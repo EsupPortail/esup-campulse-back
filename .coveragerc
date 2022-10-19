@@ -1,0 +1,4 @@
+[run]
+source = plana/
+omit = plana/settings/*
+       plana/wsgi.py
