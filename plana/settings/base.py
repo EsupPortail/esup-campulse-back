@@ -313,3 +313,19 @@ LOGGING = {
         }
     }
 }
+
+##########
+# Sentry #
+##########
+STAGE = None
+
+def sentry_init(environment):
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn="https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54",
+        integrations=[DjangoIntegration(), ],
+        environment=environment,
+        send_default_pii=True
+    )
