@@ -15,10 +15,7 @@ DATABASES['default']['NAME'] = '{{ default_db_name }}'
 # Allowed hosts & Security #
 ############################
 
-ALLOWED_HOSTS = [
-    '.u-strasbg.fr',
-    '.unistra.fr',
-]
+ALLOWED_HOSTS = ['*']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'ssl')
 
