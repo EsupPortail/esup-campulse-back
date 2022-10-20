@@ -327,5 +327,6 @@ def sentry_init(environment):
         dsn="https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54",
         integrations=[DjangoIntegration(), ],
         environment=environment,
+        release=open(path.join(SITE_ROOT, "build.txt")).read(),
         send_default_pii=True
     )
