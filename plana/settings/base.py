@@ -330,3 +330,10 @@ def sentry_init(environment):
         release=open(path.join(SITE_ROOT, "build.txt")).read(),
         send_default_pii=True
     )
+
+########
+# Misc #
+########
+
+# Extending the abstract User class.
+AUTH_USER_MODEL = 'plana.User'
