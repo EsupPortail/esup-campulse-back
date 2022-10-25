@@ -335,5 +335,8 @@ def sentry_init(environment):
 # Misc #
 ########
 
+# Defining default format for database identifiers.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # Extending the abstract User class.
 AUTH_USER_MODEL = 'plana.User'
