@@ -1,0 +1,58 @@
+[
+  {
+    "model": "associations.Institution",
+    "pk": 1,
+    "fields": {
+      "name_institution": "Centre régional des œuvres universitaires et scolaires",
+      "acronym_institution": "Crous"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 2,
+    "fields": {
+      "name_institution": "Universitré de Strasbourg",
+      "acronym_institution": "Unistra"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 3,
+    "fields": {
+      "name_institution": "Université de Haute-Alsace",
+      "acronym_institution": "UHA"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 4,
+    "fields": {
+      "name_institution": "Institut National des Sciences Appliquées Strasbourg",
+      "acronym_institution": "INSA Strasbourg"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 5,
+    "fields": {
+      "name_institution": "Haute École des Arts du Rhin",
+      "acronym_institution": "HEAR"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 6,
+    "fields": {
+      "name_institution": "École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
+      "acronym_institution": "ENGEES"
+    }
+  },
+  {
+    "model": "associations.Institution",
+    "pk": 7,
+    "fields": {
+      "name_institution": "École Nationale Supérieure d'Architecture de Strasbourg",
+      "acronym_institution": "ENSAS"
+    }
+  }
+]

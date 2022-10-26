@@ -1,0 +1,54 @@
+[
+  {
+    "model": "users.User",
+    "pk": 1,
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "username": "prenom.nom@unistra.fr",
+      "password": "sudochmod777-R/",
+      "email": "prenom.nom@unistra.fr",
+      "is_active": false,
+      "is_cas_user": false
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 2,
+    "fields": {
+      "first_name": "John",
+      "last_name": "Lennon",
+      "username": "john.lennon",
+      "password": "jesuispasboblennonquandmeme",
+      "email": "john.lennon@bbc.com",
+      "is_active": true,
+      "is_cas_user": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 3,
+    "fields": {
+      "first_name": "Georges",
+      "last_name": "Saucisse",
+      "username": "georges.saucisse@georgeslasaucisse.fr",
+      "password": "youpi123YOUPI&é'(-è_çà)=",
+      "email": "georges.saucisse@georgeslasaucisse.fr",
+      "is_active": true,
+      "is_cas_user": false
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 4,
+    "fields": {
+      "first_name": "amogus",
+      "last_name": "sus",
+      "username": "amogus",
+      "password": "amogus",
+      "email": "amogus@unistra.fr",
+      "is_active": false,
+      "is_cas_user": true
+    }
+  }
+]

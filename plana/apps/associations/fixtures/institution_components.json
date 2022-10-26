@@ -1,0 +1,9 @@
+[
+  {
+    "model": "associations.InstitutionComponent",
+    "pk": 1,
+    "fields": {
+      "name_institution_component": "Faculté de médecine"
+    }
+  }
+]
