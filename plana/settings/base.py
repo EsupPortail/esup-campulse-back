@@ -231,6 +231,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'django_extensions',
+    'rest_framework',
 ]
 
 LOCAL_APPS = [
@@ -315,6 +316,18 @@ LOGGING = {
         }
     }
 }
+
+#########################
+# DJANGO REST FRAMEWORK #
+#########################
+
+#REST_FRAMEWORK = {
+#    'DEFAULT_PERMISSION_CLASSES': [
+#        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+#    ]
+#}
+
+
 
 ##########
 # Sentry #
