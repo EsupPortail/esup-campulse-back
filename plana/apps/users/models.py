@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from plana.apps.associations.models import Association
 
 
 class User(AbstractUser):
@@ -15,7 +16,13 @@ class User(AbstractUser):
     """
     is_cas_user = models.BooleanField(default=False)
     # TODO token_reset_date_user = models.DateField(default=None)
+    association_members = models.ManyToManyField(Association, through="AssociationUsers")
 
     class Meta:
         default_permissions = []
+
+class AssociationUsers(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
+    has_office_status = models.BooleanField(default=False)
 
