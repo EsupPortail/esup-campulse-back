@@ -9,3 +9,4 @@ django-allauth==0.51.0
 django-allauth-cas==1.0.0
 djangorestframework-simplejwt==5.2.2
 dj_rest_auth==2.2.5
+django-cors-headers==3.13.0
