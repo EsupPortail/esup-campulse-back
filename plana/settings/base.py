@@ -232,6 +232,13 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth_cas',
 ]
 
 LOCAL_APPS = [
@@ -314,6 +321,24 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True
         }
+    }
+}
+
+
+##################
+# AUTHENTICATION #
+##################
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'cas': {
+        'VERIFIED_EMAIL': True,
     }
 }
 

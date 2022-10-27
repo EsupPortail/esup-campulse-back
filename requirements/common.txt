@@ -4,3 +4,6 @@ django-extensions==3.2.1
 djangorestframework==3.14.0
 django-filter==22.1
 ipython==8.5.0
+dj_rest_auth==2.2.5
+django-allauth==0.51.0
+django-allauth-cas==1.0.0
