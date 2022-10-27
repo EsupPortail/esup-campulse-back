@@ -236,9 +236,10 @@ THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth_cas',
+    'rest_framework_simplejwt',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    'allauth_cas',
 ]
 
 LOCAL_APPS = [
@@ -349,11 +350,14 @@ SOCIALACCOUNT_PROVIDERS = {
 # DJANGO REST FRAMEWORK #
 #########################
 
-#REST_FRAMEWORK = {
-#    'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-#    ]
-#}
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
 
 
 
