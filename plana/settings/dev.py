@@ -81,3 +81,15 @@ MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
+
+
+##########
+# Emails #
+##########
+
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = False
+
