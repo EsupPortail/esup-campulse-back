@@ -28,6 +28,8 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
+# DEFAULT_FROM_EMAIL = "plan-a@unistra.fr"
+
 
 ##########################
 # Database configuration #
