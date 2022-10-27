@@ -9,7 +9,7 @@
       "password": "sudochmod777-R/",
       "email": "prenom.nom@unistra.fr",
       "is_active": false,
-      "is_cas_user": false
+      "is_cas": false
     }
   },
   {
@@ -22,7 +22,7 @@
       "password": "jesuispasboblennonquandmeme",
       "email": "john.lennon@bbc.com",
       "is_active": true,
-      "is_cas_user": true
+      "is_cas": true
     }
   },
   {
@@ -35,7 +35,7 @@
       "password": "youpi123YOUPI&é'(-è_çà)=",
       "email": "georges.saucisse@georgeslasaucisse.fr",
       "is_active": true,
-      "is_cas_user": false
+      "is_cas": false
     }
   },
   {
@@ -48,7 +48,7 @@
       "password": "amogus",
       "email": "amogus@unistra.fr",
       "is_active": false,
-      "is_cas_user": true
+      "is_cas": true
     }
   }
 ]

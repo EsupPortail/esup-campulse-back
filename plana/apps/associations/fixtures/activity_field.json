@@ -3,91 +3,91 @@
     "model": "associations.ActivityField",
     "pk": 1,
     "fields": {
-      "name_activity_field": "Arts, lettres, langues"
+      "name": "Arts, lettres, langues"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 2,
     "fields": {
-      "name_activity_field": "Bureau d'étudiants"
+      "name": "Bureau d'étudiants"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 3,
     "fields": {
-      "name_activity_field": "Culture"
+      "name": "Culture"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 4,
     "fields": {
-      "name_activity_field": "Citoyenneté, organisations"
+      "name": "Citoyenneté, organisations"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 5,
     "fields": {
-      "name_activity_field": "Doctorants"
+      "name": "Doctorants"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 6,
     "fields": {
-      "name_activity_field": "Droit, écocomie, sciences politiques"
+      "name": "Droit, écocomie, sciences politiques"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 7,
     "fields": {
-      "name_activity_field": "Environnement"
+      "name": "Environnement"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 8,
     "fields": {
-      "name_activity_field": "International"
+      "name": "International"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 9,
     "fields": {
-      "name_activity_field": "Santé"
+      "name": "Santé"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 10,
     "fields": {
-      "name_activity_field": "Sciences humaines et sociales"
+      "name": "Sciences humaines et sociales"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 11,
     "fields": {
-      "name_activity_field": "Sciences, technologie"
+      "name": "Sciences, technologie"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 12,
     "fields": {
-      "name_activity_field": "Sport"
+      "name": "Sport"
     }
   },
   {
     "model": "associations.ActivityField",
     "pk": 13,
     "fields": {
-      "name_activity_field": "Autres"
+      "name": "Autres"
     }
   }
 ]

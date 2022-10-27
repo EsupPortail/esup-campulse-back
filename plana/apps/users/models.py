@@ -14,7 +14,7 @@ class User(AbstractUser):
         - last_name
         - is_active
     """
-    is_cas_user = models.BooleanField(default=False)
+    is_cas = models.BooleanField(default=False)
     # TODO token_reset_date_user = models.DateField(default=None)
     association_members = models.ManyToManyField(Association, through="AssociationUsers")
 

@@ -3,9 +3,9 @@
     "model": "associations.Association",
     "pk": 1,
     "fields": {
-      "username_association": "PlanA",
-      "name_association": "Plateforme de Liaison et ANnuaire Associatif",
-      "created_date_association": "2022-10-26 15:45:35",
+      "username": "PlanA",
+      "name": "Plateforme de Liaison et ANnuaire Associatif",
+      "created_date": "2022-10-26 15:45:35",
       "activity_field_id": 1,
       "institution_id": 2,
       "institution_component_id": 1
@@ -15,9 +15,9 @@
     "model": "associations.Association",
     "pk": 2,
     "fields": {
-      "username_association": "GeorgesSaucisse",
-      "name_association": "Les Fans de Georges la Saucisse",
-      "created_date_association": "2022-10-26 15:45:35",
+      "username": "GeorgesSaucisse",
+      "name": "Les Fans de Georges la Saucisse",
+      "created_date": "2022-10-26 15:45:35",
       "activity_field_id": 3,
       "institution_id": 2,
       "institution_component_id": 1
@@ -27,9 +27,9 @@
     "model": "associations.Association",
     "pk": 3,
     "fields": {
-      "username_association": "PlanB",
-      "name_association": "Au cas où le Plan A marche pas",
-      "created_date_association": "2022-10-26 15:45:35",
+      "username": "PlanB",
+      "name": "Au cas où le Plan A marche pas",
+      "created_date": "2022-10-26 15:45:35",
       "activity_field_id": 11,
       "institution_id": 3,
       "institution_component_id": 1
