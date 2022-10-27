@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from rest_framework import status
 
 class UserTests(TestCase):
     fixtures = ['institutions.json', 'institution_components.json',
@@ -9,9 +10,9 @@ class UserTests(TestCase):
 
     def test_get_associations_status_code(self):
         response = self.client.get('/associations/')
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_by_id_status_code(self):
         response = self.client.get('/associations/1')
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
