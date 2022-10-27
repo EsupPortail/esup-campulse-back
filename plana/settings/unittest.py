@@ -16,11 +16,11 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': environ.get('DEFAULT_DB_TEST_NAME', 'plana'),
-        'USER': environ.get('DEFAULT_DB_TEST_USER', 'plana'),
-        'PASSWORD': environ.get('DEFAULT_DB_TEST_PASSWORD', 'plana'),
-        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'postgres'),
-        'PORT': environ.get('DEFAULT_DB_TEST_PORT', ''),
+        'NAME': environ.get('DEFAULT_DB_TEST_NAME', 'postgres'),
+        'USER': environ.get('DEFAULT_DB_TEST_USER', 'postgres'),
+        'PASSWORD': environ.get('DEFAULT_DB_TEST_PASSWORD', 'postgres'),
+        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'localhost'),
+        'PORT': environ.get('DEFAULT_DB_TEST_PORT', '5432'),
     }
 }
 
