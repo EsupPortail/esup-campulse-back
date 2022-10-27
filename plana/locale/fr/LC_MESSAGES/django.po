@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-27 15:21+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: plana/apps/associations/models.py:10 plana/apps/associations/models.py:55
+#: plana/apps/associations/models.py:67 plana/apps/associations/models.py:78
+msgid "Name"
+msgstr "Nom"
+
+#: plana/apps/associations/models.py:11 plana/apps/associations/models.py:56
+msgid "Acronym"
+msgstr "Acronyme"
+
+#: plana/apps/associations/models.py:12
+msgid "Logo path"
+msgstr "Emplacement du logo"
+
+#: plana/apps/associations/models.py:13
+msgid "Description"
+msgstr "Description"
+
+#: plana/apps/associations/models.py:14
+msgid "Activities"
+msgstr "Activités"
+
+#: plana/apps/associations/models.py:15
+msgid "Address"
+msgstr "Adresse"
+
+#: plana/apps/associations/models.py:16
+msgid "Phone"
+msgstr "Téléphone"
+
+#: plana/apps/associations/models.py:17
+msgid "Email"
+msgstr "Courriel"
+
+#: plana/apps/associations/models.py:18
+msgid "SIRET"
+msgstr "SIRET"
+
+#: plana/apps/associations/models.py:19
+msgid "Website"
+msgstr "Site"
+
+#: plana/apps/associations/models.py:20
+msgid "Student count"
+msgstr "Nombre d'étudiants"
+
+#: plana/apps/associations/models.py:21
+msgid "Is active"
+msgstr "Est active"
+
+#: plana/apps/associations/models.py:22
+msgid "Is site"
+msgstr "Site ?"
+
+#: plana/apps/associations/models.py:23
+msgid "Creation date"
+msgstr "Date de création"
+
+#: plana/apps/associations/models.py:24
+msgid "Approval date"
+msgstr "Date d'agrément"
+
+#: plana/apps/associations/models.py:25
+msgid "Last GOA date"
+msgstr "Date de la dernière AGO"
+
+#: plana/apps/associations/models.py:26
+msgid "CGA date"
+msgstr "Date de dernière AG constitutive"
+
+#: plana/apps/associations/models.py:27 plana/apps/associations/models.py:59
+msgid "Institution"
+msgstr "Etablissement"
+
+#: plana/apps/associations/models.py:29 plana/apps/associations/models.py:70
+msgid "Institution component"
+msgstr "Composante"
+
+#: plana/apps/associations/models.py:31 plana/apps/associations/models.py:81
+msgid "Activity field"
+msgstr "Domaine d'activité"
+
+#: plana/apps/associations/models.py:34 plana/apps/associations/models.py:44
+#: plana/apps/users/models.py:30 plana/apps/users/models.py:34
+msgid "Association"
+msgstr "Association"
+
+#: plana/apps/associations/models.py:35 plana/apps/users/models.py:20
+#: plana/apps/users/models.py:35
+msgid "Associations"
+msgstr "Associations"
+
+#: plana/apps/associations/models.py:42
+msgid "Type"
+msgstr "Type"
+
+#: plana/apps/associations/models.py:43
+msgid "Location"
+msgstr "Adresse"
+
+#: plana/apps/associations/models.py:47
+msgid "Social network"
+msgstr "Réseau social"
+
+#: plana/apps/associations/models.py:48
+msgid "Social networks"
+msgstr "Réseaux sociaux"
+
+#: plana/apps/associations/models.py:60
+msgid "Institutions"
+msgstr "Etablissements"
+
+#: plana/apps/associations/models.py:71
+msgid "Institution components"
+msgstr "Composantes"
+
+#: plana/apps/associations/models.py:82
+msgid "Activity fields"
+msgstr "Domaines d'activités"
+
+#: plana/apps/users/models.py:17
+msgid "Is CAS account"
+msgstr "Compte CAS ?"
+
+#: plana/apps/users/models.py:25 plana/apps/users/models.py:29
+msgid "User"
+msgstr "Utilisateur"
+
+#: plana/apps/users/models.py:26
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: plana/apps/users/models.py:31
+msgid "Has office status"
+msgstr "Membre du bureau ?"
+
+#: plana/templates/404.html:6
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: plana/templates/500.html:6
+msgid "Error"
+msgstr "Erreur"
