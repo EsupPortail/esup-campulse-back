@@ -93,3 +93,9 @@ EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = False
 
+
+##################
+# AUTHENTICATION #
+##################
+
+CAS_SERVER = "https://cas6-dev.unistra.fr/cas/"

@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-
-from rest_framework.views import APIView
+from allauth_cas.views import CASCallbackView, CASLoginView, CASLogoutView
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .serializers import UserSerializer
+from .adapter import CASAdapter
 from .models import User
+from .serializers import UserSerializer
 
 
 class UserView(APIView):
@@ -27,3 +27,6 @@ class UserView(APIView):
 #    data = {"test users": "test users"}
 #    return JsonResponse(data)
 
+
+login = CASLoginView.adapter_view(CASAdapter)
+callback = CASCallbackView.adapter_view(CASAdapter)

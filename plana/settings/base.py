@@ -329,6 +329,9 @@ LOGGING = {
 # AUTHENTICATION #
 ##################
 
+CAS_SERVER = "https://cas.unistra.fr/cas/"
+CAS_VERSION = 3
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
