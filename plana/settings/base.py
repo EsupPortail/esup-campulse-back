@@ -390,6 +390,17 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+ACCOUNT_ADAPTER = "plana.apps.users.adapter.PlanAAdapter"
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+ACCOUNT_USERNAME_BLACKLIST = ["admin", "unistra", "plana", "plan-a", "plan_a"]
+
+SOCIALACCOUNT_ADAPTER = "plana.apps.users.adapter.SocialAccountAdapter"
+SOCIALACCOUNT_EMAIL_VERIFICATION = False
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
 SOCIALACCOUNT_PROVIDERS = {
     'cas': {
         'VERIFIED_EMAIL': True,
