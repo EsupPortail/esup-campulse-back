@@ -7,5 +7,6 @@ from . import views
 
 urlpatterns = [
     #path('', include(router.urls)),
+    path('<int:pk>', views.AssociationView.as_view(), name='association_by_id'),
     path('', views.AssociationView.as_view(), name='associations'),
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
@@ -11,9 +11,15 @@ from .models import User
 class UserView(APIView):
     serializer_class = UserSerializer
 
-    def get(self, request):
-        queryset = User.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
+    def get(self, request, pk=None):
+        if pk:
+            queryset = get_object_or_404(User, pk=pk)
+            many = False
+        else:
+            queryset = User.objects.all()
+            many = True
+
+        serializer = self.serializer_class(queryset, many=many)
         return Response(serializer.data)
 
 # Create your views here.
