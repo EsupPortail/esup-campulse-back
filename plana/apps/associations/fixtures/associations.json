@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "Plateforme de Liaison et ANnuaire Associatif",
-      "creation_date": "2022-10-26 15:45:35",
+      "creation_date": "2022-10-26T15:45:35+02:00",
       "activity_field_id": 1,
       "institution_id": 2,
       "institution_component_id": 1,
@@ -16,7 +16,7 @@
     "pk": 2,
     "fields": {
       "name": "Les Fans de Georges la Saucisse",
-      "creation_date": "2022-10-26 15:45:35",
+      "creation_date": "2022-10-27T14:12:11+02:00",
       "activity_field_id": 3,
       "institution_id": 2,
       "institution_component_id": 1,
@@ -28,7 +28,7 @@
     "pk": 3,
     "fields": {
       "name": "Au cas où le Plan A marche pas",
-      "creation_date": "2022-10-26 15:45:35",
+      "creation_date": "2022-10-28T10:27:10+02:00",
       "activity_field_id": 11,
       "institution_id": 3,
       "institution_component_id": 1,

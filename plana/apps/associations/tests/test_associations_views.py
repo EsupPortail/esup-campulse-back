@@ -20,7 +20,6 @@ class AssociationsTests(TestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode('utf-8'))
-        print(f"list content : {content}")
         self.assertEqual(len(content), associations_cnt)
 
 
