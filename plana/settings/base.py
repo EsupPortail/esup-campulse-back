@@ -390,3 +390,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Extending the abstract User class.
 AUTH_USER_MODEL = 'users.User'
+
+# Avoid errors while testing the API with cURL.
+APPEND_SLASH=False
