@@ -325,6 +325,18 @@ LOGGING = {
     }
 }
 
+#########################
+# DJANGO REST FRAMEWORK #
+#########################
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
 
 ##################
 # AUTHENTICATION #
@@ -346,24 +358,15 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-#########################
-# DJANGO REST FRAMEWORK #
-#########################
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
-}
-
-
+# Using SimpleJWT with dj-rest-auth
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'plana-auth'
+JWT_AUTH_REFRESH_COOKIE = 'plana-refresh-auth'
 
 ##########
 # Sentry #
 ##########
+
 STAGE = None
 
 def sentry_init(environment):
