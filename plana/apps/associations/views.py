@@ -3,23 +3,31 @@ from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics, status
 
 from .serializers import AssociationSerializer
 from .models import Association
 
 
-class AssociationView(APIView):
+class AssociationList(generics.ListCreateAPIView):
+    """
+    Generic DRF view to list associations or create a new one
+    GET: list
+    POST: create
+    """
     serializer_class = AssociationSerializer
 
-    def get(self, request, pk=None):
-        if pk:
-            queryset = get_object_or_404(Association, pk=pk)
-            many = False
-        else:
-            queryset = Association.objects.all()
-            many = True
-        serializer = self.serializer_class(queryset, many=many)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return Association.objects.filter(is_enabled=True).order_by('name')
+
+
+class AssociationDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET a single association (pk)
+    """
+    serializer_class = AssociationSerializer
+    queryset = Association.objects.all()
+
 
 # Create your views here.
 #def index(self):

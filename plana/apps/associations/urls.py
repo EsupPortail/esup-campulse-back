@@ -6,7 +6,7 @@ from . import views
 #router.register(r'associations', views.AssociationView)
 
 urlpatterns = [
-    #path('', include(router.urls)),
-    path('<int:pk>', views.AssociationView.as_view(), name='association_by_id'),
-    path('', views.AssociationView.as_view(), name='associations'),
+    path('', views.AssociationList.as_view(), name='association_list'),
+    path('<int:pk>', views.AssociationDetail.as_view(), name='association_detail'),
+
 ]
