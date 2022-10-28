@@ -50,5 +50,57 @@
       "is_active": false,
       "is_cas": true
     }
+  },
+  {
+    "model": "users.User",
+    "pk": 5,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "NonActifNonCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "test@gmail.com",
+      "is_active": false,
+      "is_cas": false
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 6,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "ActifNonCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "test@protonmail.com",
+      "is_active": true,
+      "is_cas": false
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 7,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "NonActifCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "test@unistra.fr",
+      "is_active": false,
+      "is_cas": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 8,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "ActifCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "admin@unistra.fr",
+      "is_active": true,
+      "is_cas": true
+    }
   }
 ]
