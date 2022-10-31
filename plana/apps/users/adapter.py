@@ -18,3 +18,6 @@ class CASAdapter(AllAuthCASAdapter):
     provider_id = CASProvider.id
     url = settings.CAS_SERVER
     version = settings.CAS_VERSION
+
+    def get_provider(self, request):
+        return self.provider

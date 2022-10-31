@@ -19,7 +19,7 @@ class CASProvider(AllAuthCASProvider):
         uid, extra = data
         fields = {
             "username": uid,
-            "email": extra.get("email", ""),
+            "email": extra.get("mail", ""),
             "first_name": extra.get("first_name", ""),
             "last_name": extra.get("last_name", ""),
             # "affiliation": extra.get("affiliation"),
