@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import typing
+
 import cas
 from allauth.socialaccount.models import SocialLogin
 from allauth_cas.views import AuthAction
@@ -9,7 +13,9 @@ from rest_framework import exceptions, serializers
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.provider import CASProvider
-from plana.apps.users.views import CASLogin
+
+if typing.TYPE_CHECKING:
+    from plana.apps.users.views import CASLogin
 
 
 class CASSerializer(LoginSerializer):

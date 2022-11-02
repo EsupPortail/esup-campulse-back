@@ -1,6 +1,7 @@
 import requests
 from allauth_cas.views import CASCallbackView, CASLoginView
 from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.views import LogoutView
 from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -35,13 +36,18 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-login = CASLoginView.adapter_view(CASAdapter)
-callback = CASCallbackView.adapter_view(CASAdapter)
+# login = CASLoginView.adapter_view(CASAdapter)
+# callback = CASCallbackView.adapter_view(CASAdapter)
 
 
 class CASLogin(SocialLoginView):
     adapter_class = CASAdapter
     serializer_class = CASSerializer
+
+
+class CASLogout(LogoutView):
+    # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
+    ...
 
 
 def cas_test(request):
@@ -56,7 +62,7 @@ def cas_verify(request):
     ticket = request.GET.get("ticket")
 
     response = requests.post(
-        request.build_absolute_uri(reverse("dj_cas_login")),
+        request.build_absolute_uri(reverse("rest_cas_login")),
         json={
             "service": service_url,
             "ticket": ticket,
@@ -65,5 +71,7 @@ def cas_verify(request):
             "Accept": "application/json",
         },
     )
-
-    return JsonResponse({"token": response.json()["key"]})
+    if response.ok:
+        return JsonResponse({"token": response.json()["key"]})
+    else:
+        print(response)
