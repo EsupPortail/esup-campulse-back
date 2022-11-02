@@ -11,7 +11,6 @@ urlpatterns = [
     path("auth/cas/logout/", views.CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/", include("dj_rest_auth.urls")),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    # path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

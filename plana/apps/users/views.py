@@ -1,20 +1,16 @@
 import requests
-from allauth_cas.views import CASCallbackView, CASLoginView
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.http import urlencode
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import generics, status
+from rest_framework import generics
 
 from .adapter import CASAdapter
-from .cas_serializer import CASSerializer
 from .models import User
-from .serializers import UserSerializer
+from .serializers.cas import CASSerializer
+from .serializers.user import UserSerializer
 
 
 class UserList(generics.ListCreateAPIView):
@@ -23,18 +19,21 @@ class UserList(generics.ListCreateAPIView):
     GET: list
     POST: create
     """
+
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return User.objects.all().order_by('username')
+        return User.objects.all().order_by("username")
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     GET a single association (pk)
     """
+
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
 
 # login = CASLoginView.adapter_view(CASAdapter)
 # callback = CASCallbackView.adapter_view(CASAdapter)

@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.contrib import admin
 
 from .views import home
 
@@ -12,9 +11,6 @@ urlpatterns = [
     path('', home, name='home'),
     path('associations/', include('plana.apps.associations.urls')),
     path('users/', include('plana.apps.users.urls')),
-    path('accounts/', include('allauth.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
 ]
 
