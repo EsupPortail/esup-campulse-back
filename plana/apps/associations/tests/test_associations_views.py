@@ -7,7 +7,7 @@ from ..models import Association
 
 class AssociationsTests(TestCase):
     fixtures = ['institutions.json', 'institution_components.json',
-                'activity_field.json', 'associations.json']
+                'activity_fields.json', 'associations.json']
 
     def setUp(self):
         self.client = Client()
