@@ -17,7 +17,7 @@ class Association(models.Model):
     siret = models.IntegerField(_("SIRET"), default=0)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.IntegerField(_("Student count"), default=0)
-    is_enabled = models.BooleanField(_("Is active"), default=False)
+    is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateTimeField(_("Approval date"), null=True) # date d'agrément

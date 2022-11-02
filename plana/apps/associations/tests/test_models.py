@@ -2,8 +2,8 @@ from django.test import TestCase, Client
 from ..models import Association, SocialNetwork, Institution, InstitutionComponent, ActivityField
 
 class AssociationsModelsTests(TestCase):
-    fixtures = ['institutions.json', 'institution_components.json', 'activity_field.json', 'associations.json',
-                'socialnetworks.json']
+    fixtures = ['institutions.json', 'institution_components.json', 'activity_fields.json', 'associations.json',
+                'social_networks.json']
 
     def setUp(self):
         self.client = Client()

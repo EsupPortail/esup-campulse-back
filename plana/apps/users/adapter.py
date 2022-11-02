@@ -20,6 +20,9 @@ class CASAdapter(AllAuthCASAdapter):
     url = settings.CAS_SERVER
     version = settings.CAS_VERSION
 
+    def get_provider(self, request):
+        return self.provider
+
 
 class CustomUserAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=False):
