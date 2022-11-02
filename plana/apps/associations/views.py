@@ -1,8 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import generics, status
 
 from .serializers import AssociationSerializer
@@ -27,10 +24,4 @@ class AssociationDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     serializer_class = AssociationSerializer
     queryset = Association.objects.all()
-
-
-# Create your views here.
-#def index(self):
-#    data = {"test associations": "test associations"}
-#    return JsonResponse(data)
 

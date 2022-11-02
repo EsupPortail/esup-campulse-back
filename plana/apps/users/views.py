@@ -5,10 +5,6 @@ from rest_framework import generics, status
 from .serializers import UserSerializer
 from .models import User
 
-# Create your views here.
-#def index(self):
-#    data = {"test users": "test users"}
-#    return JsonResponse(data)
 
 class UserList(generics.ListCreateAPIView):
     """
