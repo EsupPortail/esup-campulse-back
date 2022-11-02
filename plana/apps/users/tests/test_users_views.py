@@ -1,5 +1,9 @@
+import json
+
 from django.test import TestCase, Client
 from rest_framework import status
+
+from ..models import User
 
 class UserTests(TestCase):
     fixtures = ['users.json']
@@ -7,11 +11,24 @@ class UserTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_get_users_status_code(self):
+
+    def test_get_users_list(self):
+        users_cnt = User.objects.count()
+        self.assertTrue(users_cnt > 0)
+
         response = self.client.get('/users/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    def test_get_users_by_id_status_code(self):
+        content = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(content), users_cnt)
+
+
+    def test_get_user_detail(self):
+        user = User.objects.get(pk=1)
+
         response = self.client.get('/users/1')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        user_1 = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(user_1["username"], user.username)
 
