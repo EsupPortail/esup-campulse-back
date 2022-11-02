@@ -368,6 +368,10 @@ REST_FRAMEWORK = {
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
 
+CAS_AUTHORIZED_SERVICES = [
+    "http://localhost:8000/users/auth/cas_verify/",
+]
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -403,6 +407,7 @@ JWT_AUTH_REFRESH_COOKIE = 'plana-refresh-auth'
 
 STAGE = None
 
+
 def sentry_init(environment):
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
@@ -414,6 +419,7 @@ def sentry_init(environment):
         release=open(path.join(SITE_ROOT, "build.txt")).read(),
         send_default_pii=True
     )
+
 
 ########
 # Misc #

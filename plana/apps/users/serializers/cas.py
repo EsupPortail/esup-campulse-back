@@ -7,6 +7,7 @@ from allauth.socialaccount.models import SocialLogin
 from allauth_cas.views import AuthAction
 from cas import CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
+from django.conf import settings
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
@@ -57,6 +58,13 @@ class CASSerializer(LoginSerializer):
         attrs["user"] = login.account.user
 
         return attrs
+
+    def validate_service(self, value):
+        if value not in settings.CAS_AUTHORIZED_SERVICES:
+            raise exceptions.ValidationError(
+                _("%(service)s is not a valid service" % {"service": value})
+            )
+        return value
 
     def get_client(
         self, request: HttpRequest, adapter: CASAdapter, service_url: str, action: str = AuthAction.AUTHENTICATE

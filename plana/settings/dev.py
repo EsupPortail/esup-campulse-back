@@ -99,3 +99,6 @@ EMAIL_USE_TLS = False
 ##################
 
 CAS_SERVER = "https://cas6-dev.unistra.fr/cas/"
+CAS_AUTHORIZED_SERVICES = [
+    "http://localhost:8000/users/auth/cas_verify/",
+]
