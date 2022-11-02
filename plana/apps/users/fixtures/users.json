@@ -9,6 +9,7 @@
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "prenom.nom@unistra.fr",
       "is_active": false,
+      "is_validated_by_admin": false,
       "is_cas": false
     }
   },
@@ -22,6 +23,7 @@
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "john.lennon@bbc.com",
       "is_active": true,
+      "is_validated_by_admin": false,
       "is_cas": true
     }
   },
@@ -35,6 +37,7 @@
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "georges.saucisse@georgeslasaucisse.fr",
       "is_active": true,
+      "is_validated_by_admin": true,
       "is_cas": false
     }
   },
@@ -47,7 +50,8 @@
       "username": "amogus",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "amogus@unistra.fr",
-      "is_active": false,
+      "is_active": true,
+      "is_validated_by_admin": true,
       "is_cas": true
     }
   },
@@ -57,10 +61,11 @@
     "fields": {
       "first_name": "test",
       "last_name": "test",
-      "username": "NonActifNonCas",
+      "username": "NonActifNonValideNonCas",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "test@gmail.com",
       "is_active": false,
+      "is_validated_by_admin": false,
       "is_cas": false
     }
   },
@@ -70,10 +75,11 @@
     "fields": {
       "first_name": "test",
       "last_name": "test",
-      "username": "ActifNonCas",
+      "username": "ActifNonValideNonCas",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "test@protonmail.com",
       "is_active": true,
+      "is_validated_by_admin": false,
       "is_cas": false
     }
   },
@@ -83,11 +89,12 @@
     "fields": {
       "first_name": "test",
       "last_name": "test",
-      "username": "NonActifCas",
+      "username": "ActifValideNonCas",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-      "email": "test@unistra.fr",
-      "is_active": false,
-      "is_cas": true
+      "email": "test2@protonmail.com",
+      "is_active": true,
+      "is_validated_by_admin": true,
+      "is_cas": false
     }
   },
   {
@@ -96,10 +103,39 @@
     "fields": {
       "first_name": "test",
       "last_name": "test",
-      "username": "ActifCas",
+      "username": "NonActifNonValideCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "test@unistra.fr",
+      "is_active": false,
+      "is_validated_by_admin": false,
+      "is_cas": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 9,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "ActifNonValideCas",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "admin@unistra.fr",
       "is_active": true,
+      "is_validated_by_admin": false,
+      "is_cas": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 10,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "ActifValideCas",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "email": "admin@unistra.fr",
+      "is_active": true,
+      "is_validated_by_admin": true,
       "is_cas": true
     }
   }

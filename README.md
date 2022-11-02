@@ -26,7 +26,7 @@ $ sudo docker-compose down
 ### Création de l'environnement virtuel
 
 ```
-$ mkvirtualenv melusine
+$ mkvirtualenv plana
 ```
 
 ### Configuration des variables d'environnement nécessaires (fichier postactivate du venv)
@@ -53,7 +53,7 @@ $ python manage.py migrate
 
 ### Chargement des fixtures dans la base de données
 ```
-$ python manage.py loaddata users activity_field institutions institution_components socialnetworks associations
+$ python manage.py loaddata associations_users auth_groups users user_groups activity_fields associations institution_components institutions social_networks
 ```
 
 ## Lancement du serveur en local

@@ -1,0 +1,18 @@
+[
+  {
+    "model": "users.AssociationUsers",
+    "pk": 1,
+    "fields": {
+      "association_id": 1,
+      "user_id": 4
+    }
+  },
+  {
+    "model": "users.AssociationUsers",
+    "pk": 2,
+    "fields": {
+      "association_id": 2,
+      "user_id": 3
+    }
+  }
+]
