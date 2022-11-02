@@ -51,3 +51,10 @@ DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
 ##########
 STAGE = '{{ goal }}'
 sentry_init(STAGE)
+
+
+##################
+# AUTHENTICATION #
+##################
+
+CAS_SERVER = "https://cas6-dev.unistra.fr/cas/"

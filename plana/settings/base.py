@@ -182,6 +182,22 @@ TEMPLATES = [
     },
 ]
 
+########
+# CORS #
+########
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (
+    "x-requested-with",
+    "content-type",
+    "accept",
+    "origin",
+    "authorization",
+    "x-csrftoken",
+    "range",
+)
+CORS_REPLACE_HTTPS_REFERER = True
+
 
 ############################
 # Middleware configuration #
@@ -190,6 +206,7 @@ TEMPLATES = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -231,7 +248,16 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'django_extensions',
+    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth_cas',
+    'rest_framework_simplejwt',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 LOCAL_APPS = [
@@ -321,17 +347,44 @@ LOGGING = {
 # DJANGO REST FRAMEWORK #
 #########################
 
-#REST_FRAMEWORK = {
-#    'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-#    ]
-#}
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
 
+##################
+# AUTHENTICATION #
+##################
 
+CAS_SERVER = "https://cas.unistra.fr/cas/"
+CAS_VERSION = 3
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'cas': {
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+# Using SimpleJWT with dj-rest-auth
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'plana-auth'
+JWT_AUTH_REFRESH_COOKIE = 'plana-refresh-auth'
 
 ##########
 # Sentry #
 ##########
+
 STAGE = None
 
 def sentry_init(environment):
@@ -355,3 +408,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Extending the abstract User class.
 AUTH_USER_MODEL = 'users.User'
+
+# Avoid errors while testing the API with cURL.
+APPEND_SLASH=False

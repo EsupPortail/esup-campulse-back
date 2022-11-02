@@ -11,7 +11,6 @@ class UserTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-
     def test_get_users_list(self):
         users_cnt = User.objects.count()
         self.assertTrue(users_cnt > 0)
