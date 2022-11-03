@@ -71,6 +71,6 @@ def cas_verify(request):
         },
     )
     if response.ok:
-        return JsonResponse({"token": response.json()["key"]})
+        return JsonResponse(response.json())
     else:
         print(response)
