@@ -398,10 +398,10 @@ JWT_AUTH_COOKIE = 'plana-auth'
 JWT_AUTH_REFRESH_COOKIE = 'plana-refresh-auth'
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'plana.apps.users.serializers.CustomRegisterSerializer',
+    'REGISTER_SERIALIZER': 'plana.apps.users.serializers.user.CustomRegisterSerializer',
 }
 
-ACCOUNT_ADAPTER = 'plana.apps.users.adapter.CustomUserAdapter'
+#ACCOUNT_ADAPTER = 'plana.apps.users.adapter.CustomUserAdapter'
 
 ##########
 # Sentry #
