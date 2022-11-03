@@ -101,5 +101,5 @@ EMAIL_USE_TLS = False
 CAS_SERVER = "https://cas-dev.unistra.fr/cas/"
 CAS_AUTHORIZED_SERVICES = [
     "http://localhost:8000/users/auth/cas_verify/",
-    "http://localhost:8000/users/auth/cas/login/",
+    "http://localhost:3000/cas-login",
 ]
