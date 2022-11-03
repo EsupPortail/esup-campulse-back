@@ -50,7 +50,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     last_name = serializers.CharField(required=True)
     phone = serializers.CharField(required=False)
     password1 = serializers.CharField(required=False, default="")
-    # TODO : add multiple association name + user is president (not required), user status/role (required)
+    asso_name = serializers.CharField(required=False)
+    asso_has_office_status = serializers.BooleanField(required=False, default=False)
+    # TODO : add user status/role (required), user is cas (required, boolean)
+    # TODO : add checks on User and AssociationUsers objects creation
 
     def validate_password1(self, password):
         char_list = string.ascii_letters + string.digits + string.punctuation
@@ -65,13 +68,19 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def get_cleaned_data(self):
         data_dict = super().get_cleaned_data()
+        data_dict['asso'] = {}
+
         data_dict['first_name'] = self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         data_dict['phone'] = self.validated_data.get('phone', '')
+
+        data_dict['asso']['name'] = self.validated_data.get('asso_name', '')
+        data_dict['asso']['has_office_status'] = self.validated_data.get('asso_has_office_status', '')
 
         if self.validated_data.get('email') == self.validated_data.get('email_2'):
             data_dict['username'] = self.validated_data.get('email')
         else:
             raise Exception('Les deux adresses mail doivent être identiques.')
+
         return data_dict
 
