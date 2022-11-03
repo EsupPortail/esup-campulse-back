@@ -15,7 +15,7 @@ from .serializers.user import UserSerializer
 
 class UserList(generics.ListCreateAPIView):
     """
-    Generic DRF view to list associations or create a new one
+    Generic DRF view to list users or create a new one
     GET: list
     POST: create
     """
@@ -28,7 +28,7 @@ class UserList(generics.ListCreateAPIView):
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET a single association (pk)
+    GET a single user (pk)
     """
 
     serializer_class = UserSerializer
