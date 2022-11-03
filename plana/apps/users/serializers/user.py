@@ -41,6 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
 #        user = User.objects.create(**cleaned_data)
 #        return user
 
+
 class CustomRegisterSerializer(RegisterSerializer):
     username = None
     password2 = None
@@ -54,7 +55,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     def validate_password1(self, password):
         char_list = string.ascii_letters + string.digits + string.punctuation
         result = []
-        for i in range(6):
+        for i in range(8):
             result.append(random.choice(char_list))
         return "".join(result)
 
@@ -72,6 +73,5 @@ class CustomRegisterSerializer(RegisterSerializer):
             data_dict['username'] = self.validated_data.get('email')
         else:
             raise Exception('Les deux adresses mail doivent être identiques.')
-
         return data_dict
 

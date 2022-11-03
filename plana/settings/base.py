@@ -375,7 +375,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_ADAPTER = "plana.apps.users.adapter.PlanAAdapter"
+#ACCOUNT_ADAPTER = "plana.apps.users.adapter.PlanAAdapter"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
@@ -401,7 +401,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'plana.apps.users.serializers.user.CustomRegisterSerializer',
 }
 
-#ACCOUNT_ADAPTER = 'plana.apps.users.adapter.CustomUserAdapter'
+ACCOUNT_ADAPTER = 'plana.apps.users.adapter.CustomUserAdapter'
 
 ##########
 # Sentry #
