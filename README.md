@@ -53,7 +53,7 @@ $ python manage.py migrate
 
 ### Chargement des fixtures dans la base de données
 ```
-$ python manage.py loaddata associations_users auth_groups users user_groups activity_fields associations institution_components institutions social_networks
+$ python manage.py loaddata associations_users auth_groups users user_groups account_email_addresses activity_fields associations institution_components institutions social_networks
 ```
 
 ## Lancement du serveur en local
