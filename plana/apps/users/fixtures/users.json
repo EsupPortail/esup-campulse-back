@@ -62,7 +62,6 @@
       "is_cas": true
     }
   },
-  ,
   {
     "model": "users.User",
     "pk": 6,
