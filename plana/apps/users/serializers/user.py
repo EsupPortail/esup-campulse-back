@@ -68,14 +68,15 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def get_cleaned_data(self):
         data_dict = super().get_cleaned_data()
-        data_dict['asso'] = {}
 
         data_dict['first_name'] = self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         data_dict['phone'] = self.validated_data.get('phone', '')
 
-        data_dict['asso']['name'] = self.validated_data.get('asso_name', '')
-        data_dict['asso']['has_office_status'] = self.validated_data.get('asso_has_office_status', '')
+        if self.validated_data.get('asso_name', '') != '':
+            data_dict['asso'] = {}
+            data_dict['asso']['name'] = self.validated_data.get('asso_name', '')
+            data_dict['asso']['has_office_status'] = self.validated_data.get('asso_has_office_status', '')
 
         if self.validated_data.get('email') == self.validated_data.get('email_2'):
             data_dict['username'] = self.validated_data.get('email')

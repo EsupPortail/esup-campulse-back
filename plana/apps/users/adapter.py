@@ -33,10 +33,11 @@ class CustomUserAdapter(DefaultAccountAdapter):
         data = form.cleaned_data
         user.phone = data.get('phone')
         user.save()
-        association = Association.objects.get(name=data['asso']['name'])
-        asso_user = AssociationUsers.objects.create(user=user,
-                                                    association=association,
-                                                    has_office_status=data['asso']['has_office_status'])
-        asso_user.save()
+        if 'asso' in data.keys():
+            association = Association.objects.get(name=data['asso']['name'])
+            asso_user = AssociationUsers.objects.create(user=user,
+                                                        association=association,
+                                                        has_office_status=data['asso']['has_office_status'])
+            asso_user.save()
         return user
 
