@@ -5,6 +5,8 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 
+from django.contrib.auth.models import Group
+
 from plana.apps.users.models import User, AssociationUsers
 
 
@@ -18,6 +20,11 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociationUsers
         fields = '__all__'
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id', 'name',)
 
 
 #class CustomRegisterSerializer(serializers.Serializer):

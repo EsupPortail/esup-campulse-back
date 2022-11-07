@@ -1,16 +1,19 @@
 import requests
+
+from rest_framework import generics
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
+
 from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-from rest_framework import generics
+from django.contrib.auth.models import Group
 
 from .adapter import CASAdapter
 from .models import User, AssociationUsers
 from .serializers.cas import CASSerializer
-from .serializers.user import UserSerializer, AssociationUsersSerializer
+from .serializers.user import UserSerializer, AssociationUsersSerializer, GroupSerializer
 
 
 #########
@@ -62,7 +65,6 @@ def cas_verify(request):
 #  Users  #
 ###########
 
-
 class UserList(generics.ListCreateAPIView):
     """
     Generic DRF view to list associations or create a new one
@@ -89,7 +91,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 #  AssociationUsers  #
 ######################
 
-
 class AssociationUsersList(generics.ListCreateAPIView):
     """
     Generic DRF view to list AssociationsUsers or create a new one
@@ -100,4 +101,20 @@ class AssociationUsersList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return AssociationUsers.objects.all()
+
+
+###########
+#  Roles  #
+###########
+
+class GroupList(generics.ListCreateAPIView):
+    """
+    Generic DRF view to list AssociationsUsers or create a new one
+    GET: list
+    POST: create
+    """
+    serializer_class = GroupSerializer
+
+    def get_queryset(self):
+        return Group.objects.all()
 

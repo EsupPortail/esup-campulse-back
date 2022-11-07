@@ -7,7 +7,8 @@ urlpatterns = [
     path("<int:pk>", views.UserDetail.as_view(), name="user_detail"),
     path("", views.UserList.as_view(), name="user_list"),
     path("association/", views.AssociationUsersList.as_view(), name="asso_users_list"),
-    # path('', views.index, name='index'),
+    path("groups/", views.GroupList.as_view(), name="group_list"),
+
     path("auth/cas/login/", views.CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", views.CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/", include("dj_rest_auth.urls")),
