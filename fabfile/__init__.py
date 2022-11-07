@@ -63,6 +63,7 @@ env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You ne
 # env.nginx_location_extra_directives = ['proxy_read_timeout 120'] # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
+env.sentry_project_name = 'plan-a'
 
 
 @task

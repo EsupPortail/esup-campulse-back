@@ -1,6 +1,6 @@
 import os
 
-from fabric.api import env, local, lcd
+from fabric.api import env, local, lcd, warn_only
 from pydiploy.decorators import do_verbose
 
 
@@ -27,7 +27,10 @@ def env_setup():
         print("Setting origin in the temp repo to be {}".format(distant_repo))
         local("git remote remove origin")
         local("git remote add origin {}".format(distant_repo))
-        project_version = local("git describe --long", capture=True)
+        with warn_only():
+            # Does not work if the git repository has no tags
+            result = local("git describe --long", capture=True)
+        project_version = str(result) if result.succeeded else '0.1.0'
         print("Getting project version to declare to Sentry ({})".format(project_version))
 
     return project_version
@@ -36,11 +39,12 @@ def env_setup():
 @do_verbose
 def declare_release():
     project_version = env_setup()
+    project_name = getattr(env, 'sentry_project_name', env.application_name)
 
     # Create a release
     print("Declaring new release to Sentry")
     local("sentry-cli releases new -p {} {}".format(
-        env.application_name,
+        project_name,
         project_version
     ))
 
