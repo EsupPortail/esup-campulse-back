@@ -62,10 +62,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     phone = serializers.CharField(required=False)
-    role = serializers.CharField(required=True)
     password1 = serializers.CharField(required=False, default="")
     # TODO : add user is cas (required, boolean)
-    # TODO : add checks on User and AssociationUsers objects creation
     # TODO : use Model User instead of fields
 
     def validate_password1(self, password):
@@ -81,11 +79,9 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def get_cleaned_data(self):
         data_dict = super().get_cleaned_data()
-
         data_dict['first_name'] = self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         data_dict['phone'] = self.validated_data.get('phone', '')
-        data_dict['role'] = self.validated_data.get('role', '')
 
         if self.validated_data.get('email') == self.validated_data.get('email_2'):
             data_dict['username'] = self.validated_data.get('email')
