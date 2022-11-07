@@ -23,12 +23,3 @@ class CASAdapter(AllAuthCASAdapter):
     def get_provider(self, request):
         return self.provider
 
-
-class CustomUserAdapter(DefaultAccountAdapter):
-    def save_user(self, request, user, form, commit=False):
-        user = super().save_user(request, user, form, commit)
-        data = form.cleaned_data
-        user.phone = data.get('phone')
-        user.save()
-        return user
-

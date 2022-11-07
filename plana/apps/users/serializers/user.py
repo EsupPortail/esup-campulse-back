@@ -55,38 +55,21 @@ class GroupSerializer(serializers.ModelSerializer):
 #        return user
 
 
-class CustomRegisterSerializer(RegisterSerializer):
-    username = None
-    password2 = None
-    email_2 = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    phone = serializers.CharField(required=False)
-    password1 = serializers.CharField(required=False, default="")
-    # TODO : add user is cas (required, boolean)
-    # TODO : use Model User instead of fields
+class CustomRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'phone')
 
-    def validate_password1(self, password):
-        char_list = string.ascii_letters + string.digits + string.punctuation
-        result = []
-        for i in range(8):
-            result.append(random.choice(char_list))
-        return "".join(result)
+    # TODO: Add check if user exists before save
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = request.data
+        adapter.save_user(request, user, self)
 
-    def validate(self, data):
-        data['password2'] = data['password1']
-        return data
+        user.username = self.cleaned_data['email']
+        user.phone = self.cleaned_data['phone']
 
-    def get_cleaned_data(self):
-        data_dict = super().get_cleaned_data()
-        data_dict['first_name'] = self.validated_data.get('first_name', '')
-        data_dict['last_name'] = self.validated_data.get('last_name', '')
-        data_dict['phone'] = self.validated_data.get('phone', '')
-
-        if self.validated_data.get('email') == self.validated_data.get('email_2'):
-            data_dict['username'] = self.validated_data.get('email')
-        else:
-            raise Exception('Les deux adresses mail doivent être identiques.')
-
-        return data_dict
+        user.save()
+        return user
 
