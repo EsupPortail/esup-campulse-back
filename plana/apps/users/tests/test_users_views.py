@@ -3,10 +3,11 @@ import json
 from django.test import TestCase, Client
 from rest_framework import status
 
-from ..models import User
+from ..models import User, AssociationUsers
 
 class UserTests(TestCase):
-    fixtures = ['users.json']
+    fixtures = ['users.json', 'associations_users.json', 'associations.json', 'institutions.json',
+                'institution_components.json', 'activity_fields.json']
 
     def setUp(self):
         self.client = Client()
@@ -31,3 +32,13 @@ class UserTests(TestCase):
         user_1 = json.loads(response.content.decode('utf-8'))
         self.assertEqual(user_1["username"], user.username)
 
+
+    def test_get_association_users_list(self):
+        asso_users_cnt = AssociationUsers.objects.count()
+        self.assertTrue(asso_users_cnt > 0)
+
+        response = self.client.get('/users/association/')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(content), asso_users_cnt)
