@@ -15,6 +15,5 @@ class AssociationsModelsTests(TestCase):
 
     def testAssociationUsersModel(self):
         asso_user =  AssociationUsers.objects.first()
-        print(asso_user)
         self.assertEqual(str(asso_user), f"{asso_user.user}, {asso_user.association}, office : {asso_user.has_office_status}")
 
