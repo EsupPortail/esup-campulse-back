@@ -18,7 +18,7 @@ env.application_name = 'plana'   # name of webapp
 env.root_package_name = 'plana'  # name of app in webapp
 
 env.remote_home = '/home/django'  # remote home root
-env.remote_python_version = '3.8'  # python version
+env.remote_python_version = '3.9'  # python version
 env.remote_virtualenv_root = join(env.remote_home, '.virtualenvs')  # venv root
 env.remote_virtualenv_dir = join(env.remote_virtualenv_root,
                                  env.application_name)  # venv for webapp dir
@@ -90,23 +90,28 @@ def dev():
 def test():
     """Define test stage"""
     env.roledefs = {
-        'web': ['plana-test.net'],
-        'lb': ['lb.plana-test.net'],
+        'web': ['django-test2.u-strasbg.fr'],
+        'lb': ['django-test2.u-strasbg.fr'],
     }
     # env.user = 'root'  # user for ssh
     env.backends = ['127.0.0.1']
-    env.server_name = 'plana-test.net'
+    env.server_name = 'plana-test.app.unistra.fr'
     env.short_server_name = 'plana-test'
     env.static_folder = '/site_media/'
     env.server_ip = ''
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = '/etc/ssl/certs/plana.net.pem'
-    env.path_to_cert_key = '/etc/ssl/private/plana.net.key'
+    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
+    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
     env.goal = 'test'
-    env.socket_port = ''
+    env.socket_port = '8038'
     env.socket_host = '127.0.0.1'
-    env.map_settings = {}
+    env.map_settings = {
+        'default_db_host': "DATABASES['default']['HOST']",
+        'default_db_user': "DATABASES['default']['USER']",
+        'default_db_password': "DATABASES['default']['PASSWORD']",
+        'default_db_name': "DATABASES['default']['NAME']",
+    }
     execute(build_env)
 
 
