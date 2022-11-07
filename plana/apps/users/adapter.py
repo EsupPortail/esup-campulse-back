@@ -7,7 +7,6 @@ from django.contrib.auth.models import Group
 
 from .provider import CASProvider
 
-from .models import AssociationUsers
 from ..associations.models import Association
 
 
@@ -37,7 +36,6 @@ class CustomUserAdapter(DefaultAccountAdapter):
         # Testing if role and association exists in db
         try:
             group = Group.objects.get(name=data.get('role'))
-            association = Association.objects.get(name=data['asso']['name'])
         except Exception as e:
             print(e)
             # TODO : if group does not exist add user in a default one (with the less permissions)
@@ -46,11 +44,5 @@ class CustomUserAdapter(DefaultAccountAdapter):
 
         user.save()
         user.groups.add(group)
-        # TODO : create a special route to create AssociationUsers object
-        if 'asso' in data.keys():
-            asso_user = AssociationUsers.objects.create(user=user,
-                                                        association=association,
-                                                        has_office_status=data['asso']['has_office_status'])
-            asso_user.save()
         return user
 

@@ -57,11 +57,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     phone = serializers.CharField(required=False)
     role = serializers.CharField(required=True)
     password1 = serializers.CharField(required=False, default="")
-    asso_name = serializers.CharField(required=False)
-    asso_has_office_status = serializers.BooleanField(required=False, default=False)
     # TODO : add user is cas (required, boolean)
     # TODO : add checks on User and AssociationUsers objects creation
-    # TODO : split user creation and AssociationUsers creation in different routes
     # TODO : use Model User instead of fields
 
     def validate_password1(self, password):
@@ -82,11 +79,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         data_dict['phone'] = self.validated_data.get('phone', '')
         data_dict['role'] = self.validated_data.get('role', '')
-
-        if self.validated_data.get('asso_name', '') != '':
-            data_dict['asso'] = {}
-            data_dict['asso']['name'] = self.validated_data.get('asso_name', '')
-            data_dict['asso']['has_office_status'] = self.validated_data.get('asso_has_office_status', False)
 
         if self.validated_data.get('email') == self.validated_data.get('email_2'):
             data_dict['username'] = self.validated_data.get('email')
