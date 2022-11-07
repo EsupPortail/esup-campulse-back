@@ -8,5 +8,15 @@
       "primary": true,
       "user_id": 3
     }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 2,
+    "fields": {
+      "email": "test@pas-unistra.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 7
+    }
   }
 ]
