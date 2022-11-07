@@ -5,12 +5,18 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 
-from plana.apps.users.models import User
+from plana.apps.users.models import User, AssociationUsers
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = '__all__'
+
+
+class AssociationUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssociationUsers
         fields = '__all__'
 
 

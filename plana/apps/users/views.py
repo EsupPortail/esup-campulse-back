@@ -8,32 +8,14 @@ from django.utils.http import urlencode
 from rest_framework import generics
 
 from .adapter import CASAdapter
-from .models import User
+from .models import User, AssociationUsers
 from .serializers.cas import CASSerializer
-from .serializers.user import UserSerializer
+from .serializers.user import UserSerializer, AssociationUsersSerializer
 
 
-class UserList(generics.ListCreateAPIView):
-    """
-    Generic DRF view to list associations or create a new one
-    GET: list
-    POST: create
-    """
-
-    serializer_class = UserSerializer
-
-    def get_queryset(self):
-        return User.objects.all().order_by("username")
-
-
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET a single association (pk)
-    """
-
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
+#########
+#  CAS  #
+#########
 
 # login = CASLoginView.adapter_view(CASAdapter)
 # callback = CASCallbackView.adapter_view(CASAdapter)
@@ -74,3 +56,48 @@ def cas_verify(request):
         return JsonResponse({"token": response.json()["key"]})
     else:
         print(response)
+
+
+###########
+#  Users  #
+###########
+
+
+class UserList(generics.ListCreateAPIView):
+    """
+    Generic DRF view to list associations or create a new one
+    GET: list
+    POST: create
+    """
+
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.all().order_by("username")
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET a single association (pk)
+    """
+
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+######################
+#  AssociationUsers  #
+######################
+
+
+class AssociationUsersList(generics.ListCreateAPIView):
+    """
+    Generic DRF view to list AssociationsUsers or create a new one
+    GET: list
+    POST: create
+    """
+    serializer_class = AssociationUsersSerializer
+
+    def get_queryset(self):
+        return AssociationUsers.objects.all()
+
