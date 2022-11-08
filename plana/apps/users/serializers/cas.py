@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import typing
 
-import cas
 from allauth.socialaccount.models import SocialLogin
 from allauth_cas.views import AuthAction
-from cas import CASClientBase
+from cas import CASClient, CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
+from django.conf import settings
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
@@ -26,7 +26,8 @@ class CASSerializer(LoginSerializer):
 
     def validate(self, attrs):
         """
-        We need
+        We get the username from the CAS Server from the ticket and service url, log in the user
+        and add it to the serializer attributes
         """
         view = self.context.get("view")
         request = self.context.get("request")
@@ -58,13 +59,18 @@ class CASSerializer(LoginSerializer):
 
         return attrs
 
+    def validate_service(self, value):
+        if value not in settings.CAS_AUTHORIZED_SERVICES:
+            raise exceptions.ValidationError(_("%(service)s is not a valid service" % {"service": value}))
+        return value
+
     def get_client(
         self, request: HttpRequest, adapter: CASAdapter, service_url: str, action: str = AuthAction.AUTHENTICATE
     ) -> CASClientBase:
         provider: CASProvider = adapter.get_provider(request)
         auth_params = provider.get_auth_params(request, action)
         service_url = service_url or adapter.get_service_url(request)
-        client = cas.CASClient(
+        client = CASClient(
             service_url=service_url,
             server_url=adapter.url,
             version=adapter.version,

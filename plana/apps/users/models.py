@@ -15,7 +15,6 @@ class User(AbstractUser):
         - is_active
     """
     phone = models.CharField(_("Phone"), default="", max_length=25)
-    is_cas = models.BooleanField(_("Is CAS account"), default=False)
     is_validated_by_admin = models.BooleanField(_("Is validated by administrator"), default=False)
     # TODO token_reset_date_user = models.DateField(default=None)
     association_members = models.ManyToManyField(

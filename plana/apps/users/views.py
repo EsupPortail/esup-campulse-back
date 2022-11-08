@@ -56,7 +56,7 @@ def cas_verify(request):
         },
     )
     if response.ok:
-        return JsonResponse({"token": response.json()["key"]})
+        return JsonResponse(response.json())
     else:
         print(response)
 
@@ -80,7 +80,7 @@ class UserList(generics.ListCreateAPIView):
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET a single association (pk)
+    GET a single user (pk)
     """
 
     serializer_class = UserSerializer
