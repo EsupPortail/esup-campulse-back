@@ -7,7 +7,7 @@
       "last_name": "Nom",
       "username": "prenom.nom@unistra.fr",
       "email": "prenom.nom@unistra.fr",
-      "is_validated_by_admin": false,
+      "is_validated_by_admin": false
     }
   },
   {
@@ -18,7 +18,7 @@
       "last_name": "Lennon",
       "username": "john.lennon@bbc.com",
       "email": "john.lennon@bbc.com",
-      "is_validated_by_admin": false,
+      "is_validated_by_admin": false
     }
   },
   {
@@ -30,7 +30,7 @@
       "username": "georges.saucisse@georgeslasaucisse.fr",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "georges.saucisse@georgeslasaucisse.fr",
-      "is_validated_by_admin": true,
+      "is_validated_by_admin": true
     }
   },
   {
@@ -42,7 +42,7 @@
       "username": "amogus@amogus.amogus",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "amogus@amogus.amogus",
-      "is_validated_by_admin": false,
+      "is_validated_by_admin": false
     }
   },
   {
@@ -54,7 +54,7 @@
       "username": "patricia@cas.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "patricia@cas.tld",
-      "is_validated_by_admin": false,
+      "is_validated_by_admin": false
     }
   },
   {
@@ -66,7 +66,7 @@
       "username": "brice-CASé@nice.fr",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "email": "brice-CASé@nice.fr",
-      "is_validated_by_admin": false,
+      "is_validated_by_admin": false
     }
   },
   {
@@ -78,7 +78,7 @@
       "username": "test@pas-unistra.fr",
       "email": "test@pas-unistra.fr",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-      "is_validated_by_admin": true,
+      "is_validated_by_admin": true
     }
   }
 ]
