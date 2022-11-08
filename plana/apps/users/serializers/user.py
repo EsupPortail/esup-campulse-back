@@ -52,6 +52,12 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
         return exclusions + ['phone']
 
+    def validate_email(self, value):
+        ModelClass = self.Meta.model
+        if ModelClass.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Cette adresse mail est déjà utilisée.')
+        return value
+
     # TODO: Add check if user exists before save
     def save(self, request):
         adapter = get_adapter()
