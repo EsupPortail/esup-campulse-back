@@ -262,6 +262,7 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_spectacular',
 ]
 
 LOCAL_APPS = [
@@ -357,7 +358,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 
@@ -419,6 +421,18 @@ def sentry_init(environment):
         release=open(join(SITE_ROOT, "build.txt")).read(),
         send_default_pii=True
     )
+
+###############
+# Spectacular #
+###############
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'PlanA API',
+    'DESCRIPTION': 'API for PlanA API',
+    'VERSION': '0.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 
 ########
