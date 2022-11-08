@@ -3,7 +3,7 @@
     "model": "users.user_groups",
     "pk": 1,
     "fields": {
-      "user_id": 4,
+      "user_id": 7,
       "group_id": 1
     }
   },
