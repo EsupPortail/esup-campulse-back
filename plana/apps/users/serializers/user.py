@@ -48,6 +48,10 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone')
 
+    def get_validation_exclusions(self):
+        exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
+        return exclusions + ['phone']
+
     # TODO: Add check if user exists before save
     def save(self, request):
         adapter = get_adapter()
