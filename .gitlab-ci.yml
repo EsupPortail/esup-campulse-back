@@ -1,0 +1,18 @@
+stages:
+  - test
+
+services:
+  - postgres
+
+variables:
+  POSTGRES_DB: pos-test
+  POSTGRES_USER: pos
+  POSTGRES_PASSWORD: pos
+
+unittest:
+  stage: test
+  tags:
+    - python3.9
+  script:
+    - pip3 install tox
+    - tox
