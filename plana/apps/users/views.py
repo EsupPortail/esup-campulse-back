@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-from rest_framework import generics
+from rest_framework import generics, response, status
 
 from .adapter import CASAdapter
 from .models import User
@@ -33,6 +33,18 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.serializer_class(instance=user)
+        return response.Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 # login = CASLoginView.adapter_view(CASAdapter)
