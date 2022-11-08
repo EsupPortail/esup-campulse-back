@@ -15,10 +15,27 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        if type(data) == str:
+            return User.objects.get(username=data)
+        elif type(data) == int:
+            return User.objects.get(pk=data)
+
+
 class AssociationUsersSerializer(serializers.ModelSerializer):
+    user = UserRelatedField(queryset=User.objects.all(), many=False)
+
     class Meta:
         model = AssociationUsers
         fields = '__all__'
+
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
