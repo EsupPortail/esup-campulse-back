@@ -3,16 +3,18 @@
     "model": "users.AssociationUsers",
     "pk": 1,
     "fields": {
+      "user_id": 4,
       "association_id": 1,
-      "user_id": 4
+      "has_office_status": true
     }
   },
   {
     "model": "users.AssociationUsers",
     "pk": 2,
     "fields": {
+      "user_id": 3,
       "association_id": 2,
-      "user_id": 3
+      "has_office_status": false
     }
   }
 ]

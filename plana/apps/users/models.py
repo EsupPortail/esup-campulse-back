@@ -34,6 +34,9 @@ class AssociationUsers(models.Model):
     association = models.ForeignKey(Association, verbose_name=_("Association"), on_delete=models.CASCADE)
     has_office_status = models.BooleanField(_("Has office status"), default=False)
 
+    def __str__(self):
+        return f"{self.user}, {self.association}, office : {self.has_office_status}"
+
     class Meta:
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
