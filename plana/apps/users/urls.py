@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from . import views
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path("auth/cas/logout/", views.CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/", include("dj_rest_auth.urls")),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
+    re_path("auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$", views.PasswordResetConfirm.as_view(), name="password_reset_confirm"),
 ]
 
 if settings.DEBUG:

@@ -118,3 +118,10 @@ class GroupList(generics.ListCreateAPIView):
     def get_queryset(self):
         return Group.objects.all()
 
+####################
+#  Password Reset  #
+####################
+
+class PasswordResetConfirm(generics.GenericAPIView):
+    ...
+
