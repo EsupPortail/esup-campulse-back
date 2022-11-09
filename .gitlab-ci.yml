@@ -5,9 +5,9 @@ services:
   - postgres
 
 variables:
-  POSTGRES_DB: pos-test
-  POSTGRES_USER: pos
-  POSTGRES_PASSWORD: pos
+  POSTGRES_DB: plana_test
+  POSTGRES_USER: plana
+  POSTGRES_PASSWORD: plana
 
 unittest:
   stage: test
