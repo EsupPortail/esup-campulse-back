@@ -61,3 +61,14 @@ $ python manage.py loaddata associations_users auth_groups users user_groups acc
 $ python manage.py runserver
 ```
 
+## Documentation des routes de l'application
+
+### Commande pour mettre à jour automatiquement le fichier de documentation de l'API
+```
+$ python manage.py spectacular --file schema.yml
+```
+
+### URLs pour accéder à la documentation générée
+- `/api/schema/` pour télécharger un fichier YAML contenant la documentation
+- `/api/schema/swagger-ui/` pour consulter la documentation de l'API en mode Swagger
+- `/api/schema/redoc/` pour consulter la documentation de l'API en mode Redoc
