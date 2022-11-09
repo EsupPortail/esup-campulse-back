@@ -58,7 +58,6 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Cette adresse mail est déjà utilisée.')
         return value
 
-    # TODO: Add check if user exists before save
     def save(self, request):
         adapter = get_adapter()
         user = adapter.new_user(request)
