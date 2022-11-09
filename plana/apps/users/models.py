@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from plana.apps.associations.models import Association
 from django.utils.translation import gettext as _
+from allauth.socialaccount.models import SocialAccount
+
+from plana.apps.associations.models import Association
+from plana.apps.users.provider import CASProvider
 
 class User(AbstractUser):
     """
@@ -23,6 +26,20 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def is_cas_user(self):
+        try:
+            self.socialaccount_set.get(provider=CASProvider.id)
+            return True
+        except SocialAccount.DoesNotExist:
+            return False
+
+    def get_cas_user(self):
+        try:
+            account = self.socialaccount_set.get(provider=CASProvider.id)
+            return account
+        except SocialAccount.DoesNotExist:
+            return None
 
     class Meta:
         default_permissions = []

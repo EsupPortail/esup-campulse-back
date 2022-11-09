@@ -42,6 +42,15 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
+            if serializer.instance.get_cas_user():
+                print(serializer.instance.get_cas_user().extra_data)
+            # TODO : Check if user authenticated with CAS cannot PATCH the fields auto-filled by CAS (not testable on localhost because CAS-dev doesn't allow it).
+            """
+            if serializer.instance.get_cas_user():
+                cas_user_response = serializer.instance.get_cas_user()
+                cas_restricted_fields = CASAdapter.get_provider().extract_common_fields(cas_user_response)
+                print(cas_user_response.extra_data)
+            """
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_200_OK)
 
