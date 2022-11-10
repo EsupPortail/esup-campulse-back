@@ -58,14 +58,16 @@ $ pip install -r requirements/dev.txt
 ```
 
 ### Migrer les modèles de données dans la base de données
+
 ```
 $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
 ### Chargement des fixtures dans la base de données
+
 ```
-$ python manage.py loaddata associations_users auth_groups users user_groups account_email_addresses activity_fields associations institution_components institutions social_networks
+$ python manage.py loaddata plana/apps/*/fixtures/*.json
 ```
 
 ## Lancement du serveur en local
@@ -73,3 +75,8 @@ $ python manage.py loaddata associations_users auth_groups users user_groups acc
 $ python manage.py runserver
 ```
 
+## Détecter de nouvelles chaînes de caractères à traduire
+```
+$ python manage.py makemessages -l fr
+
+```
