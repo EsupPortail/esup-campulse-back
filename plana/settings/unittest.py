@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': environ.get('DEFAULT_DB_TEST_NAME', 'plana_test'),
         'USER': environ.get('DEFAULT_DB_TEST_USER', 'plana'),
         'PASSWORD': environ.get('DEFAULT_DB_TEST_PASSWORD', 'plana'),
-        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'postgres'),
+        'HOST': environ.get('DEFAULT_DB_TEST_HOST', 'localhost'),
         'PORT': environ.get('DEFAULT_DB_TEST_PORT', '5432'),
     }
 }
