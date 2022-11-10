@@ -22,9 +22,6 @@ class CASProvider(AllAuthCASProvider):
             "email": extra.get("mail", ""),
             "first_name": extra.get("first_name", ""),
             "last_name": extra.get("last_name", ""),
-            # "affiliation": extra.get("affiliation"),
-            # "top_unit_code": extra.get("top_unit_code"),
-            # "academic_year": extra.get("academic_year"),
         }
         return fields
 

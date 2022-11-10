@@ -1,6 +1,6 @@
 import requests
 
-from rest_framework import generics
+from rest_framework import generics, response,status
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
@@ -19,6 +19,7 @@ from .serializers.user import UserSerializer, AssociationUsersSerializer, GroupS
 #########
 #  CAS  #
 #########
+
 
 # login = CASLoginView.adapter_view(CASAdapter)
 # callback = CASCallbackView.adapter_view(CASAdapter)
@@ -86,6 +87,25 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.serializer_class(instance=user)
+        return response.Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            if serializer.instance.get_cas_user():
+                print(serializer.instance.get_cas_user().extra_data)
+            # TODO : Check if user authenticated with CAS cannot PATCH the fields auto-filled by CAS (not testable on localhost because CAS-dev doesn't allow it).
+            """
+            if serializer.instance.get_cas_user():
+                cas_user_response = serializer.instance.get_cas_user()
+                cas_restricted_fields = CASAdapter.get_provider().extract_common_fields(cas_user_response)
+                print(cas_user_response.extra_data)
+            """
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
 
 ######################
 #  AssociationUsers  #
