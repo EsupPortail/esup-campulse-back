@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-02 15:50+0100\n"
+"POT-Creation-Date: 2022-11-10 11:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,12 +100,12 @@ msgid "Activity field"
 msgstr "Domaine d'activité"
 
 #: plana/apps/associations/models.py:39 plana/apps/associations/models.py:50
-#: plana/apps/users/models.py:35 plana/apps/users/models.py:39
+#: plana/apps/users/models.py:34 plana/apps/users/models.py:41
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models.py:40 plana/apps/users/models.py:22
-#: plana/apps/users/models.py:40
+#: plana/apps/associations/models.py:40 plana/apps/users/models.py:21
+#: plana/apps/users/models.py:42
 msgid "Associations"
 msgstr "Associations"
 
@@ -138,22 +138,18 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/users/models.py:18
-msgid "Is CAS account"
-msgstr "Compte CAS ?"
-
-#: plana/apps/users/models.py:19
 msgid "Is validated by administrator"
 msgstr ""
 
-#: plana/apps/users/models.py:30 plana/apps/users/models.py:34
+#: plana/apps/users/models.py:29 plana/apps/users/models.py:33
 msgid "User"
 msgstr "Utilisateur"
 
-#: plana/apps/users/models.py:31
+#: plana/apps/users/models.py:30
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/models.py:36
+#: plana/apps/users/models.py:35
 msgid "Has office status"
 msgstr "Membre du bureau ?"
 
@@ -165,12 +161,12 @@ msgstr "Vue non définie, passez-là dans une variable de contexte"
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:65
+#: plana/apps/users/serializers/cas.py:64
 #, python-format
 msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:88
+#: plana/apps/users/serializers/cas.py:86
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
@@ -182,5 +178,40 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#~ msgid "Is active"
-#~ msgstr "Est active"
+#: plana/templates/account/email/base_message.txt:1
+#, python-format
+msgid "Hello from %(site_name)s."
+msgstr "Bonjour de la part de %(site_name)s."
+
+#: plana/templates/account/email/base_message.txt:5
+#, python-format
+msgid "%(site_name)s team hopes that you have a nice day.\n"
+msgstr "L'équipe de %(site_name)s vous souhaite une bonne journée.\n"
+
+#: plana/templates/account/email/email_confirmation_message.txt:6
+#, python-format
+msgid ""
+"You're receiving this e-mail because your e-mail address was used to "
+"register an account on %(site_domain)s.\n"
+"\n"
+"To confirm this is correct, go to "
+msgstr ""
+"Vous recevez cet e-mail car votre adresse e-mail a été utilisée pour créer "
+"un compte sur %(site_domain)s.\n"
+"\n"
+"Si vous êtes bien à l'origine de cette requête, veuillez vous rendre à "
+"l'adresse "
+
+#: plana/templates/account/email/email_confirmation_message.txt:10
+msgid ""
+"Once you've confirmed your account, you will have to wait for an "
+"administrator to validate it definitely. You will receive another e-mail "
+"when it's done."
+msgstr ""
+"Une fois votre compte confirmé, vous devrez attendre la validation "
+"définitive de votre compte par l'équipe d'administration. Vous recevrez un "
+"autre e-mail quand ce sera fait."
+
+#: plana/templates/account/email/email_confirmation_subject.txt:3
+msgid "Hello, please confirm your e-mail address"
+msgstr "Bonjour, veuillez s'il vous plaît confirmer votre adresse e-mail"
