@@ -77,6 +77,6 @@ $ python manage.py runserver
 
 ## Détecter de nouvelles chaînes de caractères à traduire
 ```
-$ python manage.py makemessages -l fr
+$ python manage.py makemessages -l fr --extension html,txt,py
 
 ```
