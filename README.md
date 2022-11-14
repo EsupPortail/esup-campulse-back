@@ -24,59 +24,72 @@ python (>=3.9), pip, virtualenv, virtualenvwrapper
 
 ### Lancer la base de données PostgreSQL et le service de mail en local avec Docker
 
-A la racine du projet :
+À la racine du projet :
 
-```
+```sh
 $ sudo docker-compose up -d
 ```
 
-Et pour stopper le service :
+Ou
+```sh
+$ sudo docker compose up -d
 ```
+
+Pour stopper le service :
+```sh
 $ sudo docker-compose down
 ```
 
-### Création de l'environnement virtuel
+### Créer l'environnement virtuel
 
-```
+```sh
 $ mkvirtualenv plana
 ```
 
-### Configuration des variables d'environnement nécessaires (fichier postactivate du venv)
+### Configurer les variables d'environnement nécessaires (fichier postactivate du venv)
 
-```
+```sh
 export DJANGO_SETTINGS_MODULE=plana.settings.dev
 ```
 
-
 Les actions suivantes se font avec le virtualenv activé :
 
+### Installer les dépendances de dev dans le virtualenv
 
-### Installation des dépendances de dev dans le virtualenv
-
-```
+```sh
 $ pip install -r requirements/dev.txt
 ```
 
 ### Migrer les modèles de données dans la base de données
 
-```
+```sh
 $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-### Chargement des fixtures dans la base de données
+### Charger les fixtures dans la base de données
 
-```
+```sh
 $ python manage.py loaddata plana/apps/*/fixtures/*.json
 ```
 
-## Lancement du serveur en local
-```
+## Développement
+
+### Lancer du serveur en local
+
+```sh
 $ python manage.py runserver
 ```
 
-## Détecter de nouvelles chaînes de caractères à traduire
-```
+### Détecter de nouvelles chaînes de caractères à traduire
+
+```sh
 $ python manage.py makemessages -l fr --extension html,txt,py
 
+```
+
+### Linter les fichiers
+
+```sh
+$ black plana
 ```

@@ -16,6 +16,10 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
 
 class CASAdapter(AllAuthCASAdapter):
+    """
+    [django-allauth-cas] Subclass CASAdapter to give the configuration as a CAS client.
+    """
+
     provider_id = CASProvider.id
     url = settings.CAS_SERVER
     version = settings.CAS_VERSION

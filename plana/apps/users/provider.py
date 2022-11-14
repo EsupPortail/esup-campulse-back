@@ -7,6 +7,10 @@ class CASAccount(ProviderAccount):
 
 
 class CASProvider(AllAuthCASProvider):
+    """
+    [django-allauth-cas] The CASProvider subclass defines how to process data returned by the CAS server.
+    """
+
     id = "cas"
     name = "CAS Unistra"
     account_class = CASAccount

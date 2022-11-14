@@ -1,10 +1,9 @@
-import string, random
-
 from rest_framework import serializers
 
 from allauth.account.adapter import get_adapter
 
 from django.contrib.auth.models import Group
+from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models import User, AssociationUsers
 
@@ -13,6 +12,9 @@ class UserSerializer(serializers.ModelSerializer):
     is_cas = serializers.SerializerMethodField("is_cas_user")
 
     def is_cas_user(self, user):
+        """
+        Contenu du champ calculé "is_cas" (True si l'utilisateur s'est inscrit via CAS, False sinon).
+        """
         return user.is_cas_user()
 
     class Meta:
@@ -73,7 +75,9 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         ModelClass = self.Meta.model
         if ModelClass.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Cette adresse mail est déjà utilisée.")
+            raise serializers.ValidationError(
+                _("This email address is already in use.")
+            )
         return value
 
     def save(self, request):

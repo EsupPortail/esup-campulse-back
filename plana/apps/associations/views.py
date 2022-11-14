@@ -1,6 +1,4 @@
-from django.shortcuts import render, get_object_or_404
-
-from rest_framework import generics, status
+from rest_framework import generics
 
 from .serializers import AssociationSerializer
 from .models import Association
@@ -8,9 +6,8 @@ from .models import Association
 
 class AssociationList(generics.ListCreateAPIView):
     """
-    Generic DRF view to list associations or create a new one
-    GET: list
-    POST: create
+    GET : Lists all associations currently active.
+    POST : Creates a new association.
     """
 
     serializer_class = AssociationSerializer
@@ -21,7 +18,10 @@ class AssociationList(generics.ListCreateAPIView):
 
 class AssociationDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET a single association (pk)
+    GET : Lists an association with all its details.
+    PUT : Edits all fields of an association.
+    PATCH : Edits one field of an association.
+    DELETE : Deletes an association.
     """
 
     serializer_class = AssociationSerializer

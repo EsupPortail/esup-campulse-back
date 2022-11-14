@@ -9,7 +9,7 @@ from plana.apps.users.provider import CASProvider
 
 class User(AbstractUser):
     """
-    Extending the abstract User class.
+    Model that extends the abstract User class.
     Following fields from Django User class are used :
         - username
         - password
@@ -32,6 +32,10 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
     def is_cas_user(self):
+        """
+        Returns True if the user account was generated through CAS on signup (checks if a related row is in socialaccount table).
+        """
+
         try:
             self.socialaccount_set.get(provider=CASProvider.id)
             return True
@@ -39,6 +43,10 @@ class User(AbstractUser):
             return False
 
     def get_cas_user(self):
+        """
+        Returns user account CAS details if it was generated through CAS on signup (from a related row in socialaccount table).
+        """
+
         try:
             account = self.socialaccount_set.get(provider=CASProvider.id)
             return account
@@ -52,6 +60,10 @@ class User(AbstractUser):
 
 
 class AssociationUsers(models.Model):
+    """
+    Model that lists links between associations and users (which user is in which association, is the user in the association office).
+    """
+
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     association = models.ForeignKey(
         Association, verbose_name=_("Association"), on_delete=models.CASCADE

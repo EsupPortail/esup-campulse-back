@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 class Association(models.Model):
     """
-    Main table which represents an association.
+    Model representing an association and most of its details.
     """
 
     name = models.CharField(
@@ -56,7 +56,7 @@ class Association(models.Model):
 
 class SocialNetwork(models.Model):
     """
-    Social networks from associations.
+    List of social networks used by the associations (Facebook, Twitter, Mastodon, ...).
     """
 
     type = models.CharField(_("Type"), max_length=32, blank=False)
@@ -78,7 +78,7 @@ class SocialNetwork(models.Model):
 
 class Institution(models.Model):
     """
-    Associations are attached to institutions.
+    Associations are attached to institutions (Crous, Unistra, UHA, ...).
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
@@ -94,7 +94,7 @@ class Institution(models.Model):
 
 class InstitutionComponent(models.Model):
     """
-    Associations are attached to components.
+    Associations are attached to components (faculté de médecine, IUT, ...).
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
@@ -109,7 +109,7 @@ class InstitutionComponent(models.Model):
 
 class ActivityField(models.Model):
     """
-    Associations have an activity field.
+    Associations have an activity field (culture, international, santé, sport, ...).
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
