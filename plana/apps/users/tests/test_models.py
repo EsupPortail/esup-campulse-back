@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from plana.apps.users.models.user import User, AssociationUsers
 
 
-class AssociationsModelsTests(TestCase):
+class UsersModelsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",

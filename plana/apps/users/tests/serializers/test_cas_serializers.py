@@ -3,6 +3,7 @@ from unittest.mock import patch
 from allauth.socialaccount.models import SocialAccount
 from allauth_cas import CAS_PROVIDER_SESSION_KEY
 from django.test import TestCase, override_settings
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
@@ -37,7 +38,7 @@ class CASSerializerTest(TestCase):
             serializer.get_adapter(request, view)
 
         self.assertIn(
-            "Can not find adapter_class attribute on view",
+            _("Can not find adapter_class attribute on view"),
             ctx.exception.detail,
         )
 
@@ -133,8 +134,8 @@ class CASSerializerTest(TestCase):
         with self.assertRaises(ValidationError) as ctx:
             serializer.is_valid(raise_exception=True)
         self.assertIn(
-            "CAS server doesn't validate the ticket",
             ctx.exception.detail["non_field_errors"][0],
+            _("CAS server doesn't validate the ticket"),
         )
 
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])

@@ -1,10 +1,8 @@
-import json
-
 from rest_framework import status
 from django.test import TestCase, Client
 
 
-class AssociationsTests(TestCase):
+class ViewsTests(TestCase):
     def setUp(self):
         self.client = Client()
 

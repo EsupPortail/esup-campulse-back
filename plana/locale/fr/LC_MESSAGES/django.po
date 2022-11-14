@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-14 09:43+0100\n"
+"POT-Creation-Date: 2022-11-14 14:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,138 +18,146 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: plana/apps/associations/models.py:11 plana/apps/associations/models.py:84
-#: plana/apps/associations/models.py:100 plana/apps/associations/models.py:115
+#: plana/apps/associations/models/association.py:11
+#: plana/apps/associations/models/association.py:84
+#: plana/apps/associations/models/association.py:100
+#: plana/apps/associations/models/association.py:115
 msgid "Name"
 msgstr "Nom"
 
-#: plana/apps/associations/models.py:13 plana/apps/associations/models.py:85
+#: plana/apps/associations/models/association.py:13
+#: plana/apps/associations/models/association.py:85
 msgid "Acronym"
 msgstr "Acronyme"
 
-#: plana/apps/associations/models.py:14
+#: plana/apps/associations/models/association.py:14
 msgid "Logo path"
 msgstr "Emplacement du logo"
 
-#: plana/apps/associations/models.py:15
+#: plana/apps/associations/models/association.py:15
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/associations/models.py:16
+#: plana/apps/associations/models/association.py:16
 msgid "Activities"
 msgstr "Activités"
 
-#: plana/apps/associations/models.py:17
+#: plana/apps/associations/models/association.py:17
 msgid "Address"
 msgstr "Adresse"
 
-#: plana/apps/associations/models.py:18 plana/apps/users/models.py:22
+#: plana/apps/associations/models/association.py:18
+#: plana/apps/users/models/user.py:22
 msgid "Phone"
 msgstr "Téléphone"
 
-#: plana/apps/associations/models.py:19
+#: plana/apps/associations/models/association.py:19
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models.py:20
+#: plana/apps/associations/models/association.py:20
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models.py:21
+#: plana/apps/associations/models/association.py:21
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models.py:22
+#: plana/apps/associations/models/association.py:22
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models.py:23
+#: plana/apps/associations/models/association.py:23
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models.py:24
+#: plana/apps/associations/models/association.py:24
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models.py:25
+#: plana/apps/associations/models/association.py:25
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models.py:27
+#: plana/apps/associations/models/association.py:27
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models.py:30
+#: plana/apps/associations/models/association.py:30
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models.py:32
+#: plana/apps/associations/models/association.py:32
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models.py:35 plana/apps/associations/models.py:91
+#: plana/apps/associations/models/association.py:35
+#: plana/apps/associations/models/association.py:91
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models.py:41 plana/apps/associations/models.py:106
+#: plana/apps/associations/models/association.py:41
+#: plana/apps/associations/models/association.py:106
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models.py:46 plana/apps/associations/models.py:121
+#: plana/apps/associations/models/association.py:46
+#: plana/apps/associations/models/association.py:121
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
-#: plana/apps/associations/models.py:53 plana/apps/associations/models.py:66
-#: plana/apps/users/models.py:69 plana/apps/users/models.py:77
+#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:66
+#: plana/apps/users/models/user.py:69 plana/apps/users/models/user.py:77
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models.py:54 plana/apps/users/models.py:28
-#: plana/apps/users/models.py:78
+#: plana/apps/associations/models/association.py:54
+#: plana/apps/users/models/user.py:28 plana/apps/users/models/user.py:78
 msgid "Associations"
 msgstr "Associations"
 
-#: plana/apps/associations/models.py:62
+#: plana/apps/associations/models/association.py:62
 msgid "Type"
 msgstr "Type"
 
-#: plana/apps/associations/models.py:63
+#: plana/apps/associations/models/association.py:63
 msgid "Location"
 msgstr "Adresse"
 
-#: plana/apps/associations/models.py:75
+#: plana/apps/associations/models/association.py:75
 msgid "Social network"
 msgstr "Réseau social"
 
-#: plana/apps/associations/models.py:76
+#: plana/apps/associations/models/association.py:76
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/models.py:92
+#: plana/apps/associations/models/association.py:92
 msgid "Institutions"
 msgstr "Établissements"
 
-#: plana/apps/associations/models.py:107
+#: plana/apps/associations/models/association.py:107
 msgid "Institution components"
 msgstr "Composantes"
 
-#: plana/apps/associations/models.py:122
+#: plana/apps/associations/models/association.py:122
 msgid "Activity fields"
 msgstr "Domaines d'activités"
 
-#: plana/apps/users/models.py:24
+#: plana/apps/users/models/user.py:24
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models.py:58 plana/apps/users/models.py:67
+#: plana/apps/users/models/user.py:58 plana/apps/users/models/user.py:67
 msgid "User"
 msgstr "Utilisateur"
 
-#: plana/apps/users/models.py:59
+#: plana/apps/users/models/user.py:59
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/models.py:71
+#: plana/apps/users/models/user.py:71
 msgid "Has office status"
 msgstr "Membre du bureau d'association"
 
@@ -158,6 +166,7 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:53
+#: plana/apps/users/tests/serializers/test_cas_serializers.py:138
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
@@ -167,10 +176,11 @@ msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
 #: plana/apps/users/serializers/cas.py:97
+#: plana/apps/users/tests/serializers/test_cas_serializers.py:41
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:75
+#: plana/apps/users/serializers/user.py:79
 msgid "This email address is already in use."
 msgstr "Cette adresse mail est déjà utilisée."
 

@@ -77,7 +77,7 @@ $ python manage.py loaddata plana/apps/*/fixtures/*.json
 
 ## Développement
 
-### Lancer du serveur en local
+### Lancer le serveur en local
 
 ```sh
 $ python manage.py runserver
@@ -94,4 +94,10 @@ $ python manage.py makemessages -l fr --extension html,txt,py
 
 ```sh
 $ black plana
+```
+
+### Exécuter les tests localement
+
+```sh
+$ DEFAULT_DB_TEST_HOST=localhost tox
 ```
