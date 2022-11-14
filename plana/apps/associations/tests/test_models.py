@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from ..models import (
+from plana.apps.associations.models.association import (
     Association,
     SocialNetwork,
     Institution,
@@ -10,11 +10,11 @@ from ..models import (
 
 class AssociationsModelsTests(TestCase):
     fixtures = [
-        "institutions.json",
-        "institution_components.json",
-        "activity_fields.json",
-        "associations.json",
-        "social_networks.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "associations_institution.json",
+        "associations_institutioncomponent.json",
+        "associations_socialnetwork.json",
     ]
 
     def setUp(self):

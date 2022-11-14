@@ -3,15 +3,16 @@ import json
 from django.test import TestCase, Client
 from rest_framework import status
 
-from ..models import Association
+from plana.apps.associations.models.association import Association
 
 
 class AssociationsTests(TestCase):
     fixtures = [
-        "institutions.json",
-        "institution_components.json",
-        "activity_fields.json",
-        "associations.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "associations_institution.json",
+        "associations_institutioncomponent.json",
+        "associations_socialnetwork.json",
     ]
 
     def setUp(self):

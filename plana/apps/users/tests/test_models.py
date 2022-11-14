@@ -1,17 +1,20 @@
 from django.test import TestCase, Client
-from ..models import User, AssociationUsers
+from plana.apps.users.models.user import User, AssociationUsers
 
 
 class AssociationsModelsTests(TestCase):
     fixtures = [
-        "users.json",
-        "associations_users.json",
-        "associations.json",
-        "institutions.json",
-        "institution_components.json",
-        "activity_fields.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "associations_institution.json",
+        "associations_institutioncomponent.json",
+        "associations_socialnetwork.json",
+        "account_emailaddress.json",
+        "auth_group.json",
+        "users_associationsusers.json",
+        "users_user.json",
+        "users_user_groups.json",
     ]
-
     def setUp(self):
         self.client = Client()
 

@@ -6,18 +6,21 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 from rest_framework import status
 
-from ..models import User, AssociationUsers
+from plana.apps.users.models.user import User, AssociationUsers
 
 
 class UserTests(TestCase):
     fixtures = [
-        "users.json",
-        "associations_users.json",
-        "associations.json",
-        "institutions.json",
-        "institution_components.json",
-        "activity_fields.json",
-        "auth_groups.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "associations_institution.json",
+        "associations_institutioncomponent.json",
+        "associations_socialnetwork.json",
+        "account_emailaddress.json",
+        "auth_group.json",
+        "users_associationsusers.json",
+        "users_user.json",
+        "users_user_groups.json",
     ]
 
     def setUp(self):

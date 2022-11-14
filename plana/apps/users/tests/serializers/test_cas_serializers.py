@@ -7,10 +7,10 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
 from plana.apps.users.adapter import CASAdapter
-from plana.apps.users.models import User
+from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.cas import CASSerializer
-from plana.apps.users.views import CASLogin
+from plana.apps.users.views.user import CASLogin
 
 
 class CASSerializerTest(TestCase):
