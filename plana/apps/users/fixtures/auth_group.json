@@ -3,40 +3,33 @@
     "model": "auth.group",
     "pk": 1,
     "fields": {
-      "name": "Administrateur"
+      "name": "Gestionnaire SVU"
     }
   },
   {
     "model": "auth.group",
     "pk": 2,
     "fields": {
-      "name": "Gestionnaire SVU"
+      "name": "Gestionnaire Crous"
     }
   },
   {
     "model": "auth.group",
     "pk": 3,
     "fields": {
-      "name": "Gestionnaire Crous"
+      "name": "Membre Commission FSDIE/IdEx"
     }
   },
   {
     "model": "auth.group",
     "pk": 4,
     "fields": {
-      "name": "Membre Commission FSDIE/IdEx"
-    }
-  },
-  {
-    "model": "auth.group",
-    "pk": 5,
-    "fields": {
       "name": "Membre Commission Culture ActionS"
     }
   },
   {
     "model": "auth.group",
-    "pk": 6,
+    "pk": 5,
     "fields": {
       "name": "Étudiant"
     }

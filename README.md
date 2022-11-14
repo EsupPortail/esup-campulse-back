@@ -69,6 +69,8 @@ $ python manage.py migrate
 
 ### Charger les fixtures dans la base de données
 
+Tous les mots de passe utilisés dans les fixtures sont `motdepasse`.
+
 ```sh
 $ python manage.py loaddata plana/apps/*/fixtures/*.json
 ```

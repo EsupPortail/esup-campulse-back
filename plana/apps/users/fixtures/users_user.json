@@ -1,0 +1,107 @@
+[
+  {
+    "model": "users.User",
+    "pk": 1,
+    "fields": {
+      "first_name": "admin",
+      "last_name": "admin",
+      "username": "admin@admin.admin",
+      "email": "admin@admin.admin",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 2,
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "username": "prenom.nom@adressemail.fr",
+      "email": "prenom.nom@adressemail.fr",
+      "is_validated_by_admin": false,
+      "is_active": false
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 3,
+    "fields": {
+      "first_name": "Georges",
+      "last_name": "Saucisse",
+      "username": "georges.saucisse@georgeslasaucisse.fr",
+      "email": "georges.saucisse@georgeslasaucisse.fr",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 4,
+    "fields": {
+      "first_name": "John",
+      "last_name": "Lennon",
+      "username": "john.lennon@bbc.com",
+      "email": "john.lennon@bbc.com",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 5,
+    "fields": {
+      "first_name": "amogus",
+      "last_name": "sus",
+      "username": "amogus@amogus.amogus",
+      "email": "amogus@amogus.amogus",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 6,
+    "fields": {
+      "first_name": "Patricia",
+      "last_name": "Cas",
+      "username": "patricia@cas.tld",
+      "email": "patricia@cas.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 7,
+    "fields": {
+      "first_name": "Brice",
+      "last_name": "De Nice",
+      "username": "brice-CASé@nice.fr",
+      "email": "brice-CASé@nice.fr",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 8,
+    "fields": {
+      "first_name": "test",
+      "last_name": "test",
+      "username": "test@pas-unistra.fr",
+      "email": "test@pas-unistra.fr",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  }
+]

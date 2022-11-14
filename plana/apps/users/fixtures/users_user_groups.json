@@ -1,0 +1,50 @@
+[
+  {
+    "model": "users.user_groups",
+    "pk": 1,
+    "fields": {
+      "user_id": 3,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 2,
+    "fields": {
+      "user_id": 4,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 3,
+    "fields": {
+      "user_id": 5,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 4,
+    "fields": {
+      "user_id": 6,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 5,
+    "fields": {
+      "user_id": 7,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 6,
+    "fields": {
+      "user_id": 8,
+      "group_id": 5
+    }
+  }
+]

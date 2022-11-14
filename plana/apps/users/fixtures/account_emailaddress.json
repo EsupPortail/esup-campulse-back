@@ -1,0 +1,62 @@
+[
+  {
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+      "email": "georges.saucisse@georgeslasaucisse.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 3
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 2,
+    "fields": {
+      "email": "john.lennon@bbc.com",
+      "verified": true,
+      "primary": true,
+      "user_id": 4
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 3,
+    "fields": {
+      "email": "amogus@amogus.amogus",
+      "verified": true,
+      "primary": true,
+      "user_id": 5
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 4,
+    "fields": {
+      "email": "patricia@cas.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 6
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 5,
+    "fields": {
+      "email": "brice-CASé@nice.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 7
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 6,
+    "fields": {
+      "email": "test@pas-unistra.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 8
+    }
+  }
+]
