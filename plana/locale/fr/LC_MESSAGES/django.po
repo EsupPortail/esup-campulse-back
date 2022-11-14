@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-14 14:15+0100\n"
+"POT-Creation-Date: 2022-11-14 16:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,7 +202,7 @@ msgstr "Bonjour de la part de %(site_name)s."
 msgid "%(site_name)s team hopes that you have a nice day.\n"
 msgstr "L'équipe de %(site_name)s vous souhaite une bonne journée.\n"
 
-#: plana/templates/account/email/email_confirmation_message.txt:6
+#: plana/templates/account/email/email_confirmation_message.txt:5
 #, python-format
 msgid ""
 "You're receiving this e-mail because your e-mail address was used to "
@@ -216,7 +216,7 @@ msgstr ""
 "Si vous êtes bien à l'origine de cette requête, veuillez vous rendre à "
 "l'adresse "
 
-#: plana/templates/account/email/email_confirmation_message.txt:10
+#: plana/templates/account/email/email_confirmation_message.txt:9
 msgid ""
 "Once you've confirmed your account, you will have to wait for an "
 "administrator to validate it definitely. You will receive another e-mail "
@@ -229,3 +229,25 @@ msgstr ""
 #: plana/templates/account/email/email_confirmation_subject.txt:3
 msgid "Hello, please confirm your e-mail address"
 msgstr "Bonjour, veuillez s'il vous plaît confirmer votre adresse e-mail"
+
+#: plana/templates/account/email/password_reset_key_message.txt:5
+msgid ""
+"You're receiving this e-mail because you or someone else has requested a "
+"password for your user account.\n"
+"It can be safely ignored if you did not request a password reset. Click the "
+"link below to reset your password."
+msgstr ""
+"Vous recevez cet e-mail car vous ou une autre personne a demandé la "
+"réinitialisation du mot de passe de votre compte.\n"
+"Vous pouvez ignorer cette requête si vous ne souhaitez pas faire cette "
+"démarche. Sinon cliquez sur le lien ci-dessous pour réinitialiser votre mot "
+"de passe."
+
+#: plana/templates/account/email/password_reset_key_message.txt:10
+#, python-format
+msgid "In case you forgot, your username is %(username)s ."
+msgstr "Si vous l'avez oublié, votre nom de compte est %(username)s ."
+
+#: plana/templates/account/email/password_reset_key_subject.txt:3
+msgid "Hello, please reset your password"
+msgstr "Bonjour, veuillez s'il vous plaît réinitialiser votre mot de passe"
