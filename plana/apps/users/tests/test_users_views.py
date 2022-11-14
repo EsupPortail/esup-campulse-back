@@ -8,9 +8,17 @@ from rest_framework import status
 
 from ..models import User, AssociationUsers
 
+
 class UserTests(TestCase):
-    fixtures = ['users.json', 'associations_users.json', 'associations.json', 'institutions.json',
-                'institution_components.json', 'activity_fields.json', 'auth_groups.json']
+    fixtures = [
+        "users.json",
+        "associations_users.json",
+        "associations.json",
+        "institutions.json",
+        "institution_components.json",
+        "activity_fields.json",
+        "auth_groups.json",
+    ]
 
     def setUp(self):
         self.client = Client()
@@ -19,10 +27,10 @@ class UserTests(TestCase):
         users_cnt = User.objects.count()
         self.assertTrue(users_cnt > 0)
 
-        response = self.client.get(reverse('user_list'))
+        response = self.client.get(reverse("user_list"))
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
 
     # TODO Anonymous users aren't allowed to see user details anymore. Correct the test to pass an authenticated user.
@@ -37,25 +45,22 @@ class UserTests(TestCase):
         self.assertEqual(user_1["username"], user.username)
     """
 
-
     def test_get_association_users_list(self):
         asso_users_cnt = AssociationUsers.objects.count()
         self.assertTrue(asso_users_cnt > 0)
 
-        response = self.client.get('/users/association/')
+        response = self.client.get("/users/association/")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_users_cnt)
-
 
     def test_get_groups_list(self):
         groups_cnt = Group.objects.count()
         self.assertTrue(groups_cnt > 0)
 
-        response = self.client.get('/users/groups/')
+        response = self.client.get("/users/groups/")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), groups_cnt)
-

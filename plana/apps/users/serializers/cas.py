@@ -33,7 +33,9 @@ class CASSerializer(LoginSerializer):
         request = self.context.get("request")
 
         if not view:
-            raise exceptions.ValidationError(_("View is not defined, pass it as a context variable"))
+            raise exceptions.ValidationError(
+                _("View is not defined, pass it as a context variable")
+            )
 
         adapter = self.get_adapter(request, view)
 
@@ -47,7 +49,9 @@ class CASSerializer(LoginSerializer):
         uid, extra, _pgtiou = response
 
         if not uid:
-            raise exceptions.ValidationError(_("CAS server doesn't validate the ticket"))
+            raise exceptions.ValidationError(
+                _("CAS server doesn't validate the ticket")
+            )
 
         data = (uid, extra or {})
 
@@ -61,11 +65,17 @@ class CASSerializer(LoginSerializer):
 
     def validate_service(self, value):
         if value not in settings.CAS_AUTHORIZED_SERVICES:
-            raise exceptions.ValidationError(_("%(service)s is not a valid service" % {"service": value}))
+            raise exceptions.ValidationError(
+                _("%(service)s is not a valid service" % {"service": value})
+            )
         return value
 
     def get_client(
-        self, request: HttpRequest, adapter: CASAdapter, service_url: str, action: str = AuthAction.AUTHENTICATE
+        self,
+        request: HttpRequest,
+        adapter: CASAdapter,
+        service_url: str,
+        action: str = AuthAction.AUTHENTICATE,
     ) -> CASClientBase:
         provider: CASProvider = adapter.get_provider(request)
         auth_params = provider.get_auth_params(request, action)
@@ -83,6 +93,8 @@ class CASSerializer(LoginSerializer):
     def get_adapter(self, request: HttpRequest, view: CASLogin) -> CASAdapter:
         adapter_class = getattr(view, "adapter_class", None)
         if not adapter_class:
-            raise serializers.ValidationError(_("Can not find adapter_class attribute on view"))
+            raise serializers.ValidationError(
+                _("Can not find adapter_class attribute on view")
+            )
         adapter = adapter_class(request)
         return adapter

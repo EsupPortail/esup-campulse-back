@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0006_user_is_validated_by_admin'),
+        ("users", "0006_user_is_validated_by_admin"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='phone',
-            field=models.CharField(default='', max_length=25, verbose_name='Phone'),
+            model_name="user",
+            name="phone",
+            field=models.CharField(default="", max_length=25, verbose_name="Phone"),
         ),
     ]

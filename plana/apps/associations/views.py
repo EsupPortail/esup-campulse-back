@@ -12,16 +12,17 @@ class AssociationList(generics.ListCreateAPIView):
     GET: list
     POST: create
     """
+
     serializer_class = AssociationSerializer
 
     def get_queryset(self):
-        return Association.objects.filter(is_enabled=True).order_by('name')
+        return Association.objects.filter(is_enabled=True).order_by("name")
 
 
 class AssociationDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     GET a single association (pk)
     """
+
     serializer_class = AssociationSerializer
     queryset = Association.objects.all()
-

@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0005_auto_20221027_1609'),
+        ("users", "0005_auto_20221027_1609"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='is_validated_by_admin',
-            field=models.BooleanField(default=False, verbose_name='Is validated by administrator'),
+            model_name="user",
+            name="is_validated_by_admin",
+            field=models.BooleanField(
+                default=False, verbose_name="Is validated by administrator"
+            ),
         ),
     ]

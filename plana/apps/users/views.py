@@ -1,6 +1,6 @@
 import requests
 
-from rest_framework import generics, response,status
+from rest_framework import generics, response, status
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
@@ -13,7 +13,11 @@ from django.contrib.auth.models import Group
 from .adapter import CASAdapter
 from .models import User, AssociationUsers
 from .serializers.cas import CASSerializer
-from .serializers.user import UserSerializer, AssociationUsersSerializer, GroupSerializer
+from .serializers.user import (
+    UserSerializer,
+    AssociationUsersSerializer,
+    GroupSerializer,
+)
 
 
 #########
@@ -66,6 +70,7 @@ def cas_verify(request):
 #  Users  #
 ###########
 
+
 class UserList(generics.ListCreateAPIView):
     """
     Generic DRF view to list associations or create a new one
@@ -93,7 +98,9 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
         return response.Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
-        serializer = self.serializer_class(instance=request.user, data=request.data, partial=True)
+        serializer = self.serializer_class(
+            instance=request.user, data=request.data, partial=True
+        )
         if serializer.is_valid(raise_exception=True):
             if serializer.instance.get_cas_user():
                 print(serializer.instance.get_cas_user().extra_data)
@@ -107,9 +114,11 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_200_OK)
 
+
 ######################
 #  AssociationUsers  #
 ######################
+
 
 class AssociationUsersList(generics.ListCreateAPIView):
     """
@@ -117,6 +126,7 @@ class AssociationUsersList(generics.ListCreateAPIView):
     GET: list
     POST: create
     """
+
     serializer_class = AssociationUsersSerializer
 
     def get_queryset(self):
@@ -127,21 +137,24 @@ class AssociationUsersList(generics.ListCreateAPIView):
 #  Roles  #
 ###########
 
+
 class GroupList(generics.ListCreateAPIView):
     """
     Generic DRF view to list AssociationsUsers or create a new one
     GET: list
     POST: create
     """
+
     serializer_class = GroupSerializer
 
     def get_queryset(self):
         return Group.objects.all()
 
+
 ####################
 #  Password Reset  #
 ####################
 
+
 class PasswordResetConfirm(generics.GenericAPIView):
     ...
-

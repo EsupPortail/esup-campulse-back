@@ -7,18 +7,16 @@ register = template.Library()
 
 
 class DipstrapNode(StaticNode):
-
     @classmethod
     def handle_simple(cls, path):
-        static_dipstrap = getattr(settings, 'DIPSTRAP_STATIC_URL', '')
+        static_dipstrap = getattr(settings, "DIPSTRAP_STATIC_URL", "")
         if static_dipstrap:
-            return urljoin(PrefixNode.handle_simple('DIPSTRAP_STATIC_URL'),
-                           path)
+            return urljoin(PrefixNode.handle_simple("DIPSTRAP_STATIC_URL"), path)
         else:
             return super(DipstrapNode, cls).handle_simple(path)
 
 
-@register.tag(name='dipstrap')
+@register.tag(name="dipstrap")
 def do_dipstrap(parser, token):
     return DipstrapNode.handle_token(parser, token)
 

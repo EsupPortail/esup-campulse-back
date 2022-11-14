@@ -8,23 +8,45 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('associations', '0001_initial'),
-        ('users', '0002_auto_20221026_1039'),
+        ("associations", "0001_initial"),
+        ("users", "0002_auto_20221026_1039"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AssociationUsers',
+            name="AssociationUsers",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('has_office_status', models.BooleanField(default=False)),
-                ('association', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='associations.association')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("has_office_status", models.BooleanField(default=False)),
+                (
+                    "association",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="associations.association",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='user',
-            name='association_members',
-            field=models.ManyToManyField(through='users.AssociationUsers', to='associations.Association'),
+            model_name="user",
+            name="association_members",
+            field=models.ManyToManyField(
+                through="users.AssociationUsers", to="associations.Association"
+            ),
         ),
     ]

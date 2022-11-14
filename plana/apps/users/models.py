@@ -6,6 +6,7 @@ from allauth.socialaccount.models import SocialAccount
 from plana.apps.associations.models import Association
 from plana.apps.users.provider import CASProvider
 
+
 class User(AbstractUser):
     """
     Extending the abstract User class.
@@ -17,8 +18,11 @@ class User(AbstractUser):
         - last_name
         - is_active
     """
+
     phone = models.CharField(_("Phone"), default="", max_length=25)
-    is_validated_by_admin = models.BooleanField(_("Is validated by administrator"), default=False)
+    is_validated_by_admin = models.BooleanField(
+        _("Is validated by administrator"), default=False
+    )
     # TODO token_reset_date_user = models.DateField(default=None)
     association_members = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
@@ -46,9 +50,12 @@ class User(AbstractUser):
         verbose_name = _("User")
         verbose_name_plural = _("Users")
 
+
 class AssociationUsers(models.Model):
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
-    association = models.ForeignKey(Association, verbose_name=_("Association"), on_delete=models.CASCADE)
+    association = models.ForeignKey(
+        Association, verbose_name=_("Association"), on_delete=models.CASCADE
+    )
     has_office_status = models.BooleanField(_("Has office status"), default=False)
 
     def __str__(self):

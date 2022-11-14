@@ -22,4 +22,3 @@ class CASAdapter(AllAuthCASAdapter):
 
     def get_provider(self, request):
         return self.provider
-

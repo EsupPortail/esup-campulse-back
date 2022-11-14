@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='user',
-            options={'default_permissions': []},
+            name="user",
+            options={"default_permissions": []},
         ),
         migrations.AddField(
-            model_name='user',
-            name='is_cas_user',
+            model_name="user",
+            name="is_cas_user",
             field=models.BooleanField(default=False),
         ),
     ]

@@ -25,13 +25,13 @@ DEBUG = True
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': environ.get('DEFAULT_DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': environ.get('DEFAULT_DB_NAME', 'plana'),
-        'USER': environ.get('DEFAULT_DB_USER', 'plana'),
-        'PASSWORD': environ.get('DEFAULT_DB_PASSWORD', 'plana'),
-        'HOST': environ.get('DEFAULT_DB_HOST', 'localhost'),
-        'PORT': environ.get('DEFAULT_DB_PORT', '5432'),
+    "default": {
+        "ENGINE": environ.get("DEFAULT_DB_ENGINE", "django.db.backends.postgresql"),
+        "NAME": environ.get("DEFAULT_DB_NAME", "plana"),
+        "USER": environ.get("DEFAULT_DB_USER", "plana"),
+        "PASSWORD": environ.get("DEFAULT_DB_PASSWORD", "plana"),
+        "HOST": environ.get("DEFAULT_DB_HOST", "localhost"),
+        "PORT": environ.get("DEFAULT_DB_PORT", "5432"),
     }
 }
 
@@ -40,18 +40,20 @@ DATABASES = {
 # Allowed hosts & Security #
 ############################
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 #####################
 # Log configuration #
 #####################
 
-LOGGING['handlers']['file']['filename'] = environ.get('LOG_DIR', normpath(join('/tmp', '%s.log' % SITE_NAME)))
-LOGGING['handlers']['file']['level'] = 'DEBUG'
+LOGGING["handlers"]["file"]["filename"] = environ.get(
+    "LOG_DIR", normpath(join("/tmp", "%s.log" % SITE_NAME))
+)
+LOGGING["handlers"]["file"]["level"] = "DEBUG"
 
-for logger in LOGGING['loggers']:
-    LOGGING['loggers'][logger]['level'] = 'DEBUG'
+for logger in LOGGING["loggers"]:
+    LOGGING["loggers"][logger]["level"] = "DEBUG"
 
 
 ###########################
@@ -59,8 +61,8 @@ for logger in LOGGING['loggers']:
 ###########################
 
 INSTALLED_APPS += [
-    'coverage',
-    'debug_toolbar',
+    "coverage",
+    "debug_toolbar",
 ]
 
 
@@ -68,8 +70,8 @@ INSTALLED_APPS += [
 # Dipstrap #
 ############
 
-DIPSTRAP_VERSION = environ.get('DIPSTRAP_VERSION', 'latest')
-DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
+DIPSTRAP_VERSION = environ.get("DIPSTRAP_VERSION", "latest")
+DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
 
 
 #################
@@ -78,9 +80,9 @@ DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
-INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
+INTERNAL_IPS = ["127.0.0.1", "0.0.0.0"]
 
 
 ##########
@@ -104,5 +106,5 @@ CAS_SERVER = "https://cas-dev.unistra.fr/cas/"
 CAS_AUTHORIZED_SERVICES = [
     "http://localhost:8000/users/auth/cas_verify/",
     "http://localhost:3000/cas-login",
-    "http://localhost:3000/cas-register"
+    "http://localhost:3000/cas-register",
 ]

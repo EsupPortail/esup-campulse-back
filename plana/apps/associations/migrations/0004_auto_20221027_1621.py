@@ -7,23 +7,38 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('associations', '0003_auto_20221027_1609'),
+        ("associations", "0003_auto_20221027_1609"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='association',
-            name='institution',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, related_name='associations', to='associations.institution', verbose_name='Institution'),
+            model_name="association",
+            name="institution",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.RESTRICT,
+                related_name="associations",
+                to="associations.institution",
+                verbose_name="Institution",
+            ),
         ),
         migrations.AlterField(
-            model_name='association',
-            name='institution_component',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, related_name='associations', to='associations.institutioncomponent', verbose_name='Institution component'),
+            model_name="association",
+            name="institution_component",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.RESTRICT,
+                related_name="associations",
+                to="associations.institutioncomponent",
+                verbose_name="Institution component",
+            ),
         ),
         migrations.AlterField(
-            model_name='socialnetwork',
-            name='association',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='social_networks', to='associations.association', verbose_name='Association'),
+            model_name="socialnetwork",
+            name="association",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="social_networks",
+                to="associations.association",
+                verbose_name="Association",
+            ),
         ),
     ]

@@ -12,10 +12,10 @@ DEBUG = True
 # Database configuration #
 ##########################
 
-DATABASES['default']['HOST'] = '{{ default_db_host }}'
-DATABASES['default']['USER'] = '{{ default_db_user }}'
-DATABASES['default']['PASSWORD'] = '{{ default_db_password }}'
-DATABASES['default']['NAME'] = '{{ default_db_name }}'
+DATABASES["default"]["HOST"] = "{{ default_db_host }}"
+DATABASES["default"]["USER"] = "{{ default_db_user }}"
+DATABASES["default"]["PASSWORD"] = "{{ default_db_password }}"
+DATABASES["default"]["NAME"] = "{{ default_db_name }}"
 
 
 ############################
@@ -23,8 +23,8 @@ DATABASES['default']['NAME'] = '{{ default_db_name }}'
 ############################
 
 ALLOWED_HOSTS = [
-    '.u-strasbg.fr',
-    '.unistra.fr',
+    ".u-strasbg.fr",
+    ".unistra.fr",
 ]
 
 
@@ -32,24 +32,24 @@ ALLOWED_HOSTS = [
 # Log configuration #
 #####################
 
-LOGGING['handlers']['file']['filename'] = '{{ remote_current_path }}/log/app.log'
+LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log"
 
-for logger in LOGGING['loggers']:
-    LOGGING['loggers'][logger]['level'] = 'DEBUG'
+for logger in LOGGING["loggers"]:
+    LOGGING["loggers"][logger]["level"] = "DEBUG"
 
 
 ############
 # Dipstrap #
 ############
 
-DIPSTRAP_VERSION = '{{ dipstrap_version }}'
-DIPSTRAP_STATIC_URL += '%s/' % DIPSTRAP_VERSION
+DIPSTRAP_VERSION = "{{ dipstrap_version }}"
+DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
 
 
 ##########
 # Sentry #
 ##########
-STAGE = '{{ goal }}'
+STAGE = "{{ goal }}"
 sentry_init(STAGE)
 
 
