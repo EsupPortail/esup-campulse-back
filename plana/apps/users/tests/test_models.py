@@ -15,6 +15,7 @@ class UsersModelsTests(TestCase):
         "users_user.json",
         "users_user_groups.json",
     ]
+
     def setUp(self):
         self.client = Client()
 

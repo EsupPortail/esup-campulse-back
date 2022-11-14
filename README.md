@@ -75,6 +75,12 @@ Tous les mots de passe utilisés dans les fixtures sont `motdepasse`.
 $ python manage.py loaddata plana/apps/*/fixtures/*.json
 ```
 
+Réinitialiser le contenu de la base de données au besoin :
+
+```sh
+$ python manage.py flush
+```
+
 ## Développement
 
 ### Lancer le serveur en local
