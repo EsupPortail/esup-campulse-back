@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Association, Institution, InstitutionComponent, ActivityField
+from plana.apps.associations.models.association import (
+    Association,
+    Institution,
+    InstitutionComponent,
+    ActivityField,
+)
 
 
 class InstitutionSerializer(serializers.ModelSerializer):

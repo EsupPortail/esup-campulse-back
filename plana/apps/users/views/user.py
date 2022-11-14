@@ -10,10 +10,10 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from django.contrib.auth.models import Group
 
-from .adapter import CASAdapter
-from .models import User, AssociationUsers
-from .serializers.cas import CASSerializer
-from .serializers.user import (
+from plana.apps.users.adapter import CASAdapter
+from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.users.serializers.cas import CASSerializer
+from plana.apps.users.serializers.user import (
     UserSerializer,
     AssociationUsersSerializer,
     GroupSerializer,

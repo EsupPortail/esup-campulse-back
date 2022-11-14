@@ -5,7 +5,7 @@ from allauth.account.adapter import get_adapter
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
 
-from plana.apps.users.models import User, AssociationUsers
+from plana.apps.users.models.user import User, AssociationUsers
 
 
 class UserSerializer(serializers.ModelSerializer):

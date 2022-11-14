@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from allauth.socialaccount.models import SocialAccount
 
-from plana.apps.associations.models import Association
+from plana.apps.associations.models.association import Association
 from plana.apps.users.provider import CASProvider
 
 

@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from .serializers import AssociationSerializer
-from .models import Association
+from plana.apps.associations.models.association import Association
+from plana.apps.associations.serializers.association import AssociationSerializer
 
 
 class AssociationList(generics.ListCreateAPIView):
