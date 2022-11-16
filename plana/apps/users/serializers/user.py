@@ -65,6 +65,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = User
         fields = ("email", "first_name", "last_name", "phone")
