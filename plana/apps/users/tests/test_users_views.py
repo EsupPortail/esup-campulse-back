@@ -46,7 +46,7 @@ class UserTests(TestCase):
 
         user_1 = json.loads(response.content.decode('utf-8'))
         self.assertEqual(user_1["username"], user.username)
-    """
+
 
     def test_get_association_users_list(self):
         asso_users_cnt = AssociationUsers.objects.count()
@@ -57,3 +57,4 @@ class UserTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_users_cnt)
+    """
