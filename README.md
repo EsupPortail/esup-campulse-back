@@ -107,3 +107,17 @@ $ black plana
 ```sh
 $ DEFAULT_DB_TEST_HOST=localhost tox
 ```
+
+## Documentation des routes de l'application
+
+### Mettre à jour automatiquement le fichier de documentation de l'API
+
+```sh
+$ python manage.py spectacular --file schema.yml
+```
+
+### URLs pour accéder à la documentation générée
+
+- `/api/schema/` pour télécharger un fichier YAML contenant la documentation.
+- `/api/schema/swagger-ui/` pour consulter la documentation de l'API en mode Swagger.
+- `/api/schema/redoc/` pour consulter la documentation de l'API en mode Redoc.

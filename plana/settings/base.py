@@ -262,6 +262,8 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "dj_rest_auth",
     "dj_rest_auth.registration",
+    "drf_spectacular",
+    "djangorestframework_camel_case",
 ]
 
 LOCAL_APPS = [
@@ -358,6 +360,16 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+    ],
+    "DEFAULT_PARSER_CLASSES": [
+        "djangorestframework_camel_case.parser.CamelCaseFormParser",
+        "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 
@@ -426,6 +438,23 @@ def sentry_init(environment):
         release=open(join(SITE_ROOT, "build.txt")).read(),
         send_default_pii=True,
     )
+
+
+###############
+# Spectacular #
+###############
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "PlanA API",
+    "DESCRIPTION": "API for PlanA API",
+    "VERSION": "0.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "POST_PROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+    ],
+    "COMPONENT_SPLIT_REQUEST": True,
+}
 
 
 ########

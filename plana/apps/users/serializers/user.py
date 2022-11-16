@@ -11,7 +11,7 @@ from plana.apps.users.models.user import User, AssociationUsers
 class UserSerializer(serializers.ModelSerializer):
     is_cas = serializers.SerializerMethodField("is_cas_user")
 
-    def is_cas_user(self, user):
+    def is_cas_user(self, user) -> bool:
         """
         Contenu du champ calculé "is_cas" (True si l'utilisateur s'est inscrit via CAS, False sinon).
         """
@@ -47,6 +47,7 @@ class UserRelatedField(serializers.RelatedField):
 
 
 class AssociationUsersSerializer(serializers.ModelSerializer):
+    # TODO Check drf-spectacular error.
     user = UserRelatedField(queryset=User.objects.all(), many=False)
 
     class Meta:
