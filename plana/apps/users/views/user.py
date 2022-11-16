@@ -8,7 +8,6 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-from django.contrib.auth.models import Group
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers
@@ -16,7 +15,6 @@ from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import (
     UserSerializer,
     AssociationUsersSerializer,
-    GroupSerializer,
 )
 
 ###########
@@ -50,7 +48,10 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         serializer = self.serializer_class(instance=user)
-        return response.Response(serializer.data)
+        try:
+            return response.Response(serializer.data)
+        except AttributeError:
+            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -68,16 +69,17 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
             """
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-######################
-#  AssociationUsers  #
-######################
+##################
+#  Associations  #
+##################
 
 
-class AssociationUsersList(generics.ListCreateAPIView):
+class UserAssociationsCreate(generics.CreateAPIView):
     """
-    GET : Lists all links between users and association.
     POST : Creates a new link between an user and an association.
     """
 
@@ -85,6 +87,52 @@ class AssociationUsersList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return AssociationUsers.objects.all()
+
+
+class UserAssociationsList(generics.RetrieveDestroyAPIView):
+    """
+    GET : Lists all associations linked to an user.
+    DELETE : Deletes a link between an association and a user.
+    """
+
+    serializer_class = AssociationUsersSerializer
+    queryset = AssociationUsers.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        associations_user = AssociationUsers.objects.get(user_id=request.user.pk)
+        serializer = self.serializer_class(instance=associations_user)
+        return response.Response(serializer.data)
+
+
+############
+#  Groups  #
+############
+
+
+class UserGroupsCreate(generics.CreateAPIView):
+    """
+    POST : Creates a new link between an user and a group.
+    """
+
+    serializer_class = UserSerializer
+
+
+class UserGroupsList(generics.RetrieveDestroyAPIView):
+    """
+    GET : Lists all groups linked to an user.
+    DELETE : Deletes a link between a group and a user.
+    """
+
+    """
+    serializer_class = GroupUsersSerializer
+
+    def get(self, request, *args, **kwargs):
+        groups_user = request.user.groups.all()
+        serializer = self.serializer_class(instance=groups_user)
+        return response.Response(serializer.data)
+    """
+
+    serializer_class = UserSerializer
 
 
 #########
@@ -159,20 +207,3 @@ class PasswordResetConfirm(generics.GenericAPIView):
     """
 
     ...
-
-
-###########
-#  Roles  #
-###########
-
-
-class GroupList(generics.ListCreateAPIView):
-    """
-    GET : Lists all users groups.
-    POST : Creates a new user group.
-    """
-
-    serializer_class = GroupSerializer
-
-    def get_queryset(self):
-        return Group.objects.all()

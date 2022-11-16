@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from allauth.account.adapter import get_adapter
 
-from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import User, AssociationUsers
@@ -55,23 +54,18 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = (
-            "id",
-            "name",
-        )
-
-
 class CustomRegisterSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = User
         fields = ("email", "first_name", "last_name", "phone")
 
+    """
     def get_validation_exclusions(self):
         exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
         return exclusions + ["phone"]
+    """
 
     def validate_email(self, value):
         ModelClass = self.Meta.model
@@ -88,7 +82,10 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         adapter.save_user(request, user, self)
 
         user.username = self.cleaned_data["email"]
-        user.phone = self.cleaned_data["phone"]
+        try:
+            user.phone = self.cleaned_data["phone"]
+        except KeyError:
+            ...
 
         user.save()
         return user

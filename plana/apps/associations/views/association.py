@@ -16,12 +16,11 @@ class AssociationList(generics.ListCreateAPIView):
         return Association.objects.filter(is_enabled=True).order_by("name")
 
 
-class AssociationDetail(generics.RetrieveUpdateDestroyAPIView):
+class AssociationDetail(generics.RetrieveUpdateAPIView):
     """
     GET : Lists an association with all its details.
     PUT : Edits all fields of an association.
     PATCH : Edits one field of an association.
-    DELETE : Deletes an association.
     """
 
     serializer_class = AssociationSerializer

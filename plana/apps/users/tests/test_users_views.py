@@ -46,24 +46,15 @@ class UserTests(TestCase):
 
         user_1 = json.loads(response.content.decode('utf-8'))
         self.assertEqual(user_1["username"], user.username)
-    """
+
 
     def test_get_association_users_list(self):
         asso_users_cnt = AssociationUsers.objects.count()
         self.assertTrue(asso_users_cnt > 0)
 
-        response = self.client.get("/users/association/")
+        response = self.client.get("/users/associations/")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_users_cnt)
-
-    def test_get_groups_list(self):
-        groups_cnt = Group.objects.count()
-        self.assertTrue(groups_cnt > 0)
-
-        response = self.client.get("/users/groups/")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), groups_cnt)
+    """

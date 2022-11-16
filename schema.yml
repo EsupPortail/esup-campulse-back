@@ -60,7 +60,6 @@ paths:
         GET : Lists an association with all its details.
         PUT : Edits all fields of an association.
         PATCH : Edits one field of an association.
-        DELETE : Deletes an association.
       parameters:
       - in: path
         name: id
@@ -85,7 +84,6 @@ paths:
         GET : Lists an association with all its details.
         PUT : Edits all fields of an association.
         PATCH : Edits one field of an association.
-        DELETE : Deletes an association.
       parameters:
       - in: path
         name: id
@@ -122,7 +120,6 @@ paths:
         GET : Lists an association with all its details.
         PUT : Edits all fields of an association.
         PATCH : Edits one field of an association.
-        DELETE : Deletes an association.
       parameters:
       - in: path
         name: id
@@ -152,27 +149,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/Association'
           description: ''
-    delete:
-      operationId: associations_destroy
-      description: |-
-        GET : Lists an association with all its details.
-        PUT : Edits all fields of an association.
-        PATCH : Edits one field of an association.
-        DELETE : Deletes an association.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
+  /groups/:
+    get:
+      operationId: groups_list
+      description: 'GET : Lists all users groups.'
       tags:
-      - associations
+      - groups
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
       responses:
-        '204':
-          description: No response body
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+          description: ''
   /users/:
     get:
       operationId: users_list
@@ -342,31 +336,10 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/association/:
-    get:
-      operationId: users_association_list
-      description: |-
-        GET : Lists all links between users and association.
-        POST : Creates a new link between an user and an association.
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AssociationUsers'
-          description: ''
+  /users/associations/:
     post:
-      operationId: users_association_create
-      description: |-
-        GET : Lists all links between users and association.
-        POST : Creates a new link between an user and an association.
+      operationId: users_associations_create
+      description: 'POST : Creates a new link between an user and an association.'
       tags:
       - users
       requestBody:
@@ -391,6 +364,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationUsers'
           description: ''
+  /users/associations/{id}:
+    get:
+      operationId: users_associations_retrieve
+      description: |-
+        GET : Lists all associations linked to an user.
+        DELETE : Deletes a link between an association and a user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUsers'
+          description: ''
+    delete:
+      operationId: users_associations_destroy
+      description: |-
+        GET : Lists all associations linked to an user.
+        DELETE : Deletes a link between an association and a user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /users/auth/cas/login/:
     post:
       operationId: users_auth_cas_login_create
@@ -838,11 +854,45 @@ paths:
                 $ref: '#/components/schemas/UserDetails'
           description: ''
   /users/groups/:
+    post:
+      operationId: users_groups_create
+      description: 'POST : Creates a new link between an user and a group.'
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/groups/{id}:
     get:
-      operationId: users_groups_list
+      operationId: users_groups_retrieve
       description: |-
-        GET : Lists all users groups.
-        POST : Creates a new user group.
+        GET : Lists all groups linked to an user.
+        DELETE : Deletes a link between a group and a user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
       - users
       security:
@@ -853,39 +903,27 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Group'
+                $ref: '#/components/schemas/User'
           description: ''
-    post:
-      operationId: users_groups_create
+    delete:
+      operationId: users_groups_destroy
       description: |-
-        GET : Lists all users groups.
-        POST : Creates a new user group.
+        GET : Lists all groups linked to an user.
+        DELETE : Deletes a link between a group and a user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
       - users
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Group'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Group'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Group'
-        required: true
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
       responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Group'
-          description: ''
+        '204':
+          description: No response body
 components:
   schemas:
     ActivityField:
@@ -1039,8 +1077,6 @@ components:
           maxLength: 150
         phone:
           type: string
-          title: Téléphone
-          maxLength: 25
     Group:
       type: object
       properties:
@@ -1261,8 +1297,9 @@ components:
           maxLength: 254
         phone:
           type: string
+          nullable: true
           title: Téléphone
-          maxLength: 25
+          maxLength: 32
         groups:
           type: array
           items:
@@ -1373,8 +1410,9 @@ components:
           maxLength: 254
         phone:
           type: string
+          nullable: true
           title: Téléphone
-          maxLength: 25
+          maxLength: 32
         groups:
           type: array
           items:

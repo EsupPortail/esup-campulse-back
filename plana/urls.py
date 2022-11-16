@@ -15,6 +15,7 @@ admin.autodiscover()
 urlpatterns = [
     path("", home, name="home"),
     path("associations/", include("plana.apps.associations.urls")),
+    path("groups/", include("plana.apps.groups.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
     path(

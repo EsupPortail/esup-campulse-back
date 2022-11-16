@@ -4,11 +4,13 @@ from django.urls import include, path, re_path
 from .views.user import (
     UserList,
     UserDetail,
-    AssociationUsersList,
+    UserAssociationsCreate,
+    UserAssociationsList,
+    UserGroupsCreate,
+    UserGroupsList,
     CASLogin,
     CASLogout,
     PasswordResetConfirm,
-    GroupList,
     cas_test,
     cas_verify,
 )
@@ -16,7 +18,18 @@ from .views.user import (
 urlpatterns = [
     path("", UserList.as_view(), name="user_list"),
     path("<int:pk>", UserDetail.as_view(), name="user_detail"),
-    path("association/", AssociationUsersList.as_view(), name="asso_users_list"),
+    path(
+        "associations/",
+        UserAssociationsCreate.as_view(),
+        name="user_associations_create",
+    ),
+    path(
+        "associations/<int:pk>",
+        UserAssociationsList.as_view(),
+        name="user_associations_list",
+    ),
+    path("groups/", UserGroupsCreate.as_view(), name="user_groups_create"),
+    path("groups/<int:pk>", UserGroupsList.as_view(), name="user_groups_list"),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/", include("dj_rest_auth.urls")),
@@ -26,7 +39,6 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("groups/", GroupList.as_view(), name="group_list"),
 ]
 
 if settings.DEBUG:
