@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from allauth.account.adapter import get_adapter
 
-from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import User, AssociationUsers
@@ -53,15 +52,6 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociationUsers
         fields = "__all__"
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = (
-            "id",
-            "name",
-        )
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):

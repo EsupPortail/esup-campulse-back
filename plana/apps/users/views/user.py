@@ -8,7 +8,6 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-from django.contrib.auth.models import Group
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers
@@ -16,7 +15,6 @@ from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import (
     UserSerializer,
     AssociationUsersSerializer,
-    GroupSerializer,
 )
 
 ###########
@@ -159,20 +157,3 @@ class PasswordResetConfirm(generics.GenericAPIView):
     """
 
     ...
-
-
-###########
-#  Roles  #
-###########
-
-
-class GroupList(generics.ListCreateAPIView):
-    """
-    GET : Lists all users groups.
-    POST : Creates a new user group.
-    """
-
-    serializer_class = GroupSerializer
-
-    def get_queryset(self):
-        return Group.objects.all()
