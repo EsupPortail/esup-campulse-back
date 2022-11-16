@@ -173,6 +173,55 @@ paths:
       responses:
         '204':
           description: No response body
+  /groups/:
+    get:
+      operationId: groups_list
+      description: |-
+        GET : Lists all users groups.
+        POST : Creates a new user group.
+      tags:
+      - groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+          description: ''
+    post:
+      operationId: groups_create
+      description: |-
+        GET : Lists all users groups.
+        POST : Creates a new user group.
+      tags:
+      - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
   /users/:
     get:
       operationId: users_list
@@ -342,9 +391,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/association/:
+  /users/associations/:
     get:
-      operationId: users_association_list
+      operationId: users_associations_list
       description: |-
         GET : Lists all links between users and association.
         POST : Creates a new link between an user and an association.
@@ -363,7 +412,7 @@ paths:
                   $ref: '#/components/schemas/AssociationUsers'
           description: ''
     post:
-      operationId: users_association_create
+      operationId: users_associations_create
       description: |-
         GET : Lists all links between users and association.
         POST : Creates a new link between an user and an association.
@@ -837,55 +886,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserDetails'
           description: ''
-  /users/groups/:
-    get:
-      operationId: users_groups_list
-      description: |-
-        GET : Lists all users groups.
-        POST : Creates a new user group.
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Group'
-          description: ''
-    post:
-      operationId: users_groups_create
-      description: |-
-        GET : Lists all users groups.
-        POST : Creates a new user group.
-      tags:
-      - users
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Group'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Group'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Group'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Group'
-          description: ''
 components:
   schemas:
     ActivityField:
@@ -1039,8 +1039,6 @@ components:
           maxLength: 150
         phone:
           type: string
-          title: Téléphone
-          maxLength: 25
     Group:
       type: object
       properties:
@@ -1261,8 +1259,9 @@ components:
           maxLength: 254
         phone:
           type: string
+          nullable: true
           title: Téléphone
-          maxLength: 25
+          maxLength: 32
         groups:
           type: array
           items:
@@ -1373,8 +1372,9 @@ components:
           maxLength: 254
         phone:
           type: string
+          nullable: true
           title: Téléphone
-          maxLength: 25
+          maxLength: 32
         groups:
           type: array
           items:
