@@ -360,6 +360,11 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+"""
+TODO : Correct drf camel case.
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
         "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
@@ -369,8 +374,7 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
     ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
+"""
 
 
 ##################
@@ -449,13 +453,16 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API for PlanA API",
     "VERSION": "0.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+}
+
+"""
+TODO : Correct drf camel case.
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
         "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
     ],
     "COMPONENT_SPLIT_REQUEST": True,
-}
-
+"""
 
 ########
 # Misc #
