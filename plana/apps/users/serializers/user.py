@@ -69,9 +69,11 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ("email", "first_name", "last_name", "phone")
 
+    """
     def get_validation_exclusions(self):
         exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
         return exclusions + ["phone"]
+    """
 
     def validate_email(self, value):
         ModelClass = self.Meta.model
@@ -88,7 +90,10 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         adapter.save_user(request, user, self)
 
         user.username = self.cleaned_data["email"]
-        user.phone = self.cleaned_data["phone"]
+        try:
+            user.phone = self.cleaned_data["phone"]
+        except KeyError:
+            ...
 
         user.save()
         return user
