@@ -86,6 +86,9 @@ class UserAssociationsCreate(generics.CreateAPIView):
     serializer_class = AssociationUsersSerializer
 
     def get_queryset(self):
+        """
+        TODO : restrict the post route if is_validated_by_admin is set to true.
+        """
         return AssociationUsers.objects.all()
 
 
@@ -115,6 +118,17 @@ class UserGroupsCreate(generics.CreateAPIView):
     """
 
     serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.serializer_class(instance=user)
+        if serializer.is_valid(raise_exception=True):
+            """
+            TODO : restrict the route if is_validated_by_admin is set to true.
+            """
+            return response.Response(serializer.data["groups"])
+        else:
+            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserGroupsList(generics.RetrieveDestroyAPIView):
