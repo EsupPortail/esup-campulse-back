@@ -451,7 +451,11 @@ paths:
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CAS'
+          description: ''
     post:
       operationId: users_auth_cas_logout_create
       description: |-
@@ -459,13 +463,29 @@ paths:
         POST : Logs out an user authenticated with CAS out.
       tags:
       - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+        required: true
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CAS'
+          description: ''
   /users/auth/login/:
     post:
       operationId: users_auth_login_create

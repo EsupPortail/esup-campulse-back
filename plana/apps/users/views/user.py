@@ -175,7 +175,9 @@ class CASLogout(LogoutView):
     POST : Logs out an user authenticated with CAS out.
     """
 
-    # TODO Check drf-spectacular error.
+    adapter_class = CASAdapter
+    serializer_class = CASSerializer
+
     # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
     ...
 
