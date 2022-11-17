@@ -1,14 +1,17 @@
 import requests
 
-from rest_framework import generics, response, status
+from rest_framework import generics, permissions, response, status
+from dj_rest_auth.app_settings import PasswordResetSerializer
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
+from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers
@@ -224,3 +227,37 @@ class PasswordResetConfirm(generics.GenericAPIView):
     """
 
     ...
+
+
+class PasswordResetView(generics.GenericAPIView):
+    """
+    Overrides dj-rest-auth PasswordResetView to avoid resetting the password of a CAS account or inexistent account.
+    """
+
+    serializer_class = PasswordResetSerializer
+    permission_classes = (permissions.AllowAny,)
+    throttle_scope = "dj_rest_auth"
+
+    def post(self, request, *args, **kwargs):
+        # Create a serializer with request.data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            user = User.objects.get(email=request.data["email"])
+            if user.is_cas_user():
+                return response.Response(
+                    {"detail": _("Unable to reset the password of a CAS account.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"detail": _("No account exists with this user e-mail address.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer.save()
+        # Return the success message with OK HTTP status
+        return response.Response(
+            {"detail": _("Password reset e-mail has been sent.")},
+            status=status.HTTP_200_OK,
+        )
