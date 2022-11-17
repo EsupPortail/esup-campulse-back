@@ -370,8 +370,8 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
     ],
-    'JSON_UNDERSCOREIZE': {
-        'no_underscore_before_number': True,
+    "JSON_UNDERSCOREIZE": {
+        "no_underscore_before_number": True,
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }

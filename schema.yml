@@ -33,15 +33,15 @@ paths:
       - associations
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Association'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Association'
+              $ref: '#/components/schemas/AssociationRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Association'
+              $ref: '#/components/schemas/AssociationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -94,15 +94,15 @@ paths:
       - associations
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Association'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Association'
+              $ref: '#/components/schemas/AssociationRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Association'
+              $ref: '#/components/schemas/AssociationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -130,15 +130,15 @@ paths:
       - associations
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedAssociation'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAssociation'
+              $ref: '#/components/schemas/PatchedAssociationRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAssociation'
+              $ref: '#/components/schemas/PatchedAssociationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -196,15 +196,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -259,15 +259,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -296,15 +296,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUser'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUser'
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -344,15 +344,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssociationUsers'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/AssociationUsers'
+              $ref: '#/components/schemas/AssociationUsersRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/AssociationUsers'
+              $ref: '#/components/schemas/AssociationUsersRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -416,15 +416,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CAS'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/CAS'
+              $ref: '#/components/schemas/CASRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CAS'
+              $ref: '#/components/schemas/CASRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -481,15 +481,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Login'
+              $ref: '#/components/schemas/LoginRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Login'
+              $ref: '#/components/schemas/LoginRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -535,15 +535,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PasswordChange'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PasswordChange'
+              $ref: '#/components/schemas/PasswordChangeRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PasswordChange'
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -567,15 +567,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PasswordReset'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PasswordReset'
+              $ref: '#/components/schemas/PasswordResetRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PasswordReset'
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -602,15 +602,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PasswordResetConfirm'
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -630,15 +630,16 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomRegister'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/CustomRegister'
+              $ref: '#/components/schemas/CustomRegisterRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CustomRegister'
+              $ref: '#/components/schemas/CustomRegisterRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+        required: true
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -657,15 +658,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ResendEmailVerification'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ResendEmailVerification'
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ResendEmailVerification'
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -685,15 +686,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VerifyEmail'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/VerifyEmail'
+              $ref: '#/components/schemas/VerifyEmailRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/VerifyEmail'
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -716,15 +717,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenRefresh'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
         required: true
       responses:
         '200':
@@ -743,23 +744,19 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TokenVerify'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              $ref: '#/components/schemas/TokenVerifyRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenVerify'
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
         required: true
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenVerify'
-          description: ''
+          description: No response body
   /users/auth/user/:
     get:
       operationId: users_auth_user_retrieve
@@ -799,15 +796,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDetails'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserDetails'
+              $ref: '#/components/schemas/UserDetailsRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserDetails'
+              $ref: '#/components/schemas/UserDetailsRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailsRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -834,15 +831,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
+              $ref: '#/components/schemas/PatchedUserDetailsRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserDetails'
+              $ref: '#/components/schemas/PatchedUserDetailsRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetailsRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -861,15 +858,15 @@ paths:
       - users
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -938,6 +935,16 @@ components:
           maxLength: 250
       required:
       - id
+      - name
+    ActivityFieldRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
       - name
     Association:
       type: object
@@ -1024,6 +1031,90 @@ components:
       - id
       - institution
       - institution_component
+    AssociationRequest:
+      type: object
+      properties:
+        institution:
+          $ref: '#/components/schemas/InstitutionRequest'
+        institution_component:
+          $ref: '#/components/schemas/InstitutionComponentRequest'
+        activity_field:
+          $ref: '#/components/schemas/ActivityFieldRequest'
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          minLength: 1
+          title: Emplacement du logo
+          maxLength: 250
+        description:
+          type: string
+          minLength: 1
+        activities:
+          type: string
+          minLength: 1
+          title: Activités
+        address:
+          type: string
+          minLength: 1
+          title: Adresse
+        phone:
+          type: string
+          minLength: 1
+          title: Téléphone
+          maxLength: 25
+        email:
+          type: string
+          minLength: 1
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          minLength: 1
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        is_enabled:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
+      required:
+      - activity_field
+      - institution
+      - institution_component
     AssociationUsers:
       type: object
       properties:
@@ -1040,6 +1131,19 @@ components:
       required:
       - association
       - id
+      - user
+    AssociationUsersRequest:
+      type: object
+      properties:
+        user:
+          type: string
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        association:
+          type: integer
+      required:
+      - association
       - user
     CAS:
       type: object
@@ -1059,13 +1163,34 @@ components:
       required:
       - service
       - ticket
-    CustomRegister:
+    CASRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+        ticket:
+          type: string
+          minLength: 1
+        service:
+          type: string
+          format: uri
+          minLength: 1
+      required:
+      - service
+      - ticket
+    CustomRegisterRequest:
       type: object
       properties:
         email:
           type: string
           format: email
-          title: Adresse électronique
+          minLength: 1
           maxLength: 254
         first_name:
           type: string
@@ -1077,6 +1202,8 @@ components:
           maxLength: 150
         phone:
           type: string
+      required:
+      - email
     Group:
       type: object
       properties:
@@ -1121,6 +1248,32 @@ components:
       required:
       - id
       - name
+    InstitutionComponentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
+      - name
+    InstitutionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+      required:
+      - acronym
+      - name
     JWT:
       type: object
       description: Serializer for JWT authentication.
@@ -1135,7 +1288,7 @@ components:
       - access_token
       - refresh_token
       - user
-    Login:
+    LoginRequest:
       type: object
       properties:
         username:
@@ -1145,86 +1298,99 @@ components:
           format: email
         password:
           type: string
+          minLength: 1
       required:
       - password
-    PasswordChange:
+    PasswordChangeRequest:
       type: object
       properties:
         new_password1:
           type: string
+          minLength: 1
           maxLength: 128
         new_password2:
           type: string
+          minLength: 1
           maxLength: 128
       required:
       - new_password1
       - new_password2
-    PasswordReset:
+    PasswordResetConfirmRequest:
+      type: object
+      description: Serializer for confirming a password reset attempt.
+      properties:
+        new_password1:
+          type: string
+          minLength: 1
+          maxLength: 128
+        new_password2:
+          type: string
+          minLength: 1
+          maxLength: 128
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+      required:
+      - new_password1
+      - new_password2
+      - token
+      - uid
+    PasswordResetRequest:
       type: object
       description: Serializer for requesting a password reset e-mail.
       properties:
         email:
           type: string
           format: email
+          minLength: 1
       required:
       - email
-    PasswordResetConfirm:
-      type: object
-      description: Serializer for confirming a password reset attempt.
-      properties:
-        new_password1:
-          type: string
-          maxLength: 128
-        new_password2:
-          type: string
-          maxLength: 128
-        uid:
-          type: string
-        token:
-          type: string
-      required:
-      - new_password1
-      - new_password2
-      - token
-      - uid
-    PatchedAssociation:
+    PatchedAssociationRequest:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
         institution:
-          $ref: '#/components/schemas/Institution'
+          $ref: '#/components/schemas/InstitutionRequest'
         institution_component:
-          $ref: '#/components/schemas/InstitutionComponent'
+          $ref: '#/components/schemas/InstitutionComponentRequest'
         activity_field:
-          $ref: '#/components/schemas/ActivityField'
+          $ref: '#/components/schemas/ActivityFieldRequest'
         name:
           type: string
+          minLength: 1
           title: Nom
           maxLength: 250
         acronym:
           type: string
+          minLength: 1
           title: Acronyme
           maxLength: 30
         path_logo:
           type: string
+          minLength: 1
           title: Emplacement du logo
           maxLength: 250
         description:
           type: string
+          minLength: 1
         activities:
           type: string
+          minLength: 1
           title: Activités
         address:
           type: string
+          minLength: 1
           title: Adresse
         phone:
           type: string
+          minLength: 1
           title: Téléphone
           maxLength: 25
         email:
           type: string
+          minLength: 1
           title: Courriel
           maxLength: 256
         siret:
@@ -1234,6 +1400,7 @@ components:
         website:
           type: string
           format: uri
+          minLength: 1
           title: Site
           maxLength: 200
         student_count:
@@ -1246,11 +1413,6 @@ components:
         is_site:
           type: boolean
           title: Site ?
-        creation_date:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Date de création
         approval_date:
           type: string
           format: date-time
@@ -1266,17 +1428,32 @@ components:
           format: date-time
           nullable: true
           title: Date de dernière AG constitutive
-    PatchedUser:
+    PatchedUserDetailsRequest:
       type: object
+      description: User model w/o password
       properties:
-        id:
-          type: integer
-          readOnly: true
-        is_cas:
-          type: boolean
-          readOnly: true
         username:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 150
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 150
+    PatchedUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
           title: Nom d’utilisateur
           description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
             et les caractères « @ », « . », « + », « - » et « _ ».
@@ -1293,11 +1470,12 @@ components:
         email:
           type: string
           format: email
-          title: Adresse électronique
+          minLength: 1
           maxLength: 254
         phone:
           type: string
           nullable: true
+          minLength: 1
           title: Téléphone
           maxLength: 32
         groups:
@@ -1308,47 +1486,13 @@ components:
           title: Groupes
           description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
             tous les droits de tous les groupes auxquels il appartient.
-        association_members:
-          type: array
-          items:
-            type: integer
-            title: Associations
-          readOnly: true
-          title: Associations
-    PatchedUserDetails:
-      type: object
-      description: User model w/o password
-      properties:
-        pk:
-          type: integer
-          readOnly: true
-          title: ID
-        username:
-          type: string
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        email:
-          type: string
-          format: email
-          readOnly: true
-          title: Adresse électronique
-        first_name:
-          type: string
-          title: Prénom
-          maxLength: 150
-        last_name:
-          type: string
-          title: Nom
-          maxLength: 150
-    ResendEmailVerification:
+    ResendEmailVerificationRequest:
       type: object
       properties:
         email:
           type: string
           format: email
+          minLength: 1
       required:
       - email
     RestAuthDetail:
@@ -1365,18 +1509,24 @@ components:
         access:
           type: string
           readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
         refresh:
           type: string
           writeOnly: true
+          minLength: 1
       required:
-      - access
       - refresh
-    TokenVerify:
+    TokenVerifyRequest:
       type: object
       properties:
         token:
           type: string
           writeOnly: true
+          minLength: 1
       required:
       - token
     User:
@@ -1406,7 +1556,6 @@ components:
         email:
           type: string
           format: email
-          title: Adresse électronique
           maxLength: 254
         phone:
           type: string
@@ -1430,6 +1579,7 @@ components:
           title: Associations
       required:
       - association_members
+      - email
       - id
       - is_cas
       - username
@@ -1452,7 +1602,6 @@ components:
           type: string
           format: email
           readOnly: true
-          title: Adresse électronique
         first_name:
           type: string
           title: Prénom
@@ -1465,11 +1614,75 @@ components:
       - email
       - pk
       - username
-    VerifyEmail:
+    UserDetailsRequest:
+      type: object
+      description: User model w/o password
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 150
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 150
+      required:
+      - username
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 150
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        groups:
+          type: array
+          items:
+            type: integer
+            title: Groupes
+          title: Groupes
+          description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
+            tous les droits de tous les groupes auxquels il appartient.
+      required:
+      - email
+      - username
+    VerifyEmailRequest:
       type: object
       properties:
         key:
           type: string
+          minLength: 1
       required:
       - key
   securitySchemes:

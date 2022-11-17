@@ -19,6 +19,7 @@ class User(AbstractUser):
         - is_active
     """
 
+    email = models.EmailField(unique=True)
     phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False

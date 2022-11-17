@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import typing
 
-from allauth.socialaccount.models import SocialLogin
-from allauth_cas.views import AuthAction
-from cas import CASClient, CASClientBase
-from dj_rest_auth.serializers import LoginSerializer
 from django.conf import settings
+from django.db import IntegrityError
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
+
+from allauth.socialaccount.models import SocialLogin
+from allauth_cas.views import AuthAction
+from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import exceptions, serializers
 
+from cas import CASClient, CASClientBase
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.provider import CASProvider
 
@@ -58,8 +60,17 @@ class CASSerializer(LoginSerializer):
         login: SocialLogin = adapter.complete_login(request, data)
         login.lookup()
         if not login.is_existing:
-            login.save(request, connect=True)
-        attrs["user"] = login.account.user
+            try:
+                login.save(request, connect=True)
+                attrs["user"] = login.account.user
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    _(
+                        "An user is already registered with the email address linked to this CAS account."
+                    )
+                )
+        else:
+            attrs["user"] = login.account.user
 
         return attrs
 
