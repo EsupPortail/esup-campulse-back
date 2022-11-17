@@ -128,9 +128,10 @@ class UserGroupsCreate(generics.CreateAPIView):
             """
             TODO : restrict the route if is_validated_by_admin is set to true.
             """
-            user = User.objects.get(id=request.user.pk)
-            group = Group.objects.get(id=request.data["role"])
-            user.groups.add(group)
+            user = User.objects.get(email=request.data["user"])
+            for id_group in request.data["groups"]:
+                group = Group.objects.get(id=id_group)
+                user.groups.add(group)
             return response.Response({}, status=status.HTTP_200_OK)
         else:
             return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
