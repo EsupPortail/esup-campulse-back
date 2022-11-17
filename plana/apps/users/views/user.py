@@ -5,6 +5,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -86,6 +87,9 @@ class UserAssociationsCreate(generics.CreateAPIView):
     serializer_class = AssociationUsersSerializer
 
     def get_queryset(self):
+        """
+        TODO : restrict the post route if is_validated_by_admin is set to true.
+        """
         return AssociationUsers.objects.all()
 
 
@@ -116,6 +120,21 @@ class UserGroupsCreate(generics.CreateAPIView):
 
     serializer_class = UserSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            instance=request.user, data=request.data, partial=True
+        )
+        if serializer.is_valid(raise_exception=True):
+            """
+            TODO : restrict the route if is_validated_by_admin is set to true.
+            """
+            user = User.objects.get(id=request.user.pk)
+            group = Group.objects.get(id=request.data["role"])
+            user.groups.add(group)
+            return response.Response({}, status=status.HTTP_200_OK)
+        else:
+            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserGroupsList(generics.RetrieveDestroyAPIView):
     """
@@ -123,16 +142,13 @@ class UserGroupsList(generics.RetrieveDestroyAPIView):
     DELETE : Deletes a link between a group and a user.
     """
 
-    """
-    serializer_class = GroupUsersSerializer
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        groups_user = request.user.groups.all()
-        serializer = self.serializer_class(instance=groups_user)
-        return response.Response(serializer.data)
-    """
-
-    serializer_class = UserSerializer
+        user = request.user
+        serializer = self.serializer_class(instance=user)
+        return response.Response(serializer.data["groups"])
 
 
 #########
