@@ -123,16 +123,13 @@ class UserGroupsList(generics.RetrieveDestroyAPIView):
     DELETE : Deletes a link between a group and a user.
     """
 
-    """
-    serializer_class = GroupUsersSerializer
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        groups_user = request.user.groups.all()
-        serializer = self.serializer_class(instance=groups_user)
-        return response.Response(serializer.data)
-    """
-
-    serializer_class = UserSerializer
+        user = request.user
+        serializer = self.serializer_class(instance=user)
+        return response.Response(serializer.data["groups"])
 
 
 #########
