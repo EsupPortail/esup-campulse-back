@@ -69,7 +69,6 @@ $ python manage.py migrate
 
 ### Charger les fixtures dans la base de données
 
-Tous les mots de passe utilisés dans les fixtures sont `motdepasse`.
 
 ```sh
 $ python manage.py loaddata plana/apps/*/fixtures/*.json
@@ -81,13 +80,37 @@ Réinitialiser le contenu de la base de données au besoin :
 $ python manage.py flush
 ```
 
-## Développement
-
-### Lancer le serveur en local
+### Lancer le serveur local
 
 ```sh
 $ python manage.py runserver
 ```
+
+## Développement
+
+### Liens
+
+- `http://localhost:3000/` : frontend.
+- `http://localhost:8000/api/schema/` : télécharger un fichier YAML contenant la documentation.
+- `http://localhost:8000/api/schema/swagger-ui/` : consulter la documentation de l'API en mode Swagger.
+- `http://localhost:8000/api/schema/redoc/` : consulter la documentation de l'API en mode Redoc.
+- `http://localhost:1080/` : serveur mail.
+
+### Comptes de test des fixtures
+
+Mot de passe commun : `motdepasse`
+- `gestionnaire-svu@mail.tld`
+- `gestionnaire-crous@mail.tld`
+- `membre-fsdie-idex@mail.tld`
+- `membre-culture-actions@mail.tld`
+- `membre-commissions@mail.tld`
+- `étudiant-commissions@mail.tld`
+- `étudiant-asso-hors-site@mail.tld`
+- `étudiant-asso-site@mail.tld`
+- `président-asso-hors-site@mail.tld`
+- `président-asso-site@mail.tld`
+- `président-asso-hors-site-étudiant-asso-site@mail.tld`
+- `président-asso-site-étudiant-asso-hors-site@mail.tld`
 
 ### Détecter de nouvelles chaînes de caractères à traduire
 
@@ -102,22 +125,14 @@ $ python manage.py makemessages -l fr --extension html,txt,py
 $ black plana
 ```
 
-### Exécuter les tests localement
-
-```sh
-$ DEFAULT_DB_TEST_HOST=localhost tox
-```
-
-## Documentation des routes de l'application
-
 ### Mettre à jour automatiquement le fichier de documentation de l'API
 
 ```sh
 $ python manage.py spectacular --file schema.yml
 ```
 
-### URLs pour accéder à la documentation générée
+### Exécuter les tests localement
 
-- `/api/schema/` pour télécharger un fichier YAML contenant la documentation.
-- `/api/schema/swagger-ui/` pour consulter la documentation de l'API en mode Swagger.
-- `/api/schema/redoc/` pour consulter la documentation de l'API en mode Redoc.
+```sh
+$ DEFAULT_DB_TEST_HOST=localhost tox
+```

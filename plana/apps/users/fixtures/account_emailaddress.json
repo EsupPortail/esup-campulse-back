@@ -3,17 +3,17 @@
     "model": "account.emailaddress",
     "pk": 1,
     "fields": {
-      "email": "georges.saucisse@georgeslasaucisse.fr",
+      "email": "test@pas-unistra.fr",
       "verified": true,
       "primary": true,
-      "user_id": 3
+      "user_id": 2
     }
   },
   {
     "model": "account.emailaddress",
     "pk": 2,
     "fields": {
-      "email": "john.lennon@bbc.com",
+      "email": "gestionnaire-svu@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 4
@@ -23,7 +23,7 @@
     "model": "account.emailaddress",
     "pk": 3,
     "fields": {
-      "email": "amogus@amogus.amogus",
+      "email": "gestionnaire-crous@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 5
@@ -33,7 +33,7 @@
     "model": "account.emailaddress",
     "pk": 4,
     "fields": {
-      "email": "patricia@cas.tld",
+      "email": "membre-fsdie-idex@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 6
@@ -43,7 +43,7 @@
     "model": "account.emailaddress",
     "pk": 5,
     "fields": {
-      "email": "brice-CASé@nice.fr",
+      "email": "membre-culture-actions@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 7
@@ -53,10 +53,140 @@
     "model": "account.emailaddress",
     "pk": 6,
     "fields": {
-      "email": "test@pas-unistra.fr",
+      "email": "membre-commissions@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 8
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 7,
+    "fields": {
+      "email": "étudiant-commissions@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 9
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 8,
+    "fields": {
+      "email": "étudiant-asso-hors-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 10
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 9,
+    "fields": {
+      "email": "étudiant-asso-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 11
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 10,
+    "fields": {
+      "email": "président-asso-hors-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 12
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 11,
+    "fields": {
+      "email": "président-asso-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 13
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 12,
+    "fields": {
+      "email": "président-asso-hors-site-étudiant-asso-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 14
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 13,
+    "fields": {
+      "email": "président-asso-site-étudiant-asso-hors-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 15
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 14,
+    "fields": {
+      "email": "georges.saucisse@georgeslasaucisse.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 16
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 15,
+    "fields": {
+      "email": "john.lennon@bbc.com",
+      "verified": true,
+      "primary": true,
+      "user_id": 17
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 16,
+    "fields": {
+      "email": "amogus@amogus.amogus",
+      "verified": true,
+      "primary": true,
+      "user_id": 18
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 17,
+    "fields": {
+      "email": "patricia@cas.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 19
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 18,
+    "fields": {
+      "email": "brice-CASé@nice.fr",
+      "verified": true,
+      "primary": true,
+      "user_id": 20
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 19,
+    "fields": {
+      "email": "chantal.goyave@youpi.ouais",
+      "verified": true,
+      "primary": true,
+      "user_id": 21
     }
   }
 ]

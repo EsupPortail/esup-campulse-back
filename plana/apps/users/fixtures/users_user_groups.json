@@ -3,7 +3,7 @@
     "model": "users.user_groups",
     "pk": 1,
     "fields": {
-      "user_id": 3,
+      "user_id": 2,
       "group_id": 5
     }
   },
@@ -12,7 +12,7 @@
     "pk": 2,
     "fields": {
       "user_id": 4,
-      "group_id": 5
+      "group_id": 1
     }
   },
   {
@@ -20,7 +20,7 @@
     "pk": 3,
     "fields": {
       "user_id": 5,
-      "group_id": 5
+      "group_id": 2
     }
   },
   {
@@ -28,7 +28,7 @@
     "pk": 4,
     "fields": {
       "user_id": 6,
-      "group_id": 5
+      "group_id": 3
     }
   },
   {
@@ -36,7 +36,7 @@
     "pk": 5,
     "fields": {
       "user_id": 7,
-      "group_id": 5
+      "group_id": 4
     }
   },
   {
@@ -44,6 +44,134 @@
     "pk": 6,
     "fields": {
       "user_id": 8,
+      "group_id": 3
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 7,
+    "fields": {
+      "user_id": 8,
+      "group_id": 4
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 8,
+    "fields": {
+      "user_id": 9,
+      "group_id": 3
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 9,
+    "fields": {
+      "user_id": 9,
+      "group_id": 4
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 10,
+    "fields": {
+      "user_id": 9,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 11,
+    "fields": {
+      "user_id": 10,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 12,
+    "fields": {
+      "user_id": 11,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 13,
+    "fields": {
+      "user_id": 12,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 14,
+    "fields": {
+      "user_id": 13,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 15,
+    "fields": {
+      "user_id": 14,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 16,
+    "fields": {
+      "user_id": 15,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 17,
+    "fields": {
+      "user_id": 16,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 18,
+    "fields": {
+      "user_id": 17,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 19,
+    "fields": {
+      "user_id": 18,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 20,
+    "fields": {
+      "user_id": 19,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 21,
+    "fields": {
+      "user_id": 20,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 22,
+    "fields": {
+      "user_id": 21,
       "group_id": 5
     }
   }
