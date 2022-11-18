@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-17 15:42+0100\n"
+"POT-Creation-Date: 2022-11-18 09:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,15 +190,15 @@ msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 msgid "This email address is already in use."
 msgstr "Cette adresse mail est déjà utilisée."
 
-#: plana/apps/users/views/user.py:249
+#: plana/apps/users/views/user.py:251
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/user.py:254
+#: plana/apps/users/views/user.py:256
 msgid "No account exists with this user e-mail address."
 msgstr "Aucun compte n'existe avec cette adresse email."
 
-#: plana/apps/users/views/user.py:261
+#: plana/apps/users/views/user.py:263
 msgid "Password reset e-mail has been sent."
 msgstr "L'email de réinitialisation de mot de passe a été envoyé."
 

@@ -90,11 +90,11 @@ $ python manage.py runserver
 
 ### Liens
 
-- `http://localhost:3000/` : frontend.
-- `http://localhost:8000/api/schema/` : télécharger un fichier YAML contenant la documentation.
-- `http://localhost:8000/api/schema/swagger-ui/` : consulter la documentation de l'API en mode Swagger.
-- `http://localhost:8000/api/schema/redoc/` : consulter la documentation de l'API en mode Redoc.
-- `http://localhost:1080/` : serveur mail.
+- `[http://localhost:3000/](http://localhost:3000/)` : frontend.
+- `[http://localhost:8000/api/schema/](http://localhost:8000/api/schema/)` : télécharger un fichier YAML contenant la documentation.
+- `[http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/)` : consulter la documentation de l'API en mode Swagger.
+- `[http://localhost:8000/api/schema/redoc/](http://localhost:8000/api/schema/redoc/)` : consulter la documentation de l'API en mode Redoc.
+- `[http://localhost:1080/](http://localhost:1080/)` : serveur mail.
 
 ### Comptes de test des fixtures
 
