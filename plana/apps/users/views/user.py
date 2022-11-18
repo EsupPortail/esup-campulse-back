@@ -252,9 +252,10 @@ class PasswordResetView(generics.GenericAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
         except ObjectDoesNotExist:
+            # Email address wasn't found, but that fact is hidden to avoid leaking data.
             return response.Response(
-                {"detail": _("No account exists with this user e-mail address.")},
-                status=status.HTTP_404_NOT_FOUND,
+                {"detail": _("Password reset e-mail has been sent.")},
+                status=status.HTTP_200_OK,
             )
 
         serializer.save()
