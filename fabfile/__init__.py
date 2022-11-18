@@ -120,21 +120,21 @@ def test():
 def preprod():
     """Define preprod stage"""
     env.roledefs = {
-        'web': ['plana-pprd.net'],
-        'lb': ['lb.plana-pprd.net'],
+        'web': ['django-pprd-w3.di.unistra.fr', 'django-pprd-w4.di.unistra.fr'],
+        'lb': ['rp-dip-pprd-public.di.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.server_name = 'plana-pprd.net'
+    env.server_name = 'plana-pprd.app.unistra.fr'
     env.short_server_name = 'plana-pprd'
     env.static_folder = '/site_media/'
-    env.server_ip = ''
+    env.server_ip = '130.79.245.212'
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = '/etc/ssl/certs/plana.net.pem'
-    env.path_to_cert_key = '/etc/ssl/private/plana.net.key'
+    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
+    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
     env.goal = 'preprod'
-    env.socket_port = ''
+    env.socket_port = '8056'
     env.map_settings = {
         'default_db_host': "DATABASES['default']['HOST']",
         'default_db_user': "DATABASES['default']['USER']",
