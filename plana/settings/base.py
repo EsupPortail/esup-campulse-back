@@ -422,7 +422,7 @@ REST_AUTH_SERIALIZERS = {
     # "USER_DETAILS_SERIALIZER": "dj_rest_auth.serializers.UserDetailsSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetSerializer",
     # "PASSWORD_RESET_CONFIRM_SERIALIZER": "dj_rest_auth.serializers.PasswordResetConfirmSerializer",
-    "PASSWORD_CHANGE_SERIALIZER": "dj_rest_auth.serializers.PasswordChangeSerializer",
+    "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user.PasswordChangeSerializer",
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {

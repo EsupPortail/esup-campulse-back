@@ -102,8 +102,9 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
     """
 
     def save(self):
+        request = self.context.get("request")
         try:
-            user = User.objects.get(email=request.data["email"])
+            user = User.objects.get(email=request.user.email)
             if user.is_cas_user():
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to change the password of a CAS account.")]}
