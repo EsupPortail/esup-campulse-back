@@ -4,6 +4,7 @@ from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
+    UserDetailsSerializer as DJRestAuthUserDetailsSerializer,
 )
 
 from django.conf import settings
