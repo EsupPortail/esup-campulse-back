@@ -1,7 +1,13 @@
-from rest_framework import serializers
+from rest_framework import exceptions, serializers
 
 from allauth.account.adapter import get_adapter
+from dj_rest_auth.serializers import (
+    PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
+    PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
+)
 
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import User, AssociationUsers
@@ -12,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def is_cas_user(self, user) -> bool:
         """
-        Contenu du champ calculé "is_cas" (True si l'utilisateur s'est inscrit via CAS, False sinon).
+        Content from calculated field "is_cas" (True if user registred through CAS, or False).
         """
         return user.is_cas_user()
 
@@ -20,14 +26,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "is_cas",
             "username",
             "first_name",
             "last_name",
             "email",
             "phone",
-            "groups",
-            "association_members",
+            "is_cas",
+            "is_validated_by_admin",
         ]
 
 
@@ -89,3 +94,60 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
         user.save()
         return user
+
+
+class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
+    """
+    Overrided PasswordChangeSerializer to prevent CAS users to change their passwords.
+    """
+
+    def save(self):
+        request = self.context.get("request")
+        try:
+            user = User.objects.get(email=request.user.email)
+            if user.is_cas_user():
+                raise exceptions.ValidationError(
+                    {"detail": [_("Unable to change the password of a CAS account.")]}
+                )
+            else:
+                self.set_password_form.save()
+                if not self.logout_on_password_change:
+                    from django.contrib.auth import update_session_auth_hash
+
+                    update_session_auth_hash(self.request, self.user)
+        except ObjectDoesNotExist:
+            ...
+
+
+class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
+    """
+    Overrided PasswordResetSerializer to prevent CAS users to reset their passwords.
+    """
+
+    def save(self):
+        if "allauth" in settings.INSTALLED_APPS:
+            from allauth.account.forms import default_token_generator
+        else:
+            from django.contrib.auth.tokens import default_token_generator
+
+        request = self.context.get("request")
+        # Set some values to trigger the send_email method.
+        opts = {
+            "use_https": request.is_secure(),
+            "from_email": getattr(settings, "DEFAULT_FROM_EMAIL"),
+            "request": request,
+            "token_generator": default_token_generator,
+        }
+
+        opts.update(self.get_email_options())
+
+        try:
+            user = User.objects.get(email=request.data["email"])
+            if user.is_cas_user():
+                raise exceptions.ValidationError(
+                    {"detail": [_("Unable to reset the password of a CAS account.")]}
+                )
+            else:
+                self.reset_form.save(**opts)
+        except ObjectDoesNotExist:
+            ...

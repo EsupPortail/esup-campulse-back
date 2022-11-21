@@ -1,13 +1,11 @@
 import requests
 
-from rest_framework import generics, permissions, response, status
-from dj_rest_auth.app_settings import PasswordResetSerializer
+from rest_framework import generics, response, status
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -21,65 +19,12 @@ from plana.apps.users.serializers.user import (
     AssociationUsersSerializer,
 )
 
-###########
-#  Users  #
-###########
-
-
-class UserList(generics.ListCreateAPIView):
-    """
-    GET : Lists all users ordered by username.
-    POST : Creates a new user.
-    """
-
-    serializer_class = UserSerializer
-
-    def get_queryset(self):
-        return User.objects.all().order_by("username")
-
-
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET : Lists an user with all its details.
-    PUT : Edits all fields of an user.
-    PATCH : Edits one field of an user.
-    DELETE : Deletes an user.
-    """
-
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        serializer = self.serializer_class(instance=user)
-        try:
-            return response.Response(serializer.data)
-        except AttributeError:
-            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            instance=request.user, data=request.data, partial=True
-        )
-        if serializer.is_valid(raise_exception=True):
-            if serializer.instance.get_cas_user():
-                print(serializer.instance.get_cas_user().extra_data)
-            # TODO : Check if user authenticated with CAS cannot PATCH the fields auto-filled by CAS (not testable on localhost because CAS-dev doesn't allow it).
-            """
-            if serializer.instance.get_cas_user():
-                cas_user_response = serializer.instance.get_cas_user()
-                cas_restricted_fields = CASAdapter.get_provider().extract_common_fields(cas_user_response)
-                print(cas_user_response.extra_data)
-            """
-            serializer.save()
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
-
-
 ##################
 #  Associations  #
 ##################
+
+
+# TODO Only work if authenticated user is username in request, and not validated by admin.
 
 
 class UserAssociationsCreate(generics.CreateAPIView):
@@ -88,12 +33,7 @@ class UserAssociationsCreate(generics.CreateAPIView):
     """
 
     serializer_class = AssociationUsersSerializer
-
-    def get_queryset(self):
-        """
-        TODO : restrict the post route if is_validated_by_admin is set to true.
-        """
-        return AssociationUsers.objects.all()
+    queryset = AssociationUsers.objects.all()
 
 
 class UserAssociationsList(generics.RetrieveDestroyAPIView):
@@ -111,9 +51,52 @@ class UserAssociationsList(generics.RetrieveDestroyAPIView):
         return response.Response(serializer.data)
 
 
+#########
+#  CAS  #
+#########
+
+
+class CASLogin(SocialLoginView):
+    """
+    POST : Authenticates an user through CAS with django-allauth-cas and dj-rest-auth.
+    """
+
+    adapter_class = CASAdapter
+    serializer_class = CASSerializer
+
+
+class CASLogout(LogoutView):
+    """
+    GET : Logs out an user authenticated with CAS out.
+    POST : Logs out an user authenticated with CAS out.
+    """
+
+    adapter_class = CASAdapter
+    serializer_class = CASSerializer
+
+    # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
+    ...
+
+
+##################
+#  dj-rest-auth  #
+##################
+
+
+class PasswordResetConfirm(generics.GenericAPIView):
+    """
+    POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
+    """
+
+    ...
+
+
 ############
 #  Groups  #
 ############
+
+
+# TODO Only work if authenticated user is username in request, and not validated by admin.
 
 
 class UserGroupsCreate(generics.CreateAPIView):
@@ -155,33 +138,6 @@ class UserGroupsList(generics.RetrieveDestroyAPIView):
         return response.Response(serializer.data["groups"])
 
 
-#########
-#  CAS  #
-#########
-
-
-class CASLogin(SocialLoginView):
-    """
-    POST : Authenticates an user through CAS with django-allauth-cas and dj-rest-auth.
-    """
-
-    adapter_class = CASAdapter
-    serializer_class = CASSerializer
-
-
-class CASLogout(LogoutView):
-    """
-    GET : Logs out an user authenticated with CAS out.
-    POST : Logs out an user authenticated with CAS out.
-    """
-
-    adapter_class = CASAdapter
-    serializer_class = CASSerializer
-
-    # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
-    ...
-
-
 ###############
 #  CAS Debug  #
 ###############
@@ -216,51 +172,3 @@ def cas_verify(request):
         return JsonResponse(response.json())
     else:
         print(response)
-
-
-##################
-#  dj-rest-auth  #
-##################
-
-
-class PasswordResetConfirm(generics.GenericAPIView):
-    """
-    POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
-    """
-
-    ...
-
-
-class PasswordResetView(generics.GenericAPIView):
-    """
-    Overrides dj-rest-auth PasswordResetView to avoid resetting the password of a CAS account or inexistent account.
-    """
-
-    serializer_class = PasswordResetSerializer
-    permission_classes = (permissions.AllowAny,)
-    throttle_scope = "dj_rest_auth"
-
-    def post(self, request, *args, **kwargs):
-        # Create a serializer with request.data
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        try:
-            user = User.objects.get(email=request.data["email"])
-            if user.is_cas_user():
-                return response.Response(
-                    {"detail": _("Unable to reset the password of a CAS account.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
-        except ObjectDoesNotExist:
-            # Email address wasn't found, but that fact is hidden to avoid leaking data.
-            return response.Response(
-                {"detail": _("Password reset e-mail has been sent.")},
-                status=status.HTTP_200_OK,
-            )
-
-        serializer.save()
-        # Return the success message with OK HTTP status
-        return response.Response(
-            {"detail": _("Password reset e-mail has been sent.")},
-            status=status.HTTP_200_OK,
-        )

@@ -417,6 +417,12 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = "plana-auth"
 JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
+    "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetSerializer",
+    "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user.PasswordChangeSerializer",
+}
+
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "plana.apps.users.serializers.user.CustomRegisterSerializer",
 }
@@ -450,8 +456,8 @@ def sentry_init(environment):
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "PlanA API",
-    "DESCRIPTION": "API for PlanA API",
-    "VERSION": "0.0.0",
+    "DESCRIPTION": "API for PlanA",
+    "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
