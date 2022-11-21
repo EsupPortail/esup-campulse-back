@@ -72,6 +72,8 @@ class CASSerializer(LoginSerializer):
                 )
         else:
             attrs["user"] = login.account.user
+            # TODO Avoid logging in a CAS user who hasn't completed registration.
+            """
             user = User.objects.get(email=attrs["user"].email)
             try:
                 user.groups.all()[0]
@@ -79,6 +81,7 @@ class CASSerializer(LoginSerializer):
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")
                 )
+            """
 
         return attrs
 
