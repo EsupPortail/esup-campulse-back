@@ -62,102 +62,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Group'
           description: ''
-  /users/{id}:
-    get:
-      operationId: users_retrieve
-      description: |-
-        GET : Lists an user with all its details.
-        PUT : Edits all fields of an user.
-        PATCH : Edits one field of an user.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-    put:
-      operationId: users_update
-      description: |-
-        GET : Lists an user with all its details.
-        PUT : Edits all fields of an user.
-        PATCH : Edits one field of an user.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-    patch:
-      operationId: users_partial_update
-      description: |-
-        GET : Lists an user with all its details.
-        PUT : Edits all fields of an user.
-        PATCH : Edits one field of an user.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
   /users/associations/:
     post:
       operationId: users_associations_create
@@ -1129,37 +1033,6 @@ components:
           type: string
           minLength: 1
           maxLength: 150
-    PatchedUserRequest:
-      type: object
-      properties:
-        username:
-          type: string
-          minLength: 1
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        first_name:
-          type: string
-          minLength: 1
-          maxLength: 150
-        last_name:
-          type: string
-          minLength: 1
-          maxLength: 150
-        email:
-          type: string
-          format: email
-          minLength: 1
-          title: Courriel
-          maxLength: 254
-        phone:
-          type: string
-          nullable: true
-          minLength: 1
-          title: Téléphone
-          maxLength: 32
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -1209,9 +1082,6 @@ components:
         id:
           type: integer
           readOnly: true
-        is_cas:
-          type: boolean
-          readOnly: true
         username:
           type: string
           title: Nom d’utilisateur
@@ -1235,6 +1105,12 @@ components:
           nullable: true
           title: Téléphone
           maxLength: 32
+        is_cas:
+          type: boolean
+          readOnly: true
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
       required:
       - email
       - first_name
@@ -1329,6 +1205,9 @@ components:
           minLength: 1
           title: Téléphone
           maxLength: 32
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
       required:
       - email
       - first_name

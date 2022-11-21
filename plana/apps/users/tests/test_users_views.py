@@ -26,6 +26,8 @@ class UserTests(TestCase):
     def setUp(self):
         self.client = Client()
 
+    # TODO Route doesn't exist anymore at this time.
+    """
     def test_get_users_list(self):
         users_cnt = User.objects.count()
         self.assertTrue(users_cnt > 0)
@@ -35,6 +37,7 @@ class UserTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
+    """
 
     # TODO Anonymous users aren't allowed to see user details anymore. Correct the test to pass an authenticated user.
     """

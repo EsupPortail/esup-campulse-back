@@ -20,12 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "is_cas",
             "username",
             "first_name",
             "last_name",
             "email",
             "phone",
+            "is_cas",
+            "is_validated_by_admin",
         ]
 
 
