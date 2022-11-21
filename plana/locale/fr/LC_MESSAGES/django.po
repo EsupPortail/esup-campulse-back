@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-18 09:30+0100\n"
+"POT-Creation-Date: 2022-11-21 09:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,27 +161,31 @@ msgstr "Utilisateurs"
 msgid "Has office status"
 msgstr "Membre du bureau d'association"
 
-#: plana/apps/users/serializers/cas.py:39
+#: plana/apps/users/serializers/cas.py:40
 msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
-#: plana/apps/users/serializers/cas.py:55
-#: plana/apps/users/tests/serializers/test_cas_serializers.py:138
+#: plana/apps/users/serializers/cas.py:56
+#: plana/apps/users/tests/serializers/test_cas_serializers.py:141
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:69
+#: plana/apps/users/serializers/cas.py:70
 msgid ""
 "An user is already registered with the email address linked to this CAS "
 "account."
 msgstr "Un compte est déjà inscrit avec l'adresse mail liée à ce compte CAS."
 
 #: plana/apps/users/serializers/cas.py:80
+msgid "Account registration must be completed."
+msgstr "L'inscription doit être complétée."
+
+#: plana/apps/users/serializers/cas.py:88
 #, python-format
 msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:108
+#: plana/apps/users/serializers/cas.py:116
 #: plana/apps/users/tests/serializers/test_cas_serializers.py:41
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -194,11 +198,7 @@ msgstr "Cette adresse mail est déjà utilisée."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/user.py:256
-msgid "No account exists with this user e-mail address."
-msgstr "Aucun compte n'existe avec cette adresse email."
-
-#: plana/apps/users/views/user.py:263
+#: plana/apps/users/views/user.py:257 plana/apps/users/views/user.py:264
 msgid "Password reset e-mail has been sent."
 msgstr "L'email de réinitialisation de mot de passe a été envoyé."
 

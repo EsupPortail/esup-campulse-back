@@ -14,6 +14,7 @@ from rest_framework import exceptions, serializers
 
 from cas import CASClient, CASClientBase
 from plana.apps.users.adapter import CASAdapter
+from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
 
 if typing.TYPE_CHECKING:
@@ -71,6 +72,13 @@ class CASSerializer(LoginSerializer):
                 )
         else:
             attrs["user"] = login.account.user
+            user = User.objects.get(email=attrs["user"].email)
+            try:
+                user.groups.all()[0]
+            except IndexError:
+                raise serializers.ValidationError(
+                    _("Account registration must be completed.")
+                )
 
         return attrs
 
