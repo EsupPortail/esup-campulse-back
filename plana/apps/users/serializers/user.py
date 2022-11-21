@@ -2,6 +2,7 @@ from rest_framework import exceptions, serializers
 
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
+    PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
 
@@ -95,7 +96,33 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
+    """
+    Overrided PasswordChangeSerializer to prevent CAS users to change their passwords.
+    """
+
+    def save(self):
+        try:
+            user = User.objects.get(email=request.data["email"])
+            if user.is_cas_user():
+                raise exceptions.ValidationError(
+                    {"detail": [_("Unable to change the password of a CAS account.")]}
+                )
+            else:
+                self.set_password_form.save()
+                if not self.logout_on_password_change:
+                    from django.contrib.auth import update_session_auth_hash
+
+                    update_session_auth_hash(self.request, self.user)
+        except ObjectDoesNotExist:
+            ...
+
+
 class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
+    """
+    Overrided PasswordResetSerializer to prevent CAS users to reset their passwords.
+    """
+
     def save(self):
         if "allauth" in settings.INSTALLED_APPS:
             from allauth.account.forms import default_token_generator

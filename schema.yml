@@ -999,7 +999,8 @@ components:
       - uid
     PasswordResetRequest:
       type: object
-      description: Serializer for requesting a password reset e-mail.
+      description: Overrided PasswordResetSerializer to prevent CAS users to reset
+        their passwords.
       properties:
         email:
           type: string
