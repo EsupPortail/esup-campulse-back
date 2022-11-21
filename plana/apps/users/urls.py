@@ -8,7 +8,6 @@ from .views.user import (
     UserGroupsList,
     CASLogin,
     CASLogout,
-    PasswordResetView,
     PasswordResetConfirm,
     cas_test,
     cas_verify,
@@ -27,9 +26,6 @@ urlpatterns = [
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
-    path(
-        "auth/password/reset/", PasswordResetView.as_view(), name="rest_password_reset"
-    ),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         "auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",

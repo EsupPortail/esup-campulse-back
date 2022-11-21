@@ -417,6 +417,14 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = "plana-auth"
 JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
+REST_AUTH_SERIALIZERS = {
+    # 'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    # 'USER_DETAILS_SERIALIZER': 'dj_rest_auth.serializers.UserDetailsSerializer',
+    "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetSerializer",
+    # 'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
+    # 'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
+}
+
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "plana.apps.users.serializers.user.CustomRegisterSerializer",
 }

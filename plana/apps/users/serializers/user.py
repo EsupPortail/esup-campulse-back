@@ -1,7 +1,12 @@
-from rest_framework import serializers
+from rest_framework import exceptions, serializers
 
 from allauth.account.adapter import get_adapter
+from dj_rest_auth.serializers import (
+    PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
+)
 
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import User, AssociationUsers
@@ -12,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def is_cas_user(self, user) -> bool:
         """
-        Contenu du champ calculé "is_cas" (True si l'utilisateur s'est inscrit via CAS, False sinon).
+        Content from calculated field "is_cas" (True if user registred through CAS, or False).
         """
         return user.is_cas_user()
 
@@ -88,3 +93,33 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
         user.save()
         return user
+
+
+class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
+    def save(self):
+        if "allauth" in settings.INSTALLED_APPS:
+            from allauth.account.forms import default_token_generator
+        else:
+            from django.contrib.auth.tokens import default_token_generator
+
+        request = self.context.get("request")
+        # Set some values to trigger the send_email method.
+        opts = {
+            "use_https": request.is_secure(),
+            "from_email": getattr(settings, "DEFAULT_FROM_EMAIL"),
+            "request": request,
+            "token_generator": default_token_generator,
+        }
+
+        opts.update(self.get_email_options())
+
+        try:
+            user = User.objects.get(email=request.data["email"])
+            if user.is_cas_user():
+                raise exceptions.ValidationError(
+                    {"detail": [_("Unable to reset the password of a CAS account.")]}
+                )
+            else:
+                self.reset_form.save(**opts)
+        except ObjectDoesNotExist:
+            ...
