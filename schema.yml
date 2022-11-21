@@ -62,36 +62,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Group'
           description: ''
-  /users/:
-    post:
-      operationId: users_create
-      description: 'POST : Creates a new user.'
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: ''
-        '401':
-          description: No response body
   /users/{id}:
     get:
       operationId: users_retrieve
@@ -99,7 +69,6 @@ paths:
         GET : Lists an user with all its details.
         PUT : Edits all fields of an user.
         PATCH : Edits one field of an user.
-        DELETE : Deletes an user.
       parameters:
       - in: path
         name: id
@@ -124,7 +93,6 @@ paths:
         GET : Lists an user with all its details.
         PUT : Edits all fields of an user.
         PATCH : Edits one field of an user.
-        DELETE : Deletes an user.
       parameters:
       - in: path
         name: id
@@ -161,7 +129,6 @@ paths:
         GET : Lists an user with all its details.
         PUT : Edits all fields of an user.
         PATCH : Edits one field of an user.
-        DELETE : Deletes an user.
       parameters:
       - in: path
         name: id
@@ -191,27 +158,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
-    delete:
-      operationId: users_destroy
-      description: |-
-        GET : Lists an user with all its details.
-        PUT : Edits all fields of an user.
-        PATCH : Edits one field of an user.
-        DELETE : Deletes an user.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '204':
-          description: No response body
   /users/associations/:
     post:
       operationId: users_associations_create

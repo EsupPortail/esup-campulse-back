@@ -27,28 +27,11 @@ from plana.apps.users.serializers.user import (
 ###########
 
 
-class UserList(generics.CreateAPIView):
-    """
-    POST : Creates a new user.
-    """
-
-    serializer_class = UserSerializer
-    queryset = User.objects.all().order_by("username")
-
-    @extend_schema(
-        responses={ 201: UserSerializer, 401: None },
-    )
-    def post(self, request, *args, **kwargs):
-        request.data["username"] = request.data["email"]
-        return self.create(request, *args, **kwargs)
-
-
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(generics.RetrieveUpdateAPIView):
     """
     GET : Lists an user with all its details.
     PUT : Edits all fields of an user.
     PATCH : Edits one field of an user.
-    DELETE : Deletes an user.
     """
 
     serializer_class = UserSerializer
