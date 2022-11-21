@@ -26,8 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "phone",
-            "groups",
-            "association_members",
         ]
 
 

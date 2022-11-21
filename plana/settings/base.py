@@ -450,8 +450,8 @@ def sentry_init(environment):
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "PlanA API",
-    "DESCRIPTION": "API for PlanA API",
-    "VERSION": "0.0.0",
+    "DESCRIPTION": "API for PlanA",
+    "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",

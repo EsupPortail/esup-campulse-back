@@ -4,6 +4,7 @@ from rest_framework import generics, permissions, response, status
 from dj_rest_auth.app_settings import PasswordResetSerializer
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
+from drf_spectacular.utils import extend_schema
 
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -26,16 +27,20 @@ from plana.apps.users.serializers.user import (
 ###########
 
 
-class UserList(generics.ListCreateAPIView):
+class UserList(generics.CreateAPIView):
     """
-    GET : Lists all users ordered by username.
     POST : Creates a new user.
     """
 
     serializer_class = UserSerializer
+    queryset = User.objects.all().order_by("username")
 
-    def get_queryset(self):
-        return User.objects.all().order_by("username")
+    @extend_schema(
+        responses={ 201: UserSerializer, 401: None },
+    )
+    def post(self, request, *args, **kwargs):
+        request.data["username"] = request.data["email"]
+        return self.create(request, *args, **kwargs)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):

@@ -1,27 +1,25 @@
 from rest_framework import generics
 
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.serializers.association import AssociationSerializer
+from plana.apps.associations.serializers.association import (
+    AssociationListSerializer,
+    AssociationDetailSerializer,
+)
 
 
-class AssociationList(generics.ListCreateAPIView):
+class AssociationList(generics.ListAPIView):
     """
     GET : Lists all associations currently active.
-    POST : Creates a new association.
     """
 
-    serializer_class = AssociationSerializer
-
-    def get_queryset(self):
-        return Association.objects.filter(is_enabled=True).order_by("name")
+    serializer_class = AssociationListSerializer
+    queryset = Association.objects.filter(is_enabled=True).order_by("name")
 
 
-class AssociationDetail(generics.RetrieveUpdateAPIView):
+class AssociationDetail(generics.RetrieveAPIView):
     """
     GET : Lists an association with all its details.
-    PUT : Edits all fields of an association.
-    PATCH : Edits one field of an association.
     """
 
-    serializer_class = AssociationSerializer
+    serializer_class = AssociationDetailSerializer
     queryset = Association.objects.all()

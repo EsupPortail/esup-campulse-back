@@ -25,7 +25,26 @@ class ActivityFieldSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AssociationSerializer(serializers.ModelSerializer):
+class AssociationListSerializer(serializers.ModelSerializer):
+    institution = InstitutionSerializer()
+    institution_component = InstitutionComponentSerializer()
+    activity_field = ActivityFieldSerializer()
+
+    class Meta:
+        model = Association
+        fields = [
+            "id",
+            "institution",
+            "institution_component",
+            "activity_field",
+            "name",
+            "acronym",
+            "is_enabled",
+            "is_site",
+        ]
+
+
+class AssociationDetailSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()

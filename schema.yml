@@ -1,15 +1,13 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 0.0.0
-  description: API for PlanA API
+  version: 0.1.0
+  description: API for PlanA
 paths:
   /associations/:
     get:
       operationId: associations_list
-      description: |-
-        GET : Lists all associations currently active.
-        POST : Creates a new association.
+      description: 'GET : Lists all associations currently active.'
       tags:
       - associations
       security:
@@ -22,44 +20,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Association'
-          description: ''
-    post:
-      operationId: associations_create
-      description: |-
-        GET : Lists all associations currently active.
-        POST : Creates a new association.
-      tags:
-      - associations
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Association'
+                  $ref: '#/components/schemas/AssociationList'
           description: ''
   /associations/{id}:
     get:
       operationId: associations_retrieve
-      description: |-
-        GET : Lists an association with all its details.
-        PUT : Edits all fields of an association.
-        PATCH : Edits one field of an association.
+      description: 'GET : Lists an association with all its details.'
       parameters:
       - in: path
         name: id
@@ -76,78 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Association'
-          description: ''
-    put:
-      operationId: associations_update
-      description: |-
-        GET : Lists an association with all its details.
-        PUT : Edits all fields of an association.
-        PATCH : Edits one field of an association.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - associations
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssociationRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Association'
-          description: ''
-    patch:
-      operationId: associations_partial_update
-      description: |-
-        GET : Lists an association with all its details.
-        PUT : Edits all fields of an association.
-        PATCH : Edits one field of an association.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - associations
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedAssociationRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedAssociationRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedAssociationRequest'
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Association'
+                $ref: '#/components/schemas/AssociationDetail'
           description: ''
   /groups/:
     get:
@@ -168,30 +63,9 @@ paths:
                   $ref: '#/components/schemas/Group'
           description: ''
   /users/:
-    get:
-      operationId: users_list
-      description: |-
-        GET : Lists all users ordered by username.
-        POST : Creates a new user.
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-          description: ''
     post:
       operationId: users_create
-      description: |-
-        GET : Lists all users ordered by username.
-        POST : Creates a new user.
+      description: 'POST : Creates a new user.'
       tags:
       - users
       requestBody:
@@ -216,6 +90,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '401':
+          description: No response body
   /users/{id}:
     get:
       operationId: users_retrieve
@@ -953,17 +829,7 @@ components:
       required:
       - id
       - name
-    ActivityFieldRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-      required:
-      - name
-    Association:
+    AssociationDetail:
       type: object
       properties:
         id:
@@ -1048,88 +914,34 @@ components:
       - id
       - institution
       - institution_component
-    AssociationRequest:
+    AssociationList:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         institution:
-          $ref: '#/components/schemas/InstitutionRequest'
+          $ref: '#/components/schemas/Institution'
         institution_component:
-          $ref: '#/components/schemas/InstitutionComponentRequest'
+          $ref: '#/components/schemas/InstitutionComponent'
         activity_field:
-          $ref: '#/components/schemas/ActivityFieldRequest'
+          $ref: '#/components/schemas/ActivityField'
         name:
           type: string
-          minLength: 1
           title: Nom
           maxLength: 250
         acronym:
           type: string
-          minLength: 1
           title: Acronyme
           maxLength: 30
-        path_logo:
-          type: string
-          minLength: 1
-          title: Emplacement du logo
-          maxLength: 250
-        description:
-          type: string
-          minLength: 1
-        activities:
-          type: string
-          minLength: 1
-          title: Activités
-        address:
-          type: string
-          minLength: 1
-          title: Adresse
-        phone:
-          type: string
-          minLength: 1
-          title: Téléphone
-          maxLength: 25
-        email:
-          type: string
-          minLength: 1
-          title: Courriel
-          maxLength: 256
-        siret:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        website:
-          type: string
-          format: uri
-          minLength: 1
-          title: Site
-          maxLength: 200
-        student_count:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Nombre d'étudiants
         is_enabled:
           type: boolean
         is_site:
           type: boolean
           title: Site ?
-        approval_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date d'agrément
-        last_goa_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de la dernière AGO
-        cga_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de dernière AG constitutive
       required:
       - activity_field
+      - id
       - institution
       - institution_component
     AssociationUsers:
@@ -1208,19 +1020,22 @@ components:
           type: string
           format: email
           minLength: 1
+          title: Courriel
           maxLength: 254
         first_name:
           type: string
-          title: Prénom
+          minLength: 1
           maxLength: 150
         last_name:
           type: string
-          title: Nom
+          minLength: 1
           maxLength: 150
         phone:
           type: string
       required:
       - email
+      - first_name
+      - last_name
     Group:
       type: object
       properties:
@@ -1264,32 +1079,6 @@ components:
           maxLength: 250
       required:
       - id
-      - name
-    InstitutionComponentRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-      required:
-      - name
-    InstitutionRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
-          maxLength: 30
-      required:
-      - acronym
       - name
     JWT:
       type: object
@@ -1374,86 +1163,6 @@ components:
           minLength: 1
       required:
       - email
-    PatchedAssociationRequest:
-      type: object
-      properties:
-        institution:
-          $ref: '#/components/schemas/InstitutionRequest'
-        institution_component:
-          $ref: '#/components/schemas/InstitutionComponentRequest'
-        activity_field:
-          $ref: '#/components/schemas/ActivityFieldRequest'
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
-          maxLength: 30
-        path_logo:
-          type: string
-          minLength: 1
-          title: Emplacement du logo
-          maxLength: 250
-        description:
-          type: string
-          minLength: 1
-        activities:
-          type: string
-          minLength: 1
-          title: Activités
-        address:
-          type: string
-          minLength: 1
-          title: Adresse
-        phone:
-          type: string
-          minLength: 1
-          title: Téléphone
-          maxLength: 25
-        email:
-          type: string
-          minLength: 1
-          title: Courriel
-          maxLength: 256
-        siret:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        website:
-          type: string
-          format: uri
-          minLength: 1
-          title: Site
-          maxLength: 200
-        student_count:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Nombre d'étudiants
-        is_enabled:
-          type: boolean
-        is_site:
-          type: boolean
-          title: Site ?
-        approval_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date d'agrément
-        last_goa_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de la dernière AGO
-        cga_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de dernière AG constitutive
     PatchedUserDetailsRequest:
       type: object
       description: User model w/o password
@@ -1468,11 +1177,11 @@ components:
           maxLength: 150
         first_name:
           type: string
-          title: Prénom
+          minLength: 1
           maxLength: 150
         last_name:
           type: string
-          title: Nom
+          minLength: 1
           maxLength: 150
     PatchedUserRequest:
       type: object
@@ -1487,16 +1196,17 @@ components:
           maxLength: 150
         first_name:
           type: string
-          title: Prénom
+          minLength: 1
           maxLength: 150
         last_name:
           type: string
-          title: Nom
+          minLength: 1
           maxLength: 150
         email:
           type: string
           format: email
           minLength: 1
+          title: Courriel
           maxLength: 254
         phone:
           type: string
@@ -1504,14 +1214,6 @@ components:
           minLength: 1
           title: Téléphone
           maxLength: 32
-        groups:
-          type: array
-          items:
-            type: integer
-            title: Groupes
-          title: Groupes
-          description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
-            tous les droits de tous les groupes auxquels il appartient.
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -1573,41 +1275,26 @@ components:
           maxLength: 150
         first_name:
           type: string
-          title: Prénom
           maxLength: 150
         last_name:
           type: string
-          title: Nom
           maxLength: 150
         email:
           type: string
           format: email
+          title: Courriel
           maxLength: 254
         phone:
           type: string
           nullable: true
           title: Téléphone
           maxLength: 32
-        groups:
-          type: array
-          items:
-            type: integer
-            title: Groupes
-          title: Groupes
-          description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
-            tous les droits de tous les groupes auxquels il appartient.
-        association_members:
-          type: array
-          items:
-            type: integer
-            title: Associations
-          readOnly: true
-          title: Associations
       required:
-      - association_members
       - email
+      - first_name
       - id
       - is_cas
+      - last_name
       - username
     UserDetails:
       type: object
@@ -1628,16 +1315,17 @@ components:
           type: string
           format: email
           readOnly: true
+          title: Courriel
         first_name:
           type: string
-          title: Prénom
           maxLength: 150
         last_name:
           type: string
-          title: Nom
           maxLength: 150
       required:
       - email
+      - first_name
+      - last_name
       - pk
       - username
     UserDetailsRequest:
@@ -1654,13 +1342,15 @@ components:
           maxLength: 150
         first_name:
           type: string
-          title: Prénom
+          minLength: 1
           maxLength: 150
         last_name:
           type: string
-          title: Nom
+          minLength: 1
           maxLength: 150
       required:
+      - first_name
+      - last_name
       - username
     UserRequest:
       type: object
@@ -1675,16 +1365,17 @@ components:
           maxLength: 150
         first_name:
           type: string
-          title: Prénom
+          minLength: 1
           maxLength: 150
         last_name:
           type: string
-          title: Nom
+          minLength: 1
           maxLength: 150
         email:
           type: string
           format: email
           minLength: 1
+          title: Courriel
           maxLength: 254
         phone:
           type: string
@@ -1692,16 +1383,10 @@ components:
           minLength: 1
           title: Téléphone
           maxLength: 32
-        groups:
-          type: array
-          items:
-            type: integer
-            title: Groupes
-          title: Groupes
-          description: Les groupes dont fait partie cet utilisateur. Celui-ci obtient
-            tous les droits de tous les groupes auxquels il appartient.
       required:
       - email
+      - first_name
+      - last_name
       - username
     VerifyEmailRequest:
       type: object
