@@ -96,7 +96,7 @@ def test():
     }
     # env.user = 'root'  # user for ssh
     env.backends = ['127.0.0.1']
-    env.server_name = 'plana-test.app.unistra.fr'
+    env.server_name = 'plana-api-test.app.unistra.fr'
     env.short_server_name = 'plana-test'
     env.static_folder = '/site_media/'
     env.server_ip = ''
@@ -125,7 +125,7 @@ def preprod():
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.server_name = 'plana-pprd.app.unistra.fr'
+    env.server_name = 'plana-api-pprd.app.unistra.fr'
     env.short_server_name = 'plana-pprd'
     env.static_folder = '/site_media/'
     env.server_ip = '130.79.245.212'
