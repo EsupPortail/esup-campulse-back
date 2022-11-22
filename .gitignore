@@ -47,3 +47,6 @@ htmlcov/
 
 # JOE
 *~
+
+# OpenAPI
+schema.yml

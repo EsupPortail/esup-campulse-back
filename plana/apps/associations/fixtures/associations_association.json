@@ -45,7 +45,7 @@
     "model": "associations.Association",
     "pk": 4,
     "fields": {
-      "name": "Les Fans de Georges la Saucisse",
+      "name": "AssoTest",
       "acronym": "Sau6",
       "creation_date": "2022-10-27T14:12:11+02:00",
       "activity_field_id": 3,
@@ -59,7 +59,7 @@
     "model": "associations.Association",
     "pk": 5,
     "fields": {
-      "name": "Au cas où le Plan A marche pas",
+      "name": "PlanB",
       "acronym": "PlanB",
       "creation_date": "2022-10-28T10:27:10+02:00",
       "activity_field_id": 11,
