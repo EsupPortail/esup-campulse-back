@@ -2,6 +2,8 @@ from django.conf import settings
 from django.urls import include, path, re_path
 
 from .views.user import (
+    # UserList,
+    # UserDetail,
     UserAssociationsCreate,
     UserAssociationsList,
     UserGroupsCreate,
@@ -14,6 +16,8 @@ from .views.user import (
 )
 
 urlpatterns = [
+    # path("", UserList.as_view(), name="user_list"),
+    # path("<int:pk>", UserDetail.as_view(), name="user_detail"),
     path(
         "associations/",
         UserAssociationsCreate.as_view(),
