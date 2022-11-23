@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
+from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers
 from plana.apps.users.serializers.cas import CASSerializer
@@ -170,18 +171,17 @@ class UserGroupsCreate(generics.CreateAPIView):
             return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserGroupsList(generics.RetrieveAPIView):
+class UserGroupsList(generics.ListAPIView):
     """
     GET : Lists all groups linked to an user.
     """
 
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    serializer_class = GroupSerializer
 
     def get(self, request, *args, **kwargs):
-        user = request.user
-        serializer = self.serializer_class(instance=user)
-        return response.Response(serializer.data["groups"])
+        user_groups = request.user.groups.all()
+        serializer = self.serializer_class(instance=user_groups)
+        return response.Response(serializer.data)
 
 
 ###############
