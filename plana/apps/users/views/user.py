@@ -84,10 +84,9 @@ class UserAssociationsCreate(generics.CreateAPIView):
     queryset = AssociationUsers.objects.all()
 
 
-class UserAssociationsList(generics.RetrieveDestroyAPIView):
+class UserAssociationsList(generics.RetrieveAPIView):
     """
     GET : Lists all associations linked to an user.
-    DELETE : Deletes a link between an association and a user.
     """
 
     serializer_class = AssociationUsersSerializer
@@ -171,10 +170,9 @@ class UserGroupsCreate(generics.CreateAPIView):
             return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserGroupsList(generics.RetrieveDestroyAPIView):
+class UserGroupsList(generics.RetrieveAPIView):
     """
     GET : Lists all groups linked to an user.
-    DELETE : Deletes a link between a group and a user.
     """
 
     serializer_class = UserSerializer
