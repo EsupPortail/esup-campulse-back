@@ -11,4 +11,4 @@ class GroupList(generics.ListAPIView):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
-        return Group.objects.all()
+        return Group.objects.all().order_by("name")
