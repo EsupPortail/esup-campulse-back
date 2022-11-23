@@ -36,3 +36,7 @@ class AssociationsTests(TestCase):
 
         association_1 = json.loads(response.content.decode("utf-8"))
         self.assertEqual(association_1["name"], association.name)
+
+    def test_get_association_detail_error(self):
+        not_found_response = self.client.get("/associations/50")
+        self.assertEquals(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
