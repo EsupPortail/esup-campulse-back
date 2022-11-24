@@ -272,5 +272,18 @@
       "is_validated_by_admin": true,
       "is_active": true
     }
+  },
+  {
+    "model": "users.User",
+    "pk": 22,
+    "fields": {
+      "first_name": "George",
+      "last_name": "LuCAS",
+      "username": "salut-cest-star-wars@lucasfilm.com",
+      "email": "salut-cest-star-wars@lucasfilm.com",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
   }
 ]
