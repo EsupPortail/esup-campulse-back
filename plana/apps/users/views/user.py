@@ -90,12 +90,13 @@ class UserAssociationsList(generics.RetrieveAPIView):
     GET : Lists all associations linked to an user.
     """
 
+    # TODO create a specific serializer without user ?
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
 
     def get(self, request, *args, **kwargs):
-        associations_user = AssociationUsers.objects.get(user_id=request.user.pk)
-        serializer = self.serializer_class(instance=associations_user)
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset.filter(user_id=kwargs['pk']), many=True)
         return response.Response(serializer.data)
 
 
@@ -176,6 +177,7 @@ class UserGroupsList(generics.ListAPIView):
     GET : Lists all groups linked to an user.
     """
 
+    # TODO create a specific serializer returning only groups ?
     serializer_class = UserSerializer
     queryset = User.objects.all()
 

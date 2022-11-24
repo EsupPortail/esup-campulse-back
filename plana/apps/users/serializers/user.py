@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import User, AssociationUsers
 from plana.apps.groups.serializers.group import GroupSerializer
+from plana.apps.associations.serializers.association import SimpleAssociationDataSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,10 +57,15 @@ class UserRelatedField(serializers.RelatedField):
 class AssociationUsersSerializer(serializers.ModelSerializer):
     # TODO Check drf-spectacular error.
     user = UserRelatedField(queryset=User.objects.all(), many=False)
+    association = SimpleAssociationDataSerializer()
 
     class Meta:
         model = AssociationUsers
-        fields = "__all__"
+        fields = [
+            "user",
+            "has_office_status",
+            "association",
+        ]
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):

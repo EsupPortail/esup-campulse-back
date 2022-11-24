@@ -52,3 +52,14 @@ class AssociationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Association
         fields = "__all__"
+
+
+class SimpleAssociationDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Association
+        fields = [
+            "id",
+            "name",
+            "acronym",
+        ]
+
