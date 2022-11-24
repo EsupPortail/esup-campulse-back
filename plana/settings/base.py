@@ -269,6 +269,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "plana",
     "plana.apps.associations",
+    "plana.apps.consents",
     "plana.apps.groups",
     "plana.apps.users",
 ]

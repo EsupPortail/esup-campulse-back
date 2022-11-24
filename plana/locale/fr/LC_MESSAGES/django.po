@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-24 14:57+0100\n"
+"POT-Creation-Date: 2022-11-24 15:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,12 +47,12 @@ msgid "Address"
 msgstr "Adresse"
 
 #: plana/apps/associations/models/association.py:18
-#: plana/apps/users/models/user.py:25
+#: plana/apps/users/models/user.py:26
 msgid "Phone"
 msgstr "Téléphone"
 
 #: plana/apps/associations/models/association.py:19
-#: plana/apps/users/models/user.py:22
+#: plana/apps/users/models/user.py:23
 msgid "Email"
 msgstr "Courriel"
 
@@ -109,12 +109,12 @@ msgstr "Domaine d'activité"
 
 #: plana/apps/associations/models/association.py:53
 #: plana/apps/associations/models/association.py:66
-#: plana/apps/users/models/user.py:72 plana/apps/users/models/user.py:80
+#: plana/apps/users/models/user.py:73 plana/apps/users/models/user.py:81
 msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:54
-#: plana/apps/users/models/user.py:31 plana/apps/users/models/user.py:81
+#: plana/apps/users/models/user.py:32 plana/apps/users/models/user.py:82
 msgid "Associations"
 msgstr "Associations"
 
@@ -146,52 +146,52 @@ msgstr "Composantes"
 msgid "Activity fields"
 msgstr "Domaines d'activités"
 
-#: plana/apps/users/models/user.py:23
-msgid "First name"
-msgstr "Prénom"
-
-#: plana/apps/users/models/user.py:24
-msgid "Last name"
-msgstr "Nom de famille"
-
-#: plana/apps/users/models/user.py:27
-msgid "Is validated by administrator"
-msgstr "Est validé par l'équipe d'administration"
-
-#: plana/apps/users/models/user.py:61 plana/apps/users/models/user.py:70
-#: plana/apps/users/models/user.py:102
-msgid "User"
-msgstr "Utilisateur"
-
-#: plana/apps/users/models/user.py:62
-msgid "Users"
-msgstr "Utilisateurs"
-
-#: plana/apps/users/models/user.py:74
-msgid "Has office status"
-msgstr "Membre du bureau d'association"
-
-#: plana/apps/users/models/user.py:88
+#: plana/apps/consents/models/consent.py:10
 msgid "GDPR Consent title"
 msgstr "Titre du consentement RGPD"
 
-#: plana/apps/users/models/user.py:94 plana/apps/users/models/user.py:104
+#: plana/apps/consents/models/consent.py:16 plana/apps/users/models/user.py:92
 msgid "GDPR Consent"
 msgstr "Consentement RGPD"
 
-#: plana/apps/users/models/user.py:95
+#: plana/apps/consents/models/consent.py:17
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
 
-#: plana/apps/users/models/user.py:106
+#: plana/apps/users/models/user.py:24
+msgid "First name"
+msgstr "Prénom"
+
+#: plana/apps/users/models/user.py:25
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: plana/apps/users/models/user.py:28
+msgid "Is validated by administrator"
+msgstr "Est validé par l'équipe d'administration"
+
+#: plana/apps/users/models/user.py:62 plana/apps/users/models/user.py:71
+#: plana/apps/users/models/user.py:90
+msgid "User"
+msgstr "Utilisateur"
+
+#: plana/apps/users/models/user.py:63
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: plana/apps/users/models/user.py:75
+msgid "Has office status"
+msgstr "Membre du bureau d'association"
+
+#: plana/apps/users/models/user.py:94
 msgid "Consent date"
 msgstr "Date de consentement"
 
-#: plana/apps/users/models/user.py:112
+#: plana/apps/users/models/user.py:100
 msgid "GDPR Consent User"
 msgstr "Consentement RGPD de l'utilisateur"
 
-#: plana/apps/users/models/user.py:113
+#: plana/apps/users/models/user.py:101
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
@@ -220,15 +220,15 @@ msgstr "%(service)s n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:78
+#: plana/apps/users/serializers/user.py:83
 msgid "This email address is already in use."
 msgstr "Cette adresse mail est déjà utilisée."
 
-#: plana/apps/users/serializers/user.py:109
+#: plana/apps/users/serializers/user.py:114
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:147
+#: plana/apps/users/serializers/user.py:152
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
