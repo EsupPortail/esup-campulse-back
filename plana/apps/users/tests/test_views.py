@@ -6,7 +6,10 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 from rest_framework import status
 
+from django.core import serializers
+
 from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.groups.serializers.group import GroupSerializer
 
 
 class UserTests(TestCase):
@@ -62,11 +65,14 @@ class UserTests(TestCase):
         response = self.client.get("/users/associations/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    """
-    def test_get_groups_user_list(self):
-        groups_user_cnt = Group.objects.count()
-        self.assertTrue(groups_user_cnt > 0)
+    # TODO : add authentication on tested view + rights management
+    def test_get_user_groups_list(self):
+        user = User.objects.get(pk=2)
+        groups = list(user.groups.all().values('id', 'name'))
 
         response = self.client.get("/users/groups/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-    """
+
+        get_groups = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(get_groups, groups)
+
