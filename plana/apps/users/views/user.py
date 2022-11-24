@@ -96,7 +96,9 @@ class UserAssociationsList(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = self.serializer_class(queryset.filter(user_id=kwargs['pk']), many=True)
+        serializer = self.serializer_class(
+            queryset.filter(user_id=kwargs["pk"]), many=True
+        )
         return response.Response(serializer.data)
 
 
@@ -182,9 +184,9 @@ class UserGroupsList(generics.ListAPIView):
     queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(id=kwargs['pk'])
+        user = User.objects.get(id=kwargs["pk"])
         serializer = self.serializer_class(instance=user)
-        return response.Response(serializer.data['groups'])
+        return response.Response(serializer.data["groups"])
 
 
 ###############

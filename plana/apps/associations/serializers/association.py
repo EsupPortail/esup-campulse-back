@@ -62,4 +62,3 @@ class SimpleAssociationDataSerializer(serializers.ModelSerializer):
             "name",
             "acronym",
         ]
-

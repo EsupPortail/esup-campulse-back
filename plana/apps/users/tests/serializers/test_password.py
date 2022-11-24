@@ -26,38 +26,16 @@ class TestCASPasswordChangeSerializer(TestCase):
         }
         request = APIRequestFactory().post(passwords, format="json")
         force_authenticate(request, user)
+        request.user = user
 
         cls.request_data = passwords
         cls.request = request
         cls.user = user
 
     def test_change_password_as_cas(self):
-        """
-        # Test custom validation success
-        PasswordChangeSerializer.custom_validation = MagicMock(return_value=True)
         serializer = PasswordChangeSerializer(
             reverse("rest_password_change"),
-            data=self.request_data
+            context={"request": self.request},
         )
-        serializer.validate(self.request_data)
-        PasswordChangeSerializer.custom_validation.assert_called_once_with(self.request_data)
-        """
-
-        """
-        # Test custom validation error
-        PasswordChangeSerializer.custom_validation = MagicMock(
-            side_effect=ValidationError("failed")
-        )
-        serializer = PasswordChangeSerializer(
-            reverse("rest_password_change"),
-            data=self.request_data
-        )
-        with self.assertRaisesMessage(ValidationError, "failed"):
-            serializer.validate(self.request_data)
-        """
-
-        print(self.user.is_cas_user())
-        serializer = PasswordChangeSerializer(reverse("rest_password_change"), data=self.request_data)
-        serializer.save()
         with self.assertRaises(ValidationError):
-            serializer.is_valid(raise_exception=True)
+            serializer.save()
