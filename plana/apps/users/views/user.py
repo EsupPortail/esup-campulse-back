@@ -78,7 +78,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class UserAssociationsCreate(generics.CreateAPIView):
     """
-    POST : Creates a new link between an user and an association.
+    POST : Creates a new link between a user and an association.
     """
 
     serializer_class = AssociationUsersSerializer
@@ -87,7 +87,7 @@ class UserAssociationsCreate(generics.CreateAPIView):
 
 class UserAssociationsList(generics.RetrieveAPIView):
     """
-    GET : Lists all associations linked to an user.
+    GET : Lists all associations linked to a user.
     """
 
     # TODO create a specific serializer without user ?
@@ -107,7 +107,7 @@ class UserAssociationsList(generics.RetrieveAPIView):
 
 class CASLogin(SocialLoginView):
     """
-    POST : Authenticates an user through CAS with django-allauth-cas and dj-rest-auth.
+    POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
     """
 
     adapter_class = CASAdapter
@@ -116,8 +116,8 @@ class CASLogin(SocialLoginView):
 
 class CASLogout(LogoutView):
     """
-    GET : Logs out an user authenticated with CAS out.
-    POST : Logs out an user authenticated with CAS out.
+    GET : Logs out a user authenticated with CAS out.
+    POST : Logs out a user authenticated with CAS out.
     """
 
     adapter_class = CASAdapter
@@ -150,7 +150,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
 class UserGroupsCreate(generics.CreateAPIView):
     """
-    POST : Creates a new link between an user and a group.
+    POST : Creates a new link between a user and a group.
     """
 
     serializer_class = UserSerializer
@@ -174,7 +174,7 @@ class UserGroupsCreate(generics.CreateAPIView):
 
 class UserGroupsList(generics.ListAPIView):
     """
-    GET : Lists all groups linked to an user.
+    GET : Lists all groups linked to a user.
     """
 
     # TODO create a specific serializer returning only groups ?
