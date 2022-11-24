@@ -176,12 +176,13 @@ class UserGroupsList(generics.ListAPIView):
     GET : Lists all groups linked to an user.
     """
 
-    serializer_class = GroupSerializer
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        user_groups = request.user.groups.all()
-        serializer = self.serializer_class(instance=user_groups)
-        return response.Response(serializer.data)
+        user = User.objects.get(id=kwargs['pk'])
+        serializer = self.serializer_class(instance=user)
+        return response.Response(serializer.data['groups'])
 
 
 ###############
