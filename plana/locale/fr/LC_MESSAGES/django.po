@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 16:02+0100\n"
+"POT-Creation-Date: 2022-11-24 14:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,19 +148,18 @@ msgstr "Domaines d'activités"
 
 #: plana/apps/users/models/user.py:23
 msgid "First name"
-msgstr ""
+msgstr "Prénom"
 
 #: plana/apps/users/models/user.py:24
-#, fuzzy
-#| msgid "Last GOA date"
 msgid "Last name"
-msgstr "Date de la dernière AGO"
+msgstr "Nom de famille"
 
 #: plana/apps/users/models/user.py:27
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
 #: plana/apps/users/models/user.py:61 plana/apps/users/models/user.py:70
+#: plana/apps/users/models/user.py:102
 msgid "User"
 msgstr "Utilisateur"
 
@@ -171,6 +170,30 @@ msgstr "Utilisateurs"
 #: plana/apps/users/models/user.py:74
 msgid "Has office status"
 msgstr "Membre du bureau d'association"
+
+#: plana/apps/users/models/user.py:88
+msgid "GDPR Consent title"
+msgstr "Titre du consentement RGPD"
+
+#: plana/apps/users/models/user.py:94 plana/apps/users/models/user.py:104
+msgid "GDPR Consent"
+msgstr "Consentement RGPD"
+
+#: plana/apps/users/models/user.py:95
+msgid "GDPR Consents"
+msgstr "Consentements RGPD"
+
+#: plana/apps/users/models/user.py:106
+msgid "Consent date"
+msgstr "Date de consentement"
+
+#: plana/apps/users/models/user.py:112
+msgid "GDPR Consent User"
+msgstr "Consentement RGPD de l'utilisateur"
+
+#: plana/apps/users/models/user.py:113
+msgid "GDPR Consents Users"
+msgstr "Consentements RPGD des utilisateurs"
 
 #: plana/apps/users/serializers/cas.py:40
 msgid "View is not defined, pass it as a context variable"
@@ -197,15 +220,15 @@ msgstr "%(service)s n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:79
+#: plana/apps/users/serializers/user.py:78
 msgid "This email address is already in use."
 msgstr "Cette adresse mail est déjà utilisée."
 
-#: plana/apps/users/serializers/user.py:110
+#: plana/apps/users/serializers/user.py:109
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:148
+#: plana/apps/users/serializers/user.py:147
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 

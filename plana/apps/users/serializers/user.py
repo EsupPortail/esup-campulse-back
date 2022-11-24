@@ -10,7 +10,12 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
-from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GDPRConsent,
+    GDPRConsentUsers,
+    User,
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -151,3 +156,17 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
                 self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             ...
+
+
+class GDPRConsentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GDPRConsent
+        fields = "__all__"
+
+
+class GDPRConsentUsersSerializer(serializers.ModelSerializer):
+    user = UserRelatedField(queryset=User.objects.all(), many=False)
+
+    class Meta:
+        model = GDPRConsentUsers
+        fields = "__all__"

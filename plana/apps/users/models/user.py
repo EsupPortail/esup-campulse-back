@@ -79,3 +79,37 @@ class AssociationUsers(models.Model):
     class Meta:
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
+
+
+class GDPRConsent(models.Model):
+    """
+    Model that lists GDPR types of consents.
+    """
+
+    title = models.CharField(_("GDPR Consent title"), max_length=256, blank=False)
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = _("GDPR Consent")
+        verbose_name_plural = _("GDPR Consents")
+
+
+class GDPRConsentUsers(models.Model):
+    """
+    Model that lists links between GDPR consents and users (which user has given which consent and when).
+    """
+
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    consent = models.ForeignKey(
+        GDPRConsent, verbose_name=_("GDPR Consent"), on_delete=models.CASCADE
+    )
+    date_consented = models.DateTimeField(_("Consent date"), auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}, {self.consent}, date : {self.date_consented}"
+
+    class Meta:
+        verbose_name = _("GDPR Consent User")
+        verbose_name_plural = _("GDPR Consents Users")

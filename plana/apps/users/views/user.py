@@ -12,11 +12,12 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.adapter import CASAdapter
-from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.users.models.user import User, AssociationUsers, GDPRConsentUsers
 from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import (
     UserSerializer,
     AssociationUsersSerializer,
+    GDPRConsentUsersSerializer,
 )
 
 ###########
@@ -136,6 +137,40 @@ class PasswordResetConfirm(generics.GenericAPIView):
     """
 
     ...
+
+
+###################
+#  GDPR Consents  #
+###################
+
+
+# TODO Only work if authenticated user is username in request, and not validated by admin.
+
+
+class UserConsentsCreate(generics.CreateAPIView):
+    """
+    POST : Creates a new link between an user and a GDPR consent.
+    """
+
+    serializer_class = GDPRConsentUsersSerializer
+    queryset = GDPRConsentUsers.objects.all()
+
+
+class UserConsentsList(generics.RetrieveAPIView):
+    """
+    GET : Lists all GDPR consents linked to an user.
+    """
+
+    # TODO create a specific serializer without user ?
+    serializer_class = GDPRConsentUsersSerializer
+    queryset = GDPRConsentUsers.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(
+            queryset.filter(user_id=kwargs["pk"]), many=True
+        )
+        return response.Response(serializer.data)
 
 
 ############

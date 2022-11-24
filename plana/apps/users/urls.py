@@ -6,6 +6,8 @@ from .views.user import (
     # UserDetail,
     UserAssociationsCreate,
     UserAssociationsList,
+    UserConsentsCreate,
+    UserConsentsList,
     UserGroupsCreate,
     UserGroupsList,
     CASLogin,
@@ -37,6 +39,8 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("consents/", UserConsentsCreate.as_view(), name="user_consents_create"),
+    path("consents/<int:pk>", UserConsentsList.as_view(), name="user_consents_list"),
     path("groups/", UserGroupsCreate.as_view(), name="user_groups_create"),
     path("groups/<int:pk>", UserGroupsList.as_view(), name="user_groups_list"),
 ]
