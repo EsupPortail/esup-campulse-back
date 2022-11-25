@@ -203,6 +203,11 @@ class UserGroupsCreate(generics.CreateAPIView):
         user = User.objects.get(username=request.data["username"])
         serializer = self.serializer_class(instance=user)
 
+        if user.is_validated_by_admin:
+            return response.Response(
+                {"error": "Impossible de modifier les rôles de cet utilisateur."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
         for id_group in list(map(int, request.data["groups"].split(","))):
             try:
                 group = Group.objects.get(id=id_group)
