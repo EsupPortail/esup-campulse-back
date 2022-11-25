@@ -13,8 +13,8 @@
     "pk": 2,
     "fields": {
       "type": "PeerTube",
-      "location": "https://peertube.desmu.fr/c/georgeslasaucisse",
-      "association_id": 2
+      "location": "https://framatube.org/c/joinpeertube",
+      "association_id": 1
     }
   }
 ]

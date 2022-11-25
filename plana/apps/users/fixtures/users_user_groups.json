@@ -126,53 +126,5 @@
       "user_id": 15,
       "group_id": 5
     }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 17,
-    "fields": {
-      "user_id": 16,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 18,
-    "fields": {
-      "user_id": 17,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 19,
-    "fields": {
-      "user_id": 18,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 20,
-    "fields": {
-      "user_id": 19,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 21,
-    "fields": {
-      "user_id": 20,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.user_groups",
-    "pk": 22,
-    "fields": {
-      "user_id": 21,
-      "group_id": 5
-    }
   }
 ]

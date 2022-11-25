@@ -79,14 +79,5 @@
       "association_id": 3,
       "has_office_status": false
     }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 10,
-    "fields": {
-      "user_id": 16,
-      "association_id": 4,
-      "has_office_status": false
-    }
   }
 ]
