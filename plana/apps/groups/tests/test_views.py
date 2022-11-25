@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from rest_framework import status
 
 
-class GroupTests(TestCase):
+class GroupViewsTests(TestCase):
     fixtures = [
         "auth_group.json",
     ]

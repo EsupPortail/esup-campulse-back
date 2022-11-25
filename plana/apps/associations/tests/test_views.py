@@ -6,7 +6,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 
 
-class AssociationsTests(TestCase):
+class AssociationsViewsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",

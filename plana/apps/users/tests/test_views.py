@@ -12,7 +12,7 @@ from plana.apps.users.models.user import User, AssociationUsers
 from plana.apps.groups.serializers.group import GroupSerializer
 
 
-class UserTests(TestCase):
+class UserViewsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
