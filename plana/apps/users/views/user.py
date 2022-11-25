@@ -1,6 +1,7 @@
 import requests
 
 from rest_framework import generics, response, status
+from rest_framework.permissions import IsAuthenticated
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
@@ -83,6 +84,7 @@ class UserAssociationsCreate(generics.CreateAPIView):
 
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class UserAssociationsList(generics.RetrieveAPIView):
@@ -93,6 +95,7 @@ class UserAssociationsList(generics.RetrieveAPIView):
     # TODO create a specific serializer without user ?
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -156,6 +159,7 @@ class UserGroupsCreate(generics.CreateAPIView):
     """
 
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -182,8 +186,10 @@ class UserGroupsList(generics.ListAPIView):
     # TODO create a specific serializer returning only groups ?
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        print(request.user.username)
         user = User.objects.get(id=kwargs["pk"])
         serializer = self.serializer_class(instance=user)
         return response.Response(serializer.data["groups"])
