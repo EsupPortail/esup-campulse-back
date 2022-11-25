@@ -34,7 +34,6 @@ class UsersModelsTests(TestCase):
 
     def testGDPRConsentUsersModel(self):
         consent_user = GDPRConsentUsers.objects.first()
-        print(consent_user)
         self.assertEqual(
             str(consent_user),
             f"{consent_user.user}, {consent_user.consent}, date : {consent_user.date_consented}",

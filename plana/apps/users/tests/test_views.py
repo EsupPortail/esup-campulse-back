@@ -25,7 +25,8 @@ class UserViewsTests(TestCase):
         "users_associationsusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",    ]
+        "users_user_groups.json",
+    ]
 
     def setUp(self):
         self.client = Client()
@@ -90,3 +91,18 @@ class UserViewsTests(TestCase):
 
         get_groups = json.loads(response.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
+
+
+class UserAuthTests(TestCase):
+    def test_user_auth_registration(self):
+        user = {
+            "email": "georges.saucisse@georgeslasaucisse.fr",
+            "first_name": "Georges",
+            "last_name": "La Saucisse",
+        }
+
+        response = self.client.post("/users/auth/registration/", user)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post("/users/auth/registration/", user)
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)

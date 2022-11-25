@@ -226,7 +226,6 @@ class UserGroupsList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print(request.user.username)
         user = User.objects.get(id=kwargs["pk"])
         serializer = self.serializer_class(instance=user)
         return response.Response(serializer.data["groups"])

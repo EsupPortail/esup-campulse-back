@@ -95,6 +95,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         return exclusions + ["phone"]
     """
 
+    """
     def validate_email(self, value):
         ModelClass = self.Meta.model
         if ModelClass.objects.filter(email=value).exists():
@@ -102,6 +103,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
                 _("This email address is already in use.")
             )
         return value
+    """
 
     def save(self, request):
         adapter = get_adapter()
