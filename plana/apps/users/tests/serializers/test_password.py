@@ -12,6 +12,7 @@ class TestLocalUserPasswordChangeSerializer(TestCase):
     """
     Testing password methods for a non-CAS user.
     """
+
     @classmethod
     def setUpTestData(cls):
         user = User.objects.create_user(
@@ -48,6 +49,7 @@ class TestCASUserPasswordChangeSerializer(TestCase):
     """
     Testing password methods for a CAS user.
     """
+
     @classmethod
     def setUpTestData(cls):
         user = User.objects.create_user(

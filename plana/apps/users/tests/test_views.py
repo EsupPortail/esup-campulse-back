@@ -76,7 +76,9 @@ class UserTests(TestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
         response_unauthorized = self.anonymous_client.get("/users/groups/2")
-        self.assertEquals(response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEquals(
+            response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
+        )
 
         get_groups = json.loads(response.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
