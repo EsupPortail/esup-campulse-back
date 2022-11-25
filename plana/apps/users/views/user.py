@@ -197,7 +197,6 @@ class UserGroupsCreate(generics.CreateAPIView):
 
     serializer_class = UserGroupsSerializer
 
-    # TODO : restrict the route if is_validated_by_admin is set to true.
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
         serializer = self.serializer_class(instance=user)
@@ -230,7 +229,6 @@ class UserGroupsList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print(request.user.username)
         user = User.objects.get(id=kwargs["pk"])
         serializer = self.serializer_class(instance=user)
         return response.Response(serializer.data["groups"])
