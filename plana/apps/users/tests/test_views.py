@@ -65,7 +65,7 @@ class UserTests(TestCase):
         response = self.client.get("/users/associations/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    # TODO : add authentication on tested view + rights management
+    # TODO : add rights management
     def test_get_user_groups_list(self):
         user = User.objects.get(pk=2)
         groups = list(user.groups.all().values("id", "name"))
