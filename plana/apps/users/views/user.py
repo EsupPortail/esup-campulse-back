@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.adapter import CASAdapter
@@ -18,6 +19,7 @@ from plana.apps.users.models.user import User, AssociationUsers
 from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import (
     UserSerializer,
+    UserGroupsSerializer,
     AssociationUsersSerializer,
 )
 
@@ -158,24 +160,22 @@ class UserGroupsCreate(generics.CreateAPIView):
     POST : Creates a new link between a user and a group.
     """
 
-    serializer_class = UserSerializer
+    serializer_class = UserGroupsSerializer
     permission_classes = [IsAuthenticated]
 
+    #TODO : restrict the route if is_validated_by_admin is set to true.
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            instance=request.user, data=request.data, partial=True
-        )
-        if serializer.is_valid(raise_exception=True):
-            """
-            TODO : restrict the route if is_validated_by_admin is set to true.
-            """
-            user = User.objects.get(email=request.data["user"])
-            for id_group in request.data["groups"]:
+        user = User.objects.get(username=request.data['username'])
+        serializer = self.serializer_class(instance=user)
+
+        for id_group in list(map(int, request.data["groups"].split(","))):
+            try:
                 group = Group.objects.get(id=id_group)
-                user.groups.add(group)
-            return response.Response({}, status=status.HTTP_200_OK)
-        else:
-            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+            except ObjectDoesNotExist:
+                return response.Response({"error": "Rôle inexistant"}, status=status.HTTP_400_BAD_REQUEST)
+            user.groups.add(group)
+
+        return response.Response({}, status=status.HTTP_200_OK)
 
 
 class UserGroupsList(generics.ListAPIView):

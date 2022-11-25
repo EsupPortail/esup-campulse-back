@@ -56,6 +56,17 @@ class UserRelatedField(serializers.RelatedField):
             return User.objects.get(pk=data)
 
 
+class UserGroupsSerializer(serializers.ModelSerializer):
+    groups = serializers.ListField(child=serializers.IntegerField(), required=True)
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "groups",
+        ]
+
+
 class AssociationUsersSerializer(serializers.ModelSerializer):
     # TODO Check drf-spectacular error.
     user = UserRelatedField(queryset=User.objects.all(), many=False)
