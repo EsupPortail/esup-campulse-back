@@ -6,7 +6,7 @@ from plana.apps.consents.models.consent import GDPRConsent
 from rest_framework import status
 
 
-class GDPRConsentsTests(TestCase):
+class GDPRConsentsViewsTests(TestCase):
     fixtures = [
         "consents_gdprconsent.json",
     ]
@@ -14,7 +14,8 @@ class GDPRConsentsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_get_groups_list(self):
+
+    def test_get_consents_list(self):
         groups_cnt = GDPRConsent.objects.count()
         self.assertTrue(groups_cnt > 0)
 
