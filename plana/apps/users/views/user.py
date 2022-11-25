@@ -77,7 +77,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 ##################
 
 
-# TODO Only work if authenticated user is username in request, and not validated by admin.
+# TODO Only work if authenticated user is username in request
 
 
 class UserAssociationsCreate(generics.CreateAPIView):
@@ -87,7 +87,19 @@ class UserAssociationsCreate(generics.CreateAPIView):
 
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
-    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        user = User.objects.get(username=request.data["user"])
+
+        if user.is_validated_by_admin:
+            return response.Response(
+                {"error": "Impossible de modifier les rôles de cet utilisateur."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # TODO Add UserAssociation object creation with checks here
+
+        return response.Response({}, status=status.HTTP_200_OK)
 
 
 class UserAssociationsList(generics.RetrieveAPIView):

@@ -67,6 +67,19 @@ class UserViewsTests(TestCase):
         response = self.client.get("/users/associations/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
+    def test_link_user_to_associations(self):
+        # An admin-validated user can't be added in an association
+        response = self.client.post("/users/associations/", {'user': 'test@pas-unistra.fr', 'association': {}})
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # A non-validated user can be added in an association
+        response = self.client.post("/users/associations/", {'user': 'prenom.nom@adressemail.fr', 'association': {}})
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        # Authentication is not needed to access view
+        response = self.anonymous_client.post("/users/associations/", {'user': 'prenom.nom@adressemail.fr', 'association': {}})
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
     # TODO : add rights management
     def test_get_user_groups_list(self):
         user = User.objects.get(pk=2)
