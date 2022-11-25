@@ -204,14 +204,14 @@ class UserGroupsList(generics.ListAPIView):
 # callback = CASCallbackView.adapter_view(CASAdapter)
 
 
-def cas_test(request):
+def cas_test(request):  # pragma: no cover
     service_url = reverse("cas_verify")
     service_url = urlencode({"service": request.build_absolute_uri(service_url)})
     redirect_url = f"{settings.CAS_SERVER}login?{service_url}"
     return HttpResponseRedirect(redirect_to=redirect_url)
 
 
-def cas_verify(request):
+def cas_verify(request):  # pragma: no cover
     service_url = request.build_absolute_uri(reverse("cas_verify"))
     ticket = request.GET.get("ticket")
 

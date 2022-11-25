@@ -34,7 +34,7 @@ urlpatterns = [
 ]
 
 # debug toolbar for dev
-if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
+if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:  # pragma: no cover
     import debug_toolbar
 
     urlpatterns += [
