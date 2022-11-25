@@ -36,6 +36,8 @@ class UserTests(TestCase):
         self.response = self.client.post(url, data)
         self.home_url = reverse("home")
 
+        self.anonymous_client = Client()
+
     # TODO Route doesn't exist anymore at this time.
     """
     def test_get_users_list(self):
@@ -72,6 +74,9 @@ class UserTests(TestCase):
 
         response = self.client.get("/users/groups/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        response_unauthorized = self.anonymous_client.get("/users/groups/2")
+        self.assertEquals(response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED)
 
         get_groups = json.loads(response.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
