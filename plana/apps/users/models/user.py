@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from allauth.socialaccount.models import SocialAccount
 
 from plana.apps.associations.models.association import Association

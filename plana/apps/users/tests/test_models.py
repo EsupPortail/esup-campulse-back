@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
 
 
 class UsersModelsTests(TestCase):
