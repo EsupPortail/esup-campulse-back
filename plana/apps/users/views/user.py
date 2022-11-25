@@ -163,16 +163,18 @@ class UserGroupsCreate(generics.CreateAPIView):
     serializer_class = UserGroupsSerializer
     permission_classes = [IsAuthenticated]
 
-    #TODO : restrict the route if is_validated_by_admin is set to true.
+    # TODO : restrict the route if is_validated_by_admin is set to true.
     def post(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.data['username'])
+        user = User.objects.get(username=request.data["username"])
         serializer = self.serializer_class(instance=user)
 
         for id_group in list(map(int, request.data["groups"].split(","))):
             try:
                 group = Group.objects.get(id=id_group)
             except ObjectDoesNotExist:
-                return response.Response({"error": "Rôle inexistant"}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response(
+                    {"error": "Rôle inexistant"}, status=status.HTTP_400_BAD_REQUEST
+                )
             user.groups.add(group)
 
         return response.Response({}, status=status.HTTP_200_OK)

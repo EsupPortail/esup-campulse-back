@@ -58,6 +58,7 @@ class UserRelatedField(serializers.RelatedField):
 
 class UserGroupsSerializer(serializers.ModelSerializer):
     groups = serializers.ListField(child=serializers.IntegerField(), required=True)
+
     class Meta:
         model = User
         fields = [
