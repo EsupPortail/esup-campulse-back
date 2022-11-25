@@ -8,7 +8,7 @@ from rest_framework import status
 
 from django.core import serializers
 
-from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
 from plana.apps.groups.serializers.group import GroupSerializer
 
 
@@ -20,11 +20,12 @@ class UserViewsTests(TestCase):
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
         "account_emailaddress.json",
+        "consents_gdprconsent.json",
         "auth_group.json",
         "users_associationsusers.json",
+        "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",
-    ]
+        "users_user_groups.json",    ]
 
     def setUp(self):
         self.client = Client()
@@ -65,6 +66,13 @@ class UserViewsTests(TestCase):
         self.assertTrue(associations_user_cnt > 0)
 
         response = self.client.get("/users/associations/2")
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def test_get_consents_user_list(self):
+        consents_user_cnt = GDPRConsentUsers.objects.count()
+        self.assertTrue(consents_user_cnt > 0)
+
+        response = self.client.get("/users/consents/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     # TODO : add rights management
