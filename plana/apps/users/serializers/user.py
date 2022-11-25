@@ -10,15 +10,16 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
-from plana.apps.users.models.user import (
-    AssociationUsers,
-    GDPRConsentUsers,
-    User,
+from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
+from plana.apps.groups.serializers.group import GroupSerializer
+from plana.apps.associations.serializers.association import (
+    SimpleAssociationDataSerializer,
 )
 
 
 class UserSerializer(serializers.ModelSerializer):
     is_cas = serializers.SerializerMethodField("is_cas_user")
+    groups = GroupSerializer(many=True)
 
     def is_cas_user(self, user) -> bool:
         """
@@ -37,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
             "phone",
             "is_cas",
             "is_validated_by_admin",
+            "groups",
         ]
 
 
@@ -54,13 +56,30 @@ class UserRelatedField(serializers.RelatedField):
             return User.objects.get(pk=data)
 
 
+class UserGroupsSerializer(serializers.ModelSerializer):
+    groups = serializers.ListField(child=serializers.IntegerField(), required=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "groups",
+        ]
+
+
 class AssociationUsersSerializer(serializers.ModelSerializer):
     # TODO Check drf-spectacular error.
     user = UserRelatedField(queryset=User.objects.all(), many=False)
+    association = SimpleAssociationDataSerializer()
 
     class Meta:
         model = AssociationUsers
-        fields = "__all__"
+        fields = [
+            "user",
+            "has_office_status",
+            "association",
+        ]
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):

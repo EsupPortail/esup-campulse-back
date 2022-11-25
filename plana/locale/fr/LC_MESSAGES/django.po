@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-24 15:57+0100\n"
+"POT-Creation-Date: 2022-11-25 14:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,7 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:56
-#: plana/apps/users/tests/serializers/test_cas_serializers.py:141
+#: plana/apps/users/tests/serializers/test_cas.py:138
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
@@ -216,19 +216,19 @@ msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
 #: plana/apps/users/serializers/cas.py:119
-#: plana/apps/users/tests/serializers/test_cas_serializers.py:41
+#: plana/apps/users/tests/serializers/test_cas.py:41
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:83
+#: plana/apps/users/serializers/user.py:109
 msgid "This email address is already in use."
 msgstr "Cette adresse mail est déjà utilisée."
 
-#: plana/apps/users/serializers/user.py:114
+#: plana/apps/users/serializers/user.py:140
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:152
+#: plana/apps/users/serializers/user.py:178
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 

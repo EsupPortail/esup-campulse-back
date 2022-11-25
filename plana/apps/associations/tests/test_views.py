@@ -6,7 +6,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 
 
-class AssociationsTests(TestCase):
+class AssociationsViewsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
@@ -28,6 +28,10 @@ class AssociationsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), associations_cnt)
 
+        association_1 = content[0]
+        self.assertTrue(association_1.get("name"))
+        self.assertFalse(association_1.get("activities"))
+
     def test_get_association_detail(self):
         association = Association.objects.get(pk=1)
 
@@ -36,6 +40,7 @@ class AssociationsTests(TestCase):
 
         association_1 = json.loads(response.content.decode("utf-8"))
         self.assertEqual(association_1["name"], association.name)
+        self.assertEqual(association_1["activities"], association.activities)
 
     def test_get_association_detail_error(self):
         not_found_response = self.client.get("/associations/50")

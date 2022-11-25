@@ -17,7 +17,7 @@ from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # pragma: no cover
     from plana.apps.users.views import CASLogin
 
 

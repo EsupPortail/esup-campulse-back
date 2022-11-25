@@ -1,6 +1,7 @@
 import requests
 
 from rest_framework import generics, response, status
+from rest_framework.permissions import IsAuthenticated
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 
@@ -10,12 +11,15 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
+from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers, GDPRConsentUsers
 from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import (
     UserSerializer,
+    UserGroupsSerializer,
     AssociationUsersSerializer,
     GDPRConsentUsersSerializer,
 )
@@ -78,24 +82,29 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class UserAssociationsCreate(generics.CreateAPIView):
     """
-    POST : Creates a new link between an user and an association.
+    POST : Creates a new link between a user and an association.
     """
 
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class UserAssociationsList(generics.RetrieveAPIView):
     """
-    GET : Lists all associations linked to an user.
+    GET : Lists all associations linked to a user.
     """
 
+    # TODO create a specific serializer without user ?
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        associations_user = AssociationUsers.objects.get(user_id=request.user.pk)
-        serializer = self.serializer_class(instance=associations_user)
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(
+            queryset.filter(user_id=kwargs["pk"]), many=True
+        )
         return response.Response(serializer.data)
 
 
@@ -106,7 +115,7 @@ class UserAssociationsList(generics.RetrieveAPIView):
 
 class CASLogin(SocialLoginView):
     """
-    POST : Authenticates an user through CAS with django-allauth-cas and dj-rest-auth.
+    POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
     """
 
     adapter_class = CASAdapter
@@ -115,8 +124,8 @@ class CASLogin(SocialLoginView):
 
 class CASLogout(LogoutView):
     """
-    GET : Logs out an user authenticated with CAS out.
-    POST : Logs out an user authenticated with CAS out.
+    GET : Logs out a user authenticated with CAS out.
+    POST : Logs out a user authenticated with CAS out.
     """
 
     adapter_class = CASAdapter
@@ -183,38 +192,42 @@ class UserConsentsList(generics.RetrieveAPIView):
 
 class UserGroupsCreate(generics.CreateAPIView):
     """
-    POST : Creates a new link between an user and a group.
+    POST : Creates a new link between a user and a group.
     """
 
-    serializer_class = UserSerializer
+    serializer_class = UserGroupsSerializer
+    permission_classes = [IsAuthenticated]
 
+    # TODO : restrict the route if is_validated_by_admin is set to true.
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            instance=request.user, data=request.data, partial=True
-        )
-        if serializer.is_valid(raise_exception=True):
-            """
-            TODO : restrict the route if is_validated_by_admin is set to true.
-            """
-            user = User.objects.get(email=request.data["user"])
-            for id_group in request.data["groups"]:
+        user = User.objects.get(username=request.data["username"])
+        serializer = self.serializer_class(instance=user)
+
+        for id_group in list(map(int, request.data["groups"].split(","))):
+            try:
                 group = Group.objects.get(id=id_group)
-                user.groups.add(group)
-            return response.Response({}, status=status.HTTP_200_OK)
-        else:
-            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": "Rôle inexistant"}, status=status.HTTP_400_BAD_REQUEST
+                )
+            user.groups.add(group)
+
+        return response.Response({}, status=status.HTTP_200_OK)
 
 
-class UserGroupsList(generics.RetrieveAPIView):
+class UserGroupsList(generics.ListAPIView):
     """
-    GET : Lists all groups linked to an user.
+    GET : Lists all groups linked to a user.
     """
 
+    # TODO create a specific serializer returning only groups ?
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        user = request.user
+        print(request.user.username)
+        user = User.objects.get(id=kwargs["pk"])
         serializer = self.serializer_class(instance=user)
         return response.Response(serializer.data["groups"])
 
@@ -228,14 +241,14 @@ class UserGroupsList(generics.RetrieveAPIView):
 # callback = CASCallbackView.adapter_view(CASAdapter)
 
 
-def cas_test(request):
+def cas_test(request):  # pragma: no cover
     service_url = reverse("cas_verify")
     service_url = urlencode({"service": request.build_absolute_uri(service_url)})
     redirect_url = f"{settings.CAS_SERVER}login?{service_url}"
     return HttpResponseRedirect(redirect_to=redirect_url)
 
 
-def cas_verify(request):
+def cas_verify(request):  # pragma: no cover
     service_url = request.build_absolute_uri(reverse("cas_verify"))
     ticket = request.GET.get("ticket")
 

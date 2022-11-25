@@ -14,7 +14,6 @@ class GDPRConsentsViewsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-
     def test_get_consents_list(self):
         groups_cnt = GDPRConsent.objects.count()
         self.assertTrue(groups_cnt > 0)

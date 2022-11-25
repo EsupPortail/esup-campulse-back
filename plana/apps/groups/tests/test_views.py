@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from rest_framework import status
 
 
-class GroupTests(TestCase):
+class GroupViewsTests(TestCase):
     fixtures = [
         "auth_group.json",
     ]
@@ -23,3 +23,6 @@ class GroupTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), groups_cnt)
+
+        group_1 = content[0]
+        self.assertTrue(group_1.get("name"))
