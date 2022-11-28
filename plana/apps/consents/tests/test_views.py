@@ -23,3 +23,6 @@ class GDPRConsentsViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), groups_cnt)
+
+        consent_1 = content[0]
+        self.assertTrue(consent_1.get("title"))
