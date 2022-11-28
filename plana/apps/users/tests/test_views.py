@@ -86,15 +86,21 @@ class UserViewsTests(TestCase):
 
     def test_post_user_consents(self):
         # An authenticated user can execute this request
-        response = self.client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1})
+        response = self.client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
         # An anonymous user can't execute this request
-        response = self.anonymous_client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1})
+        response = self.anonymous_client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
         self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # A user cannot consent to non-existing gdpr-consent object
-        response = self.client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75})
+        response = self.client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
+        )
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_link_user_to_associations(self):

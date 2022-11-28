@@ -65,11 +65,7 @@ class CASSerializer(LoginSerializer):
                 login.save(request, connect=True)
                 attrs["user"] = login.account.user
             except IntegrityError:
-                raise serializers.ValidationError(
-                    _(
-                        "An user is already registered with the email address linked to this CAS account."
-                    )
-                )
+                ...
         else:
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)

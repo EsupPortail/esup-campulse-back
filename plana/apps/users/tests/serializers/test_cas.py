@@ -77,6 +77,33 @@ class CASSerializerTest(TestCase):
 
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
     @patch("plana.apps.users.serializers.cas.CASClient")
+    def test_valid_ticket_adds_user_to_serializer_attributes_except_when_user_has_no_group(
+        self, CASClient
+    ):
+        user = User.objects.create_user(
+            username="username", email="username@unistra.fr"
+        )
+        SocialAccount.objects.create(
+            user=user,
+            provider=CASProvider.id,
+            uid=user.username,
+            extra_data={},
+        )
+
+        CASClient.return_value.verify_ticket.return_value = ("username", {}, None)
+        request = APIRequestFactory().get("/")
+        request.session = {}
+        view = CASLogin.as_view()
+        view.adapter_class = CASAdapter
+        serializer = CASSerializer(
+            data={"ticket": "CAS-Ticket-123", "service": "http://service.url"},
+            context={"view": view, "request": request},
+        )
+        with self.assertRaises(ValidationError) as ctx:
+            serializer.is_valid(raise_exception=True)
+
+    @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
+    @patch("plana.apps.users.serializers.cas.CASClient")
     def test_valid_ticket_adds_user_to_serializer_attributes(self, CASClient):
         user = User.objects.create_user(
             username="username", email="username@unistra.fr"
