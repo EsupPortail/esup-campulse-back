@@ -264,6 +264,7 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth.registration",
     "drf_spectacular",
     "djangorestframework_camel_case",
+    'django_summernote',
 ]
 
 LOCAL_APPS = [
@@ -271,6 +272,7 @@ LOCAL_APPS = [
     "plana.apps.associations",
     "plana.apps.groups",
     "plana.apps.users",
+    "plana.libs.mail_template",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
