@@ -54,6 +54,20 @@ class AssociationDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AssociationRelatedField(serializers.RelatedField):
+    def display_value(self, instance):
+        return instance
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        if type(data) == str:
+            return Association.objects.get(acronym=data)
+        elif type(data) == int:
+            return Association.objects.get(pk=data)
+
+
 class SimpleAssociationDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Association

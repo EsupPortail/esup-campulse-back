@@ -13,7 +13,6 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
-from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User, AssociationUsers, GDPRConsentUsers
 from plana.apps.users.serializers.cas import CASSerializer
@@ -77,17 +76,14 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 ##################
 
 
-# TODO Only work if authenticated user is username in request, and not validated by admin.
-
-
 class UserAssociationsCreate(generics.CreateAPIView):
     """
     POST : Creates a new link between a user and an association.
     """
 
+    # TODO Only work if user is not validated by admin.
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
-    permission_classes = [IsAuthenticated]
 
 
 class UserAssociationsList(generics.RetrieveAPIView):
@@ -153,9 +149,6 @@ class PasswordResetConfirm(generics.GenericAPIView):
 ###################
 
 
-# TODO Only work if authenticated user is username in request, and not validated by admin.
-
-
 class UserConsentsCreate(generics.CreateAPIView):
     """
     POST : Creates a new link between an user and a GDPR consent.
@@ -163,6 +156,7 @@ class UserConsentsCreate(generics.CreateAPIView):
 
     serializer_class = GDPRConsentUsersSerializer
     queryset = GDPRConsentUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class UserConsentsList(generics.RetrieveAPIView):
@@ -173,6 +167,7 @@ class UserConsentsList(generics.RetrieveAPIView):
     # TODO create a specific serializer without user ?
     serializer_class = GDPRConsentUsersSerializer
     queryset = GDPRConsentUsers.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -187,18 +182,14 @@ class UserConsentsList(generics.RetrieveAPIView):
 ############
 
 
-# TODO Only work if authenticated user is username in request, and not validated by admin.
-
-
 class UserGroupsCreate(generics.CreateAPIView):
     """
     POST : Creates a new link between a user and a group.
     """
 
+    # TODO Only work if user is not validated by admin.
     serializer_class = UserGroupsSerializer
-    permission_classes = [IsAuthenticated]
 
-    # TODO : restrict the route if is_validated_by_admin is set to true.
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
         serializer = self.serializer_class(instance=user)

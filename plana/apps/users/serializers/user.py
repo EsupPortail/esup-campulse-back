@@ -5,6 +5,8 @@ from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,8 +14,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
 from plana.apps.groups.serializers.group import GroupSerializer
+from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
-    SimpleAssociationDataSerializer,
+    AssociationRelatedField,
 )
 
 
@@ -71,7 +74,7 @@ class UserGroupsSerializer(serializers.ModelSerializer):
 class AssociationUsersSerializer(serializers.ModelSerializer):
     # TODO Check drf-spectacular error.
     user = UserRelatedField(queryset=User.objects.all(), many=False)
-    association = SimpleAssociationDataSerializer()
+    association = AssociationRelatedField(queryset=Association.objects.all(), many=False)
 
     class Meta:
         model = AssociationUsers
