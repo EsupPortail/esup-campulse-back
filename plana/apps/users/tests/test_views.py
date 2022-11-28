@@ -1,7 +1,6 @@
 import json
 
 from django.test import TestCase, Client
-from django.contrib.auth.models import Group
 
 from django.urls import reverse
 from rest_framework import status
@@ -9,7 +8,6 @@ from rest_framework import status
 from django.core import serializers
 
 from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
-from plana.apps.groups.serializers.group import GroupSerializer
 
 
 class UserViewsTests(TestCase):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-28 13:28+0100\n"
+"POT-Creation-Date: 2022-11-28 13:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,7 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:56
-#: plana/apps/users/tests/serializers/test_cas.py:138
+#: plana/apps/users/tests/serializers/test_cas.py:141
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
@@ -224,13 +224,25 @@ msgstr "%(service)s n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:135
+#: plana/apps/users/serializers/user.py:132
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:173
+#: plana/apps/users/serializers/user.py:170
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
+
+#: plana/apps/users/views/user.py:92
+msgid "Associations for this user cannot be edited."
+msgstr "Les associations de cet utilisateur ne peuvent être éditées."
+
+#: plana/apps/users/views/user.py:207
+msgid "Groups for this user cannot be edited."
+msgstr "Les groupes de cet utilisateur ne peuvent être édités."
+
+#: plana/apps/users/views/user.py:216
+msgid "Group not found."
+msgstr "Groupe non trouvé."
 
 #: plana/templates/404.html:6
 msgid "Page not found"

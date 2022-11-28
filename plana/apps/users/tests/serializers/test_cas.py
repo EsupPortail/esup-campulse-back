@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from allauth.socialaccount.models import SocialAccount
 from allauth_cas import CAS_PROVIDER_SESSION_KEY
+from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -74,14 +75,14 @@ class CASSerializerTest(TestCase):
             ctx.exception.detail,
         )
 
-    """
-    # TODO Check this test.
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
     @patch("plana.apps.users.serializers.cas.CASClient")
     def test_valid_ticket_adds_user_to_serializer_attributes(self, CASClient):
         user = User.objects.create_user(
             username="username", email="username@unistra.fr"
         )
+        group = Group.objects.create(name="Bonjourg")
+        user.groups.add(group)
         SocialAccount.objects.create(
             user=user,
             provider=CASProvider.id,
@@ -104,7 +105,6 @@ class CASSerializerTest(TestCase):
             serializer.validated_data["user"],
             user,
         )
-    """
 
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
     def test_view_must_be_present_in_serializer_context(self):

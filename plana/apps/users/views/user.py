@@ -77,15 +77,11 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 ##################
 
 
-# TODO Only work if authenticated user is username in request
-
-
 class UserAssociationsCreate(generics.CreateAPIView):
     """
     POST : Creates a new link between a user and an association.
     """
 
-    # TODO Only work if user is not validated by admin.
     serializer_class = AssociationUsersCreationSerializer
 
     def create(self, request, *args, **kwargs):
@@ -93,7 +89,7 @@ class UserAssociationsCreate(generics.CreateAPIView):
 
         if user.is_validated_by_admin:
             return response.Response(
-                {"error": "Impossible de modifier les rôles de cet utilisateur."},
+                {"error": _("Associations for this user cannot be edited.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -106,7 +102,6 @@ class UserAssociationsList(generics.RetrieveAPIView):
     GET : Lists all associations linked to a user.
     """
 
-    # TODO create a specific serializer without user ?
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated]
@@ -179,7 +174,6 @@ class UserConsentsList(generics.RetrieveAPIView):
     GET : Lists all GDPR consents linked to an user.
     """
 
-    # TODO create a specific serializer without user ?
     serializer_class = GDPRConsentUsersSerializer
     queryset = GDPRConsentUsers.objects.all()
     permission_classes = [IsAuthenticated]
@@ -202,7 +196,6 @@ class UserGroupsCreate(generics.CreateAPIView):
     POST : Creates a new link between a user and a group.
     """
 
-    # TODO Only work if user is not validated by admin.
     serializer_class = UserGroupsSerializer
 
     def post(self, request, *args, **kwargs):
@@ -211,7 +204,7 @@ class UserGroupsCreate(generics.CreateAPIView):
 
         if user.is_validated_by_admin:
             return response.Response(
-                {"error": "Impossible de modifier les rôles de cet utilisateur."},
+                {"error": _("Groups for this user cannot be edited.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -220,7 +213,7 @@ class UserGroupsCreate(generics.CreateAPIView):
                 group = Group.objects.get(id=id_group)
             except ObjectDoesNotExist:
                 return response.Response(
-                    {"error": "Rôle inexistant"}, status=status.HTTP_400_BAD_REQUEST
+                    {"error": _("Group not found.")}, status=status.HTTP_400_BAD_REQUEST
                 )
             user.groups.add(group)
 
@@ -232,7 +225,6 @@ class UserGroupsList(generics.ListAPIView):
     GET : Lists all groups linked to a user.
     """
 
-    # TODO create a specific serializer returning only groups ?
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
