@@ -76,6 +76,40 @@ class UserViewsTests(TestCase):
         response = self.client.get("/users/consents/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
+    # TODO : Add tests for UserAssociation object creation error with non-existing asso object
+    def test_link_user_to_associations(self):
+        # An admin-validated user can't be added in an association
+        response = self.client.post(
+            "/users/associations/",
+            {
+                "user": "test@pas-unistra.fr",
+                "association": 1,
+                "has_office_status": False,
+            },
+        )
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # A non-validated user can be added in an association
+        response = self.client.post(
+            "/users/associations/",
+            {
+                "user": "prenom.nom@adressemail.fr",
+                "association": 1,
+                "has_office_status": False,
+            },
+        )
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        # Authentication is not needed to access view
+        response = self.anonymous_client.post(
+            "/users/associations/",
+            {
+                "user": "prenom.nom@adressemail.fr",
+                "association": 1,
+                "has_office_status": False,
+            },
+        )
+
     # TODO : add rights management
     def test_get_user_groups_list(self):
         user = User.objects.get(pk=2)
@@ -91,6 +125,33 @@ class UserViewsTests(TestCase):
 
         get_groups = json.loads(response.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
+
+    def test_link_user_to_groups(self):
+        # Groups of admin-validated accounts can't be updated
+        response = self.client.post(
+            "/users/groups/", {"username": "test@pas-unistra.fr", "groups": [1, 2]}
+        )
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Groups of non-validated accounts can be updated
+        response = self.client.post(
+            "/users/groups/",
+            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
+        )
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        # Authentication is not needed to access view
+        response = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
+        )
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        # Cannot add a user in a non-existing group
+        response = self.client.post(
+            "/users/groups/", {"username": "prenom.nom@adressemail.fr", "groups": [66]}
+        )
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class UserAuthTests(TestCase):

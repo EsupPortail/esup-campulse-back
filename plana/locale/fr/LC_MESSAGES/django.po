@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 16:15+0100\n"
+"POT-Creation-Date: 2022-11-28 13:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,12 +210,16 @@ msgid ""
 "account."
 msgstr "Un compte est déjà inscrit avec l'adresse mail liée à ce compte CAS."
 
-#: plana/apps/users/serializers/cas.py:91
+#: plana/apps/users/serializers/cas.py:80
+msgid "Account registration must be completed."
+msgstr "L'inscription de ce compte n'est pas terminée."
+
+#: plana/apps/users/serializers/cas.py:88
 #, python-format
 msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:119
+#: plana/apps/users/serializers/cas.py:116
 #: plana/apps/users/tests/serializers/test_cas.py:41
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"

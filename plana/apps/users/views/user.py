@@ -20,6 +20,7 @@ from plana.apps.users.serializers.user import (
     UserSerializer,
     UserGroupsSerializer,
     AssociationUsersSerializer,
+    AssociationUsersCreationSerializer,
     GDPRConsentUsersSerializer,
 )
 
@@ -76,14 +77,28 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 ##################
 
 
+# TODO Only work if authenticated user is username in request
+
+
 class UserAssociationsCreate(generics.CreateAPIView):
     """
     POST : Creates a new link between a user and an association.
     """
 
     # TODO Only work if user is not validated by admin.
-    serializer_class = AssociationUsersSerializer
-    queryset = AssociationUsers.objects.all()
+    serializer_class = AssociationUsersCreationSerializer
+
+    def create(self, request, *args, **kwargs):
+        user = User.objects.get(username=request.data["user"])
+
+        if user.is_validated_by_admin:
+            return response.Response(
+                {"error": "Impossible de modifier les rôles de cet utilisateur."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # TODO Add UserAssociation object creation with checks here
+        return super(UserAssociationsCreate, self).create(request, *args, **kwargs)
 
 
 class UserAssociationsList(generics.RetrieveAPIView):
@@ -193,6 +208,12 @@ class UserGroupsCreate(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
         serializer = self.serializer_class(instance=user)
+
+        if user.is_validated_by_admin:
+            return response.Response(
+                {"error": "Impossible de modifier les rôles de cet utilisateur."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         for id_group in list(map(int, request.data["groups"].split(","))):
             try:
