@@ -21,6 +21,7 @@ from plana.apps.users.serializers.user import (
     UserSerializer,
     UserGroupsSerializer,
     AssociationUsersSerializer,
+    AssociationUsersCreationSerializer,
     GDPRConsentUsersSerializer,
 )
 
@@ -85,11 +86,9 @@ class UserAssociationsCreate(generics.CreateAPIView):
     POST : Creates a new link between a user and an association.
     """
 
-    serializer_class = AssociationUsersSerializer
-    queryset = AssociationUsers.objects.all()
+    serializer_class = AssociationUsersCreationSerializer
 
-    def post(self, request, *args, **kwargs):
-        print(request.data)
+    def create(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["user"])
 
         if user.is_validated_by_admin:
@@ -98,8 +97,7 @@ class UserAssociationsCreate(generics.CreateAPIView):
             )
 
         # TODO Add UserAssociation object creation with checks here
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super(UserAssociationsCreate, self).create(request, *args, **kwargs)
 
 
 class UserAssociationsList(generics.RetrieveAPIView):

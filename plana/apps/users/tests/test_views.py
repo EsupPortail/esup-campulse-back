@@ -67,6 +67,7 @@ class UserViewsTests(TestCase):
         response = self.client.get("/users/associations/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
+    # TODO : Add tests for UserAssociation object creation error with non-existing asso object
     def test_link_user_to_associations(self):
         # An admin-validated user can't be added in an association
         response = self.client.post("/users/associations/", {'user': 'test@pas-unistra.fr', 'association': {}})

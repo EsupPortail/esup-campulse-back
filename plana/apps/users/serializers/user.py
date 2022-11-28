@@ -42,20 +42,6 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
-class UserRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        if type(data) == str:
-            return User.objects.get(username=data)
-        elif type(data) == int:
-            return User.objects.get(pk=data)
-
-
 class UserGroupsSerializer(serializers.ModelSerializer):
     groups = serializers.ListField(child=serializers.IntegerField(), required=True)
 
@@ -69,9 +55,20 @@ class UserGroupsSerializer(serializers.ModelSerializer):
 
 
 class AssociationUsersSerializer(serializers.ModelSerializer):
-    # TODO Check drf-spectacular error.
-    user = UserRelatedField(queryset=User.objects.all(), many=False)
+    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
     association = SimpleAssociationDataSerializer()
+
+    class Meta:
+        model = AssociationUsers
+        fields = [
+            "user",
+            "has_office_status",
+            "association",
+        ]
+
+
+class AssociationUsersCreationSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
     class Meta:
         model = AssociationUsers
@@ -177,7 +174,8 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
 
 
 class GDPRConsentUsersSerializer(serializers.ModelSerializer):
-    user = UserRelatedField(queryset=User.objects.all(), many=False)
+    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    #user = UserRelatedField(queryset=User.objects.all(), many=False)
 
     class Meta:
         model = GDPRConsentUsers
