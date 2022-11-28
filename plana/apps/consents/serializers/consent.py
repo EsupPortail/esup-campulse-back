@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from plana.apps.consents.models.consent import GDPRConsent
 
 

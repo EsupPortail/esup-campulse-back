@@ -12,7 +12,9 @@ from allauth_cas.views import AuthAction
 from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import exceptions, serializers
 
+# TODO Vérifier à quoi ça sert.
 from cas import CASClient, CASClientBase
+
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider

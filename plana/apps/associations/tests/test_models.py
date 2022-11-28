@@ -1,11 +1,10 @@
 from django.test import TestCase, Client
-from plana.apps.associations.models.association import (
-    Association,
-    SocialNetwork,
-    Institution,
-    InstitutionComponent,
-    ActivityField,
-)
+
+from plana.apps.associations.models.activity_field import ActivityField
+from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
+from plana.apps.associations.models.social_network import SocialNetwork
 
 
 class AssociationsModelsTests(TestCase):

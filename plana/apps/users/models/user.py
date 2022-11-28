@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+
 from allauth.socialaccount.models import SocialAccount
 
 from plana.apps.associations.models.association import Association
-from plana.apps.consents.models.consent import GDPRConsent
 from plana.apps.users.provider import CASProvider
 
 
@@ -27,7 +27,7 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
-    # TODO token_reset_date_user = models.DateField(default=None)
+    # TODO : Pourquoi y'a ce champ pour les assos et pas pour le GDPR ???
     association_members = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
     )
@@ -61,41 +61,3 @@ class User(AbstractUser):
         default_permissions = []
         verbose_name = _("User")
         verbose_name_plural = _("Users")
-
-
-class AssociationUsers(models.Model):
-    """
-    Model that lists links between associations and users (which user is in which association, is the user in the association office).
-    """
-
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
-    association = models.ForeignKey(
-        Association, verbose_name=_("Association"), on_delete=models.CASCADE
-    )
-    has_office_status = models.BooleanField(_("Has office status"), default=False)
-
-    def __str__(self):
-        return f"{self.user}, {self.association}, office : {self.has_office_status}"
-
-    class Meta:
-        verbose_name = _("Association")
-        verbose_name_plural = _("Associations")
-
-
-class GDPRConsentUsers(models.Model):
-    """
-    Model that lists links between GDPR consents and users (which user has given which consent and when).
-    """
-
-    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
-    consent = models.ForeignKey(
-        GDPRConsent, verbose_name=_("GDPR Consent"), on_delete=models.CASCADE
-    )
-    date_consented = models.DateTimeField(_("Consent date"), auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user}, {self.consent}, date : {self.date_consented}"
-
-    class Meta:
-        verbose_name = _("GDPR Consent User")
-        verbose_name_plural = _("GDPR Consents Users")

@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase, Client
+
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association

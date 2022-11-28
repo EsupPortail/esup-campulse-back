@@ -1,9 +1,10 @@
 import json
 
 from django.test import TestCase, Client
-from plana.apps.consents.models.consent import GDPRConsent
 
 from rest_framework import status
+
+from plana.apps.consents.models.consent import GDPRConsent
 
 
 class GDPRConsentsViewsTests(TestCase):

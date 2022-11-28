@@ -10,8 +10,11 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
-from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
+from plana.apps.associations.serializers.association import SimpleAssociationDataSerializer
 from plana.apps.groups.serializers.group import GroupSerializer
+from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
+from plana.apps.users.models.user import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,6 +58,7 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
+    association = SimpleAssociationDataSerializer()
 
     class Meta:
         model = AssociationUsers

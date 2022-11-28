@@ -1,28 +1,9 @@
 from rest_framework import serializers
-from plana.apps.associations.models.association import (
-    Association,
-    Institution,
-    InstitutionComponent,
-    ActivityField,
-)
 
-
-class InstitutionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Institution
-        fields = "__all__"
-
-
-class InstitutionComponentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InstitutionComponent
-        fields = "__all__"
-
-
-class ActivityFieldSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ActivityField
-        fields = "__all__"
+from plana.apps.associations.models.association import Association
+from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
+from plana.apps.associations.serializers.institution import InstitutionSerializer
+from plana.apps.associations.serializers.institution_component import InstitutionComponentSerializer
 
 
 class AssociationListSerializer(serializers.ModelSerializer):

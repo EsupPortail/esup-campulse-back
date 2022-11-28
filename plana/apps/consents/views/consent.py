@@ -1,4 +1,5 @@
 from rest_framework import generics
+
 from plana.apps.consents.models.consent import GDPRConsent
 from plana.apps.consents.serializers.consent import GDPRConsentSerializer
 

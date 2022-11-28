@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+
 from plana.apps.consents.models.consent import GDPRConsent
 
 
