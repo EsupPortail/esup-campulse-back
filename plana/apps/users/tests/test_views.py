@@ -64,17 +64,39 @@ class UserViewsTests(TestCase):
         associations_user_cnt = AssociationUsers.objects.count()
         self.assertTrue(associations_user_cnt > 0)
 
+        # An authenticated user can execute this request
         response = self.client.get("/users/associations/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.get("/users/associations/2")
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_consents_user_list(self):
         consents_user_cnt = GDPRConsentUsers.objects.count()
         self.assertTrue(consents_user_cnt > 0)
 
+        # An authenticated user can execute this request
         response = self.client.get("/users/consents/2")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    # TODO : Add tests for UserAssociation object creation error with non-existing asso object
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.get("/users/consents/2")
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_post_user_consents(self):
+        # An authenticated user can execute this request
+        response = self.client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1})
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1})
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A user cannot consent to non-existing gdpr-consent object
+        response = self.client.post("/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75})
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_link_user_to_associations(self):
         # An admin-validated user can't be added in an association
         response = self.client.post(
@@ -107,6 +129,18 @@ class UserViewsTests(TestCase):
                 "has_office_status": False,
             },
         )
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        # A user cannot be part of a non-existing association
+        response = self.client.post(
+            "/users/associations/",
+            {
+                "user": "prenom.nom@adressemail.fr",
+                "association": 99,
+                "has_office_status": False,
+            },
+        )
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     # TODO : add rights management
     def test_get_user_groups_list(self):
