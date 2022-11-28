@@ -208,7 +208,12 @@ class UserGroupsCreate(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        for id_group in list(map(int, request.data["groups"].split(","))):
+        groups = (
+            request.data["groups"]
+            if type(request.data["groups"]) == list
+            else list(map(int, request.data["groups"].split(",")))
+        )
+        for id_group in groups:
             try:
                 group = Group.objects.get(id=id_group)
             except ObjectDoesNotExist:
