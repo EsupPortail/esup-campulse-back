@@ -60,6 +60,36 @@ class UserViewsTests(TestCase):
         user_1 = json.loads(response.content.decode("utf-8"))
         self.assertEqual(user_1["username"], user.username)
 
+    def test_patch_user_detail(self):
+        response = self.anonymous_client.put(
+            "/users/auth/user/", {"username": "Aurevoirg"}
+        )
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.anonymous_client.patch(
+            "/users/auth/user/", {"username": "Bienvenueg"}
+        )
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        user = User.objects.get(pk=2)
+
+        response = self.client.put("/users/auth/user/", {"username": "Alorsçavag"})
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = self.client.patch(
+            "/users/auth/user/",
+            data={"username": "Mafoipastropmalpourlasaisong"},
+            content_type="application/json",
+        )
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.patch(
+            "/users/auth/user/",
+            data={"is_validated_by_admin": False},
+            content_type="application/json",
+        )
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
     def test_get_associations_user_list(self):
         associations_user_cnt = AssociationUsers.objects.count()
         self.assertTrue(associations_user_cnt > 0)

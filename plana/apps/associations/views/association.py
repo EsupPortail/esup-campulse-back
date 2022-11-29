@@ -5,8 +5,6 @@ from plana.apps.associations.serializers.association import (
     AssociationListSerializer,
     AssociationDetailSerializer,
 )
-# TODO Find a usage for that import, we need to import it to make migrations work.
-from plana.apps.associations.serializers.social_network import SocialNetworkSerializer
 
 
 class AssociationList(generics.ListAPIView):

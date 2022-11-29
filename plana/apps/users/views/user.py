@@ -56,7 +56,11 @@ class PasswordResetConfirm(generics.GenericAPIView):
     ...
 
 
-@extend_schema(methods=['PUT'], exclude=True)
+@extend_schema(methods=["PUT"], exclude=True)
 class UserDetailsView(DJRestAuthUserDetailsView):
-     def put(self, request, *args, **kwargs):
-         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, *args, **kwargs):
+        request.data.pop("is_validated_by_admin", False)
+        return self.partial_update(request, *args, **kwargs)
