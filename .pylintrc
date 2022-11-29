@@ -1,0 +1,10 @@
+[MASTER]
+
+ignore=migrations, settings
+
+load-plugins=pylint_django
+django-settings-module=plana.settings.dev
+
+[FORMAT]
+
+[MESSAGE CONTROL]

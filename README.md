@@ -125,6 +125,14 @@ $ python manage.py makemessages -l fr --extension html,txt,py
 $ black plana
 ```
 
+### Détecter les autres erreurs non lintables des fichiers
+
+```sh
+$ pylint plana --output-format=json:pylint.json
+```
+
+(Ajouter `export PYTHONPATH=$PYTHONPATH:DOSSIER_DU_PROJET` au fichier `postactivate` de l'environnement virtuel.)
+
 ### Mettre à jour automatiquement le fichier de documentation de l'API
 
 ```sh

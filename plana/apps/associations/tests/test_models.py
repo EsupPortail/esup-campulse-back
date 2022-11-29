@@ -19,28 +19,28 @@ class AssociationsModelsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def testAssociationModel(self):
+    def test_association_model(self):
         association = Association.objects.first()
         self.assertEqual(
             str(association), f"{association.name} ({association.acronym})"
         )
 
-    def testSocialNetworkModel(self):
+    def test_social_network_model(self):
         social_network = SocialNetwork.objects.first()
         self.assertEqual(
             str(social_network), f"{social_network.type} : {social_network.location}"
         )
 
-    def testInstitutionModel(self):
+    def test_institution_model(self):
         institution = Institution.objects.first()
         self.assertEqual(
             str(institution), f"{institution.name} ({institution.acronym})"
         )
 
-    def testInstitutionComponentModel(self):
+    def test_institution_component_model(self):
         component = InstitutionComponent.objects.first()
         self.assertEqual(str(component), f"{component.name}")
 
-    def testActivityFieldModel(self):
+    def test_activity_field_model(self):
         activity_field = ActivityField.objects.first()
         self.assertEqual(str(activity_field), f"{activity_field.name}")
