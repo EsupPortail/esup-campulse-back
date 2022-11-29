@@ -13,10 +13,10 @@ class MailTemplatePreviewAPI(View):
 
         body = request.POST.get("body", None)
         context_params = {
-            "user_is": request.POST.get("user_group", "estetudiant"),
-            "slot_type": request.POST.get("slot_type", "estuncours"),
-            "local_account": request.POST.get("local_user", "true").strip().lower() == "true",
-            "remote": request.POST.get("remote", "true").strip().lower() == "true",
+            # "user_is": request.POST.get("user_group", "estetudiant"),
+            # "slot_type": request.POST.get("slot_type", "estuncours"),
+            # "local_account": request.POST.get("local_user", "true").strip().lower() == "true",
+            # "remote": request.POST.get("remote", "true").strip().lower() == "true",
         }
 
         if not body:
@@ -30,11 +30,22 @@ class MailTemplatePreviewAPI(View):
             return JsonResponse(response)
 
         try:
+            available_vars=template.available_vars.prefetch_fakevars()
+
+            # Get multi-valued fakevars
+            for tv in template.multivalued_fakevars:
+                template_value = tv.name
+                if (value := request.POST.get(template_value)):
+                    type_, id_ = value.split('_')
+                    fakevar = getattr(tv, f'fakevar{type_.lower()}_set').get(pk=id_)
+                    context_params[template_value] = fakevar.value
+
             body = template.parse_var_faker_from_string(
                 context_params=context_params,
                 user=self.request.user,
                 request=self.request,
-                body=body
+                body=body,
+                available_vars=available_vars
             )
             response["data"] = body
         except TemplateSyntaxError:

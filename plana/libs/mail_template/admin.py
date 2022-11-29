@@ -22,15 +22,13 @@ class MailTemplateAdmin(SummernoteModelAdmin):
         
         fakevars_dict = {}
         qs = MailTemplateVar.objects \
-            .prefetch_related(*(
-                f'{MailTemplateVar.fakevars_relation_name(rel)}_set' 
-                for rel in MailTemplateVar.fakevars_relations()
-            )) \
+            .prefetch_fakevars() \
             .filter(mail_templates__id=object_id)
 
+        # Get all multi-valued fakevars
         for template_var in qs:
             if (len(fakevars := template_var.fakevars) > 1):
-                fakevars_dict[template_var.code] = [(f.pk, f.value) for f in fakevars]
+                fakevars_dict[template_var.name] = fakevars
         extra_context['fakevars'] = fakevars_dict
 
         return super().change_view(

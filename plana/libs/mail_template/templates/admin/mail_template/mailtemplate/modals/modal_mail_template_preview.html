@@ -2,13 +2,13 @@
 <div id="template_preview_dialog" title="{% trans 'Mail template preview' %}">
   <div class="module aligned">
     <form id="preview_control_form">
-    {% for name,data in fakevars.items %}
+    {% for var,data in fakevars.items %}
       <div class="form-row field-code">
         <div>
-          <label for="user_group">{{ name }}</label>
-          <select name="toto" id="toto">
-          {% for pk,value in data %}
-            <option value="{{ pk }}">{{ value }}</option>
+          <label for="user_group">{{ var }}</label>
+          <select name="{{ var }}" id="{{ var }}">
+          {% for fakevar in data %}
+            <option value="{{ fakevar.var_type }}_{{ fakevar.pk }}">{{ fakevar.value }}</option>
           {% endfor %}
           </select>
         </div>

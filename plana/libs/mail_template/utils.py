@@ -64,7 +64,7 @@ class ParserFaker:
     def parser(cls, message_body: str, available_vars: Optional[List[MailTemplateVar]], context_params: Dict[str, Any],
                user: Optional[User] = None, request=None, **kwargs) -> str:
 
-        context: Dict[str, Any] = cls.get_context(request, **context_params)
+        context = cls.get_context(request, available_vars=available_vars, extra_variables=context_params)
         return render_text(template_data=message_body, data=context)
 
     @classmethod
@@ -76,45 +76,13 @@ class ParserFaker:
         return format_html(text)
 
     @classmethod
-    def get_context(cls, request, user_is, slot_type, local_account, remote):
-        today: str = datetime.datetime.today().strftime("%d/%m/%Y")
+    def get_context(cls, request, available_vars=None, extra_variables=None):
+        # Get mono-value fakevars
+        variables = {}
+        for template_var in available_vars:
+            if (len(fakevars := template_var.fakevars) == 1):
+                variables[template_var.name] = fakevars[0].value
 
-        # platform_url = Parser.get_platform_url(request)
-        platform_url = 'www.google.fr'
-
-        variables = {
-            "annee": 2022,
-            # "platform_url": platform_url,
-
-            # user
-            "prenom": "Dominique",
-            "nom": "MARTIN",
-            "estlyceen": False,
-        }
-
-        context = {key: cls.add_tooltip(key, value) for key, value in variables.items()} 
-
-        # context = {
-        #     "annee": cls.add_tooltip("annee", 2022),
-        #     "platform_url": cls.add_tooltip("platform_url", platform_url),
-        # }
-
-        # # user
-        # context.update({
-        #     "prenom": cls.add_tooltip("prenom", "Dominique"),
-        #     "nom": cls.add_tooltip("nom", "MARTIN"),
-        #     "estlyceen": False,
-        # })
-        # context[user_is] = True
-
-        # # course
-        # context.update({
-        #     "cours": {
-        #         "libelle": cls.add_tooltip("cours.libelle", "Cours n°1"),
-        #         "formation": cls.add_tooltip("cours.formation", "Formation n°2"),
-        #         "nbplaceslibre": 25,
-        #         "type": "TD"
-        #     }
-        # })
-
+        context = {key: cls.add_tooltip(key, value) for key, value in variables.items()}
+        context.update(extra_variables or {})
         return context

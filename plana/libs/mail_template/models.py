@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -9,6 +11,13 @@ class MailTemplateVar(models.Model):
     description = models.CharField(_("Description"), max_length=128, blank=False, null=False, unique=True)
 
     objects = managers.MailTemplateVarQuerySet.as_manager()
+
+    @property
+    def name(self):
+        try:
+            return re.match(r'\{\{ *([\w.\-_]*) *\}\}', self.code).groups()[0]
+        except AttributeError:
+            return ''
 
     @classmethod
     def fakevars_relations(cls):
@@ -29,7 +38,6 @@ class MailTemplateVar(models.Model):
         for rel in self.fakevars_relations_names():
             results.extend(list(getattr(self, f'{rel}_set').all()))
         return results
-    
 
     def __str__(self):
         return f"{self.code} : {self.description}"
@@ -60,36 +68,49 @@ class MailTemplate(models.Model):
         return f"{self.code} : {self.label}"
 
 
-    def parse_vars(self, user, request, **kwargs):
-        from .utils import parser
+    # def parse_vars(self, user, request, **kwargs):
+    #     from .utils import parser
 
-        return parser(
-            user=user,
-            request=request,
-            message_body=self.body,
-            vars=[v for v in self.available_vars.all()], **kwargs,
-        )
+    #     return parser(
+    #         user=user,
+    #         request=request,
+    #         message_body=self.body,
+    #         vars=self.available_vars.all(), **kwargs,
+    #     )
 
-    def parse_vars_faker(self, user, request, **kwargs):
-        from .utils import parser_faker
-        return parser_faker(
-            user=user,
-            request=request,
-            message_body=self.body,
-            available_vars=[v for v in self.available_vars.all()],
-            **kwargs,
-        )
+    # def parse_vars_faker(self, user, request, **kwargs):
+    #     from .utils import parser_faker
+    #     return parser_faker(
+    #         user=user,
+    #         request=request,
+    #         message_body=self.body,
+    #         available_vars=self.available_vars.all(),
+    #         **kwargs,
+    #     )
 
-    def parse_var_faker_from_string(self, user, body, request, context_params, **kwargs):
+    def parse_var_faker_from_string(
+        self, user, body, request, context_params, available_vars=None, **kwargs):
         from .utils import parser_faker
         return parser_faker(
             context_params=context_params,
             user=user,
             request=request,
             message_body=body,
-            available_vars=[v for v in self.available_vars.all()],
+            available_vars=available_vars or self.available_vars.all(),
             **kwargs,
         )
+
+    @property
+    def monovalued_fakevars(self):
+        rel_names = MailTemplateVar.fakevars_relations_names()
+        return [fv for fv in self.available_vars.prefetch_fakevars().fakevar_counts()
+                if sum(getattr(fv, f'{rel}_cnt') for rel in rel_names) == 1]
+
+    @property
+    def multivalued_fakevars(self):
+        rel_names = MailTemplateVar.fakevars_relations_names()
+        return [fv for fv in self.available_vars.prefetch_fakevars().fakevar_counts()
+                if sum(getattr(fv, f'{rel}_cnt') for rel in rel_names) > 1]
 
     class Meta:
         verbose_name = _('Mail template')
@@ -103,6 +124,9 @@ class FakeVar(models.Model):
     class Meta:
         abstract = True
 
+    @property
+    def var_type(self):
+        return re.match(r'FakeVar(\w*)', self.__class__.__name__).groups()[0].lower()
 
 class FakeVarText(FakeVar):
     value = models.TextField(_("Value"))

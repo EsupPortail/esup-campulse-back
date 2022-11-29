@@ -12,3 +12,11 @@ class MailTemplateVarQuerySet(models.QuerySet):
             lambda acc, b: acc.annotate(**{f'{b}_cnt': Count(b, distinct=True)}),
             self.model.fakevars_relations_names(),
             queryset)
+
+    def prefetch_fakevars(self):
+        model = self.model
+        return super() \
+            .prefetch_related(*(
+                f'{model.fakevars_relation_name(rel)}_set'
+                for rel in model.fakevars_relations()
+            ))
