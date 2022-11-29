@@ -1,6 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics
+from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, response, status
 
 """
 class UserList(generics.CreateAPIView):
@@ -52,3 +54,9 @@ class PasswordResetConfirm(generics.GenericAPIView):
     """
 
     ...
+
+
+@extend_schema(methods=['PUT'], exclude=True)
+class UserDetailsView(DJRestAuthUserDetailsView):
+     def put(self, request, *args, **kwargs):
+         return response.Response({}, status=status.HTTP_404_NOT_FOUND)

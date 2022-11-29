@@ -5,7 +5,7 @@ from .views.association_users import AssociationUsersCreate, AssociationUsersLis
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsCreate, UserConsentsList
 
-from .views.user import PasswordResetConfirm  # , UserList, UserDetail
+from .views.user import PasswordResetConfirm, UserDetailsView  # , UserList, UserDetail
 from .views.user_groups import UserGroupsCreate, UserGroupsList
 
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
+    path("auth/user/", UserDetailsView.as_view(), name="rest_user_details"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         "auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
