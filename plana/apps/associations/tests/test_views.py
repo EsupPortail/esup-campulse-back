@@ -24,7 +24,7 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(associations_cnt > 0)
 
         response = self.client.get("/associations/")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), associations_cnt)
@@ -37,7 +37,7 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(pk=1)
 
         response = self.client.get("/associations/1")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         association_1 = json.loads(response.content.decode("utf-8"))
         self.assertEqual(association_1["name"], association.name)
@@ -45,4 +45,4 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_association_detail_error(self):
         not_found_response = self.client.get("/associations/50")
-        self.assertEquals(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)

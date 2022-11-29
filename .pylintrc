@@ -8,3 +8,5 @@ django-settings-module=plana.settings.dev
 [FORMAT]
 
 [MESSAGE CONTROL]
+
+disable=C0301

@@ -19,7 +19,7 @@ class GroupViewsTests(TestCase):
         self.assertTrue(groups_cnt > 0)
 
         response = self.client.get("/groups/")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), groups_cnt)

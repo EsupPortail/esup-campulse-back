@@ -11,6 +11,6 @@ class GDPRConsentsModelsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def testConsentModel(self):
+    def test_consent_model(self):
         consent = GDPRConsent.objects.first()
         self.assertEqual(str(consent), f"{consent.title}")

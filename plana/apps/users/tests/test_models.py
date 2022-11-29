@@ -20,18 +20,18 @@ class UsersModelsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def testUserModel(self):
+    def test_user_model(self):
         user = User.objects.first()
         self.assertEqual(str(user), f"{user.first_name} {user.last_name}")
 
-    def testAssociationUsersModel(self):
+    def test_association_users_model(self):
         asso_user = AssociationUsers.objects.first()
         self.assertEqual(
             str(asso_user),
             f"{asso_user.user}, {asso_user.association}, office : {asso_user.has_office_status}",
         )
 
-    def testGDPRConsentUsersModel(self):
+    def test_gdpr_consent_users_model(self):
         consent_user = GDPRConsentUsers.objects.first()
         self.assertEqual(
             str(consent_user),

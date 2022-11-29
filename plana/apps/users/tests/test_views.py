@@ -45,7 +45,7 @@ class UserViewsTests(TestCase):
         self.assertTrue(users_cnt > 0)
 
         response = self.client.get(reverse("user_list"))
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
@@ -55,7 +55,7 @@ class UserViewsTests(TestCase):
         user = User.objects.get(pk=2)
 
         response = self.client.get("/users/auth/user/")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         user_1 = json.loads(response.content.decode("utf-8"))
         self.assertEqual(user_1["username"], user.username)
@@ -64,31 +64,31 @@ class UserViewsTests(TestCase):
         response = self.anonymous_client.put(
             "/users/auth/user/", {"username": "Aurevoirg"}
         )
-        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         response = self.anonymous_client.patch(
             "/users/auth/user/", {"username": "Bienvenueg"}
         )
-        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         user = User.objects.get(pk=2)
 
         response = self.client.put("/users/auth/user/", {"username": "Alorsçavag"})
-        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.patch(
             "/users/auth/user/",
             data={"username": "Mafoipastropmalpourlasaisong"},
             content_type="application/json",
         )
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
             content_type="application/json",
         )
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_user_list(self):
         associations_user_cnt = AssociationUsers.objects.count()
@@ -96,11 +96,11 @@ class UserViewsTests(TestCase):
 
         # An authenticated user can execute this request
         response = self.client.get("/users/associations/2")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/associations/2")
-        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_consents_user_list(self):
         consents_user_cnt = GDPRConsentUsers.objects.count()
@@ -108,30 +108,30 @@ class UserViewsTests(TestCase):
 
         # An authenticated user can execute this request
         response = self.client.get("/users/consents/2")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/consents/2")
-        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_user_consents(self):
         # An authenticated user can execute this request
         response = self.client.post(
             "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
         )
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # An anonymous user can't execute this request
         response = self.anonymous_client.post(
             "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
         )
-        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # A user cannot consent to non-existing gdpr-consent object
         response = self.client.post(
             "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
         )
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_link_user_to_associations(self):
         # An admin-validated user can't be added in an association
@@ -143,7 +143,7 @@ class UserViewsTests(TestCase):
                 "has_office_status": False,
             },
         )
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # A non-validated user can be added in an association
         response = self.client.post(
@@ -154,7 +154,7 @@ class UserViewsTests(TestCase):
                 "has_office_status": False,
             },
         )
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Authentication is not needed to access view
         response = self.anonymous_client.post(
@@ -165,7 +165,7 @@ class UserViewsTests(TestCase):
                 "has_office_status": False,
             },
         )
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # A user cannot be part of a non-existing association
         response = self.client.post(
@@ -176,7 +176,7 @@ class UserViewsTests(TestCase):
                 "has_office_status": False,
             },
         )
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     # TODO : add rights management
     def test_get_user_groups_list(self):
@@ -184,10 +184,10 @@ class UserViewsTests(TestCase):
         groups = list(user.groups.all().values("id", "name"))
 
         response = self.client.get("/users/groups/2")
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response_unauthorized = self.anonymous_client.get("/users/groups/2")
-        self.assertEquals(
+        self.assertEqual(
             response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
         )
 
@@ -199,27 +199,27 @@ class UserViewsTests(TestCase):
         response = self.client.post(
             "/users/groups/", {"username": "test@pas-unistra.fr", "groups": [1, 2]}
         )
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Groups of non-validated accounts can be updated
         response = self.client.post(
             "/users/groups/",
             {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
         )
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Authentication is not needed to access view
         response = self.anonymous_client.post(
             "/users/groups/",
             {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
         )
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Cannot add a user in a non-existing group
         response = self.client.post(
             "/users/groups/", {"username": "prenom.nom@adressemail.fr", "groups": [66]}
         )
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class UserAuthTests(TestCase):
@@ -231,7 +231,7 @@ class UserAuthTests(TestCase):
         }
 
         response = self.client.post("/users/auth/registration/", user)
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         response = self.client.post("/users/auth/registration/", user)
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
