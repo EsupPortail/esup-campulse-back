@@ -1,13 +1,13 @@
 import json
 
 from django.test import TestCase, Client
-
 from django.urls import reverse
+
 from rest_framework import status
 
-from django.core import serializers
-
-from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
+from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
+from plana.apps.users.models.user import User
 
 
 class UserViewsTests(TestCase):
@@ -20,7 +20,7 @@ class UserViewsTests(TestCase):
         "account_emailaddress.json",
         "consents_gdprconsent.json",
         "auth_group.json",
-        "users_associationsusers.json",
+        "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
         "users_user_groups.json",

@@ -1,18 +1,18 @@
-from unittest.mock import patch
-
-from allauth.socialaccount.models import SocialAccount
-from allauth_cas import CAS_PROVIDER_SESSION_KEY
 from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.utils.translation import ugettext_lazy as _
+
+from allauth.socialaccount.models import SocialAccount
+from allauth_cas import CAS_PROVIDER_SESSION_KEY
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
+from unittest.mock import patch
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.cas import CASSerializer
-from plana.apps.users.views.user import CASLogin
+from plana.apps.users.views.cas import CASLogin
 
 
 class CASSerializerTest(TestCase):

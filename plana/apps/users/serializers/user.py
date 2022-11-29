@@ -1,19 +1,15 @@
-from rest_framework import exceptions, serializers
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _
 
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
+from rest_framework import exceptions, serializers
 
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
-
-from plana.apps.associations.serializers.association import SimpleAssociationDataSerializer
 from plana.apps.groups.serializers.group import GroupSerializer
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import User
 
 
@@ -39,47 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
             "is_cas",
             "is_validated_by_admin",
             "groups",
-        ]
-
-
-class UserGroupsSerializer(serializers.ModelSerializer):
-    groups = serializers.ListField(child=serializers.IntegerField(), required=True)
-
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "groups",
-        ]
-
-
-class AssociationUsersSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
-    )
-    association = SimpleAssociationDataSerializer()
-
-    class Meta:
-        model = AssociationUsers
-        fields = [
-            "user",
-            "has_office_status",
-            "association",
-        ]
-
-
-class AssociationUsersCreationSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
-    )
-
-    class Meta:
-        model = AssociationUsers
-        fields = [
-            "user",
-            "has_office_status",
-            "association",
         ]
 
 
@@ -177,14 +132,3 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
                 self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             ...
-
-
-class GDPRConsentUsersSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
-    )
-    # user = UserRelatedField(queryset=User.objects.all(), many=False)
-
-    class Meta:
-        model = GDPRConsentUsers
-        fields = "__all__"

@@ -1,33 +1,22 @@
 from django.conf import settings
 from django.urls import include, path, re_path
 
-from .views.user import (
-    # UserList,
-    # UserDetail,
-    UserAssociationsCreate,
-    UserAssociationsList,
-    UserConsentsCreate,
-    UserConsentsList,
-    UserGroupsCreate,
-    UserGroupsList,
-    CASLogin,
-    CASLogout,
-    PasswordResetConfirm,
-    cas_test,
-    cas_verify,
-)
+from .views.association_users import AssociationUsersCreate, AssociationUsersList
+from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
+from .views.gdpr_consent_users import UserConsentsCreate, UserConsentsList
+
+from .views.user import PasswordResetConfirm  # , UserList, UserDetail
+from .views.user_groups import UserGroupsCreate, UserGroupsList
 
 urlpatterns = [
-    # path("", UserList.as_view(), name="user_list"),
-    # path("<int:pk>", UserDetail.as_view(), name="user_detail"),
     path(
         "associations/",
-        UserAssociationsCreate.as_view(),
+        AssociationUsersCreate.as_view(),
         name="user_associations_create",
     ),
     path(
         "associations/<int:pk>",
-        UserAssociationsList.as_view(),
+        AssociationUsersList.as_view(),
         name="user_associations_list",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
@@ -41,6 +30,8 @@ urlpatterns = [
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
     path("consents/", UserConsentsCreate.as_view(), name="user_consents_create"),
     path("consents/<int:pk>", UserConsentsList.as_view(), name="user_consents_list"),
+    # path("", UserList.as_view(), name="user_list"),
+    # path("<int:pk>", UserDetail.as_view(), name="user_detail"),
     path("groups/", UserGroupsCreate.as_view(), name="user_groups_create"),
     path("groups/<int:pk>", UserGroupsList.as_view(), name="user_groups_list"),
 ]

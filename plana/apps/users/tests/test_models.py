@@ -1,5 +1,8 @@
 from django.test import TestCase, Client
-from plana.apps.users.models.user import AssociationUsers, GDPRConsentUsers, User
+
+from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
+from plana.apps.users.models.user import User
 
 
 class UsersModelsTests(TestCase):
@@ -8,14 +11,10 @@ class UsersModelsTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
-        "account_emailaddress.json",
         "consents_gdprconsent.json",
-        "auth_group.json",
-        "users_associationsusers.json",
+        "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",
     ]
 
     def setUp(self):
