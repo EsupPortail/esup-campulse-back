@@ -133,41 +133,6 @@ class UserViewsTests(TestCase):
         content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
-    def test_get_consents_user_list(self):
-        # consents_user_cnt = GDPRConsentUsers.objects.count()
-        # self.assertTrue(consents_user_cnt > 0)
-
-        # An anonymous user can't execute this request
-        response = self.anonymous_client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-        # A student user can't execute this request.
-        response = self.client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        # A manager user can execute this request.
-        response = self.manager_client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_post_user_consents(self):
-        # An authenticated user can execute this request
-        response = self.client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # An anonymous user can't execute this request
-        response = self.anonymous_client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
-        )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-        # A user cannot consent to non-existing gdpr-consent object
-        response = self.client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_link_user_to_associations(self):
         # An admin-validated user can't be added in an association
         response = self.client.post(
@@ -221,6 +186,66 @@ class UserViewsTests(TestCase):
                 "association": 99,
                 "has_office_status": False,
             },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_consents_user_list(self):
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.get("/users/consents/2")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A student user can't execute this request.
+        response = self.client.get("/users/consents/2")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request.
+        response = self.manager_client.get("/users/consents/2")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_self_get_consents_user_list(self):
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.get("/users/consents/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # An authenticated user can execute this request.
+        response = self.client.get("/users/consents/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # A student user can execute this request and get only his consents
+        consents_user_cnt = GDPRConsentUsers.objects.filter(user_id=2).count()
+        response_student = self.client.get("/users/consents/")
+        content_student = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(len(content_student), consents_user_cnt)
+
+        # A manager user can get a list of every regulation consented by every user
+        consents_user_all_cnt = GDPRConsentUsers.objects.count()
+        response_all_consents = self.manager_client.get("/users/consents/")
+        content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
+        self.assertEqual(len(content_all_consents), consents_user_all_cnt)
+
+
+    def test_post_user_consents(self):
+        # An authenticated user can execute this request
+        response = self.client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # A user can't consent mutliple times to the same regulation
+        response = self.client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A user cannot consent to non-existing gdpr-consent object
+        response = self.client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
