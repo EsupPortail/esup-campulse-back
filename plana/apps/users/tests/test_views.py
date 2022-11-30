@@ -38,6 +38,14 @@ class UserViewsTests(TestCase):
 
         self.anonymous_client = Client()
 
+        self.manager_client = Client()
+        url_manager = reverse("rest_login")
+        data_manager = {
+            "username": "gestionnaire-svu@mail.tld",
+            "password": "motdepasse"
+        }
+        self.response = self.manager_client.post(url_manager, data_manager)
+
     # TODO Route doesn't exist anymore at this time.
     """
     def test_get_users_list(self):
@@ -94,13 +102,36 @@ class UserViewsTests(TestCase):
         # associations_user_cnt = AssociationUsers.objects.count()
         # self.assertTrue(associations_user_cnt > 0)
 
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.get("/users/associations/2")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
         # A student user can't execute this request.
         response = self.client.get("/users/associations/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+        # A manager user can execute this request.
+        response = self.manager_client.get("/users/associations/2")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_self_associations_user_list(self):
+        # A student user can execute this request.
+        response_student = self.client.get("/users/associations/")
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+
+        associations_user_cnt = AssociationUsers.objects.filter(user_id=2).count()
+        content = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(len(content), associations_user_cnt)
+
         # An anonymous user can't execute this request
-        response = self.anonymous_client.get("/users/associations/2")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response_anonymous = self.anonymous_client.get("/users/associations/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A manager user can get a list of every association-user links
+        associations_user_all_cnt = AssociationUsers.objects.count()
+        response_all_asso = self.manager_client.get("/users/associations/")
+        content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
+        self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
     def test_get_consents_user_list(self):
         consents_user_cnt = GDPRConsentUsers.objects.count()
