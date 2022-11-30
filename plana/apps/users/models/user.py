@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from allauth.socialaccount.models import SocialAccount
@@ -20,6 +21,14 @@ class User(AbstractUser):
         - is_active
     """
 
+    _groups = {
+        "SVU": "svu_manager",
+        "CROUS": "crous_manager",
+        "FSDIE_IDEX": "fsdie_idex_member",
+        "CULTURE_ACTIONS": "culture_actions_member",
+        "STUDENT": "student"
+    }
+
     email = models.EmailField(_("Email"), unique=True)
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
@@ -34,6 +43,17 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def has_groups(self, *groups):
+        """
+        :param groups: group names to check
+        - return True if User belongs to one of the groups, else False
+        """
+        return self.groups.filter(name__in=groups).exists()
+
+    def authorized_groups(self):
+        user_filter = {'user__id': self.pk}
+        return Group.objects.filter(**user_filter)
 
     def is_cas_user(self):
         """
@@ -61,3 +81,14 @@ class User(AbstractUser):
         default_permissions = []
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+
+
+# Dynamically create cached properties to check the user's presence in a group
+# Based on https://bugs.python.org/issue38517
+for code, name in User._groups.items():
+    @cached_property
+    def is_in_group(self, code=code):
+        return self.has_groups(code)
+    attr_name = f'is_{name}'
+    setattr(User, attr_name, is_in_group)
+    is_in_group.__set_name__(User, attr_name)
