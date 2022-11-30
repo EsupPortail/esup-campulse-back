@@ -14,8 +14,9 @@ from plana.apps.users.serializers.association_users import (
 
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """
-    GET : Lists all associations linked to all users or associations of an authenticated user.
-    POST : Creates a new link between a user and an association.
+    GET : Lists all associations linked to a user (student), or all associations of all users (manager).
+
+    POST : Creates a new link between a non-validated user and an association.
     """
 
     serializer_class = AssociationUsersCreationSerializer
@@ -54,26 +55,22 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
     """
-    GET : Lists all associations linked to a user.
+    GET : Lists all associations linked to a user (manager).
     """
 
     serializer_class = AssociationUsersSerializer
+    queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.is_student:
-            queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
-        else:
-            queryset = AssociationUsers.objects.all()
-        return queryset
-
+    
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        if "pk" in kwargs.keys():
-            serializer = self.serializer_class(
-                queryset.filter(user_id=kwargs["pk"]), many=True
+        if request.user.is_student:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
         else:
-            serializer = self.serializer_class(queryset, many=True)
+            serializer = self.serializer_class(
+                self.queryset.filter(user_id=kwargs["pk"]), many=True
+            )
         return response.Response(serializer.data)

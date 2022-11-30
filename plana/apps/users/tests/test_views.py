@@ -91,12 +91,12 @@ class UserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_user_list(self):
-        associations_user_cnt = AssociationUsers.objects.count()
-        self.assertTrue(associations_user_cnt > 0)
+        # associations_user_cnt = AssociationUsers.objects.count()
+        # self.assertTrue(associations_user_cnt > 0)
 
-        # An authenticated user can execute this request
+        # A student user can't execute this request.
         response = self.client.get("/users/associations/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/associations/2")
