@@ -42,7 +42,7 @@ class UserViewsTests(TestCase):
         url_manager = reverse("rest_login")
         data_manager = {
             "username": "gestionnaire-svu@mail.tld",
-            "password": "motdepasse"
+            "password": "motdepasse",
         }
         self.response = self.manager_client.post(url_manager, data_manager)
 
@@ -134,16 +134,20 @@ class UserViewsTests(TestCase):
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
     def test_get_consents_user_list(self):
-        consents_user_cnt = GDPRConsentUsers.objects.count()
-        self.assertTrue(consents_user_cnt > 0)
-
-        # An authenticated user can execute this request
-        response = self.client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # consents_user_cnt = GDPRConsentUsers.objects.count()
+        # self.assertTrue(consents_user_cnt > 0)
 
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/consents/2")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A student user can't execute this request.
+        response = self.client.get("/users/consents/2")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request.
+        response = self.manager_client.get("/users/consents/2")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post_user_consents(self):
         # An authenticated user can execute this request
@@ -170,7 +174,7 @@ class UserViewsTests(TestCase):
             "/users/associations/",
             {
                 "user": "test@pas-unistra.fr",
-                "association": 1,
+                "association": 2,
                 "has_office_status": False,
             },
         )
@@ -187,12 +191,23 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        # A user cannot be added twice in the same association
+        response = self.client.post(
+            "/users/associations/",
+            {
+                "user": "prenom.nom@adressemail.fr",
+                "association": 1,
+                "has_office_status": False,
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
         # Authentication is not needed to access view
         response = self.anonymous_client.post(
             "/users/associations/",
             {
                 "user": "prenom.nom@adressemail.fr",
-                "association": 1,
+                "association": 2,
                 "has_office_status": False,
             },
         )

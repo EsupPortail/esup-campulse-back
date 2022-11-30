@@ -26,7 +26,7 @@ class User(AbstractUser):
         "CROUS": "crous_manager",
         "FSDIE_IDEX": "fsdie_idex_member",
         "CULTURE_ACTIONS": "culture_actions_member",
-        "STUDENT": "student"
+        "STUDENT": "student",
     }
 
     email = models.EmailField(_("Email"), unique=True)
@@ -52,7 +52,7 @@ class User(AbstractUser):
         return self.groups.filter(name__in=groups).exists()
 
     def authorized_groups(self):
-        user_filter = {'user__id': self.pk}
+        user_filter = {"user__id": self.pk}
         return Group.objects.filter(**user_filter)
 
     def is_cas_user(self):
@@ -86,9 +86,11 @@ class User(AbstractUser):
 # Dynamically create cached properties to check the user's presence in a group
 # Based on https://bugs.python.org/issue38517
 for code, name in User._groups.items():
+
     @cached_property
     def is_in_group(self, code=code):
         return self.has_groups(code)
-    attr_name = f'is_{name}'
+
+    attr_name = f"is_{name}"
     setattr(User, attr_name, is_in_group)
     is_in_group.__set_name__(User, attr_name)

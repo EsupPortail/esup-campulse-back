@@ -1,7 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, response, status
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.users.models.association_users import AssociationUsers
@@ -29,7 +28,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get_permissions(self):
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
@@ -42,6 +41,14 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["user"])
+        association_users = AssociationUsers.objects.filter(
+            user_id=user.pk, association_id=request.data["association"]
+        )
+        if association_users.count() > 0:
+            return response.Response(
+                {"error": _("User already in association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if user.is_validated_by_admin:
             return response.Response(
@@ -49,7 +56,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # TODO Add UserAssociation object creation with checks here
         return super(AssociationUsersListCreate, self).create(request, *args, **kwargs)
 
 
@@ -62,7 +68,6 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
     queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated]
 
-    
     def get(self, request, *args, **kwargs):
         if request.user.is_student:
             return response.Response(
