@@ -6,6 +6,7 @@ from plana.apps.users.models.user import User
 
 
 class UserGroupsSerializer(serializers.ModelSerializer):
+    # TODO SlugField ??
     groups = serializers.ListField(child=serializers.IntegerField(), required=True)
 
     class Meta:

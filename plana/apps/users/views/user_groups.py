@@ -3,19 +3,39 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, response, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.apps.users.serializers.user_groups import UserGroupsSerializer
 
 
-class UserGroupsCreate(generics.CreateAPIView):
+class UserGroupsListCreate(generics.ListCreateAPIView):
     """
-    POST : Creates a new link between a user and a group.
+    GET : Lists all groups linked to a user (student), or all groups of all users (manager).
+
+    POST : Creates a new link between a non-validated user and a group.
     """
 
-    serializer_class = UserGroupsSerializer
+
+    def get_queryset(self):
+        queryset = self.request.user.groups.all()
+        return queryset
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+        return super(UserGroupsListCreate, self).get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            self.serializer_class = GroupSerializer
+        else:
+            self.serializer_class = UserGroupsSerializer
+        return super(UserGroupsListCreate, self).get_permissions()
 
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
@@ -44,9 +64,9 @@ class UserGroupsCreate(generics.CreateAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
-class UserGroupsList(generics.ListAPIView):
+class UserGroupsRetrieve(generics.RetrieveAPIView):
     """
-    GET : Lists all groups linked to a user.
+    GET : Lists all groups linked to a user (manager).
     """
 
     serializer_class = UserSerializer

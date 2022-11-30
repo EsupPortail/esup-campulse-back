@@ -9,7 +9,7 @@ from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 
 from .views.user import PasswordResetConfirm, UserDetailsView  # , UserList, UserDetail
-from .views.user_groups import UserGroupsCreate, UserGroupsList
+from .views.user_groups import UserGroupsListCreate, UserGroupsRetrieve
 
 urlpatterns = [
     path(
@@ -42,8 +42,8 @@ urlpatterns = [
     ),
     # path("", UserList.as_view(), name="user_list"),
     # path("<int:pk>", UserDetail.as_view(), name="user_detail"),
-    path("groups/", UserGroupsCreate.as_view(), name="user_groups_create"),
-    path("groups/<int:pk>", UserGroupsList.as_view(), name="user_groups_list"),
+    path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
+    path("groups/<int:pk>", UserGroupsRetrieve.as_view(), name="user_groups_retrieve"),
 ]
 
 if settings.DEBUG:  # pragma: no cover
