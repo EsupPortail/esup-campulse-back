@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import include, path, re_path
 
-from .views.association_users import AssociationUsersCreate, AssociationUsersList
+from .views.association_users import AssociationUsersListCreate, AssociationUsersRetrieve
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsCreate, UserConsentsList
 
@@ -11,12 +11,12 @@ from .views.user_groups import UserGroupsCreate, UserGroupsList
 urlpatterns = [
     path(
         "associations/",
-        AssociationUsersCreate.as_view(),
+        AssociationUsersListCreate.as_view(),
         name="user_associations_create",
     ),
     path(
         "associations/<int:pk>",
-        AssociationUsersList.as_view(),
+        AssociationUsersRetrieve.as_view(),
         name="user_associations_list",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
