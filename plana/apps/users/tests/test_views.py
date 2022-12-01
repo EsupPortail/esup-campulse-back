@@ -248,20 +248,52 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # TODO : add rights management
     def test_get_user_groups_list(self):
-        user = User.objects.get(pk=2)
-        groups = list(user.groups.all().values("id", "name"))
+        # A student user can't execute this request
+        response_student = self.client.get("/users/groups/2")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-        response = self.client.get("/users/groups/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        # An anonymous user can't execute this request
         response_unauthorized = self.anonymous_client.get("/users/groups/2")
         self.assertEqual(
             response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
         )
 
-        get_groups = json.loads(response.content.decode("utf-8"))
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/groups/2")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # A manager user get correctly all groups linked to a chosen user
+        user = User.objects.get(pk=2)
+        groups = list(user.groups.all().values("id", "name"))
+        get_groups = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(get_groups, groups)
+
+    def test_self_get_user_groups_list(self):
+        # A student user can execute this request
+        response_student = self.client.get("/users/groups/")
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+
+        # An authenticated user get correctly all his groups
+        user = User.objects.get(pk=2)
+        groups = list(user.groups.all().values("id", "name"))
+        get_groups = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(get_groups, groups)
+
+        # An anonymous user can't execute this request
+        response_unauthorized = self.anonymous_client.get("/users/groups/")
+        self.assertEqual(
+            response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
+        )
+
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/groups/")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # An authenticated user get correctly all his groups even if manager
+        user = User.objects.get(pk=4)
+        groups = list(user.groups.all().values("id", "name"))
+        get_groups = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
 
     def test_link_user_to_groups(self):
