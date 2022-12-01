@@ -1,0 +1,9 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+exclude: "^.tox*|^fabfile*|^plana/settings*"
+fail_fast: true
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 22.8.0
+    hooks:
+    - id: black
