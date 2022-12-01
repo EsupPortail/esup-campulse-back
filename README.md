@@ -144,3 +144,7 @@ $ python manage.py spectacular --file schema.yml
 ```sh
 $ DEFAULT_DB_TEST_HOST=localhost tox
 ```
+### Voir de façon graphique le coverage des tests unitaires
+```sh
+$ firefox htmlcov/index.html
+```

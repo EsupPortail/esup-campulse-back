@@ -16,14 +16,14 @@ class GDPRConsentsViewsTests(TestCase):
         self.client = Client()
 
     def test_get_consents_list(self):
-        groups_cnt = GDPRConsent.objects.count()
-        self.assertTrue(groups_cnt > 0)
+        consents_cnt = GDPRConsent.objects.count()
+        self.assertTrue(consents_cnt > 0)
 
         response = self.client.get("/consents/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), groups_cnt)
+        self.assertEqual(len(content), consents_cnt)
 
         consent_1 = content[0]
         self.assertTrue(consent_1.get("title"))
