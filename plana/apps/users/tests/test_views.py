@@ -223,7 +223,6 @@ class UserViewsTests(TestCase):
         content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
         self.assertEqual(len(content_all_consents), consents_user_all_cnt)
 
-
     def test_post_user_consents(self):
         # An authenticated user can execute this request
         response = self.client.post(

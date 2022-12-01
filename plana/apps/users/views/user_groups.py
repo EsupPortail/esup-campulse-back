@@ -18,7 +18,6 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
     POST : Creates a new link between a non-validated user and a group.
     """
 
-
     def get_queryset(self):
         queryset = self.request.user.groups.all()
         return queryset
@@ -35,11 +34,10 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
             self.serializer_class = GroupSerializer
         else:
             self.serializer_class = UserGroupsSerializer
-        return super(UserGroupsListCreate, self).get_permissions()
+        return super(UserGroupsListCreate, self).get_serializer_class()
 
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
-        serializer = self.serializer_class(instance=user)
 
         if user.is_validated_by_admin:
             return response.Response(
@@ -69,11 +67,21 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
     GET : Lists all groups linked to a user (manager).
     """
 
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        queryset = Group.objects.all()
+        return queryset
+
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(id=kwargs["pk"])
-        serializer = self.serializer_class(instance=user)
-        return response.Response(serializer.data["groups"])
+        if request.user.is_student:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        else:
+            serializer = self.serializer_class(
+                self.get_queryset().filter(user=kwargs["pk"]), many=True
+            )
+        return response.Response(serializer.data)
