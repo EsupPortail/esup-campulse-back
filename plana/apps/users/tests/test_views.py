@@ -87,6 +87,24 @@ class UserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_user_detail(self):
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/2")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # A manager user gets informations of requested user
+        user = User.objects.get(pk=2)
+        user_requested = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(user_requested["username"], user.username)
+
+        # An anonymous user cannot execute this request
+        response_anonymous = self.client.get("/users/2")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A student user cannot execute this request
+        response = self.client.get("/users/2")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_auth_user_detail(self):
         user = User.objects.get(pk=2)
 
         response = self.client.get("/users/auth/user/")
