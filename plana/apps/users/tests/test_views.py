@@ -71,6 +71,9 @@ class UserViewsTests(TestCase):
         self.assertTrue(users_cnt > 0)
 
         response = self.client.get(reverse("user_list"))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.manager_client.get(reverse("user_list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
