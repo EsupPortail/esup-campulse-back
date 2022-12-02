@@ -184,7 +184,6 @@ class UserViewsTests(TestCase):
 
         # A user cannot update his validation status
         user_not_valid = User.objects.get(username="test@pas-unistra.fr")
-        print(user_not_valid)
         response = self.client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
@@ -293,6 +292,28 @@ class UserViewsTests(TestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_user_association(self):
+        response = self.manager_client.get("/users/associations/2")
+        first_user_association_id = response.data[0]["id"]
+
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A student user can't execute this request.
+        response = self.client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request.
+        response = self.manager_client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_get_consents_user_list(self):
         # An anonymous user can't execute this request
