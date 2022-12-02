@@ -59,7 +59,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         return super(AssociationUsersListCreate, self).create(request, *args, **kwargs)
 
 
-class AssociationUsersRetrieve(generics.RetrieveAPIView):
+class AssociationUsersRetrieveDestroy(generics.RetrieveDestroyAPIView):
     """
     GET : Lists all associations linked to a user (manager).
     """
@@ -79,3 +79,13 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
                 self.queryset.filter(user_id=kwargs["pk"]), many=True
             )
         return response.Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        if request.user.is_student:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        else:
+            self.destroy(request, *args, **kwargs)
+            return response.Response({}, status=status.HTTP_204_NO_CONTENT)

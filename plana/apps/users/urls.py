@@ -3,7 +3,7 @@ from django.urls import include, path, re_path
 
 from .views.association_users import (
     AssociationUsersListCreate,
-    AssociationUsersRetrieve,
+    AssociationUsersRetrieveDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
@@ -19,8 +19,8 @@ urlpatterns = [
     ),
     path(
         "associations/<int:pk>",
-        AssociationUsersRetrieve.as_view(),
-        name="user_associations_retrieve",
+        AssociationUsersRetrieveDestroy.as_view(),
+        name="user_associations_retrieve_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
@@ -43,7 +43,11 @@ urlpatterns = [
     path("", UserList.as_view(), name="user_list"),
     path("<int:pk>", UserDetail.as_view(), name="user_detail"),
     path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
-    path("groups/<int:pk>", UserGroupsRetrieve.as_view(), name="user_groups_retrieve"),
+    path(
+        "groups/<int:pk>",
+        UserGroupsRetrieve.as_view(),
+        name="user_groups_retrieve_destroy",
+    ),
 ]
 
 if settings.DEBUG:  # pragma: no cover

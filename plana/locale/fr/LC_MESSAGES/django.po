@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 09:40+0100\n"
+"POT-Creation-Date: 2022-12-02 10:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,6 +239,7 @@ msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 
 #: plana/apps/users/views/association_users.py:74
+#: plana/apps/users/views/association_users.py:86
 #: plana/apps/users/views/gdpr_consent_users.py:55
 #: plana/apps/users/views/user.py:18 plana/apps/users/views/user.py:33
 #: plana/apps/users/views/user.py:45 plana/apps/users/views/user_groups.py:79
