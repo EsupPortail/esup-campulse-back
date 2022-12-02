@@ -67,17 +67,6 @@ class UserViewsTests(TestCase):
         self.response = self.cas_client.post(url_cas, data_cas)
 
     def test_get_users_list(self):
-        users_cnt = User.objects.count()
-        self.assertTrue(users_cnt > 0)
-
-        # A manager user can execute this request
-        response_manager = self.manager_client.get("/users/")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        # A manager user gets a list of all users in db
-        content = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(len(content), users_cnt)
-
         # An anonymous user cannot execute this request
         response_anonymous = self.client.get("/users/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
@@ -87,15 +76,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_user_detail(self):
-        # A manager user can execute this request
-        response_manager = self.manager_client.get("/users/2")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        # A manager user gets informations of requested user
-        user = User.objects.get(pk=2)
-        user_requested = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(user_requested["username"], user.username)
-
         # An anonymous user cannot execute this request
         response_anonymous = self.client.get("/users/2")
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
@@ -117,21 +97,6 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-        # A manager user can execute this request and modifications are correctly applied on local account
-        response_manager = self.manager_client.patch(
-            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
-        )
-        user = User.objects.get(pk=2)
-        self.assertEqual(user.username, "Bienvenueg")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        # Some CAS user fields cannot be modified
-        user_cas = User.objects.get(username="PatriciaCAS")
-        response = self.manager_client.patch(
-            f"/users/{user_cas.pk}", {"username": "JesuisCASg"}
-        )
-        self.assertEqual(user_cas.username, "PatriciaCAS")
-
     def test_put_user_detail_unexisting(self):
         # Request should return an error 404 no matter which role is trying to execute it
         response_anonymous = self.anonymous_client.put(
@@ -141,11 +106,6 @@ class UserViewsTests(TestCase):
 
         response_student = self.client.put("/users/2", {"username": "Aurevoirg"})
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_manager = self.manager_client.put(
-            "/users/2", {"username": "Aurevoirg"}
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_auth_user_detail(self):
         # An authenticated user can get execute this request
@@ -203,9 +163,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_user_list(self):
-        # associations_user_cnt = AssociationUsers.objects.count()
-        # self.assertTrue(associations_user_cnt > 0)
-
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/associations/2")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -213,10 +170,6 @@ class UserViewsTests(TestCase):
         # A student user can't execute this request.
         response = self.client.get("/users/associations/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        # A manager user can execute this request.
-        response = self.manager_client.get("/users/associations/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_self_associations_user_list(self):
         # A student user can execute this request.
@@ -230,12 +183,6 @@ class UserViewsTests(TestCase):
         # An anonymous user can't execute this request
         response_anonymous = self.anonymous_client.get("/users/associations/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
-        # A manager user can get a list of every association-user links
-        associations_user_all_cnt = AssociationUsers.objects.count()
-        response_all_asso = self.manager_client.get("/users/associations/")
-        content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
-        self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
     def test_link_user_to_associations(self):
         # An admin-validated user can't be added in an association
@@ -309,12 +256,6 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        # A manager user can execute this request.
-        response = self.manager_client.delete(
-            "/users/associations/" + str(first_user_association_id)
-        )
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
     def test_get_consents_user_list(self):
         # An anonymous user can't execute this request
         response = self.anonymous_client.get("/users/consents/2")
@@ -323,10 +264,6 @@ class UserViewsTests(TestCase):
         # A student user can't execute this request.
         response = self.client.get("/users/consents/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-        # A manager user can execute this request.
-        response = self.manager_client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_self_get_consents_user_list(self):
         # An anonymous user can't execute this request
@@ -342,12 +279,6 @@ class UserViewsTests(TestCase):
         response_student = self.client.get("/users/consents/")
         content_student = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(len(content_student), consents_user_cnt)
-
-        # A manager user can get a list of every regulation consented by every user
-        consents_user_all_cnt = GDPRConsentUsers.objects.count()
-        response_all_consents = self.manager_client.get("/users/consents/")
-        content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
-        self.assertEqual(len(content_all_consents), consents_user_all_cnt)
 
     def test_post_user_consents(self):
         # An authenticated user can execute this request
@@ -385,16 +316,6 @@ class UserViewsTests(TestCase):
             response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
         )
 
-        # A manager user can execute this request
-        response_manager = self.manager_client.get("/users/groups/2")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        # A manager user get correctly all groups linked to a chosen user
-        user = User.objects.get(pk=2)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
-
     def test_self_get_user_groups_list(self):
         # A student user can execute this request
         response_student = self.client.get("/users/groups/")
@@ -411,16 +332,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(
             response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
         )
-
-        # A manager user can execute this request
-        response_manager = self.manager_client.get("/users/groups/")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        # An authenticated user get correctly all his groups even if manager
-        user = User.objects.get(pk=4)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
 
     def test_link_user_to_groups(self):
         # Groups of admin-validated accounts can't be updated
