@@ -16,7 +16,7 @@ class Association(models.Model):
     description = models.TextField(_("Description"), default="")
     activities = models.TextField(_("Activities"), default="")
     address = models.TextField(_("Address"), default="")
-    phone = models.CharField(_("Phone"), default="", max_length=25)
+    phone = models.CharField(_("Phone"), default="", max_length=32)
     email = models.CharField(_("Email"), default="", max_length=256)
     siret = models.IntegerField(_("SIRET"), default=0)
     website = models.URLField(_("Website"), default="", max_length=200)
