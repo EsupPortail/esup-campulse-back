@@ -104,50 +104,103 @@ class UserViewsTests(TestCase):
         response = self.client.get("/users/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_auth_user_detail(self):
-        user = User.objects.get(pk=2)
+    def test_patch_user_detail(self):
+        # An anonymous user cannot execute this request
+        response_anonymous = self.anonymous_client.patch(
+            "/users/2", {"username": "Bienvenueg"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # A student user cannot execute this request
+        response_student = self.client.patch(
+            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request and modifications are correctly applied on local account
+        response_manager = self.manager_client.patch(
+            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+        )
+        user = User.objects.get(pk=2)
+        self.assertEqual(user.username, "Bienvenueg")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # Some CAS user fields cannot be modified
+        user_cas = User.objects.get(username="PatriciaCAS")
+        response = self.manager_client.patch(
+            f"/users/{user_cas.pk}", {"username": "JesuisCASg"}
+        )
+        self.assertEqual(user_cas.username, "PatriciaCAS")
+
+    def test_put_user_detail_unexisting(self):
+        # Request should return an error 404 no matter which role is trying to execute it
+        response_anonymous = self.anonymous_client.put(
+            "/users/2", {"username": "Aurevoirg"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_student = self.client.put("/users/2", {"username": "Aurevoirg"})
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_manager = self.manager_client.put(
+            "/users/2", {"username": "Aurevoirg"}
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_auth_user_detail(self):
+        # An authenticated user can get execute this request
         response = self.client.get("/users/auth/user/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        user_1 = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(user_1["username"], user.username)
+        # An authenticated user get correct data when executing the request
+        user = User.objects.get(username="test@pas-unistra.fr")
+        user_data = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(user_data["username"], user.username)
 
-    def test_patch_user_detail(self):
+    def test_patch_auth_user_detail(self):
+        # An anonymous user cannot execute this request
         response = self.anonymous_client.put(
             "/users/auth/user/", {"username": "Aurevoirg"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # An anonymous user cannot execute this request
         response = self.anonymous_client.patch(
             "/users/auth/user/", {"username": "Bienvenueg"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        user = User.objects.get(username="PatriciaCAS")
+        #        # A CAS user can execute this request but cannot update some CAS fields from his account
+        #        user_cas = User.objects.get(username="PatriciaCAS")
+        #        response_not_modified = self.cas_client.patch(
+        #            "/users/auth/user/", {"username": "JesuisCASg"}
+        #        )
+        #        self.assertEqual(user_cas.username, "PatriciaCAS")
+        #        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.cas_client.patch(
-            "/users/auth/user/", {"username": "JesuisCASg"}
-        )
-        self.assertEqual(user.username, "PatriciaCAS")
-
-        user = User.objects.get(pk=2)
-
+        # PUT request is never accessible for authenticated users, returns 404
         response = self.client.put("/users/auth/user/", {"username": "Alorsçavag"})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        response = self.client.patch(
-            "/users/auth/user/",
-            data={"username": "Mafoipastropmalpourlasaisong"},
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        # A user cannot update his validation status
+        user_not_valid = User.objects.get(username="test@pas-unistra.fr")
+        print(user_not_valid)
         response = self.client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
             content_type="application/json",
         )
+        self.assertTrue(user_not_valid.is_validated_by_admin)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # A student user cannot update his username
+        user_username = User.objects.get(username="test@pas-unistra.fr")
+        response = self.client.patch(
+            "/users/auth/user/",
+            data={"username": "Mafoipastropmalpourlasaisong"},
+            content_type="application/json",
+        )
+        self.assertEqual(user_username.username, "test@pas-unistra.fr")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_user_list(self):
@@ -384,8 +437,10 @@ class UserAuthTests(TestCase):
             "last_name": "La Saucisse",
         }
 
+        # It is possible to create users
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        # It is not possible to create the same user twice
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

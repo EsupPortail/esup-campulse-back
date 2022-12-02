@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
@@ -26,6 +27,13 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated]
+        return super(UserDetail, self).get_permissions()
 
     def get(self, request, *args, **kwargs):
         if request.user.is_student:
