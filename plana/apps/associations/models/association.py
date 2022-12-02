@@ -12,6 +12,7 @@ class Association(models.Model):
     )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
     path_logo = models.CharField(_("Logo path"), default="", max_length=250)
+    alt_logo = models.TextField(_("Description"), default="")
     description = models.TextField(_("Description"), default="")
     activities = models.TextField(_("Activities"), default="")
     address = models.TextField(_("Address"), default="")
