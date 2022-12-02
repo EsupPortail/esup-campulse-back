@@ -70,14 +70,21 @@ class UserViewsTests(TestCase):
         users_cnt = User.objects.count()
         self.assertTrue(users_cnt > 0)
 
-        response = self.client.get(reverse("user_list"))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        response = self.manager_client.get(reverse("user_list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
+        # A manager user gets a list of all users in db
+        content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
+
+        # An anonymous user cannot execute this request
+        response_anonymous = self.client.get("/users/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A student user cannot execute this request
+        response = self.client.get("/users/")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_user_detail(self):
         user = User.objects.get(pk=2)
