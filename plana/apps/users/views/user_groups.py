@@ -7,7 +7,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import User
-from plana.apps.users.serializers.user import UserSerializer
 from plana.apps.users.serializers.user_groups import UserGroupsSerializer
 
 

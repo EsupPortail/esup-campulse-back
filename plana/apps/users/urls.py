@@ -8,7 +8,7 @@ from .views.association_users import (
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 
-from .views.user import PasswordResetConfirm, UserDetailsView  # , UserList, UserDetail
+from .views.user import PasswordResetConfirm, UserDetailsView, UserList, UserDetail
 from .views.user_groups import UserGroupsListCreate, UserGroupsRetrieve
 
 urlpatterns = [
@@ -40,8 +40,8 @@ urlpatterns = [
         UserConsentsRetrieve.as_view(),
         name="user_consents_retrieve",
     ),
-    # path("", UserList.as_view(), name="user_list"),
-    # path("<int:pk>", UserDetail.as_view(), name="user_detail"),
+    path("", UserList.as_view(), name="user_list"),
+    path("<int:pk>", UserDetail.as_view(), name="user_detail"),
     path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
     path("groups/<int:pk>", UserGroupsRetrieve.as_view(), name="user_groups_retrieve"),
 ]
