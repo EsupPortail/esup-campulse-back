@@ -3,11 +3,13 @@ import json
 from django.test import TestCase, Client
 from django.urls import reverse
 
+from allauth.socialaccount.models import SocialAccount
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import User
+from plana.apps.users.provider import CASProvider
 
 
 class UserViewsTests(TestCase):
@@ -27,6 +29,8 @@ class UserViewsTests(TestCase):
     ]
 
     def setUp(self):
+        self.anonymous_client = Client()
+
         self.client = Client()
         url = reverse("rest_login")
         data = {
@@ -34,9 +38,6 @@ class UserViewsTests(TestCase):
             "password": "motdepasse",
         }
         self.response = self.client.post(url, data)
-        self.home_url = reverse("home")
-
-        self.anonymous_client = Client()
 
         self.manager_client = Client()
         url_manager = reverse("rest_login")
@@ -46,56 +47,159 @@ class UserViewsTests(TestCase):
         }
         self.response = self.manager_client.post(url_manager, data_manager)
 
-    # TODO Route doesn't exist anymore at this time.
-    """
+        user = User.objects.create_user(
+            username="PatriciaCAS",
+            password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+            email="test@unistra.fr",
+        )
+        SocialAccount.objects.create(
+            user=user,
+            provider=CASProvider.id,
+            uid=user.username,
+            extra_data={},
+        )
+        self.cas_client = Client()
+        url_cas = reverse("rest_login")
+        data_cas = {
+            "username": "PatriciaCAS",
+            "password": "motdepasse",
+        }
+        self.response = self.cas_client.post(url_cas, data_cas)
+
     def test_get_users_list(self):
         users_cnt = User.objects.count()
         self.assertTrue(users_cnt > 0)
 
-        response = self.client.get(reverse("user_list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
+        # A manager user gets a list of all users in db
+        content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
-    """
+
+        # An anonymous user cannot execute this request
+        response_anonymous = self.client.get("/users/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A student user cannot execute this request
+        response = self.client.get("/users/")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_user_detail(self):
-        user = User.objects.get(pk=2)
+        # A manager user can execute this request
+        response_manager = self.manager_client.get("/users/2")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
+        # A manager user gets informations of requested user
+        user = User.objects.get(pk=2)
+        user_requested = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(user_requested["username"], user.username)
+
+        # An anonymous user cannot execute this request
+        response_anonymous = self.client.get("/users/2")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A student user cannot execute this request
+        response = self.client.get("/users/2")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_user_detail(self):
+        # An anonymous user cannot execute this request
+        response_anonymous = self.anonymous_client.patch(
+            "/users/2", {"username": "Bienvenueg"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A student user cannot execute this request
+        response_student = self.client.patch(
+            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request and modifications are correctly applied on local account
+        response_manager = self.manager_client.patch(
+            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+        )
+        user = User.objects.get(pk=2)
+        self.assertEqual(user.username, "Bienvenueg")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # Some CAS user fields cannot be modified
+        user_cas = User.objects.get(username="PatriciaCAS")
+        response = self.manager_client.patch(
+            f"/users/{user_cas.pk}", {"username": "JesuisCASg"}
+        )
+        self.assertEqual(user_cas.username, "PatriciaCAS")
+
+    def test_put_user_detail_unexisting(self):
+        # Request should return an error 404 no matter which role is trying to execute it
+        response_anonymous = self.anonymous_client.put(
+            "/users/2", {"username": "Aurevoirg"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_student = self.client.put("/users/2", {"username": "Aurevoirg"})
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_manager = self.manager_client.put(
+            "/users/2", {"username": "Aurevoirg"}
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_auth_user_detail(self):
+        # An authenticated user can get execute this request
         response = self.client.get("/users/auth/user/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        user_1 = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(user_1["username"], user.username)
+        # An authenticated user get correct data when executing the request
+        user = User.objects.get(username="test@pas-unistra.fr")
+        user_data = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(user_data["username"], user.username)
 
-    def test_patch_user_detail(self):
+    def test_patch_auth_user_detail(self):
+        # An anonymous user cannot execute this request
         response = self.anonymous_client.put(
             "/users/auth/user/", {"username": "Aurevoirg"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # An anonymous user cannot execute this request
         response = self.anonymous_client.patch(
             "/users/auth/user/", {"username": "Bienvenueg"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        user = User.objects.get(pk=2)
+        #        # A CAS user can execute this request but cannot update some CAS fields from his account
+        #        user_cas = User.objects.get(username="PatriciaCAS")
+        #        response_not_modified = self.cas_client.patch(
+        #            "/users/auth/user/", {"username": "JesuisCASg"}
+        #        )
+        #        self.assertEqual(user_cas.username, "PatriciaCAS")
+        #        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        # PUT request is never accessible for authenticated users, returns 404
         response = self.client.put("/users/auth/user/", {"username": "Alorsçavag"})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        response = self.client.patch(
-            "/users/auth/user/",
-            data={"username": "Mafoipastropmalpourlasaisong"},
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        # A user cannot update his validation status
+        user_not_valid = User.objects.get(username="test@pas-unistra.fr")
         response = self.client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
             content_type="application/json",
         )
+        self.assertTrue(user_not_valid.is_validated_by_admin)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # A student user cannot update his username
+        user_username = User.objects.get(username="test@pas-unistra.fr")
+        response = self.client.patch(
+            "/users/auth/user/",
+            data={"username": "Mafoipastropmalpourlasaisong"},
+            content_type="application/json",
+        )
+        self.assertEqual(user_username.username, "test@pas-unistra.fr")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_associations_user_list(self):
@@ -188,6 +292,28 @@ class UserViewsTests(TestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_user_association(self):
+        response = self.manager_client.get("/users/associations/2")
+        first_user_association_id = response.data[0]["id"]
+
+        # An anonymous user can't execute this request
+        response = self.anonymous_client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # A student user can't execute this request.
+        response = self.client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # A manager user can execute this request.
+        response = self.manager_client.delete(
+            "/users/associations/" + str(first_user_association_id)
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_get_consents_user_list(self):
         # An anonymous user can't execute this request
@@ -332,8 +458,10 @@ class UserAuthTests(TestCase):
             "last_name": "La Saucisse",
         }
 
+        # It is possible to create users
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        # It is not possible to create the same user twice
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

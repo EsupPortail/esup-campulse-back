@@ -18,6 +18,7 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssociationUsers
         fields = [
+            "id",
             "user",
             "has_office_status",
             "association",
