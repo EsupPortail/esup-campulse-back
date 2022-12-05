@@ -94,16 +94,14 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
 
-    # TODO : test "GET /users/auth/user/" result with manager
-    def test_manager_patch_auth_user_detail(self):
-        #        # A CAS user can execute this request but cannot update some CAS fields from his account
-        #        user_cas = User.objects.get(username="PatriciaCAS")
-        #        response_not_modified = self.cas_client.patch(
-        #            "/users/auth/user/", {"username": "JesuisCASg"}
-        #        )
-        #        self.assertEqual(user_cas.username, "PatriciaCAS")
-        #        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_manager_get_auth_user_detail(self):
+        # An authenticated manager get correct data when executing the request
+        response_manager = self.manager_client.get("/users/auth/user/")
+        user = User.objects.get(username="gestionnaire-svu@mail.tld")
+        user_data = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(user_data["username"], user.username)
 
+    def test_manager_patch_auth_user_detail(self):
         # PUT request is never accessible for authenticated users, returns 404
         response = self.manager_client.put(
             "/users/auth/user/", {"username": "Alorsçavag"}

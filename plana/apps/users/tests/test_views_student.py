@@ -3,13 +3,11 @@ import json
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from allauth.socialaccount.models import SocialAccount
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import User
-from plana.apps.users.provider import CASProvider
 
 
 class UserViewsStudentTests(TestCase):
@@ -36,18 +34,6 @@ class UserViewsStudentTests(TestCase):
             "password": "motdepasse",
         }
         self.response = self.client.post(url, data)
-
-    #        user = User.objects.create_user(
-    #            username="PatriciaCAS",
-    #            password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-    #            email="test@unistra.fr",
-    #        )
-    #        SocialAccount.objects.create(
-    #            user=user,
-    #            provider=CASProvider.id,
-    #            uid=user.username,
-    #            extra_data={},
-    #        )
 
     def test_student_get_users_list(self):
         # A student user cannot execute this request
