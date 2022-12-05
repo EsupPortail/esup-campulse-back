@@ -21,12 +21,13 @@ class User(AbstractUser):
         - is_active
     """
 
+    # TODO Renommer les groupes (et fixtures).
     _groups = {
-        "SVU": "svu_manager",
-        "CROUS": "crous_manager",
-        "FSDIE_IDEX": "fsdie_idex_member",
-        "CULTURE_ACTIONS": "culture_actions_member",
-        "STUDENT": "student",
+        "Gestionnaire SVU": "svu_manager",
+        "Gestionnaire Crous": "crous_manager",
+        "Membre de Commission FSDIE/IdEx": "fsdie_idex_member",
+        "Membre de Commission Culture-ActionS": "culture_actions_member",
+        "Étudiante ou Étudiant": "student",
     }
 
     email = models.EmailField(_("Email"), unique=True)
