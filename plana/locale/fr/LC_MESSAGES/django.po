@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-02 10:55+0100\n"
+"POT-Creation-Date: 2022-12-05 15:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,25 +199,25 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/serializers/cas.py:42
+#: plana/apps/users/serializers/cas.py:40
 msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
-#: plana/apps/users/serializers/cas.py:58
+#: plana/apps/users/serializers/cas.py:56
 #: plana/apps/users/tests/serializers/test_cas.py:168
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:78
+#: plana/apps/users/serializers/cas.py:76
 msgid "Account registration must be completed."
 msgstr "L'inscription de ce compte n'est pas terminée."
 
-#: plana/apps/users/serializers/cas.py:86
+#: plana/apps/users/serializers/cas.py:84
 #, python-format
 msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:114
+#: plana/apps/users/serializers/cas.py:112
 #: plana/apps/users/tests/serializers/test_cas.py:42
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -241,8 +241,8 @@ msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 #: plana/apps/users/views/association_users.py:74
 #: plana/apps/users/views/association_users.py:86
 #: plana/apps/users/views/gdpr_consent_users.py:55
-#: plana/apps/users/views/user.py:18 plana/apps/users/views/user.py:33
-#: plana/apps/users/views/user.py:45 plana/apps/users/views/user_groups.py:79
+#: plana/apps/users/views/user.py:20 plana/apps/users/views/user.py:42
+#: plana/apps/users/views/user.py:54 plana/apps/users/views/user_groups.py:79
 msgid "Bad request."
 msgstr "Erreur de requête."
 

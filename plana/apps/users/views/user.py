@@ -12,6 +12,7 @@ from plana.apps.users.serializers.user import UserSerializer
 class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all().order_by("username")
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         if request.user.is_student:

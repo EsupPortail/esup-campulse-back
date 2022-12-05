@@ -9,11 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from allauth.socialaccount.models import SocialLogin
 from allauth_cas.views import AuthAction
+from cas import CASClient, CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import exceptions, serializers
-
-# TODO Vérifier à quoi ça sert.
-from cas import CASClient, CASClientBase
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User

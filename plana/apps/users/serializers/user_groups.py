@@ -7,7 +7,6 @@ from plana.apps.users.models.user import User
 
 
 class UserGroupsSerializer(serializers.ModelSerializer):
-    # TODO SlugField ??
     groups = serializers.ListField(
         child=serializers.SlugRelatedField(
             slug_field="id", queryset=Group.objects.all()
