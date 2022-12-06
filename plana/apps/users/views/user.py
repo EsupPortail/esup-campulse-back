@@ -11,7 +11,7 @@ from plana.apps.users.serializers.user import UserSerializer
 
 class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all().order_by("username")
+    queryset = User.objects.all().order_by("id")
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
