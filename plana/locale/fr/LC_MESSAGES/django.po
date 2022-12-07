@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-07 12:14+0100\n"
+"POT-Creation-Date: 2022-12-07 16:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:16
-#: plana/apps/associations/models/association.py:47
+#: plana/apps/associations/models/association.py:48
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -79,47 +79,51 @@ msgid "Student count"
 msgstr "Nombre d'étudiants"
 
 #: plana/apps/associations/models/association.py:24
+msgid "President names"
+msgstr "Noms du président"
+
+#: plana/apps/associations/models/association.py:25
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:25
+#: plana/apps/associations/models/association.py:26
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:26
+#: plana/apps/associations/models/association.py:27
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:28
+#: plana/apps/associations/models/association.py:29
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:31
+#: plana/apps/associations/models/association.py:32
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:33
+#: plana/apps/associations/models/association.py:34
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:36
+#: plana/apps/associations/models/association.py:37
 #: plana/apps/associations/models/institution.py:17
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:42
+#: plana/apps/associations/models/association.py:43
 #: plana/apps/associations/models/institution_component.py:16
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:54
+#: plana/apps/associations/models/association.py:55
 #: plana/apps/associations/models/social_network.py:14
 #: plana/apps/users/models/association_users.py:15
 #: plana/apps/users/models/association_users.py:25
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:55
+#: plana/apps/associations/models/association.py:56
 #: plana/apps/users/models/association_users.py:26
 #: plana/apps/users/models/user.py:42
 msgid "Associations"
@@ -164,7 +168,7 @@ msgstr "Consentements RGPD"
 
 #: plana/apps/users/models/association_users.py:13
 #: plana/apps/users/models/gdpr_consent_users.py:13
-#: plana/apps/users/models/user.py:83
+#: plana/apps/users/models/user.py:85
 msgid "User"
 msgstr "Utilisateur"
 
@@ -204,7 +208,7 @@ msgstr "Nom de famille"
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:84
+#: plana/apps/users/models/user.py:86
 msgid "Users"
 msgstr "Utilisateurs"
 
