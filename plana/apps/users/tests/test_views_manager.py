@@ -170,6 +170,6 @@ class UserViewsManagerTests(TestCase):
         response = self.manager_client.get(f"/users/groups/{user_id}")
         first_user_group_id = response.data[0]["id"]
         response_delete = self.manager_client.delete(
-            f"/users/associations/{user_id}/{str(first_user_group_id)}"
+            f"/users/groups/{user_id}/{str(first_user_group_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)

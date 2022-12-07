@@ -52,9 +52,11 @@ class User(AbstractUser):
         """
         return self.groups.filter(name__in=groups).exists()
 
+    """
     def authorized_groups(self):
         user_filter = {"user__id": self.pk}
         return Group.objects.filter(**user_filter)
+    """
 
     def is_cas_user(self):
         """
