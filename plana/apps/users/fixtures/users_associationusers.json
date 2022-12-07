@@ -5,7 +5,9 @@
     "fields": {
       "user_id": 2,
       "association_id": 1,
-      "has_office_status": true
+      "role_name": "Test",
+      "has_office_status": true,
+      "is_president": false
     }
   },
   {
@@ -14,7 +16,9 @@
     "fields": {
       "user_id": 10,
       "association_id": 3,
-      "has_office_status": false
+      "role_name": "Membre",
+      "has_office_status": false,
+      "is_president": false
     }
   },
   {
@@ -23,7 +27,9 @@
     "fields": {
       "user_id": 11,
       "association_id": 2,
-      "has_office_status": false
+      "role_name": "Membre",
+      "has_office_status": false,
+      "is_president": false
     }
   },
   {
@@ -32,7 +38,9 @@
     "fields": {
       "user_id": 12,
       "association_id": 3,
-      "has_office_status": true
+      "role_name": "Président",
+      "has_office_status": true,
+      "is_president": true
     }
   },
   {
@@ -41,7 +49,9 @@
     "fields": {
       "user_id": 13,
       "association_id": 2,
-      "has_office_status": true
+      "role_name": "Président",
+      "has_office_status": true,
+      "is_president": true
     }
   },
   {
@@ -50,7 +60,9 @@
     "fields": {
       "user_id": 14,
       "association_id": 3,
-      "has_office_status": true
+      "role_name": "Président",
+      "has_office_status": true,
+      "is_president": true
     }
   },
   {
@@ -59,7 +71,9 @@
     "fields": {
       "user_id": 14,
       "association_id": 2,
-      "has_office_status": false
+      "role_name": "Membre",
+      "has_office_status": false,
+      "is_president": false
     }
   },
   {
@@ -68,7 +82,9 @@
     "fields": {
       "user_id": 15,
       "association_id": 2,
-      "has_office_status": true
+      "role_name": "Président",
+      "has_office_status": true,
+      "is_president": true
     }
   },
   {
@@ -77,7 +93,9 @@
     "fields": {
       "user_id": 15,
       "association_id": 3,
-      "has_office_status": false
+      "role_name": "Membre",
+      "has_office_status": false,
+      "is_president": false
     }
   }
 ]

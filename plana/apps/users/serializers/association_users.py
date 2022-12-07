@@ -20,7 +20,9 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
+            "role_name",
             "has_office_status",
+            "is_president",
             "association",
         ]
 
@@ -34,6 +36,8 @@ class AssociationUsersCreationSerializer(serializers.ModelSerializer):
         model = AssociationUsers
         fields = [
             "user",
+            "role_name",
             "has_office_status",
+            "is_president",
             "association",
         ]

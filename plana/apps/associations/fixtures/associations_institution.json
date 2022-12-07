@@ -11,7 +11,7 @@
     "model": "associations.Institution",
     "pk": 2,
     "fields": {
-      "name": "Universitré de Strasbourg",
+      "name": "Université de Strasbourg",
       "acronym": "Unistra"
     }
   },

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-05 15:40+0100\n"
+"POT-Creation-Date: 2022-12-07 08:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:16
-#: plana/apps/associations/models/association.py:46
+#: plana/apps/associations/models/association.py:47
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -44,83 +44,84 @@ msgid "Logo path"
 msgstr "Emplacement du logo"
 
 #: plana/apps/associations/models/association.py:15
+#: plana/apps/associations/models/association.py:16
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/associations/models/association.py:16
+#: plana/apps/associations/models/association.py:17
 msgid "Activities"
 msgstr "Activités"
 
-#: plana/apps/associations/models/association.py:17
+#: plana/apps/associations/models/association.py:18
 msgid "Address"
 msgstr "Adresse"
 
-#: plana/apps/associations/models/association.py:18
-#: plana/apps/users/models/user.py:35
+#: plana/apps/associations/models/association.py:19
+#: plana/apps/users/models/user.py:36
 msgid "Phone"
 msgstr "Téléphone"
 
-#: plana/apps/associations/models/association.py:19
-#: plana/apps/users/models/user.py:32
+#: plana/apps/associations/models/association.py:20
+#: plana/apps/users/models/user.py:33
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models/association.py:20
+#: plana/apps/associations/models/association.py:21
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models/association.py:21
+#: plana/apps/associations/models/association.py:22
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models/association.py:22
+#: plana/apps/associations/models/association.py:23
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models/association.py:23
+#: plana/apps/associations/models/association.py:24
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:24
+#: plana/apps/associations/models/association.py:25
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:25
+#: plana/apps/associations/models/association.py:26
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:27
+#: plana/apps/associations/models/association.py:28
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:30
+#: plana/apps/associations/models/association.py:31
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:32
+#: plana/apps/associations/models/association.py:33
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:35
+#: plana/apps/associations/models/association.py:36
 #: plana/apps/associations/models/institution.py:17
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:41
+#: plana/apps/associations/models/association.py:42
 #: plana/apps/associations/models/institution_component.py:16
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:54
 #: plana/apps/associations/models/social_network.py:14
 #: plana/apps/users/models/association_users.py:15
-#: plana/apps/users/models/association_users.py:23
+#: plana/apps/users/models/association_users.py:25
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:54
-#: plana/apps/users/models/association_users.py:24
-#: plana/apps/users/models/user.py:41
+#: plana/apps/associations/models/association.py:55
+#: plana/apps/users/models/association_users.py:26
+#: plana/apps/users/models/user.py:42
 msgid "Associations"
 msgstr "Associations"
 
@@ -163,13 +164,21 @@ msgstr "Consentements RGPD"
 
 #: plana/apps/users/models/association_users.py:13
 #: plana/apps/users/models/gdpr_consent_users.py:13
-#: plana/apps/users/models/user.py:82
+#: plana/apps/users/models/user.py:83
 msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/users/models/association_users.py:17
+msgid "Role name"
+msgstr "Nom du poste"
+
+#: plana/apps/users/models/association_users.py:18
 msgid "Has office status"
 msgstr "Membre du bureau d'association"
+
+#: plana/apps/users/models/association_users.py:19
+msgid "Is president"
+msgstr "Dirige l'association"
 
 #: plana/apps/users/models/gdpr_consent_users.py:17
 msgid "Consent date"
@@ -183,19 +192,19 @@ msgstr "Consentement RGPD de l'utilisateur"
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
-#: plana/apps/users/models/user.py:33
+#: plana/apps/users/models/user.py:34
 msgid "First name"
 msgstr "Prénom"
 
-#: plana/apps/users/models/user.py:34
+#: plana/apps/users/models/user.py:35
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/models/user.py:37
+#: plana/apps/users/models/user.py:38
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:83
+#: plana/apps/users/models/user.py:84
 msgid "Users"
 msgstr "Utilisateurs"
 

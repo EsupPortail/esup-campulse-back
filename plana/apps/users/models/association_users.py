@@ -14,7 +14,9 @@ class AssociationUsers(models.Model):
     association = models.ForeignKey(
         Association, verbose_name=_("Association"), on_delete=models.CASCADE
     )
+    role_name = models.CharField(_("Role name"), max_length=150, default="", null=True)
     has_office_status = models.BooleanField(_("Has office status"), default=False)
+    is_president = models.BooleanField(_("Is president"), default=False)
 
     def __str__(self):
         return f"{self.user}, {self.association}, office : {self.has_office_status}"
