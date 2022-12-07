@@ -122,10 +122,11 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_association(self):
         # A manager user can execute this request.
-        response = self.manager_client.get("/users/associations/2")
+        user_id = 2
+        response = self.manager_client.get(f"/users/associations/{user_id}")
         first_user_association_id = response.data[0]["id"]
         response_delete = self.manager_client.delete(
-            "/users/associations/" + str(first_user_association_id)
+            f"/users/associations/{user_id}/{str(first_user_association_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -162,3 +163,13 @@ class UserViewsManagerTests(TestCase):
         groups = list(user.groups.all().values("id", "name"))
         get_groups = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
+
+    def test_manager_delete_user_group(self):
+        # A manager user can execute this request.
+        user_id = 2
+        response = self.manager_client.get(f"/users/groups/{user_id}")
+        first_user_group_id = response.data[0]["id"]
+        response_delete = self.manager_client.delete(
+            f"/users/associations/{user_id}/{str(first_user_group_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)

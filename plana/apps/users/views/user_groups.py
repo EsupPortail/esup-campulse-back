@@ -66,12 +66,9 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
     GET : Lists all groups linked to a user (manager).
     """
 
-    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        queryset = Group.objects.all()
-        return queryset
+    serializer_class = GroupSerializer
 
     def get(self, request, *args, **kwargs):
         if request.user.is_student:
@@ -84,3 +81,24 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
                 self.get_queryset().filter(user=kwargs["pk"]), many=True
             )
         return response.Response(serializer.data)
+
+
+class UserGroupsDestroy(generics.DestroyAPIView):
+    """
+    DELETE : Deletes a group linked to a user (manager).
+    """
+
+    queryset = Group.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = GroupSerializer
+
+    def delete(self, request, *args, **kwargs):
+        if request.user.is_student:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        else:
+            user = User.objects.get(id=kwargs["user_id"])
+            user.groups.remove(kwargs["group_id"])
+            return response.Response({}, status=status.HTTP_204_NO_CONTENT)

@@ -59,9 +59,11 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         return super(AssociationUsersListCreate, self).create(request, *args, **kwargs)
 
 
-class AssociationUsersRetrieveDestroy(generics.RetrieveDestroyAPIView):
+class AssociationUsersRetrieve(generics.RetrieveAPIView):
     """
     GET : Lists all associations linked to a user (manager).
+
+    DELETE : Deletes an association linked to a user (manager).
     """
 
     serializer_class = AssociationUsersSerializer
@@ -80,6 +82,18 @@ class AssociationUsersRetrieveDestroy(generics.RetrieveDestroyAPIView):
             )
         return response.Response(serializer.data)
 
+
+class AssociationUsersDestroy(generics.DestroyAPIView):
+    """
+    GET : Lists all associations linked to a user (manager).
+
+    DELETE : Deletes an association linked to a user (manager).
+    """
+
+    serializer_class = AssociationUsersSerializer
+    queryset = AssociationUsers.objects.all()
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request, *args, **kwargs):
         if request.user.is_student:
             return response.Response(
@@ -87,5 +101,7 @@ class AssociationUsersRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
         else:
-            self.destroy(request, *args, **kwargs)
+            AssociationUsers.objects.filter(
+                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
+            ).delete()
             return response.Response({}, status=status.HTTP_204_NO_CONTENT)

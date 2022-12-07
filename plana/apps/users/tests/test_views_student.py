@@ -156,8 +156,9 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_delete_user_association(self):
         # A student user can't execute this request.
-        asso_user = AssociationUsers.objects.get(user_id=2)
-        response = self.client.delete(f"/users/associations/{asso_user.id}")
+        user_id = 2
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response = self.client.delete(f"/users/associations/{user_id}/{asso_user.id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_consents_user_list(self):
@@ -208,6 +209,12 @@ class UserViewsStudentTests(TestCase):
         groups = list(user.groups.all().values("id", "name"))
         get_groups = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
+
+    def test_student_delete_user_group(self):
+        # A student user can't execute this request.
+        user_id = 2
+        response = self.client.delete(f"/users/groups/{user_id}/5")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_link_validated_user_to_groups(self):
         # Groups of admin-validated accounts can't be updated

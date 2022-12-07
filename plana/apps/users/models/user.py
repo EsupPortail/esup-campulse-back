@@ -21,7 +21,7 @@ class User(AbstractUser):
         - is_active
     """
 
-    # TODO Renommer les groupes (et fixtures).
+    # TODO Renommer les groupes et fixtures (impossible de récupérer les modèles à partir de ce point).
     _groups = {
         "Gestionnaire SVU": "svu_manager",
         "Gestionnaire Crous": "crous_manager",

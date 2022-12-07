@@ -3,13 +3,18 @@ from django.urls import include, path, re_path
 
 from .views.association_users import (
     AssociationUsersListCreate,
-    AssociationUsersRetrieveDestroy,
+    AssociationUsersRetrieve,
+    AssociationUsersDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 
 from .views.user import PasswordResetConfirm, UserDetailsView, UserList, UserDetail
-from .views.user_groups import UserGroupsListCreate, UserGroupsRetrieve
+from .views.user_groups import (
+    UserGroupsListCreate,
+    UserGroupsRetrieve,
+    UserGroupsDestroy,
+)
 
 urlpatterns = [
     path(
@@ -19,8 +24,13 @@ urlpatterns = [
     ),
     path(
         "associations/<int:pk>",
-        AssociationUsersRetrieveDestroy.as_view(),
-        name="user_associations_retrieve_destroy",
+        AssociationUsersRetrieve.as_view(),
+        name="user_associations_retrieve",
+    ),
+    path(
+        "associations/<int:user_id>/<int:association_id>",
+        AssociationUsersDestroy.as_view(),
+        name="user_associations_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
@@ -46,7 +56,12 @@ urlpatterns = [
     path(
         "groups/<int:pk>",
         UserGroupsRetrieve.as_view(),
-        name="user_groups_retrieve_destroy",
+        name="user_groups_retrieve",
+    ),
+    path(
+        "groups/<int:user_id>/<int:group_id>",
+        UserGroupsDestroy.as_view(),
+        name="user_groups_destroy",
     ),
 ]
 

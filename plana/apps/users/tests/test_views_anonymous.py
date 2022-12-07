@@ -82,8 +82,11 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_delete_user_association(self):
         # An anonymous user can't execute this request
-        asso_user = AssociationUsers.objects.get(user_id=2)
-        response = self.anonymous_client.delete(f"/users/associations/{asso_user.id}")
+        user_id = 2
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response = self.anonymous_client.delete(
+            f"/users/associations/{user_id}/{asso_user.id}"
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_get_consents_user_list(self):
@@ -116,6 +119,12 @@ class UserViewsAnonymousTests(TestCase):
         self.assertEqual(
             response_unauthorized.status_code, status.HTTP_401_UNAUTHORIZED
         )
+
+    def test_anonymous_delete_user_group(self):
+        # A student user can't execute this request.
+        user_id = 2
+        response = self.client.delete(f"/users/groups/{user_id}/5")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_link_user_to_groups(self):
         # Authentication is not needed to access view
