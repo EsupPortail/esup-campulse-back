@@ -52,6 +52,12 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_anonymous_delete_user_detail(self):
+        # A student user cannot execute this request
+        user_id = 2
+        response = self.client.delete(f"/users/{user_id}")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_student_put_user_detail_unexisting(self):
         # Request should return an error 404 no matter which role is trying to execute it
         response_student = self.client.put("/users/2", {"username": "Aurevoirg"})

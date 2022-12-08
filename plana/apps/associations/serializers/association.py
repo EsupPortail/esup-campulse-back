@@ -28,7 +28,7 @@ class AssociationListSerializer(serializers.ModelSerializer):
         ]
 
 
-class AssociationDetailSerializer(serializers.ModelSerializer):
+class AssociationRetrieveSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()

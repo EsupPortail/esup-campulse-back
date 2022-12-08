@@ -1,5 +1,6 @@
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -93,6 +94,20 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(user_cas.username, "PatriciaCAS")
 
+    def test_manager_delete_user_detail(self):
+        # A manager can delete a user.
+        user_id = 2
+        response = self.manager_client.delete(f"/users/{user_id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist) as ctx:
+            User.objects.get(pk=user_id)
+
+        # A manager cannot delete another manager.
+        managers_ids = [1, 4, 5]
+        for manager_id in managers_ids:
+            response = self.manager_client.delete(f"/users/{manager_id}")
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_manager_put_user_detail_unexisting(self):
         # Request should return an error 404 no matter which role is trying to execute it
         response_manager = self.manager_client.put(
@@ -135,6 +150,10 @@ class UserViewsManagerTests(TestCase):
             f"/users/associations/{user_id}/{str(first_user_association_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist) as ctx:
+            AssociationUsers.objects.get(
+                user_id=user_id, association_id=first_user_association_id
+            )
 
     def test_manager_get_consents_user_list(self):
         # A manager user can execute this request

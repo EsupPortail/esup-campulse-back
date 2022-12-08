@@ -37,6 +37,12 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_delete_user_detail(self):
+        # An anonymous user can't execute this request
+        user_id = 2
+        response = self.anonymous_client.delete(f"/users/{user_id}")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_anonymous_put_user_detail_404(self):
         # Request should return an error 404 no matter which role is trying to execute it
         response_anonymous = self.anonymous_client.put(

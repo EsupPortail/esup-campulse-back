@@ -3,7 +3,7 @@ from rest_framework import generics
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
     AssociationListSerializer,
-    AssociationDetailSerializer,
+    AssociationRetrieveSerializer,
 )
 
 
@@ -16,10 +16,10 @@ class AssociationList(generics.ListAPIView):
     queryset = Association.objects.filter(is_enabled=True).order_by("name")
 
 
-class AssociationDetail(generics.RetrieveAPIView):
+class AssociationRetrieve(generics.RetrieveAPIView):
     """
     GET : Lists an association with all its details.
     """
 
-    serializer_class = AssociationDetailSerializer
+    serializer_class = AssociationRetrieveSerializer
     queryset = Association.objects.all()

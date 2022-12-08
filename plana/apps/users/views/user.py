@@ -52,7 +52,7 @@ class UserList(generics.ListAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
-class UserDetail(generics.RetrieveUpdateAPIView):
+class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -61,7 +61,7 @@ class UserDetail(generics.RetrieveUpdateAPIView):
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated]
-        return super(UserDetail, self).get_permissions()
+        return super(UserRetrieveUpdateDestroy, self).get_permissions()
 
     def get(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
@@ -86,12 +86,32 @@ class UserDetail(generics.RetrieveUpdateAPIView):
                     "last_name",
                 ]:
                     request.data.pop(restricted_field, False)
+            return self.partial_update(request, *args, **kwargs)
         else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            user = User.objects.get(id=kwargs["pk"])
+            if (
+                (user.is_superuser == True)
+                or user.is_svu_manager
+                or user.is_crous_manager
+            ):
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            else:
+                return self.destroy(request, *args, **kwargs)
+        else:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
@@ -103,7 +123,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
-class UserDetailsView(DJRestAuthUserDetailsView):
+class UserAuthView(DJRestAuthUserDetailsView):
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 

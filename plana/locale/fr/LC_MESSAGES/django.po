@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-08 14:31+0100\n"
+"POT-Creation-Date: 2022-12-08 15:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -255,7 +255,8 @@ msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 #: plana/apps/users/views/association_users.py:105
 #: plana/apps/users/views/gdpr_consent_users.py:59
 #: plana/apps/users/views/user.py:49 plana/apps/users/views/user.py:71
-#: plana/apps/users/views/user.py:91 plana/apps/users/views/user_groups.py:80
+#: plana/apps/users/views/user.py:92 plana/apps/users/views/user.py:101
+#: plana/apps/users/views/user.py:108 plana/apps/users/views/user_groups.py:80
 #: plana/apps/users/views/user_groups.py:108
 msgid "Bad request."
 msgstr "Erreur de requête."

@@ -9,7 +9,12 @@ from .views.association_users import (
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 
-from .views.user import PasswordResetConfirm, UserDetailsView, UserList, UserDetail
+from .views.user import (
+    PasswordResetConfirm,
+    UserAuthView,
+    UserList,
+    UserRetrieveUpdateDestroy,
+)
 from .views.user_groups import (
     UserGroupsListCreate,
     UserGroupsRetrieve,
@@ -34,7 +39,7 @@ urlpatterns = [
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
-    path("auth/user/", UserDetailsView.as_view(), name="rest_user_details"),
+    path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         "auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
@@ -51,7 +56,7 @@ urlpatterns = [
         name="user_consents_retrieve",
     ),
     path("", UserList.as_view(), name="user_list"),
-    path("<int:pk>", UserDetail.as_view(), name="user_detail"),
+    path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
     path(
         "groups/<int:pk>",
