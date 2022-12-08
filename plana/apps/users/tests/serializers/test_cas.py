@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.utils.translation import ugettext_lazy as _
@@ -6,7 +8,6 @@ from allauth.socialaccount.models import SocialAccount
 from allauth_cas import CAS_PROVIDER_SESSION_KEY
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
-from unittest.mock import patch
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
@@ -69,7 +70,7 @@ class CASSerializerTest(TestCase):
     def test_validate_service_not_in_authorized_services_raises_validation_error(self):
         serializer = CASSerializer()
         with self.assertRaises(ValidationError) as ctx:
-            validated_service = serializer.validate_service("http://evil-service.url")
+            serializer.validate_service("http://evil-service.url")
         self.assertIn(
             "http://evil-service.url is not a valid service",
             ctx.exception.detail,
@@ -99,7 +100,7 @@ class CASSerializerTest(TestCase):
             data={"ticket": "CAS-Ticket-123", "service": "http://service.url"},
             context={"view": view, "request": request},
         )
-        with self.assertRaises(ValidationError) as ctx:
+        with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
 
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])

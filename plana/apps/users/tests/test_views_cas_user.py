@@ -37,8 +37,8 @@ class UserViewsTests(TestCase):
         self.response = self.cas_client.post(url_cas, data_cas)
         print(self.response.data)
 
-    """
     # TODO Rewrite user CAS test login.
+    """
     def test_cas_patch_auth_user_detail(self):
         # A CAS user can execute this request but cannot update some CAS fields from his account
         user_cas = User.objects.get(username="PatriciaCAS")

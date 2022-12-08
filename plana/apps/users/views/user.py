@@ -44,11 +44,10 @@ class UserList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             return self.list(request, *args, **kwargs)
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -61,16 +60,15 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated]
-        return super(UserRetrieveUpdateDestroy, self).get_permissions()
+        return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             return self.retrieve(request, *args, **kwargs)
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
@@ -87,17 +85,16 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ]:
                     request.data.pop(restricted_field, False)
             return self.partial_update(request, *args, **kwargs)
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             user = User.objects.get(id=kwargs["pk"])
             if (
-                (user.is_superuser == True)
+                (user.is_superuser is True)
                 or user.is_svu_manager
                 or user.is_crous_manager
             ):
@@ -105,8 +102,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     {"error": _("Bad request.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-            else:
-                return self.destroy(request, *args, **kwargs)
+            return self.destroy(request, *args, **kwargs)
         else:
             return response.Response(
                 {"error": _("Bad request.")},
@@ -119,7 +115,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
     POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
     """
 
-    ...
+    pass
 
 
 @extend_schema(methods=["PUT"], exclude=True)

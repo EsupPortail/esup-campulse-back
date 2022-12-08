@@ -4,7 +4,6 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-from django.utils.translation import gettext_lazy as _
 
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
@@ -32,7 +31,7 @@ class CASLogout(LogoutView):
     serializer_class = CASSerializer
 
     # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
-    ...
+    pass
 
 
 # login = CASLoginView.adapter_view(CASAdapter)
@@ -62,5 +61,4 @@ def cas_verify(request):  # pragma: no cover
     )
     if response.ok:
         return JsonResponse(response.json())
-    else:
-        print(response)
+    print(response)

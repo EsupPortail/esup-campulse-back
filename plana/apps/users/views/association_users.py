@@ -32,7 +32,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
-        return super(AssociationUsersListCreate, self).get_permissions()
+        return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -56,7 +56,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        return super(AssociationUsersListCreate, self).create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
@@ -100,8 +100,7 @@ class AssociationUsersDestroy(generics.DestroyAPIView):
                 user_id=kwargs["user_id"], association_id=kwargs["association_id"]
             ).delete()
             return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )

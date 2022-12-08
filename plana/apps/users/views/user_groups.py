@@ -26,14 +26,14 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
-        return super(UserGroupsListCreate, self).get_permissions()
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "GET":
             self.serializer_class = GroupSerializer
         else:
             self.serializer_class = UserGroupsSerializer
-        return super(UserGroupsListCreate, self).get_serializer_class()
+        return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
@@ -46,7 +46,7 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
 
         groups = (
             request.data["groups"]
-            if type(request.data["groups"]) == list
+            if isinstance(request.data["groups"], list)
             else list(map(int, request.data["groups"].split(",")))
         )
         for id_group in groups:
@@ -98,11 +98,10 @@ class UserGroupsDestroy(generics.DestroyAPIView):
             if user.groups.count() > 1:
                 user.groups.remove(kwargs["group_id"])
                 return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return response.Response(
-                    {"error": _("User should have at least one group.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         else:
             return response.Response(
                 {"error": _("Bad request.")},

@@ -37,7 +37,7 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        return super(UserConsentsListCreate, self).create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
 class UserConsentsRetrieve(generics.RetrieveAPIView):

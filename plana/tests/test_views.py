@@ -11,4 +11,4 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = response.content.decode("utf-8")
 
-        # self.assertIn("", content) #FIXME wait for content to be tested
+        # self.assertIn("", content) # wait for content to be tested

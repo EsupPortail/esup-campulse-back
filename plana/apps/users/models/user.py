@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -21,7 +21,7 @@ class User(AbstractUser):
         - is_active
     """
 
-    # TODO Renommer les groupes et fixtures (impossible de récupérer les modèles à partir de ce point).
+    # TODO Rename groups and fixtures (can't retrieve models here).
     _groups = {
         "Gestionnaire SVU": "svu_manager",
         "Gestionnaire Crous": "crous_manager",
@@ -37,7 +37,7 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
-    # TODO : Pourquoi y'a ce champ pour les assos et pas pour le GDPR ???
+    # TODO : Add this field for GDPR Consents.
     association_members = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
     )
@@ -88,10 +88,10 @@ class User(AbstractUser):
 
 # Dynamically create cached properties to check the user's presence in a group
 # Based on https://bugs.python.org/issue38517
-for code, name in User._groups.items():
+for group_code, name in User._groups.items():
 
     @cached_property
-    def is_in_group(self, code=code):
+    def is_in_group(self, code=group_code):
         return self.has_groups(code)
 
     attr_name = f"is_{name}"

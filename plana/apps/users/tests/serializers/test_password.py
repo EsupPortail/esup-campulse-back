@@ -89,9 +89,7 @@ class TestCASUserPasswordChangeSerializer(TestCase):
             email="georges-cas@unistra.fr",
             is_validated_by_admin=True,
         )
-        social_account = SocialAccount.objects.create(
-            provider="cas", uid="GeorgesCAS", user_id=user.id
-        )
+        SocialAccount.objects.create(provider="cas", uid="GeorgesCAS", user_id=user.id)
 
         request = APIRequestFactory().post({}, format="json")
         force_authenticate(request, user)
@@ -124,9 +122,7 @@ class TestCASUserPasswordResetSerializer(TestCase):
             email="georges-cas@unistra.fr",
             is_validated_by_admin=True,
         )
-        social_account = SocialAccount.objects.create(
-            provider="cas", uid="GeorgesCAS", user_id=user.id
-        )
+        SocialAccount.objects.create(provider="cas", uid="GeorgesCAS", user_id=user.id)
 
         request = APIRequestFactory().post({}, format="json")
         request.data = {"email": "georges-cas@unistra.fr"}

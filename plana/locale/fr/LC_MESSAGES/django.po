@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-08 15:24+0100\n"
+"POT-Creation-Date: 2022-12-08 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -217,7 +217,7 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:56
-#: plana/apps/users/tests/serializers/test_cas.py:168
+#: plana/apps/users/tests/serializers/test_cas.py:169
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
@@ -231,7 +231,7 @@ msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
 #: plana/apps/users/serializers/cas.py:112
-#: plana/apps/users/tests/serializers/test_cas.py:42
+#: plana/apps/users/tests/serializers/test_cas.py:43
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
@@ -239,7 +239,7 @@ msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:129
+#: plana/apps/users/serializers/user.py:128
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -252,12 +252,12 @@ msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 
 #: plana/apps/users/views/association_users.py:80
-#: plana/apps/users/views/association_users.py:105
+#: plana/apps/users/views/association_users.py:104
 #: plana/apps/users/views/gdpr_consent_users.py:59
-#: plana/apps/users/views/user.py:49 plana/apps/users/views/user.py:71
-#: plana/apps/users/views/user.py:92 plana/apps/users/views/user.py:101
+#: plana/apps/users/views/user.py:48 plana/apps/users/views/user.py:69
+#: plana/apps/users/views/user.py:89 plana/apps/users/views/user.py:102
 #: plana/apps/users/views/user.py:108 plana/apps/users/views/user_groups.py:80
-#: plana/apps/users/views/user_groups.py:108
+#: plana/apps/users/views/user_groups.py:107
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -273,7 +273,7 @@ msgstr "Les groupes de cet utilisateur ne peuvent être édités."
 msgid "Group not found."
 msgstr "Groupe non trouvé."
 
-#: plana/apps/users/views/user_groups.py:103
+#: plana/apps/users/views/user_groups.py:102
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 

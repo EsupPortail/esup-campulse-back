@@ -71,10 +71,10 @@ class CASSerializer(LoginSerializer):
             user = User.objects.get(email=attrs["user"].email)
             try:
                 user.groups.all()[0]
-            except IndexError:
+            except IndexError as exc:
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")
-                )
+                ) from exc
 
         return attrs
 

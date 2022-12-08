@@ -90,12 +90,11 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to change the password of a CAS account.")]}
                 )
-            else:
-                self.set_password_form.save()
-                if not self.logout_on_password_change:
-                    from django.contrib.auth import update_session_auth_hash
+            self.set_password_form.save()
+            if not self.logout_on_password_change:
+                from django.contrib.auth import update_session_auth_hash
 
-                    update_session_auth_hash(self.request, self.user)
+                update_session_auth_hash(self.request, self.user)
         except ObjectDoesNotExist:
             ...
 
@@ -128,7 +127,6 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to reset the password of a CAS account.")]}
                 )
-            else:
-                self.reset_form.save(**opts)
+            self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             ...

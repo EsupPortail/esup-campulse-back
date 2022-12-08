@@ -89,9 +89,7 @@ class UserViewsManagerTests(TestCase):
 
         # Some CAS user fields cannot be modified
         user_cas = User.objects.get(username="PatriciaCAS")
-        response = self.manager_client.patch(
-            f"/users/{user_cas.pk}", {"username": "JesuisCASg"}
-        )
+        self.manager_client.patch(f"/users/{user_cas.pk}", {"username": "JesuisCASg"})
         self.assertEqual(user_cas.username, "PatriciaCAS")
 
     def test_manager_delete_user_detail(self):
@@ -99,7 +97,7 @@ class UserViewsManagerTests(TestCase):
         user_id = 2
         response = self.manager_client.delete(f"/users/{user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        with self.assertRaises(ObjectDoesNotExist) as ctx:
+        with self.assertRaises(ObjectDoesNotExist):
             User.objects.get(pk=user_id)
 
         # A manager cannot delete another manager.
@@ -150,7 +148,7 @@ class UserViewsManagerTests(TestCase):
             f"/users/associations/{user_id}/{str(first_user_association_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
-        with self.assertRaises(ObjectDoesNotExist) as ctx:
+        with self.assertRaises(ObjectDoesNotExist):
             AssociationUsers.objects.get(
                 user_id=user_id, association_id=first_user_association_id
             )
