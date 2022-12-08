@@ -100,5 +100,11 @@ class UserGroupsDestroy(generics.DestroyAPIView):
             )
         else:
             user = User.objects.get(id=kwargs["user_id"])
-            user.groups.remove(kwargs["group_id"])
-            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+            if user.groups.count() > 1:
+                user.groups.remove(kwargs["group_id"])
+                return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return response.Response(
+                    {"error": _("User should have at least one group.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )

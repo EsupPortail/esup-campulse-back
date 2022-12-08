@@ -166,10 +166,19 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_group(self):
         # A manager user can execute this request.
-        user_id = 2
+        user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
         first_user_group_id = response.data[0]["id"]
-        response_delete = self.manager_client.delete(
+        second_user_group_id = response.data[1]["id"]
+        first_response_delete = self.manager_client.delete(
             f"/users/groups/{user_id}/{str(first_user_group_id)}"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        # A user should have at least one group.
+        second_response_delete = self.manager_client.delete(
+            f"/users/groups/{user_id}/{str(second_user_group_id)}"
+        )
+        self.assertEqual(
+            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
+        )
