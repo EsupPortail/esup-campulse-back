@@ -62,3 +62,4 @@ def cas_verify(request):  # pragma: no cover
     if response.ok:
         return JsonResponse(response.json())
     print(response)
+    return JsonResponse({})

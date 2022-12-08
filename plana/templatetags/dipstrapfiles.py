@@ -12,8 +12,7 @@ class DipstrapNode(StaticNode):
         static_dipstrap = getattr(settings, "DIPSTRAP_STATIC_URL", "")
         if static_dipstrap:
             return urljoin(PrefixNode.handle_simple("DIPSTRAP_STATIC_URL"), path)
-        else:
-            return super(DipstrapNode, cls).handle_simple(path)
+        return super(DipstrapNode, cls).handle_simple(path)
 
 
 @register.tag(name="dipstrap")

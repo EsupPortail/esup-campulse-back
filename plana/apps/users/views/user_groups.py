@@ -102,8 +102,7 @@ class UserGroupsDestroy(generics.DestroyAPIView):
                 {"error": _("User should have at least one group.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )

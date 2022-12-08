@@ -37,7 +37,7 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
-    # TODO : Add this field for GDPR Consents.
+    # TODO Add this field for GDPR Consents.
     association_members = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
     )
