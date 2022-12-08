@@ -61,6 +61,12 @@ class UserViewsManagerTests(TestCase):
         content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
 
+        # Get only users not validated by an admin.
+        response_manager = self.manager_client.get(
+            "/users/?is_validated_by_admin=false"
+        )
+        self.assertEqual(response_manager.data[0]["is_validated_by_admin"], False)
+
     def test_manager_get_user_detail(self):
         # A manager user can execute this request
         response_manager = self.manager_client.get("/users/2")
