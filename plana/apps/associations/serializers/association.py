@@ -6,6 +6,7 @@ from plana.apps.associations.serializers.institution import InstitutionSerialize
 from plana.apps.associations.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
+from plana.apps.associations.serializers.social_network import SocialNetworkSerializer
 
 
 class AssociationListSerializer(serializers.ModelSerializer):
@@ -31,6 +32,7 @@ class AssociationDetailSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()
+    social_networks = SocialNetworkSerializer(many=True)
 
     class Meta:
         model = Association
