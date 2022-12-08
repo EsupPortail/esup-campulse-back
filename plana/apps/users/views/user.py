@@ -1,7 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiParameter,
+)
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -9,10 +14,32 @@ from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_validated_by_admin",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members not validated by an admin",
+            )
+        ]
+    )
+)
 class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all().order_by("id")
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = User.objects.all().order_by("id")
+        is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
+        if is_validated_by_admin is not None:
+            queryset = queryset.filter(
+                is_validated_by_admin={"true": True, "false": False}.get(
+                    is_validated_by_admin
+                )
+            )
+        return queryset
 
     def get(self, request, *args, **kwargs):
         if request.user.is_student:
