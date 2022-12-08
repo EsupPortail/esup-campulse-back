@@ -21,10 +21,10 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     serializer_class = AssociationUsersCreationSerializer
 
     def get_queryset(self):
-        if self.request.user.is_student:
-            queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
-        else:
+        if self.request.user.is_svu_manager or self.request.user.is_crous_manager:
             queryset = AssociationUsers.objects.all()
+        else:
+            queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
         return queryset
 
     def get_permissions(self):
@@ -71,14 +71,14 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_student:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            serializer = self.serializer_class(
+                self.queryset.filter(user_id=kwargs["pk"]), many=True
+            )
+        else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["pk"]), many=True
             )
         return response.Response(serializer.data)
 
@@ -95,13 +95,13 @@ class AssociationUsersDestroy(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
-        if request.user.is_student:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
             AssociationUsers.objects.filter(
                 user_id=kwargs["user_id"], association_id=kwargs["association_id"]
             ).delete()
             return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )

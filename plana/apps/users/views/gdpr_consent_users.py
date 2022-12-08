@@ -20,10 +20,10 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        if self.request.user.is_student:
-            queryset = GDPRConsentUsers.objects.filter(user_id=self.request.user.pk)
-        else:
+        if self.request.user.is_svu_manager or self.request.user.is_crous_manager:
             queryset = GDPRConsentUsers.objects.all()
+        else:
+            queryset = GDPRConsentUsers.objects.filter(user_id=self.request.user.pk)
         return queryset
 
     def post(self, request, *args, **kwargs):
@@ -50,13 +50,13 @@ class UserConsentsRetrieve(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_student:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            serializer = self.serializer_class(
+                self.queryset.filter(user_id=kwargs["pk"]), many=True
+            )
+        else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["pk"]), many=True
             )
         return response.Response(serializer.data)

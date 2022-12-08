@@ -71,14 +71,14 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
     serializer_class = GroupSerializer
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_student:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            serializer = self.serializer_class(
+                self.get_queryset().filter(user=kwargs["pk"]), many=True
+            )
+        else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
-            serializer = self.serializer_class(
-                self.get_queryset().filter(user=kwargs["pk"]), many=True
             )
         return response.Response(serializer.data)
 
@@ -93,12 +93,7 @@ class UserGroupsDestroy(generics.DestroyAPIView):
     serializer_class = GroupSerializer
 
     def delete(self, request, *args, **kwargs):
-        if request.user.is_student:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
             user = User.objects.get(id=kwargs["user_id"])
             if user.groups.count() > 1:
                 user.groups.remove(kwargs["group_id"])
@@ -108,3 +103,8 @@ class UserGroupsDestroy(generics.DestroyAPIView):
                     {"error": _("User should have at least one group.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        else:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )

@@ -42,13 +42,13 @@ class UserList(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_student:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            return self.list(request, *args, **kwargs)
+        else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        else:
-            return self.list(request, *args, **kwargs)
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -64,24 +64,19 @@ class UserDetail(generics.RetrieveUpdateAPIView):
         return super(UserDetail, self).get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_student:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            return self.retrieve(request, *args, **kwargs)
+        else:
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        else:
-            return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if request.user.is_student:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        else:
+        if request.user.is_svu_manager or request.user.is_crous_manager:
             user = User.objects.get(id=kwargs["pk"])
             if user.get_cas_user():
                 for restricted_field in [
@@ -91,7 +86,12 @@ class UserDetail(generics.RetrieveUpdateAPIView):
                     "last_name",
                 ]:
                     request.data.pop(restricted_field, False)
-            return self.partial_update(request, *args, **kwargs)
+        else:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return self.partial_update(request, *args, **kwargs)
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
