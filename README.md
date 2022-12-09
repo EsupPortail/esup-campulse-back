@@ -2,11 +2,6 @@
 
 ## Health
 
-### Master
-
-[![pipeline status](https://git.unistra.fr/di/plan_a/plana/badges/master/pipeline.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/master)
-[![coverage report](https://git.unistra.fr/di/plan_a/plana/badges/master/coverage.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/master)
-
 ### Develop
 
 [![pipeline status](https://git.unistra.fr/di/plan_a/plana/badges/develop/pipeline.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/develop)
