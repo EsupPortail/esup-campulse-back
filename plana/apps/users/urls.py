@@ -31,7 +31,7 @@ urlpatterns = [
         name="user_associations_list_create",
     ),
     path(
-        "associations/<int:pk>",
+        "associations/<int:user_id>",
         AssociationUsersRetrieve.as_view(),
         name="user_associations_retrieve",
     ),
@@ -54,7 +54,7 @@ urlpatterns = [
         "consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"
     ),
     path(
-        "consents/<int:pk>",
+        "consents/<int:user_id>",
         UserConsentsRetrieve.as_view(),
         name="user_consents_retrieve",
     ),
@@ -62,7 +62,7 @@ urlpatterns = [
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
     path(
-        "groups/<int:pk>",
+        "groups/<int:user_id>",
         UserGroupsRetrieve.as_view(),
         name="user_groups_retrieve",
     ),

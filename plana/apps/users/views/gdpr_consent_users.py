@@ -55,7 +55,7 @@ class UserConsentsRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["pk"]), many=True
+                self.queryset.filter(user_id=kwargs["user_id"]), many=True
             )
         else:
             return response.Response(

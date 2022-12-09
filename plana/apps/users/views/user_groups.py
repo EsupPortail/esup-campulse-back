@@ -76,7 +76,7 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             serializer = self.serializer_class(
-                self.get_queryset().filter(user=kwargs["pk"]), many=True
+                self.get_queryset().filter(user=kwargs["user_id"]), many=True
             )
         else:
             return response.Response(

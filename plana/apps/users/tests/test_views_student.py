@@ -153,7 +153,7 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_associations_user_detail(self):
         """
-        GET /users/associations/{id}
+        GET /users/associations/{user_id}
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get("/users/associations/2")
@@ -255,7 +255,7 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_consents_user_detail(self):
         """
-        GET /users/consents/{id}
+        GET /users/consents/{user_id}
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get("/users/consents/2")
@@ -300,7 +300,7 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_user_groups_detail(self):
         """
-        GET /users/groups/{id}
+        GET /users/groups/{user_id}
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get("/users/groups/2")

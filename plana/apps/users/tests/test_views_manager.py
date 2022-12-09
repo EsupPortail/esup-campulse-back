@@ -156,7 +156,7 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_associations_user_detail(self):
         """
-        GET /users/associations/{id}
+        GET /users/associations/{user_id}
         - A manager user can execute this request.
         """
         response_manager = self.manager_client.get("/users/associations/2")
@@ -222,7 +222,7 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_consents_user_detail(self):
         """
-        GET /users/consents/{id}
+        GET /users/consents/{user_id}
         - A manager user can execute this request.
         - We get the same amount of consents through the model and through the view.
         """
@@ -249,7 +249,7 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_user_groups_detail(self):
         """
-        GET /users/groups/{id}
+        GET /users/groups/{user_id}
         - A manager user can execute this request.
         - We get the same amount of groups links through the model and through the view.
         """

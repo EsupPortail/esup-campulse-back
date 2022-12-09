@@ -99,7 +99,7 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_associations_user_detail(self):
         """
-        GET /users/associations/{id}
+        GET /users/associations/{user_id}
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/associations/2")
@@ -165,7 +165,7 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_consents_user_list(self):
         """
-        GET /users/consents/{id}
+        GET /users/consents/{user_id}
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/consents/2")
@@ -192,7 +192,7 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_user_groups_detail(self):
         """
-        GET /users/groups/{id}
+        GET /users/groups/{user_id}
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/groups/2")
