@@ -154,6 +154,32 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
+    def test_manager_post_association_user(self):
+        """
+        POST /users/associations/
+        - A manager user can add an association to a validated student.
+        - A manager user can add an association to a non-validated student.
+        """
+        response_manager = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": "test@pas-unistra.fr",
+                "association": 2,
+                "has_office_status": False,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        response_manager = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": "prenom.nom@adressemail.fr",
+                "association": 1,
+                "has_office_status": False,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
     def test_manager_get_associations_user_detail(self):
         """
         GET /users/associations/{user_id}
@@ -246,6 +272,24 @@ class UserViewsManagerTests(TestCase):
         groups = list(user.groups.all().values("id", "name"))
         get_groups = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
+
+    def test_manager_post_group_user(self):
+        """
+        POST /users/group/
+        - A manager user can add a group to a validated student.
+        - A manager user can add a group to a non-validated student.
+        """
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": "test@pas-unistra.fr", "groups": [1, 2]},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
     def test_manager_get_user_groups_detail(self):
         """

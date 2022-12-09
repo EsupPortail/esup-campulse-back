@@ -41,7 +41,11 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=request.data["username"])
 
-        if user.is_validated_by_admin:
+        if (request.user.is_anonymous and user.is_validated_by_admin) or (
+            not request.user.is_anonymous
+            and not request.user.is_svu_manager
+            and not request.user.is_crous_manager
+        ):
             return response.Response(
                 {"error": _("Groups for this user cannot be edited.")},
                 status=status.HTTP_400_BAD_REQUEST,

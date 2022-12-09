@@ -107,9 +107,6 @@ class UserViewsStudentTests(TestCase):
         """
         POST /users/associations/
         - An admin-validated student user cannot execute this request.
-        - A non-admin-validated student user can execute this request.
-        - A user cannot be added twice in the same association.
-        - A user cannot be added in a non-existing association.
         """
         response_student = self.student_client.post(
             "/users/associations/",
@@ -120,36 +117,6 @@ class UserViewsStudentTests(TestCase):
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response = self.client.post(
-            "/users/associations/",
-            {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 1,
-                "has_office_status": False,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        response = self.client.post(
-            "/users/associations/",
-            {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 1,
-                "has_office_status": False,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response = self.student_client.post(
-            "/users/associations/",
-            {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 99,
-                "has_office_status": False,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_get_associations_user_detail(self):
         """
@@ -279,24 +246,11 @@ class UserViewsStudentTests(TestCase):
         """
         POST /users/groups/
         - An admin-validated student user cannot execute this request.
-        - A non-admin-validated student user can execute this request.
-        - A user cannot be added in a non-existing group.
         """
         response_student = self.student_client.post(
             "/users/groups/", {"username": "test@pas-unistra.fr", "groups": [1, 2]}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response = self.client.post(
-            "/users/groups/",
-            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        response = self.client.post(
-            "/users/groups/", {"username": "prenom.nom@adressemail.fr", "groups": [66]}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_get_user_groups_detail(self):
         """
