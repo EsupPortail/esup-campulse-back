@@ -48,8 +48,5 @@ htmlcov/
 # JOE
 *~
 
-# OpenAPI
-schema.yml
-
 # pylint
 pylint.json
