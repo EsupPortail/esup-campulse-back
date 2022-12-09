@@ -1,3 +1,6 @@
+"""
+List of URLs linked to operations that can be done on users and users related models.
+"""
 from django.conf import settings
 from django.urls import include, path, re_path
 

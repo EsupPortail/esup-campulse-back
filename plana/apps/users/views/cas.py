@@ -1,3 +1,6 @@
+"""
+Special serializer to interact with CAS.
+"""
 import requests
 
 from django.conf import settings
@@ -24,6 +27,7 @@ class CASLogin(SocialLoginView):
 class CASLogout(LogoutView):
     """
     GET : Logs out a user authenticated with CAS out.
+
     POST : Logs out a user authenticated with CAS out.
     """
 
@@ -39,6 +43,9 @@ class CASLogout(LogoutView):
 
 
 def cas_test(request):  # pragma: no cover
+    """
+    Debug function to test the CAS server.
+    """
     service_url = reverse("cas_verify")
     service_url = urlencode({"service": request.build_absolute_uri(service_url)})
     redirect_url = f"{settings.CAS_SERVER}login?{service_url}"
@@ -46,6 +53,9 @@ def cas_test(request):  # pragma: no cover
 
 
 def cas_verify(request):  # pragma: no cover
+    """
+    Debug function to test the ticket.
+    """
     service_url = request.build_absolute_uri(reverse("cas_verify"))
     ticket = request.GET.get("ticket")
 

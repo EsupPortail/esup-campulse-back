@@ -1,3 +1,6 @@
+"""
+List of tests done on users views with a student user.
+"""
 import json
 
 from django.test import TestCase, Client
@@ -11,6 +14,10 @@ from plana.apps.users.models.user import User
 
 
 class UserViewsStudentTests(TestCase):
+    """
+    Main tests class.
+    """
+
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
@@ -27,95 +34,84 @@ class UserViewsStudentTests(TestCase):
     ]
 
     def setUp(self):
-        self.client = Client()
+        """
+        Start a default client used on all tests, retrieves a student user.
+        """
+        self.student_client = Client()
         url = reverse("rest_login")
         data = {
             "username": "test@pas-unistra.fr",
             "password": "motdepasse",
         }
-        self.response = self.client.post(url, data)
+        self.response = self.student_client.post(url, data)
 
     def test_student_get_users_list(self):
-        # A student user cannot execute this request
-        response = self.client.get("/users/")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        """
+        GET /users/
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get("/users/")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_user_detail(self):
-        # A student user cannot execute this request
-        response = self.client.get("/users/2")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        """
+        GET /users/{id}
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get("/users/2")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_user_detail(self):
-        # A student user cannot execute this request
-        response_student = self.client.patch(
+        """
+        PATCH /users/{id}
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.patch(
             "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_delete_user_detail(self):
-        # A student user cannot execute this request
+        """
+        DELETE /users/{id}
+        - A student user cannot execute this request.
+        """
         user_id = 2
-        response = self.client.delete(f"/users/{user_id}")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response_student = self.student_client.delete(f"/users/{user_id}")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_put_user_detail_unexisting(self):
-        # Request should return an error 404 no matter which role is trying to execute it
-        response_student = self.client.put("/users/2", {"username": "Aurevoirg"})
+    def test_student_put_user_detail(self):
+        """
+        PUT /users/{id}
+        - Request should return an error no matter which role is trying to execute it.
+        """
+        response_student = self.student_client.put(
+            "/users/2", {"username": "Aurevoirg"}
+        )
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_student_get_auth_user_detail(self):
-        # An authenticated user can get execute this request
-        response = self.client.get("/users/auth/user/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # An authenticated user get correct data when executing the request
-        user = User.objects.get(username="test@pas-unistra.fr")
-        user_data = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(user_data["username"], user.username)
-
-    def test_student_patch_auth_user_detail(self):
-        # PUT request is never accessible for authenticated users, returns 404
-        response = self.client.put("/users/auth/user/", {"username": "Alorsçavag"})
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-        # A student user cannot update his validation status
-        user_not_valid = User.objects.get(username="test@pas-unistra.fr")
-        response = self.client.patch(
-            "/users/auth/user/",
-            data={"is_validated_by_admin": False},
-            content_type="application/json",
-        )
-        self.assertTrue(user_not_valid.is_validated_by_admin)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # A student user cannot update his username
-        user_username = User.objects.get(username="test@pas-unistra.fr")
-        response = self.client.patch(
-            "/users/auth/user/",
-            data={"username": "Mafoipastropmalpourlasaisong"},
-            content_type="application/json",
-        )
-        self.assertEqual(user_username.username, "test@pas-unistra.fr")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
     def test_student_get_associations_user_list(self):
-        # A student user can't execute this request.
-        response = self.client.get("/users/associations/2")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_get_self_associations_user_list(self):
-        # A student user can execute this request.
-        response_student = self.client.get("/users/associations/")
+        """
+        GET /users/associations/
+        - A student user can execute this request.
+        - A student user gets correct association user list data.
+        """
+        response_student = self.student_client.get("/users/associations/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
-        # A student user gets correct association user list data
         associations_user_cnt = AssociationUsers.objects.filter(user_id=2).count()
         content = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(len(content), associations_user_cnt)
 
-    def test_student_link_validated_user_to_associations(self):
-        # An admin-validated user can't be added in an association
-        response = self.client.post(
+    def test_student_post_association_user(self):
+        """
+        POST /users/associations/
+        - An admin-validated student user cannot execute this request.
+        - A non-admin-validated student user can execute this request.
+        - A user cannot be added twice in the same association.
+        - A user cannot be added in a non-existing association.
+        """
+        response_student = self.student_client.post(
             "/users/associations/",
             {
                 "user": "test@pas-unistra.fr",
@@ -123,10 +119,8 @@ class UserViewsStudentTests(TestCase):
                 "has_office_status": False,
             },
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_link_user_to_associations(self):
-        # A non-validated user can be added in an association
         response = self.client.post(
             "/users/associations/",
             {
@@ -137,7 +131,6 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # A user cannot be added twice in the same association
         response = self.client.post(
             "/users/associations/",
             {
@@ -148,9 +141,7 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_link_user_to_associations_non_existing(self):
-        # A user cannot be part of a non-existing association
-        response = self.client.post(
+        response = self.student_client.post(
             "/users/associations/",
             {
                 "user": "prenom.nom@adressemail.fr",
@@ -160,55 +151,123 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_delete_user_association(self):
-        # A student user can't execute this request.
-        user_id = 2
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
-        response = self.client.delete(f"/users/associations/{user_id}/{asso_user.id}")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_get_consents_user_list(self):
-        # A student user can't execute this request.
-        response = self.client.get("/users/consents/2")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_get_self_consents_user_list(self):
-        # A student user can execute this request and get only his consents
-        consents_user_cnt = GDPRConsentUsers.objects.filter(user_id=2).count()
-        response_student = self.client.get("/users/consents/")
-        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-
-        content_student = json.loads(response_student.content.decode("utf-8"))
-        self.assertEqual(len(content_student), consents_user_cnt)
-
-    def test_student_post_user_consents(self):
-        # An authenticated user can execute this request
-        response = self.client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # A user can't consent mutliple times to the same regulation
-        response = self.client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_student_post_user_consents_non_existing(self):
-        # A user cannot consent to non-existing gdpr-consent object
-        response = self.client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_student_get_user_groups_list(self):
-        # A student user can't execute this request
-        response_student = self.client.get("/users/groups/2")
+    def test_student_get_associations_user_detail(self):
+        """
+        GET /users/associations/{id}
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get("/users/associations/2")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_get_self_user_groups_list(self):
-        # A student user can execute this request and get correctly all his groups
-        response_student = self.client.get("/users/groups/")
+    def test_student_delete_user_association(self):
+        """
+        DELETE /users/associations/{user_id}/{association_id}
+        - An student user cannot execute this request.
+        """
+        user_id = 2
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response_student = self.student_client.delete(
+            f"/users/associations/{user_id}/{asso_user.id}"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_get_auth_user_detail(self):
+        """
+        GET /users/auth/user/
+        - A student user can execute this request.
+        - A student user gets correct data when executing the request.
+        """
+        response_student = self.student_client.get("/users/auth/user/")
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+
+        user = User.objects.get(username="test@pas-unistra.fr")
+        user_data = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(user_data["username"], user.username)
+
+    def test_student_patch_auth_user_detail(self):
+        """
+        PATCH /users/auth/user/
+        - A student user can execute this request.
+        - A student user cannot update his validation status.
+        - A student user cannot update his username.
+        """
+        user_not_valid = User.objects.get(username="test@pas-unistra.fr")
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"is_validated_by_admin": False},
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertTrue(user_not_valid.is_validated_by_admin)
+
+        user_username = User.objects.get(username="test@pas-unistra.fr")
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"username": "Mafoipastropmalpourlasaisong"},
+            content_type="application/json",
+        )
+        self.assertEqual(user_username.username, "test@pas-unistra.fr")
+
+    def test_student_put_auth_user_detail(self):
+        """
+        PUT /users/auth/user/
+        - Request should return an error no matter which role is trying to execute it.
+        """
+        response_student = self.student_client.put(
+            "/users/auth/user/", {"username": "Aurevoirg"}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_student_get_consents_user_list(self):
+        """
+        GET /users/consents/
+        - A student user can execute this request.
+        - A student user gets only his own consents.
+        """
+        consents_user_cnt = GDPRConsentUsers.objects.filter(user_id=2).count()
+        response_student = self.student_client.get("/users/consents/")
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(len(content), consents_user_cnt)
+
+    def test_student_post_user_consents(self):
+        """
+        POST /users/consents/
+        - A student user can execute this request.
+        - A student user cannot give the same consent twice.
+        - A student user cannot give an unexisting consent.
+        """
+        response_student = self.student_client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
+
+        response_student = self.student_client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_student = self.student_client.post(
+            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_get_consents_user_detail(self):
+        """
+        GET /users/consents/{id}
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get("/users/consents/2")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_get_user_groups_list(self):
+        """
+        GET /users/groups/
+        - A student user can execute this request.
+        - A student user gets only his own groups.
+        """
+        response_student = self.student_client.get("/users/groups/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
         user = User.objects.get(pk=2)
@@ -216,47 +275,66 @@ class UserViewsStudentTests(TestCase):
         get_groups = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)
 
-    def test_student_delete_user_group(self):
-        # A student user can't execute this request.
-        user_id = 2
-        response = self.client.delete(f"/users/groups/{user_id}/5")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_link_validated_user_to_groups(self):
-        # Groups of admin-validated accounts can't be updated
-        response = self.client.post(
+    def test_student_post_user_groups(self):
+        """
+        POST /users/groups/
+        - An admin-validated student user cannot execute this request.
+        - A non-admin-validated student user can execute this request.
+        - A user cannot be added in a non-existing group.
+        """
+        response_student = self.student_client.post(
             "/users/groups/", {"username": "test@pas-unistra.fr", "groups": [1, 2]}
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_link_non_validated_user_to_groups(self):
-        # Groups of non-validated accounts can be updated
         response = self.client.post(
             "/users/groups/",
             {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_student_link_user_to_groups_non_existing(self):
-        # Cannot add a user in a non-existing group
         response = self.client.post(
             "/users/groups/", {"username": "prenom.nom@adressemail.fr", "groups": [66]}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_student_get_user_groups_detail(self):
+        """
+        GET /users/groups/{id}
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get("/users/groups/2")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_delete_user_group(self):
+        """
+        DELETE /users/groups/{user_id}/{group_id}
+        - A student user cannot execute this request.
+        """
+        user_id = 2
+        response_student = self.student_client.delete(f"/users/groups/{user_id}/5")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class UserAuthTests(TestCase):
+    """
+    Special tests class.
+    """
+
     def test_user_auth_registration(self):
+        """
+        POST /users/auth/registration/
+        - A user can be created.
+        - The same user can't be created twice.
+        """
         user = {
             "email": "georges.saucisse@georgeslasaucisse.fr",
             "first_name": "Georges",
             "last_name": "La Saucisse",
         }
 
-        # It is possible to create users
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # It is not possible to create the same user twice
         response = self.client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

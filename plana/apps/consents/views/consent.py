@@ -1,3 +1,6 @@
+"""
+Views directly linked to GDPR consents.
+"""
 from rest_framework import generics
 
 from plana.apps.consents.models.consent import GDPRConsent

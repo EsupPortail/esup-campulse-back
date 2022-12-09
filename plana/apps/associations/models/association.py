@@ -1,10 +1,13 @@
+"""
+Models describing associations and most of its details.
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class Association(models.Model):
     """
-    Model representing an association and most of its details.
+    Main model.
     """
 
     name = models.CharField(

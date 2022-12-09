@@ -1,3 +1,6 @@
+"""
+Serializers describing fields used on users and related forms.
+"""
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
@@ -14,6 +17,10 @@ from plana.apps.users.models.user import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Main serializer.
+    """
+
     is_cas = serializers.SerializerMethodField("is_cas_user")
     groups = GroupSerializer(many=True)
 
@@ -39,6 +46,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):
+    """
+    Used for the user registration form (to parse the phone field).
+    """
+
     phone = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:

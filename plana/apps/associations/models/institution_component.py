@@ -1,10 +1,13 @@
+"""
+Models describing associations institutions components (faculté de médecine, IUT, ...).
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class InstitutionComponent(models.Model):
     """
-    Associations are attached to components (faculté de médecine, IUT, ...).
+    Main model.
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)

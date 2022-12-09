@@ -1,3 +1,6 @@
+"""
+Describes the used CAS service and the fields retrieved from it.
+"""
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth_cas.providers import CASProvider as AllAuthCASProvider
 

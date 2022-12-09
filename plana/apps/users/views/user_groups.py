@@ -1,3 +1,6 @@
+"""
+Views linked to links between users and auth groups.
+"""
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _

@@ -1,10 +1,13 @@
+"""
+Models describing associations activity fields (culture, international, santé, sport, ...).
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class ActivityField(models.Model):
     """
-    Associations have an activity field (culture, international, santé, sport, ...).
+    Main model.
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)

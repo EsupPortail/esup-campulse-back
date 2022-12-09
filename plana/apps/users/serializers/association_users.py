@@ -1,3 +1,6 @@
+"""
+Serializers describing fields used on links between users and associations.
+"""
 from rest_framework import serializers
 
 from plana.apps.associations.serializers.association import (
@@ -8,6 +11,10 @@ from plana.apps.users.models.user import User
 
 
 class AssociationUsersSerializer(serializers.ModelSerializer):
+    """
+    Main serializer.
+    """
+
     user = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
@@ -26,6 +33,10 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
 
 
 class AssociationUsersCreationSerializer(serializers.ModelSerializer):
+    """
+    Serializer to create the link (without all association details).
+    """
+
     user = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )

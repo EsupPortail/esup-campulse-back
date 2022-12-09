@@ -1,3 +1,6 @@
+"""
+Models describing users and most of its details.
+"""
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
@@ -13,12 +16,12 @@ class User(AbstractUser):
     """
     Model that extends the abstract User class.
     Following fields from Django User class are used :
-        - username
-        - password
-        - email
-        - first_name
-        - last_name
-        - is_active
+    - username
+    - password
+    - email
+    - first_name
+    - last_name
+    - is_active
     """
 
     # TODO Rename groups and fixtures (can't retrieve models here).
@@ -47,8 +50,7 @@ class User(AbstractUser):
 
     def has_groups(self, *groups):
         """
-        :param groups: group names to check
-        - return True if User belongs to one of the groups, else False
+        Returns True if User belongs to one of the groups, else False.
         """
         return self.groups.filter(name__in=groups).exists()
 
@@ -86,12 +88,17 @@ class User(AbstractUser):
         verbose_name_plural = _("Users")
 
 
-# Dynamically create cached properties to check the user's presence in a group
-# Based on https://bugs.python.org/issue38517
+"""
+Dynamically create cached properties to check the user's presence in a group
+Based on https://bugs.python.org/issue38517
+"""
 for group_code, name in User._groups.items():
 
     @cached_property
     def is_in_group(self, code=group_code):
+        """
+        Checks if user has the auth group in args.
+        """
         return self.has_groups(code)
 
     attr_name = f"is_{name}"

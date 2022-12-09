@@ -1,10 +1,13 @@
+"""
+Models describing GDPR types of consents.
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class GDPRConsent(models.Model):
     """
-    Model that lists GDPR types of consents.
+    Main model.
     """
 
     title = models.CharField(_("GDPR Consent title"), max_length=256, blank=False)

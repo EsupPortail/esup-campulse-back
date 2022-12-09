@@ -1,10 +1,13 @@
+"""
+Models describing social networks used by associations (Facebook, Twitter, Mastodon, ...).
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class SocialNetwork(models.Model):
     """
-    List of social networks used by the associations (Facebook, Twitter, Mastodon, ...).
+    Main model.
     """
 
     type = models.CharField(_("Type"), max_length=32, blank=False)

@@ -1,3 +1,6 @@
+"""
+List of tests done on users models.
+"""
 from django.test import TestCase, Client
 
 from plana.apps.users.models.association_users import AssociationUsers
@@ -6,6 +9,10 @@ from plana.apps.users.models.user import User
 
 
 class UsersModelsTests(TestCase):
+    """
+    Main tests class.
+    """
+
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
@@ -18,13 +25,22 @@ class UsersModelsTests(TestCase):
     ]
 
     def setUp(self):
+        """
+        Start a default client used on all tests.
+        """
         self.client = Client()
 
     def test_user_model(self):
+        """
+        There's at least one user in the database.
+        """
         user = User.objects.first()
         self.assertEqual(str(user), f"{user.first_name} {user.last_name}")
 
     def test_association_users_model(self):
+        """
+        There's at least one user linked to an association in the database.
+        """
         asso_user = AssociationUsers.objects.first()
         self.assertEqual(
             str(asso_user),
@@ -32,6 +48,9 @@ class UsersModelsTests(TestCase):
         )
 
     def test_gdpr_consent_users_model(self):
+        """
+        There's at least one user linked to a GDPR consent in the database.
+        """
         consent_user = GDPRConsentUsers.objects.first()
         self.assertEqual(
             str(consent_user),

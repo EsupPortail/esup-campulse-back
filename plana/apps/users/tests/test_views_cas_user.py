@@ -1,3 +1,6 @@
+"""
+List of tests done on users views with a CAS user.
+"""
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -9,6 +12,10 @@ from plana.apps.users.provider import CASProvider
 
 
 class UserViewsTests(TestCase):
+    """
+    Main tests class.
+    """
+
     def setUp(self):
         user = User.objects.create_user(
             username="PatriciaCAS",
@@ -38,13 +45,13 @@ class UserViewsTests(TestCase):
         print(self.response.data)
 
     # TODO Rewrite user CAS test login.
-    """
-    def test_cas_patch_auth_user_detail(self):
-        # A CAS user can execute this request but cannot update some CAS fields from his account
-        user_cas = User.objects.get(username="PatriciaCAS")
-        response_not_modified = self.cas_client.patch(
-            "/users/auth/user/", {"username": "GeorgeLuCAS"}
-        )
-        self.assertEqual(user_cas.username, "PatriciaCAS")
-        self.assertEqual(response_not_modified.status_code, status.HTTP_200_OK)
-    """
+    # def test_cas_patch_auth_user_detail(self):
+    #    """
+    #    A CAS user can execute this request but cannot update some CAS fields from his account.
+    #    """
+    #    user_cas = User.objects.get(username="PatriciaCAS")
+    #    response_not_modified = self.cas_client.patch(
+    #        "/users/auth/user/", {"username": "GeorgeLuCAS"}
+    #    )
+    #    self.assertEqual(user_cas.username, "PatriciaCAS")
+    #    self.assertEqual(response_not_modified.status_code, status.HTTP_200_OK)

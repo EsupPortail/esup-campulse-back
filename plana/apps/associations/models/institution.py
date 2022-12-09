@@ -1,10 +1,13 @@
+"""
+Models describing associations institutions (Crous, Unistra, UHA, ...).
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class Institution(models.Model):
     """
-    Associations are attached to institutions (Crous, Unistra, UHA, ...).
+    Main model.
     """
 
     name = models.CharField(_("Name"), max_length=250, blank=False)

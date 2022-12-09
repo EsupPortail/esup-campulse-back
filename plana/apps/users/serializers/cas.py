@@ -1,3 +1,6 @@
+"""
+Special serializers used to interact with CAS.
+"""
 from __future__ import annotations
 
 import typing
@@ -22,6 +25,9 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 
 
 class CASSerializer(LoginSerializer):
+    """
+    Main serializer.
+    """
 
     ticket = serializers.CharField(required=True)
     service = serializers.URLField(required=True)
@@ -29,8 +35,7 @@ class CASSerializer(LoginSerializer):
 
     def validate(self, attrs):
         """
-        We get the username from the CAS Server from the ticket and service url, log in the user
-        and add it to the serializer attributes
+        We get the username from the CAS Server from the ticket and service url, log in the user, and add it to the serializer attributes.
         """
         view = self.context.get("view")
         request = self.context.get("request")
@@ -79,6 +84,9 @@ class CASSerializer(LoginSerializer):
         return attrs
 
     def validate_service(self, value):
+        """
+        Checks if the service is authorized in the configuration file.
+        """
         if value not in settings.CAS_AUTHORIZED_SERVICES:
             raise exceptions.ValidationError(
                 _("%(service)s is not a valid service" % {"service": value})
@@ -92,6 +100,9 @@ class CASSerializer(LoginSerializer):
         service_url: str,
         action: str = AuthAction.AUTHENTICATE,
     ) -> CASClientBase:
+        """
+        Get CAS informations.
+        """
         provider: CASProvider = adapter.get_provider(request)
         auth_params = provider.get_auth_params(request, action)
         service_url = service_url or adapter.get_service_url(request)
@@ -106,6 +117,9 @@ class CASSerializer(LoginSerializer):
         return client
 
     def get_adapter(self, request: HttpRequest, view: CASLogin) -> CASAdapter:
+        """
+        Get CAS adapter informations.
+        """
         adapter_class = getattr(view, "adapter_class", None)
         if not adapter_class:
             raise serializers.ValidationError(

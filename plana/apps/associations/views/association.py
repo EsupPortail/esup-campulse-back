@@ -1,3 +1,6 @@
+"""
+Views directly linked to associations.
+"""
 from rest_framework import generics
 
 from plana.apps.associations.models.association import Association

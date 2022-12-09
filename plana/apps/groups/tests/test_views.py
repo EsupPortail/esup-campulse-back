@@ -1,3 +1,6 @@
+"""
+List of tests done on auth groups views.
+"""
 import json
 
 from django.test import TestCase, Client
@@ -7,14 +10,28 @@ from rest_framework import status
 
 
 class GroupViewsTests(TestCase):
+    """
+    Main tests class.
+    """
+
     fixtures = [
         "auth_group.json",
     ]
 
     def setUp(self):
+        """
+        Start a default client used on all tests.
+        """
         self.client = Client()
 
     def test_get_groups_list(self):
+        """
+        GET /groups/
+        - There's at least one group in the groups list.
+        - The route can be accessed by anyone.
+        - We get the same amount of groups through the model and through the view.
+        - Groups details are returned (test the "name" attribute).
+        """
         groups_cnt = Group.objects.count()
         self.assertTrue(groups_cnt > 0)
 

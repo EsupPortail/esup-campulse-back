@@ -1,3 +1,6 @@
+"""
+Views directly linked to users and their links with other models.
+"""
 from django.utils.translation import gettext_lazy as _
 
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
@@ -27,6 +30,10 @@ from plana.apps.users.serializers.user import UserSerializer
     )
 )
 class UserList(generics.ListAPIView):
+    """
+    GET : Lists all users.
+    """
+
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
@@ -52,6 +59,14 @@ class UserList(generics.ListAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET : Lists a user with all details.
+
+    PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
+
+    DELETE : Removes a user from the database (with a restriction on manager users).
+    """
+
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -119,6 +134,10 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class UserAuthView(DJRestAuthUserDetailsView):
+    """
+    Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+    """
+
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
