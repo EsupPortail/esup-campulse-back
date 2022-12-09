@@ -11,7 +11,7 @@ class CASAccount(ProviderAccount):
 
 class CASProvider(AllAuthCASProvider):
     """
-    [django-allauth-cas] The CASProvider subclass defines how to process data returned by the CAS server.
+    The CASProvider subclass defines how to process data returned by the CAS server.
     """
 
     id = "cas"

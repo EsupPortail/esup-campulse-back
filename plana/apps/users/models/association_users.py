@@ -1,5 +1,6 @@
 """
-Models describing links between associations and users (which user is in which association, is the user in the association office, ...).
+Models describing links between associations and users
+(which user is in which association, is the user in the association office, ...).
 """
 from django.db import models
 from django.utils.translation import gettext_lazy as _

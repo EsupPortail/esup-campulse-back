@@ -126,10 +126,9 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 class PasswordResetConfirm(generics.GenericAPIView):
     """
-    POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
+    POST : Blank redirection to make the password reset work
+    (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
     """
-
-    pass
 
 
 @extend_schema(methods=["PUT"], exclude=True)

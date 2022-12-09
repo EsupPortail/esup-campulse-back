@@ -35,7 +35,8 @@ class CASSerializer(LoginSerializer):
 
     def validate(self, attrs):
         """
-        We get the username from the CAS Server from the ticket and service url, log in the user, and add it to the serializer attributes.
+        We get the username from the CAS Server from the ticket and service url,
+        log in the user, and add it to the serializer attributes.
         """
         view = self.context.get("view")
         request = self.context.get("request")

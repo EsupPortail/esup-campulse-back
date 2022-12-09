@@ -29,7 +29,8 @@ class AssociationRetrieveSerializer(serializers.ModelSerializer):
 
 class AssociationListSerializer(serializers.ModelSerializer):
     """
-    Smaller serializer to return only some of the informations of an association (used in a table list of all associations).
+    Smaller serializer to return only some of the informations of an association
+    (used in a table list of all associations).
     """
 
     institution = InstitutionSerializer()
@@ -52,7 +53,8 @@ class AssociationListSerializer(serializers.ModelSerializer):
 
 class SimpleAssociationDataSerializer(serializers.ModelSerializer):
     """
-    Smaller serializer to return only the main informations of an association (used in a simple name list of all associations).
+    Smaller serializer to return only the main informations of an association
+    (used in a simple name list of all associations).
     """
 
     class Meta:

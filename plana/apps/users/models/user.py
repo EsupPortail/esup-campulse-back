@@ -62,7 +62,8 @@ class User(AbstractUser):
 
     def is_cas_user(self):
         """
-        Returns True if the user account was generated through CAS on signup (checks if a related row is in socialaccount table).
+        Returns True if the user account was generated through CAS on signup
+        (checks if a related row is in socialaccount table).
         """
 
         try:
@@ -73,7 +74,8 @@ class User(AbstractUser):
 
     def get_cas_user(self):
         """
-        Returns user account CAS details if it was generated through CAS on signup (from a related row in socialaccount table).
+        Returns user account CAS details if it was generated through CAS on signup
+        (from a related row in socialaccount table).
         """
 
         try:

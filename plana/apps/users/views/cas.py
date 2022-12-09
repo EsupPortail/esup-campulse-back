@@ -35,7 +35,6 @@ class CASLogout(LogoutView):
     serializer_class = CASSerializer
 
     # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
-    pass
 
 
 # login = CASLoginView.adapter_view(CASAdapter)

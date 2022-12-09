@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 11:52+0100\n"
+"POT-Creation-Date: 2022-12-09 15:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,13 +118,13 @@ msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:58
 #: plana/apps/associations/models/social_network.py:17
-#: plana/apps/users/models/association_users.py:18
-#: plana/apps/users/models/association_users.py:28
+#: plana/apps/users/models/association_users.py:19
+#: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:59
-#: plana/apps/users/models/association_users.py:29
+#: plana/apps/users/models/association_users.py:30
 #: plana/apps/users/models/user.py:45
 msgid "Associations"
 msgstr "Associations"
@@ -158,7 +158,7 @@ msgid "GDPR Consent title"
 msgstr "Titre du consentement RGPD"
 
 #: plana/apps/consents/models/consent.py:19
-#: plana/apps/users/models/gdpr_consent_users.py:18
+#: plana/apps/users/models/gdpr_consent_users.py:19
 msgid "GDPR Consent"
 msgstr "Consentement RGPD"
 
@@ -166,33 +166,33 @@ msgstr "Consentement RGPD"
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
 
-#: plana/apps/users/models/association_users.py:16
-#: plana/apps/users/models/gdpr_consent_users.py:16
-#: plana/apps/users/models/user.py:87
+#: plana/apps/users/models/association_users.py:17
+#: plana/apps/users/models/gdpr_consent_users.py:17
+#: plana/apps/users/models/user.py:89
 msgid "User"
 msgstr "Utilisateur"
 
-#: plana/apps/users/models/association_users.py:20
+#: plana/apps/users/models/association_users.py:21
 msgid "Role name"
 msgstr "Nom du poste"
 
-#: plana/apps/users/models/association_users.py:21
+#: plana/apps/users/models/association_users.py:22
 msgid "Has office status"
 msgstr "Membre du bureau d'association"
 
-#: plana/apps/users/models/association_users.py:22
+#: plana/apps/users/models/association_users.py:23
 msgid "Is president"
 msgstr "Dirige l'association"
 
-#: plana/apps/users/models/gdpr_consent_users.py:20
+#: plana/apps/users/models/gdpr_consent_users.py:21
 msgid "Consent date"
 msgstr "Date de consentement"
 
-#: plana/apps/users/models/gdpr_consent_users.py:26
+#: plana/apps/users/models/gdpr_consent_users.py:27
 msgid "GDPR Consent User"
 msgstr "Consentement RGPD de l'utilisateur"
 
-#: plana/apps/users/models/gdpr_consent_users.py:27
+#: plana/apps/users/models/gdpr_consent_users.py:28
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
@@ -208,29 +208,29 @@ msgstr "Nom de famille"
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:88
+#: plana/apps/users/models/user.py:90
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/serializers/cas.py:45
+#: plana/apps/users/serializers/cas.py:46
 msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
-#: plana/apps/users/serializers/cas.py:61
+#: plana/apps/users/serializers/cas.py:62
 #: plana/apps/users/tests/serializers/test_cas.py:203
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:81
+#: plana/apps/users/serializers/cas.py:82
 msgid "Account registration must be completed."
 msgstr "L'inscription de ce compte n'est pas terminée."
 
-#: plana/apps/users/serializers/cas.py:92
+#: plana/apps/users/serializers/cas.py:93
 #, python-format
 msgid "%(service)s is not a valid service"
 msgstr "%(service)s n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:126
+#: plana/apps/users/serializers/cas.py:127
 #: plana/apps/users/tests/serializers/test_cas.py:56
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -247,17 +247,17 @@ msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:58
+#: plana/apps/users/views/association_users.py:62
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 
-#: plana/apps/users/views/association_users.py:83
-#: plana/apps/users/views/association_users.py:107
+#: plana/apps/users/views/association_users.py:87
+#: plana/apps/users/views/association_users.py:111
 #: plana/apps/users/views/gdpr_consent_users.py:62
 #: plana/apps/users/views/user.py:55 plana/apps/users/views/user.py:84
 #: plana/apps/users/views/user.py:104 plana/apps/users/views/user.py:117
-#: plana/apps/users/views/user.py:122 plana/apps/users/views/user_groups.py:83
-#: plana/apps/users/views/user_groups.py:109
+#: plana/apps/users/views/user.py:122 plana/apps/users/views/user_groups.py:87
+#: plana/apps/users/views/user_groups.py:113
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -265,15 +265,15 @@ msgstr "Erreur de requête."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user_groups.py:46
+#: plana/apps/users/views/user_groups.py:50
 msgid "Groups for this user cannot be edited."
 msgstr "Les groupes de cet utilisateur ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups.py:60
+#: plana/apps/users/views/user_groups.py:64
 msgid "Group not found."
 msgstr "Groupe non trouvé."
 
-#: plana/apps/users/views/user_groups.py:105
+#: plana/apps/users/views/user_groups.py:109
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 

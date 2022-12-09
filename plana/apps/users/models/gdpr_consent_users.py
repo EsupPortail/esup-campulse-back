@@ -1,5 +1,6 @@
 """
-Models describing links between GDPR consents and users (which user has given which consent and when).
+Models describing links between GDPR consents and users
+(which user has given which consent and when).
 """
 from django.db import models
 from django.utils.translation import gettext_lazy as _

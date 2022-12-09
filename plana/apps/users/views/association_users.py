@@ -16,7 +16,7 @@ from plana.apps.users.serializers.association_users import (
 
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """
-    GET : Lists all associations linked to a user (student), or all associations of all users (manager).
+    GET : Lists all associations linked to a user, or all associations of all users.
 
     POST : Creates a new link between a non-validated user and an association.
     """
