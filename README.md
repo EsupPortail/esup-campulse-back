@@ -120,6 +120,12 @@ $ python manage.py makemessages -l fr --extension html,txt,py
 $ black plana
 ```
 
+### Réordonner les imports
+
+```sh
+$ isort plana
+```
+
 ### Détecter les autres erreurs non lintables des fichiers
 
 ```sh

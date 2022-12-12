@@ -4,6 +4,8 @@ Views directly linked to associations.
 import unicodedata
 
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -15,6 +17,24 @@ from plana.apps.associations.serializers.association import (
 )
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_enabled",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for non-validated associations.",
+            ),
+            OpenApiParameter(
+                "is_site",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations from site.",
+            ),
+        ]
+    )
+)
 class AssociationListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all associations currently active.
@@ -22,7 +42,16 @@ class AssociationListCreate(generics.ListCreateAPIView):
     POST : Creates a new association with mandatory informations.
     """
 
-    queryset = Association.objects.filter(is_enabled=True).order_by("name")
+    def get_queryset(self):
+        queryset = Association.objects.all().order_by("name")
+        booleans = {"true": True, "false": False}
+        is_enabled = self.request.query_params.get("is_enabled")
+        is_site = self.request.query_params.get("is_site")
+        if is_enabled is not None:
+            queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
+        if is_site is not None:
+            queryset = queryset.filter(is_site=booleans.get(is_site))
+        return queryset
 
     def get_permissions(self):
         if self.request.method == "POST":

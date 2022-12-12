@@ -11,6 +11,17 @@ paths:
         GET : Lists all associations currently active.
 
         POST : Creates a new association with mandatory informations.
+      parameters:
+      - in: query
+        name: is_enabled
+        schema:
+          type: boolean
+        description: Filter for non-validated associations.
+      - in: query
+        name: is_site
+        schema:
+          type: boolean
+        description: Filter for associations from site.
       tags:
       - associations
       security:

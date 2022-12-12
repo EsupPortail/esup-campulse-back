@@ -57,6 +57,8 @@ class AssociationsViewsTests(TestCase):
         - We get the same amount of associations through the model and through the view.
         - Main associations details are returned (test the "name" attribute).
         - All associations details aren't returned (test the "activities" attribute).
+        - Non-enabled associations can be filtered.
+        - Site associations can be filtered.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -70,6 +72,14 @@ class AssociationsViewsTests(TestCase):
         association_1 = content[0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
+
+        response = self.client.get("/associations/?is_enabled=true")
+        for association in response.data:
+            self.assertEqual(association["is_enabled"], True)
+
+        response = self.client.get("/associations/?is_site=true")
+        for association in response.data:
+            self.assertEqual(association["is_site"], True)
 
     def test_post_association(self):
         """

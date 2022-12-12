@@ -67,7 +67,8 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get(
             "/users/?is_validated_by_admin=false"
         )
-        self.assertEqual(response_manager.data[0]["is_validated_by_admin"], False)
+        for user in response_manager.data:
+            self.assertEqual(user["is_validated_by_admin"], False)
 
     def test_manager_get_user_detail(self):
         """
