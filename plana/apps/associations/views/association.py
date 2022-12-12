@@ -44,13 +44,14 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Association.objects.all().order_by("name")
-        booleans = {"true": True, "false": False}
-        is_enabled = self.request.query_params.get("is_enabled")
-        is_site = self.request.query_params.get("is_site")
-        if is_enabled is not None:
-            queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
-        if is_site is not None:
-            queryset = queryset.filter(is_site=booleans.get(is_site))
+        if self.request.method == "GET":
+            booleans = {"true": True, "false": False}
+            is_enabled = self.request.query_params.get("is_enabled")
+            is_site = self.request.query_params.get("is_site")
+            if is_enabled is not None:
+                queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
+            if is_site is not None:
+                queryset = queryset.filter(is_site=booleans.get(is_site))
         return queryset
 
     def get_permissions(self):

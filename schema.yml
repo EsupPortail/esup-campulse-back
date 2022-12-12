@@ -56,6 +56,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+        required: true
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -1035,6 +1036,7 @@ components:
       - id
       - institution
       - institution_component
+      - name
       - social_networks
     AssociationMandatoryData:
       type: object
@@ -1051,6 +1053,7 @@ components:
           maxLength: 250
       required:
       - id
+      - name
     AssociationMandatoryDataRequest:
       type: object
       description: |-
@@ -1062,6 +1065,8 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+      required:
+      - name
     AssociationPartialData:
       type: object
       description: |-
@@ -1095,6 +1100,7 @@ components:
       - id
       - institution
       - institution_component
+      - name
     AssociationUsers:
       type: object
       description: Main serializer.

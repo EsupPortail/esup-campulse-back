@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-12 11:24+0100\n"
+"POT-Creation-Date: 2022-12-12 15:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,12 +57,12 @@ msgid "Address"
 msgstr "Adresse"
 
 #: plana/apps/associations/models/association.py:22
-#: plana/apps/users/models/user.py:39
+#: plana/apps/users/models/user.py:38
 msgid "Phone"
 msgstr "Téléphone"
 
 #: plana/apps/associations/models/association.py:23
-#: plana/apps/users/models/user.py:36
+#: plana/apps/users/models/user.py:35
 msgid "Email"
 msgstr "Courriel"
 
@@ -125,7 +125,7 @@ msgstr "Association"
 
 #: plana/apps/associations/models/association.py:64
 #: plana/apps/users/models/association_users.py:30
-#: plana/apps/users/models/user.py:45
+#: plana/apps/users/models/user.py:44
 msgid "Associations"
 msgstr "Associations"
 
@@ -153,18 +153,18 @@ msgstr "Réseau social"
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:95
+#: plana/apps/associations/views/association.py:92
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:101
-#: plana/apps/users/views/association_users.py:87
-#: plana/apps/users/views/association_users.py:111
-#: plana/apps/users/views/gdpr_consent_users.py:62
-#: plana/apps/users/views/user.py:55 plana/apps/users/views/user.py:84
-#: plana/apps/users/views/user.py:104 plana/apps/users/views/user.py:117
-#: plana/apps/users/views/user.py:122 plana/apps/users/views/user_groups.py:87
-#: plana/apps/users/views/user_groups.py:113
+#: plana/apps/associations/views/association.py:98
+#: plana/apps/users/views/association_users.py:86
+#: plana/apps/users/views/association_users.py:110
+#: plana/apps/users/views/gdpr_consent_users.py:61
+#: plana/apps/users/views/user.py:50 plana/apps/users/views/user.py:79
+#: plana/apps/users/views/user.py:99 plana/apps/users/views/user.py:112
+#: plana/apps/users/views/user.py:117 plana/apps/users/views/user_groups.py:86
+#: plana/apps/users/views/user_groups.py:112
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -183,7 +183,7 @@ msgstr "Consentements RGPD"
 
 #: plana/apps/users/models/association_users.py:17
 #: plana/apps/users/models/gdpr_consent_users.py:17
-#: plana/apps/users/models/user.py:89
+#: plana/apps/users/models/user.py:88
 msgid "User"
 msgstr "Utilisateur"
 
@@ -211,74 +211,74 @@ msgstr "Consentement RGPD de l'utilisateur"
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
-#: plana/apps/users/models/user.py:37
+#: plana/apps/users/models/user.py:36
 msgid "First name"
 msgstr "Prénom"
 
-#: plana/apps/users/models/user.py:38
+#: plana/apps/users/models/user.py:37
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/models/user.py:41
+#: plana/apps/users/models/user.py:40
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:90
+#: plana/apps/users/models/user.py:89
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/serializers/cas.py:46
+#: plana/apps/users/serializers/cas.py:45
 msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
-#: plana/apps/users/serializers/cas.py:62
-#: plana/apps/users/tests/serializers/test_cas.py:203
+#: plana/apps/users/serializers/cas.py:61
+#: plana/apps/users/tests/serializers/test_cas.py:202
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:82
+#: plana/apps/users/serializers/cas.py:81
 msgid "Account registration must be completed."
 msgstr "L'inscription de ce compte n'est pas terminée."
 
-#: plana/apps/users/serializers/cas.py:93
-#, python-format
-msgid "%(service)s is not a valid service"
-msgstr "%(service)s n'est pas un service valide"
+#: plana/apps/users/serializers/cas.py:91
+#, python-brace-format
+msgid "{value} is not a valid service"
+msgstr "{value} n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:127
-#: plana/apps/users/tests/serializers/test_cas.py:56
+#: plana/apps/users/serializers/cas.py:124
+#: plana/apps/users/tests/serializers/test_cas.py:55
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:102
+#: plana/apps/users/serializers/user.py:103
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:139
+#: plana/apps/users/serializers/user.py:140
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:52
+#: plana/apps/users/views/association_users.py:51
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:62
+#: plana/apps/users/views/association_users.py:61
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 
-#: plana/apps/users/views/gdpr_consent_users.py:39
+#: plana/apps/users/views/gdpr_consent_users.py:38
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user_groups.py:50
+#: plana/apps/users/views/user_groups.py:49
 msgid "Groups for this user cannot be edited."
 msgstr "Les groupes de cet utilisateur ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups.py:64
+#: plana/apps/users/views/user_groups.py:63
 msgid "Group not found."
 msgstr "Groupe non trouvé."
 
-#: plana/apps/users/views/user_groups.py:109
+#: plana/apps/users/views/user_groups.py:108
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
