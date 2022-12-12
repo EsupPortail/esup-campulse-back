@@ -100,10 +100,20 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
 
 
-class AssociationRetrieve(generics.RetrieveAPIView):
+class AssociationRetrieveDestroy(generics.RetrieveDestroyAPIView):
     """
     GET : Lists an association with all its details.
+
+    DELETE : Removes an entire association.
     """
 
     serializer_class = AssociationAllDataSerializer
     queryset = Association.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        if not request.user.is_anonymous and request.user.is_svu_manager:
+            return self.destroy(request, *args, **kwargs)
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )

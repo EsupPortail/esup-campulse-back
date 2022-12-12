@@ -3,6 +3,7 @@ List of tests done on associations views.
 """
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -146,3 +147,20 @@ class AssociationsViewsTests(TestCase):
 
         not_found_response = self.client.get("/associations/50")
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_association(self):
+        """
+        DELETE /associations/{id}
+        - An anonymous user cannot execute this request.
+        - A Crous manager cannot delete an association.
+        - A SVU manager can delete an association.
+        """
+        association_id = 1
+        response_anonymous = self.client.delete(f"/associations/{association_id}")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+        response_crous = self.crous_client.delete(f"/associations/{association_id}")
+        self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
+        response_svu = self.svu_client.delete(f"/associations/{association_id}")
+        self.assertEqual(response_svu.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist):
+            Association.objects.get(id=association_id)
