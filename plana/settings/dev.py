@@ -3,7 +3,6 @@ from os.path import normpath
 
 from .base import *
 
-
 #######################
 # Debug configuration #
 #######################

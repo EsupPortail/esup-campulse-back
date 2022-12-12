@@ -3,9 +3,8 @@ List of tests done on associations views.
 """
 import json
 
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
-
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association

@@ -3,9 +3,8 @@ List of tests done on users views with a student user.
 """
 import json
 
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
-
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers

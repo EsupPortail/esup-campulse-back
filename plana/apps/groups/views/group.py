@@ -2,7 +2,6 @@
 Views directly linked to auth groups.
 """
 from django.contrib.auth.models import Group
-
 from rest_framework import generics
 
 from plana.apps.groups.serializers.group import GroupSerializer

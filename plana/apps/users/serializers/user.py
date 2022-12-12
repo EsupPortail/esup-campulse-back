@@ -1,15 +1,16 @@
 """
 Serializers describing fields used on users and related forms.
 """
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
-
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
+)
+from dj_rest_auth.serializers import (
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
 from plana.apps.groups.serializers.group import GroupSerializer

@@ -2,7 +2,6 @@
 Serializers describing fields used on links between users and auth groups.
 """
 from django.contrib.auth.models import Group
-
 from rest_framework import serializers
 
 from plana.apps.users.models.user import User

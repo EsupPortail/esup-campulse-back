@@ -5,13 +5,12 @@ from django.conf import settings
 from django.urls import include, path, re_path
 
 from .views.association_users import (
+    AssociationUsersDestroy,
     AssociationUsersListCreate,
     AssociationUsersRetrieve,
-    AssociationUsersDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
-
 from .views.user import (
     PasswordResetConfirm,
     UserAuthView,
@@ -19,9 +18,9 @@ from .views.user import (
     UserRetrieveUpdateDestroy,
 )
 from .views.user_groups import (
+    UserGroupsDestroy,
     UserGroupsListCreate,
     UserGroupsRetrieve,
-    UserGroupsDestroy,
 )
 
 urlpatterns = [
@@ -45,7 +44,7 @@ urlpatterns = [
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
-        "auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
+        r"auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
         PasswordResetConfirm.as_view(),
         name="password_reset_confirm",
     ),

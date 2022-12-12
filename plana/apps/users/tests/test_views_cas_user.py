@@ -1,11 +1,10 @@
 """
 List of tests done on users views with a CAS user.
 """
-from django.test import TestCase, Client
-from django.urls import reverse
-
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
+from django.test import Client, TestCase
+from django.urls import reverse
 
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider

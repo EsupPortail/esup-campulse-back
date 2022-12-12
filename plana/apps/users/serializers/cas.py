@@ -5,15 +5,14 @@ from __future__ import annotations
 
 import typing
 
-from django.conf import settings
-from django.db import IntegrityError
-from django.http import HttpRequest
-from django.utils.translation import ugettext_lazy as _
-
 from allauth.socialaccount.models import SocialLogin
 from allauth_cas.views import AuthAction
 from cas import CASClient, CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
+from django.conf import settings
+from django.db import IntegrityError
+from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
 from plana.apps.users.adapter import CASAdapter
@@ -89,9 +88,7 @@ class CASSerializer(LoginSerializer):
         Checks if the service is authorized in the configuration file.
         """
         if value not in settings.CAS_AUTHORIZED_SERVICES:
-            raise exceptions.ValidationError(
-                _("%(service)s is not a valid service" % {"service": value})
-            )
+            raise exceptions.ValidationError(_(f"{value} is not a valid service"))
         return value
 
     def get_client(

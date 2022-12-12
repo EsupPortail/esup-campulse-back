@@ -1,7 +1,7 @@
 """
 List of tests done on users models.
 """
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers

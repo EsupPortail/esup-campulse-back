@@ -2,15 +2,14 @@
 Views linked to links between users and associations.
 """
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
-from plana.apps.users.serializers.association_users import AssociationUsersSerializer
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreationSerializer,
+    AssociationUsersSerializer,
 )
 
 

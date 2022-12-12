@@ -1,6 +1,5 @@
 from os.path import abspath, basename, dirname, join, normpath
 
-
 ######################
 # Path configuration #
 ######################
