@@ -1,15 +1,10 @@
 """
 Views directly linked to users and their links with other models.
 """
-from django.utils.translation import gettext_lazy as _
-
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (
-    extend_schema,
-    extend_schema_view,
-    OpenApiParameter,
-)
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 

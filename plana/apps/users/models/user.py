@@ -1,12 +1,11 @@
 """
 Models describing users and most of its details.
 """
-from django.db import models
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-
-from allauth.socialaccount.models import SocialAccount
 
 from plana.apps.associations.models.association import Association
 from plana.apps.users.provider import CASProvider

@@ -2,14 +2,12 @@
 Special serializer to interact with CAS.
 """
 import requests
-
+from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.views import LogoutView
 from django.conf import settings
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import urlencode
-
-from dj_rest_auth.registration.views import SocialLoginView
-from dj_rest_auth.views import LogoutView
 
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.serializers.cas import CASSerializer

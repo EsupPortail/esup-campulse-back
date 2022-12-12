@@ -4,7 +4,6 @@ Links the CAS provider to the CAS views.
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth_cas.views import CASAdapter as AllAuthCASAdapter
-
 from django.conf import settings
 
 from .provider import CASProvider

@@ -3,11 +3,10 @@ List of tests done on users views with a manager user.
 """
 import json
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.test import TestCase, Client
-from django.urls import reverse
-
 from allauth.socialaccount.models import SocialAccount
+from django.core.exceptions import ObjectDoesNotExist
+from django.test import Client, TestCase
+from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers
@@ -22,14 +21,14 @@ class UserViewsManagerTests(TestCase):
     """
 
     fixtures = [
+        "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
-        "account_emailaddress.json",
-        "consents_gdprconsent.json",
         "auth_group.json",
+        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
@@ -68,7 +67,8 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get(
             "/users/?is_validated_by_admin=false"
         )
-        self.assertEqual(response_manager.data[0]["is_validated_by_admin"], False)
+        for user in response_manager.data:
+            self.assertEqual(user["is_validated_by_admin"], False)
 
     def test_manager_get_user_detail(self):
         """

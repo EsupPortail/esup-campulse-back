@@ -3,9 +3,8 @@ List of tests done on auth groups views.
 """
 import json
 
-from django.test import TestCase, Client
 from django.contrib.auth.models import Group
-
+from django.test import Client, TestCase
 from rest_framework import status
 
 

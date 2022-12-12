@@ -1,7 +1,7 @@
 """
 List of tests done on GDPR consents models.
 """
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 
 from plana.apps.consents.models.consent import GDPRConsent
 

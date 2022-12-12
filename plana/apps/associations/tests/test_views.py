@@ -3,8 +3,8 @@ List of tests done on associations views.
 """
 import json
 
-from django.test import TestCase, Client
-
+from django.test import Client, TestCase
+from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
@@ -16,11 +16,15 @@ class AssociationsViewsTests(TestCase):
     """
 
     fixtures = [
+        "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
+        "auth_group.json",
+        "users_user.json",
+        "users_user_groups.json",
     ]
 
     def setUp(self):
@@ -28,6 +32,22 @@ class AssociationsViewsTests(TestCase):
         Start a default client used on all tests.
         """
         self.client = Client()
+
+        self.crous_client = Client()
+        url_crous = reverse("rest_login")
+        data_crous = {
+            "username": "gestionnaire-crous@mail.tld",
+            "password": "motdepasse",
+        }
+        self.response = self.crous_client.post(url_crous, data_crous)
+
+        self.svu_client = Client()
+        url_svu = reverse("rest_login")
+        data_svu = {
+            "username": "gestionnaire-svu@mail.tld",
+            "password": "motdepasse",
+        }
+        self.response = self.svu_client.post(url_svu, data_svu)
 
     def test_get_associations_list(self):
         """
@@ -37,6 +57,8 @@ class AssociationsViewsTests(TestCase):
         - We get the same amount of associations through the model and through the view.
         - Main associations details are returned (test the "name" attribute).
         - All associations details aren't returned (test the "activities" attribute).
+        - Non-enabled associations can be filtered.
+        - Site associations can be filtered.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -50,6 +72,60 @@ class AssociationsViewsTests(TestCase):
         association_1 = content[0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
+
+        response = self.client.get("/associations/?is_enabled=true")
+        for association in response.data:
+            self.assertEqual(association["is_enabled"], True)
+
+        response = self.client.get("/associations/?is_site=true")
+        for association in response.data:
+            self.assertEqual(association["is_site"], True)
+
+    def test_post_association(self):
+        """
+        POST /associations/
+        - A SVU manager can add an association.
+        - A Crous manager cannot add an association.
+        - Another user cannot add an association.
+        - An association cannot be added twice, neither associations with similar names.
+        """
+        response_svu = self.svu_client.post(
+            "/associations/",
+            {
+                "name": "Les Fans de Georges la Saucisse",
+            },
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_201_CREATED)
+
+        response_crous = self.crous_client.post(
+            "/associations/",
+            {
+                "name": "C'est Brice de Nice qui se connecte via CAS, il clique sur Connexion et c'est CASsé.",
+            },
+        )
+        self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.client.post(
+            "/associations/",
+            {
+                "name": "Quelle chanteuse peut se connecter sans compte à l'application ? Patricia CAS.",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        similar_names = [
+            "Les Fans de Georges la Saucisse",
+            "LesFansdeGeorgeslaSaucisse",
+            "lesfansdegeorgeslasaucisse",
+            " Les Fans de Georges la Saucisse ",
+            "Lés Fàns dè Gêörgës lâ Säùcîsse",
+        ]
+        for similar_name in similar_names:
+            response_svu = self.svu_client.post(
+                "/associations/",
+                {"name": similar_name},
+            )
+            self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_association_retrieve(self):
         """

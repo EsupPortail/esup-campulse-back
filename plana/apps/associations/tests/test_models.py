@@ -1,7 +1,7 @@
 """
 List of tests done on associations models.
 """
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association

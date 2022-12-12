@@ -3,8 +3,7 @@ List of tests done on GDPR consents views.
 """
 import json
 
-from django.test import TestCase, Client
-
+from django.test import Client, TestCase
 from rest_framework import status
 
 from plana.apps.consents.models.consent import GDPRConsent

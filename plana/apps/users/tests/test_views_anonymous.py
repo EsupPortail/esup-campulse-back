@@ -1,8 +1,7 @@
 """
 List of tests done on users views with an anonymous user.
 """
-from django.test import TestCase, Client
-
+from django.test import Client, TestCase
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers

@@ -3,12 +3,11 @@ List of tests done on CAS server serializer.
 """
 from unittest.mock import patch
 
-from django.contrib.auth.models import Group
-from django.test import TestCase, override_settings
-from django.utils.translation import ugettext_lazy as _
-
 from allauth.socialaccount.models import SocialAccount
 from allauth_cas import CAS_PROVIDER_SESSION_KEY
+from django.contrib.auth.models import Group
+from django.test import TestCase, override_settings
+from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 

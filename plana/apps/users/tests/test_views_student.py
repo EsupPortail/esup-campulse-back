@@ -3,9 +3,8 @@ List of tests done on users views with a student user.
 """
 import json
 
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
-
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers
@@ -19,14 +18,14 @@ class UserViewsStudentTests(TestCase):
     """
 
     fixtures = [
+        "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
-        "account_emailaddress.json",
-        "consents_gdprconsent.json",
         "auth_group.json",
+        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
