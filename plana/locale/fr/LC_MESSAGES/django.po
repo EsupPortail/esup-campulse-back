@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-12 09:28+0100\n"
+"POT-Creation-Date: 2022-12-12 10:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,11 @@ msgstr "Réseau social"
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:45
+#: plana/apps/associations/views/association.py:63
+msgid "Association name already taken."
+msgstr "Nom d'association déjà enregistré."
+
+#: plana/apps/associations/views/association.py:69
 #: plana/apps/users/views/association_users.py:87
 #: plana/apps/users/views/association_users.py:111
 #: plana/apps/users/views/gdpr_consent_users.py:62

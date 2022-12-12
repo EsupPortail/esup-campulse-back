@@ -1,6 +1,8 @@
 """
 Views directly linked to associations.
 """
+import unicodedata
+
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics, response, status
@@ -39,6 +41,28 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager:
+            # Removes spaces, uppercase and accented characters to avoid similar association names.
+            new_association_name = (
+                unicodedata.normalize(
+                    "NFD", request.data["name"].strip().replace(" ", "").lower()
+                )
+                .encode("ascii", "ignore")
+                .decode("utf-8")
+            )
+            associations = Association.objects.all()
+            for association in associations:
+                existing_association_name = (
+                    unicodedata.normalize(
+                        "NFD", association.name.strip().replace(" ", "").lower()
+                    )
+                    .encode("ascii", "ignore")
+                    .decode("utf-8")
+                )
+                if new_association_name == existing_association_name:
+                    return response.Response(
+                        {"error": _("Association name already taken.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
             return super().create(request, *args, **kwargs)
         else:
             return response.Response(

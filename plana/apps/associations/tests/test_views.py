@@ -78,6 +78,7 @@ class AssociationsViewsTests(TestCase):
         - A SVU manager can add an association.
         - A Crous manager cannot add an association.
         - Another user cannot add an association.
+        - An association cannot be added twice, neither associations with similar names.
         """
         response_svu = self.svu_client.post(
             "/associations/",
@@ -102,6 +103,20 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        similar_names = [
+            "Les Fans de Georges la Saucisse",
+            "LesFansdeGeorgeslaSaucisse",
+            "lesfansdegeorgeslasaucisse",
+            " Les Fans de Georges la Saucisse ",
+            "Lés Fàns dè Gêörgës lâ Säùcîsse",
+        ]
+        for similar_name in similar_names:
+            response_svu = self.svu_client.post(
+                "/associations/",
+                {"name": similar_name},
+            )
+            self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_association_retrieve(self):
         """
