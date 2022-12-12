@@ -12,7 +12,7 @@ from plana.apps.associations.serializers.institution_component import (
 from plana.apps.associations.serializers.social_network import SocialNetworkSerializer
 
 
-class AssociationRetrieveSerializer(serializers.ModelSerializer):
+class AssociationAllDataSerializer(serializers.ModelSerializer):
     """
     Main serializer.
     """
@@ -27,7 +27,7 @@ class AssociationRetrieveSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AssociationListSerializer(serializers.ModelSerializer):
+class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """
     Smaller serializer to return only some of the informations of an association
     (used in a table list of all associations).
@@ -51,7 +51,7 @@ class AssociationListSerializer(serializers.ModelSerializer):
         ]
 
 
-class SimpleAssociationDataSerializer(serializers.ModelSerializer):
+class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
     """
     Smaller serializer to return only the main informations of an association
     (used in a simple name list of all associations).
@@ -62,5 +62,4 @@ class SimpleAssociationDataSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "acronym",
         ]

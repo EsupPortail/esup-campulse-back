@@ -7,12 +7,16 @@ paths:
   /associations/:
     get:
       operationId: associations_list
-      description: 'GET : Lists all associations currently active.'
+      description: |-
+        GET : Lists all associations currently active.
+
+        POST : Creates a new association with mandatory informations.
       tags:
       - associations
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -20,7 +24,36 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationList'
+                  $ref: '#/components/schemas/AssociationPartialData'
+          description: ''
+    post:
+      operationId: associations_create
+      description: |-
+        GET : Lists all associations currently active.
+
+        POST : Creates a new association with mandatory informations.
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationMandatoryData'
           description: ''
   /associations/{id}:
     get:
@@ -42,7 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationRetrieve'
+                $ref: '#/components/schemas/AssociationAllData'
           description: ''
   /consents/:
     get:
@@ -895,40 +928,7 @@ components:
       required:
       - id
       - name
-    AssociationList:
-      type: object
-      description: |-
-        Smaller serializer to return only some of the informations of an association
-        (used in a table list of all associations).
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        institution:
-          $ref: '#/components/schemas/Institution'
-        institution_component:
-          $ref: '#/components/schemas/InstitutionComponent'
-        activity_field:
-          $ref: '#/components/schemas/ActivityField'
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-        is_enabled:
-          type: boolean
-        is_site:
-          type: boolean
-          title: Site ?
-      required:
-      - activity_field
-      - id
-      - institution
-      - institution_component
-    AssociationRetrieve:
+    AssociationAllData:
       type: object
       description: Main serializer.
       properties:
@@ -1025,6 +1025,65 @@ components:
       - institution
       - institution_component
       - social_networks
+    AssociationMandatoryData:
+      type: object
+      description: |-
+        Smaller serializer to return only the main informations of an association
+        (used in a simple name list of all associations).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+    AssociationMandatoryDataRequest:
+      type: object
+      description: |-
+        Smaller serializer to return only the main informations of an association
+        (used in a simple name list of all associations).
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+    AssociationPartialData:
+      type: object
+      description: |-
+        Smaller serializer to return only some of the informations of an association
+        (used in a table list of all associations).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          $ref: '#/components/schemas/Institution'
+        institution_component:
+          $ref: '#/components/schemas/InstitutionComponent'
+        activity_field:
+          $ref: '#/components/schemas/ActivityField'
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        is_enabled:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+      required:
+      - activity_field
+      - id
+      - institution
+      - institution_component
     AssociationUsers:
       type: object
       description: Main serializer.
@@ -1044,7 +1103,7 @@ components:
         is_president:
           type: boolean
         association:
-          $ref: '#/components/schemas/SimpleAssociationData'
+          $ref: '#/components/schemas/AssociationMandatoryData'
       required:
       - association
       - id
@@ -1394,25 +1453,6 @@ components:
           readOnly: true
       required:
       - detail
-    SimpleAssociationData:
-      type: object
-      description: |-
-        Smaller serializer to return only the main informations of an association
-        (used in a simple name list of all associations).
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-      required:
-      - id
     SocialNetwork:
       type: object
       description: Main serializer.

@@ -40,15 +40,20 @@ class Association(models.Model):
         verbose_name=_("Institution"),
         related_name="associations",
         on_delete=models.RESTRICT,
+        null=True,
     )
     institution_component = models.ForeignKey(
         "InstitutionComponent",
         verbose_name=_("Institution component"),
         related_name="associations",
         on_delete=models.RESTRICT,
+        null=True,
     )
     activity_field = models.ForeignKey(
-        "ActivityField", verbose_name=_("Activity field"), on_delete=models.RESTRICT
+        "ActivityField",
+        verbose_name=_("Activity field"),
+        on_delete=models.RESTRICT,
+        null=True,
     )
 
     def __str__(self):
