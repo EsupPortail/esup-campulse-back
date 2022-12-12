@@ -67,6 +67,7 @@ pylint-django = "^2.5.0"
 sphinx = "^5.3.0"
 black = "^22.10.0"
 pre-commit = "^2.20.0"
+safety = "^2.3.5"
 
 
 [tool.poetry.group.prod.dependencies]
