@@ -19,14 +19,14 @@ class UserViewsStudentTests(TestCase):
     """
 
     fixtures = [
+        "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
-        "account_emailaddress.json",
-        "consents_gdprconsent.json",
         "auth_group.json",
+        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",

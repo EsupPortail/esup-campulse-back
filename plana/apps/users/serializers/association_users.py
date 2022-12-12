@@ -4,7 +4,7 @@ Serializers describing fields used on links between users and associations.
 from rest_framework import serializers
 
 from plana.apps.associations.serializers.association import (
-    SimpleAssociationDataSerializer,
+    AssociationMandatoryDataSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
@@ -18,7 +18,7 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
-    association = SimpleAssociationDataSerializer()
+    association = AssociationMandatoryDataSerializer()
 
     class Meta:
         model = AssociationUsers

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 15:47+0100\n"
+"POT-Creation-Date: 2022-12-12 09:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:19
-#: plana/apps/associations/models/association.py:51
+#: plana/apps/associations/models/association.py:54
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -111,19 +111,19 @@ msgstr "Date de dernière AG constitutive"
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:46
+#: plana/apps/associations/models/association.py:47
 #: plana/apps/associations/models/institution_component.py:19
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:58
+#: plana/apps/associations/models/association.py:63
 #: plana/apps/associations/models/social_network.py:17
 #: plana/apps/users/models/association_users.py:19
 #: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:59
+#: plana/apps/associations/models/association.py:64
 #: plana/apps/users/models/association_users.py:30
 #: plana/apps/users/models/user.py:45
 msgid "Associations"
@@ -152,6 +152,17 @@ msgstr "Réseau social"
 #: plana/apps/associations/models/social_network.py:27
 msgid "Social networks"
 msgstr "Réseaux sociaux"
+
+#: plana/apps/associations/views/association.py:45
+#: plana/apps/users/views/association_users.py:87
+#: plana/apps/users/views/association_users.py:111
+#: plana/apps/users/views/gdpr_consent_users.py:62
+#: plana/apps/users/views/user.py:55 plana/apps/users/views/user.py:84
+#: plana/apps/users/views/user.py:104 plana/apps/users/views/user.py:117
+#: plana/apps/users/views/user.py:122 plana/apps/users/views/user_groups.py:87
+#: plana/apps/users/views/user_groups.py:113
+msgid "Bad request."
+msgstr "Erreur de requête."
 
 #: plana/apps/consents/models/consent.py:13
 msgid "GDPR Consent title"
@@ -250,16 +261,6 @@ msgstr "L'utilisateur est déjà membre de l'association."
 #: plana/apps/users/views/association_users.py:62
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
-
-#: plana/apps/users/views/association_users.py:87
-#: plana/apps/users/views/association_users.py:111
-#: plana/apps/users/views/gdpr_consent_users.py:62
-#: plana/apps/users/views/user.py:55 plana/apps/users/views/user.py:84
-#: plana/apps/users/views/user.py:104 plana/apps/users/views/user.py:117
-#: plana/apps/users/views/user.py:122 plana/apps/users/views/user_groups.py:87
-#: plana/apps/users/views/user_groups.py:113
-msgid "Bad request."
-msgstr "Erreur de requête."
 
 #: plana/apps/users/views/gdpr_consent_users.py:39
 msgid "User already consented."
