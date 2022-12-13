@@ -73,6 +73,8 @@ paths:
       description: |-
         GET : Lists an association with all its details.
 
+        PATCH : Edit association details (with different permissions for SVU and president).
+
         DELETE : Removes an entire association.
       parameters:
       - in: path
@@ -82,6 +84,44 @@ paths:
         required: true
       tags:
       - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllData'
+          description: ''
+    patch:
+      operationId: associations_partial_update
+      description: |-
+        GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
+
+        DELETE : Removes an entire association.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -96,6 +136,8 @@ paths:
       operationId: associations_destroy
       description: |-
         GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
 
         DELETE : Removes an entire association.
       parameters:
@@ -963,6 +1005,17 @@ components:
       required:
       - id
       - name
+    ActivityFieldRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
+      - name
     AssociationAllData:
       type: object
       description: Main serializer.
@@ -1349,6 +1402,34 @@ components:
       required:
       - id
       - name
+    InstitutionComponentRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
+      - name
+    InstitutionRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+      required:
+      - acronym
+      - name
     JWT:
       type: object
       description: Serializer for JWT authentication.
@@ -1426,6 +1507,99 @@ components:
           minLength: 1
       required:
       - email
+    PatchedAssociationAllDataRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        institution:
+          $ref: '#/components/schemas/InstitutionRequest'
+        institution_component:
+          $ref: '#/components/schemas/InstitutionComponentRequest'
+        activity_field:
+          $ref: '#/components/schemas/ActivityFieldRequest'
+        social_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetworkRequest'
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          minLength: 1
+          title: Emplacement du logo
+          maxLength: 250
+        alt_logo:
+          type: string
+          minLength: 1
+          title: Description
+        description:
+          type: string
+          minLength: 1
+        activities:
+          type: string
+          minLength: 1
+          title: Activités
+        address:
+          type: string
+          minLength: 1
+          title: Adresse
+        phone:
+          type: string
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          minLength: 1
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          minLength: 1
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          minLength: 1
+          maxLength: 256
+        is_enabled:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -1495,6 +1669,23 @@ components:
           maxLength: 200
       required:
       - id
+      - location
+      - type
+    SocialNetworkRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        type:
+          type: string
+          minLength: 1
+          maxLength: 32
+        location:
+          type: string
+          format: uri
+          minLength: 1
+          title: Adresse
+          maxLength: 200
+      required:
       - location
       - type
     TokenRefresh:
