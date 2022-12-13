@@ -100,7 +100,8 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
 
 
-class AssociationRetrieveDestroy(generics.RetrieveDestroyAPIView):
+@extend_schema(methods=["PUT"], exclude=True)
+class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     GET : Lists an association with all its details.
 
@@ -110,8 +111,35 @@ class AssociationRetrieveDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = AssociationAllDataSerializer
     queryset = Association.objects.all()
 
+    def get_permissions(self):
+        if self.request.method == "PATCH" or self.request.method == "DELETE":
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, *args, **kwargs):
+        if request.user.is_svu_manager:
+            return self.partial_update(request, *args, **kwargs)
+        """
+        elif is_president:
+            for restricted_field in [
+                "is_enabled",
+                "is_site",
+                "creation_date",
+            ]:
+                request.data.pop(restricted_field, False)
+        """
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
     def delete(self, request, *args, **kwargs):
-        if not request.user.is_anonymous and request.user.is_svu_manager:
+        if request.user.is_svu_manager:
             return self.destroy(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},

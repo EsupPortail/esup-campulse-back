@@ -148,6 +148,38 @@ class AssociationsViewsTests(TestCase):
         not_found_response = self.client.get("/associations/50")
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_patch_association(self):
+        """
+        PATCH /users/{id}
+        - An anonymous user cannot execute this request.
+        - A Crous manager cannot edit an association.
+        - A SVU manager can edit an association.
+        """
+        association_id = 1
+        response_anonymous = self.client.patch(
+            f"/associations/{association_id}",
+            {"name": "La Grande Confrérie du Cassoulet de Castelnaudary"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        response_crous = self.crous_client.patch(
+            f"/associations/{association_id}",
+            {"name": "L'assaucissiation"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"name": "Association Amicale des Amateurs d'Andouillette Authentique"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(
+            association.name,
+            "Association Amicale des Amateurs d'Andouillette Authentique",
+        )
+
     def test_delete_association(self):
         """
         DELETE /associations/{id}
@@ -157,10 +189,20 @@ class AssociationsViewsTests(TestCase):
         """
         association_id = 1
         response_anonymous = self.client.delete(f"/associations/{association_id}")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
         response_crous = self.crous_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
         response_svu = self.svu_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_svu.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
+
+    def test_put_association(self):
+        """
+        PUT /users/{id}
+        - Request should return an error.
+        """
+        response = self.client.put(
+            "/associations/1", {"name": "Les aficionados d'endives au jambon"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
