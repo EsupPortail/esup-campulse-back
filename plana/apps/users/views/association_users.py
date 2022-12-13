@@ -50,7 +50,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             user = User.objects.get(username=username)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("Bad request.")},
+                {"error": _("No user name or association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         association_users = AssociationUsers.objects.filter(

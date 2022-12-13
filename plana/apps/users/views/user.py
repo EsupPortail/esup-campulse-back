@@ -113,7 +113,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 user = User.objects.get(id=kwargs["pk"])
             except ObjectDoesNotExist:
                 return response.Response(
-                    {"error": _("Bad request.")},
+                    {"error": _("No user found.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             if (
@@ -122,7 +122,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 or user.is_crous_manager
             ):
                 return response.Response(
-                    {"error": _("Bad request.")},
+                    {"error": _("Cannot delete superuser.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
             return self.destroy(request, *args, **kwargs)

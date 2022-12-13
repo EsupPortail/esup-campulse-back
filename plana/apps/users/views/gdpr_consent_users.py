@@ -37,7 +37,7 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
             user = User.objects.get(username=username)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("Bad request.")},
+                {"error": _("No user name or consent id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         consent_users = GDPRConsentUsers.objects.filter(

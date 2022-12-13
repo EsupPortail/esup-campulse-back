@@ -45,7 +45,7 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
             user = User.objects.get(username=username)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("Bad request.")},
+                {"error": _("No user name or groups ids given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -113,7 +113,7 @@ class UserGroupsDestroy(generics.DestroyAPIView):
                 user = User.objects.get(id=kwargs["user_id"])
             except ObjectDoesNotExist:
                 return response.Response(
-                    {"error": _("Bad request.")},
+                    {"error": _("No user found.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             if user.groups.count() > 1:

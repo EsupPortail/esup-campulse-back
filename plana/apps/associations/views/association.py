@@ -77,7 +77,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 association_name = request.data["name"]
             except KeyError:
                 return response.Response(
-                    {"error": _("Bad request.")},
+                    {"error": _("No association name given.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             # Removes spaces, uppercase and accented characters to avoid similar association names.
@@ -139,7 +139,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             Association.objects.get(id=association_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("Bad request.")},
+                {"error": _("No association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -161,7 +161,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     return self.partial_update(request, *args, **kwargs)
             except (ObjectDoesNotExist, MultiValueDictKeyError):
                 return response.Response(
-                    {"error": _("Bad request.")},
+                    {"error": _("No office link between association and user found.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 

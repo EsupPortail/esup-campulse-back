@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 16:05+0100\n"
+"POT-Creation-Date: 2022-12-13 16:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,28 +154,32 @@ msgid "Social networks"
 msgstr "Réseaux sociaux"
 
 #: plana/apps/associations/views/association.py:80
-#: plana/apps/associations/views/association.py:108
-#: plana/apps/associations/views/association.py:142
-#: plana/apps/associations/views/association.py:164
-#: plana/apps/associations/views/association.py:172
-#: plana/apps/users/views/association_users.py:53
-#: plana/apps/users/views/association_users.py:96
-#: plana/apps/users/views/association_users.py:120
-#: plana/apps/users/views/gdpr_consent_users.py:40
-#: plana/apps/users/views/gdpr_consent_users.py:71
-#: plana/apps/users/views/user.py:51 plana/apps/users/views/user.py:80
-#: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:106
-#: plana/apps/users/views/user.py:116 plana/apps/users/views/user.py:125
-#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:48
-#: plana/apps/users/views/user_groups.py:95
-#: plana/apps/users/views/user_groups.py:116
-#: plana/apps/users/views/user_groups.py:127
-msgid "Bad request."
-msgstr "Erreur de requête."
+msgid "No association name given."
+msgstr "Aucun nom d'association donné."
 
 #: plana/apps/associations/views/association.py:102
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
+
+#: plana/apps/associations/views/association.py:108
+#: plana/apps/associations/views/association.py:172
+#: plana/apps/users/views/association_users.py:96
+#: plana/apps/users/views/association_users.py:120
+#: plana/apps/users/views/gdpr_consent_users.py:71
+#: plana/apps/users/views/user.py:51 plana/apps/users/views/user.py:80
+#: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:106
+#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:95
+#: plana/apps/users/views/user_groups.py:127
+msgid "Bad request."
+msgstr "Erreur de requête."
+
+#: plana/apps/associations/views/association.py:142
+msgid "No association id given."
+msgstr "Pas d'identifiant d'association donné."
+
+#: plana/apps/associations/views/association.py:164
+msgid "No office link between association and user found."
+msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
 #: plana/apps/consents/models/consent.py:13
 msgid "GDPR Consent title"
@@ -267,6 +271,10 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
+#: plana/apps/users/views/association_users.py:53
+msgid "No user name or association id given."
+msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
+
 #: plana/apps/users/views/association_users.py:61
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
@@ -275,9 +283,25 @@ msgstr "L'utilisateur est déjà membre de l'association."
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 
+#: plana/apps/users/views/gdpr_consent_users.py:40
+msgid "No user name or consent id given."
+msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
+
 #: plana/apps/users/views/gdpr_consent_users.py:48
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
+
+#: plana/apps/users/views/user.py:116 plana/apps/users/views/user_groups.py:116
+msgid "No user found."
+msgstr "Aucun utilisateur trouvé."
+
+#: plana/apps/users/views/user.py:125
+msgid "Cannot delete superuser."
+msgstr "Suppression de superutilisateur impossiblr"
+
+#: plana/apps/users/views/user_groups.py:48
+msgid "No user name or groups ids given."
+msgstr "Aucun nom d'utilisateur ou identifiant de groupe donné."
 
 #: plana/apps/users/views/user_groups.py:58
 msgid "Groups for this user cannot be edited."
