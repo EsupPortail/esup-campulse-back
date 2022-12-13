@@ -3,6 +3,8 @@ Views directly linked to associations.
 """
 import unicodedata
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -15,6 +17,7 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
 )
+from plana.apps.users.models.association_users import AssociationUsers
 
 
 @extend_schema_view(
@@ -124,21 +127,36 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        try:
+            association_id = kwargs["pk"]
+            Association.objects.get(id=association_id)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if request.user.is_svu_manager:
             return self.partial_update(request, *args, **kwargs)
-        """
-        elif is_president:
-            for restricted_field in [
-                "is_enabled",
-                "is_site",
-                "creation_date",
-            ]:
-                request.data.pop(restricted_field, False)
-        """
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        else:
+            try:
+                AssociationUsers.objects.get(
+                    user_id=request.user.pk,
+                    association_id=association_id,
+                    has_office_status=True,
+                )
+                for restricted_field in [
+                    "is_enabled",
+                    "is_site",
+                    "creation_date",
+                ]:
+                    request.data.pop(restricted_field, False)
+                    return self.partial_update(request, *args, **kwargs)
+            except (ObjectDoesNotExist, MultiValueDictKeyError):
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager:

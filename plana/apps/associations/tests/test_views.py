@@ -24,6 +24,7 @@ class AssociationsViewsTests(TestCase):
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
         "auth_group.json",
+        "users_associationusers.json",
         "users_user.json",
         "users_user_groups.json",
     ]
@@ -33,22 +34,35 @@ class AssociationsViewsTests(TestCase):
         Start a default client used on all tests.
         """
         self.client = Client()
+        url_login = reverse("rest_login")
+
+        self.member_client = Client()
+        data_member = {
+            "username": "étudiant-asso-hors-site@mail.tld",
+            "password": "motdepasse",
+        }
+        self.response = self.member_client.post(url_login, data_member)
+
+        self.president_client = Client()
+        data_president = {
+            "username": "président-asso-hors-site@mail.tld",
+            "password": "motdepasse",
+        }
+        self.response = self.president_client.post(url_login, data_president)
 
         self.crous_client = Client()
-        url_crous = reverse("rest_login")
         data_crous = {
             "username": "gestionnaire-crous@mail.tld",
             "password": "motdepasse",
         }
-        self.response = self.crous_client.post(url_crous, data_crous)
+        self.response = self.crous_client.post(url_login, data_crous)
 
         self.svu_client = Client()
-        url_svu = reverse("rest_login")
         data_svu = {
             "username": "gestionnaire-svu@mail.tld",
             "password": "motdepasse",
         }
-        self.response = self.svu_client.post(url_svu, data_svu)
+        self.response = self.svu_client.post(url_login, data_svu)
 
     def test_get_associations_list(self):
         """
@@ -150,10 +164,15 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association(self):
         """
-        PATCH /users/{id}
+        PATCH /associations/{id}
         - An anonymous user cannot execute this request.
         - A Crous manager cannot edit an association.
         - A SVU manager can edit an association.
+        - A non-existing association cannot be edited.
+        - Someone from an association without office status cannot edit informations from another association.
+        - Someone from an association's office cannot edit informations from another association.
+        - Someone from the association without office status cannot edit informations from the association.
+        - Someone from the association's office can edit informations from the association.
         """
         association_id = 1
         response_anonymous = self.client.patch(
@@ -167,7 +186,7 @@ class AssociationsViewsTests(TestCase):
             {"name": "L'assaucissiation"},
             content_type="application/json",
         )
-        self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_crous.status_code, status.HTTP_400_BAD_REQUEST)
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
             {"name": "Association Amicale des Amateurs d'Andouillette Authentique"},
@@ -178,6 +197,57 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(
             association.name,
             "Association Amicale des Amateurs d'Andouillette Authentique",
+        )
+
+        association_id = 99
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"name": "La singularité de l'espace-temps."},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
+
+        association_id = 2
+        response_incorrect_member = self.member_client.patch(
+            f"/associations/{association_id}",
+            {"name": "Je suis pas de cette asso mais je veux l'éditer."},
+            content_type="application/json",
+        )
+        self.assertEqual(
+            response_incorrect_member.status_code, status.HTTP_400_BAD_REQUEST
+        )
+        response_incorrect_president = self.president_client.patch(
+            f"/associations/{association_id}",
+            {
+                "name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer quand même."
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(
+            response_incorrect_president.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+        association_id = 3
+        response_correct_member = self.member_client.patch(
+            f"/associations/{association_id}",
+            {
+                "name": "Ah et bah moi je suis de l'asso mais je peux pas l'éditer c'est terrible."
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(
+            response_correct_member.status_code, status.HTTP_400_BAD_REQUEST
+        )
+        response_correct_president = self.president_client.patch(
+            f"/associations/{association_id}",
+            {"name": "Moi je peux vraiment éditer l'asso, nananère."},
+            content_type="application/json",
+        )
+        self.assertEqual(response_correct_president.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(
+            association.name,
+            "Moi je peux vraiment éditer l'asso, nananère.",
         )
 
     def test_delete_association(self):
@@ -199,7 +269,7 @@ class AssociationsViewsTests(TestCase):
 
     def test_put_association(self):
         """
-        PUT /users/{id}
+        PUT /associations/{id}
         - Request should return an error.
         """
         response = self.client.put(
