@@ -105,6 +105,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     GET : Lists an association with all its details.
 
+    PATCH : Edit association details (with different permissions for SVU and president).
+
     DELETE : Removes an entire association.
     """
 

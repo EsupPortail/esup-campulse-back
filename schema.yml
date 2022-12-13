@@ -73,6 +73,8 @@ paths:
       description: |-
         GET : Lists an association with all its details.
 
+        PATCH : Edit association details (with different permissions for SVU and president).
+
         DELETE : Removes an entire association.
       parameters:
       - in: path
@@ -97,6 +99,8 @@ paths:
       operationId: associations_partial_update
       description: |-
         GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
 
         DELETE : Removes an entire association.
       parameters:
@@ -132,6 +136,8 @@ paths:
       operationId: associations_destroy
       description: |-
         GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
 
         DELETE : Removes an entire association.
       parameters:
