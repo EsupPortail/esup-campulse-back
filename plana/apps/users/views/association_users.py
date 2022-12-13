@@ -1,6 +1,7 @@
 """
 Views linked to links between users and associations.
 """
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -42,7 +43,13 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         return response.Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.data["user"])
+        try:
+            user = User.objects.get(username=request.data["user"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         association_users = AssociationUsers.objects.filter(
             user_id=user.pk, association_id=request.data["association"]
         )

@@ -84,11 +84,22 @@ class UserViewsAnonymousTests(TestCase):
     def test_anonymous_post_association_user(self):
         """
         POST /users/associations/
+        - A non-existing user cannot be added in an association.
         - An anonymous user cannot add a link between a validated user and an association.
         - An anonymous user can add a link between a non-validated user and an association.
         - A user cannot be added twice in the same association.
         - A user cannot be added in a non-existing association.
         """
+        response_anonymous = self.anonymous_client.post(
+            "/users/associations/",
+            {
+                "user": "george-luCAS",
+                "association": 2,
+                "has_office_status": False,
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
@@ -214,10 +225,17 @@ class UserViewsAnonymousTests(TestCase):
     def test_anonymous_post_user_groups(self):
         """
         POST /users/groups/
+        - A non-existing user cannot be added in a group.
         - An anonymous user cannot add a link between a validated user and a group.
         - An anonymous user can add a link between a non-validated user and a group.
         - A user cannot be added in a non-existing group.
         """
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": "patricia-CAS", "groups": [1, 2]},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": "test@pas-unistra.fr", "groups": [1, 2]},

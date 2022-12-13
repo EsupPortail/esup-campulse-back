@@ -38,7 +38,13 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        user = User.objects.get(username=request.data["username"])
+        try:
+            user = User.objects.get(username=request.data["username"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if (request.user.is_anonymous and user.is_validated_by_admin) or (
             not request.user.is_anonymous
@@ -100,7 +106,13 @@ class UserGroupsDestroy(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
-            user = User.objects.get(id=kwargs["user_id"])
+            try:
+                user = User.objects.get(id=kwargs["user_id"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             if user.groups.count() > 1:
                 user.groups.remove(kwargs["group_id"])
                 return response.Response({}, status=status.HTTP_204_NO_CONTENT)

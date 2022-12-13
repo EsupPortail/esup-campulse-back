@@ -88,6 +88,7 @@ class UserViewsManagerTests(TestCase):
         PATCH /users/{id}
         - A manager user can execute this request.
         - A manager user can update user details.
+        - A non-existing user cannot be updated.
         - A manager user cannot update restricted CAS user details.
         """
 
@@ -97,6 +98,13 @@ class UserViewsManagerTests(TestCase):
         user = User.objects.get(pk=2)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.username, "Bienvenueg")
+
+        response_manager = self.manager_client.patch(
+            "/users/1000",
+            data={"username": "Joséphine Ange Gardien"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.create_user(
             username="PatriciaCAS",
@@ -119,6 +127,7 @@ class UserViewsManagerTests(TestCase):
         DELETE /users/{id}
         - A manager user can execute this request.
         - A user can be deleted.
+        - A non-existing user cannot be deleted.
         - A manager account cannot be deleted.
         """
         user_id = 2
@@ -126,6 +135,9 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             User.objects.get(pk=user_id)
+
+        response = self.manager_client.delete(f"/users/{user_id}")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         managers_ids = [1, 4, 5]
         for manager_id in managers_ids:
@@ -311,6 +323,7 @@ class UserViewsManagerTests(TestCase):
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
+        - A link between a group and a non-existing user cannot be deleted.
         """
         user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
@@ -327,3 +340,8 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
         )
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/groups/{user_id}/{str(first_user_group_id)}"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)

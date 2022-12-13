@@ -49,7 +49,7 @@ export DJANGO_SETTINGS_MODULE=plana.settings.dev
 
 Les actions suivantes se font avec le virtualenv activé :
 
-### Installer les dépendances de dev dans le virtualenv
+### Installer les dépendances de dev dans le virtualenv sans Poetry
 
 ```sh
 $ pip install -r requirements/dev.txt
@@ -145,7 +145,17 @@ $ python manage.py spectacular --file schema.yml
 ```sh
 $ DEFAULT_DB_TEST_HOST=localhost tox
 ```
+
 ### Voir de façon graphique le coverage des tests unitaires
+
 ```sh
 $ firefox htmlcov/index.html
+```
+
+### Mettre à jour les dépendances du projet
+
+```sh
+$ poetry lock
+$ poetry install --sync
+$ ./generate_requirements.sh
 ```

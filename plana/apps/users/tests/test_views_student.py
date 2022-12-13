@@ -200,10 +200,16 @@ class UserViewsStudentTests(TestCase):
     def test_student_post_user_consents(self):
         """
         POST /users/consents/
+        - A non-existing user cannot have a consent.
         - A student user can execute this request.
         - A student user cannot give the same consent twice.
         - A student user cannot give an unexisting consent.
         """
+        response_student = self.student_client.post(
+            "/users/consents/", {"user": "brice-de-nice-CASsé", "consent": 1}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_student = self.student_client.post(
             "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
         )

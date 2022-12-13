@@ -2,6 +2,7 @@
 Views directly linked to users and their links with other models.
 """
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -85,7 +86,13 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
-            user = User.objects.get(id=kwargs["pk"])
+            try:
+                user = User.objects.get(id=kwargs["pk"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             if user.get_cas_user():
                 for restricted_field in [
                     "username",
@@ -102,7 +109,13 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
-            user = User.objects.get(id=kwargs["pk"])
+            try:
+                user = User.objects.get(id=kwargs["pk"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             if (
                 (user.is_superuser is True)
                 or user.is_svu_manager
