@@ -3,6 +3,7 @@ Views linked to links between users and auth groups.
 """
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -39,8 +40,10 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(username=request.data["username"])
-        except ObjectDoesNotExist:
+            username = request.data["username"]
+            groups_ids = request.data["groups"]
+            user = User.objects.get(username=username)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -57,9 +60,9 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
             )
 
         groups = (
-            request.data["groups"]
-            if isinstance(request.data["groups"], list)
-            else list(map(int, request.data["groups"].split(",")))
+            groups_ids
+            if isinstance(groups_ids, list)
+            else list(map(int, groups_ids.split(",")))
         )
         for id_group in groups:
             try:

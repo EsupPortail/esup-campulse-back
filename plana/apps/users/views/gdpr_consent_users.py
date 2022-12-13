@@ -2,6 +2,7 @@
 Views linked to links between users and GDPR consents.
 """
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
@@ -31,14 +32,16 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            user = User.objects.get(username=request.data["user"])
-        except ObjectDoesNotExist:
+            username = request.data["user"]
+            consent_id = request.data["consent"]
+            user = User.objects.get(username=username)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("Bad request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         consent_users = GDPRConsentUsers.objects.filter(
-            user_id=user.pk, consent_id=request.data["consent"]
+            user_id=user.pk, consent_id=consent_id
         )
         if consent_users.count() > 0:
             return response.Response(
