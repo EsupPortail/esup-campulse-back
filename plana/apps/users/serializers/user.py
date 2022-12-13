@@ -23,7 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
     """
 
     is_cas = serializers.SerializerMethodField("is_cas_user")
-    groups = GroupSerializer(many=True)
 
     def is_cas_user(self, user) -> bool:
         """
@@ -42,7 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
             "phone",
             "is_cas",
             "is_validated_by_admin",
-            "groups",
         ]
 
 

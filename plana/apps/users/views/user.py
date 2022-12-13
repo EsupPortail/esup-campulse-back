@@ -34,7 +34,7 @@ class UserList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = User.objects.all().order_by("id")
+        queryset = User.objects.filter(is_active=True).order_by("id")
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
         if is_validated_by_admin is not None:
             queryset = queryset.filter(

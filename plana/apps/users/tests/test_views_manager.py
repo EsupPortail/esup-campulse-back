@@ -58,7 +58,7 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get("/users/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        users_cnt = User.objects.count()
+        users_cnt = User.objects.filter(is_active=True).count()
         self.assertTrue(users_cnt > 0)
 
         content = json.loads(response_manager.content.decode("utf-8"))
