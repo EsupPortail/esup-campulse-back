@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 14:35+0100\n"
+"POT-Creation-Date: 2022-12-13 15:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,12 +153,9 @@ msgstr "Réseau social"
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:92
-msgid "Association name already taken."
-msgstr "Nom d'association déjà enregistré."
-
-#: plana/apps/associations/views/association.py:98
-#: plana/apps/associations/views/association.py:117
+#: plana/apps/associations/views/association.py:77
+#: plana/apps/associations/views/association.py:105
+#: plana/apps/associations/views/association.py:124
 #: plana/apps/users/views/association_users.py:53
 #: plana/apps/users/views/association_users.py:96
 #: plana/apps/users/views/association_users.py:120
@@ -173,6 +170,10 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/users/views/user_groups.py:127
 msgid "Bad request."
 msgstr "Erreur de requête."
+
+#: plana/apps/associations/views/association.py:99
+msgid "Association name already taken."
+msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/consents/models/consent.py:13
 msgid "GDPR Consent title"

@@ -70,10 +70,17 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager:
+            try:
+                association_name = request.data["name"]
+            except KeyError:
+                return response.Response(
+                    {"error": _("Bad request.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             # Removes spaces, uppercase and accented characters to avoid similar association names.
             new_association_name = (
                 unicodedata.normalize(
-                    "NFD", request.data["name"].strip().replace(" ", "").lower()
+                    "NFD", association_name.strip().replace(" ", "").lower()
                 )
                 .encode("ascii", "ignore")
                 .decode("utf-8")

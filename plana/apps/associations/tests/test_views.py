@@ -89,6 +89,7 @@ class AssociationsViewsTests(TestCase):
         - A Crous manager cannot add an association.
         - Another user cannot add an association.
         - An association cannot be added twice, neither associations with similar names.
+        - name field is mandatory.
         """
         response_svu = self.svu_client.post(
             "/associations/",
@@ -127,6 +128,9 @@ class AssociationsViewsTests(TestCase):
                 {"name": similar_name},
             )
             self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_svu = self.svu_client.post("/associations/", {})
+        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_association_retrieve(self):
         """
