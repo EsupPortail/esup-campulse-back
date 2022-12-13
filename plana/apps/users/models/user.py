@@ -8,6 +8,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.consents.models.consent import GDPRConsent
 from plana.apps.users.provider import CASProvider
 
 
@@ -39,9 +40,11 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
-    # TODO Add this field for GDPR Consents.
     association_members = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
+    )
+    consents_given = models.ManyToManyField(
+        GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
 
     def __str__(self):
