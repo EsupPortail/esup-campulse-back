@@ -116,7 +116,7 @@ class AssociationsViewsTests(TestCase):
         response_crous = self.crous_client.post(
             "/associations/",
             {
-                "name": "C'est Brice de Nice qui se connecte via CAS, il clique sur Connexion et c'est CASsé.",
+                "name": "Quand Brice de Nice se connecte via CAS, c'est CASsé.",
             },
         )
         self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
@@ -124,7 +124,7 @@ class AssociationsViewsTests(TestCase):
         response = self.client.post(
             "/associations/",
             {
-                "name": "Quelle chanteuse peut se connecter sans compte à l'application ? Patricia CAS.",
+                "name": "Quelle chanteuse se connecte sans compte à l'application ? Patricia CAS",
             },
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -173,9 +173,9 @@ class AssociationsViewsTests(TestCase):
         - A Crous manager cannot edit an association.
         - A SVU manager can edit an association.
         - A non-existing association cannot be edited.
-        - Someone from an association without office status cannot edit informations from another association.
+        - Someone from an association without status can't edit infos from another association.
         - Someone from an association's office cannot edit informations from another association.
-        - Someone from the association without office status cannot edit informations from the association.
+        - Someone from the association without status can't edit infos from the association.
         - Someone from the association's office can edit informations from the association.
         """
         association_id = 1
@@ -227,7 +227,7 @@ class AssociationsViewsTests(TestCase):
         response_incorrect_president = self.president_client.patch(
             f"/associations/{association_id}",
             {
-                "name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer quand même."
+                "name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer."
             },
             content_type="application/json",
         )

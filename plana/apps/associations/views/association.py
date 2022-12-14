@@ -104,11 +104,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             return super().create(request, *args, **kwargs)
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -125,7 +124,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Association.objects.all()
 
     def get_permissions(self):
-        if self.request.method == "PATCH" or self.request.method == "DELETE":
+        if self.request.method in ("PATCH", "DELETE"):
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
@@ -153,25 +152,24 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if request.user.is_svu_manager:
             return self.partial_update(request, *args, **kwargs)
-        else:
-            try:
-                AssociationUsers.objects.get(
-                    user_id=request.user.pk,
-                    association_id=association_id,
-                    has_office_status=True,
-                )
-                for restricted_field in [
-                    "is_enabled",
-                    "is_site",
-                    "creation_date",
-                ]:
-                    request.data.pop(restricted_field, False)
-                    return self.partial_update(request, *args, **kwargs)
-            except (ObjectDoesNotExist, MultiValueDictKeyError):
-                return response.Response(
-                    {"error": _("No office link between association and user found.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        try:
+            AssociationUsers.objects.get(
+                user_id=request.user.pk,
+                association_id=association_id,
+                has_office_status=True,
+            )
+            for restricted_field in [
+                "is_enabled",
+                "is_site",
+                "creation_date",
+            ]:
+                request.data.pop(restricted_field, False)
+                return self.partial_update(request, *args, **kwargs)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            return response.Response(
+                {"error": _("No office link between association and user found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager:

@@ -13,7 +13,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
-from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import User
 
 

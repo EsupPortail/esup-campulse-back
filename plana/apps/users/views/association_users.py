@@ -118,8 +118,8 @@ class AssociationUsersDestroy(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             try:
-                user = User.objects.get(id=kwargs["user_id"])
-                association = Association.objects.get(id=kwargs["association_id"])
+                User.objects.get(id=kwargs["user_id"])
+                Association.objects.get(id=kwargs["association_id"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("No user or association found.")},
