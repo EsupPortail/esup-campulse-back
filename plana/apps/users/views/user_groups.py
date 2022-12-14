@@ -49,13 +49,24 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (request.user.is_anonymous and user.is_validated_by_admin) or (
+        if user.is_svu_manager or user.is_crous_manager or user.is_superuser:
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if request.user.is_anonymous and user.is_validated_by_admin:
+            return response.Response(
+                {"error": _("Only managers can edit groups for this account.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if (
             not request.user.is_anonymous
+            and user.is_validated_by_admin
             and not request.user.is_svu_manager
             and not request.user.is_crous_manager
         ):
             return response.Response(
-                {"error": _("Groups for this user cannot be edited.")},
+                {"error": _("Only managers can edit groups.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

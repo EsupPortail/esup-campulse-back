@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 13:46+0100\n"
+"POT-Creation-Date: 2022-12-14 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,13 +163,13 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:108
 #: plana/apps/associations/views/association.py:178
-#: plana/apps/users/views/association_users.py:101
-#: plana/apps/users/views/association_users.py:133
+#: plana/apps/users/views/association_users.py:103
+#: plana/apps/users/views/association_users.py:135
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:51 plana/apps/users/views/user.py:80
 #: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:106
-#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:90
-#: plana/apps/users/views/user_groups.py:122
+#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:96
+#: plana/apps/users/views/user_groups.py:128
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -279,11 +279,19 @@ msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:76
-msgid "Associations for this user cannot be edited."
-msgstr "Les associations de cet utilisateur ne peuvent être éditées."
+#: plana/apps/users/views/association_users.py:68
+msgid "A manager cannot have an association."
+msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:125
+#: plana/apps/users/views/association_users.py:73
+msgid "Only managers can edit associations for this account."
+msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
+
+#: plana/apps/users/views/association_users.py:78
+msgid "Only managers can edit associations."
+msgstr "Seuls les gestionnaires peuvent éditer les associations."
+
+#: plana/apps/users/views/association_users.py:127
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
@@ -295,7 +303,7 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:116 plana/apps/users/views/user_groups.py:111
+#: plana/apps/users/views/user.py:116 plana/apps/users/views/user_groups.py:117
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
@@ -307,11 +315,19 @@ msgstr "Suppression de superutilisateur impossiblr"
 msgid "No user name or groups ids given."
 msgstr "Aucun nom d'utilisateur ou identifiant de groupe donné."
 
-#: plana/apps/users/views/user_groups.py:58
-msgid "Groups for this user cannot be edited."
-msgstr "Les groupes de cet utilisateur ne peuvent être édités."
+#: plana/apps/users/views/user_groups.py:54
+msgid "Groups for a manager cannot be changed."
+msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups.py:118
+#: plana/apps/users/views/user_groups.py:59
+msgid "Only managers can edit groups for this account."
+msgstr "Seuls les gestionnaires peuvent changer les groupes de ce compte."
+
+#: plana/apps/users/views/user_groups.py:64
+msgid "Only managers can edit groups."
+msgstr "Seuls les gestionnaires peuvent changer les groupes."
+
+#: plana/apps/users/views/user_groups.py:124
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
