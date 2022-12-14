@@ -13,6 +13,26 @@ paths:
         POST : Creates a new association with mandatory informations.
       parameters:
       - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Association acronym.
+      - in: query
+        name: activity_field
+        schema:
+          type: integer
+        description: Filter by Activity Field ID.
+      - in: query
+        name: institution
+        schema:
+          type: integer
+        description: Filter by Institution ID.
+      - in: query
+        name: institution_component
+        schema:
+          type: integer
+        description: Filter by Institution Component ID.
+      - in: query
         name: is_enabled
         schema:
           type: boolean
@@ -22,6 +42,11 @@ paths:
         schema:
           type: boolean
         description: Filter for associations from site.
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Association name.
       tags:
       - associations
       security:
