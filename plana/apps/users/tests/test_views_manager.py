@@ -196,7 +196,7 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.post(
             "/users/associations/",
             {
-                "user": "gestionnaire.svu@mail.tld",
+                "user": "gestionnaire-svu@mail.tld",
                 "association": 1,
                 "has_office_status": True,
             },
@@ -314,6 +314,7 @@ class UserViewsManagerTests(TestCase):
         POST /users/group/
         - A manager user can add a group to a validated student.
         - A manager user can add a group to a non-validated student.
+        - Groups for a manager cannot be changed.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
@@ -326,6 +327,12 @@ class UserViewsManagerTests(TestCase):
             {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": "gestionnaire-svu@mail.tld", "groups": [1, 2]},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_get_user_groups_detail(self):
         """
