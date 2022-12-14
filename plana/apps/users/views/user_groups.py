@@ -65,12 +65,7 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
             else list(map(int, groups_ids.split(",")))
         )
         for id_group in groups:
-            try:
-                group = Group.objects.get(id=id_group)
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Group not found.")}, status=status.HTTP_400_BAD_REQUEST
-                )
+            group = Group.objects.get(id=id_group)
             user.groups.add(group)
 
         return response.Response({}, status=status.HTTP_200_OK)

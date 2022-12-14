@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.associations.models.association import Association
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.association_users import (
@@ -116,6 +117,14 @@ class AssociationUsersDestroy(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
+            try:
+                user = User.objects.get(id=kwargs["user_id"])
+                association = Association.objects.get(id=kwargs["association_id"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("No user or association found.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             AssociationUsers.objects.filter(
                 user_id=kwargs["user_id"], association_id=kwargs["association_id"]
             ).delete()

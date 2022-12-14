@@ -220,12 +220,25 @@ class UserViewsManagerTests(TestCase):
     def test_manager_delete_user_association(self):
         """
         DELETE /users/associations/{user_id}/{association_id}
+        - The user must exist.
+        - The association must exist.
         - A manager user can execute this request.
         - The link between an association and a user is deleted.
         """
         user_id = 2
         response = self.manager_client.get(f"/users/associations/{user_id}")
         first_user_association_id = response.data[0]["id"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/associations/99/{str(first_user_association_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_delete = self.manager_client.delete(
+            f"/users/associations/{user_id}/99"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_delete = self.manager_client.delete(
             f"/users/associations/{user_id}/{str(first_user_association_id)}"
         )
@@ -331,19 +344,30 @@ class UserViewsManagerTests(TestCase):
     def test_manager_delete_user_group(self):
         """
         DELETE /users/groups/{user_id}/{group_id}
+        - The user must exist.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
-        - A link between a group and a non-existing user cannot be deleted.
         """
         user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
         first_user_group_id = response.data[0]["id"]
         second_user_group_id = response.data[1]["id"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/groups/99/{str(first_user_group_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
         first_response_delete = self.manager_client.delete(
             f"/users/groups/{user_id}/{str(first_user_group_id)}"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/groups/{user_id}/{str(first_user_group_id)}"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         second_response_delete = self.manager_client.delete(
             f"/users/groups/{user_id}/{str(second_user_group_id)}"
@@ -351,8 +375,3 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
         )
-
-        first_response_delete = self.manager_client.delete(
-            f"/users/groups/{user_id}/{str(first_user_group_id)}"
-        )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)

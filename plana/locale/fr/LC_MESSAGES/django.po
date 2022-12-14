@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 08:49+0100\n"
+"POT-Creation-Date: 2022-12-14 09:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,13 +163,13 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:109
 #: plana/apps/associations/views/association.py:180
-#: plana/apps/users/views/association_users.py:100
-#: plana/apps/users/views/association_users.py:124
+#: plana/apps/users/views/association_users.py:101
+#: plana/apps/users/views/association_users.py:133
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:51 plana/apps/users/views/user.py:80
 #: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:106
-#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:95
-#: plana/apps/users/views/user_groups.py:127
+#: plana/apps/users/views/user.py:130 plana/apps/users/views/user_groups.py:90
+#: plana/apps/users/views/user_groups.py:122
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -271,17 +271,21 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:53
+#: plana/apps/users/views/association_users.py:54
 msgid "No user name or association id given."
 msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 
-#: plana/apps/users/views/association_users.py:61
+#: plana/apps/users/views/association_users.py:62
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:75
+#: plana/apps/users/views/association_users.py:76
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
+
+#: plana/apps/users/views/association_users.py:125
+msgid "No user or association found."
+msgstr "Aucun utilisateur ou association."
 
 #: plana/apps/users/views/gdpr_consent_users.py:40
 msgid "No user name or consent id given."
@@ -291,7 +295,7 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:116 plana/apps/users/views/user_groups.py:116
+#: plana/apps/users/views/user.py:116 plana/apps/users/views/user_groups.py:111
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
@@ -307,11 +311,7 @@ msgstr "Aucun nom d'utilisateur ou identifiant de groupe donné."
 msgid "Groups for this user cannot be edited."
 msgstr "Les groupes de cet utilisateur ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups.py:72
-msgid "Group not found."
-msgstr "Groupe non trouvé."
-
-#: plana/apps/users/views/user_groups.py:123
+#: plana/apps/users/views/user_groups.py:118
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
