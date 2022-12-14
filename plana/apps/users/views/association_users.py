@@ -62,10 +62,14 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (request.user.is_anonymous and user.is_validated_by_admin) or (
-            not request.user.is_anonymous
-            and not request.user.is_svu_manager
-            and not request.user.is_crous_manager
+        if (
+            (request.user.is_anonymous and user.is_validated_by_admin)
+            or (
+                not request.user.is_anonymous
+                and not request.user.is_svu_manager
+                and not request.user.is_crous_manager
+            )
+            or (user.is_svu_manager or user.is_crous_manager or user.is_superuser)
         ):
             return response.Response(
                 {"error": _("Associations for this user cannot be edited.")},

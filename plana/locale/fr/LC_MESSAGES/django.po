@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 16:18+0100\n"
+"POT-Creation-Date: 2022-12-14 08:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,8 +163,8 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:108
 #: plana/apps/associations/views/association.py:172
-#: plana/apps/users/views/association_users.py:96
-#: plana/apps/users/views/association_users.py:120
+#: plana/apps/users/views/association_users.py:100
+#: plana/apps/users/views/association_users.py:124
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:51 plana/apps/users/views/user.py:80
 #: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:106
@@ -279,7 +279,7 @@ msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:71
+#: plana/apps/users/views/association_users.py:75
 msgid "Associations for this user cannot be edited."
 msgstr "Les associations de cet utilisateur ne peuvent être éditées."
 

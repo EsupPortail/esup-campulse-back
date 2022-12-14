@@ -171,6 +171,7 @@ class UserViewsManagerTests(TestCase):
         POST /users/associations/
         - A manager user can add an association to a validated student.
         - A manager user can add an association to a non-validated student.
+        - A manager cannot be added in an association.
         """
         response_manager = self.manager_client.post(
             "/users/associations/",
@@ -191,6 +192,16 @@ class UserViewsManagerTests(TestCase):
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        response_manager = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": "gestionnaire.svu@mail.tld",
+                "association": 1,
+                "has_office_status": True,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_get_associations_user_detail(self):
         """
