@@ -25,6 +25,18 @@ from plana.apps.users.models.association_users import AssociationUsers
     get=extend_schema(
         parameters=[
             OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association name.",
+            ),
+            OpenApiParameter(
+                "acronym",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association acronym.",
+            ),
+            OpenApiParameter(
                 "is_enabled",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -35,6 +47,24 @@ from plana.apps.users.models.association_users import AssociationUsers
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter for associations from site.",
+            ),
+            OpenApiParameter(
+                "institution",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution ID.",
+            ),
+            OpenApiParameter(
+                "institution_component",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution Component ID.",
+            ),
+            OpenApiParameter(
+                "activity_field",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Activity Field ID.",
             ),
         ]
     )
@@ -50,12 +80,31 @@ class AssociationListCreate(generics.ListCreateAPIView):
         queryset = Association.objects.all().order_by("name")
         if self.request.method == "GET":
             booleans = {"true": True, "false": False}
+            name = str(self.request.query_params.get("name")).strip()
+            acronym = str(self.request.query_params.get("acronym")).strip()
             is_enabled = self.request.query_params.get("is_enabled")
             is_site = self.request.query_params.get("is_site")
+            institution = self.request.query_params.get("institution")
+            institution_component = self.request.query_params.get(
+                "institution_component"
+            )
+            activity_field = self.request.query_params.get("activity_field")
+            if name is not None:
+                queryset = queryset.filter(name=name)
+            if acronym is not None:
+                queryset = queryset.filter(acronym=acronym)
             if is_enabled is not None:
                 queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
             if is_site is not None:
                 queryset = queryset.filter(is_site=booleans.get(is_site))
+            if institution is not None:
+                queryset = queryset.filter(institution_id=institution)
+            if institution_component is not None:
+                queryset = queryset.filter(
+                    institution_component_id=institution_component
+                )
+            if activity_field is not None:
+                queryset = queryset.filter(activity_field_id=activity_field)
         return queryset
 
     def get_permissions(self):
