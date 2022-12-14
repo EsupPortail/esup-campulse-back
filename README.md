@@ -163,6 +163,6 @@ $ ./generate_requirements.sh
 ### Déployer sur le serveur de test
 
 ```sh
-fab tag:develop test deploy -u root
-fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root
+$ fab tag:develop test deploy -u root
+$ fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root
 ```
