@@ -48,6 +48,14 @@ class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
         model = Association
         fields = "__all__"
 
+    def update(self, instance, validated_data):
+        """
+        Overrided update to manage nested social network fields.
+        """
+        print(validated_data)
+        instance = super().update(instance, validated_data)
+        return instance
+
 
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """
