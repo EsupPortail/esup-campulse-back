@@ -3,7 +3,10 @@ Serializers describing fields used on associations.
 """
 from rest_framework import serializers
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.institution import InstitutionSerializer
 from plana.apps.associations.serializers.institution_component import (
@@ -20,6 +23,25 @@ class AssociationAllDataSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()
+    social_networks = SocialNetworkSerializer(many=True)
+
+    class Meta:
+        model = Association
+        fields = "__all__"
+
+
+class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
+    """
+    Serializer without name details about sub-tables.
+    """
+
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
+    institution_component = serializers.PrimaryKeyRelatedField(
+        queryset=InstitutionComponent.objects.all()
+    )
+    activity_field = serializers.PrimaryKeyRelatedField(
+        queryset=ActivityField.objects.all()
+    )
     social_networks = SocialNetworkSerializer(many=True)
 
     class Meta:

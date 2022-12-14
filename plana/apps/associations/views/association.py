@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
+    AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
@@ -129,6 +130,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = AssociationAllDataNoSubTableSerializer
+        else:
+            self.serializer_class = AssociationAllDataSerializer
+        return super().get_serializer_class()
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)

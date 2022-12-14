@@ -193,7 +193,10 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_crous.status_code, status.HTTP_400_BAD_REQUEST)
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"name": "Association Amicale des Amateurs d'Andouillette Authentique"},
+            {
+                "name": "Association Amicale des Amateurs d'Andouillette Authentique",
+                "institution": 1,
+            },
             content_type="application/json",
         )
         self.assertEqual(response_svu.status_code, status.HTTP_200_OK)
@@ -202,6 +205,7 @@ class AssociationsViewsTests(TestCase):
             association.name,
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
+        self.assertEqual(association.institution_id, 1)
 
         association_id = 99
         response_svu = self.svu_client.patch(

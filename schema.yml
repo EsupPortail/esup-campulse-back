@@ -115,13 +115,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -130,7 +130,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationAllData'
+                $ref: '#/components/schemas/AssociationAllDataNoSubTable'
           description: ''
     delete:
       operationId: associations_destroy
@@ -1005,17 +1005,6 @@ components:
       required:
       - id
       - name
-    ActivityFieldRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-      required:
-      - name
     AssociationAllData:
       type: object
       description: Main serializer.
@@ -1029,6 +1018,104 @@ components:
           $ref: '#/components/schemas/InstitutionComponent'
         activity_field:
           $ref: '#/components/schemas/ActivityField'
+        social_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetwork'
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          title: Emplacement du logo
+          maxLength: 250
+        alt_logo:
+          type: string
+          title: Description
+        description:
+          type: string
+        activities:
+          type: string
+          title: Activités
+        address:
+          type: string
+          title: Adresse
+        phone:
+          type: string
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          maxLength: 256
+        is_enabled:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
+      required:
+      - activity_field
+      - creation_date
+      - id
+      - institution
+      - institution_component
+      - name
+      - social_networks
+    AssociationAllDataNoSubTable:
+      type: object
+      description: Serializer without name details about sub-tables.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          type: integer
+        institution_component:
+          type: integer
+        activity_field:
+          type: integer
         social_networks:
           type: array
           items:
@@ -1402,34 +1489,6 @@ components:
       required:
       - id
       - name
-    InstitutionComponentRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-      required:
-      - name
-    InstitutionRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
-          maxLength: 30
-      required:
-      - acronym
-      - name
     JWT:
       type: object
       description: Serializer for JWT authentication.
@@ -1507,16 +1566,16 @@ components:
           minLength: 1
       required:
       - email
-    PatchedAssociationAllDataRequest:
+    PatchedAssociationAllDataNoSubTableRequest:
       type: object
-      description: Main serializer.
+      description: Serializer without name details about sub-tables.
       properties:
         institution:
-          $ref: '#/components/schemas/InstitutionRequest'
+          type: integer
         institution_component:
-          $ref: '#/components/schemas/InstitutionComponentRequest'
+          type: integer
         activity_field:
-          $ref: '#/components/schemas/ActivityFieldRequest'
+          type: integer
         social_networks:
           type: array
           items:
