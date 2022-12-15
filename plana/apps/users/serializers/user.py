@@ -13,6 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
+from plana.apps.associations.serializers.association import (
+    AssociationMandatoryDataSerializer,
+)
+from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import User
 
 
@@ -22,6 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
     """
 
     is_cas = serializers.SerializerMethodField("is_cas_user")
+    associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
+    groups = GroupSerializer(many=True, read_only=True)
 
     def is_cas_user(self, user) -> bool:
         """
@@ -40,6 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
             "phone",
             "is_cas",
             "is_validated_by_admin",
+            "associations",
+            "groups",
         ]
 
 

@@ -1456,6 +1456,17 @@ components:
       required:
       - id
       - name
+    GroupRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 150
+      required:
+      - name
     Institution:
       type: object
       description: Main serializer.
@@ -1809,9 +1820,21 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationMandatoryData'
+          readOnly: true
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
       required:
+      - associations
       - email
       - first_name
+      - groups
       - id
       - is_cas
       - last_name
