@@ -75,6 +75,8 @@ class AssociationsViewsTests(TestCase):
         - We get the same amount of associations through the model and through the view.
         - Main associations details are returned (test the "name" attribute).
         - All associations details aren't returned (test the "activities" attribute).
+        - An association can be found with its name.
+        - An association can be found with its acronym.
         - Non-enabled associations can be filtered.
         - Site associations can be filtered.
         - Associations with a specific institution ID can be filtered.
@@ -93,6 +95,31 @@ class AssociationsViewsTests(TestCase):
         association_1 = content[0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
+
+        # TODO Implement different search cases for names and acronyms.
+        similar_names = [
+            "Plateforme de Liaison et ANnuaire Associatif",
+            "plateforme de liaison et annuaire associatif",
+            # "PlateformedeLiaisonetANnuaireAssociatif",
+            # "plateformedeliaisonetannuaireassociatif",
+            " Plateforme de Liaison et ANnuaire Associatif ",
+            # "Plàtéfôrmè dê Lîâïsön ët ANnùäire Associatif",
+            "plateforme",
+        ]
+        for similar_name in similar_names:
+            response = self.client.get(f"/associations/?name={similar_name}")
+            self.assertEqual(response.data[0]["name"], similar_names[0])
+
+        similar_acronyms = [
+            "PLANA",
+            "PlanA",
+            " PLANA ",
+            # "PLÂNÄ",
+            "plan",
+        ]
+        for similar_acronym in similar_acronyms:
+            response = self.client.get(f"/associations/?acronym={similar_acronym}")
+            self.assertEqual(response.data[0]["acronym"], similar_acronyms[0])
 
         response = self.client.get("/associations/?is_enabled=true")
         for association in response.data:
