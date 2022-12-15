@@ -80,8 +80,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
         queryset = Association.objects.all().order_by("name")
         if self.request.method == "GET":
             booleans = {"true": True, "false": False}
-            name = str(self.request.query_params.get("name")).strip()
-            acronym = str(self.request.query_params.get("acronym")).strip()
+            """
+            name = self.request.query_params.get("name")
+            acronym = self.request.query_params.get("acronym")
+            """
             is_enabled = self.request.query_params.get("is_enabled")
             is_site = self.request.query_params.get("is_site")
             institution = self.request.query_params.get("institution")
@@ -89,10 +91,14 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 "institution_component"
             )
             activity_field = self.request.query_params.get("activity_field")
+            """
             if name is not None:
+                name = str(name).strip()
                 queryset = queryset.filter(name=name)
             if acronym is not None:
+                acronym = str(acronym).strip()
                 queryset = queryset.filter(acronym=acronym)
+            """
             if is_enabled is not None:
                 queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
             if is_site is not None:

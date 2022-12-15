@@ -74,6 +74,9 @@ class AssociationsViewsTests(TestCase):
         - All associations details aren't returned (test the "activities" attribute).
         - Non-enabled associations can be filtered.
         - Site associations can be filtered.
+        - Associations with a specific institution ID can be filtered.
+        - Associations with a specific institution component ID can be filtered.
+        - Associations with a specific institution activity field can be filtered.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -95,6 +98,18 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/?is_site=true")
         for association in response.data:
             self.assertEqual(association["is_site"], True)
+
+        response = self.client.get("/associations/?institution=1")
+        for association in response.data:
+            self.assertEqual(association["institution"]["id"], 1)
+
+        response = self.client.get("/associations/?institution_component=1")
+        for association in response.data:
+            self.assertEqual(association["institution_component"]["id"], 1)
+
+        response = self.client.get("/associations/?activity_field=3")
+        for association in response.data:
+            self.assertEqual(association["activity_field"]["id"], 3)
 
     def test_post_association(self):
         """
