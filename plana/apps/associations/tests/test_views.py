@@ -8,7 +8,10 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
 
 
 class AssociationsViewsTests(TestCase):
@@ -304,3 +307,63 @@ class AssociationsViewsTests(TestCase):
             "/associations/1", {"name": "Les aficionados d'endives au jambon"}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_activity_fields_list(self):
+        """
+        GET /associations/activity_fields
+        - There's at least one activity field in the activity fields list.
+        - The route can be accessed by anyone.
+        - We get the same amount of activity fields through the model and through the view.
+        - Activity fields details are returned (test the "name" attribute).
+        """
+        activity_fields_cnt = ActivityField.objects.count()
+        self.assertTrue(activity_fields_cnt > 0)
+
+        response = self.client.get("/associations/activity_fields")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), activity_fields_cnt)
+
+        activity_field_1 = content[0]
+        self.assertTrue(activity_field_1.get("name"))
+
+    def test_get_institution_components_list(self):
+        """
+        GET /associations/institution_components
+        - There's at least one institution component in the institution components list.
+        - The route can be accessed by anyone.
+        - We get the same amount of institution components through the model and through the view.
+        - Institution components details are returned (test the "name" attribute).
+        """
+        institution_components_cnt = InstitutionComponent.objects.count()
+        self.assertTrue(institution_components_cnt > 0)
+
+        response = self.client.get("/associations/institution_components")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), institution_components_cnt)
+
+        institution_component_1 = content[0]
+        self.assertTrue(institution_component_1.get("name"))
+
+    def test_get_institutions_list(self):
+        """
+        GET /associations/institutions
+        - There's at least one institution in the institutions list.
+        - The route can be accessed by anyone.
+        - We get the same amount of institutions through the model and through the view.
+        - Institutions details are returned (test the "name" attribute).
+        """
+        institutions_cnt = Institution.objects.count()
+        self.assertTrue(institutions_cnt > 0)
+
+        response = self.client.get("/associations/institutions")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), institutions_cnt)
+
+        institution_1 = content[0]
+        self.assertTrue(institution_1.get("name"))

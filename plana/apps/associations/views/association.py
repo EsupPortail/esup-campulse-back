@@ -11,12 +11,20 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
+from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.association import (
     AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
+)
+from plana.apps.associations.serializers.institution import InstitutionSerializer
+from plana.apps.associations.serializers.institution_component import (
+    InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
 
@@ -233,3 +241,36 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             {"error": _("Bad request.")},
             status=status.HTTP_403_FORBIDDEN,
         )
+
+
+class AssociationActivityFieldList(generics.ListAPIView):
+    """
+    GET : Lists all activity fields.
+    """
+
+    serializer_class = ActivityFieldSerializer
+
+    def get_queryset(self):
+        return ActivityField.objects.all().order_by("name")
+
+
+class AssociationInstitutionComponentList(generics.ListAPIView):
+    """
+    GET : Lists all institution components.
+    """
+
+    serializer_class = InstitutionComponentSerializer
+
+    def get_queryset(self):
+        return InstitutionComponent.objects.all().order_by("name")
+
+
+class AssociationInstitutionList(generics.ListAPIView):
+    """
+    GET : Lists all institutions.
+    """
+
+    serializer_class = InstitutionSerializer
+
+    def get_queryset(self):
+        return Institution.objects.all().order_by("name")
