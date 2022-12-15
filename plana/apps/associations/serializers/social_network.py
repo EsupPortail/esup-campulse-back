@@ -18,3 +18,16 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
             "type",
             "location",
         ]
+
+
+class SocialNetworkNoIdSerializer(serializers.ModelSerializer):
+    """
+    Serializer without an ID.
+    """
+
+    class Meta:
+        model = SocialNetwork
+        fields = [
+            "type",
+            "location",
+        ]
