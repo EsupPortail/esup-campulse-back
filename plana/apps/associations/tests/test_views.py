@@ -196,6 +196,10 @@ class AssociationsViewsTests(TestCase):
             {
                 "name": "Association Amicale des Amateurs d'Andouillette Authentique",
                 "institution": 1,
+                # TODO Find correct way to test social networks.
+                # "social_networks": [
+                #    {"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}
+                # ],
             },
             content_type="application/json",
         )
@@ -206,6 +210,7 @@ class AssociationsViewsTests(TestCase):
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
         self.assertEqual(association.institution_id, 1)
+        # self.assertEqual(len(association.social_networks), 1)
 
         association_id = 99
         response_svu = self.svu_client.patch(
