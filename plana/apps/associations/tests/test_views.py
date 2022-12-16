@@ -100,8 +100,8 @@ class AssociationsViewsTests(TestCase):
         similar_names = [
             "Plateforme de Liaison et ANnuaire Associatif",
             "plateforme de liaison et annuaire associatif",
-            # "PlateformedeLiaisonetANnuaireAssociatif",
-            # "plateformedeliaisonetannuaireassociatif",
+            "PlateformedeLiaisonetANnuaireAssociatif",
+            "plateformedeliaisonetannuaireassociatif",
             " Plateforme de Liaison et ANnuaire Associatif ",
             # "Plàtéfôrmè dê Lîâïsön ët ANnùäire Associatif",
             "plateforme",

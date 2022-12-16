@@ -99,7 +99,9 @@ class AssociationListCreate(generics.ListCreateAPIView):
             activity_field = self.request.query_params.get("activity_field")
             if name is not None:
                 name = str(name).strip()
-                queryset = queryset.filter(name__icontains=name)
+                queryset = queryset.filter(
+                    name__nospaces__icontains=name.replace(" ", "")
+                )
             if acronym is not None:
                 acronym = str(acronym).strip()
                 queryset = queryset.filter(acronym__icontains=acronym)
