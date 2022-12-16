@@ -96,7 +96,8 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
 
-        # TODO Implement different search cases for names and acronyms.
+        # TODO Implement unaccented search cases for names and acronyms.
+        # https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/lookups/#std:fieldlookup-unaccent
         similar_names = [
             "Plateforme de Liaison et ANnuaire Associatif",
             "plateforme de liaison et annuaire associatif",
