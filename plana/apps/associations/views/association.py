@@ -11,12 +11,20 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
+from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.association import (
     AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
+)
+from plana.apps.associations.serializers.institution import InstitutionSerializer
+from plana.apps.associations.serializers.institution_component import (
+    InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
 
@@ -24,6 +32,18 @@ from plana.apps.users.models.association_users import AssociationUsers
 @extend_schema_view(
     get=extend_schema(
         parameters=[
+            OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association name.",
+            ),
+            OpenApiParameter(
+                "acronym",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association acronym.",
+            ),
             OpenApiParameter(
                 "is_enabled",
                 OpenApiTypes.BOOL,
@@ -35,6 +55,24 @@ from plana.apps.users.models.association_users import AssociationUsers
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter for associations from site.",
+            ),
+            OpenApiParameter(
+                "institution",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution ID.",
+            ),
+            OpenApiParameter(
+                "institution_component",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution Component ID.",
+            ),
+            OpenApiParameter(
+                "activity_field",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Activity Field ID.",
             ),
         ]
     )
@@ -50,12 +88,35 @@ class AssociationListCreate(generics.ListCreateAPIView):
         queryset = Association.objects.all().order_by("name")
         if self.request.method == "GET":
             booleans = {"true": True, "false": False}
+            name = self.request.query_params.get("name")
+            acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
             is_site = self.request.query_params.get("is_site")
+            institution = self.request.query_params.get("institution")
+            institution_component = self.request.query_params.get(
+                "institution_component"
+            )
+            activity_field = self.request.query_params.get("activity_field")
+            if name is not None:
+                name = str(name).strip()
+                queryset = queryset.filter(
+                    name__nospaces__icontains=name.replace(" ", "")
+                )
+            if acronym is not None:
+                acronym = str(acronym).strip()
+                queryset = queryset.filter(acronym__icontains=acronym)
             if is_enabled is not None:
                 queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
             if is_site is not None:
                 queryset = queryset.filter(is_site=booleans.get(is_site))
+            if institution is not None:
+                queryset = queryset.filter(institution_id=institution)
+            if institution_component is not None:
+                queryset = queryset.filter(
+                    institution_component_id=institution_component
+                )
+            if activity_field is not None:
+                queryset = queryset.filter(activity_field_id=activity_field)
         return queryset
 
     def get_permissions(self):
@@ -178,3 +239,36 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             {"error": _("Bad request.")},
             status=status.HTTP_403_FORBIDDEN,
         )
+
+
+class AssociationActivityFieldList(generics.ListAPIView):
+    """
+    GET : Lists all activity fields.
+    """
+
+    serializer_class = ActivityFieldSerializer
+
+    def get_queryset(self):
+        return ActivityField.objects.all().order_by("name")
+
+
+class AssociationInstitutionComponentList(generics.ListAPIView):
+    """
+    GET : Lists all institution components.
+    """
+
+    serializer_class = InstitutionComponentSerializer
+
+    def get_queryset(self):
+        return InstitutionComponent.objects.all().order_by("name")
+
+
+class AssociationInstitutionList(generics.ListAPIView):
+    """
+    GET : Lists all institutions.
+    """
+
+    serializer_class = InstitutionSerializer
+
+    def get_queryset(self):
+        return Institution.objects.all().order_by("name")

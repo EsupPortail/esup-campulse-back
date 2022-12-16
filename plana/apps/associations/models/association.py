@@ -62,3 +62,19 @@ class Association(models.Model):
     class Meta:
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
+
+
+class SpaceRemovedValue(models.Transform):
+    """
+    Custom lookup function to compare two strings with or without spaces on a queryset.
+    Thanks StackOverflow https://stackoverflow.com/a/30375271
+    """
+
+    lookup_name = 'nospaces'
+
+    def as_sql(self, compiler, connection):
+        lhs, params = compiler.compile(self.lhs)
+        return "REPLACE(%s, ' ', '')" % lhs, params
+
+
+models.CharField.register_lookup(SpaceRemovedValue)

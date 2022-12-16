@@ -8,7 +8,10 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.models.institution import Institution
+from plana.apps.associations.models.institution_component import InstitutionComponent
 
 
 class AssociationsViewsTests(TestCase):
@@ -72,8 +75,13 @@ class AssociationsViewsTests(TestCase):
         - We get the same amount of associations through the model and through the view.
         - Main associations details are returned (test the "name" attribute).
         - All associations details aren't returned (test the "activities" attribute).
+        - An association can be found with its name.
+        - An association can be found with its acronym.
         - Non-enabled associations can be filtered.
         - Site associations can be filtered.
+        - Associations with a specific institution ID can be filtered.
+        - Associations with a specific institution component ID can be filtered.
+        - Associations with a specific institution activity field can be filtered.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -88,6 +96,32 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
 
+        # TODO Implement unaccented search cases for names and acronyms.
+        # https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/lookups/#std:fieldlookup-unaccent
+        similar_names = [
+            "Plateforme de Liaison et ANnuaire Associatif",
+            "plateforme de liaison et annuaire associatif",
+            "PlateformedeLiaisonetANnuaireAssociatif",
+            "plateformedeliaisonetannuaireassociatif",
+            " Plateforme de Liaison et ANnuaire Associatif ",
+            # "Plàtéfôrmè dê Lîâïsön ët ANnùäire Associatif",
+            "plateforme",
+        ]
+        for similar_name in similar_names:
+            response = self.client.get(f"/associations/?name={similar_name}")
+            self.assertEqual(response.data[0]["name"], similar_names[0])
+
+        similar_acronyms = [
+            "PLANA",
+            "PlanA",
+            " PLANA ",
+            # "PLÂNÄ",
+            "plan",
+        ]
+        for similar_acronym in similar_acronyms:
+            response = self.client.get(f"/associations/?acronym={similar_acronym}")
+            self.assertEqual(response.data[0]["acronym"], similar_acronyms[0])
+
         response = self.client.get("/associations/?is_enabled=true")
         for association in response.data:
             self.assertEqual(association["is_enabled"], True)
@@ -95,6 +129,18 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/?is_site=true")
         for association in response.data:
             self.assertEqual(association["is_site"], True)
+
+        response = self.client.get("/associations/?institution=1")
+        for association in response.data:
+            self.assertEqual(association["institution"]["id"], 1)
+
+        response = self.client.get("/associations/?institution_component=1")
+        for association in response.data:
+            self.assertEqual(association["institution_component"]["id"], 1)
+
+        response = self.client.get("/associations/?activity_field=3")
+        for association in response.data:
+            self.assertEqual(association["activity_field"]["id"], 3)
 
     def test_post_association(self):
         """
@@ -289,3 +335,63 @@ class AssociationsViewsTests(TestCase):
             "/associations/1", {"name": "Les aficionados d'endives au jambon"}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_activity_fields_list(self):
+        """
+        GET /associations/activity_fields
+        - There's at least one activity field in the activity fields list.
+        - The route can be accessed by anyone.
+        - We get the same amount of activity fields through the model and through the view.
+        - Activity fields details are returned (test the "name" attribute).
+        """
+        activity_fields_cnt = ActivityField.objects.count()
+        self.assertTrue(activity_fields_cnt > 0)
+
+        response = self.client.get("/associations/activity_fields")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), activity_fields_cnt)
+
+        activity_field_1 = content[0]
+        self.assertTrue(activity_field_1.get("name"))
+
+    def test_get_institution_components_list(self):
+        """
+        GET /associations/institution_components
+        - There's at least one institution component in the institution components list.
+        - The route can be accessed by anyone.
+        - We get the same amount of institution components through the model and through the view.
+        - Institution components details are returned (test the "name" attribute).
+        """
+        institution_components_cnt = InstitutionComponent.objects.count()
+        self.assertTrue(institution_components_cnt > 0)
+
+        response = self.client.get("/associations/institution_components")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), institution_components_cnt)
+
+        institution_component_1 = content[0]
+        self.assertTrue(institution_component_1.get("name"))
+
+    def test_get_institutions_list(self):
+        """
+        GET /associations/institutions
+        - There's at least one institution in the institutions list.
+        - The route can be accessed by anyone.
+        - We get the same amount of institutions through the model and through the view.
+        - Institutions details are returned (test the "name" attribute).
+        """
+        institutions_cnt = Institution.objects.count()
+        self.assertTrue(institutions_cnt > 0)
+
+        response = self.client.get("/associations/institutions")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), institutions_cnt)
+
+        institution_1 = content[0]
+        self.assertTrue(institution_1.get("name"))

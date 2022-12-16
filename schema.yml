@@ -13,6 +13,26 @@ paths:
         POST : Creates a new association with mandatory informations.
       parameters:
       - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Association acronym.
+      - in: query
+        name: activity_field
+        schema:
+          type: integer
+        description: Filter by Activity Field ID.
+      - in: query
+        name: institution
+        schema:
+          type: integer
+        description: Filter by Institution ID.
+      - in: query
+        name: institution_component
+        schema:
+          type: integer
+        description: Filter by Institution Component ID.
+      - in: query
         name: is_enabled
         schema:
           type: boolean
@@ -22,6 +42,11 @@ paths:
         schema:
           type: boolean
         description: Filter for associations from site.
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Association name.
       tags:
       - associations
       security:
@@ -154,6 +179,60 @@ paths:
       responses:
         '204':
           description: No response body
+  /associations/activity_fields:
+    get:
+      operationId: associations_activity_fields_list
+      description: 'GET : Lists all activity fields.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityField'
+          description: ''
+  /associations/institution_components:
+    get:
+      operationId: associations_institution_components_list
+      description: 'GET : Lists all institution components.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstitutionComponent'
+          description: ''
+  /associations/institutions:
+    get:
+      operationId: associations_institutions_list
+      description: 'GET : Lists all institutions.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Institution'
+          description: ''
   /consents/:
     get:
       operationId: consents_list
