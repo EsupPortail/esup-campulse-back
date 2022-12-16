@@ -12,12 +12,7 @@ class MailTemplatePreviewAPI(View):
         pk = kwargs["pk"]
 
         body = request.POST.get("body", None)
-        context_params = {
-            # "user_is": request.POST.get("user_group", "estetudiant"),
-            # "slot_type": request.POST.get("slot_type", "estuncours"),
-            # "local_account": request.POST.get("local_user", "true").strip().lower() == "true",
-            # "remote": request.POST.get("remote", "true").strip().lower() == "true",
-        }
+        context_params = {}
 
         if not body:
             response["msg"] = _("No body for this template provided")
@@ -30,15 +25,20 @@ class MailTemplatePreviewAPI(View):
             return JsonResponse(response)
 
         try:
-            available_vars=template.available_vars.prefetch_fakevars()
+            available_vars=template.available_vars.all()
 
             # Get multi-valued fakevars
-            for tv in template.multivalued_fakevars:
-                template_value = tv.name
-                if (value := request.POST.get(template_value)):
-                    type_, id_ = value.split('_')
-                    fakevar = getattr(tv, f'fakevar{type_.lower()}_set').get(pk=id_)
-                    context_params[template_value] = fakevar.value
+            fakevars_dict = {}
+            for template_var in available_vars:
+                fake_vars = template_var.fake_vars
+                if isinstance(fake_vars, list) and len(fake_vars) > 1:
+                    fake_var_lst = []
+                    for fv in fake_vars:
+                        fake_var_lst.append((type(fv), fv))
+                    fakevars_dict[template_var.name] = fake_var_lst
+                else:
+                    context_params[template_var.name] = fake_vars[0] if fake_vars else None
+            context_params['fakevars_dict'] = fakevars_dict
 
             body = template.parse_var_faker_from_string(
                 context_params=context_params,

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 
@@ -22,13 +24,18 @@ class MailTemplateAdmin(SummernoteModelAdmin):
         
         fakevars_dict = {}
         qs = MailTemplateVar.objects \
-            .prefetch_fakevars() \
             .filter(mail_templates__id=object_id)
 
         # Get all multi-valued fakevars
         for template_var in qs:
-            if (len(fakevars := template_var.fakevars) > 1):
-                fakevars_dict[template_var.name] = fakevars
+            fake_vars = template_var.fake_vars
+            if isinstance(fake_vars, list) and len(fake_vars) > 1:
+                # var_type = type(fake_vars[0])
+                fake_var_lst = []
+                for fv in fake_vars:
+                    fake_var_lst.append((type(fv), fv))
+                fakevars_dict[template_var.name] = fake_var_lst
+
         extra_context['fakevars'] = fakevars_dict
 
         return super().change_view(

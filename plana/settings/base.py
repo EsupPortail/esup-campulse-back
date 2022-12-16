@@ -28,7 +28,7 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
-# DEFAULT_FROM_EMAIL = "plan-a@unistra.fr"
+DEFAULT_FROM_EMAIL = "plan-a.noreply@unistra.fr"
 
 
 ##########################

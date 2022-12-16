@@ -80,9 +80,22 @@ class ParserFaker:
         # Get mono-value fakevars
         variables = {}
         for template_var in available_vars:
-            if (len(fakevars := template_var.fakevars) == 1):
-                variables[template_var.name] = fakevars[0].value
-
+            fakevars = template_var.fake_vars
+            if fakevars and len(fakevars) == 1:
+                variables[template_var.name] = fakevars[0]
         context = {key: cls.add_tooltip(key, value) for key, value in variables.items()}
-        context.update(extra_variables or {})
+
+
+class Parser:
+    @classmethod
+    def parser(cls, message_body: str, available_vars: Optional[List[MailTemplateVar]],
+               user: Optional[User] = None, request=None, context=None, **kwargs) -> str:
+        context = context or {}
+        # context.update(cls.get_context(user, request, **kwargs))
+        return render_text(template_data=message_body, data=context)
+
+
+    @classmethod
+    def get_context(cls, user, request=None, **kwargs) -> Dict[str, Any]:
+        context = {}
         return context

@@ -7,8 +7,8 @@
         <div>
           <label for="user_group">{{ var }}</label>
           <select name="{{ var }}" id="{{ var }}">
-          {% for fakevar in data %}
-            <option value="{{ fakevar.var_type }}_{{ fakevar.pk }}">{{ fakevar.value }}</option>
+          {% for vartype,val in data %}
+            <option value="{{ var }}_{{ forloop.counter }}">{{ val }}</option>
           {% endfor %}
           </select>
         </div>
