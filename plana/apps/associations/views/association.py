@@ -51,6 +51,12 @@ from plana.apps.users.models.association_users import AssociationUsers
                 description="Filter for non-validated associations.",
             ),
             OpenApiParameter(
+                "is_public",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations shown in the public list.",
+            ),
+            OpenApiParameter(
                 "is_site",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -91,6 +97,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             name = self.request.query_params.get("name")
             acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
+            is_public = self.request.query_params.get("is_public")
             is_site = self.request.query_params.get("is_site")
             institution = self.request.query_params.get("institution")
             institution_component = self.request.query_params.get(
@@ -107,6 +114,8 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(acronym__icontains=acronym)
             if is_enabled is not None:
                 queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
+            if is_public is not None:
+                queryset = queryset.filter(is_public=booleans.get(is_public))
             if is_site is not None:
                 queryset = queryset.filter(is_site=booleans.get(is_site))
             if institution is not None:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 09:28+0100\n"
+"POT-Creation-Date: 2022-12-19 13:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:19
-#: plana/apps/associations/models/association.py:54
+#: plana/apps/associations/models/association.py:55
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -87,43 +87,47 @@ msgid "Is enabled"
 msgstr "Est active"
 
 #: plana/apps/associations/models/association.py:29
+msgid "Is public"
+msgstr "Est publique"
+
+#: plana/apps/associations/models/association.py:30
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:30
+#: plana/apps/associations/models/association.py:31
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:32
+#: plana/apps/associations/models/association.py:33
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:35
+#: plana/apps/associations/models/association.py:36
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:37
+#: plana/apps/associations/models/association.py:38
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:40
+#: plana/apps/associations/models/association.py:41
 #: plana/apps/associations/models/institution.py:20
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:47
+#: plana/apps/associations/models/association.py:48
 #: plana/apps/associations/models/institution_component.py:19
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:63
+#: plana/apps/associations/models/association.py:64
 #: plana/apps/associations/models/social_network.py:17
 #: plana/apps/users/models/association_users.py:19
 #: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:64
+#: plana/apps/associations/models/association.py:65
 #: plana/apps/users/models/association_users.py:30
 #: plana/apps/users/models/user.py:44
 msgid "Associations"
@@ -153,16 +157,16 @@ msgstr "Réseau social"
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:142
+#: plana/apps/associations/views/association.py:151
 msgid "No association name given."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:164
+#: plana/apps/associations/views/association.py:173
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:169
-#: plana/apps/associations/views/association.py:239
+#: plana/apps/associations/views/association.py:178
+#: plana/apps/associations/views/association.py:248
 #: plana/apps/users/views/association_users.py:108
 #: plana/apps/users/views/association_users.py:140
 #: plana/apps/users/views/gdpr_consent_users.py:71
@@ -173,11 +177,11 @@ msgstr "Nom d'association déjà enregistré."
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/associations/views/association.py:210
+#: plana/apps/associations/views/association.py:219
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:231
+#: plana/apps/associations/views/association.py:240
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 

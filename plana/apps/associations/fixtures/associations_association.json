@@ -22,6 +22,7 @@
       "institution_id": 2,
       "institution_component_id": 1,
       "is_site": true,
+      "is_public": true,
       "is_enabled": true
     }
   },
@@ -36,6 +37,7 @@
       "institution_id": 2,
       "institution_component_id": 1,
       "is_site": true,
+      "is_public": true,
       "is_enabled": true
     }
   },
@@ -50,6 +52,7 @@
       "institution_id": 1,
       "institution_component_id": 1,
       "is_site": false,
+      "is_public": false,
       "is_enabled": true
     }
   }

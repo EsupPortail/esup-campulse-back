@@ -26,6 +26,7 @@ class Association(models.Model):
     student_count = models.IntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
+    is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateTimeField(

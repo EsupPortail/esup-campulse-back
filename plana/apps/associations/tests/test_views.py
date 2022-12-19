@@ -126,6 +126,10 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_enabled"], True)
 
+        response = self.client.get("/associations/?is_public=true")
+        for association in response.data:
+            self.assertEqual(association["is_public"], True)
+
         response = self.client.get("/associations/?is_site=true")
         for association in response.data:
             self.assertEqual(association["is_site"], True)

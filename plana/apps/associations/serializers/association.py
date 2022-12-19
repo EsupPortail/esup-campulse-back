@@ -98,6 +98,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
             "name",
             "acronym",
             "is_enabled",
+            "is_public",
             "is_site",
         ]
 

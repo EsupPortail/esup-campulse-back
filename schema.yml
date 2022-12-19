@@ -38,6 +38,11 @@ paths:
           type: boolean
         description: Filter for non-validated associations.
       - in: query
+        name: is_public
+        schema:
+          type: boolean
+        description: Filter for associations shown in the public list.
+      - in: query
         name: is_site
         schema:
           type: boolean
@@ -1151,6 +1156,8 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+        is_public:
+          type: boolean
         is_site:
           type: boolean
           title: Site ?
@@ -1249,6 +1256,8 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+        is_public:
+          type: boolean
         is_site:
           type: boolean
           title: Site ?
@@ -1333,6 +1342,8 @@ components:
           title: Acronyme
           maxLength: 30
         is_enabled:
+          type: boolean
+        is_public:
           type: boolean
         is_site:
           type: boolean
@@ -1730,6 +1741,8 @@ components:
           minLength: 1
           maxLength: 256
         is_enabled:
+          type: boolean
+        is_public:
           type: boolean
         is_site:
           type: boolean
