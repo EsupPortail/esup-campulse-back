@@ -48,9 +48,6 @@
       "name": "Association Hors Site",
       "acronym": "AssoHorsSite",
       "creation_date": "2022-10-27T14:12:11+02:00",
-      "activity_field_id": 3,
-      "institution_id": 1,
-      "institution_component_id": 1,
       "is_site": false,
       "is_public": false,
       "is_enabled": true

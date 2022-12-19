@@ -79,6 +79,7 @@ class AssociationsViewsTests(TestCase):
         - An association can be found with its acronym.
         - Non-enabled associations can be filtered.
         - Site associations can be filtered.
+        - Associations without institution ID can be filtered.
         - Associations with a specific institution ID can be filtered.
         - Associations with a specific institution component ID can be filtered.
         - Associations with a specific institution activity field can be filtered.
@@ -133,6 +134,10 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/?is_site=true")
         for association in response.data:
             self.assertEqual(association["is_site"], True)
+
+        response = self.client.get("/associations/?institution=")
+        for association in response.data:
+            self.assertEqual(association["institution"], None)
 
         response = self.client.get("/associations/?institution=1")
         for association in response.data:

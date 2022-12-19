@@ -119,7 +119,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
             if is_site is not None:
                 queryset = queryset.filter(is_site=booleans.get(is_site))
             if institution is not None:
-                queryset = queryset.filter(institution_id=institution)
+                if institution == "":
+                    queryset = queryset.filter(institution_id__isnull=True)
+                else:
+                    queryset = queryset.filter(institution_id=institution)
             if institution_component is not None:
                 queryset = queryset.filter(
                     institution_component_id=institution_component
