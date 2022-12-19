@@ -265,7 +265,21 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
     def delete(self, request, *args, **kwargs):
+        try:
+            association_id = kwargs["pk"]
+            association = Association.objects.get(id=association_id)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            return response.Response(
+                {"error": _("No association id given.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if request.user.is_svu_manager:
+            if association.is_enabled == True:
+                return response.Response(
+                    {"error": _("Can't delete an enabled association.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             return self.destroy(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},

@@ -350,7 +350,9 @@ class AssociationsViewsTests(TestCase):
         DELETE /associations/{id}
         - An anonymous user cannot execute this request.
         - A Crous manager cannot delete an association.
+        - An enabled association cannot be deleted.
         - A SVU manager can delete an association.
+        - A non-existing association cannot be deleted.
         """
         association_id = 1
         response_anonymous = self.client.delete(f"/associations/{association_id}")
@@ -358,9 +360,18 @@ class AssociationsViewsTests(TestCase):
         response_crous = self.crous_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_crous.status_code, status.HTTP_403_FORBIDDEN)
         response_svu = self.svu_client.delete(f"/associations/{association_id}")
+        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_enabled": "false"},
+            content_type="application/json",
+        )
+        response_svu = self.svu_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_svu.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
+        response_svu = self.svu_client.delete(f"/associations/99")
+        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_put_association(self):
         """
