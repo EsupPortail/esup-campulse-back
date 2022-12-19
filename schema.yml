@@ -280,6 +280,11 @@ paths:
       description: 'GET : Lists all users.'
       parameters:
       - in: query
+        name: is_cas
+        schema:
+          type: boolean
+        description: Filter for members logged through CAS
+      - in: query
         name: is_validated_by_admin
         schema:
           type: boolean

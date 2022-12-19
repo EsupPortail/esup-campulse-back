@@ -1,6 +1,7 @@
 """
 Views directly linked to users and their links with other models.
 """
+from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
@@ -21,7 +22,13 @@ from plana.apps.users.serializers.user import UserSerializer
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter for members not validated by an admin",
-            )
+            ),
+            OpenApiParameter(
+                "is_cas",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members logged through CAS",
+            ),
         ]
     )
 )
@@ -35,13 +42,17 @@ class UserList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.filter(is_active=True).order_by("id")
+        booleans = {"true": True, "false": False}
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
+        is_cas = self.request.query_params.get("is_cas")
         if is_validated_by_admin is not None:
             queryset = queryset.filter(
-                is_validated_by_admin={"true": True, "false": False}.get(
-                    is_validated_by_admin
-                )
+                is_validated_by_admin=booleans.get(is_validated_by_admin)
             )
+        # TODO Test with CAS.
+        # if is_cas is not None:
+        # social_accounts_queryset = SocialAccount.objects.all()
+        # queryset = queryset.intersection(queryset, social_accounts_queryset)
         return queryset
 
     def get(self, request, *args, **kwargs):
