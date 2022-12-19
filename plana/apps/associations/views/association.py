@@ -213,12 +213,35 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         try:
             association_id = kwargs["pk"]
-            Association.objects.get(id=association_id)
+            association = Association.objects.get(id=association_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        try:
+            is_site = request.data["is_site"]
+            if is_site == "false":
+                request.data["is_public"] = "false"
+        except:
+            pass
+
+        try:
+            is_enabled = request.data["is_enabled"]
+            if is_enabled == "false":
+                request.data["is_public"] = "false"
+        except:
+            pass
+
+        try:
+            is_public = request.data["is_public"]
+            if is_public == "true" and (
+                association.is_site == False or association.is_enabled == False
+            ):
+                request.data.pop("is_public", False)
+        except:
+            pass
 
         if request.user.is_svu_manager:
             return self.partial_update(request, *args, **kwargs)

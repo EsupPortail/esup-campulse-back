@@ -222,6 +222,8 @@ class AssociationsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         - A Crous manager cannot edit an association.
         - A SVU manager can edit an association.
+        - An association can't be public if not enabled and not site.
+        - An association must lost public status if enabled or site is removed.
         - A non-existing association cannot be edited.
         - Someone from an association without status can't edit infos from another association.
         - Someone from an association's office cannot edit informations from another association.
@@ -261,6 +263,36 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(association.institution_id, 1)
         # self.assertEqual(len(association.social_networks), 1)
+
+        response_svu = self.svu_client.patch(
+            f"/associations/3", {"is_public": "true"}, content_type="application/json"
+        )
+        association = Association.objects.get(id=3)
+        self.assertEqual(association.is_public, False)
+
+        response_svu = self.svu_client.patch(
+            f"/associations/3",
+            {"is_enabled": "false", "is_site": "true"},
+            content_type="application/json",
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/3", {"is_public": "true"}, content_type="application/json"
+        )
+        association = Association.objects.get(id=3)
+        self.assertEqual(association.is_public, False)
+        response_svu = self.svu_client.patch(
+            f"/associations/3", {"is_enabled": "true"}, content_type="application/json"
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/3", {"is_public": "true"}, content_type="application/json"
+        )
+        association = Association.objects.get(id=3)
+        self.assertEqual(association.is_public, True)
+        response_svu = self.svu_client.patch(
+            f"/associations/3", {"is_site": "false"}, content_type="application/json"
+        )
+        association = Association.objects.get(id=3)
+        self.assertEqual(association.is_public, False)
 
         association_id = 99
         response_svu = self.svu_client.patch(

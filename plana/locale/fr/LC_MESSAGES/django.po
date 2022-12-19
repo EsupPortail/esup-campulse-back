@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-19 13:53+0100\n"
+"POT-Creation-Date: 2022-12-19 15:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,7 +166,7 @@ msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:178
-#: plana/apps/associations/views/association.py:248
+#: plana/apps/associations/views/association.py:271
 #: plana/apps/users/views/association_users.py:108
 #: plana/apps/users/views/association_users.py:140
 #: plana/apps/users/views/gdpr_consent_users.py:71
@@ -181,7 +181,7 @@ msgstr "Erreur de requête."
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:240
+#: plana/apps/associations/views/association.py:263
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
