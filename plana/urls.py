@@ -2,8 +2,10 @@
 List of root URLs, some linking to subapps.
 """
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.static import serve
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -16,6 +18,9 @@ admin.autodiscover()
 
 urlpatterns = [
     path("", home, name="home"),
+    re_path(
+        r'^media/(?P<path>.*)$', serve, kwargs={'document_root': settings.MEDIA_ROOT}
+    ),
     path("associations/", include("plana.apps.associations.urls")),
     path("consents/", include("plana.apps.consents.urls")),
     path("groups/", include("plana.apps.groups.urls")),
