@@ -40,7 +40,7 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
-    association_members = models.ManyToManyField(
+    associations = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUsers"
     )
     consents_given = models.ManyToManyField(

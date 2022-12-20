@@ -187,7 +187,7 @@ class UserViewsManagerTests(TestCase):
             "/users/associations/",
             {
                 "user": "prenom.nom@adressemail.fr",
-                "association": 1,
+                "association": 2,
                 "has_office_status": False,
             },
         )

@@ -1,5 +1,5 @@
 alabaster==0.7.12 ; python_version >= "3.8" and python_version < "3.11"
-asgiref==3.5.2 ; python_version >= "3.8" and python_version < "3.11"
+asgiref==3.6.0 ; python_version >= "3.8" and python_version < "3.11"
 astroid==2.12.13 ; python_version >= "3.8" and python_version < "3.11"
 attrs==22.1.0 ; python_version >= "3.8" and python_version < "3.11"
 babel==2.11.0 ; python_version >= "3.8" and python_version < "3.11"
