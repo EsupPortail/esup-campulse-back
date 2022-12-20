@@ -14,7 +14,9 @@ class Association(models.Model):
         _("Name"), max_length=250, null=False, blank=False, unique=True
     )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
-    path_logo = models.CharField(_("Logo path"), default="", max_length=250)
+    path_logo = models.ImageField(
+        _("Logo path"), blank=True
+    )  # By default images are stored in MEDIA_ROOT
     alt_logo = models.TextField(_("Description"), default="")
     description = models.TextField(_("Description"), default="")
     activities = models.TextField(_("Activities"), default="")

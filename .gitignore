@@ -50,3 +50,6 @@ htmlcov/
 
 # pylint
 pylint.json
+
+# Media local storage for now
+plana/media/

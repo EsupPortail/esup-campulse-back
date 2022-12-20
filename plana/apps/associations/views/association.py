@@ -213,6 +213,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
+    # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     def patch(self, request, *args, **kwargs):
         try:
             association_id = kwargs["pk"]
