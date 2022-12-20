@@ -213,15 +213,11 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
+    # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     def patch(self, request, *args, **kwargs):
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
-            # WARNING : to upload images the form sent must be "multipart/form-data" encoded
-            asso_serializer = self.serializer_class(
-                instance=self.get_object(), data=request.data, partial=True
-            )
-            asso_serializer.is_valid(raise_exception=True)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No association id given.")},
