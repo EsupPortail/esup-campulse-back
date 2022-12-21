@@ -70,6 +70,22 @@ class UserViewsManagerTests(TestCase):
         for user in response_manager.data:
             self.assertEqual(user["is_validated_by_admin"], False)
 
+    def test_manager_post_user(self):
+        """
+        POST /users/
+        - A manager user can execute this request.
+        - The user has been created.
+        """
+        username = "bourvil@splatoon.com"
+        response_manager = self.manager_client.post(
+            "/users/",
+            {"first_name": "Bourvil", "last_name": "André", "email": username},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        user = User.objects.get(username=username)
+        self.assertEqual(user.username, username)
+
     def test_manager_get_user_detail(self):
         """
         GET /users/{id}

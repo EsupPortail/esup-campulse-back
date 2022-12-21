@@ -277,7 +277,10 @@ paths:
   /users/:
     get:
       operationId: users_list
-      description: 'GET : Lists all users.'
+      description: |-
+        GET : Lists all users.
+
+        POST : Create an account for another person as a manager.
       parameters:
       - in: query
         name: is_cas
@@ -302,6 +305,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      description: |-
+        GET : Lists all users.
+
+        POST : Create an account for another person as a manager.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
           description: ''
   /users/{id}:
     get:
@@ -1975,6 +2008,46 @@ components:
             type: string
       required:
       - groups
+      - username
+    UserRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+      required:
+      - email
+      - first_name
+      - last_name
       - username
     VerifyEmailRequest:
       type: object

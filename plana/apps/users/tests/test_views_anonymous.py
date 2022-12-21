@@ -37,6 +37,21 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.get("/users/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_post_user(self):
+        """
+        POST /users/
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/",
+            {
+                "first_name": "Bourvil",
+                "last_name": "André",
+                "email": "bourvil@splatoon.com",
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_anonymous_get_user_detail(self):
         """
         GET /users/{id}

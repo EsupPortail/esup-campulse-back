@@ -52,6 +52,21 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.get("/users/")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_anonymous_post_user(self):
+        """
+        POST /users/
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.post(
+            "/users/",
+            {
+                "first_name": "Bourvil",
+                "last_name": "André",
+                "email": "bourvil@splatoon.com",
+            },
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_student_get_user_detail(self):
         """
         GET /users/{id}

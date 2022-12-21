@@ -32,9 +32,11 @@ from plana.apps.users.serializers.user import UserSerializer
         ]
     )
 )
-class UserList(generics.ListAPIView):
+class UserListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all users.
+
+    POST : Create an account for another person as a manager.
     """
 
     serializer_class = UserSerializer
@@ -61,6 +63,17 @@ class UserList(generics.ListAPIView):
         return response.Response(
             {"error": _("Bad request.")},
             status=status.HTTP_403_FORBIDDEN,
+        )
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            request.data.update(
+                {"username": request.data["email"], "is_validated_by_admin": True}
+            )
+            return self.create(request, *args, **kwargs)
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
 

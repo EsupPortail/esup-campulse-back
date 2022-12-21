@@ -14,7 +14,7 @@ from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrie
 from .views.user import (
     PasswordResetConfirm,
     UserAuthView,
-    UserList,
+    UserListCreate,
     UserRetrieveUpdateDestroy,
 )
 from .views.user_groups import (
@@ -57,7 +57,7 @@ urlpatterns = [
         UserConsentsRetrieve.as_view(),
         name="user_consents_retrieve",
     ),
-    path("", UserList.as_view(), name="user_list"),
+    path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
     path(
