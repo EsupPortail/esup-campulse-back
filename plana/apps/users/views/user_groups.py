@@ -49,7 +49,9 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.is_svu_manager or user.is_crous_manager or user.is_superuser:
+        if user.is_validated_by_admin and (
+            user.is_svu_manager or user.is_crous_manager or user.is_superuser
+        ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
