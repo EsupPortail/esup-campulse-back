@@ -124,6 +124,13 @@ class UserGroupsDestroy(generics.DestroyAPIView):
                     {"error": _("No user found.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            if user.is_validated_by_admin and (
+                user.is_svu_manager or user.is_crous_manager or user.is_superuser
+            ):
+                return response.Response(
+                    {"error": _("Groups for a manager cannot be changed.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             if user.groups.count() > 1:
                 user.groups.remove(kwargs["group_id"])
                 return response.Response({}, status=status.HTTP_204_NO_CONTENT)
