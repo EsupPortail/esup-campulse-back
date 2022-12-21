@@ -352,6 +352,7 @@ class UserViewsManagerTests(TestCase):
         """
         DELETE /users/groups/{user_id}/{group_id}
         - The user must exist.
+        - Groups for a validated manager user can't be deleted.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
@@ -364,6 +365,9 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete(
             f"/users/groups/99/{str(first_user_group_id)}"
         )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_delete = self.manager_client.delete(f"/users/groups/4/1")
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         first_response_delete = self.manager_client.delete(

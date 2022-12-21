@@ -1121,8 +1121,8 @@ components:
           maxLength: 30
         path_logo:
           type: string
+          format: uri
           title: Emplacement du logo
-          maxLength: 250
         alt_logo:
           type: string
           title: Description
@@ -1221,8 +1221,8 @@ components:
           maxLength: 30
         path_logo:
           type: string
+          format: uri
           title: Emplacement du logo
-          maxLength: 250
         alt_logo:
           type: string
           title: Description
@@ -1698,9 +1698,8 @@ components:
           maxLength: 30
         path_logo:
           type: string
-          minLength: 1
+          format: binary
           title: Emplacement du logo
-          maxLength: 250
         alt_logo:
           type: string
           minLength: 1
