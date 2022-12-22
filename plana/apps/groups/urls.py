@@ -1,3 +1,6 @@
+"""
+List of URLs directly linked to operations that can be done on auth groups.
+"""
 from django.urls import path
 
 from .views.group import GroupList

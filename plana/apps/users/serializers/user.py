@@ -1,20 +1,33 @@
-from rest_framework import exceptions, serializers
-
+"""
+Serializers describing fields used on users and related forms.
+"""
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
+)
+from dj_rest_auth.serializers import (
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
-
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from rest_framework import exceptions, serializers
 
-from plana.apps.users.models.user import User, AssociationUsers
+from plana.apps.associations.serializers.association import (
+    AssociationMandatoryDataSerializer,
+)
+from plana.apps.groups.serializers.group import GroupSerializer
+from plana.apps.users.models.user import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Main serializer.
+    """
+
     is_cas = serializers.SerializerMethodField("is_cas_user")
+    associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
+    groups = GroupSerializer(many=True, read_only=True)
 
     def is_cas_user(self, user) -> bool:
         """
@@ -33,33 +46,16 @@ class UserSerializer(serializers.ModelSerializer):
             "phone",
             "is_cas",
             "is_validated_by_admin",
+            "associations",
+            "groups",
         ]
 
 
-class UserRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        if type(data) == str:
-            return User.objects.get(username=data)
-        elif type(data) == int:
-            return User.objects.get(pk=data)
-
-
-class AssociationUsersSerializer(serializers.ModelSerializer):
-    # TODO Check drf-spectacular error.
-    user = UserRelatedField(queryset=User.objects.all(), many=False)
-
-    class Meta:
-        model = AssociationUsers
-        fields = "__all__"
-
-
 class CustomRegisterSerializer(serializers.ModelSerializer):
+    """
+    Used for the user registration form (to parse the phone field).
+    """
+
     phone = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
@@ -72,6 +68,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         return exclusions + ["phone"]
     """
 
+    """
     def validate_email(self, value):
         ModelClass = self.Meta.model
         if ModelClass.objects.filter(email=value).exists():
@@ -79,6 +76,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
                 _("This email address is already in use.")
             )
         return value
+    """
 
     def save(self, request):
         adapter = get_adapter()
@@ -109,12 +107,11 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to change the password of a CAS account.")]}
                 )
-            else:
-                self.set_password_form.save()
-                if not self.logout_on_password_change:
-                    from django.contrib.auth import update_session_auth_hash
+            self.set_password_form.save()
+            if not self.logout_on_password_change:
+                from django.contrib.auth import update_session_auth_hash
 
-                    update_session_auth_hash(self.request, self.user)
+                update_session_auth_hash(self.request, self.user)
         except ObjectDoesNotExist:
             ...
 
@@ -147,7 +144,6 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to reset the password of a CAS account.")]}
                 )
-            else:
-                self.reset_form.save(**opts)
+            self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             ...

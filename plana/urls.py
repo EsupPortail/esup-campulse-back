@@ -1,7 +1,9 @@
+"""
+List of root URLs, some linking to subapps.
+"""
 from django.conf import settings
-from django.urls import include, path
 from django.contrib import admin
-
+from django.urls import include, path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -15,6 +17,7 @@ admin.autodiscover()
 urlpatterns = [
     path("", home, name="home"),
     path("associations/", include("plana.apps.associations.urls")),
+    path("consents/", include("plana.apps.consents.urls")),
     path("groups/", include("plana.apps.groups.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
@@ -36,7 +39,7 @@ urlpatterns = [
 ]
 
 # debug toolbar for dev
-if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
+if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:  # pragma: no cover
     import debug_toolbar
 
     urlpatterns += [

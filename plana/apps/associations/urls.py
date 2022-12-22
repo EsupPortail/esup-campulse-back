@@ -1,12 +1,36 @@
+"""
+List of URLs directly linked to operations that can be done on associations.
+"""
 from django.urls import path
 
-# from rest_framework import routers
-from .views.association import AssociationList, AssociationDetail
-
-# router = routers.DefaultRouter()
-# router.register(r'associations', views.AssociationView)
+from .views.association import (
+    AssociationActivityFieldList,
+    AssociationInstitutionComponentList,
+    AssociationInstitutionList,
+    AssociationListCreate,
+    AssociationRetrieveUpdateDestroy,
+)
 
 urlpatterns = [
-    path("", AssociationList.as_view(), name="association_list"),
-    path("<int:pk>", AssociationDetail.as_view(), name="association_detail"),
+    path("", AssociationListCreate.as_view(), name="association_list_create"),
+    path(
+        "<int:pk>",
+        AssociationRetrieveUpdateDestroy.as_view(),
+        name="association_retrieve_update_destroy",
+    ),
+    path(
+        "activity_fields",
+        AssociationActivityFieldList.as_view(),
+        name="association_activity_field_list",
+    ),
+    path(
+        "institution_components",
+        AssociationInstitutionComponentList.as_view(),
+        name="association_institution_component_list",
+    ),
+    path(
+        "institutions",
+        AssociationInstitutionList.as_view(),
+        name="association_institution_list",
+    ),
 ]

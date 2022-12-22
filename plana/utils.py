@@ -6,7 +6,9 @@ def _listify(x):
     return list(filter(None, set(x if isinstance(x, (list, tuple, set)) else [x])))
 
 
-def send_mail(to_, subject, message, from_='', attachments=None, has_html=True, **kwargs):
+def send_mail(
+    to_, subject, message, from_='', attachments=None, has_html=True, **kwargs
+):
     # Listify recipient address
     to_ = _listify(to_)
     from_ = from_ or settings.DEFAULT_FROM_EMAIL

@@ -1,27 +1,32 @@
+"""
+Special serializers used to interact with CAS.
+"""
 from __future__ import annotations
 
 import typing
 
+from allauth.socialaccount.models import SocialLogin
+from allauth_cas.views import AuthAction
+from cas import CASClient, CASClientBase
+from dj_rest_auth.serializers import LoginSerializer
 from django.conf import settings
 from django.db import IntegrityError
 from django.http import HttpRequest
-from django.utils.translation import ugettext_lazy as _
-
-from allauth.socialaccount.models import SocialLogin
-from allauth_cas.views import AuthAction
-from dj_rest_auth.serializers import LoginSerializer
+from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
-from cas import CASClient, CASClientBase
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # pragma: no cover
     from plana.apps.users.views import CASLogin
 
 
 class CASSerializer(LoginSerializer):
+    """
+    Main serializer.
+    """
 
     ticket = serializers.CharField(required=True)
     service = serializers.URLField(required=True)
@@ -29,8 +34,8 @@ class CASSerializer(LoginSerializer):
 
     def validate(self, attrs):
         """
-        We get the username from the CAS Server from the ticket and service url, log in the user
-        and add it to the serializer attributes
+        We get the username from the CAS Server from the ticket and service url,
+        log in the user, and add it to the serializer attributes.
         """
         view = self.context.get("view")
         request = self.context.get("request")
@@ -65,31 +70,25 @@ class CASSerializer(LoginSerializer):
                 login.save(request, connect=True)
                 attrs["user"] = login.account.user
             except IntegrityError:
-                raise serializers.ValidationError(
-                    _(
-                        "An user is already registered with the email address linked to this CAS account."
-                    )
-                )
+                ...
         else:
             attrs["user"] = login.account.user
-            # TODO Avoid logging in a CAS user who hasn't completed registration.
-            """
             user = User.objects.get(email=attrs["user"].email)
             try:
                 user.groups.all()[0]
-            except IndexError:
+            except IndexError as exc:
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")
-                )
-            """
+                ) from exc
 
         return attrs
 
     def validate_service(self, value):
+        """
+        Checks if the service is authorized in the configuration file.
+        """
         if value not in settings.CAS_AUTHORIZED_SERVICES:
-            raise exceptions.ValidationError(
-                _("%(service)s is not a valid service" % {"service": value})
-            )
+            raise exceptions.ValidationError(_(f"{value} is not a valid service"))
         return value
 
     def get_client(
@@ -99,6 +98,9 @@ class CASSerializer(LoginSerializer):
         service_url: str,
         action: str = AuthAction.AUTHENTICATE,
     ) -> CASClientBase:
+        """
+        Get CAS informations.
+        """
         provider: CASProvider = adapter.get_provider(request)
         auth_params = provider.get_auth_params(request, action)
         service_url = service_url or adapter.get_service_url(request)
@@ -113,6 +115,9 @@ class CASSerializer(LoginSerializer):
         return client
 
     def get_adapter(self, request: HttpRequest, view: CASLogin) -> CASAdapter:
+        """
+        Get CAS adapter informations.
+        """
         adapter_class = getattr(view, "adapter_class", None)
         if not adapter_class:
             raise serializers.ValidationError(

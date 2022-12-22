@@ -21,10 +21,9 @@ class MailTemplateAdmin(SummernoteModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
-        
+
         fakevars_dict = {}
-        qs = MailTemplateVar.objects \
-            .filter(mail_templates__id=object_id)
+        qs = MailTemplateVar.objects.filter(mail_templates__id=object_id)
 
         # Get all multi-valued fakevars
         for template_var in qs:
@@ -39,7 +38,10 @@ class MailTemplateAdmin(SummernoteModelAdmin):
         extra_context['fakevars'] = fakevars_dict
 
         return super().change_view(
-            request, object_id, form_url, extra_context=extra_context,
+            request,
+            object_id,
+            form_url,
+            extra_context=extra_context,
         )
 
     class Media:

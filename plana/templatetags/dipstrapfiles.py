@@ -1,7 +1,6 @@
 from django import template
 from django.conf import settings
-from django.templatetags.static import StaticNode, PrefixNode, urljoin
-
+from django.templatetags.static import PrefixNode, StaticNode, urljoin
 
 register = template.Library()
 
@@ -12,8 +11,7 @@ class DipstrapNode(StaticNode):
         static_dipstrap = getattr(settings, "DIPSTRAP_STATIC_URL", "")
         if static_dipstrap:
             return urljoin(PrefixNode.handle_simple("DIPSTRAP_STATIC_URL"), path)
-        else:
-            return super(DipstrapNode, cls).handle_simple(path)
+        return super().handle_simple(path)
 
 
 @register.tag(name="dipstrap")

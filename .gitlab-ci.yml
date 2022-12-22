@@ -16,3 +16,4 @@ unittest:
   script:
     - pip3 install tox
     - tox
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'

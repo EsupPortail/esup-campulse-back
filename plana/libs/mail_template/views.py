@@ -25,7 +25,7 @@ class MailTemplatePreviewAPI(View):
             return JsonResponse(response)
 
         try:
-            available_vars=template.available_vars.all()
+            available_vars = template.available_vars.all()
 
             # Get multi-valued fakevars
             fakevars_dict = {}
@@ -37,7 +37,9 @@ class MailTemplatePreviewAPI(View):
                         fake_var_lst.append((type(fv), fv))
                     fakevars_dict[template_var.name] = fake_var_lst
                 else:
-                    context_params[template_var.name] = fake_vars[0] if fake_vars else None
+                    context_params[template_var.name] = (
+                        fake_vars[0] if fake_vars else None
+                    )
             context_params['fakevars_dict'] = fakevars_dict
 
             body = template.parse_var_faker_from_string(
@@ -45,7 +47,7 @@ class MailTemplatePreviewAPI(View):
                 user=self.request.user,
                 request=self.request,
                 body=body,
-                available_vars=available_vars
+                available_vars=available_vars,
             )
             response["data"] = body
         except TemplateSyntaxError:
@@ -60,7 +62,10 @@ def ajax_get_available_vars(request, template_id=None):
 
     if template_id:
         template_vars = MailTemplateVar.objects.filter(mail_templates=template_id)
-        response["data"] = [{'id': v.id, 'code': v.code, 'description': v.description} for v in template_vars]
+        response["data"] = [
+            {'id': v.id, 'code': v.code, 'description': v.description}
+            for v in template_vars
+        ]
     else:
         response["msg"] = gettext("Error : no template id")
 

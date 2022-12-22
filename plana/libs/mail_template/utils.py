@@ -1,6 +1,6 @@
 import datetime
 from functools import wraps
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
 
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseForbidden
@@ -9,7 +9,6 @@ from django.utils.html import format_html
 
 from .models import MailTemplateVar
 
-
 User = get_user_model()
 
 
@@ -17,16 +16,20 @@ def is_ajax_request(view_func):
     """
     Check if the request is ajax
     """
+
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.is_ajax():
             return view_func(request, *args, **kwargs)
-        return HttpResponseForbidden("<h1>Forbidden</h1>You do not have \
-            permission to access this page.")
+        return HttpResponseForbidden(
+            "<h1>Forbidden</h1>You do not have \
+            permission to access this page."
+        )
+
     return wrapper
 
 
-def render_text(template_data: str, data: Dict[str, Any]) -> str:
+def render_text(template_data: str, data: dict[str, Any]) -> str:
     """
     Render a text base on jinja2 engine
     :param template_data:
@@ -44,27 +47,38 @@ def parser(message_body, available_vars=None, user=None, request=None, **kwargs)
         available_vars=available_vars,
         user=user,
         request=request,
-        **kwargs
+        **kwargs,
     )
 
 
-def parser_faker(message_body, context_params, available_vars=None, user=None, request=None, **kwargs):
+def parser_faker(
+    message_body, context_params, available_vars=None, user=None, request=None, **kwargs
+):
     return ParserFaker.parser(
         message_body=message_body,
         context_params=context_params,
         available_vars=available_vars,
         user=user,
         request=request,
-        **kwargs
+        **kwargs,
     )
 
 
 class ParserFaker:
     @classmethod
-    def parser(cls, message_body: str, available_vars: Optional[List[MailTemplateVar]], context_params: Dict[str, Any],
-               user: Optional[User] = None, request=None, **kwargs) -> str:
+    def parser(
+        cls,
+        message_body: str,
+        available_vars: Optional[list[MailTemplateVar]],
+        context_params: dict[str, Any],
+        user: Optional[User] = None,
+        request=None,
+        **kwargs,
+    ) -> str:
 
-        context = cls.get_context(request, available_vars=available_vars, extra_variables=context_params)
+        context = cls.get_context(
+            request, available_vars=available_vars, extra_variables=context_params
+        )
         return render_text(template_data=message_body, data=context)
 
     @classmethod
@@ -88,14 +102,20 @@ class ParserFaker:
 
 class Parser:
     @classmethod
-    def parser(cls, message_body: str, available_vars: Optional[List[MailTemplateVar]],
-               user: Optional[User] = None, request=None, context=None, **kwargs) -> str:
+    def parser(
+        cls,
+        message_body: str,
+        available_vars: Optional[list[MailTemplateVar]],
+        user: Optional[User] = None,
+        request=None,
+        context=None,
+        **kwargs,
+    ) -> str:
         context = context or {}
         # context.update(cls.get_context(user, request, **kwargs))
         return render_text(template_data=message_body, data=context)
 
-
     @classmethod
-    def get_context(cls, user, request=None, **kwargs) -> Dict[str, Any]:
+    def get_context(cls, user, request=None, **kwargs) -> dict[str, Any]:
         context = {}
         return context

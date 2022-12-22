@@ -2,11 +2,6 @@
 
 ## Health
 
-### Master
-
-[![pipeline status](https://git.unistra.fr/di/plan_a/plana/badges/master/pipeline.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/master)
-[![coverage report](https://git.unistra.fr/di/plan_a/plana/badges/master/coverage.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/master)
-
 ### Develop
 
 [![pipeline status](https://git.unistra.fr/di/plan_a/plana/badges/develop/pipeline.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/develop)
@@ -54,7 +49,7 @@ export DJANGO_SETTINGS_MODULE=plana.settings.dev
 
 Les actions suivantes se font avec le virtualenv activé :
 
-### Installer les dépendances de dev dans le virtualenv
+### Installer les dépendances de dev dans le virtualenv sans Poetry
 
 ```sh
 $ pip install -r requirements/dev.txt
@@ -125,6 +120,20 @@ $ python manage.py makemessages -l fr --extension html,txt,py
 $ black plana
 ```
 
+### Réordonner les imports
+
+```sh
+$ isort plana
+```
+
+### Détecter les autres erreurs non lintables des fichiers
+
+```sh
+$ pylint plana --output-format=json:pylint.json
+```
+
+(Ajouter `export PYTHONPATH=$PYTHONPATH:DOSSIER_DU_PROJET` au fichier `postactivate` de l'environnement virtuel.)
+
 ### Mettre à jour automatiquement le fichier de documentation de l'API
 
 ```sh
@@ -135,4 +144,25 @@ $ python manage.py spectacular --file schema.yml
 
 ```sh
 $ DEFAULT_DB_TEST_HOST=localhost tox
+```
+
+### Voir de façon graphique le coverage des tests unitaires
+
+```sh
+$ firefox htmlcov/index.html
+```
+
+### Mettre à jour les dépendances du projet
+
+```sh
+$ poetry lock
+$ poetry install --sync
+$ ./generate_requirements.sh
+```
+
+### Déployer sur le serveur de test
+
+```sh
+$ fab tag:develop test deploy -u root
+$ fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root
 ```

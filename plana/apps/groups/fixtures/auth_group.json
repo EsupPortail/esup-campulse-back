@@ -17,14 +17,14 @@
     "model": "auth.group",
     "pk": 3,
     "fields": {
-      "name": "Membre Commission FSDIE/IdEx"
+      "name": "Membre de Commission FSDIE/IdEx"
     }
   },
   {
     "model": "auth.group",
     "pk": 4,
     "fields": {
-      "name": "Membre Commission Culture ActionS"
+      "name": "Membre de Commission Culture-ActionS"
     }
   },
   {

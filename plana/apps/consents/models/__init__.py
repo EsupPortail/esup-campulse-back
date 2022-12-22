@@ -1,0 +1,1 @@
+from .consent import GDPRConsent

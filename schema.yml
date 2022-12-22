@@ -1,0 +1,2068 @@
+openapi: 3.0.3
+info:
+  title: PlanA API
+  version: 0.1.0
+  description: API for PlanA
+paths:
+  /associations/:
+    get:
+      operationId: associations_list
+      description: |-
+        GET : Lists all associations currently active.
+
+        POST : Creates a new association with mandatory informations.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Association acronym.
+      - in: query
+        name: activity_field
+        schema:
+          type: integer
+        description: Filter by Activity Field ID.
+      - in: query
+        name: institution
+        schema:
+          type: integer
+        description: Filter by Institution ID.
+      - in: query
+        name: institution_component
+        schema:
+          type: integer
+        description: Filter by Institution Component ID.
+      - in: query
+        name: is_enabled
+        schema:
+          type: boolean
+        description: Filter for non-validated associations.
+      - in: query
+        name: is_public
+        schema:
+          type: boolean
+        description: Filter for associations shown in the public list.
+      - in: query
+        name: is_site
+        schema:
+          type: boolean
+        description: Filter for associations from site.
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Association name.
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssociationPartialData'
+          description: ''
+    post:
+      operationId: associations_create
+      description: |-
+        GET : Lists all associations currently active.
+
+        POST : Creates a new association with mandatory informations.
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationMandatoryDataRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationMandatoryData'
+          description: ''
+  /associations/{id}:
+    get:
+      operationId: associations_retrieve
+      description: |-
+        GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
+
+        DELETE : Removes an entire association.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllData'
+          description: ''
+    patch:
+      operationId: associations_partial_update
+      description: |-
+        GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
+
+        DELETE : Removes an entire association.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataNoSubTable'
+          description: ''
+    delete:
+      operationId: associations_destroy
+      description: |-
+        GET : Lists an association with all its details.
+
+        PATCH : Edit association details (with different permissions for SVU and president).
+
+        DELETE : Removes an entire association.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /associations/activity_fields:
+    get:
+      operationId: associations_activity_fields_list
+      description: 'GET : Lists all activity fields.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityField'
+          description: ''
+  /associations/institution_components:
+    get:
+      operationId: associations_institution_components_list
+      description: 'GET : Lists all institution components.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstitutionComponent'
+          description: ''
+  /associations/institutions:
+    get:
+      operationId: associations_institutions_list
+      description: 'GET : Lists all institutions.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Institution'
+          description: ''
+  /consents/:
+    get:
+      operationId: consents_list
+      description: 'GET : Lists all GDPR types of consents.'
+      tags:
+      - consents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GDPRConsent'
+          description: ''
+  /groups/:
+    get:
+      operationId: groups_list
+      description: 'GET : Lists all groups.'
+      tags:
+      - groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+          description: ''
+  /users/:
+    get:
+      operationId: users_list
+      description: |-
+        GET : Lists all users.
+
+        POST : Create an account for another person as a manager.
+      parameters:
+      - in: query
+        name: is_cas
+        schema:
+          type: boolean
+        description: Filter for members logged through CAS
+      - in: query
+        name: is_validated_by_admin
+        schema:
+          type: boolean
+        description: Filter for members not validated by an admin
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      description: |-
+        GET : Lists all users.
+
+        POST : Create an account for another person as a manager.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/{id}:
+    get:
+      operationId: users_retrieve
+      description: |-
+        GET : Lists a user with all details.
+
+        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
+
+        DELETE : Removes a user from the database (with a restriction on manager users).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: |-
+        GET : Lists a user with all details.
+
+        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
+
+        DELETE : Removes a user from the database (with a restriction on manager users).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: |-
+        GET : Lists a user with all details.
+
+        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
+
+        DELETE : Removes a user from the database (with a restriction on manager users).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/associations/:
+    get:
+      operationId: users_associations_list
+      description: |-
+        GET : Lists all associations linked to a user, or all associations of all users.
+
+        POST : Creates a new link between a non-validated user and an association.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssociationUsersCreation'
+          description: ''
+    post:
+      operationId: users_associations_create
+      description: |-
+        GET : Lists all associations linked to a user, or all associations of all users.
+
+        POST : Creates a new link between a non-validated user and an association.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUsersCreation'
+          description: ''
+  /users/associations/{user_id}:
+    get:
+      operationId: users_associations_retrieve
+      description: |-
+        GET : Lists all associations linked to a user (manager).
+
+        DELETE : Deletes an association linked to a user (manager).
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUsers'
+          description: ''
+  /users/associations/{user_id}/{association_id}:
+    delete:
+      operationId: users_associations_destroy
+      description: |-
+        GET : Lists all associations linked to a user (manager).
+
+        DELETE : Deletes an association linked to a user (manager).
+      parameters:
+      - in: path
+        name: association_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/auth/cas/login/:
+    post:
+      operationId: users_auth_cas_login_create
+      description: 'POST : Authenticates a user through CAS with django-allauth-cas
+        and dj-rest-auth.'
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CAS'
+          description: ''
+  /users/auth/cas/logout/:
+    get:
+      operationId: users_auth_cas_logout_retrieve
+      description: |-
+        GET : Logs out a user authenticated with CAS out.
+
+        POST : Logs out a user authenticated with CAS out.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CAS'
+          description: ''
+    post:
+      operationId: users_auth_cas_logout_create
+      description: |-
+        GET : Logs out a user authenticated with CAS out.
+
+        POST : Logs out a user authenticated with CAS out.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CASRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CAS'
+          description: ''
+  /users/auth/login/:
+    post:
+      operationId: users_auth_login_create
+      description: |-
+        Check the credentials and return the REST Token
+        if the credentials are valid and authenticated.
+        Calls Django Auth login method to register User ID
+        in Django session framework
+
+        Accept the following POST parameters: username, password
+        Return the REST Framework Token Object's key.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWT'
+          description: ''
+  /users/auth/logout/:
+    post:
+      operationId: users_auth_logout_create
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/password/change/:
+    post:
+      operationId: users_auth_password_change_create
+      description: |-
+        Calls Django Auth SetPasswordForm save method.
+
+        Accepts the following POST parameters: new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/password/reset/:
+    post:
+      operationId: users_auth_password_reset_create
+      description: |-
+        Calls Django Auth PasswordResetForm save method.
+
+        Accepts the following POST parameters: email
+        Returns the success/fail message.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/password/reset/confirm/:
+    post:
+      operationId: users_auth_password_reset_confirm_create
+      description: |-
+        Password reset e-mail link is confirmed, therefore
+        this resets the user's password.
+
+        Accepts the following POST parameters: token, uid,
+            new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/registration/:
+    post:
+      operationId: users_auth_registration_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/registration/resend-email/:
+    post:
+      operationId: users_auth_registration_resend_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/registration/verify-email/:
+    post:
+      operationId: users_auth_registration_verify_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /users/auth/token/refresh/:
+    post:
+      operationId: users_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /users/auth/token/verify/:
+    post:
+      operationId: users_auth_token_verify_create
+      description: |-
+        Takes a token and indicates if it is valid.  This view provides no
+        information about a token's fitness for a particular use.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /users/auth/user/:
+    get:
+      operationId: users_auth_user_retrieve
+      description: Overrided UserDetailsView to prevent CAS users to change their
+        own auto-generated fields.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_auth_user_partial_update
+      description: Overrided UserDetailsView to prevent CAS users to change their
+        own auto-generated fields.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/consents/:
+    get:
+      operationId: users_consents_list
+      description: |-
+        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
+
+        POST : Creates a new link between a user and a consent (authenticated).
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GDPRConsentUsers'
+          description: ''
+    post:
+      operationId: users_consents_create
+      description: |-
+        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
+
+        POST : Creates a new link between a user and a consent (authenticated).
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GDPRConsentUsersRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GDPRConsentUsersRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GDPRConsentUsersRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GDPRConsentUsers'
+          description: ''
+  /users/consents/{user_id}:
+    get:
+      operationId: users_consents_retrieve
+      description: 'GET : Lists all GDPR consents linked to a user (manager).'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GDPRConsentUsers'
+          description: ''
+  /users/groups/:
+    get:
+      operationId: users_groups_list
+      description: |-
+        GET : Lists all groups linked to a user (student), or all groups of all users (manager).
+
+        POST : Creates a new link between a non-validated user and a group.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+          description: ''
+    post:
+      operationId: users_groups_create
+      description: |-
+        GET : Lists all groups linked to a user (student), or all groups of all users (manager).
+
+        POST : Creates a new link between a non-validated user and a group.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserGroupsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserGroupsRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupsRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroups'
+          description: ''
+  /users/groups/{user_id}:
+    get:
+      operationId: users_groups_retrieve
+      description: 'GET : Lists all groups linked to a user (manager).'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+  /users/groups/{user_id}/{group_id}:
+    delete:
+      operationId: users_groups_destroy
+      description: 'DELETE : Deletes a group linked to a user (manager).'
+      parameters:
+      - in: path
+        name: group_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    ActivityField:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+      - name
+    AssociationAllData:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          $ref: '#/components/schemas/Institution'
+        institution_component:
+          $ref: '#/components/schemas/InstitutionComponent'
+        activity_field:
+          $ref: '#/components/schemas/ActivityField'
+        social_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetwork'
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          format: uri
+          title: Emplacement du logo
+        alt_logo:
+          type: string
+          title: Description
+        description:
+          type: string
+        activities:
+          type: string
+          title: Activités
+        address:
+          type: string
+          title: Adresse
+        phone:
+          type: string
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          maxLength: 256
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
+      required:
+      - activity_field
+      - creation_date
+      - id
+      - institution
+      - institution_component
+      - name
+      - social_networks
+    AssociationAllDataNoSubTable:
+      type: object
+      description: Serializer without name details about sub-tables.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          type: integer
+        institution_component:
+          type: integer
+        activity_field:
+          type: integer
+        social_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetwork'
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          format: uri
+          title: Emplacement du logo
+        alt_logo:
+          type: string
+          title: Description
+        description:
+          type: string
+        activities:
+          type: string
+          title: Activités
+        address:
+          type: string
+          title: Adresse
+        phone:
+          type: string
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          maxLength: 256
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
+      required:
+      - activity_field
+      - creation_date
+      - id
+      - institution
+      - institution_component
+      - name
+      - social_networks
+    AssociationMandatoryData:
+      type: object
+      description: |-
+        Smaller serializer to return only the main informations of an association
+        (used in a simple name list of all associations).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+      - name
+    AssociationMandatoryDataRequest:
+      type: object
+      description: |-
+        Smaller serializer to return only the main informations of an association
+        (used in a simple name list of all associations).
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
+      - name
+    AssociationPartialData:
+      type: object
+      description: |-
+        Smaller serializer to return only some of the informations of an association
+        (used in a table list of all associations).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          $ref: '#/components/schemas/Institution'
+        institution_component:
+          $ref: '#/components/schemas/InstitutionComponent'
+        activity_field:
+          $ref: '#/components/schemas/ActivityField'
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+      required:
+      - activity_field
+      - id
+      - institution
+      - institution_component
+      - name
+    AssociationUsers:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+        role_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        is_president:
+          type: boolean
+        association:
+          $ref: '#/components/schemas/AssociationMandatoryData'
+      required:
+      - association
+      - id
+      - user
+    AssociationUsersCreation:
+      type: object
+      description: Serializer to create the link (without all association details).
+      properties:
+        user:
+          type: string
+        role_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        is_president:
+          type: boolean
+        association:
+          type: integer
+      required:
+      - association
+      - user
+    AssociationUsersCreationRequest:
+      type: object
+      description: Serializer to create the link (without all association details).
+      properties:
+        user:
+          type: string
+        role_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        is_president:
+          type: boolean
+        association:
+          type: integer
+      required:
+      - association
+      - user
+    CAS:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        ticket:
+          type: string
+        service:
+          type: string
+          format: uri
+      required:
+      - service
+      - ticket
+    CASRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+        ticket:
+          type: string
+          minLength: 1
+        service:
+          type: string
+          format: uri
+          minLength: 1
+      required:
+      - service
+      - ticket
+    CustomRegisterRequest:
+      type: object
+      description: Used for the user registration form (to parse the phone field).
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 254
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        phone:
+          type: string
+      required:
+      - email
+      - first_name
+      - last_name
+    GDPRConsent:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: GDPR Consent title
+          maxLength: 256
+      required:
+      - id
+      - title
+    GDPRConsentUsers:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+        date_consented:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Consent date
+        consent:
+          type: integer
+          title: GDPR Consent
+      required:
+      - consent
+      - date_consented
+      - id
+      - user
+    GDPRConsentUsersRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        user:
+          type: string
+        consent:
+          type: integer
+          title: GDPR Consent
+      required:
+      - consent
+      - user
+    Group:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 150
+      required:
+      - id
+      - name
+    GroupRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 150
+      required:
+      - name
+    Institution:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+      required:
+      - acronym
+      - id
+      - name
+    InstitutionComponent:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+      - name
+    JWT:
+      type: object
+      description: Serializer for JWT authentication.
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+      - access_token
+      - refresh_token
+      - user
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 1
+      required:
+      - password
+    PasswordChangeRequest:
+      type: object
+      description: Overrided PasswordChangeSerializer to prevent CAS users to change
+        their passwords.
+      properties:
+        new_password1:
+          type: string
+          minLength: 1
+          maxLength: 128
+        new_password2:
+          type: string
+          minLength: 1
+          maxLength: 128
+      required:
+      - new_password1
+      - new_password2
+    PasswordResetConfirmRequest:
+      type: object
+      description: Serializer for confirming a password reset attempt.
+      properties:
+        new_password1:
+          type: string
+          minLength: 1
+          maxLength: 128
+        new_password2:
+          type: string
+          minLength: 1
+          maxLength: 128
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+      required:
+      - new_password1
+      - new_password2
+      - token
+      - uid
+    PasswordResetRequest:
+      type: object
+      description: Overrided PasswordResetSerializer to prevent CAS users to reset
+        their passwords.
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    PatchedAssociationAllDataNoSubTableRequest:
+      type: object
+      description: Serializer without name details about sub-tables.
+      properties:
+        institution:
+          type: integer
+        institution_component:
+          type: integer
+        activity_field:
+          type: integer
+        social_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SocialNetworkRequest'
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          format: binary
+          title: Emplacement du logo
+        alt_logo:
+          type: string
+          minLength: 1
+          title: Description
+        description:
+          type: string
+          minLength: 1
+        activities:
+          type: string
+          minLength: 1
+          title: Activités
+        address:
+          type: string
+          minLength: 1
+          title: Adresse
+        phone:
+          type: string
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          minLength: 1
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        website:
+          type: string
+          format: uri
+          minLength: 1
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          minLength: 1
+          maxLength: 256
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        approval_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dernière AG constitutive
+    PatchedUserRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+    ResendEmailVerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    RestAuthDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+      required:
+      - detail
+    SocialNetwork:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          type: string
+          maxLength: 32
+        location:
+          type: string
+          format: uri
+          title: Adresse
+          maxLength: 200
+      required:
+      - id
+      - location
+      - type
+    SocialNetworkRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        type:
+          type: string
+          minLength: 1
+          maxLength: 32
+        location:
+          type: string
+          format: uri
+          minLength: 1
+          title: Adresse
+          maxLength: 200
+      required:
+      - location
+      - type
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    TokenVerifyRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - token
+    User:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          title: Téléphone
+          maxLength: 32
+        is_cas:
+          type: boolean
+          readOnly: true
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationMandatoryData'
+          readOnly: true
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+      required:
+      - associations
+      - email
+      - first_name
+      - groups
+      - id
+      - is_cas
+      - last_name
+      - username
+    UserGroups:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        groups:
+          type: array
+          items:
+            type: string
+      required:
+      - groups
+      - id
+      - username
+    UserGroupsRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        groups:
+          type: array
+          items:
+            type: string
+      required:
+      - groups
+      - username
+    UserRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+      required:
+      - email
+      - first_name
+      - last_name
+      - username
+    VerifyEmailRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+      required:
+      - key
+  securitySchemes:
+    jwtCookieAuth:
+      type: apiKey
+      in: cookie
+      name: plana-auth
+    jwtHeaderAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,6 +1,5 @@
 from .base import *
 
-
 ##########################
 # Database configuration #
 ##########################
@@ -56,3 +55,7 @@ sentry_init(STAGE)
 ##################
 
 CAS_SERVER = "https://cas6-dev.unistra.fr/cas/"
+CAS_AUTHORIZED_SERVICES = [
+    "https://plana-pprd.app.unistra.fr/cas-login",
+    "https://plana-pprd.app.unistra.fr/cas-register",
+]

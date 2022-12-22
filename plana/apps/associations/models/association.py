@@ -1,26 +1,34 @@
+"""
+Models describing associations and most of its details.
+"""
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 class Association(models.Model):
     """
-    Model representing an association and most of its details.
+    Main model.
     """
 
     name = models.CharField(
-        _("Name"), default="", max_length=250, null=False, blank=False, unique=True
+        _("Name"), max_length=250, null=False, blank=False, unique=True
     )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
-    path_logo = models.CharField(_("Logo path"), default="", max_length=250)
+    path_logo = models.ImageField(
+        _("Logo path"), blank=True
+    )  # By default images are stored in MEDIA_ROOT
+    alt_logo = models.TextField(_("Description"), default="")
     description = models.TextField(_("Description"), default="")
     activities = models.TextField(_("Activities"), default="")
     address = models.TextField(_("Address"), default="")
-    phone = models.CharField(_("Phone"), default="", max_length=25)
+    phone = models.CharField(_("Phone"), default="", max_length=32)
     email = models.CharField(_("Email"), default="", max_length=256)
     siret = models.IntegerField(_("SIRET"), default=0)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.IntegerField(_("Student count"), default=0)
+    president_names = models.CharField(_("President names"), default="", max_length=256)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
+    is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateTimeField(
@@ -35,15 +43,20 @@ class Association(models.Model):
         verbose_name=_("Institution"),
         related_name="associations",
         on_delete=models.RESTRICT,
+        null=True,
     )
     institution_component = models.ForeignKey(
         "InstitutionComponent",
         verbose_name=_("Institution component"),
         related_name="associations",
         on_delete=models.RESTRICT,
+        null=True,
     )
     activity_field = models.ForeignKey(
-        "ActivityField", verbose_name=_("Activity field"), on_delete=models.RESTRICT
+        "ActivityField",
+        verbose_name=_("Activity field"),
+        on_delete=models.RESTRICT,
+        null=True,
     )
 
     def __str__(self):
@@ -54,69 +67,17 @@ class Association(models.Model):
         verbose_name_plural = _("Associations")
 
 
-class SocialNetwork(models.Model):
+class SpaceRemovedValue(models.Transform):
     """
-    List of social networks used by the associations (Facebook, Twitter, Mastodon, ...).
-    """
-
-    type = models.CharField(_("Type"), max_length=32, blank=False)
-    location = models.URLField(_("Location"), max_length=200, blank=False)
-    association = models.ForeignKey(
-        "Association",
-        verbose_name=_("Association"),
-        related_name="social_networks",
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return f"{self.type} : {self.location}"
-
-    class Meta:
-        verbose_name = _("Social network")
-        verbose_name_plural = _("Social networks")
-
-
-class Institution(models.Model):
-    """
-    Associations are attached to institutions (Crous, Unistra, UHA, ...).
+    Custom lookup function to compare two strings with or without spaces on a queryset.
+    Thanks StackOverflow https://stackoverflow.com/a/30375271
     """
 
-    name = models.CharField(_("Name"), max_length=250, blank=False)
-    acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
+    lookup_name = 'nospaces'
 
-    def __str__(self):
-        return f"{self.name} ({self.acronym})"
-
-    class Meta:
-        verbose_name = _("Institution")
-        verbose_name_plural = _("Institutions")
+    def as_sql(self, compiler, connection):
+        lhs, params = compiler.compile(self.lhs)
+        return "REPLACE(%s, ' ', '')" % lhs, params
 
 
-class InstitutionComponent(models.Model):
-    """
-    Associations are attached to components (faculté de médecine, IUT, ...).
-    """
-
-    name = models.CharField(_("Name"), max_length=250, blank=False)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = _("Institution component")
-        verbose_name_plural = _("Institution components")
-
-
-class ActivityField(models.Model):
-    """
-    Associations have an activity field (culture, international, santé, sport, ...).
-    """
-
-    name = models.CharField(_("Name"), max_length=250, blank=False)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = _("Activity field")
-        verbose_name_plural = _("Activity fields")
+models.CharField.register_lookup(SpaceRemovedValue)
