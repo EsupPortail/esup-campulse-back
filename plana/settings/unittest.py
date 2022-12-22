@@ -44,3 +44,16 @@ for logger in LOGGING["loggers"]:
     LOGGING["loggers"][logger]["level"] = "DEBUG"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
+
+##########
+# Emails #
+##########
+
+EMAIL_TEMPLATE_FRONTEND_URL = "http://localhost:3000/"
+EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL = (
+    EMAIL_TEMPLATE_FRONTEND_URL + "register-verify-email/"
+)
+EMAIL_TEMPLATE_PASSWORD_RESET_URL = (
+    EMAIL_TEMPLATE_FRONTEND_URL + "password-reset-confirm/"
+)
+
