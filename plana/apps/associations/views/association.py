@@ -3,6 +3,7 @@ Views directly linked to associations.
 """
 import unicodedata
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -27,6 +28,9 @@ from plana.apps.associations.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.user import User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 @extend_schema_view(
@@ -144,6 +148,22 @@ class AssociationListCreate(generics.ListCreateAPIView):
         else:
             self.serializer_class = AssociationPartialDataSerializer
         return super().get_serializer_class()
+
+    # TODO Route used for email tests, remove it when tests are done.
+    def get(self, request, *args, **kwargs):
+        template = MailTemplate.objects.get(code="BONJOURG")
+        user = User.objects.get(id=1)
+        context = {"code": "bjrg"}
+        body = template.parse_vars(user, request, context)
+
+        send_mail(
+            subject=template.subject,
+            message=body,
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_='bonjourg@ah.tld',
+        )
+
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager:

@@ -1,0 +1,11 @@
+[
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 1,
+    "fields": {
+      "code": "{{ code }}",
+      "description": "Permet d'envoyer un Bonjourg pour tester le module.",
+      "fake_vars": {}
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 1,
+    "fields": {
+      "code": "BONJOURG",
+      "label": "Template de bonjourg",
+      "description": "Permet d'envoyer un Bonjourg pour tester le module.",
+      "subject": "Bonjourg.",
+      "body": "Bonjourg tout le monde {{ code }}.",
+      "active": true,
+      "available_vars": [
+        1
+      ]
+    }
+  }
+]
