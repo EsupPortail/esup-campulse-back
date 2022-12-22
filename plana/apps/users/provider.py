@@ -1,12 +1,8 @@
 """
 Describes the used CAS service and the fields retrieved from it.
 """
-import logging
-
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth_cas.providers import CASProvider as AllAuthCASProvider
-
-logger = logging.getLogger(__name__)
 
 
 class CASAccount(ProviderAccount):
@@ -34,7 +30,6 @@ class CASProvider(AllAuthCASProvider):
             "first_name": extra.get("first_name", ""),
             "last_name": extra.get("last_name", ""),
         }
-        logger.info(fields)
         return fields
 
 

@@ -3,7 +3,6 @@ Special serializers used to interact with CAS.
 """
 from __future__ import annotations
 
-import logging
 import typing
 
 from allauth.socialaccount.models import SocialLogin
@@ -19,8 +18,6 @@ from rest_framework import exceptions, serializers
 from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models.user import User
 from plana.apps.users.provider import CASProvider
-
-logger = logging.getLogger(__name__)
 
 if typing.TYPE_CHECKING:  # pragma: no cover
     from plana.apps.users.views import CASLogin
@@ -65,7 +62,6 @@ class CASSerializer(LoginSerializer):
             )
 
         data = (uid, extra or {})
-        logger.info(data)
 
         login: SocialLogin = adapter.complete_login(request, data)
         login.lookup()
@@ -85,7 +81,6 @@ class CASSerializer(LoginSerializer):
                     _("Account registration must be completed.")
                 ) from exc
 
-        logger.info(attrs)
         return attrs
 
     def validate_service(self, value):
