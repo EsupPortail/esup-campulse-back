@@ -24,7 +24,7 @@
       "label": "Password Reset Key",
       "description": "Envoyé à la réinitialisation d'un mot de passe avec le lien vers le formulaire de réinitialisation.",
       "subject": "Bonjour, veuillez s'il vous plaît réinitialiser votre mot de passe.",
-      "body": "Bonjour de la part de {{ site_name }}.<br/>Vous recevez cet e-mail car vous ou une autre personne a demandé la réinitialisation du mot de passe de votre compte.<br/>Vous pouvez ignorer cette requête si vous ne souhaitez pas faire cette démarche. Sinon cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe.<br/>{{ password_reset_url }}<br/>Si vous l'avez oublié, votre nom de compte est {{ username }}.<br/>L'équipe de {{ site_name }} vous souhaite une bonne journée.",
+      "body": "Bonjour de la part de {{ site_name }}.<br/>Vous recevez cet e-mail car vous ou une autre personne a demandé la réinitialisation du mot de passe de votre compte.<br/>Vous pouvez ignorer cette requête si vous ne souhaitez pas faire cette démarche. Sinon cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe.<br/><a href='{{ password_reset_url }}'>{{ password_reset_url }}</a><br/>Si vous l'avez oublié, votre nom de compte est {{ username }} .<br/>L'équipe de {{ site_name }} vous souhaite une bonne journée.",
       "active": true,
       "available_vars": [
         1,

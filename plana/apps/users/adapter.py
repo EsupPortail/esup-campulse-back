@@ -1,6 +1,8 @@
 """
 Links the CAS provider to the CAS views.
 """
+import re
+
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth_cas.views import CASAdapter as AllAuthCASAdapter
@@ -15,20 +17,37 @@ from .provider import CASProvider
 
 
 class PlanAAdapter(DefaultAccountAdapter):
-    """
     def send_mail(self, template_prefix, email, context):
-        # Overrided send_mail method to use the one from the utils file.
+        """
+        Overrided send_mail method to use the one from the utils file.
+        """
         # msg = self.render_mail(template_prefix, email, context)
         # msg.send()
-        template_prefix="account/email/email_confirmation_signup"
-        send_mail(
-            to_=email,
-            subject="",
-            message="",
-            from_=settings.DEFAULT_FROM_EMAIL,
-            context=context
-        )
-    """
+        if template_prefix == "account/email/password_reset_key":
+            template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
+            user = User.objects.get(email=email)
+            request = context.get("request")
+            current_site = get_current_site(request)
+            uid = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]).group(2)
+            token = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]).group(
+                3
+            )
+            context["site_domain"] = current_site
+            context["site_name"] = current_site
+            context["username"] = user.username
+            context["password_reset_url"] = (
+                settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL
+                + "?uid="
+                + uid
+                + "&token="
+                + token
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject,
+                message=template.parse_vars(user, request, context),
+            )
 
     def send_confirmation_mail(self, request, emailconfirmation, signup):
         """
