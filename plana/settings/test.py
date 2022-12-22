@@ -56,7 +56,7 @@ sentry_init(STAGE)
 # AUTHENTICATION #
 ##################
 
-CAS_SERVER = "https://cas6-dev.unistra.fr/cas/"
+CAS_SERVER = "https://cas-dev.unistra.fr/cas/"
 CAS_AUTHORIZED_SERVICES = [
     "https://plana-test.app.unistra.fr/cas-login",
     "https://plana-test.app.unistra.fr/cas-register",
