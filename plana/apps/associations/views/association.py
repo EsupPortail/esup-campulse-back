@@ -150,6 +150,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     # TODO Route used for email tests, remove it when tests are done.
+    """
     def get(self, request, *args, **kwargs):
         template = MailTemplate.objects.get(code="BONJOURG")
         user = User.objects.get(id=1)
@@ -164,6 +165,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         )
 
         return self.list(request, *args, **kwargs)
+    """
 
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager:

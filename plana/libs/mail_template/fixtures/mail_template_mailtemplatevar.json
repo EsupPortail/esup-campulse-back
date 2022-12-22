@@ -3,8 +3,44 @@
     "model": "mail_template.MailTemplateVar",
     "pk": 1,
     "fields": {
-      "code": "{{ code }}",
-      "description": "Permet d'envoyer un Bonjourg pour tester le module.",
+      "code": "{{ site_domain }}",
+      "description": "URL du site.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 2,
+    "fields": {
+      "code": "{{ site_name }}",
+      "description": "Nom du site.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 3,
+    "fields": {
+      "code": "{{ username }}",
+      "description": "Nom de l'utilisateur.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 4,
+    "fields": {
+      "code": "{{ activate_url }}",
+      "description": "Lien de confirmation d'adresse email post-inscription.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 5,
+    "fields": {
+      "code": "{{ password_reset_url }}",
+      "description": "Lien de réinitialisation de mot de passe.",
       "fake_vars": {}
     }
   }
