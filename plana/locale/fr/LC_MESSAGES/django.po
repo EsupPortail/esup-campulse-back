@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 09:08+0100\n"
+"POT-Creation-Date: 2022-12-23 10:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,11 +275,11 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:108
+#: plana/apps/users/serializers/user.py:110
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:145
+#: plana/apps/users/serializers/user.py:147
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -321,7 +321,7 @@ msgstr "Aucun utilisateur trouvé."
 
 #: plana/apps/users/views/user.py:149
 msgid "Cannot delete superuser."
-msgstr "Suppression de superutilisateur impossiblr"
+msgstr "Suppression de superutilisateur impossible."
 
 #: plana/apps/users/views/user_groups.py:48
 msgid "No user name or groups ids given."

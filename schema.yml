@@ -1673,7 +1673,8 @@ components:
       - new_password2
     PasswordResetConfirmRequest:
       type: object
-      description: Serializer for confirming a password reset attempt.
+      description: Overrided PasswordResetConfirmSerializer to send a email when password
+        is reset.
       properties:
         new_password1:
           type: string

@@ -6,9 +6,13 @@ from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
 )
 from dj_rest_auth.serializers import (
+    PasswordResetConfirmSerializer as DJRestAuthPasswordResetConfirmSerializer,
+)
+from dj_rest_auth.serializers import (
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
@@ -18,6 +22,8 @@ from plana.apps.associations.serializers.association import (
 )
 from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -147,3 +153,27 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
             self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             ...
+
+
+class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
+    """
+    Overrided PasswordResetConfirmSerializer to send a email when password is reset.
+    """
+
+    def save(self):
+        request = None
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
+        }
+        template = MailTemplate.objects.get(code="PASSWORD_RESET_CONFIRMATION")
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=self.user.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(self.user, request, context),
+        )
+        return self.set_password_form.save()
