@@ -64,7 +64,6 @@ $ python manage.py migrate
 
 ### Charger les fixtures dans la base de données
 
-
 ```sh
 $ python manage.py loaddata plana/apps/*/fixtures/*.json
 $ python manage.py loaddata plana/libs/*/fixtures/*.json
