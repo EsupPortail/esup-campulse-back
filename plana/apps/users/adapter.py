@@ -19,58 +19,40 @@ from .provider import CASProvider
 class PlanAAdapter(DefaultAccountAdapter):
     def send_mail(self, template_prefix, email, context):
         """
-        Overrided send_mail method to use the one from the utils file.
+        Overrided send_mail django-allauth method to use the one from the utils file.
         """
-        # msg = self.render_mail(template_prefix, email, context)
-        # msg.send()
-        if template_prefix == "account/email/password_reset_key":
-            template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
-            user = User.objects.get(email=email)
-            request = context.get("request")
-            current_site = get_current_site(request)
-            uid = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]).group(2)
-            token = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]).group(
-                3
-            )
-            context["site_domain"] = current_site
-            context["site_name"] = current_site
-            context["username"] = user.username
-            context["password_reset_url"] = (
-                settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL
-                + "?uid="
-                + uid
-                + "&token="
-                + token
-            )
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
-                subject=template.subject,
-                message=template.parse_vars(user, request, context),
-            )
-
-    def send_confirmation_mail(self, request, emailconfirmation, signup):
-        """
-        Overrided send_confirmation_email method to get custom template.
-        """
-        template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
-        user = User.objects.get(email=emailconfirmation.email_address)
+        user = User.objects.get(email=email)
+        manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        request = context.get("request")
         current_site = get_current_site(request)
-        activate_url = (
-            settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL
-            + "?key="
-            + emailconfirmation.key
-        )
-        ctx = {
-            "site_domain": current_site,
-            "site_name": current_site,
-            "activate_url": activate_url,
-        }
+        template = MailTemplate.objects.all()
+        context["site_domain"] = current_site.domain
+        context["site_name"] = current_site.name
+        context["username"] = user.username
+        context["first_name"] = user.first_name
+        context["last_name"] = user.last_name
+        context["manager_email_address"] = manager.email
+
+        if template_prefix == "account/email/email_confirmation_signup":
+            template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+            context[
+                "activate_url"
+            ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL}?key={context['key']}"
+
+        elif template_prefix == "account/email/password_reset_key":
+            template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
+            password_reset_url_parts = re.match(
+                r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]
+            )
+            context[
+                "password_reset_url"
+            ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={password_reset_url_parts.group(2)}&token={password_reset_url_parts.group(3)}"
+
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
-            to_=emailconfirmation.email_address,
-            subject=template.subject,
-            message=template.parse_vars(user, request, ctx),
+            to_=email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(user, request, context),
         )
 
 

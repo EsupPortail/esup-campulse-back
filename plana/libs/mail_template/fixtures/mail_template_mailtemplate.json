@@ -81,7 +81,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "code": "PASSWORD_RESET_CONFIRMATION",
       "label": "Password Reset Confirmation",

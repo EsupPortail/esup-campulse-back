@@ -306,7 +306,13 @@ class UserAuthTests(TestCase):
     Special tests class.
     """
 
-    fixtures = ["mail_template_mailtemplate.json", "mail_template_mailtemplatevar.json"]
+    fixtures = [
+        "auth_group.json",
+        "mail_template_mailtemplate.json",
+        "mail_template_mailtemplatevar.json",
+        "users_user.json",
+        "users_user_groups.json",
+    ]
 
     def test_user_auth_registration(self):
         """

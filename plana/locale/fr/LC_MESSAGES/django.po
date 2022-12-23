@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-22 09:28+0100\n"
+"POT-Creation-Date: 2022-12-23 09:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr "Emplacement du logo"
 
 #: plana/apps/associations/models/association.py:20
 #: plana/apps/associations/models/association.py:21
-#: plana/libs/mail_template/models.py:9 plana/libs/mail_template/models.py:35
+#: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
 msgid "Description"
 msgstr "Description"
@@ -344,70 +344,70 @@ msgstr "Seuls les gestionnaires peuvent changer les groupes."
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/libs/mail_template/admin_forms.py:43
+#: plana/libs/mail_template/admin_forms.py:42
 msgid "You don't have the required privileges"
 msgstr "Vous n'avez pas les privilèges requis"
 
-#: plana/libs/mail_template/admin_forms.py:55
+#: plana/libs/mail_template/admin_forms.py:59
 msgid "The message body contains forbidden variables : "
 msgstr "Le corps du message contient des variables interdites : "
 
-#: plana/libs/mail_template/admin_forms.py:73
-#: plana/libs/mail_template/admin_forms.py:77
+#: plana/libs/mail_template/admin_forms.py:83
+#: plana/libs/mail_template/admin_forms.py:92
 msgid "The message body contains syntax error(s) : "
 msgstr "Le corps du message contient des erreurs de syntaxe : "
 
-#: plana/libs/mail_template/admin_forms.py:74
+#: plana/libs/mail_template/admin_forms.py:85
 #, python-format
 msgid "at \"%s\" line %s"
 msgstr "dans \"%s\" ligne %s"
 
-#: plana/libs/mail_template/admin_forms.py:81
+#: plana/libs/mail_template/admin_forms.py:98
 msgid "The message body contains unknown variable(s) : "
 msgstr "Le corps du message contient des variables inconnues : "
 
-#: plana/libs/mail_template/models.py:8 plana/libs/mail_template/models.py:33
+#: plana/libs/mail_template/models.py:9 plana/libs/mail_template/models.py:40
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:6
 msgid "Code"
 msgstr "Code"
 
-#: plana/libs/mail_template/models.py:10
+#: plana/libs/mail_template/models.py:14
 msgid "Fake vars"
 msgstr "Fausses variables"
 
-#: plana/libs/mail_template/models.py:23
+#: plana/libs/mail_template/models.py:27
 msgid "Template variable"
 msgstr "Variable de template"
 
-#: plana/libs/mail_template/models.py:24
+#: plana/libs/mail_template/models.py:28
 msgid "Template variables"
 msgstr "Variables de templates"
 
-#: plana/libs/mail_template/models.py:34
+#: plana/libs/mail_template/models.py:43
 msgid "Label"
 msgstr "Label"
 
-#: plana/libs/mail_template/models.py:36
+#: plana/libs/mail_template/models.py:48
 msgid "Subject"
 msgstr "Sujet"
 
-#: plana/libs/mail_template/models.py:37
+#: plana/libs/mail_template/models.py:49
 msgid "Body"
 msgstr "Corps du message"
 
-#: plana/libs/mail_template/models.py:38
+#: plana/libs/mail_template/models.py:50
 msgid "Active"
 msgstr "Actif"
 
-#: plana/libs/mail_template/models.py:41
+#: plana/libs/mail_template/models.py:55
 msgid "Available variables"
 msgstr "Variables disponibles"
 
-#: plana/libs/mail_template/models.py:83
+#: plana/libs/mail_template/models.py:98
 msgid "Mail template"
 msgstr "Template de mail"
 
-#: plana/libs/mail_template/models.py:84
+#: plana/libs/mail_template/models.py:99
 msgid "Mail templates"
 msgstr "Templates de mails"
 
@@ -428,12 +428,12 @@ msgstr "Pas de corps de texte fourni pour ce template"
 msgid "Template #%s can't be found"
 msgstr "Le template #%s n'a pas été trouvé"
 
-#: plana/libs/mail_template/views.py:52
+#: plana/libs/mail_template/views.py:54
 #, python-format
 msgid "A syntax error occured in template #%s"
 msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 
-#: plana/libs/mail_template/views.py:65
+#: plana/libs/mail_template/views.py:70
 msgid "Error : no template id"
 msgstr "Erreur : pas d'ID de template"
 
@@ -444,63 +444,3 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
-
-#: plana/templates/account/email/base_message.txt:1
-#, python-format
-msgid "Hello from %(site_name)s."
-msgstr "Bonjour de la part de %(site_name)s."
-
-#: plana/templates/account/email/base_message.txt:5
-#, python-format
-msgid "%(site_name)s team hopes that you have a nice day.\n"
-msgstr "L'équipe de %(site_name)s vous souhaite une bonne journée.\n"
-
-#: plana/templates/account/email/email_confirmation_message.txt:5
-#, python-format
-msgid ""
-"You're receiving this e-mail because your e-mail address was used to "
-"register an account on %(site_domain)s.\n"
-"\n"
-"To confirm this is correct, go to "
-msgstr ""
-"Vous recevez cet e-mail car votre adresse e-mail a été utilisée pour créer "
-"un compte sur %(site_domain)s.\n"
-"\n"
-"Si vous êtes bien à l'origine de cette requête, veuillez vous rendre à "
-"l'adresse "
-
-#: plana/templates/account/email/email_confirmation_message.txt:9
-msgid ""
-"Once you've confirmed your account, you will have to wait for an "
-"administrator to validate it definitely. You will receive another e-mail "
-"when it's done."
-msgstr ""
-"Une fois votre compte confirmé, vous devrez attendre la validation "
-"définitive de votre compte par l'équipe d'administration. Vous recevrez un "
-"autre e-mail quand ce sera fait."
-
-#: plana/templates/account/email/email_confirmation_subject.txt:3
-msgid "Hello, please confirm your e-mail address"
-msgstr "Bonjour, veuillez s'il vous plaît confirmer votre adresse e-mail"
-
-#: plana/templates/account/email/password_reset_key_message.txt:5
-msgid ""
-"You're receiving this e-mail because you or someone else has requested a "
-"password for your user account.\n"
-"It can be safely ignored if you did not request a password reset. Click the "
-"link below to reset your password."
-msgstr ""
-"Vous recevez cet e-mail car vous ou une autre personne a demandé la "
-"réinitialisation du mot de passe de votre compte.\n"
-"Vous pouvez ignorer cette requête si vous ne souhaitez pas faire cette "
-"démarche. Sinon cliquez sur le lien ci-dessous pour réinitialiser votre mot "
-"de passe."
-
-#: plana/templates/account/email/password_reset_key_message.txt:10
-#, python-format
-msgid "In case you forgot, your username is %(username)s ."
-msgstr "Si vous l'avez oublié, votre nom de compte est %(username)s ."
-
-#: plana/templates/account/email/password_reset_key_subject.txt:3
-msgid "Hello, please reset your password"
-msgstr "Bonjour, veuillez s'il vous plaît réinitialiser votre mot de passe"

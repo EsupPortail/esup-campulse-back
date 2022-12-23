@@ -3,7 +3,6 @@ Views directly linked to associations.
 """
 import unicodedata
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -28,9 +27,6 @@ from plana.apps.associations.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
-from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
 
 
 @extend_schema_view(
