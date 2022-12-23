@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 10:15+0100\n"
+"POT-Creation-Date: 2022-12-23 11:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,9 +172,9 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/users/views/association_users.py:108
 #: plana/apps/users/views/association_users.py:140
 #: plana/apps/users/views/gdpr_consent_users.py:71
-#: plana/apps/users/views/user.py:64 plana/apps/users/views/user.py:75
-#: plana/apps/users/views/user.py:104 plana/apps/users/views/user.py:117
-#: plana/apps/users/views/user.py:130 plana/apps/users/views/user.py:154
+#: plana/apps/users/views/user.py:69 plana/apps/users/views/user.py:80
+#: plana/apps/users/views/user.py:109 plana/apps/users/views/user.py:122
+#: plana/apps/users/views/user.py:171 plana/apps/users/views/user.py:195
 #: plana/apps/users/views/user_groups.py:103
 #: plana/apps/users/views/user_groups.py:142
 msgid "Bad request."
@@ -275,11 +275,11 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:110
+#: plana/apps/users/serializers/user.py:114
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:147
+#: plana/apps/users/serializers/user.py:151
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -315,11 +315,11 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:140 plana/apps/users/views/user_groups.py:124
+#: plana/apps/users/views/user.py:181 plana/apps/users/views/user_groups.py:124
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:149
+#: plana/apps/users/views/user.py:190
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
