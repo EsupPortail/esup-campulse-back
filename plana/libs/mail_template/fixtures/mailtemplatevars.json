@@ -5,7 +5,7 @@
     "fields": {
       "code": "{{ site_domain }}",
       "description": "URL du site.",
-      "fake_vars": {}
+      "fake_vars": ["plana.unistra.fr"]
     }
   },
   {
@@ -14,7 +14,7 @@
     "fields": {
       "code": "{{ site_name }}",
       "description": "Nom du site.",
-      "fake_vars": {}
+      "fake_vars": ["plana"]
     }
   },
   {

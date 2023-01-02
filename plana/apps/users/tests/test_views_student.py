@@ -308,8 +308,8 @@ class UserAuthTests(TestCase):
 
     fixtures = [
         "auth_group.json",
-        "mail_template_mailtemplate.json",
-        "mail_template_mailtemplatevar.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "users_user.json",
         "users_user_groups.json",
     ]
