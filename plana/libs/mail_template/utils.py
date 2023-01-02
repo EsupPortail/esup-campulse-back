@@ -95,9 +95,14 @@ class ParserFaker:
         variables = {}
         for template_var in available_vars:
             fakevars = template_var.fake_vars
-            if fakevars and len(fakevars) == 1:
-                variables[template_var.name] = fakevars[0]
+            var_name = template_var.name
+            if fakevars:
+                if len(fakevars) == 1:
+                    variables[var_name] = fakevars[0]
+            else:
+                variables[var_name] = var_name.upper()
         context = {key: cls.add_tooltip(key, value) for key, value in variables.items()}
+        return context
 
 
 class Parser:
