@@ -1,0 +1,83 @@
+[
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 1,
+    "fields": {
+      "code": "{{ site_domain }}",
+      "description": "URL du site.",
+      "fake_vars": ["plana.unistra.fr"]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 2,
+    "fields": {
+      "code": "{{ site_name }}",
+      "description": "Nom du site.",
+      "fake_vars": ["plana"]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 3,
+    "fields": {
+      "code": "{{ username }}",
+      "description": "Nom de compte de l'utilisateur.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 4,
+    "fields": {
+      "code": "{{ first_name }}",
+      "description": "Nom de l'utilisateur.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 5,
+    "fields": {
+      "code": "{{ last_name }}",
+      "description": "Prénom de l'utilisateur.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 6,
+    "fields": {
+      "code": "{{ manager_email_address }}",
+      "description": "Addresse email de contact du gestionnaire.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 7,
+    "fields": {
+      "code": "{{ documentation_url }}",
+      "description": "Lien de la documentation du site.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 8,
+    "fields": {
+      "code": "{{ activate_url }}",
+      "description": "Lien de confirmation d'adresse email post-inscription.",
+      "fake_vars": {}
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 9,
+    "fields": {
+      "code": "{{ password_reset_url }}",
+      "description": "Lien de réinitialisation de mot de passe.",
+      "fake_vars": {}
+    }
+  }
+]

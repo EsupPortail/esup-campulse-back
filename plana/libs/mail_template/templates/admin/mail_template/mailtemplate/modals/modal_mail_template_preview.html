@@ -1,0 +1,20 @@
+{% load i18n %}
+<div id="template_preview_dialog" title="{% trans 'Mail template preview' %}">
+  <div class="module aligned">
+    <form id="preview_control_form">
+    {% for var,data in fakevars.items %}
+      <div class="form-row field-code">
+        <div>
+          <label for="user_group">{{ var }}</label>
+          <select name="{{ var }}" id="{{ var }}">
+          {% for vartype,val in data %}
+            <option value="{{ var }}_{{ forloop.counter }}">{{ val }}</option>
+          {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endfor %}
+    </form>
+  </div>
+  <div id="template_preview_content" class="selector"></div>
+</div>

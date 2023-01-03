@@ -27,7 +27,7 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
-# DEFAULT_FROM_EMAIL = "plan-a@unistra.fr"
+DEFAULT_FROM_EMAIL = "plan-a.noreply@unistra.fr"
 
 
 ##########################
@@ -263,6 +263,7 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth.registration",
     "drf_spectacular",
     "djangorestframework_camel_case",
+    'django_summernote',
 ]
 
 LOCAL_APPS = [
@@ -271,6 +272,7 @@ LOCAL_APPS = [
     "plana.apps.consents",
     "plana.apps.groups",
     "plana.apps.users",
+    "plana.libs.mail_template",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -420,6 +422,7 @@ JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetSerializer",
+    "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetConfirmSerializer",
     "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user.PasswordChangeSerializer",
 }
 

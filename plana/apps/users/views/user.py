@@ -1,8 +1,11 @@
 """
 Views directly linked to users and their links with other models.
 """
+from allauth.account.forms import default_token_generator
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -12,6 +15,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 @extend_schema_view(
@@ -117,6 +122,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     {"error": _("Bad request.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
             if user.get_cas_user():
                 for restricted_field in [
                     "username",
@@ -125,6 +131,41 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "last_name",
                 ]:
                     request.data.pop(restricted_field, False)
+
+            if (
+                "is_validated_by_admin" in request.data
+                and request.data["is_validated_by_admin"] == "true"
+            ):
+                current_site = get_current_site(request)
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                    "username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "manager_email_address": request.user.email,
+                    "documentation_url": "ernest.unistra.fr",
+                }
+                if user.get_cas_user():
+                    template = MailTemplate.objects.get(
+                        code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
+                    )
+                else:
+                    template = MailTemplate.objects.get(
+                        code="MANAGER_ACCOUNT_CONFIRMATION"
+                    )
+                    # TODO New password generated through the form doesn't work.
+                    context[
+                        "password_reset_url"
+                    ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={'%x' % user.id}&token={default_token_generator.make_token(user)}"
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=user.email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(user, request, context),
+                )
             return self.partial_update(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},

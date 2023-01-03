@@ -1,0 +1,100 @@
+[
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 1,
+    "fields": {
+      "code": "EMAIL_CONFIRMATION_MESSAGE",
+      "label": "Email Confirmation Message",
+      "description": "Validation de l’envoi du formualire de demande de creation de compte",
+      "subject": "{{ site_name }} – Création de compte envoyée !",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Nous vous remercions d’avoir complété votre inscription sur l’application {{ site_name }}.<br/>Nous vous confirmons que votre demande de compte a été envoyée avec succès. Pour la valider, merci de cliquer sur ce lien : <a href='{{ activate_url }}'>{{ activate_url }}</a>.<br/>Si vous rencontrez des difficultés merci de nous contacter à <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        6,
+        8
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 2,
+    "fields": {
+      "code": "MANAGER_ACCOUNT_CONFIRMATION",
+      "label": "Manager Account Confirmation",
+      "description": "Validation du compte par le gestionnaire (compte local)",
+      "subject": "{{ site_name }} – Votre compte est validé !",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Nous sommes ravis de vous informer que votre compte sur l’application {{ site_name }} est bien actif.<br/>Vos premiers pas dans l’application :<br/>Votre login est le suivant : {{ username }} .<br/>Merci de cliquer sur le lien suivant pour créer votre mot de passe : <a href='{{ password_reset_url }}'>{{ password_reset_url }}</a>.<br/>Votre navigation sur les pages de {{ site_name }} via le lien <a href='{{ site_domain }}'>{{ site_domain }}</a> peut commencer.<br/>En cas de problème merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a> ou de consulter la documentation sur <a href='{{ documentation_url }}'>{{ documentation_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 3,
+    "fields": {
+      "code": "MANAGER_ACCOUNT_CONFIRMATION_LDAP",
+      "label": "Manager Account Confirmation (LDAP)",
+      "description": "Validation du compte par le gestionnaire (compte LDAP Unistra)",
+      "subject": "{{ site_name }} – Votre compte est validé !",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Nous sommes ravis de vous informer que votre compte sur l’application {{ site_name }} est bien actif.<br/>Vos premiers pas dans l’application :<br/>Votre login et votre mot de passe sont les mêmes que ceux que vous utilisez pour vous connecter à votre messagerie Partage ou encore à votre espace Ernest.<br/>Votre navigation sur les pages de {{ site_name }} via le lien <a href='{{ site_domain }}'>{{ site_domain }}</a> peut commencer.<br/>En cas de problème merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a> ou de consulter la documentation sur <a href='{{ documentation_url }}'>{{ documentation_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 4,
+    "fields": {
+      "code": "PASSWORD_RESET_KEY",
+      "label": "Password Reset Key",
+      "description": "Mot de passe oublié",
+      "subject": "{{ site_name }} – Mot de passe oublié",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Il semblerait que vous n’arriviez plus à trouver votre mot de passe, merci de bien vouloir cliquer sur le lien suivant pour le modifier : <a href='{{ password_reset_url }}'>{{ password_reset_url }}</a>.<br/>En cas de problème, vous pouvez nous contacter à l’adresse mail : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        6,
+        9
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 5,
+    "fields": {
+      "code": "PASSWORD_RESET_CONFIRMATION",
+      "label": "Password Reset Confirmation",
+      "description": "Validation du nouveau mot de passe (compte local) (mot de passe réinitialisé ou mot de passe oublié)",
+      "subject": "{{ site_name }} – Demande de nouveau mot de passe",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre mot de passe a bien été réinitialisé, vous pouvez désormais vous reconnecter à {{ site_name }} via le lien suivant : <a href='{{ site_domain }}'>{{ site_domain }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        1,
+        2,
+        4,
+        5
+      ]
+    }
+  }
+]
