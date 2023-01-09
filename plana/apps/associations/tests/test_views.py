@@ -97,15 +97,13 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
 
-        # TODO Implement unaccented search cases for names and acronyms.
-        # https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/lookups/#std:fieldlookup-unaccent
         similar_names = [
             "Plateforme de Liaison et ANnuaire Associatif",
             "plateforme de liaison et annuaire associatif",
             "PlateformedeLiaisonetANnuaireAssociatif",
             "plateformedeliaisonetannuaireassociatif",
             " Plateforme de Liaison et ANnuaire Associatif ",
-            # "Plàtéfôrmè dê Lîâïsön ët ANnùäire Associatif",
+            "Plàtéfôrmè dê Lîâïsön ët ANnùäire Associatif",
             "plateforme",
         ]
         for similar_name in similar_names:
@@ -116,7 +114,6 @@ class AssociationsViewsTests(TestCase):
             "PLANA",
             "PlanA",
             " PLANA ",
-            # "PLÂNÄ",
             "plan",
         ]
         for similar_acronym in similar_acronyms:
