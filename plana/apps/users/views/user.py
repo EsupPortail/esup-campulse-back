@@ -144,7 +144,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "manager_email_address": request.user.email,
-                    "documentation_url": "ernest.unistra.fr",
+                    "documentation_url": settings.APP_DOCUMENTATION_URL,
                 }
                 if user.get_cas_user():
                     template = MailTemplate.objects.get(

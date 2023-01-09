@@ -483,3 +483,6 @@ AUTH_USER_MODEL = "users.User"
 
 # Avoid errors while testing the API with cURL.
 APPEND_SLASH = False
+
+# Documentation URL sent in emails.
+APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
