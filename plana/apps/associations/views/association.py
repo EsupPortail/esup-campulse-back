@@ -16,8 +16,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.associations.models.institution import Institution
 from plana.apps.associations.models.institution_component import InstitutionComponent
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
-from plana.apps.associations.serializers.association import (
-    AssociationAllDataNoSubTableSerializer,
+from plana.apps.associations.serializers.association import (  # AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
@@ -204,10 +203,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get_serializer_class(self):
-        if self.request.method == "PATCH":
-            self.serializer_class = AssociationAllDataNoSubTableSerializer
-        else:
-            self.serializer_class = AssociationAllDataSerializer
+        #        if self.request.method == "PATCH":
+        #            self.serializer_class = AssociationAllDataNoSubTableSerializer
+        #        else:
+        self.serializer_class = AssociationAllDataSerializer
         return super().get_serializer_class()
 
     def put(self, request, *args, **kwargs):

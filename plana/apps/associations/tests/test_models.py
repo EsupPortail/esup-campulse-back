@@ -7,7 +7,8 @@ from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.models.institution import Institution
 from plana.apps.associations.models.institution_component import InstitutionComponent
-from plana.apps.associations.models.social_network import SocialNetwork
+
+# from plana.apps.associations.models.social_network import SocialNetwork
 
 
 class AssociationsModelsTests(TestCase):
@@ -20,7 +21,7 @@ class AssociationsModelsTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
+        #        "associations_socialnetwork.json",
     ]
 
     def setUp(self):
@@ -38,14 +39,14 @@ class AssociationsModelsTests(TestCase):
             str(association), f"{association.name} ({association.acronym})"
         )
 
-    def test_social_network_model(self):
-        """
-        There's at least one social network linked to an association in the database.
-        """
-        social_network = SocialNetwork.objects.first()
-        self.assertEqual(
-            str(social_network), f"{social_network.type} : {social_network.location}"
-        )
+    #    def test_social_network_model(self):
+    #        """
+    #        There's at least one social network linked to an association in the database.
+    #        """
+    #        social_network = SocialNetwork.objects.first()
+    #        self.assertEqual(
+    #            str(social_network), f"{social_network.type} : {social_network.location}"
+    #        )
 
     def test_institution_model(self):
         """

@@ -26,7 +26,7 @@ class UserViewsManagerTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
+        #        "associations_socialnetwork.json",
         "auth_group.json",
         "consents_gdprconsent.json",
         "users_associationusers.json",

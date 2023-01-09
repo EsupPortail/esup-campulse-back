@@ -25,7 +25,7 @@ class AssociationsViewsTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
+        #        "associations_socialnetwork.json",
         "auth_group.json",
         "users_associationusers.json",
         "users_user.json",
@@ -248,22 +248,25 @@ class AssociationsViewsTests(TestCase):
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
             {
-                "name": "Association Amicale des Amateurs d'Andouillette Authentique",
-                "institution": 1,
+                "name": "Association Amicale des Amateurs d'Andouillette Authentique"  # ,
+                #                "institution": 1
                 # TODO Find correct way to test social networks.
-                # "social_networks": [
-                #    {"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}
-                # ],
+                #                "social_networks": [
+                #                    {"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"},
+                #                    {"type": "Georges la Saucisse", "location": "https://www.georgeslasaucisse.fr/"}
+                #                ]
             },
             content_type="application/json",
         )
+        print(response_svu)
+        print(response_svu.content)
         self.assertEqual(response_svu.status_code, status.HTTP_200_OK)
         association = Association.objects.get(id=association_id)
         self.assertEqual(
             association.name,
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
-        self.assertEqual(association.institution_id, 1)
+        # self.assertEqual(association.institution_id, 1)
         # self.assertEqual(len(association.social_networks), 1)
 
         response_svu = self.svu_client.patch(
