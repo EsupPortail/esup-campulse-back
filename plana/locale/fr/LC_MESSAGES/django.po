@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-09 15:25+0100\n"
+"POT-Creation-Date: 2023-01-09 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:69 plana/apps/users/views/user.py:80
 #: plana/apps/users/views/user.py:109 plana/apps/users/views/user.py:122
-#: plana/apps/users/views/user.py:171 plana/apps/users/views/user.py:195
+#: plana/apps/users/views/user.py:171 plana/apps/users/views/user.py:211
 #: plana/apps/users/views/user_groups.py:103
 #: plana/apps/users/views/user_groups.py:142
 msgid "Bad request."
