@@ -53,10 +53,11 @@ class UserListCreate(generics.ListCreateAPIView):
         queryset = User.objects.filter(is_active=True).order_by("id")
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
         is_cas = self.request.query_params.get("is_cas")
+
         if is_validated_by_admin is not None:
             is_validated_by_admin = ast.literal_eval(is_validated_by_admin.capitalize())
             queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
-        # TODO Add unittests for query with is_cas
+
         if is_cas is not None:
             is_cas = ast.literal_eval(is_cas.capitalize())
             cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
