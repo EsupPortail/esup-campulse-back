@@ -70,6 +70,20 @@ class UserViewsManagerTests(TestCase):
         for user in response_manager.data:
             self.assertEqual(user["is_validated_by_admin"], False)
 
+    def test_manager_get_users_list_is_cas(self):
+        """
+        GET /users/
+        - Getting only non-cas users in the filter, only returns non-cas users
+        - Getting only cas users in the filter, only returns cas users
+        """
+        response_manager_cas_false = self.manager_client.get("/users/?is_cas=false")
+        for user in response_manager_cas_false.data:
+            self.assertEqual(user["is_cas"], False)
+
+        response_manager_cas_true = self.manager_client.get("/users/?is_cas=true")
+        for user in response_manager_cas_true.data:
+            self.assertEqual(user["is_cas"], True)
+
     def test_manager_post_user(self):
         """
         POST /users/
