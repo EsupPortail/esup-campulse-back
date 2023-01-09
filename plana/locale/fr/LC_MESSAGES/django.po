@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 11:25+0100\n"
+"POT-Creation-Date: 2023-01-09 15:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,16 +159,16 @@ msgstr "Réseau social"
 msgid "Social networks"
 msgstr "Réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:154
+#: plana/apps/associations/views/association.py:158
 msgid "No association name given."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:176
+#: plana/apps/associations/views/association.py:180
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:181
-#: plana/apps/associations/views/association.py:289
+#: plana/apps/associations/views/association.py:185
+#: plana/apps/associations/views/association.py:309
 #: plana/apps/users/views/association_users.py:108
 #: plana/apps/users/views/association_users.py:140
 #: plana/apps/users/views/gdpr_consent_users.py:71
@@ -180,16 +180,16 @@ msgstr "Nom d'association déjà enregistré."
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/associations/views/association.py:223
-#: plana/apps/associations/views/association.py:277
+#: plana/apps/associations/views/association.py:227
+#: plana/apps/associations/views/association.py:297
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:267
+#: plana/apps/associations/views/association.py:269
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
-#: plana/apps/associations/views/association.py:284
+#: plana/apps/associations/views/association.py:304
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 

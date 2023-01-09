@@ -3,6 +3,8 @@ Views directly linked to associations.
 """
 import unicodedata
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -27,6 +29,8 @@ from plana.apps.associations.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 @extend_schema_view(
@@ -247,26 +251,42 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except:
             pass
 
-        if request.user.is_svu_manager:
-            return self.partial_update(request, *args, **kwargs)
-        try:
-            AssociationUsers.objects.get(
-                user_id=request.user.pk,
-                association_id=association_id,
-                has_office_status=True,
-            )
-            for restricted_field in [
-                "is_enabled",
-                "is_site",
-                "creation_date",
-            ]:
-                request.data.pop(restricted_field, False)
-                return self.partial_update(request, *args, **kwargs)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
-            return response.Response(
-                {"error": _("No office link between association and user found.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if not request.user.is_svu_manager:
+            try:
+                AssociationUsers.objects.get(
+                    user_id=request.user.pk,
+                    association_id=association_id,
+                    has_office_status=True,
+                )
+                for restricted_field in [
+                    "is_enabled",
+                    "is_site",
+                    "creation_date",
+                ]:
+                    request.data.pop(restricted_field, False)
+            except (ObjectDoesNotExist, MultiValueDictKeyError):
+                return response.Response(
+                    {"error": _("No office link between association and user found.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "first_name": request.user.first_name,
+            "last_name": request.user.last_name,
+            "association_name": association.name,
+        }
+        template = MailTemplate.objects.get(code="ASSOCIATION_CONTENT_CHANGE")
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=request.user.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+
+        return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         try:

@@ -27,6 +27,8 @@ class AssociationsViewsTests(TestCase):
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
         "auth_group.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
         "users_user_groups.json",
