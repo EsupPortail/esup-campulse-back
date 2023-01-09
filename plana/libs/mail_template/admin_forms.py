@@ -9,6 +9,7 @@ from .models import MailTemplate, MailTemplateVar
 
 class MailTemplateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         request = self.request
         for field in ('label', 'description', 'subject'):

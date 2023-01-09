@@ -6,12 +6,12 @@ app_name = "mail_template"
 urlpatterns = [
     path(
         "<int:pk>/preview",
-        views.MailTemplatePreviewAPI.as_view(),
+        views.MailTemplatePreview.as_view(),
         name="mail_template-preview",
     ),
     path(
         "<int:template_id>/vars",
-        views.ajax_get_available_vars,
-        name="GetAvailableVars",
+        views.AvailableVarsList.as_view(),
+        name="available_vars-list",
     ),
 ]

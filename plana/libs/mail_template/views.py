@@ -1,12 +1,14 @@
 from django.http import JsonResponse
 from django.template import TemplateSyntaxError
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 
 from .models import MailTemplate, MailTemplateVar
 from .utils import is_ajax_request
 
 
-class MailTemplatePreviewAPI(View):
+class MailTemplatePreview(View):
     def post(self, request, *args, **kwargs):
         response = {"data": None, "msg": ""}
         pk = kwargs["pk"]
@@ -56,17 +58,21 @@ class MailTemplatePreviewAPI(View):
         return JsonResponse(response)
 
 
-@is_ajax_request
-def ajax_get_available_vars(request, template_id=None):
-    response = {'msg': '', 'data': []}
+class AvailableVarsList(View):
+    @method_decorator(is_ajax_request)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-    if template_id:
-        template_vars = MailTemplateVar.objects.filter(mail_templates=template_id)
-        response["data"] = [
-            {'id': v.id, 'code': v.code, 'description': v.description}
-            for v in template_vars
-        ]
-    else:
-        response["msg"] = gettext("Error : no template id")
+    def get(request, *args, **kwargs):
+        response = {'msg': '', 'data': []}
+        template_id = kwargs['template_id']
+        if template_id:
+            template_vars = MailTemplateVar.objects.filter(mail_templates=template_id)
+            response["data"] = [
+                {'id': v.id, 'code': v.code, 'description': v.description}
+                for v in template_vars
+            ]
+        else:
+            response["msg"] = _("Error : no template id")
 
-    return JsonResponse(response, safe=False)
+        return JsonResponse(response, safe=False)
