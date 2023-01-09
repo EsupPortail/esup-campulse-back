@@ -55,6 +55,13 @@ Les actions suivantes se font avec le virtualenv activé :
 $ pip install -r requirements/dev.txt
 ```
 
+### Ajouter l'extension unaccent à PostgreSQL
+
+```sh
+$ psql -U plana -h localhost
+plana=# CREATE EXTENSION unaccent;
+```
+
 ### Migrer les modèles de données dans la base de données
 
 ```sh

@@ -107,7 +107,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             if name is not None:
                 name = str(name).strip()
                 queryset = queryset.filter(
-                    name__nospaces__icontains=name.replace(" ", "")
+                    name__nospaces__unaccent__icontains=name.replace(" ", "")
                 )
             if acronym is not None:
                 acronym = str(acronym).strip()
