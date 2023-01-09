@@ -25,11 +25,6 @@ python (>=3.9), pip, virtualenv, virtualenvwrapper
 $ sudo docker-compose up -d
 ```
 
-Ou
-```sh
-$ sudo docker compose up -d
-```
-
 Pour stopper le service :
 ```sh
 $ sudo docker-compose down
