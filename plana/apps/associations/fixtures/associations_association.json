@@ -52,5 +52,32 @@
       "is_public": false,
       "is_enabled": true
     }
+  },
+  {
+    "model": "associations.Association",
+    "pk": 4,
+    "fields": {
+      "name": "Association du Site Alsace 2",
+      "acronym": "AssoSite2",
+      "creation_date": "2022-10-27T14:12:11+02:00",
+      "activity_field_id": 3,
+      "institution_id": 2,
+      "institution_component_id": 1,
+      "is_site": true,
+      "is_public": true,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.Association",
+    "pk": 5,
+    "fields": {
+      "name": "Association Hors Site 2",
+      "acronym": "AssoHorsSite2",
+      "creation_date": "2022-10-27T14:12:11+02:00",
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
   }
 ]
