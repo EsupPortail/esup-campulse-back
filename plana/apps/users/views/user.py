@@ -1,6 +1,8 @@
 """
 Views directly linked to users and their links with other models.
 """
+import ast
+
 from allauth.account.forms import default_token_generator
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
@@ -49,17 +51,23 @@ class UserListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = User.objects.filter(is_active=True).order_by("id")
-        booleans = {"true": True, "false": False}
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
         is_cas = self.request.query_params.get("is_cas")
         if is_validated_by_admin is not None:
-            queryset = queryset.filter(
-                is_validated_by_admin=booleans.get(is_validated_by_admin)
+            is_validated_by_admin = ast.literal_eval(is_validated_by_admin.capitalize())
+            queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
+        # TODO Add unittests for query with is_cas
+        if is_cas is not None:
+            is_cas = ast.literal_eval(is_cas.capitalize())
+            cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
+                'user_id', flat=True
             )
-        # TODO Test with CAS.
-        # if is_cas is not None:
-        # social_accounts_queryset = SocialAccount.objects.all()
-        # queryset = queryset.intersection(queryset, social_accounts_queryset)
+            queryset = (
+                queryset.filter(id__in=cas_ids_list)
+                if is_cas
+                else queryset.exclude(id__in=cas_ids_list)
+            )
+
         return queryset
 
     def get(self, request, *args, **kwargs):
