@@ -38,7 +38,9 @@ class Association(models.Model):
         _("Last GOA date"), null=True
     )  # date de dernière AGO
     cga_date = models.DateTimeField(_("CGA date"), null=True)  # date d'AG constitutive
-    social_networks = models.JSONField(default=dict)
+    social_networks = models.JSONField(
+        default=list
+    )  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
     institution = models.ForeignKey(
         "Institution",
         verbose_name=_("Institution"),
