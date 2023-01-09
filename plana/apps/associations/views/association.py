@@ -1,6 +1,7 @@
 """
 Views directly linked to associations.
 """
+import json
 import unicodedata
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -243,6 +244,22 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 association.is_site == False or association.is_enabled == False
             ):
                 request.data.pop("is_public", False)
+        except:
+            pass
+
+        try:
+            social_networks = json.loads(request.data["social_networks"])
+            for social_network in social_networks:
+                if list(social_network.keys()).sort() != ['type', 'location'].sort():
+                    return response.Response(
+                        {"error": _("Wrong social_networks parameters")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                if not all(isinstance(s, str) for s in list(social_network.values())):
+                    return response.Response(
+                        {"error": _("Wrong social_networks values")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
         except:
             pass
 
