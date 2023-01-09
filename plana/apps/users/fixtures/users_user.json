@@ -36,7 +36,7 @@
       "username": "prenom.nom@adressemail.fr",
       "email": "prenom.nom@adressemail.fr",
       "is_validated_by_admin": false,
-      "is_active": false
+      "is_active": true
     }
   },
   {
@@ -193,6 +193,19 @@
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 16,
+    "fields": {
+      "first_name": "Compte Inactif",
+      "last_name": "Étudiant",
+      "username": "inactive-test@mail.tld",
+      "email": "inactive-test@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": false,
+      "is_active": false
     }
   }
 ]

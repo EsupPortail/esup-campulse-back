@@ -126,5 +126,13 @@
       "user_id": 15,
       "group_id": 5
     }
+  },
+  {
+    "model": "users.user_groups",
+    "pk": 17,
+    "fields": {
+      "user_id": 16,
+      "group_id": 5
+    }
   }
 ]
