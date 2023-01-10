@@ -38,23 +38,25 @@ class AssociationAllDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
-#    """
-#    Serializer without name details about sub-tables.
-#    """
-#
-#    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-#    institution_component = serializers.PrimaryKeyRelatedField(
-#        queryset=InstitutionComponent.objects.all()
-#    )
-#    activity_field = serializers.PrimaryKeyRelatedField(
-#        queryset=ActivityField.objects.all()
-#    )
-#    social_networks = SocialNetworkSerializer(many=True)
-#
-#    class Meta:
-#        model = Association
-#        fields = "__all__"
+class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
+    """
+    Serializer without name details about sub-tables.
+    """
+
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
+    institution_component = serializers.PrimaryKeyRelatedField(
+        queryset=InstitutionComponent.objects.all()
+    )
+    activity_field = serializers.PrimaryKeyRelatedField(
+        queryset=ActivityField.objects.all()
+    )
+    #   social_networks = SocialNetworkSerializer(many=True)
+
+    class Meta:
+        model = Association
+        fields = "__all__"
+
+
 #
 #    def update(self, instance, validated_data):
 #        """
