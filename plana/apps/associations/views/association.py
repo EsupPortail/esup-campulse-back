@@ -304,6 +304,22 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     {"error": _("Can't delete an enabled association.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+            if association.email:
+                current_site = get_current_site(request)
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                }
+                template = MailTemplate.objects.get(code="ASSOCIATION_DELETE")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=association.email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
             return self.destroy(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},

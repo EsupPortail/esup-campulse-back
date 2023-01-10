@@ -209,13 +209,11 @@
       "code": "ASSOCIATION_DELETE",
       "label": "Association Delete",
       "description": "Suppression d'une fiche association",
-      "subject": "{{ site_name }} – Une de vos fiches association a été supprimée",
-      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>La fiche d'une de vos associations a été supprimée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "subject": "{{ site_name }} – La fiche de votre association a été supprimée",
+      "body": "Bonjour,<br/><br/>La fiche de votre association a été supprimée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2,
-        4,
-        5
+        2
       ]
     }
   },
