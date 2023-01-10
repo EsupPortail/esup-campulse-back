@@ -249,7 +249,11 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             pass
 
         try:
-            social_networks = json.loads(request.data["social_networks"])
+            social_networks = (
+                json.loads(request.data["social_networks"])
+                if "social_networks" in request.data
+                else []
+            )
             for social_network in social_networks:
                 if sorted(list(social_network.keys())) != sorted(['type', 'location']):
                     return response.Response(
@@ -262,11 +266,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
         except Exception as e:
+            print(e)
             return response.Response(
-                {"error": _(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-            pass
 
         if request.user.is_svu_manager:
             return self.partial_update(request, *args, **kwargs)
