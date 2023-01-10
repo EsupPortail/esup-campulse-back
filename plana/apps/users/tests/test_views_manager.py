@@ -27,6 +27,8 @@ class UserViewsManagerTests(TestCase):
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "auth_group.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",

@@ -5,7 +5,9 @@
     "fields": {
       "code": "{{ site_domain }}",
       "description": "URL du site.",
-      "fake_vars": ["plana.unistra.fr"]
+      "fake_vars": [
+        "plana.unistra.fr"
+      ]
     }
   },
   {
@@ -14,7 +16,9 @@
     "fields": {
       "code": "{{ site_name }}",
       "description": "Nom du site.",
-      "fake_vars": ["plana"]
+      "fake_vars": [
+        "plana"
+      ]
     }
   },
   {
@@ -23,7 +27,7 @@
     "fields": {
       "code": "{{ username }}",
       "description": "Nom de compte de l'utilisateur.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -32,7 +36,7 @@
     "fields": {
       "code": "{{ first_name }}",
       "description": "Nom de l'utilisateur.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -41,7 +45,7 @@
     "fields": {
       "code": "{{ last_name }}",
       "description": "Prénom de l'utilisateur.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -50,7 +54,7 @@
     "fields": {
       "code": "{{ manager_email_address }}",
       "description": "Addresse email de contact du gestionnaire.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -59,7 +63,7 @@
     "fields": {
       "code": "{{ documentation_url }}",
       "description": "Lien de la documentation du site.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -68,7 +72,7 @@
     "fields": {
       "code": "{{ activate_url }}",
       "description": "Lien de confirmation d'adresse email post-inscription.",
-      "fake_vars": {}
+      "fake_vars": []
     }
   },
   {
@@ -77,7 +81,43 @@
     "fields": {
       "code": "{{ password_reset_url }}",
       "description": "Lien de réinitialisation de mot de passe.",
-      "fake_vars": {}
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 10,
+    "fields": {
+      "code": "{{ account_url }}",
+      "description": "Lien menant à un compte utilisateur côté gestionnaire.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 11,
+    "fields": {
+      "code": "{{ password }}",
+      "description": "Mot de passe temporaire.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 12,
+    "fields": {
+      "code": "{{ password_change_url }}",
+      "description": "Lien menant à la page de modification de mot de passe.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 13,
+    "fields": {
+      "code": "{{ association_name }}",
+      "description": "Nom d'une association.",
+      "fake_vars": []
     }
   }
 ]

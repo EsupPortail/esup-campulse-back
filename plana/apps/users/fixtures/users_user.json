@@ -110,8 +110,8 @@
     "fields": {
       "first_name": "Étudiant + Culture-ActionS + FSDIE/IdEx",
       "last_name": "Commission",
-      "username": "étudiant-commissions@mail.tld",
-      "email": "étudiant-commissions@mail.tld",
+      "username": "etudiant-commissions@mail.tld",
+      "email": "etudiant-commissions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -123,8 +123,8 @@
     "fields": {
       "first_name": "Association Hors Site",
       "last_name": "Étudiant",
-      "username": "étudiant-asso-hors-site@mail.tld",
-      "email": "étudiant-asso-hors-site@mail.tld",
+      "username": "etudiant-asso-hors-site@mail.tld",
+      "email": "etudiant-asso-hors-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -136,8 +136,8 @@
     "fields": {
       "first_name": "Association Site",
       "last_name": "Étudiant",
-      "username": "étudiant-asso-site@mail.tld",
-      "email": "étudiant-asso-site@mail.tld",
+      "username": "etudiant-asso-site@mail.tld",
+      "email": "etudiant-asso-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -149,8 +149,8 @@
     "fields": {
       "first_name": "Président Hors Site",
       "last_name": "Étudiant",
-      "username": "président-asso-hors-site@mail.tld",
-      "email": "président-asso-hors-site@mail.tld",
+      "username": "president-asso-hors-site@mail.tld",
+      "email": "president-asso-hors-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -162,8 +162,8 @@
     "fields": {
       "first_name": "Président Site",
       "last_name": "Étudiant",
-      "username": "président-asso-site@mail.tld",
-      "email": "président-asso-site@mail.tld",
+      "username": "president-asso-site@mail.tld",
+      "email": "president-asso-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -175,8 +175,8 @@
     "fields": {
       "first_name": "Président Hors Site + Étudiant Site",
       "last_name": "Étudiant",
-      "username": "président-asso-hors-site-étudiant-asso-site@mail.tld",
-      "email": "président-asso-hors-site-étudiant-asso-site@mail.tld",
+      "username": "president-asso-hors-site-etudiant-asso-site@mail.tld",
+      "email": "president-asso-hors-site-etudiant-asso-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -188,8 +188,8 @@
     "fields": {
       "first_name": "Président Site + Étudiant Hors Site",
       "last_name": "Étudiant",
-      "username": "président-asso-site-étudiant-asso-hors-site@mail.tld",
-      "email": "président-asso-site-étudiant-asso-hors-site@mail.tld",
+      "username": "president-asso-site-etudiant-asso-hors-site@mail.tld",
+      "email": "president-asso-site-etudiant-asso-hors-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true

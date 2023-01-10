@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 11:25+0100\n"
+"POT-Creation-Date: 2023-01-10 15:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:19
-#: plana/apps/associations/models/association.py:57
+#: plana/apps/associations/models/association.py:60
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -112,24 +112,23 @@ msgstr "Date de la dernière AGO"
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:43
+#: plana/apps/associations/models/association.py:46
 #: plana/apps/associations/models/institution.py:20
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:50
+#: plana/apps/associations/models/association.py:53
 #: plana/apps/associations/models/institution_component.py:19
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:66
-#: plana/apps/associations/models/social_network.py:17
+#: plana/apps/associations/models/association.py:69
 #: plana/apps/users/models/association_users.py:19
 #: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:67
+#: plana/apps/associations/models/association.py:70
 #: plana/apps/users/models/association_users.py:30
 #: plana/apps/users/models/user.py:44
 msgid "Associations"
@@ -143,53 +142,45 @@ msgstr "Établissements"
 msgid "Institution components"
 msgstr "Composantes"
 
-#: plana/apps/associations/models/social_network.py:13
-msgid "Type"
-msgstr "Type"
-
-#: plana/apps/associations/models/social_network.py:14
-msgid "Location"
-msgstr "Adresse"
-
-#: plana/apps/associations/models/social_network.py:26
-msgid "Social network"
-msgstr "Réseau social"
-
-#: plana/apps/associations/models/social_network.py:27
-msgid "Social networks"
-msgstr "Réseaux sociaux"
-
-#: plana/apps/associations/views/association.py:154
+#: plana/apps/associations/views/association.py:159
 msgid "No association name given."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:176
+#: plana/apps/associations/views/association.py:181
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:181
-#: plana/apps/associations/views/association.py:289
-#: plana/apps/users/views/association_users.py:108
-#: plana/apps/users/views/association_users.py:140
+#: plana/apps/associations/views/association.py:186
+#: plana/apps/associations/views/association.py:349
+#: plana/apps/users/views/association_users.py:118
+#: plana/apps/users/views/association_users.py:150
 #: plana/apps/users/views/gdpr_consent_users.py:71
-#: plana/apps/users/views/user.py:69 plana/apps/users/views/user.py:80
-#: plana/apps/users/views/user.py:109 plana/apps/users/views/user.py:122
-#: plana/apps/users/views/user.py:171 plana/apps/users/views/user.py:195
+#: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
+#: plana/apps/users/views/user.py:172 plana/apps/users/views/user.py:185
+#: plana/apps/users/views/user.py:234 plana/apps/users/views/user.py:291
 #: plana/apps/users/views/user_groups.py:103
 #: plana/apps/users/views/user_groups.py:142
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/associations/views/association.py:223
-#: plana/apps/associations/views/association.py:277
+#: plana/apps/associations/views/association.py:228
+#: plana/apps/associations/views/association.py:321
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:267
+#: plana/apps/associations/views/association.py:264
+msgid "Wrong social_networks parameters"
+msgstr "Erreur de paramètres de réseaux sociaux"
+
+#: plana/apps/associations/views/association.py:269
+msgid "Wrong social_networks values"
+msgstr "Erreur de valeurs de réseaux sociaux"
+
+#: plana/apps/associations/views/association.py:293
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
-#: plana/apps/associations/views/association.py:284
+#: plana/apps/associations/views/association.py:328
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
@@ -291,19 +282,23 @@ msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:68
+#: plana/apps/users/views/association_users.py:72
+msgid "President already in association."
+msgstr "L'association a déjà un président."
+
+#: plana/apps/users/views/association_users.py:78
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:73
+#: plana/apps/users/views/association_users.py:83
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:83
+#: plana/apps/users/views/association_users.py:93
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:132
+#: plana/apps/users/views/association_users.py:142
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
@@ -315,13 +310,17 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:181 plana/apps/users/views/user_groups.py:124
+#: plana/apps/users/views/user.py:244 plana/apps/users/views/user_groups.py:124
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:190
+#: plana/apps/users/views/user.py:253
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
+
+#: plana/apps/users/views/user.py:384
+msgid "ok"
+msgstr "ok"
 
 #: plana/apps/users/views/user_groups.py:48
 msgid "No user name or groups ids given."
@@ -344,25 +343,25 @@ msgstr "Seuls les gestionnaires peuvent changer les groupes."
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/libs/mail_template/admin_forms.py:42
+#: plana/libs/mail_template/admin_forms.py:43
 msgid "You don't have the required privileges"
 msgstr "Vous n'avez pas les privilèges requis"
 
-#: plana/libs/mail_template/admin_forms.py:59
+#: plana/libs/mail_template/admin_forms.py:60
 msgid "The message body contains forbidden variables : "
 msgstr "Le corps du message contient des variables interdites : "
 
-#: plana/libs/mail_template/admin_forms.py:83
-#: plana/libs/mail_template/admin_forms.py:92
+#: plana/libs/mail_template/admin_forms.py:84
+#: plana/libs/mail_template/admin_forms.py:93
 msgid "The message body contains syntax error(s) : "
 msgstr "Le corps du message contient des erreurs de syntaxe : "
 
-#: plana/libs/mail_template/admin_forms.py:85
+#: plana/libs/mail_template/admin_forms.py:86
 #, python-format
 msgid "at \"%s\" line %s"
 msgstr "dans \"%s\" ligne %s"
 
-#: plana/libs/mail_template/admin_forms.py:98
+#: plana/libs/mail_template/admin_forms.py:99
 msgid "The message body contains unknown variable(s) : "
 msgstr "Le corps du message contient des variables inconnues : "
 
@@ -419,21 +418,21 @@ msgstr "Preview du template de mail"
 msgid "Available vars for this message"
 msgstr "Variables disponibles pour ce message"
 
-#: plana/libs/mail_template/views.py:18
+#: plana/libs/mail_template/views.py:20
 msgid "No body for this template provided"
 msgstr "Pas de corps de texte fourni pour ce template"
 
-#: plana/libs/mail_template/views.py:24
+#: plana/libs/mail_template/views.py:26
 #, python-format
 msgid "Template #%s can't be found"
 msgstr "Le template #%s n'a pas été trouvé"
 
-#: plana/libs/mail_template/views.py:54
+#: plana/libs/mail_template/views.py:56
 #, python-format
 msgid "A syntax error occured in template #%s"
 msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 
-#: plana/libs/mail_template/views.py:70
+#: plana/libs/mail_template/views.py:76
 msgid "Error : no template id"
 msgstr "Erreur : pas d'ID de template"
 
