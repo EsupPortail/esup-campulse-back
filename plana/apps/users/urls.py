@@ -13,6 +13,7 @@ from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 from .views.user import (
     PasswordResetConfirm,
+    UserAuthVerifyEmailView,
     UserAuthView,
     UserListCreate,
     UserRetrieveUpdateDestroy,
@@ -47,6 +48,11 @@ urlpatterns = [
         r"auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
         PasswordResetConfirm.as_view(),
         name="password_reset_confirm",
+    ),
+    path(
+        "auth/registration/verify-email/",
+        UserAuthVerifyEmailView.as_view(),
+        name="rest_verify_email",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
     path(

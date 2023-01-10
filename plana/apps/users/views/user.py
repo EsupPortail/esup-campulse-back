@@ -2,7 +2,9 @@
 Views directly linked to users and their links with other models.
 """
 from allauth.account.forms import default_token_generator
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
+from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -237,3 +239,46 @@ class UserAuthView(DJRestAuthUserDetailsView):
             for restricted_field in ["username", "email", "first_name", "last_name"]:
                 request.data.pop(restricted_field, False)
         return self.partial_update(request, *args, **kwargs)
+
+
+class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
+    """
+    Overrided VerifyEmailView to send an email to a manager when an account has validated its email.
+    """
+
+    def post(self, request, *args, **kwargs):
+        email_address = (
+            EmailAddress.objects.filter(verified=False).order_by('-id').first()
+        )
+        user = User.objects.get(email=email_address.email)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = serializer.validated_data['key']
+        confirmation = self.get_object()
+        confirmation.confirm(self.request)
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
+        }
+        if user.get_cas_user():
+            template = MailTemplate.objects.get(
+                code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+            )
+            manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        else:
+            template = MailTemplate.objects.get(
+                code="CROUS_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+            )
+            manager = User.objects.filter(groups__name="Gestionnaire Crous").first()
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=manager.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(user, request, context),
+        )
+
+        return response.Response({'detail': _('ok')}, status=status.HTTP_200_OK)

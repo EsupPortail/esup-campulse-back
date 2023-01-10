@@ -822,6 +822,8 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
+      description: Overrided VerifyEmailView to send an email to a manager when an
+        account has validated its email.
       tags:
       - users
       requestBody:
@@ -842,11 +844,7 @@ paths:
       - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RestAuthDetail'
-          description: ''
+          description: No response body
   /users/auth/token/refresh/:
     post:
       operationId: users_auth_token_refresh_create
@@ -2055,6 +2053,7 @@ components:
       properties:
         key:
           type: string
+          writeOnly: true
           minLength: 1
       required:
       - key
