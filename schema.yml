@@ -414,6 +414,11 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: send_email
+        schema:
+          type: boolean
+        description: True if an email must be sent on deletion.
       tags:
       - users
       security:

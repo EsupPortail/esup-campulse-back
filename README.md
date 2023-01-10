@@ -106,13 +106,13 @@ Mot de passe commun : `motdepasse`
 - `membre-fsdie-idex@mail.tld`
 - `membre-culture-actions@mail.tld`
 - `membre-commissions@mail.tld`
-- `étudiant-commissions@mail.tld`
-- `étudiant-asso-hors-site@mail.tld`
-- `étudiant-asso-site@mail.tld`
-- `président-asso-hors-site@mail.tld`
-- `président-asso-site@mail.tld`
-- `président-asso-hors-site-étudiant-asso-site@mail.tld`
-- `président-asso-site-étudiant-asso-hors-site@mail.tld`
+- `etudiant-commissions@mail.tld`
+- `etudiant-asso-hors-site@mail.tld`
+- `etudiant-asso-site@mail.tld`
+- `president-asso-hors-site@mail.tld`
+- `president-asso-site@mail.tld`
+- `president-asso-hors-site-etudiant-asso-site@mail.tld`
+- `president-asso-site-etudiant-asso-hors-site@mail.tld`
 
 ### Détecter de nouvelles chaînes de caractères à traduire
 

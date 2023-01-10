@@ -87,6 +87,19 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
+@extend_schema_view(
+    put=extend_schema(exclude=True),
+    delete=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "send_email",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="True if an email must be sent on deletion.",
+            )
+        ]
+    ),
+)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     GET : Lists a user with all details.
@@ -195,14 +208,29 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+            send_email = self.request.query_params.get("send_email")
+            current_site = get_current_site(request)
             if user.is_validated_by_admin == False:
-                current_site = get_current_site(request)
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,
                     "manager_email_address": request.user.email,
                 }
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=user.email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
+            elif send_email is not None and send_email == "true":
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                }
+                template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=user.email,
