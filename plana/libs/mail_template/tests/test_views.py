@@ -6,27 +6,32 @@ from django.urls import reverse
 
 from ..models import MailTemplate, MailTemplateVar
 
-
 User = get_user_model()
 
 
 class ViewsTestCase(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.admin_user = User.objects.create_superuser('admin')
         cls.headers = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         cls.template_var = MailTemplateVar.objects.create(
-            code='{{ username }}', description='Login')
+            code='{{ username }}', description='Login'
+        )
         cls.mail_template = MailTemplate.objects.create(
-            code='TPL', label='template', description='empty template',
-            subject='tpl', body='This is a template'
+            code='TPL',
+            label='template',
+            description='empty template',
+            subject='tpl',
+            body='This is a template',
         )
         cls.mail_template.available_vars.add(cls.template_var)
 
     def test_list_available_vars(self):
         self.client.force_login(self.admin_user)
-        url = reverse('mail_template:available_vars-list', kwargs={'template_id': self.mail_template.id})
+        url = reverse(
+            'mail_template:available_vars-list',
+            kwargs={'template_id': self.mail_template.id},
+        )
         response = self.client.get(url, **self.headers)
         content = json.loads(response.content.decode())
 

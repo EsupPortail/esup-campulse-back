@@ -414,6 +414,11 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: send_email
+        schema:
+          type: boolean
+        description: True if an email must be sent on deletion.
       tags:
       - users
       security:
@@ -822,6 +827,8 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
+      description: Overrided VerifyEmailView to send an email to a manager when a
+        local account has validated its email.
       tags:
       - users
       requestBody:
@@ -842,11 +849,7 @@ paths:
       - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RestAuthDetail'
-          description: ''
+          description: No response body
   /users/auth/token/refresh/:
     post:
       operationId: users_auth_token_refresh_create
@@ -1140,10 +1143,6 @@ components:
           $ref: '#/components/schemas/InstitutionComponent'
         activity_field:
           $ref: '#/components/schemas/ActivityField'
-        social_networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/SocialNetwork'
         name:
           type: string
           title: Nom
@@ -1219,6 +1218,9 @@ components:
           format: date-time
           nullable: true
           title: Date de dernière AG constitutive
+        social_networks:
+          type: object
+          additionalProperties: {}
       required:
       - activity_field
       - creation_date
@@ -1226,7 +1228,6 @@ components:
       - institution
       - institution_component
       - name
-      - social_networks
     AssociationAllDataNoSubTable:
       type: object
       description: Serializer without name details about sub-tables.
@@ -1240,10 +1241,6 @@ components:
           type: integer
         activity_field:
           type: integer
-        social_networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/SocialNetwork'
         name:
           type: string
           title: Nom
@@ -1319,6 +1316,9 @@ components:
           format: date-time
           nullable: true
           title: Date de dernière AG constitutive
+        social_networks:
+          type: object
+          additionalProperties: {}
       required:
       - activity_field
       - creation_date
@@ -1326,7 +1326,6 @@ components:
       - institution
       - institution_component
       - name
-      - social_networks
     AssociationMandatoryData:
       type: object
       description: |-
@@ -1716,10 +1715,6 @@ components:
           type: integer
         activity_field:
           type: integer
-        social_networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/SocialNetworkRequest'
         name:
           type: string
           minLength: 1
@@ -1800,6 +1795,9 @@ components:
           format: date-time
           nullable: true
           title: Date de dernière AG constitutive
+        social_networks:
+          type: object
+          additionalProperties: {}
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -1852,42 +1850,6 @@ components:
           readOnly: true
       required:
       - detail
-    SocialNetwork:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        type:
-          type: string
-          maxLength: 32
-        location:
-          type: string
-          format: uri
-          title: Adresse
-          maxLength: 200
-      required:
-      - id
-      - location
-      - type
-    SocialNetworkRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        type:
-          type: string
-          minLength: 1
-          maxLength: 32
-        location:
-          type: string
-          format: uri
-          minLength: 1
-          title: Adresse
-          maxLength: 200
-      required:
-      - location
-      - type
     TokenRefresh:
       type: object
       properties:
@@ -2055,6 +2017,7 @@ components:
       properties:
         key:
           type: string
+          writeOnly: true
           minLength: 1
       required:
       - key

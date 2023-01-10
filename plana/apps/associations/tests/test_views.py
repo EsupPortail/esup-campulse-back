@@ -26,6 +26,8 @@ class AssociationsViewsTests(TestCase):
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "auth_group.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
         "users_user_groups.json",
@@ -40,14 +42,14 @@ class AssociationsViewsTests(TestCase):
 
         self.member_client = Client()
         data_member = {
-            "username": "étudiant-asso-hors-site@mail.tld",
+            "username": "etudiant-asso-hors-site@mail.tld",
             "password": "motdepasse",
         }
         self.response = self.member_client.post(url_login, data_member)
 
         self.president_client = Client()
         data_president = {
-            "username": "président-asso-hors-site@mail.tld",
+            "username": "president-asso-hors-site@mail.tld",
             "password": "motdepasse",
         }
         self.response = self.president_client.post(url_login, data_president)

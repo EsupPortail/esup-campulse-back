@@ -5,23 +5,25 @@ from django.test import TestCase
 from ..admin_forms import MailTemplateForm
 from ..models import MailTemplate, MailTemplateVar
 
-
 User = get_user_model()
 
 
 class AdminFormsTestCase(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.admin_user = User.objects.create_superuser('admin')
         cls.template_var = MailTemplateVar.objects.create(
-            code='{{ username }}', description='Login')
+            code='{{ username }}', description='Login'
+        )
         cls.mail_template = MailTemplate.objects.create(
-            code='TPL', label='template', description='empty template',
-            subject='tpl', body='This is a template'
+            code='TPL',
+            label='template',
+            description='empty template',
+            subject='tpl',
+            body='This is a template',
         )
         cls.mail_template.available_vars.add(cls.template_var)
- 
+
     def test_mail_template_creation_success(self):
         self.client.force_login(self.admin_user)
         request = self.client.request().wsgi_request
@@ -29,10 +31,10 @@ class AdminFormsTestCase(TestCase):
             'label': 'my text',
             'code': 'my code',
             'subject': 'the mail subject',
-            'body':'test content',
+            'body': 'test content',
             'description': 'test desc',
             'active': True,
-            'available_vars': [self.template_var]
+            'available_vars': [self.template_var],
         }
         form = MailTemplateForm(data=data, request=request)
 

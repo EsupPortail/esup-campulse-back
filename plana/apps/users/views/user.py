@@ -4,7 +4,9 @@ Views directly linked to users and their links with other models.
 import ast
 
 from allauth.account.forms import default_token_generator
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
+from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -15,6 +17,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.associations.models.association import Association
+from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
@@ -82,9 +86,46 @@ class UserListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
             request.data.update(
-                {"username": request.data["email"], "is_validated_by_admin": True}
+                {
+                    "username": request.data["email"],
+                    "is_validated_by_admin": True,
+                }
             )
-            return self.create(request, *args, **kwargs)
+            user_response = self.create(request, *args, **kwargs)
+
+            user = User.objects.get(id=user_response.data["id"])
+            password = User.objects.make_random_password()
+            user.set_password(password)
+            user.save(update_fields=['password'])
+            EmailAddress.objects.create(
+                email=user.email, verified=True, primary=True, user_id=user.id
+            )
+
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "username": request.data["email"],
+                "first_name": request.data["first_name"],
+                "last_name": request.data["last_name"],
+                "manager_email_address": request.data["email"],
+                "documentation_url": settings.APP_DOCUMENTATION_URL,
+                "password": password,
+                "password_change_url": settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL,
+            }
+            template = MailTemplate.objects.get(
+                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=request.data["email"],
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+            return user_response
         return response.Response(
             {"error": _("Bad request.")},
             status=status.HTTP_401_UNAUTHORIZED,
@@ -92,6 +133,19 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
+@extend_schema_view(
+    put=extend_schema(exclude=True),
+    delete=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "send_email",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="True if an email must be sent on deletion.",
+            )
+        ]
+    ),
+)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     GET : Lists a user with all details.
@@ -153,7 +207,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "manager_email_address": request.user.email,
-                    "documentation_url": "ernest.unistra.fr",
+                    "documentation_url": settings.APP_DOCUMENTATION_URL,
                 }
                 if user.get_cas_user():
                     template = MailTemplate.objects.get(
@@ -199,6 +253,39 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     {"error": _("Cannot delete superuser.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
+
+            send_email = self.request.query_params.get("send_email")
+            current_site = get_current_site(request)
+            if user.is_validated_by_admin == False:
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                    "manager_email_address": request.user.email,
+                }
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=user.email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
+            elif send_email is not None and send_email == "true":
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                }
+                template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=user.email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
+
             return self.destroy(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},
@@ -227,4 +314,71 @@ class UserAuthView(DJRestAuthUserDetailsView):
         if request.user.get_cas_user():
             for restricted_field in ["username", "email", "first_name", "last_name"]:
                 request.data.pop(restricted_field, False)
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{request.user.id}",
+        }
+        template = MailTemplate.objects.get(
+            code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+        )
+        manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=manager.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+
         return self.partial_update(request, *args, **kwargs)
+
+
+class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
+    """
+    Overrided VerifyEmailView to send an email to a manager when a local account has validated its email.
+    """
+
+    def post(self, request, *args, **kwargs):
+        email_address = (
+            EmailAddress.objects.filter(verified=False).order_by('-id').first()
+        )
+        user = User.objects.get(email=email_address.email)
+        associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
+            'association_id', flat=True
+        )
+        associations_no_site = Association.objects.filter(
+            id__in=associations_ids, is_site=False
+        )
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = serializer.validated_data['key']
+        confirmation = self.get_object()
+        confirmation.confirm(self.request)
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
+        }
+        if associations_no_site.count() > 0:
+            template = MailTemplate.objects.get(
+                code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+            )
+            manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        else:
+            template = MailTemplate.objects.get(
+                code="CROUS_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+            )
+            manager = User.objects.filter(groups__name="Gestionnaire Crous").first()
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=manager.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(user, request, context),
+        )
+
+        return response.Response({'detail': _('ok')}, status=status.HTTP_200_OK)

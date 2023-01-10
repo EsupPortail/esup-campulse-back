@@ -67,6 +67,16 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if "is_president" in request.data and request.data["is_president"] == "true":
+            association_user_president = AssociationUsers.objects.filter(
+                association_id=association_id, is_president=True
+            )
+            if association_user_president.count() > 0:
+                return response.Response(
+                    {"error": _("President already in association.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         if user.is_svu_manager or user.is_crous_manager or user.is_superuser:
             return response.Response(
                 {"error": _("A manager cannot have an association.")},
