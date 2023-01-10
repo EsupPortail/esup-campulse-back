@@ -5,7 +5,7 @@ from django.conf import settings
 from django.urls import include, path, re_path
 
 from .views.association_users import (
-    AssociationUsersDestroy,
+    AssociationUsersDestroyUpdate,
     AssociationUsersListCreate,
     AssociationUsersRetrieve,
 )
@@ -36,7 +36,7 @@ urlpatterns = [
     ),
     path(
         "associations/<int:user_id>/<int:association_id>",
-        AssociationUsersDestroy.as_view(),
+        AssociationUsersDestroyUpdate.as_view(),
         name="user_associations_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),

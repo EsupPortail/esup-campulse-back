@@ -50,3 +50,17 @@ class AssociationUsersCreationSerializer(serializers.ModelSerializer):
             "is_president",
             "association",
         ]
+
+
+class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
+    """
+    Serializer used to patch AssociationUsers fields.
+    """
+
+    class Meta:
+        model = AssociationUsers
+        fields = [
+            "role_name",
+            "has_office_status",
+            "is_president",
+        ]

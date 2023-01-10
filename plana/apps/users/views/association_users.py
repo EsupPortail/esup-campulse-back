@@ -1,9 +1,12 @@
 """
 Views linked to links between users and associations.
 """
+import ast
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -13,6 +16,7 @@ from plana.apps.users.models.user import User
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreationSerializer,
     AssociationUsersSerializer,
+    AssociationUsersUpdateSerializer,
 )
 
 
@@ -111,16 +115,67 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-class AssociationUsersDestroy(generics.DestroyAPIView):
+@extend_schema(methods=["PUT", "GET"], exclude=True)
+class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
     """
-    GET : Lists all associations linked to a user (manager).
+    PATCH : Updates user role in an association (manager and president).
 
     DELETE : Deletes an association linked to a user (manager).
     """
 
-    serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = AssociationUsersUpdateSerializer
+        else:
+            self.serializer_class = AssociationUsersSerializer
+        return super().get_serializer_class()
+
+    def get(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, *args, **kwargs):
+        try:
+            User.objects.get(id=kwargs["user_id"])
+            Association.objects.get(id=kwargs["association_id"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No user or association found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            president = AssociationUsers.objects.get(
+                association_id=kwargs["association_id"], user_id=request.user.pk
+            ).is_president
+        except ObjectDoesNotExist:
+            president = False
+        if request.user.is_svu_manager or request.user.is_crous_manager or president:
+            asso_user = self.queryset.get(
+                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
+            )
+            if 'role_name' in request.data:
+                asso_user.role_name = request.data['role_name']
+            if 'is_president' in request.data:
+                asso_user.is_president = (
+                    ast.literal_eval(request.data['is_president'].capitalize())
+                    if type(request.data['is_president']) != bool
+                    else request.data['is_president']
+                )
+            if 'has_office_status' in request.data:
+                asso_user.has_office_status = (
+                    ast.literal_eval(request.data['has_office_status'].capitalize())
+                    if type(request.data['has_office_status']) != bool
+                    else request.data['has_office_status']
+                )
+
+            asso_user.save()
+            return response.Response({}, status=status.HTTP_200_OK)
+        return response.Response({}, status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, *args, **kwargs):
         if request.user.is_svu_manager or request.user.is_crous_manager:
