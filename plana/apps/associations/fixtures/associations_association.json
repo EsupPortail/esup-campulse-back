@@ -21,6 +21,16 @@
       "activity_field_id": 1,
       "institution_id": 2,
       "institution_component_id": 1,
+      "social_networks": [
+        {
+          "type": "Mastodon",
+          "location": "https://joinmastodon.org/"
+        },
+        {
+          "type": "PeerTube",
+          "location": "https://joinpeertube.org/"
+        }
+      ],
       "is_site": true,
       "is_public": true,
       "is_enabled": true
