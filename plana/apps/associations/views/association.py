@@ -251,7 +251,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             social_networks = json.loads(request.data["social_networks"])
             for social_network in social_networks:
-                if list(social_network.keys()).sort() != ['type', 'location'].sort():
+                if sorted(list(social_network.keys())) != sorted(['type', 'location']):
                     return response.Response(
                         {"error": _("Wrong social_networks parameters")},
                         status=status.HTTP_400_BAD_REQUEST,
@@ -261,7 +261,11 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         {"error": _("Wrong social_networks values")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-        except:
+        except Exception as e:
+            return response.Response(
+                {"error": _(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
             pass
 
         if request.user.is_svu_manager:

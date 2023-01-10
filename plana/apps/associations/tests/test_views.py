@@ -350,6 +350,55 @@ class AssociationsViewsTests(TestCase):
             "Moi je peux vraiment éditer l'asso, nananère.",
         )
 
+    def test_patch_association_social_networks(self):
+        """
+        PATCH /associations/{id}
+        - A SVU manager can edit an association's social networks.
+        - Association's social networks are correctly updated with provided data.
+        """
+        association_id = 2
+        social_networks_json = json.dumps(
+            [{"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}]
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"social_networks": social_networks_json},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.social_networks, social_networks_json)
+
+    def test_patch_association_wrong_social_networks(self):
+        """
+        PATCH /associations/{id}
+        - Association's social networks are not updated if the keys are not valid (400).
+        - Association's social networks are not updated if the values are not strings (400).
+        """
+        association_id = 2
+        response_svu_keys = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {
+                "social_networks": json.dumps(
+                    [
+                        {
+                            "typeeee": "Mastodon",
+                            "location": "https://framapiaf.org/@Framasoft",
+                        }
+                    ]
+                )
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu_keys.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_svu_string = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"social_networks": json.dumps([{"type": "Mastodon", "location": 1234}])},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu_string.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_delete_association(self):
         """
         DELETE /associations/{id}
