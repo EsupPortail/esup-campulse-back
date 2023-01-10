@@ -1,6 +1,7 @@
 """
 Views directly linked to associations.
 """
+import json
 import unicodedata
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -246,6 +247,29 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 request.data.pop("is_public", False)
         except:
             pass
+
+        try:
+            social_networks = (
+                json.loads(request.data["social_networks"])
+                if "social_networks" in request.data
+                else []
+            )
+            for social_network in social_networks:
+                if sorted(list(social_network.keys())) != sorted(['type', 'location']):
+                    return response.Response(
+                        {"error": _("Wrong social_networks parameters")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                if not all(isinstance(s, str) for s in list(social_network.values())):
+                    return response.Response(
+                        {"error": _("Wrong social_networks values")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+        except Exception as e:
+            print(e)
+            return response.Response(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         if request.user.is_svu_manager:
             return self.partial_update(request, *args, **kwargs)

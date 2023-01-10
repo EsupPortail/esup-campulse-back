@@ -17,7 +17,6 @@ class UserViewsAnonymousTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
         "auth_group.json",
         "users_associationusers.json",
         "users_user.json",

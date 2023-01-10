@@ -25,7 +25,6 @@ class AssociationsViewsTests(TestCase):
         "associations_association.json",
         "associations_institution.json",
         "associations_institutioncomponent.json",
-        "associations_socialnetwork.json",
         "auth_group.json",
         "users_associationusers.json",
         "users_user.json",
@@ -218,42 +217,34 @@ class AssociationsViewsTests(TestCase):
         not_found_response = self.client.get("/associations/50")
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_association(self):
+    def test_patch_association_authors(self):
         """
         PATCH /associations/{id}
         - An anonymous user cannot execute this request.
         - A Crous manager cannot edit an association.
         - A SVU manager can edit an association.
-        - An association can't be public if not enabled and not site.
-        - An association must lost public status if enabled or site is removed.
-        - A non-existing association cannot be edited.
-        - Someone from an association without status can't edit infos from another association.
-        - Someone from an association's office cannot edit informations from another association.
-        - Someone from the association without status can't edit infos from the association.
-        - Someone from the association's office can edit informations from the association.
         """
         association_id = 1
+
         response_anonymous = self.client.patch(
             f"/associations/{association_id}",
             {"name": "La Grande Confrérie du Cassoulet de Castelnaudary"},
             content_type="application/json",
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
         response_crous = self.crous_client.patch(
             f"/associations/{association_id}",
             {"name": "L'assaucissiation"},
             content_type="application/json",
         )
         self.assertEqual(response_crous.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
             {
                 "name": "Association Amicale des Amateurs d'Andouillette Authentique",
                 "institution": 1,
-                # TODO Find correct way to test social networks.
-                # "social_networks": [
-                #    {"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}
-                # ],
             },
             content_type="application/json",
         )
@@ -264,46 +255,13 @@ class AssociationsViewsTests(TestCase):
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
         self.assertEqual(association.institution_id, 1)
-        # self.assertEqual(len(association.social_networks), 1)
 
-        response_svu = self.svu_client.patch(
-            f"/associations/3", {"is_public": "true"}, content_type="application/json"
-        )
-        association = Association.objects.get(id=3)
-        self.assertEqual(association.is_public, False)
-
-        response_svu = self.svu_client.patch(
-            f"/associations/3",
-            {"is_enabled": "false", "is_site": "true"},
-            content_type="application/json",
-        )
-        response_svu = self.svu_client.patch(
-            f"/associations/3", {"is_public": "true"}, content_type="application/json"
-        )
-        association = Association.objects.get(id=3)
-        self.assertEqual(association.is_public, False)
-        response_svu = self.svu_client.patch(
-            f"/associations/3", {"is_enabled": "true"}, content_type="application/json"
-        )
-        response_svu = self.svu_client.patch(
-            f"/associations/3", {"is_public": "true"}, content_type="application/json"
-        )
-        association = Association.objects.get(id=3)
-        self.assertEqual(association.is_public, True)
-        response_svu = self.svu_client.patch(
-            f"/associations/3", {"is_site": "false"}, content_type="application/json"
-        )
-        association = Association.objects.get(id=3)
-        self.assertEqual(association.is_public, False)
-
-        association_id = 99
-        response_svu = self.svu_client.patch(
-            f"/associations/{association_id}",
-            {"name": "La singularité de l'espace-temps."},
-            content_type="application/json",
-        )
-        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
-
+    def test_patch_association_not_members(self):
+        """
+        PATCH /associations/{id}
+        - Someone from an association without status can't edit infos from another association.
+        - Someone from an association's office cannot edit informations from another association.
+        """
         association_id = 2
         response_incorrect_member = self.member_client.patch(
             f"/associations/{association_id}",
@@ -324,6 +282,12 @@ class AssociationsViewsTests(TestCase):
             response_incorrect_president.status_code, status.HTTP_400_BAD_REQUEST
         )
 
+    def test_patch_association_by_its_members(self):
+        """
+        PATCH /associations/{id}
+        - Someone from the association without status can't edit infos from the association.
+        - Someone from the association's office can edit informations from the association.
+        """
         association_id = 3
         response_correct_member = self.member_client.patch(
             f"/associations/{association_id}",
@@ -346,6 +310,120 @@ class AssociationsViewsTests(TestCase):
             association.name,
             "Moi je peux vraiment éditer l'asso, nananère.",
         )
+
+    def test_patch_association_non_existing(self):
+        """
+        PATCH /associations/{id}
+        - A non-existing association cannot be edited.
+        """
+        association_id = 99
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"name": "La singularité de l'espace-temps."},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_association_social_networks(self):
+        """
+        PATCH /associations/{id}
+        - A SVU manager can edit an association's social networks.
+        - Association's social networks are correctly updated with provided data.
+        """
+        association_id = 2
+        social_networks_json = json.dumps(
+            [{"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}]
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"social_networks": social_networks_json},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.social_networks, social_networks_json)
+
+    def test_patch_association_wrong_social_networks(self):
+        """
+        PATCH /associations/{id}
+        - Association's social networks are not updated if the keys are not valid (400).
+        - Association's social networks are not updated if the values are not strings (400).
+        """
+        association_id = 2
+        response_svu_keys = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {
+                "social_networks": json.dumps(
+                    [
+                        {
+                            "typeeee": "Mastodon",
+                            "location": "https://framapiaf.org/@Framasoft",
+                        }
+                    ]
+                )
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu_keys.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_svu_string = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"social_networks": json.dumps([{"type": "Mastodon", "location": 1234}])},
+            content_type="application/json",
+        )
+        self.assertEqual(response_svu_string.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_association_public_or_not(self):
+        """
+        PATCH /associations/{id}
+        - An association can't be public if not enabled and not site.
+        - An association must lost public status if enabled or site is removed.
+        """
+        # This association is not enabled and not site by default
+        association_id = 3
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_public": "true"},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.is_public, False)
+
+        # Association public status can be true only if is_site and is_enabled are true
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_enabled": "false", "is_site": "true"},
+            content_type="application/json",
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_public": "true"},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.is_public, False)
+
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_enabled": "true"},
+            content_type="application/json",
+        )
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_public": "true"},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.is_public, True)
+
+        # Association losting its public status by changing to is_site to false
+        response_svu = self.svu_client.patch(
+            f"/associations/{association_id}",
+            {"is_site": "false"},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.is_public, False)
 
     def test_delete_association(self):
         """
