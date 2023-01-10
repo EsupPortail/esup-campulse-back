@@ -25,6 +25,8 @@ class UserViewsStudentTests(TestCase):
         "associations_institutioncomponent.json",
         "associations_socialnetwork.json",
         "auth_group.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",

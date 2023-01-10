@@ -305,6 +305,24 @@ class UserAuthView(DJRestAuthUserDetailsView):
         if request.user.get_cas_user():
             for restricted_field in ["username", "email", "first_name", "last_name"]:
                 request.data.pop(restricted_field, False)
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{request.user.id}",
+        }
+        template = MailTemplate.objects.get(
+            code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+        )
+        manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=manager.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+
         return self.partial_update(request, *args, **kwargs)
 
 

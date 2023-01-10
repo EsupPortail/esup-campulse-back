@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 15:22+0100\n"
+"POT-Creation-Date: 2023-01-10 15:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,7 +168,7 @@ msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:185
-#: plana/apps/associations/views/association.py:323
+#: plana/apps/associations/views/association.py:325
 #: plana/apps/users/views/association_users.py:118
 #: plana/apps/users/views/association_users.py:150
 #: plana/apps/users/views/gdpr_consent_users.py:71
@@ -327,7 +327,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:357
+#: plana/apps/users/views/user.py:375
 msgid "ok"
 msgstr "ok"
 
