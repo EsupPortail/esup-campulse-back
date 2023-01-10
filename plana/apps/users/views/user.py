@@ -15,6 +15,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from plana.apps.associations.models.association import Association
+from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
@@ -243,7 +245,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    Overrided VerifyEmailView to send an email to a manager when an account has validated its email.
+    Overrided VerifyEmailView to send an email to a manager when a local account has validated its email.
     """
 
     def post(self, request, *args, **kwargs):
@@ -251,6 +253,12 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             EmailAddress.objects.filter(verified=False).order_by('-id').first()
         )
         user = User.objects.get(email=email_address.email)
+        associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
+            'association_id', flat=True
+        )
+        associations_no_site = Association.objects.filter(
+            id__in=associations_ids, is_site=False
+        )
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -264,9 +272,9 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             "site_name": current_site.name,
             "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
         }
-        if user.get_cas_user():
+        if associations_no_site.count() > 0:
             template = MailTemplate.objects.get(
-                code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+                code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
             manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
         else:
