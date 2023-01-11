@@ -505,10 +505,50 @@ paths:
                 $ref: '#/components/schemas/AssociationUsers'
           description: ''
   /users/associations/{user_id}/{association_id}:
+    patch:
+      operationId: users_associations_partial_update
+      description: |-
+        PATCH : Updates user role in an association (manager and president).
+
+        DELETE : Deletes an association linked to a user (manager).
+      parameters:
+      - in: path
+        name: association_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUsersUpdate'
+          description: ''
     delete:
       operationId: users_associations_destroy
       description: |-
-        GET : Lists all associations linked to a user (manager).
+        PATCH : Updates user role in an association (manager and president).
 
         DELETE : Deletes an association linked to a user (manager).
       parameters:
@@ -1456,6 +1496,19 @@ components:
       required:
       - association
       - user
+    AssociationUsersUpdate:
+      type: object
+      description: Serializer used to patch AssociationUsers fields.
+      properties:
+        role_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        is_president:
+          type: boolean
     CAS:
       type: object
       description: Main serializer.
@@ -1798,6 +1851,20 @@ components:
         social_networks:
           type: object
           additionalProperties: {}
+    PatchedAssociationUsersUpdateRequest:
+      type: object
+      description: Serializer used to patch AssociationUsers fields.
+      properties:
+        role_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        has_office_status:
+          type: boolean
+          title: Membre du bureau ?
+        is_president:
+          type: boolean
     PatchedUserRequest:
       type: object
       description: Main serializer.

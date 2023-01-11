@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 15:44+0100\n"
+"POT-Creation-Date: 2023-01-11 08:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,8 +152,8 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:186
 #: plana/apps/associations/views/association.py:349
-#: plana/apps/users/views/association_users.py:118
-#: plana/apps/users/views/association_users.py:150
+#: plana/apps/users/views/association_users.py:122
+#: plana/apps/users/views/association_users.py:205
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
 #: plana/apps/users/views/user.py:172 plana/apps/users/views/user.py:185
@@ -274,31 +274,32 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:54
+#: plana/apps/users/views/association_users.py:58
 msgid "No user name or association id given."
 msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 
-#: plana/apps/users/views/association_users.py:62
+#: plana/apps/users/views/association_users.py:66
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:72
+#: plana/apps/users/views/association_users.py:76
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:78
+#: plana/apps/users/views/association_users.py:82
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:83
+#: plana/apps/users/views/association_users.py:87
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:93
+#: plana/apps/users/views/association_users.py:97
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:142
+#: plana/apps/users/views/association_users.py:158
+#: plana/apps/users/views/association_users.py:197
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
@@ -318,7 +319,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:384
+#: plana/apps/users/views/user.py:385
 msgid "ok"
 msgstr "ok"
 
