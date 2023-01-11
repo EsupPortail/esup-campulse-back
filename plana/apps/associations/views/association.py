@@ -31,7 +31,7 @@ from plana.apps.associations.serializers.institution_component import (
 )
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, str_to_bool
+from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
@@ -117,11 +117,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 acronym = str(acronym).strip()
                 queryset = queryset.filter(acronym__icontains=acronym)
             if is_enabled is not None:
-                queryset = queryset.filter(is_enabled=str_to_bool(is_enabled))
+                queryset = queryset.filter(is_enabled=to_bool(is_enabled))
             if is_public is not None:
-                queryset = queryset.filter(is_public=str_to_bool(is_public))
+                queryset = queryset.filter(is_public=to_bool(is_public))
             if is_site is not None:
-                queryset = queryset.filter(is_site=str_to_bool(is_site))
+                queryset = queryset.filter(is_site=to_bool(is_site))
             if institution is not None:
                 if institution == "":
                     queryset = queryset.filter(institution_id__isnull=True)
@@ -229,17 +229,17 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if "is_site" in request.data:
-            is_site = str_to_bool(request.data["is_site"])
+            is_site = to_bool(request.data["is_site"])
             if is_site == False:
                 request.data["is_public"] = False
 
         if "is_enabled" in request.data:
-            is_enabled = str_to_bool(request.data["is_enabled"])
+            is_enabled = to_bool(request.data["is_enabled"])
             if is_enabled == False:
                 request.data["is_public"] = False
 
         if "is_public" in request.data:
-            is_public = str_to_bool(request.data["is_public"])
+            is_public = to_bool(request.data["is_public"])
             if is_public == True and (
                 association.is_site == False or association.is_enabled == False
             ):
