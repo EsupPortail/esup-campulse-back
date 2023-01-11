@@ -121,10 +121,13 @@ class UserViewsManagerTests(TestCase):
         - A manager user can update user details.
         - A non-existing user cannot be updated.
         - A manager user cannot update restricted CAS user details.
+        - A manager user can validate a CAS user.
         """
 
         response_manager = self.manager_client.patch(
-            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+            "/users/2",
+            data={"username": "Bienvenueg", "is_validated_by_admin": True},
+            content_type="application/json",
         )
         user = User.objects.get(pk=2)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
@@ -150,8 +153,13 @@ class UserViewsManagerTests(TestCase):
         )
 
         user_cas = User.objects.get(username="PatriciaCAS")
-        self.manager_client.patch(f"/users/{user_cas.pk}", {"username": "JesuisCASg"})
-        self.assertEqual(user_cas.username, "PatriciaCAS")
+        self.manager_client.patch(
+            f"/users/{user_cas.pk}",
+            data={"username": "JesuisCASg", "is_validated_by_admin": True},
+            content_type="application/json",
+        )
+        user_cas = User.objects.get(username="PatriciaCAS")
+        self.assertEqual(user_cas.is_validated_by_admin, True)
 
     def test_manager_delete_user_detail(self):
         """
@@ -160,6 +168,8 @@ class UserViewsManagerTests(TestCase):
         - A user can be deleted.
         - A non-existing user cannot be deleted.
         - A manager account cannot be deleted.
+        - A non-validated account can be deleted.
+        - An email is sent if send_email parameter is set.
         """
         user_id = 2
         response = self.manager_client.delete(f"/users/{user_id}")
@@ -174,6 +184,12 @@ class UserViewsManagerTests(TestCase):
         for manager_id in managers_ids:
             response = self.manager_client.delete(f"/users/{manager_id}")
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user_id = 3
+        response = self.manager_client.delete(f"/users/{user_id}?send_email=true")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist):
+            User.objects.get(pk=user_id)
 
     def test_manager_put_user_detail(self):
         """
