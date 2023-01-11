@@ -35,7 +35,8 @@ class UserViewsStudentTests(TestCase):
 
     def setUp(self):
         """
-        Start a default client used on all tests, retrieves a student user.
+        Start a default client used on all tests, retrieves a simple student user.
+        Start a second client used on particular tests, retrives a student user which is president of an association.
         """
         self.student_client = Client()
         url = reverse("rest_login")
@@ -44,6 +45,14 @@ class UserViewsStudentTests(TestCase):
             "password": "motdepasse",
         }
         self.response = self.student_client.post(url, data)
+
+        self.president_student_client = Client()
+        url = reverse("rest_login")
+        data = {
+            "username": "president-asso-site@mail.tld",
+            "password": "motdepasse",
+        }
+        self.response = self.president_student_client.post(url, data)
 
     def test_student_get_users_list(self):
         """
@@ -86,7 +95,7 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_anonymous_delete_user_detail(self):
+    def test_student_delete_user_detail(self):
         """
         DELETE /users/{id}
         - A student user cannot execute this request.
@@ -144,7 +153,7 @@ class UserViewsStudentTests(TestCase):
     def test_student_delete_user_association(self):
         """
         DELETE /users/associations/{user_id}/{association_id}
-        - An student user cannot execute this request.
+        - A student user cannot execute this request.
         """
         user_id = 2
         asso_user = AssociationUsers.objects.get(user_id=user_id)
@@ -152,6 +161,50 @@ class UserViewsStudentTests(TestCase):
             f"/users/associations/{user_id}/{asso_user.id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_patch_association_users(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A simple student user cannot execute this request.
+        """
+        user_id = 2
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response_student = self.student_client.patch(
+            f"/users/associations/{user_id}/{asso_user.id}"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_patch_association_users_president(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A student president of an association can execute this request.
+        - Link between member and association is correctly updated.
+        """
+        user_id = 11
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{user_id}/{asso_user.association_id}",
+            {"role_name": "Tester", "has_office_status": True},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual("Tester", asso_user.role_name)
+        self.assertTrue(asso_user.has_office_status)
+
+    def test_student_patch_association_users_other_president(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A student president of another association cannot execute this request.
+        """
+        user_id = 3
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{user_id}/{asso_user.association_id}",
+            {"role_name": "Bad Asso"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_auth_user_detail(self):
         """

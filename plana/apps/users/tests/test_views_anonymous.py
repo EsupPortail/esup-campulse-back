@@ -204,6 +204,14 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_patch_association_users(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.anonymous_client.patch("/users/associations/1/2")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_anonymous_get_auth_user_detail(self):
         """
         GET /users/auth/user/

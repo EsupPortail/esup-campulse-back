@@ -248,7 +248,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
-    def test_manager_delete_user_association(self):
+    def test_manager_delete_association_users(self):
         """
         DELETE /users/associations/{user_id}/{association_id}
         - The user must exist.
@@ -278,6 +278,48 @@ class UserViewsManagerTests(TestCase):
             AssociationUsers.objects.get(
                 user_id=user_id, association_id=first_user_association_id
             )
+
+    def test_manager_patch_association_users(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A manager can execute this request.
+        - Link between member and association is correctly updated.
+        """
+        user_id = 3
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        response = self.manager_client.patch(
+            f"/users/associations/{user_id}/{asso_user.association_id}",
+            {"role_name": "Manager", "is_president": True},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual("Manager", asso_user.role_name)
+        self.assertTrue(asso_user.is_president)
+
+    def test_manager_patch_association_users_unexisting_params(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - Returns a bad request if non-existing user or association in parameters.
+        """
+        response = self.manager_client.patch(
+            f"/users/associations/999/999",
+            {"role_name": "Unexisting"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_manager_patch_association_users_unexisting_link(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - Returns a bad request if non-existing link between selected user and association.
+        """
+        response = self.manager_client.patch(
+            f"/users/associations/3/5",
+            {"role_name": "No link"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_get_auth_user_detail(self):
         """
