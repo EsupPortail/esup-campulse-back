@@ -158,16 +158,25 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
                 {"error": _("No user or association found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        try:
+            asso_user = self.queryset.get(
+                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
+            )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Link between this user and association does not exist.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             president = AssociationUsers.objects.get(
                 association_id=kwargs["association_id"], user_id=request.user.pk
             ).is_president
         except ObjectDoesNotExist:
             president = False
+
         if request.user.is_svu_manager or request.user.is_crous_manager or president:
-            asso_user = self.queryset.get(
-                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
-            )
             if 'role_name' in request.data:
                 asso_user.role_name = request.data['role_name']
             if 'is_president' in request.data:
@@ -182,7 +191,6 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
                     if type(request.data['has_office_status']) != bool
                     else request.data['has_office_status']
                 )
-
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
         return response.Response({}, status=status.HTTP_403_FORBIDDEN)
