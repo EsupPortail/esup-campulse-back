@@ -1,3 +1,5 @@
+import ast
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 
@@ -25,3 +27,10 @@ def send_mail(
             mail.attach(att.filename, content, att.mimetype)
 
     mail.send()
+
+
+def str_to_bool(string):
+    """
+    Used to translate strings like "true"/"false" into boolean
+    """
+    return ast.literal_eval(string.capitalize())

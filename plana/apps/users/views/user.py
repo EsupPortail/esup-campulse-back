@@ -1,7 +1,6 @@
 """
 Views directly linked to users and their links with other models.
 """
-import ast
 
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress
@@ -22,7 +21,7 @@ from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.user import User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, str_to_bool
 
 
 @extend_schema_view(
@@ -59,11 +58,15 @@ class UserListCreate(generics.ListCreateAPIView):
         is_cas = self.request.query_params.get("is_cas")
 
         if is_validated_by_admin is not None:
-            is_validated_by_admin = ast.literal_eval(is_validated_by_admin.capitalize())
+            is_validated_by_admin = (
+                str_to_bool(is_validated_by_admin)
+                if type(is_validated_by_admin) != bool
+                else is_validated_by_admin
+            )
             queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
 
         if is_cas is not None:
-            is_cas = ast.literal_eval(is_cas.capitalize())
+            is_cas = str_to_bool(is_cas) if type(is_cas) != bool else is_cas
             cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
                 'user_id', flat=True
             )

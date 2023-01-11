@@ -1,7 +1,6 @@
 """
 Views linked to links between users and associations.
 """
-import ast
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
@@ -18,6 +17,7 @@ from plana.apps.users.serializers.association_users import (
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
+from plana.utils import str_to_bool
 
 
 class AssociationUsersListCreate(generics.ListCreateAPIView):
@@ -181,13 +181,13 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
                 asso_user.role_name = request.data['role_name']
             if 'is_president' in request.data:
                 asso_user.is_president = (
-                    ast.literal_eval(request.data['is_president'].capitalize())
+                    str_to_bool(request.data['is_president'])
                     if type(request.data['is_president']) != bool
                     else request.data['is_president']
                 )
             if 'has_office_status' in request.data:
                 asso_user.has_office_status = (
-                    ast.literal_eval(request.data['has_office_status'].capitalize())
+                    str_to_bool(request.data['has_office_status'])
                     if type(request.data['has_office_status']) != bool
                     else request.data['has_office_status']
                 )
