@@ -312,7 +312,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
     def patch(self, request, *args, **kwargs):
         if "is_validated_by_admin" in request.data:
             request.data.pop("is_validated_by_admin", False)
-        if not request.user.get_cas_user():
+        if request.user.get_cas_user():
             for restricted_field in ["username", "email", "first_name", "last_name"]:
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
