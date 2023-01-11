@@ -67,7 +67,10 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "is_president" in request.data and request.data["is_president"] == "true":
+        if (
+            "is_president" in request.data
+            and str_to_bool(request.data["is_president"]) == True
+        ):
             association_user_president = AssociationUsers.objects.filter(
                 association_id=association_id, is_president=True
             )

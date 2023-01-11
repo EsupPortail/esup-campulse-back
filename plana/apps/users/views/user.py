@@ -200,7 +200,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
             if (
                 "is_validated_by_admin" in request.data
-                and request.data["is_validated_by_admin"] == "true"
+                and str_to_bool(request.data["is_validated_by_admin"]) == True
             ):
                 current_site = get_current_site(request)
                 context = {
@@ -274,7 +274,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
-            elif send_email is not None and send_email == "true":
+            elif send_email is not None and str_to_bool(send_email) == True:
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,

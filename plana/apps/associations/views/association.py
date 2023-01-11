@@ -31,7 +31,7 @@ from plana.apps.associations.serializers.institution_component import (
 )
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, str_to_bool
 
 
 @extend_schema_view(
@@ -98,7 +98,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Association.objects.all().order_by("name")
         if self.request.method == "GET":
-            booleans = {"true": True, "false": False}
             name = self.request.query_params.get("name")
             acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
@@ -118,11 +117,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 acronym = str(acronym).strip()
                 queryset = queryset.filter(acronym__icontains=acronym)
             if is_enabled is not None:
-                queryset = queryset.filter(is_enabled=booleans.get(is_enabled))
+                queryset = queryset.filter(is_enabled=str_to_bool(is_enabled))
             if is_public is not None:
-                queryset = queryset.filter(is_public=booleans.get(is_public))
+                queryset = queryset.filter(is_public=str_to_bool(is_public))
             if is_site is not None:
-                queryset = queryset.filter(is_site=booleans.get(is_site))
+                queryset = queryset.filter(is_site=str_to_bool(is_site))
             if institution is not None:
                 if institution == "":
                     queryset = queryset.filter(institution_id__isnull=True)
@@ -229,28 +228,22 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            is_site = request.data["is_site"]
-            if is_site == "false":
-                request.data["is_public"] = "false"
-        except:
-            pass
+        if "is_site" in request.data:
+            is_site = str_to_bool(request.data["is_site"])
+            if is_site == False:
+                request.data["is_public"] = False
 
-        try:
-            is_enabled = request.data["is_enabled"]
-            if is_enabled == "false":
-                request.data["is_public"] = "false"
-        except:
-            pass
+        if "is_enabled" in request.data:
+            is_enabled = str_to_bool(request.data["is_enabled"])
+            if is_enabled == False:
+                request.data["is_public"] = False
 
-        try:
-            is_public = request.data["is_public"]
-            if is_public == "true" and (
+        if "is_public" in request.data:
+            is_public = str_to_bool(request.data["is_public"])
+            if is_public == True and (
                 association.is_site == False or association.is_enabled == False
             ):
-                request.data.pop("is_public", False)
-        except:
-            pass
+                request.data["is_public"] = False
 
         try:
             social_networks = (

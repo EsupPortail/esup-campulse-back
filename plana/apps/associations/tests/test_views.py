@@ -385,7 +385,7 @@ class AssociationsViewsTests(TestCase):
         association_id = 3
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_public": "true"},
+            {"is_public": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -394,12 +394,12 @@ class AssociationsViewsTests(TestCase):
         # Association public status can be true only if is_site and is_enabled are true
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_enabled": "false", "is_site": "true"},
+            {"is_enabled": False, "is_site": True},
             content_type="application/json",
         )
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_public": "true"},
+            {"is_public": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -407,12 +407,12 @@ class AssociationsViewsTests(TestCase):
 
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_enabled": "true"},
+            {"is_enabled": True},
             content_type="application/json",
         )
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_public": "true"},
+            {"is_public": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -421,7 +421,7 @@ class AssociationsViewsTests(TestCase):
         # Association losting its public status by changing to is_site to false
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_site": "false"},
+            {"is_site": False},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -445,7 +445,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
         response_svu = self.svu_client.patch(
             f"/associations/{association_id}",
-            {"is_enabled": "false"},
+            {"is_enabled": False},
             content_type="application/json",
         )
         response_svu = self.svu_client.delete(f"/associations/{association_id}")
