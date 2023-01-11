@@ -206,6 +206,26 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_student_get_association_users(self):
+        """
+        GET /users/associations/{user_id}/{association_id}
+        - Request should return an error no matter which role is trying to execute it.
+        """
+        response_student = self.student_client.get(
+            "/users/associations/999/999", {"role_name": "NotFound"}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_student_put_association_users(self):
+        """
+        PUT /users/associations/{user_id}/{association_id}
+        - Request should return an error no matter which role is trying to execute it.
+        """
+        response_student = self.student_client.put(
+            "/users/associations/999/999", {"role_name": "NotFound"}
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_student_get_auth_user_detail(self):
         """
         GET /users/auth/user/
