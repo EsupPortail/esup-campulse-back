@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from plana.utils import str_to_bool
+from plana.utils import to_bool
 
 
 class PlanAUtilsTests(TestCase):
@@ -8,9 +8,12 @@ class PlanAUtilsTests(TestCase):
     Testing utils file functions.
     """
 
-    def test_str_to_bool(self):
+    def test_to_bool(self):
         """
         String is correctly converted to boolean.
         """
-        value = str_to_bool("true")
-        self.assertTrue(value)
+        val_str = to_bool("false")
+        self.assertFalse(val_str)
+
+        val_bool = to_bool(True)
+        self.assertTrue(val_bool)

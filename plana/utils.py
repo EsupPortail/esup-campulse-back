@@ -29,8 +29,11 @@ def send_mail(
     mail.send()
 
 
-def str_to_bool(string):
+def to_bool(attr):
     """
     Used to translate strings like "true"/"false" into boolean
     """
-    return ast.literal_eval(string.capitalize())
+    if type(attr) == bool:
+        return attr
+    elif type(attr) == str:
+        return ast.literal_eval(attr.capitalize())
