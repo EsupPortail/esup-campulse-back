@@ -17,7 +17,7 @@ from plana.apps.users.serializers.association_users import (
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
-from plana.utils import str_to_bool
+from plana.utils import to_bool
 
 
 class AssociationUsersListCreate(generics.ListCreateAPIView):
@@ -183,17 +183,9 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
             if 'role_name' in request.data:
                 asso_user.role_name = request.data['role_name']
             if 'is_president' in request.data:
-                asso_user.is_president = (
-                    str_to_bool(request.data['is_president'])
-                    if type(request.data['is_president']) != bool
-                    else request.data['is_president']
-                )
+                asso_user.is_president = to_bool(request.data['is_president'])
             if 'has_office_status' in request.data:
-                asso_user.has_office_status = (
-                    str_to_bool(request.data['has_office_status'])
-                    if type(request.data['has_office_status']) != bool
-                    else request.data['has_office_status']
-                )
+                asso_user.has_office_status = to_bool(request.data['has_office_status'])
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
         return response.Response({}, status=status.HTTP_403_FORBIDDEN)
