@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 10:14+0100\n"
+"POT-Creation-Date: 2023-01-12 10:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,8 +155,8 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/users/views/association_users.py:125
 #: plana/apps/users/views/association_users.py:208
 #: plana/apps/users/views/gdpr_consent_users.py:71
-#: plana/apps/users/views/user.py:81 plana/apps/users/views/user.py:129
-#: plana/apps/users/views/user.py:171 plana/apps/users/views/user.py:184
+#: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
+#: plana/apps/users/views/user.py:172 plana/apps/users/views/user.py:185
 #: plana/apps/users/views/user.py:235 plana/apps/users/views/user.py:292
 #: plana/apps/users/views/user_groups.py:103
 #: plana/apps/users/views/user_groups.py:142
@@ -323,7 +323,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:389
+#: plana/apps/users/views/user.py:388
 msgid "ok"
 msgstr "ok"
 

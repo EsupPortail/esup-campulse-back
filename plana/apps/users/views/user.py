@@ -4,6 +4,7 @@ Views directly linked to users and their links with other models.
 
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress
+from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
@@ -216,8 +217,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     template = MailTemplate.objects.get(
                         code="MANAGER_ACCOUNT_CONFIRMATION"
                     )
-                    # TODO New password generated through the form doesn't work.
-                    uid = '%x' % user.id
+                    uid = user_pk_to_url_str(user)
                     token = default_token_generator.make_token(user)
                     context[
                         "password_reset_url"
