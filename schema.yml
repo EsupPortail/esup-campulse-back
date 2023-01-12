@@ -867,8 +867,7 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: Overrided VerifyEmailView to send an email to a manager when a
-        local account has validated its email.
+      description: Overrided VerifyEmailView to send an email to a manager.
       tags:
       - users
       requestBody:

@@ -17,6 +17,10 @@ from .provider import CASProvider
 
 
 class PlanAAdapter(DefaultAccountAdapter):
+    """
+    Default adapter for local accounts.
+    """
+
     def send_mail(self, template_prefix, email, context):
         """
         Overrided send_mail django-allauth method to use the one from the utils file.
@@ -35,18 +39,21 @@ class PlanAAdapter(DefaultAccountAdapter):
 
         if template_prefix == "account/email/email_confirmation_signup":
             template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+            key = context['key']
             context[
                 "activate_url"
-            ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL}?key={context['key']}"
+            ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL}?key={key}"
 
         elif template_prefix == "account/email/password_reset_key":
             template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
             password_reset_url_parts = re.match(
                 r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]
             )
+            uid = password_reset_url_parts.group(2)
+            token = password_reset_url_parts.group(3)
             context[
                 "password_reset_url"
-            ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={password_reset_url_parts.group(2)}&token={password_reset_url_parts.group(3)}"
+            ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
 
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
@@ -57,6 +64,10 @@ class PlanAAdapter(DefaultAccountAdapter):
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
+    """
+    Default adapter for CAS accounts.
+    """
+
     pass
 
 
@@ -70,4 +81,7 @@ class CASAdapter(AllAuthCASAdapter):
     version = settings.CAS_VERSION
 
     def get_provider(self, request):
+        """
+        Get the provider.
+        """
         return self.provider

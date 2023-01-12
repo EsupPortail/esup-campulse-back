@@ -1,3 +1,6 @@
+"""
+Generic functions to send emails, and convert "true" and "false" to real booleans.
+"""
 import ast
 
 from django.conf import settings
@@ -33,7 +36,7 @@ def to_bool(attr):
     """
     Used to translate strings like "true"/"false" into boolean
     """
-    if type(attr) == bool:
+    if isinstance(attr, bool):
         return attr
-    elif type(attr) == str:
+    if isinstance(attr, str):
         return ast.literal_eval(attr.capitalize())

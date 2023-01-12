@@ -35,8 +35,10 @@ class UserViewsStudentTests(TestCase):
 
     def setUp(self):
         """
-        Start a default client used on all tests, retrieves a simple student user.
-        Start a second client used on particular tests, retrives a student user which is president of an association.
+        Start a default client used on all tests,
+            retrieves a simple student user.
+        Start a second client used on particular tests,
+            retrieves a student user which is president of an association.
         """
         self.student_client = Client()
         url = reverse("rest_login")

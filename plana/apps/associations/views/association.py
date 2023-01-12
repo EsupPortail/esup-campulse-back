@@ -230,18 +230,18 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if "is_site" in request.data:
             is_site = to_bool(request.data["is_site"])
-            if is_site == False:
+            if is_site is False:
                 request.data["is_public"] = False
 
         if "is_enabled" in request.data:
             is_enabled = to_bool(request.data["is_enabled"])
-            if is_enabled == False:
+            if is_enabled is False:
                 request.data["is_public"] = False
 
         if "is_public" in request.data:
             is_public = to_bool(request.data["is_public"])
-            if is_public == True and (
-                association.is_site == False or association.is_enabled == False
+            if is_public is True and (
+                association.is_site is False or association.is_enabled is False
             ):
                 request.data["is_public"] = False
 
@@ -262,8 +262,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         {"error": _("Wrong social_networks values")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-        except Exception as e:
-            print(e)
+        except Exception as ex:
+            print(ex)
             return response.Response(
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
@@ -316,7 +316,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if request.user.is_svu_manager:
-            if association.is_enabled == True:
+            if association.is_enabled is True:
                 return response.Response(
                     {"error": _("Can't delete an enabled association.")},
                     status=status.HTTP_400_BAD_REQUEST,

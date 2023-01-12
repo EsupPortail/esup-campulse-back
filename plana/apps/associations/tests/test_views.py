@@ -452,7 +452,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_svu.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
-        response_svu = self.svu_client.delete(f"/associations/99")
+        response_svu = self.svu_client.delete("/associations/99")
         self.assertEqual(response_svu.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_put_association(self):

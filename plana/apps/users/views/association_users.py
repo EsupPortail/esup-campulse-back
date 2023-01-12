@@ -69,7 +69,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
         if (
             "is_president" in request.data
-            and to_bool(request.data["is_president"]) == True
+            and to_bool(request.data["is_president"]) is True
         ):
             association_user_president = AssociationUsers.objects.filter(
                 association_id=association_id, is_president=True

@@ -6,6 +6,10 @@ from allauth_cas.providers import CASProvider as AllAuthCASProvider
 
 
 class CASAccount(ProviderAccount):
+    """
+    Default CAS Account.
+    """
+
     pass
 
 

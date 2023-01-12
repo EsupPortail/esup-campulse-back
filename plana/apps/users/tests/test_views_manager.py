@@ -319,7 +319,7 @@ class UserViewsManagerTests(TestCase):
         - Returns a bad request if non-existing user or association in parameters.
         """
         response = self.manager_client.patch(
-            f"/users/associations/999/999",
+            "/users/associations/999/999",
             {"role_name": "Unexisting"},
             content_type="application/json",
         )
@@ -331,7 +331,7 @@ class UserViewsManagerTests(TestCase):
         - Returns a bad request if non-existing link between selected user and association.
         """
         response = self.manager_client.patch(
-            f"/users/associations/3/5",
+            "/users/associations/3/5",
             {"role_name": "No link"},
             content_type="application/json",
         )
@@ -456,7 +456,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response_delete = self.manager_client.delete(f"/users/groups/4/1")
+        response_delete = self.manager_client.delete("/users/groups/4/1")
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         first_response_delete = self.manager_client.delete(

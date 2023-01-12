@@ -3,7 +3,6 @@ List of tests done on users views with an anonymous user.
 """
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
-from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from rest_framework import status
 

@@ -1,8 +1,6 @@
 """
 Serializers describing fields used on associations.
 """
-import json
-
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField

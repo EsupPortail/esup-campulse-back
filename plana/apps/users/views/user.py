@@ -3,7 +3,7 @@ Views directly linked to users and their links with other models.
 """
 
 from allauth.account.forms import default_token_generator
-from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
@@ -196,7 +196,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
             if (
                 "is_validated_by_admin" in request.data
-                and to_bool(request.data["is_validated_by_admin"]) == True
+                and to_bool(request.data["is_validated_by_admin"]) is True
             ):
                 current_site = get_current_site(request)
                 context = {
@@ -217,9 +217,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         code="MANAGER_ACCOUNT_CONFIRMATION"
                     )
                     # TODO New password generated through the form doesn't work.
+                    uid = '%x' % user.id
+                    token = default_token_generator.make_token(user)
                     context[
                         "password_reset_url"
-                    ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={'%x' % user.id}&token={default_token_generator.make_token(user)}"
+                    ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=user.email,
@@ -255,7 +257,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
             send_email = self.request.query_params.get("send_email")
             current_site = get_current_site(request)
-            if user.is_validated_by_admin == False:
+            if user.is_validated_by_admin is False:
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,
@@ -270,7 +272,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
-            elif send_email is not None and to_bool(send_email) == True:
+            elif send_email is not None and to_bool(send_email) is True:
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,
@@ -316,12 +318,13 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
 
-            if request.user.is_validated_by_admin == False:
+            if request.user.is_validated_by_admin is False:
                 current_site = get_current_site(request)
+                user_id = request.user.id
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,
-                    "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{request.user.id}",
+                    "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}",
                 }
                 template = MailTemplate.objects.get(
                     code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
@@ -341,7 +344,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    Overrided VerifyEmailView to send an email to a manager when a local account has validated its email.
+    Overrided VerifyEmailView to send an email to a manager.
     """
 
     def post(self, request, *args, **kwargs):
@@ -350,7 +353,6 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         self.kwargs['key'] = serializer.validated_data['key']
         confirmation = self.get_object()
         confirmation.confirm(self.request)
-        print(confirmation.email_address)
 
         user = User.objects.get(email=confirmation.email_address)
         associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
