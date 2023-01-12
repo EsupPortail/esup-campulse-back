@@ -5,7 +5,7 @@
     "fields": {
       "user_id": 2,
       "consent_id": 1,
-      "date_consented": "2022-10-26T15:45:35+02:00"
+      "date_consented": "2022-10-26T15:45:35.000Z"
     }
   }
 ]
