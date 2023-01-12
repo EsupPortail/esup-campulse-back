@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 10:43+0100\n"
+"POT-Creation-Date: 2023-01-12 12:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,8 +152,8 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:185
 #: plana/apps/associations/views/association.py:342
-#: plana/apps/users/views/association_users.py:125
-#: plana/apps/users/views/association_users.py:208
+#: plana/apps/users/views/association_users.py:128
+#: plana/apps/users/views/association_users.py:211
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
 #: plana/apps/users/views/user.py:172 plana/apps/users/views/user.py:185
@@ -282,28 +282,24 @@ msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:79
-msgid "President already in association."
-msgstr "L'association a déjà un président."
-
-#: plana/apps/users/views/association_users.py:85
+#: plana/apps/users/views/association_users.py:88
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:90
+#: plana/apps/users/views/association_users.py:93
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:100
+#: plana/apps/users/views/association_users.py:103
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:161
-#: plana/apps/users/views/association_users.py:200
+#: plana/apps/users/views/association_users.py:164
+#: plana/apps/users/views/association_users.py:203
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:171
+#: plana/apps/users/views/association_users.py:174
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
@@ -448,3 +444,6 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "President already in association."
+#~ msgstr "L'association a déjà un président."

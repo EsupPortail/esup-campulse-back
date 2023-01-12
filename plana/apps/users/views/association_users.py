@@ -67,6 +67,8 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # TODO Reject in register form if association has already a president.
+        """
         if (
             "is_president" in request.data
             and to_bool(request.data["is_president"]) is True
@@ -79,6 +81,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                     {"error": _("President already in association.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        """
 
         if user.is_svu_manager or user.is_crous_manager or user.is_superuser:
             return response.Response(
