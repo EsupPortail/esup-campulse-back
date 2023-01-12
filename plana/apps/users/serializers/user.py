@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
     Main serializer.
     """
 
+    phone = serializers.CharField(required=False, allow_blank=True)
     is_cas = serializers.SerializerMethodField("is_cas_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
     groups = GroupSerializer(many=True, read_only=True)
