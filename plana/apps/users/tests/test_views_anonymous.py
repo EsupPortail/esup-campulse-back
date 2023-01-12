@@ -1,10 +1,14 @@
 """
 List of tests done on users views with an anonymous user.
 """
+from allauth.account.forms import default_token_generator
+from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from rest_framework import status
 
 from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.user import User
 
 
 class UserViewsAnonymousTests(TestCase):
@@ -18,8 +22,11 @@ class UserViewsAnonymousTests(TestCase):
         "associations_institution.json",
         "associations_institutioncomponent.json",
         "auth_group.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
+        "users_user_groups.json",
     ]
 
     def setUp(self):
@@ -211,6 +218,78 @@ class UserViewsAnonymousTests(TestCase):
         """
         response_anonymous = self.anonymous_client.patch("/users/associations/1/2")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_anonymous_post_password_reset(self):
+        """
+        POST /users/auth/password/reset/
+        - An anonymous user can execute this request.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/", {"email": "prenom.nom@adressemail.fr"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+    def test_anonymous_post_password_reset_confirm(self):
+        """
+        POST /users/auth/password/reset/confirm/
+        - An anonymous user can execute this request.
+        """
+        user_id = 3
+        user = User.objects.get(id=user_id)
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/confirm/",
+            {
+                "new_password1": "saucisse",
+                "new_password2": "saucisse",
+                "uid": user_id,
+                "token": default_token_generator.make_token(user),
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+    def test_anonymous_post_registration_verify_email(self):
+        """
+        POST /users/auth/registration/verify-email/
+        - An anonymous user can execute this request.
+        - An anonymous user with association where is_site is false can execute this request.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/",
+            {
+                "email": "michel.moutarde@jaime-le-raisin-de-table.org",
+                "first_name": "Michel",
+                "last_name": "Moutarde",
+            },
+        )
+        email_address = EmailAddress.objects.get(
+            email="michel.moutarde@jaime-le-raisin-de-table.org"
+        )
+        key = EmailConfirmationHMAC(email_address=email_address).key
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/verify-email/", {"key": key}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/",
+            {
+                "email": "damien.mayonnaise@je-prefere-les-crackers-au-sel.org",
+                "first_name": "Damien",
+                "last_name": "Mayonnaise",
+            },
+        )
+        user = User.objects.get(
+            email="damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
+        )
+        AssociationUsers.objects.create(user_id=user.id, association_id=3)
+        email_address = EmailAddress.objects.get(
+            email="damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
+        )
+        key = EmailConfirmationHMAC(email_address=email_address).key
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/verify-email/", {"key": key}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
     def test_anonymous_get_auth_user_detail(self):
         """

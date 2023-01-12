@@ -3,7 +3,7 @@ Views directly linked to users and their links with other models.
 """
 
 from allauth.account.forms import default_token_generator
-from allauth.account.models import EmailAddress
+from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
@@ -345,22 +345,20 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
 
     def post(self, request, *args, **kwargs):
-        email_address = (
-            EmailAddress.objects.filter(verified=False).order_by('-id').first()
-        )
-        user = User.objects.get(email=email_address.email)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = serializer.validated_data['key']
+        confirmation = self.get_object()
+        confirmation.confirm(self.request)
+        print(confirmation.email_address)
+
+        user = User.objects.get(email=confirmation.email_address)
         associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
             'association_id', flat=True
         )
         associations_no_site = Association.objects.filter(
             id__in=associations_ids, is_site=False
         )
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.kwargs['key'] = serializer.validated_data['key']
-        confirmation = self.get_object()
-        confirmation.confirm(self.request)
 
         current_site = get_current_site(request)
         context = {
