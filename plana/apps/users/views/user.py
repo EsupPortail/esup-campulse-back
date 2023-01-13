@@ -372,15 +372,17 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             template = MailTemplate.objects.get(
                 code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
-            manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+            # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
+            email = settings.DEFAULT_MANAGER_SVU_EMAIL
         else:
             template = MailTemplate.objects.get(
                 code="CROUS_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
-            manager = User.objects.filter(groups__name="Gestionnaire Crous").first()
+            # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
+            email = settings.DEFAULT_MANAGER_CROUS_EMAIL
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
-            to_=manager.email,
+            to_=email,
             subject=template.subject.replace("{{ site_name }}", context["site_name"]),
             message=template.parse_vars(user, request, context),
         )
