@@ -23,7 +23,7 @@ class Association(models.Model):
     address = models.TextField(_("Address"), default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
     email = models.CharField(_("Email"), default="", max_length=256)
-    siret = models.IntegerField(_("SIRET"), default=0)
+    siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.IntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)

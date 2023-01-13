@@ -1214,9 +1214,8 @@ components:
           title: Courriel
           maxLength: 256
         siret:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
+          type: string
+          maxLength: 14
         website:
           type: string
           format: uri
@@ -1312,9 +1311,8 @@ components:
           title: Courriel
           maxLength: 256
         siret:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
+          type: string
+          maxLength: 14
         website:
           type: string
           format: uri
@@ -1807,9 +1805,9 @@ components:
           title: Courriel
           maxLength: 256
         siret:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
+          type: string
+          minLength: 1
+          maxLength: 14
         website:
           type: string
           format: uri
@@ -1892,10 +1890,6 @@ components:
           maxLength: 254
         phone:
           type: string
-          nullable: true
-          minLength: 1
-          title: Téléphone
-          maxLength: 32
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
@@ -1969,9 +1963,6 @@ components:
           maxLength: 254
         phone:
           type: string
-          nullable: true
-          title: Téléphone
-          maxLength: 32
         is_cas:
           type: boolean
           readOnly: true
@@ -2066,10 +2057,6 @@ components:
           maxLength: 254
         phone:
           type: string
-          nullable: true
-          minLength: 1
-          title: Téléphone
-          maxLength: 32
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
