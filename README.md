@@ -96,6 +96,7 @@ $ python manage.py runserver
 ### Comptes de test des fixtures
 
 Mot de passe commun : `motdepasse`
+- `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
 - `gestionnaire-svu@mail.tld`
 - `gestionnaire-crous@mail.tld`
 - `membre-fsdie-idex@mail.tld`
