@@ -329,10 +329,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 template = MailTemplate.objects.get(
                     code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
-                manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+                # manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=manager.email,
+                    to_=settings.DEFAULT_MANAGER_SVU_EMAIL,
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
                     ),

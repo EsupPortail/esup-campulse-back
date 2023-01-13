@@ -77,3 +77,10 @@ EMAIL_TEMPLATE_PASSWORD_CHANGE_URL = (
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL = (
     EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/validate-users/"
 )
+
+########
+# Misc #
+########
+
+DEFAULT_MANAGER_SVU_EMAIL = "appli-plana-pprd@unistra.fr"
+DEFAULT_MANAGER_CROUS_EMAIL = "appli-plana-pprd@unistra.fr"

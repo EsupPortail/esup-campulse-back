@@ -26,7 +26,7 @@ class PlanAAdapter(DefaultAccountAdapter):
         Overrided send_mail django-allauth method to use the one from the utils file.
         """
         user = User.objects.get(email=email)
-        manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+        # manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
         request = context.get("request")
         current_site = get_current_site(request)
         template = MailTemplate.objects.all()
@@ -35,7 +35,7 @@ class PlanAAdapter(DefaultAccountAdapter):
         context["username"] = user.username
         context["first_name"] = user.first_name
         context["last_name"] = user.last_name
-        context["manager_email_address"] = manager.email
+        context["manager_email_address"] = settings.DEFAULT_MANAGER_SVU_EMAIL
 
         if template_prefix == "account/email/email_confirmation_signup":
             template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
