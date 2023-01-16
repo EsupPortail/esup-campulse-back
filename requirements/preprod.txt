@@ -197,8 +197,8 @@ cryptography==38.0.3 ; python_version >= "3.8" and python_version < "3.11" \
 defusedxml==0.7.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
-dj-rest-auth==2.2.6 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:653f5eecdd96699768a80fd8439de70a3bb17280101b0d25001ffae5ea7b4dc6
+dj-rest-auth==2.2.7 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:911bcf377df68c958a7f534def7715b61f3d887a46fbb53ca7666244b7c0b143
 django-allauth-cas==1.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:405185259c60f09b1b7dcb54acb2893dc900815e22eb5295c55cacc4cfa40250 \
     --hash=sha256:d8d62b050133526a7df03f254c481eb09fc673eb8947b6d35be2739af6cc6479
@@ -475,9 +475,9 @@ python-cas==1.6.0 ; python_version >= "3.8" and python_version < "3.11" \
 python3-openid==3.2.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:33fbf6928f401e0b790151ed2b5290b02545e8775f982485205a066f874aaeaf \
     --hash=sha256:6626f771e0417486701e0b4daff762e7212e820ca5b29fcc0d05f6f8736dfa6b
-pytz==2022.7 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a \
-    --hash=sha256:93007def75ae22f7cd991c84e02d434876818661f8df9ad5df9e950ff4e52cfd
+pytz==2022.7.1 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:01a0681c4b9684a28304615eba55d1ab31ae00bf68ec157ec3708a8182dbbcd0 \
+    --hash=sha256:78f4f37d8198e0627c5f1143240bb0206b8691d8d7ac6d78fee88b78733f8c4a
 pyyaml==6.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:01b45c0191e6d66c470b6cf1b9531a771a83c1c4208272ead47a3ae4f2f603bf \
     --hash=sha256:0283c35a6a9fbf047493e3a0ce8d79ef5030852c51e9d911a27badfde0605293 \
