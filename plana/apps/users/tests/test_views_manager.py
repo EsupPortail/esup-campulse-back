@@ -169,7 +169,6 @@ class UserViewsManagerTests(TestCase):
         - A non-existing user cannot be deleted.
         - A manager account cannot be deleted.
         - A non-validated account can be deleted.
-        - An email is sent if send_email parameter is set.
         """
         user_id = 2
         response = self.manager_client.delete(f"/users/{user_id}")
@@ -186,7 +185,7 @@ class UserViewsManagerTests(TestCase):
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         user_id = 3
-        response = self.manager_client.delete(f"/users/{user_id}?send_email=true")
+        response = self.manager_client.delete(f"/users/{user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             User.objects.get(pk=user_id)

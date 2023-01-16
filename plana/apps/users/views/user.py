@@ -133,19 +133,6 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
-@extend_schema_view(
-    put=extend_schema(exclude=True),
-    delete=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "send_email",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="True if an email must be sent on deletion.",
-            )
-        ]
-    ),
-)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     GET : Lists a user with all details.
@@ -255,7 +242,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            send_email = self.request.query_params.get("send_email")
             current_site = get_current_site(request)
             if user.is_validated_by_admin is False:
                 context = {
@@ -272,7 +258,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
-            elif send_email is not None and to_bool(send_email) is True:
+            else:
                 context = {
                     "site_domain": current_site.domain,
                     "site_name": current_site.name,
