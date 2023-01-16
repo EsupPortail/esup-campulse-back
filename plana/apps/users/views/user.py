@@ -344,8 +344,8 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
             'association_id', flat=True
         )
-        associations_no_site = Association.objects.filter(
-            id__in=associations_ids, is_site=False
+        associations_site = Association.objects.filter(
+            id__in=associations_ids, is_site=True
         )
 
         current_site = get_current_site(request)
@@ -354,7 +354,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             "site_name": current_site.name,
             "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
         }
-        if associations_no_site.count() > 0:
+        if associations_site.count() > 0:
             template = MailTemplate.objects.get(
                 code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
