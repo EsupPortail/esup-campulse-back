@@ -110,8 +110,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
     """
     GET : Lists all associations linked to a user (manager).
-
-    DELETE : Deletes an association linked to a user (manager).
     """
 
     serializer_class = AssociationUsersSerializer
