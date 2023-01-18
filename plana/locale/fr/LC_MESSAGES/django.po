@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-16 15:35+0100\n"
+"POT-Creation-Date: 2023-01-18 14:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,8 +152,8 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:185
 #: plana/apps/associations/views/association.py:342
-#: plana/apps/users/views/association_users.py:128
-#: plana/apps/users/views/association_users.py:211
+#: plana/apps/users/views/association_users.py:126
+#: plana/apps/users/views/association_users.py:237
 #: plana/apps/users/views/gdpr_consent_users.py:71
 #: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
 #: plana/apps/users/views/user.py:159 plana/apps/users/views/user.py:172
@@ -266,11 +266,11 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:115
+#: plana/apps/users/serializers/user.py:113
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:152
+#: plana/apps/users/serializers/user.py:150
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -294,12 +294,12 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:164
-#: plana/apps/users/views/association_users.py:203
+#: plana/apps/users/views/association_users.py:162
+#: plana/apps/users/views/association_users.py:229
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:174
+#: plana/apps/users/views/association_users.py:172
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 

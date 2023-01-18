@@ -151,9 +151,9 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if request.user.is_svu_manager:
-            try:
+            if "name" in request.data:
                 association_name = request.data["name"]
-            except KeyError:
+            else:
                 return response.Response(
                     {"error": _("No association name given.")},
                     status=status.HTTP_400_BAD_REQUEST,

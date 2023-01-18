@@ -92,10 +92,8 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         adapter.save_user(request, user, self)
 
         user.username = self.cleaned_data["email"]
-        try:
+        if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
-        except KeyError:
-            ...
 
         user.save()
         return user
