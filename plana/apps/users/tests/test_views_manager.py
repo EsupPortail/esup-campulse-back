@@ -294,23 +294,47 @@ class UserViewsManagerTests(TestCase):
                 user_id=user_id, association_id=first_user_association_id
             )
 
+    def test_manager_patch_association_users_update_president(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A manager can execute this request.
+        - Link between member and association is correctly updated.
+        - If giving president privileges to a member, the old president is no longer president
+            of the association.
+        """
+        user_id = 10
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        old_pres_pk = AssociationUsers.objects.get(
+            association_id=asso_user.association_id, is_president=True
+        ).pk
+        response = self.manager_client.patch(
+            f"/users/associations/{user_id}/{asso_user.association_id}",
+            {"is_president": True},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        old_pres = AssociationUsers.objects.get(pk=old_pres_pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(asso_user.is_president)
+        self.assertFalse(old_pres.is_president)
+
     def test_manager_patch_association_users(self):
         """
         PATCH /users/associations/{user_id}/{association_id}
         - A manager can execute this request.
         - Link between member and association is correctly updated.
         """
-        user_id = 3
+        user_id = 10
         asso_user = AssociationUsers.objects.get(user_id=user_id)
         response = self.manager_client.patch(
             f"/users/associations/{user_id}/{asso_user.association_id}",
-            {"role_name": "Manager", "is_president": True},
+            {"role_name": "Manager", "is_president": False},
             content_type="application/json",
         )
         asso_user = AssociationUsers.objects.get(user_id=user_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual("Manager", asso_user.role_name)
-        self.assertTrue(asso_user.is_president)
+        self.assertFalse(asso_user.is_president)
 
     def test_manager_patch_association_users_unexisting_params(self):
         """

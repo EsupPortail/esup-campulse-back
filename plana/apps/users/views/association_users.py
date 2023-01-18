@@ -183,12 +183,40 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
         if request.user.is_svu_manager or request.user.is_crous_manager or president:
             if 'role_name' in request.data:
                 asso_user.role_name = request.data['role_name']
-            if 'is_president' in request.data:
-                asso_user.is_president = to_bool(request.data['is_president'])
+
+            if 'is_president' in request.data and to_bool(request.data['is_president']):
+                if president:
+                    actual_president = AssociationUsers.objects.get(
+                        association_id=kwargs["association_id"], user_id=request.user.pk
+                    )
+                    asso_user.is_president = True
+                    actual_president.is_president = False
+                    actual_president.save()
+                elif request.user.is_svu_manager or request.user.is_crous_manager:
+                    try:
+                        actual_president = AssociationUsers.objects.get(
+                            association_id=kwargs["association_id"], is_president=True
+                        )
+                        actual_president.is_president = False
+                        actual_president.save()
+                    except ObjectDoesNotExist:
+                        pass
+                    asso_user.is_president = True
+
+            if 'is_president' in request.data and not to_bool(
+                request.data['is_president']
+            ):
+                if president:
+                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+                elif request.user.is_svu_manager or request.user.is_crous_manager:
+                    asso_user.is_president = False
+
             if 'has_office_status' in request.data:
                 asso_user.has_office_status = to_bool(request.data['has_office_status'])
+
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
+
         return response.Response({}, status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, *args, **kwargs):
