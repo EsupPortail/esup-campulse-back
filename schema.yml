@@ -52,6 +52,12 @@ paths:
         schema:
           type: string
         description: Association name.
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       tags:
       - associations
       security:
@@ -477,10 +483,7 @@ paths:
   /users/associations/{user_id}:
     get:
       operationId: users_associations_retrieve
-      description: |-
-        GET : Lists all associations linked to a user (manager).
-
-        DELETE : Deletes an association linked to a user (manager).
+      description: 'GET : Lists all associations linked to a user (manager).'
       parameters:
       - in: path
         name: user_id
@@ -1204,6 +1207,10 @@ components:
           type: string
           title: Téléphone
           maxLength: 32
+        phone_pres:
+          type: string
+          title: President Phone
+          maxLength: 32
         email:
           type: string
           title: Courriel
@@ -1300,6 +1307,10 @@ components:
         phone:
           type: string
           title: Téléphone
+          maxLength: 32
+        phone_pres:
+          type: string
+          title: President Phone
           maxLength: 32
         email:
           type: string
@@ -1410,6 +1421,10 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
+        email:
+          type: string
+          title: Courriel
+          maxLength: 256
         is_enabled:
           type: boolean
         is_public:
@@ -1793,6 +1808,11 @@ components:
           type: string
           minLength: 1
           title: Téléphone
+          maxLength: 32
+        phone_pres:
+          type: string
+          minLength: 1
+          title: President Phone
           maxLength: 32
         email:
           type: string

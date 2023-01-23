@@ -65,6 +65,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
             "activity_field",
             "name",
             "acronym",
+            "email",
             "is_enabled",
             "is_public",
             "is_site",
