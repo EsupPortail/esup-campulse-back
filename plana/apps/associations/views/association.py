@@ -11,7 +11,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import generics, response, status
+from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.associations.models.activity_field import ActivityField
@@ -94,6 +94,15 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     POST : Creates a new association with mandatory informations.
     """
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'name',
+        'acronym',
+        'activity_field__name',
+        'institution__name',
+        'institution_component__name',
+    ]
 
     def get_queryset(self):
         queryset = Association.objects.all().order_by("name")
