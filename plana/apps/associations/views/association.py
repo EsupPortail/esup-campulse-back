@@ -255,10 +255,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 request.data["is_public"] = False
 
         try:
-            social_networks = (
-                json.loads(request.data["social_networks"])
+            sn = (
+                request.data["social_networks"]
                 if "social_networks" in request.data
                 else []
+            )
+            social_networks = (
+                json.loads(sn) if type(sn) == str else json.loads(json.dumps(sn))
             )
             for social_network in social_networks:
                 if sorted(list(social_network.keys())) != sorted(['type', 'location']):
