@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-18 14:27+0100\n"
+"POT-Creation-Date: 2023-01-23 09:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:19
-#: plana/apps/associations/models/association.py:60
+#: plana/apps/associations/models/association.py:61
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -64,71 +64,75 @@ msgid "Phone"
 msgstr "Téléphone"
 
 #: plana/apps/associations/models/association.py:25
+msgid "President Phone"
+msgstr "Numéro de téléphone du président"
+
+#: plana/apps/associations/models/association.py:26
 #: plana/apps/users/models/user.py:36
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models/association.py:26
+#: plana/apps/associations/models/association.py:27
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models/association.py:27
+#: plana/apps/associations/models/association.py:28
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models/association.py:28
+#: plana/apps/associations/models/association.py:29
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models/association.py:29
+#: plana/apps/associations/models/association.py:30
 msgid "President names"
 msgstr "Noms du président"
 
-#: plana/apps/associations/models/association.py:30
+#: plana/apps/associations/models/association.py:31
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:31
+#: plana/apps/associations/models/association.py:32
 msgid "Is public"
 msgstr "Est publique"
 
-#: plana/apps/associations/models/association.py:32
+#: plana/apps/associations/models/association.py:33
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:33
+#: plana/apps/associations/models/association.py:34
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:35
+#: plana/apps/associations/models/association.py:36
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:38
+#: plana/apps/associations/models/association.py:39
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:40
+#: plana/apps/associations/models/association.py:41
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:46
+#: plana/apps/associations/models/association.py:47
 #: plana/apps/associations/models/institution.py:20
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:54
 #: plana/apps/associations/models/institution_component.py:19
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:69
+#: plana/apps/associations/models/association.py:70
 #: plana/apps/users/models/association_users.py:19
 #: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:70
+#: plana/apps/associations/models/association.py:71
 #: plana/apps/users/models/association_users.py:30
 #: plana/apps/users/models/user.py:44
 msgid "Associations"
@@ -266,11 +270,17 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:113
+#: plana/apps/users/serializers/user.py:93
+msgid "Unistra users cannot create local accounts."
+msgstr ""
+"Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de "
+"comptes locaux."
+
+#: plana/apps/users/serializers/user.py:118
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:150
+#: plana/apps/users/serializers/user.py:155
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
