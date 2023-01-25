@@ -118,3 +118,16 @@ CAS_AUTHORIZED_SERVICES = [
     "http://localhost:3000/cas-login",
     "http://localhost:3000/cas-register",
 ]
+
+#####################
+# S3 storage config #
+#####################
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME', '')
+AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
+S3_LOGO_FILEPATH = 'associations_logos'

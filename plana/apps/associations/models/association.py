@@ -9,12 +9,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-def get_file_path(instance, filename):
+def get_logo_path(instance, filename):
     file_basename, extension = os.path.splitext(filename)
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_FILEPATH if hasattr(settings, 'S3_FILEPATH') else '',
+            settings.S3_LOGO_FILEPATH if hasattr(settings, 'S3_LOGO_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
@@ -33,7 +33,7 @@ class Association(models.Model):
     )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
     path_logo = models.ImageField(
-        _("Logo path"), blank=True, upload_to=get_file_path
+        _("Logo path"), blank=True, upload_to=get_logo_path
     )  # By default images are stored in MEDIA_ROOT
     alt_logo = models.TextField(_("Description"), default="")
     description = models.TextField(_("Description"), default="")
