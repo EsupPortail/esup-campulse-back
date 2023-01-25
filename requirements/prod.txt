@@ -4,9 +4,9 @@ asgiref==3.6.0 ; python_version >= "3.8" and python_version < "3.11" \
 attrs==22.2.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836 \
     --hash=sha256:c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99
-bleach==5.0.1 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:085f7f33c15bd408dd9b17a4ad77c577db66d76203e5984b1bd59baeee948b2a \
-    --hash=sha256:0d03255c47eb9bd2f26aa9bb7f2107732e7e8fe195ca2f64709fcf3b0a4a085c
+bleach==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414 \
+    --hash=sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4
 certifi==2022.12.7 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3 \
     --hash=sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18

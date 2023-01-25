@@ -97,11 +97,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        'name',
-        'acronym',
-        'activity_field__name',
-        'institution__name',
-        'institution_component__name',
+        'name__nospaces__unaccent',
+        'acronym__nospaces__unaccent',
+        'activity_field__name__nospaces__unaccent',
+        'institution__name__nospaces__unaccent',
+        'institution_component__name__nospaces__unaccent',
     ]
 
     def get_queryset(self):
