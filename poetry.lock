@@ -135,18 +135,18 @@ css = ["tinycss2 (>=1.1.0,<1.2)"]
 
 [[package]]
 name = "boto3"
-version = "1.26.56"
+version = "1.26.57"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.56-py3-none-any.whl", hash = "sha256:72214a08f337d29a1300d7861872f60ea41016b2a8ad8094fab20d783c8cf1ae"},
-    {file = "boto3-1.26.56.tar.gz", hash = "sha256:0ff8667fbfda8390cab2718a4d129374a6ddd6fd1913f79777fd4498f93c84f1"},
+    {file = "boto3-1.26.57-py3-none-any.whl", hash = "sha256:f1f13bfcb34d2175cf6f515a632bc432e0b357e4ebee7d4efda7ab5ec2914ef2"},
+    {file = "boto3-1.26.57.tar.gz", hash = "sha256:9c34ceac30a0672d2b6b030d459eb87f1a02d48f86f347fb4b054de85fb8a4b1"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.56,<1.30.0"
+botocore = ">=1.29.57,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -155,14 +155,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.56"
+version = "1.29.57"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.56-py3-none-any.whl", hash = "sha256:669ed3a256c4352f8f8a77a24b4d623ab7acc966d843b460d7ce2261a9813a79"},
-    {file = "botocore-1.29.56.tar.gz", hash = "sha256:ca4d6403d745218270a20d9ca3ca9a33e3ad2fabb59a96ed8d6e1a824b274c86"},
+    {file = "botocore-1.29.57-py3-none-any.whl", hash = "sha256:f43382babffc07645a084484b1f08fb9d3fa4744bb08b74065ae0b4b1f4103b6"},
+    {file = "botocore-1.29.57.tar.gz", hash = "sha256:02078e37d6b3626794f821385f3357195d87610fa1b25355577ed5393f16f7b8"},
 ]
 
 [package.dependencies]
@@ -525,6 +525,18 @@ ssh = ["bcrypt (>=3.1.5)"]
 test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-subtests", "pytest-xdist", "pytz"]
 
 [[package]]
+name = "da-vinci"
+version = "0.3.0"
+description = "A simple image manipulation library aiming to make common image tasks easy."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "da-vinci-0.3.0.tar.gz", hash = "sha256:294f2aed5b41fe92d313b575f8221d2c457ed8007ef84b5960f5f74b45cdba8c"},
+    {file = "da_vinci-0.3.0-py3-none-any.whl", hash = "sha256:aded66359f49a39ea4d62986988072a2e97ef09d0a27a55369f7ebc40d088e46"},
+]
+
+[[package]]
 name = "defusedxml"
 version = "0.7.1"
 description = "XML bomb protection for Python stdlib modules"
@@ -642,6 +654,18 @@ docs = ["sphinx"]
 tests = ["tox"]
 
 [[package]]
+name = "django-cleanup"
+version = "6.0.0"
+description = "Deletes old files."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-cleanup-6.0.0.tar.gz", hash = "sha256:922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a"},
+    {file = "django_cleanup-6.0.0-py2.py3-none-any.whl", hash = "sha256:997feab3b1f7a2e84f71c29e83b1d664459ec0d4b1924977b1fa25b5babb8703"},
+]
+
+[[package]]
 name = "django-cors-headers"
 version = "3.13.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -743,6 +767,27 @@ django = "*"
 
 [package.extras]
 dev = ["django-dummy-plug", "pytest", "pytest-django"]
+
+[[package]]
+name = "django-thumbnails"
+version = "0.7.0"
+description = "A simple Django app to manage image/photo thumbnails. Supports remote/cloud storage systems like Amazon S3."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-thumbnails-0.7.0.tar.gz", hash = "sha256:0c26ff03762beb7b6bec01edc6f012eba05085bc235cdc598d388487c3542e61"},
+    {file = "django_thumbnails-0.7.0-py3-none-any.whl", hash = "sha256:ffcc1223da4c0d4eb764ca28cd79f702dff62936ab583d8f59b5ec07e0ce2365"},
+]
+
+[package.dependencies]
+da-vinci = "*"
+django = ">=2.0"
+pillow = "*"
+shortuuid = "*"
+
+[package.extras]
+redis = ["redis"]
 
 [[package]]
 name = "djangorestframework"
@@ -2004,6 +2049,18 @@ testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-202
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
+name = "shortuuid"
+version = "1.0.11"
+description = "A generator library for concise, unambiguous and URL-safe UUIDs."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "shortuuid-1.0.11-py3-none-any.whl", hash = "sha256:27ea8f28b1bd0bf8f15057a3ece57275d2059d2b0bb02854f02189962c13b6aa"},
+    {file = "shortuuid-1.0.11.tar.gz", hash = "sha256:fc75f2615914815a8e4cb1501b3a513745cb66ef0fd5fc6fb9f8c3fa3481f789"},
+]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -2415,4 +2472,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "d52135269a36e0bf53d744b234842702e0416e6a85ce6405950183b3e0c778d6"
+content-hash = "5744e9603456ae1890732bcc5dd51d2d01d6f8c4929fb57d57c46e22edba1b8d"

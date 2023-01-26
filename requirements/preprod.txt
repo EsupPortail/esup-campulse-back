@@ -7,12 +7,12 @@ attrs==22.2.0 ; python_version >= "3.8" and python_version < "3.11" \
 bleach==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414 \
     --hash=sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4
-boto3==1.26.56 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:0ff8667fbfda8390cab2718a4d129374a6ddd6fd1913f79777fd4498f93c84f1 \
-    --hash=sha256:72214a08f337d29a1300d7861872f60ea41016b2a8ad8094fab20d783c8cf1ae
-botocore==1.29.56 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:669ed3a256c4352f8f8a77a24b4d623ab7acc966d843b460d7ce2261a9813a79 \
-    --hash=sha256:ca4d6403d745218270a20d9ca3ca9a33e3ad2fabb59a96ed8d6e1a824b274c86
+boto3==1.26.57 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:9c34ceac30a0672d2b6b030d459eb87f1a02d48f86f347fb4b054de85fb8a4b1 \
+    --hash=sha256:f1f13bfcb34d2175cf6f515a632bc432e0b357e4ebee7d4efda7ab5ec2914ef2
+botocore==1.29.57 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:02078e37d6b3626794f821385f3357195d87610fa1b25355577ed5393f16f7b8 \
+    --hash=sha256:f43382babffc07645a084484b1f08fb9d3fa4744bb08b74065ae0b4b1f4103b6
 certifi==2022.12.7 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3 \
     --hash=sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
@@ -200,6 +200,9 @@ cryptography==38.0.3 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:c46837ea467ed1efea562bbeb543994c2d1f6e800785bd5a2c98bc096f5cb220 \
     --hash=sha256:dfb4f4dd568de1b6af9f4cda334adf7d72cf5bc052516e1b2608b683375dd95c \
     --hash=sha256:ed7b00096790213e09eb11c97cc6e2b757f15f3d2f85833cd2d3ec3fe37c1722
+da-vinci==0.3.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:294f2aed5b41fe92d313b575f8221d2c457ed8007ef84b5960f5f74b45cdba8c \
+    --hash=sha256:aded66359f49a39ea4d62986988072a2e97ef09d0a27a55369f7ebc40d088e46
 defusedxml==0.7.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
@@ -210,6 +213,9 @@ django-allauth-cas==1.0.0 ; python_version >= "3.8" and python_version < "3.11" 
     --hash=sha256:d8d62b050133526a7df03f254c481eb09fc673eb8947b6d35be2739af6cc6479
 django-allauth==0.51.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:ca1622733b6faa591580ccd3984042f12d8c79ade93438212de249b7ffb6f91f
+django-cleanup==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a \
+    --hash=sha256:997feab3b1f7a2e84f71c29e83b1d664459ec0d4b1924977b1fa25b5babb8703
 django-cors-headers==3.13.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:37e42883b5f1f2295df6b4bba96eb2417a14a03270cb24b2a07f021cd4487cf4 \
     --hash=sha256:f9dc6b4e3f611c3199700b3e5f3398c28757dcd559c2f82932687f3d0443cfdf
@@ -224,6 +230,9 @@ django-storages[boto3]==1.13.2 ; python_version >= "3.8" and python_version < "3
     --hash=sha256:cbadd15c909ceb7247d4ffc503f12a9bec36999df8d0bef7c31e57177d512688
 django-summernote==0.8.20.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:52e9b12438ed9eac0d77729f758f2aae06e468b5cbce133e24100d58ae4e43a8
+django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:0c26ff03762beb7b6bec01edc6f012eba05085bc235cdc598d388487c3542e61 \
+    --hash=sha256:ffcc1223da4c0d4eb764ca28cd79f702dff62936ab583d8f59b5ec07e0ce2365
 django==3.2.16 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:18ba8efa36b69cfcd4b670d0fa187c6fe7506596f0ababe580e16909bcdec121 \
     --hash=sha256:3adc285124244724a394fa9b9839cc8cd116faf7d159554c43ecdaa8cdf0b94d
@@ -546,6 +555,9 @@ s3transfer==0.6.0 ; python_version >= "3.8" and python_version < "3.11" \
 sentry-sdk==1.14.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:273fe05adf052b40fd19f6d4b9a5556316807246bd817e5e3482930730726bb0 \
     --hash=sha256:72c00322217d813cf493fe76590b23a757e063ff62fec59299f4af7201dd4448
+shortuuid==1.0.11 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:27ea8f28b1bd0bf8f15057a3ece57275d2059d2b0bb02854f02189962c13b6aa \
+    --hash=sha256:fc75f2615914815a8e4cb1501b3a513745cb66ef0fd5fc6fb9f8c3fa3481f789
 six==1.16.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
