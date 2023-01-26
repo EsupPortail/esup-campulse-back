@@ -43,5 +43,6 @@ DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
 ##########
 # Sentry #
 ##########
+
 STAGE = "{{ goal }}"
 sentry_init(STAGE)

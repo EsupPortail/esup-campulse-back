@@ -1,3 +1,4 @@
+from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 
 ######################
@@ -31,6 +32,7 @@ DEFAULT_FROM_EMAIL = "plan-a.noreply@unistra.fr"
 
 DEFAULT_MANAGER_SVU_EMAIL = "plan-a.noreply@unistra.fr"
 DEFAULT_MANAGER_CROUS_EMAIL = "plan-a.noreply@unistra.fr"
+
 
 ##########################
 # Database configuration #
@@ -94,9 +96,9 @@ USE_L10N = True
 USE_TZ = True
 
 
-#######################
-# locale configuration #
-#######################
+########################
+# Locale configuration #
+########################
 
 LOCALE_PATHS = [
     normpath(join(DJANGO_ROOT, "locale")),
@@ -187,6 +189,7 @@ TEMPLATES = [
     },
 ]
 
+
 ########
 # CORS #
 ########
@@ -266,7 +269,10 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth.registration",
     "drf_spectacular",
     "djangorestframework_camel_case",
-    'django_summernote',
+    "django_summernote",
+    "storages",
+    "thumbnails",
+    "django_cleanup",
 ]
 
 LOCAL_APPS = [
@@ -355,6 +361,7 @@ LOGGING = {
     },
 }
 
+
 #########################
 # DJANGO REST FRAMEWORK #
 #########################
@@ -380,6 +387,56 @@ REST_FRAMEWORK = {
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+
+#####################
+# DJANGO THUMBNAILS #
+#####################
+
+THUMBNAILS = {
+    "METADATA": {
+        "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
+    },
+    "STORAGE": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "SIZES": {
+        "small": {
+            "PROCESSORS": [
+                {"PATH": "thumbnails.processors.resize", "width": 48, "height": 48, "method": "fit"},
+            ]
+        },
+        "medium": {
+            "PROCESSORS": [
+                {"PATH": "thumbnails.processors.resize", "width": 64, "height": 64, "method": "fit"},
+            ]
+        },
+        "large": {
+            "PROCESSORS": [
+                {"PATH": "thumbnails.processors.resize", "width": 128, "height": 128, "method": "fit"},
+            ]
+        },
+        "base": {
+            "PROCESSORS": [
+                {"PATH": "thumbnails.processors.resize", "width": 2000},
+            ]
+        }
+    }
+}
+
+
+#####################
+# S3 storage config #
+#####################
+
+DEFAULT_FILE_STORAGE = 'plana.apps.associations.storages.MediaStorage'
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME', '')
+AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
+S3_LOGO_FILEPATH = 'associations_logos'
 
 
 ##################

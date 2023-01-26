@@ -25,11 +25,13 @@ DATABASES = {
     }
 }
 
+
 ############################
 # Allowed hosts & Security #
 ############################
 
 ALLOWED_HOSTS = ["*"]
+
 
 #####################
 # Log configuration #
@@ -44,6 +46,7 @@ for logger in LOGGING["loggers"]:
     LOGGING["loggers"][logger]["level"] = "DEBUG"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
+
 
 ##########
 # Emails #
