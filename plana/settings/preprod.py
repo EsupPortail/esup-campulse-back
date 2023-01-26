@@ -43,6 +43,7 @@ SECRET_KEY = "{{ secret_key }}"
 DIPSTRAP_VERSION = "{{ dipstrap_version }}"
 DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
 
+
 ##########
 # Sentry #
 ##########
@@ -59,6 +60,7 @@ CAS_AUTHORIZED_SERVICES = [
     "https://plana-pprd.app.unistra.fr/cas-login",
     "https://plana-pprd.app.unistra.fr/cas-register",
 ]
+
 
 ##########
 # Emails #
@@ -77,6 +79,17 @@ EMAIL_TEMPLATE_PASSWORD_CHANGE_URL = (
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL = (
     EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/validate-users/"
 )
+
+
+#####################
+# S3 storage config #
+#####################
+
+AWS_ACCESS_KEY_ID = '{{ s3_access_key }}'
+AWS_SECRET_ACCESS_KEY = '{{ s3_secret_key }}'
+AWS_STORAGE_BUCKET_NAME = '{{ s3_bucket }}'
+AWS_S3_ENDPOINT_URL = '{{ s3_endpoint }}'
+
 
 ########
 # Misc #

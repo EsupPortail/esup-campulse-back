@@ -1,8 +1,28 @@
 """
 Models describing associations and most of its details.
 """
+import datetime
+import os
+
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from plana.apps.associations.storages import DynamicThumbnailImageField
+
+
+def get_logo_path(instance, filename):
+    file_basename, extension = os.path.splitext(filename)
+    year = datetime.datetime.now().strftime('%Y')
+    return (
+        os.path.join(
+            settings.S3_LOGO_FILEPATH if hasattr(settings, 'S3_LOGO_FILEPATH') else '',
+            year,
+            f'{file_basename}{extension}',
+        )
+        .lower()
+        .replace(' ', '_')
+    )
 
 
 class Association(models.Model):
@@ -14,10 +34,15 @@ class Association(models.Model):
         _("Name"), max_length=250, null=False, blank=False, unique=True
     )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
-    path_logo = models.ImageField(
-        _("Logo path"), blank=True
+    path_logo = DynamicThumbnailImageField(
+        _("Dynamic thumbnails for the logo"),
+        null=True,
+        blank=True,
+        resize_source_to="base",
+        pregenerated_sizes=["list", "detail"],
+        upload_to=get_logo_path,
     )  # By default images are stored in MEDIA_ROOT
-    alt_logo = models.TextField(_("Description"), default="")
+    alt_logo = models.TextField(_("Logo description"), default="")
     description = models.TextField(_("Description"), default="")
     activities = models.TextField(_("Activities"), default="")
     address = models.TextField(_("Address"), default="")

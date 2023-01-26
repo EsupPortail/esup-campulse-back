@@ -108,6 +108,7 @@ EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL = (
     EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/validate-users/"
 )
 
+
 ##################
 # AUTHENTICATION #
 ##################
