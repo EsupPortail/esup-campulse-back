@@ -1191,10 +1191,11 @@ components:
         path_logo:
           type: string
           format: uri
-          title: Emplacement du logo
+          nullable: true
+          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
-          title: Description
+          title: Logo description
         description:
           type: string
         activities:
@@ -1292,10 +1293,11 @@ components:
         path_logo:
           type: string
           format: uri
-          title: Emplacement du logo
+          nullable: true
+          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
-          title: Description
+          title: Logo description
         description:
           type: string
         activities:
@@ -1788,11 +1790,12 @@ components:
         path_logo:
           type: string
           format: binary
-          title: Emplacement du logo
+          nullable: true
+          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
           minLength: 1
-          title: Description
+          title: Logo description
         description:
           type: string
           minLength: 1

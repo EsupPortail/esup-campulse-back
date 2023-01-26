@@ -401,24 +401,20 @@ THUMBNAILS = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
     },
     "SIZES": {
-        "small": {
+        "list": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 48, "height": 48, "method": "fit"},
+                {"PATH": "thumbnails.processors.resize", "width": 100, "height": 100, "method": "fit"},
             ]
         },
-        "medium": {
+        "detail": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 64, "height": 64, "method": "fit"},
-            ]
-        },
-        "large": {
-            "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 128, "height": 128, "method": "fit"},
+                {"PATH": "thumbnails.processors.resize", "width": 150, "height": 150, "method": "fit"},
             ]
         },
         "base": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 2000},
+                {"PATH": "thumbnails.processors.resize", "width": 250, "height": 250, "method": "fit"},
+                {"PATH": "thumbnails.processors.crop", "width": 250, "height": 250},
             ]
         }
     }
