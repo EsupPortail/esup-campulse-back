@@ -6,6 +6,7 @@ from django.db.models.fields.files import FieldFile
 from storages.backends.s3boto3 import S3Boto3Storage
 from thumbnails.fields import ImageField as ThumbnailImageField
 from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
+from thumbnails.models import Source
 
 PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
@@ -109,6 +110,14 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
         if hasattr(self, "_file"):
             self.close()
         self.storage.update_acl(self.name)
+
+    def delete(self, with_thumbnails=True, save=True, *args, **kwargs):
+        if not with_thumbnails:
+            super().delete(save=save)
+            return
+
+        self.thumbnails.delete_all()
+        Source.objects.get(name=self.thumbnails.source_image.name).delete()
 
 
 class DynamicThumbnailImageField(ThumbnailImageField):
