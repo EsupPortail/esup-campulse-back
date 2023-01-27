@@ -8,6 +8,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.associations.models.institution import Institution
 from plana.apps.associations.models.institution_component import InstitutionComponent
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
+from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.associations.serializers.institution import InstitutionSerializer
 from plana.apps.associations.serializers.institution_component import (
     InstitutionComponentSerializer,
@@ -22,6 +23,7 @@ class AssociationAllDataSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()
+    path_logo = ThumbnailField(sizes=["detail"])
 
     class Meta:
         model = Association
@@ -55,6 +57,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
     activity_field = ActivityFieldSerializer()
+    path_logo = ThumbnailField(sizes=["list"])
 
     class Meta:
         model = Association

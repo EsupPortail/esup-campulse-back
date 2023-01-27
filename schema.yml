@@ -1180,6 +1180,11 @@ components:
           $ref: '#/components/schemas/InstitutionComponent'
         activity_field:
           $ref: '#/components/schemas/ActivityField'
+        path_logo:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+          description: URL for each thumbnail size
         name:
           type: string
           title: Nom
@@ -1188,13 +1193,9 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
-        path_logo:
-          type: string
-          format: uri
-          nullable: true
-          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
+          nullable: true
           title: Logo description
         description:
           type: string
@@ -1269,6 +1270,7 @@ components:
       - institution
       - institution_component
       - name
+      - path_logo
     AssociationAllDataNoSubTable:
       type: object
       description: Serializer without name details about sub-tables.
@@ -1297,6 +1299,7 @@ components:
           title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
+          nullable: true
           title: Logo description
         description:
           type: string
@@ -1434,12 +1437,22 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        alt_logo:
+          type: string
+          nullable: true
+          title: Logo description
+        path_logo:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+          description: URL for each thumbnail size
       required:
       - activity_field
       - id
       - institution
       - institution_component
       - name
+      - path_logo
     AssociationUsers:
       type: object
       description: Main serializer.
@@ -1794,7 +1807,7 @@ components:
           title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
-          minLength: 1
+          nullable: true
           title: Logo description
         description:
           type: string
