@@ -280,6 +280,7 @@ LOCAL_APPS = [
     "plana.apps.associations",
     "plana.apps.consents",
     "plana.apps.groups",
+    "plana.apps.institutions",
     "plana.apps.users",
     "plana.libs.mail_template",
 ]

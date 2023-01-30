@@ -5,8 +5,6 @@ from django.test import Client, TestCase
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.models.institution import Institution
-from plana.apps.associations.models.institution_component import InstitutionComponent
 
 
 class AssociationsModelsTests(TestCase):
@@ -17,8 +15,6 @@ class AssociationsModelsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
     ]
 
     def setUp(self):
@@ -36,21 +32,6 @@ class AssociationsModelsTests(TestCase):
             str(association), f"{association.name} ({association.acronym})"
         )
 
-    def test_institution_model(self):
-        """
-        There's at least one institution in the database.
-        """
-        institution = Institution.objects.first()
-        self.assertEqual(
-            str(institution), f"{institution.name} ({institution.acronym})"
-        )
-
-    def test_institution_component_model(self):
-        """
-        There's at least one institution component in the database.
-        """
-        component = InstitutionComponent.objects.first()
-        self.assertEqual(str(component), f"{component.name}")
 
     def test_activity_field_model(self):
         """

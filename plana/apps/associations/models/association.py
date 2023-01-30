@@ -9,6 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.storages import DynamicThumbnailImageField
+from plana.apps.institutions.models import Institution, InstitutionComponent
 
 
 def get_logo_path(instance, filename):
@@ -49,12 +50,12 @@ class Association(models.Model):
     activities = models.TextField(_("Activities"), default="")
     address = models.TextField(_("Address"), default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
-    phone_pres = models.CharField(_("President Phone"), default="", max_length=32)
     email = models.CharField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.IntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
+    president_phone = models.CharField(_("President Phone"), default="", max_length=32)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
@@ -70,14 +71,14 @@ class Association(models.Model):
         default=list
     )  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
     institution = models.ForeignKey(
-        "Institution",
+        Institution,
         verbose_name=_("Institution"),
         related_name="associations",
         on_delete=models.RESTRICT,
         null=True,
     )
     institution_component = models.ForeignKey(
-        "InstitutionComponent",
+        InstitutionComponent,
         verbose_name=_("Institution component"),
         related_name="associations",
         on_delete=models.RESTRICT,

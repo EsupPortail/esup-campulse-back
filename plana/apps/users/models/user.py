@@ -2,7 +2,7 @@
 Models describing users and most of its details.
 """
 from allauth.socialaccount.models import SocialAccount
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -25,6 +25,7 @@ class User(AbstractUser):
     """
 
     # TODO Rename groups and fixtures (can't retrieve models here).
+    """
     _groups = {
         "Gestionnaire SVU": "svu_manager",
         "Gestionnaire Crous": "crous_manager",
@@ -32,6 +33,7 @@ class User(AbstractUser):
         "Membre de Commission Culture-ActionS": "culture_actions_member",
         "Étudiante ou Étudiant": "student",
     }
+    """
 
     email = models.EmailField(_("Email"), unique=True)
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
@@ -46,15 +48,20 @@ class User(AbstractUser):
     consents_given = models.ManyToManyField(
         GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=_("Groups"),
+        related_name="user_set",
+        related_query_name="user"
+    )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    """
     def has_groups(self, *groups):
-        """
-        Returns True if User belongs to one of the groups, else False.
-        """
         return self.groups.filter(name__in=groups).exists()
+    """
 
     """
     def authorized_groups(self):
@@ -96,15 +103,14 @@ class User(AbstractUser):
 Dynamically create cached properties to check the user's presence in a group
 Based on https://bugs.python.org/issue38517
 """
+"""
 for group_code, name in User._groups.items():
 
     @cached_property
     def is_in_group(self, code=group_code):
-        """
-        Checks if user has the auth group in args.
-        """
         return self.has_groups(code)
 
     attr_name = f"is_{name}"
     setattr(User, attr_name, is_in_group)
     is_in_group.__set_name__(User, attr_name)
+"""

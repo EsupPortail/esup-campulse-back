@@ -14,10 +14,7 @@ class UsersModelsTests(TestCase):
     """
 
     fixtures = [
-        "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
         "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",

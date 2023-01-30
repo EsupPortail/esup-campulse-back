@@ -1,6 +1,6 @@
 [
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 1,
     "fields": {
       "user_id": 2,
@@ -8,7 +8,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 2,
     "fields": {
       "user_id": 4,
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 3,
     "fields": {
       "user_id": 5,
@@ -24,7 +24,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 4,
     "fields": {
       "user_id": 6,
@@ -32,7 +32,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 5,
     "fields": {
       "user_id": 7,
@@ -40,7 +40,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 6,
     "fields": {
       "user_id": 8,
@@ -48,7 +48,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 7,
     "fields": {
       "user_id": 8,
@@ -56,7 +56,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 8,
     "fields": {
       "user_id": 9,
@@ -64,7 +64,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 9,
     "fields": {
       "user_id": 9,
@@ -72,7 +72,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 10,
     "fields": {
       "user_id": 9,
@@ -80,7 +80,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 11,
     "fields": {
       "user_id": 10,
@@ -88,7 +88,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 12,
     "fields": {
       "user_id": 11,
@@ -96,7 +96,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 13,
     "fields": {
       "user_id": 12,
@@ -104,7 +104,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 14,
     "fields": {
       "user_id": 13,
@@ -112,7 +112,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 15,
     "fields": {
       "user_id": 14,
@@ -120,7 +120,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 16,
     "fields": {
       "user_id": 15,
@@ -128,7 +128,7 @@
     }
   },
   {
-    "model": "users.user_groups",
+    "model": "users.groupusers",
     "pk": 17,
     "fields": {
       "user_id": 16,
