@@ -1,13 +1,13 @@
-stages:
-  - test
+#stages:
+#  - test
 
-services:
-  - postgres
+#services:
+#  - postgres
 
-variables:
-  POSTGRES_DB: plana_test
-  POSTGRES_USER: plana
-  POSTGRES_PASSWORD: plana
+#variables:
+#  POSTGRES_DB: plana_test
+#  POSTGRES_USER: plana
+#  POSTGRES_PASSWORD: plana
 
 #unittest:
 #  stage: test
