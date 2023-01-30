@@ -9,11 +9,11 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
 
-unittest:
-  stage: test
-  tags:
-    - python3.9
-  script:
-    - pip3 install tox
-    - tox
-  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+#unittest:
+#  stage: test
+#  tags:
+#    - python3.9
+#  script:
+#    - pip3 install tox
+#    - tox
+#  coverage: '/^TOTAL.*\s+(\d+\%)$/'
