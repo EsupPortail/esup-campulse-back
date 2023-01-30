@@ -24,6 +24,7 @@ urlpatterns = [
     path("associations/", include("plana.apps.associations.urls")),
     path("consents/", include("plana.apps.consents.urls")),
     path("groups/", include("plana.apps.groups.urls")),
+    path("institutions/", include("plana.apps.institutions.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
     path(
