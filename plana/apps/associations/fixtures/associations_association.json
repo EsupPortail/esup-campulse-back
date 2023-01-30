@@ -59,6 +59,7 @@
       "name": "Association Hors Site",
       "acronym": "AssoHorsSite",
       "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 1,
       "is_site": false,
       "is_public": false,
       "is_enabled": true
@@ -72,11 +73,11 @@
       "acronym": "AssoSite2",
       "creation_date": "2022-10-27T14:12:11.000Z",
       "activity_field_id": 3,
-      "institution_id": 2,
+      "institution_id": 3,
       "institution_component_id": 1,
       "is_site": true,
-      "is_public": true,
-      "is_enabled": true
+      "is_public": false,
+      "is_enabled": false
     }
   },
   {
@@ -86,9 +87,10 @@
       "name": "Association Hors Site 2",
       "acronym": "AssoHorsSite2",
       "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 5,
       "is_site": false,
       "is_public": false,
-      "is_enabled": true
+      "is_enabled": false
     }
   }
 ]

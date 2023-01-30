@@ -3,8 +3,8 @@
     "model": "users.groupusers",
     "pk": 1,
     "fields": {
-      "user_id": 2,
-      "group_id": 5
+      "user_id": 3,
+      "group_id": 1
     }
   },
   {
@@ -12,7 +12,8 @@
     "pk": 2,
     "fields": {
       "user_id": 4,
-      "group_id": 1
+      "group_id": 2,
+      "institution_id": 3
     }
   },
   {
@@ -20,7 +21,8 @@
     "pk": 3,
     "fields": {
       "user_id": 5,
-      "group_id": 2
+      "group_id": 3,
+      "institution_id": 1
     }
   },
   {
@@ -28,7 +30,8 @@
     "pk": 4,
     "fields": {
       "user_id": 6,
-      "group_id": 3
+      "group_id": 4,
+      "institution_id": 2
     }
   },
   {
@@ -36,7 +39,8 @@
     "pk": 5,
     "fields": {
       "user_id": 7,
-      "group_id": 4
+      "group_id": 5,
+      "institution_id": 1
     }
   },
   {
@@ -44,7 +48,8 @@
     "pk": 6,
     "fields": {
       "user_id": 8,
-      "group_id": 3
+      "group_id": 4,
+      "institution_id": 2
     }
   },
   {
@@ -52,7 +57,8 @@
     "pk": 7,
     "fields": {
       "user_id": 8,
-      "group_id": 4
+      "group_id": 5,
+      "institution_id": 1
     }
   },
   {
@@ -60,55 +66,58 @@
     "pk": 8,
     "fields": {
       "user_id": 9,
-      "group_id": 3
+      "group_id": 7,
+      "institution_id": 1
     }
   },
   {
     "model": "users.groupusers",
     "pk": 9,
     "fields": {
-      "user_id": 9,
-      "group_id": 4
+      "user_id": 10,
+      "group_id": 6
     }
   },
   {
     "model": "users.groupusers",
     "pk": 10,
     "fields": {
-      "user_id": 9,
-      "group_id": 5
+      "user_id": 11,
+      "group_id": 6
     }
   },
   {
     "model": "users.groupusers",
     "pk": 11,
     "fields": {
-      "user_id": 10,
-      "group_id": 5
+      "user_id": 12,
+      "group_id": 6
     }
   },
   {
     "model": "users.groupusers",
     "pk": 12,
     "fields": {
-      "user_id": 11,
-      "group_id": 5
+      "user_id": 13,
+      "group_id": 6
     }
   },
   {
     "model": "users.groupusers",
     "pk": 13,
     "fields": {
-      "user_id": 12,
-      "group_id": 5
+      "user_id": 14,
+      "group_id": 4,
+      "institution_id": 2
     }
   },
   {
     "model": "users.groupusers",
     "pk": 14,
     "fields": {
-      "user_id": 13,
-      "group_id": 5
+      "user_id": 14,
+      "group_id": 5,
+      "institution_id": 1
     }
   },
   {
@@ -116,23 +125,16 @@
     "pk": 15,
     "fields": {
       "user_id": 14,
-      "group_id": 5
+      "group_id": 6
     }
   },
   {
     "model": "users.groupusers",
     "pk": 16,
     "fields": {
-      "user_id": 15,
-      "group_id": 5
-    }
-  },
-  {
-    "model": "users.groupusers",
-    "pk": 17,
-    "fields": {
-      "user_id": 16,
-      "group_id": 5
+      "user_id": 14,
+      "group_id": 7,
+      "institution_id": 1
     }
   }
 ]

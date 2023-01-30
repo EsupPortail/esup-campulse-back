@@ -3,17 +3,6 @@
     "model": "users.AssociationUsers",
     "pk": 1,
     "fields": {
-      "user_id": 2,
-      "association_id": 1,
-      "role_name": "Test",
-      "is_president": false,
-      "can_be_president": true
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 2,
-    "fields": {
       "user_id": 10,
       "association_id": 3,
       "role_name": "Membre",
@@ -23,7 +12,7 @@
   },
   {
     "model": "users.AssociationUsers",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "user_id": 11,
       "association_id": 2,
@@ -34,7 +23,7 @@
   },
   {
     "model": "users.AssociationUsers",
-    "pk": 4,
+    "pk": 3,
     "fields": {
       "user_id": 12,
       "association_id": 3,
@@ -45,10 +34,21 @@
   },
   {
     "model": "users.AssociationUsers",
-    "pk": 5,
+    "pk": 4,
     "fields": {
       "user_id": 13,
       "association_id": 2,
+      "role_name": "Président",
+      "is_president": true,
+      "can_be_president": true
+    }
+  },
+  {
+    "model": "users.AssociationUsers",
+    "pk": 5,
+    "fields": {
+      "user_id": 14,
+      "association_id": 4,
       "role_name": "Président",
       "is_president": true,
       "can_be_president": true
@@ -60,51 +60,7 @@
     "fields": {
       "user_id": 14,
       "association_id": 5,
-      "role_name": "Président",
-      "is_president": true,
-      "can_be_president": true
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 7,
-    "fields": {
-      "user_id": 14,
-      "association_id": 2,
       "role_name": "Membre",
-      "is_president": false,
-      "can_be_president": false
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 8,
-    "fields": {
-      "user_id": 15,
-      "association_id": 4,
-      "role_name": "Président",
-      "is_president": true,
-      "can_be_president": true
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 9,
-    "fields": {
-      "user_id": 15,
-      "association_id": 3,
-      "role_name": "Membre",
-      "is_president": false,
-      "can_be_president": false
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 10,
-    "fields": {
-      "user_id": 3,
-      "association_id": 1,
-      "role_name": "Pas valide",
       "is_president": false,
       "can_be_president": false
     }

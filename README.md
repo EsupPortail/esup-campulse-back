@@ -97,18 +97,19 @@ $ python manage.py runserver
 
 Mot de passe commun : `motdepasse`
 - `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
+- `compte-non-valide@mail.tld`
 - `gestionnaire-svu@mail.tld`
+- `gestionnaire-uha@mail.tld`
 - `gestionnaire-crous@mail.tld`
 - `membre-fsdie-idex@mail.tld`
 - `membre-culture-actions@mail.tld`
 - `membre-commissions@mail.tld`
-- `etudiant-commissions@mail.tld`
+- `etudiant-porteur@mail.tld`
 - `etudiant-asso-hors-site@mail.tld`
 - `etudiant-asso-site@mail.tld`
 - `president-asso-hors-site@mail.tld`
 - `president-asso-site@mail.tld`
-- `president-asso-hors-site-etudiant-asso-site@mail.tld`
-- `president-asso-site-etudiant-asso-hors-site@mail.tld`
+- `president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld`
 
 ### Détecter de nouvelles chaînes de caractères à traduire
 
