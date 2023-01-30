@@ -41,7 +41,7 @@ class UsersModelsTests(TestCase):
         asso_user = AssociationUsers.objects.first()
         self.assertEqual(
             str(asso_user),
-            f"{asso_user.user}, {asso_user.association}, office : {asso_user.has_office_status}",
+            f"{asso_user.user}, {asso_user.association}, office : {asso_user.can_be_president}",
         )
 
     def test_gdpr_consent_users_model(self):

@@ -224,7 +224,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": "test@pas-unistra.fr",
                 "association": 2,
-                "has_office_status": False,
+                "can_be_president": False,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
@@ -234,7 +234,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": "prenom.nom@adressemail.fr",
                 "association": 2,
-                "has_office_status": False,
+                "can_be_president": False,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
@@ -244,7 +244,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": "gestionnaire-svu@mail.tld",
                 "association": 1,
-                "has_office_status": True,
+                "can_be_president": True,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)

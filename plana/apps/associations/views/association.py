@@ -285,7 +285,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 AssociationUsers.objects.get(
                     user_id=request.user.pk,
                     association_id=association_id,
-                    has_office_status=True,
+                    can_be_president=True,
                 )
                 for restricted_field in [
                     "is_enabled",

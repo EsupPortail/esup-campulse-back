@@ -211,8 +211,8 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
                 elif request.user.is_svu_manager or request.user.is_crous_manager:
                     asso_user.is_president = False
 
-            if 'has_office_status' in request.data:
-                asso_user.has_office_status = to_bool(request.data['has_office_status'])
+            if 'can_be_president' in request.data:
+                asso_user.can_be_president = to_bool(request.data['can_be_president'])
 
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)

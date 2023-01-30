@@ -139,7 +139,7 @@ class UserViewsStudentTests(TestCase):
             {
                 "user": "test@pas-unistra.fr",
                 "association": 2,
-                "has_office_status": False,
+                "can_be_president": False,
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
@@ -201,14 +201,14 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(user_id=user_id)
         response_president = self.president_student_client.patch(
             f"/users/associations/{user_id}/{asso_user.association_id}",
-            {"role_name": "Tester", "has_office_status": True, "is_president": True},
+            {"role_name": "Tester", "can_be_president": True, "is_president": True},
             content_type="application/json",
         )
         asso_user = AssociationUsers.objects.get(user_id=user_id)
         old_president = AssociationUsers.objects.get(user_id=13)
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertEqual("Tester", asso_user.role_name)
-        self.assertTrue(asso_user.has_office_status)
+        self.assertTrue(asso_user.can_be_president)
         self.assertTrue(asso_user.is_president)
         self.assertFalse(old_president.is_president)
 
