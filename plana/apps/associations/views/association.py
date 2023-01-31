@@ -16,18 +16,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.institutions.models.institution import Institution
-from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.association import (
     AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
-)
-from plana.apps.institutions.serializers.institution import InstitutionSerializer
-from plana.apps.institutions.serializers.institution_component import (
-    InstitutionComponentSerializer,
 )
 from plana.apps.users.models.association_users import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
@@ -159,7 +153,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_svu_manager:
+        if request.user.has_perm("add_association_same_institution"):
             if "name" in request.data:
                 association_name = request.data["name"]
             else:
@@ -167,6 +161,20 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     {"error": _("No association name given.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            if (
+                "institution_id" in request.data
+                and not request.user.has_perm("add_association_any_institution")
+                and not request.user.has_institution(request.data["institution_id"])
+            ):
+                return response.Response(
+                    {
+                        "error": _(
+                            "Not allowed to create an association for this institution."
+                        )
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
             # Removes spaces, uppercase and accented characters to avoid similar association names.
             new_association_name = (
                 unicodedata.normalize(

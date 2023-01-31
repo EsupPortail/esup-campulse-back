@@ -3,12 +3,31 @@ Models describing users and most of its details.
 """
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
 from plana.apps.consents.models.consent import GDPRConsent
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
+
+
+class GroupInstitutionUsers(models.Model):
+    """
+    Main model.
+    """
+
+    user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"{self.user}, {self.group}, {self.institution}"
+
+    class Meta:
+        verbose_name = _("User Institution Groups")
+        verbose_name_plural = _("Users Institution Groups")
 
 
 class User(AbstractUser):
@@ -36,16 +55,12 @@ class User(AbstractUser):
     consents_given = models.ManyToManyField(
         GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_("Groups"),
-        related_name="user_set",
-        related_query_name="user"
+    groups_institutions = models.ManyToManyField(
+        Group, verbose_name=_("Groups"), through="GroupInstitutionUsers", related_name="group_institution_set"
     )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
 
     def is_cas_user(self):
         """
@@ -70,6 +85,26 @@ class User(AbstractUser):
             return account
         except SocialAccount.DoesNotExist:
             return None
+
+    def has_perm(self, permission_name):
+        if self.is_superuser:
+            return True
+        else:
+            groups_institutions_user = GroupInstitutionUsers.objects.filter(user_id=self.pk)
+            for group_institution_user in groups_institutions_user:
+                group_user = Group.objects.get(id=group_institution_user.group_id)
+                for permission in group_user.permissions.all():
+                    if permission.codename == permission_name:
+                        return True
+            return False
+
+    def has_institution(self, institution_id):
+        try:
+            print(self.groups)
+            # GroupInstitutionUsers.objects.get(user_id=self.pk, institution_id=institution_id)
+            return True
+        except ObjectDoesNotExist:
+            return False
 
     class Meta:
         default_permissions = []
