@@ -56,7 +56,10 @@ class User(AbstractUser):
         GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
     groups_institutions = models.ManyToManyField(
-        Group, verbose_name=_("Groups"), through="GroupInstitutionUsers", related_name="group_institution_set"
+        Group,
+        verbose_name=_("Groups"),
+        through="GroupInstitutionUsers",
+        related_name="group_institution_set",
     )
 
     def __str__(self):
@@ -90,7 +93,9 @@ class User(AbstractUser):
         if self.is_superuser:
             return True
         else:
-            groups_institutions_user = GroupInstitutionUsers.objects.filter(user_id=self.pk)
+            groups_institutions_user = GroupInstitutionUsers.objects.filter(
+                user_id=self.pk
+            )
             for group_institution_user in groups_institutions_user:
                 group_user = Group.objects.get(id=group_institution_user.group_id)
                 for permission in group_user.permissions.all():
@@ -100,7 +105,9 @@ class User(AbstractUser):
 
     def has_institution(self, institution_id):
         try:
-            GroupInstitutionUsers.objects.get(user_id=self.pk, institution_id=institution_id)
+            GroupInstitutionUsers.objects.get(
+                user_id=self.pk, institution_id=institution_id
+            )
             return True
         except ObjectDoesNotExist:
             return False

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 11:32+0100\n"
+"POT-Creation-Date: 2023-01-31 15:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,14 +19,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: plana/apps/associations/models/activity_field.py:13
-#: plana/apps/associations/models/association.py:34
-#: plana/apps/associations/models/institution.py:13
-#: plana/apps/associations/models/institution_component.py:13
+#: plana/apps/associations/models/association.py:35
+#: plana/apps/institutions/models/institution.py:13
+#: plana/apps/institutions/models/institution_component.py:13
 msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:19
-#: plana/apps/associations/models/association.py:86
+#: plana/apps/associations/models/association.py:89
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -34,131 +34,128 @@ msgstr "Domaine d'activité"
 msgid "Activity fields"
 msgstr "Domaines d'activités"
 
-#: plana/apps/associations/models/association.py:36
-#: plana/apps/associations/models/institution.py:14
+#: plana/apps/associations/models/association.py:37
+#: plana/apps/institutions/models/institution.py:14
 msgid "Acronym"
 msgstr "Acronyme"
 
-#: plana/apps/associations/models/association.py:38
+#: plana/apps/associations/models/association.py:39
 msgid "Dynamic thumbnails for the logo"
 msgstr "Miniatures dynamiques pour le logo"
 
-#: plana/apps/associations/models/association.py:45
+#: plana/apps/associations/models/association.py:47
 msgid "Logo description"
 msgstr "Description du logo"
 
-#: plana/apps/associations/models/association.py:46
+#: plana/apps/associations/models/association.py:49
 #: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/associations/models/association.py:47
+#: plana/apps/associations/models/association.py:50
 msgid "Activities"
 msgstr "Activités"
 
-#: plana/apps/associations/models/association.py:48
+#: plana/apps/associations/models/association.py:51
 msgid "Address"
 msgstr "Adresse"
 
-#: plana/apps/associations/models/association.py:49
-#: plana/apps/users/models/user.py:39
+#: plana/apps/associations/models/association.py:52
+#: plana/apps/users/models/user.py:48
 msgid "Phone"
 msgstr "Téléphone"
 
-#: plana/apps/associations/models/association.py:50
-msgid "President Phone"
-msgstr "Numéro de téléphone du président"
-
-#: plana/apps/associations/models/association.py:51
-#: plana/apps/users/models/user.py:36
+#: plana/apps/associations/models/association.py:53
+#: plana/apps/users/models/user.py:45
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models/association.py:52
+#: plana/apps/associations/models/association.py:54
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:55
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models/association.py:54
+#: plana/apps/associations/models/association.py:56
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models/association.py:55
+#: plana/apps/associations/models/association.py:57
 msgid "President names"
 msgstr "Noms du président"
 
-#: plana/apps/associations/models/association.py:56
+#: plana/apps/associations/models/association.py:58
+msgid "President Phone"
+msgstr "Numéro de téléphone du président"
+
+#: plana/apps/associations/models/association.py:59
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:57
+#: plana/apps/associations/models/association.py:60
 msgid "Is public"
 msgstr "Est publique"
 
-#: plana/apps/associations/models/association.py:58
+#: plana/apps/associations/models/association.py:61
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:59
+#: plana/apps/associations/models/association.py:62
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:61
+#: plana/apps/associations/models/association.py:64
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:64
+#: plana/apps/associations/models/association.py:67
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:66
+#: plana/apps/associations/models/association.py:69
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:72
-#: plana/apps/associations/models/institution.py:20
+#: plana/apps/associations/models/association.py:75
+#: plana/apps/institutions/models/institution.py:20
+#: plana/apps/institutions/models/institution_component.py:16
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:79
-#: plana/apps/associations/models/institution_component.py:19
+#: plana/apps/associations/models/association.py:82
+#: plana/apps/institutions/models/institution_component.py:26
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:95
+#: plana/apps/associations/models/association.py:98
 #: plana/apps/users/models/association_users.py:19
 #: plana/apps/users/models/association_users.py:29
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:96
+#: plana/apps/associations/models/association.py:99
 #: plana/apps/users/models/association_users.py:30
-#: plana/apps/users/models/user.py:44
+#: plana/apps/users/models/user.py:53
 msgid "Associations"
 msgstr "Associations"
 
-#: plana/apps/associations/models/institution.py:21
-msgid "Institutions"
-msgstr "Établissements"
-
-#: plana/apps/associations/models/institution_component.py:20
-msgid "Institution components"
-msgstr "Composantes"
-
-#: plana/apps/associations/views/association.py:167
+#: plana/apps/associations/views/association.py:161
 msgid "No association name given."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:189
+#: plana/apps/associations/views/association.py:172
+msgid "Not allowed to create an association for this institution."
+msgstr "Non autorisé à créer une association pour cet établissement."
+
+#: plana/apps/associations/views/association.py:197
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:194
-#: plana/apps/associations/views/association.py:352
+#: plana/apps/associations/views/association.py:202
+#: plana/apps/associations/views/association.py:362
 #: plana/apps/users/views/association_users.py:126
 #: plana/apps/users/views/association_users.py:237
 #: plana/apps/users/views/gdpr_consent_users.py:71
@@ -170,24 +167,24 @@ msgstr "Nom d'association déjà enregistré."
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/associations/views/association.py:237
-#: plana/apps/associations/views/association.py:324
+#: plana/apps/associations/views/association.py:244
+#: plana/apps/associations/views/association.py:334
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:267
+#: plana/apps/associations/views/association.py:277
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:272
+#: plana/apps/associations/views/association.py:282
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:296
+#: plana/apps/associations/views/association.py:306
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
-#: plana/apps/associations/views/association.py:331
+#: plana/apps/associations/views/association.py:341
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
@@ -200,13 +197,21 @@ msgstr "Titre du consentement RGPD"
 msgid "GDPR Consent"
 msgstr "Consentement RGPD"
 
-#: plana/apps/consents/models/consent.py:20 plana/apps/users/models/user.py:47
+#: plana/apps/consents/models/consent.py:20 plana/apps/users/models/user.py:56
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
 
+#: plana/apps/institutions/models/institution.py:21
+msgid "Institutions"
+msgstr "Établissements"
+
+#: plana/apps/institutions/models/institution_component.py:27
+msgid "Institution components"
+msgstr "Composantes"
+
 #: plana/apps/users/models/association_users.py:17
 #: plana/apps/users/models/gdpr_consent_users.py:17
-#: plana/apps/users/models/user.py:91
+#: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:110
 msgid "User"
 msgstr "Utilisateur"
 
@@ -215,12 +220,12 @@ msgid "Role name"
 msgstr "Nom du poste"
 
 #: plana/apps/users/models/association_users.py:22
-msgid "Has office status"
-msgstr "Membre du bureau d'association"
-
-#: plana/apps/users/models/association_users.py:23
 msgid "Is president"
 msgstr "Dirige l'association"
+
+#: plana/apps/users/models/association_users.py:23
+msgid "Can be president"
+msgstr "Peut diriger l'association"
 
 #: plana/apps/users/models/gdpr_consent_users.py:21
 msgid "Consent date"
@@ -234,19 +239,31 @@ msgstr "Consentement RGPD de l'utilisateur"
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
-#: plana/apps/users/models/user.py:37
+#: plana/apps/users/models/user.py:29
+msgid "User Institution Groups"
+msgstr "Groupes-établissements de l'utilisateur"
+
+#: plana/apps/users/models/user.py:30
+msgid "Users Institution Groups"
+msgstr "Groupes-établissements des utilisateurs"
+
+#: plana/apps/users/models/user.py:46
 msgid "First name"
 msgstr "Prénom"
 
-#: plana/apps/users/models/user.py:38
+#: plana/apps/users/models/user.py:47
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/models/user.py:41
+#: plana/apps/users/models/user.py:50
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:92
+#: plana/apps/users/models/user.py:59
+msgid "Groups"
+msgstr "Groupes"
+
+#: plana/apps/users/models/user.py:111
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -275,9 +292,7 @@ msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
 #: plana/apps/users/serializers/user.py:92
 msgid "Unistra users cannot create local accounts."
-msgstr ""
-"Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de "
-"comptes locaux."
+msgstr "Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de comptes locaux."
 
 #: plana/apps/users/serializers/user.py:117
 msgid "Unable to change the password of a CAS account."

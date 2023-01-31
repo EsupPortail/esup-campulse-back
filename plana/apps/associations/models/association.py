@@ -98,14 +98,38 @@ class Association(models.Model):
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
         permissions = [
-            ("add_association_same_institution", "Can create an association from the same institution."),
-            ("add_association_any_institution", "Can create an association from any institution."),
-            ("change_association_same_institution", "Can change most fields of an association from the same institution."),
-            ("change_association_any_institution", "Can change fields for an association from any institution."),
-            ("change_association_any_president", "Can change fields for an association from any president."),
-            ("change_association_all_fields", "Can change institution_id, is_enabled, is_public, is_site for an association."),
-            ("delete_association_same_institution", "Can delete an association from the same institution."),
-            ("delete_association_any_institution", "Can delete an association from any institution."),
+            (
+                "add_association_same_institution",
+                "Can create an association from the same institution.",
+            ),
+            (
+                "add_association_any_institution",
+                "Can create an association from any institution.",
+            ),
+            (
+                "change_association_same_institution",
+                "Can change most fields of an association from the same institution.",
+            ),
+            (
+                "change_association_any_institution",
+                "Can change fields for an association from any institution.",
+            ),
+            (
+                "change_association_any_president",
+                "Can change fields for an association from any president.",
+            ),
+            (
+                "change_association_all_fields",
+                "Can change institution_id, is_enabled, is_public, is_site for an association.",
+            ),
+            (
+                "delete_association_same_institution",
+                "Can delete an association from the same institution.",
+            ),
+            (
+                "delete_association_any_institution",
+                "Can delete an association from any institution.",
+            ),
             ("view_association_not_enabled", "Can view a not enabled association."),
             ("view_association_not_public", "Can view a not public association."),
         ]

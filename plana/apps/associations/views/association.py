@@ -162,9 +162,9 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             if (
-                "institution_id" in request.data
+                "institution" in request.data
                 and not request.user.has_perm("add_association_any_institution")
-                and not request.user.has_institution(request.data["institution_id"])
+                and not request.user.has_institution(request.data["institution"])
             ):
                 return response.Response(
                     {
