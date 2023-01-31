@@ -77,13 +77,6 @@ Réinitialiser le contenu de la base de données au besoin :
 $ python manage.py flush
 ```
 
-### Récupérer les permissions auto-générées
-
-```sh
-$ python manage.py dumpdata auth.permission --indent 2 -o plana/apps/groups/fixtures/auth_permission.json
-$ python manage.py dumpdata auth.group_permissions --indent 2 -o plana/apps/groups/fixtures/auth_group_permissions.json
-```
-
 ### Lancer le serveur local
 
 ```sh
@@ -149,6 +142,14 @@ $ pylint plana --output-format=json:pylint.json
 
 ```sh
 $ python manage.py spectacular --file schema.yml
+```
+
+### Réinitialiser les permissions des groupes et les récupérer dans les fixtures
+
+```sh
+$ python manage.py reset_permissions
+$ python manage.py dumpdata auth.permission --indent 2 -o plana/apps/groups/fixtures/auth_permission.json
+$ python manage.py dumpdata auth.group_permissions --indent 2 -o plana/apps/groups/fixtures/auth_group_permissions.json
 ```
 
 ### Exécuter les tests localement

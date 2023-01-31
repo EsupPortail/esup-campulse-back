@@ -100,8 +100,7 @@ class User(AbstractUser):
 
     def has_institution(self, institution_id):
         try:
-            print(self.groups)
-            # GroupInstitutionUsers.objects.get(user_id=self.pk, institution_id=institution_id)
+            GroupInstitutionUsers.objects.get(user_id=self.pk, institution_id=institution_id)
             return True
         except ObjectDoesNotExist:
             return False

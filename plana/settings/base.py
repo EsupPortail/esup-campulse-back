@@ -1,6 +1,7 @@
 from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 
+from .permissions import *
 
 ######################
 # Path configuration #

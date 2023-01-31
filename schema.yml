@@ -208,42 +208,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
-  /associations/institution_components:
-    get:
-      operationId: associations_institution_components_list
-      description: 'GET : Lists all institution components.'
-      tags:
-      - associations
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/InstitutionComponent'
-          description: ''
-  /associations/institutions:
-    get:
-      operationId: associations_institutions_list
-      description: 'GET : Lists all institutions.'
-      tags:
-      - associations
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Institution'
-          description: ''
   /consents/:
     get:
       operationId: consents_list
@@ -279,6 +243,42 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Group'
+          description: ''
+  /institutions/institution_components:
+    get:
+      operationId: institutions_institution_components_list
+      description: 'GET : Lists all institution components.'
+      tags:
+      - institutions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstitutionComponent'
+          description: ''
+  /institutions/institutions:
+    get:
+      operationId: institutions_institutions_list
+      description: 'GET : Lists all institutions.'
+      tags:
+      - institutions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Institution'
           description: ''
   /users/:
     get:
@@ -1195,6 +1195,7 @@ components:
           title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
+          nullable: true
           title: Logo description
         description:
           type: string
@@ -1207,10 +1208,6 @@ components:
         phone:
           type: string
           title: Téléphone
-          maxLength: 32
-        phone_pres:
-          type: string
-          title: President Phone
           maxLength: 32
         email:
           type: string
@@ -1232,6 +1229,9 @@ components:
         president_names:
           type: string
           maxLength: 256
+        president_phone:
+          type: string
+          maxLength: 32
         is_enabled:
           type: boolean
         is_public:
@@ -1297,6 +1297,7 @@ components:
           title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
+          nullable: true
           title: Logo description
         description:
           type: string
@@ -1309,10 +1310,6 @@ components:
         phone:
           type: string
           title: Téléphone
-          maxLength: 32
-        phone_pres:
-          type: string
-          title: President Phone
           maxLength: 32
         email:
           type: string
@@ -1334,6 +1331,9 @@ components:
         president_names:
           type: string
           maxLength: 256
+        president_phone:
+          type: string
+          maxLength: 32
         is_enabled:
           type: boolean
         is_public:
@@ -1384,6 +1384,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
       required:
       - id
       - name
@@ -1398,6 +1402,10 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
       required:
       - name
     AssociationPartialData:
@@ -1434,6 +1442,15 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        alt_logo:
+          type: string
+          nullable: true
+          title: Logo description
+        path_logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Dynamic thumbnails for the logo
       required:
       - activity_field
       - id
@@ -1453,10 +1470,9 @@ components:
           type: string
           nullable: true
           maxLength: 150
-        has_office_status:
-          type: boolean
-          title: Membre du bureau ?
         is_president:
+          type: boolean
+        can_be_president:
           type: boolean
         association:
           $ref: '#/components/schemas/AssociationMandatoryData'
@@ -1474,10 +1490,9 @@ components:
           type: string
           nullable: true
           maxLength: 150
-        has_office_status:
-          type: boolean
-          title: Membre du bureau ?
         is_president:
+          type: boolean
+        can_be_president:
           type: boolean
         association:
           type: integer
@@ -1495,10 +1510,9 @@ components:
           nullable: true
           minLength: 1
           maxLength: 150
-        has_office_status:
-          type: boolean
-          title: Membre du bureau ?
         is_president:
+          type: boolean
+        can_be_president:
           type: boolean
         association:
           type: integer
@@ -1513,10 +1527,9 @@ components:
           type: string
           nullable: true
           maxLength: 150
-        has_office_status:
-          type: boolean
-          title: Membre du bureau ?
         is_president:
+          type: boolean
+        can_be_president:
           type: boolean
     CAS:
       type: object
@@ -1686,6 +1699,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
       required:
       - id
       - name
@@ -1794,7 +1811,7 @@ components:
           title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
-          minLength: 1
+          nullable: true
           title: Logo description
         description:
           type: string
@@ -1811,11 +1828,6 @@ components:
           type: string
           minLength: 1
           title: Téléphone
-          maxLength: 32
-        phone_pres:
-          type: string
-          minLength: 1
-          title: President Phone
           maxLength: 32
         email:
           type: string
@@ -1841,6 +1853,10 @@ components:
           type: string
           minLength: 1
           maxLength: 256
+        president_phone:
+          type: string
+          minLength: 1
+          maxLength: 32
         is_enabled:
           type: boolean
         is_public:
@@ -1875,10 +1891,9 @@ components:
           nullable: true
           minLength: 1
           maxLength: 150
-        has_office_status:
-          type: boolean
-          title: Membre du bureau ?
         is_president:
+          type: boolean
+        can_be_president:
           type: boolean
     PatchedUserRequest:
       type: object
