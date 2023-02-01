@@ -229,6 +229,43 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
+        try:
+            association_id = kwargs["pk"]
+            association = Association.objects.get(id=association_id)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            return response.Response(
+                {"error": _("No association id given.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if request.user.is_anonymous and (
+            association.is_enabled == False or association.is_public == False
+        ):
+            return response.Response(
+                {"error": _("Association not visible.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            association.is_enabled == False
+            and not request.user.has_perm("view_association_not_enabled")
+            and not request.user.is_in_association(association_id)
+        ):
+            return response.Response(
+                {"error": _("Association not enabled.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            association.is_public == False
+            and not request.user.has_perm("view_association_not_public")
+            and not request.user.is_in_association(association_id)
+        ):
+            return response.Response(
+                {"error": _("Association not public.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
