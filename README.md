@@ -177,4 +177,12 @@ $ ./generate_requirements.sh
 ```sh
 $ fab tag:develop test deploy -u root
 $ fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root
+$ fab test custom_manage_cmd:loaddata\ plana/libs/*/fixtures/*.json -u root
+```
+
+### Déployer sur le serveur de prod
+
+```sh
+$ fab tag:release/X.X.X prod deploy -u root
+$ fab prod custom_manage_cmd:initial_import -u root
 ```
