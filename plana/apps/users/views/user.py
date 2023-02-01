@@ -18,8 +18,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool

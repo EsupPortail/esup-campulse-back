@@ -23,7 +23,7 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
 )
-from plana.apps.users.models.association_users import AssociationUsers
+from plana.apps.users.models.user import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -162,7 +162,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
         if not request.user.has_perm(
             "add_association_any_institution"
-        ) and not request.user.has_institution(request.data["institution"]):
+        ) and not request.user.is_admin_in_institution(request.data["institution"]):
             return response.Response(
                 {
                     "error": _(
@@ -238,22 +238,16 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "is_site" in request.data:
-            is_site = to_bool(request.data["is_site"])
-            if is_site is False:
-                request.data["is_public"] = False
-
-        if "is_enabled" in request.data:
-            is_enabled = to_bool(request.data["is_enabled"])
-            if is_enabled is False:
-                request.data["is_public"] = False
-
-        if "is_public" in request.data:
-            is_public = to_bool(request.data["is_public"])
-            if is_public is True and (
-                association.is_site is False or association.is_enabled is False
-            ):
-                request.data["is_public"] = False
+        if (
+            not request.user.has_perm("change_association_any_president")
+            and not request.user.is_president_in_association(association_id)
+            and not request.user.has_perm("change_association_any_institution")
+            and not request.user.is_admin_in_institution(association.institution_id)
+        ):
+            return response.Response(
+                {"error": _("No rights to edit this association.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         try:
             sn = (
@@ -281,6 +275,33 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+        if request.user.has_perm("change_association_all_fields"):
+            if "is_site" in request.data:
+                is_site = to_bool(request.data["is_site"])
+                if is_site is False:
+                    request.data["is_public"] = False
+
+            if "is_enabled" in request.data:
+                is_enabled = to_bool(request.data["is_enabled"])
+                if is_enabled is False:
+                    request.data["is_public"] = False
+
+        else:
+            for restricted_field in [
+                "institution_id",
+                "is_enabled",
+                "is_site",
+                "creation_date",
+            ]:
+                request.data.pop(restricted_field, False)
+
+        if "is_public" in request.data:
+            is_public = to_bool(request.data["is_public"])
+            if is_public is True and (
+                association.is_site is False or association.is_enabled is False
+            ):
+                request.data["is_public"] = False
+
         if not request.user.is_svu_manager:
             try:
                 AssociationUsers.objects.get(
@@ -288,12 +309,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     association_id=association_id,
                     can_be_president=True,
                 )
-                for restricted_field in [
-                    "is_enabled",
-                    "is_site",
-                    "creation_date",
-                ]:
-                    request.data.pop(restricted_field, False)
             except (ObjectDoesNotExist, MultiValueDictKeyError):
                 return response.Response(
                     {"error": _("No office link between association and user found.")},
@@ -336,7 +351,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if not request.user.has_perm(
             "delete_association_any_institution"
-        ) and not request.user.has_institution(association.institution):
+        ) and not request.user.is_admin_in_institution(association.institution):
             return response.Response(
                 {
                     "error": _(

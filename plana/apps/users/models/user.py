@@ -13,6 +13,27 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
 
+class AssociationUsers(models.Model):
+    """
+    Main model.
+    """
+
+    user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
+    association = models.ForeignKey(
+        Association, verbose_name=_("Association"), on_delete=models.CASCADE
+    )
+    role_name = models.CharField(_("Role name"), max_length=150, default="", null=True)
+    is_president = models.BooleanField(_("Is president"), default=False)
+    can_be_president = models.BooleanField(_("Can be president"), default=False)
+
+    def __str__(self):
+        return f"{self.user}, {self.association}, office : {self.can_be_president}"
+
+    class Meta:
+        verbose_name = _("Association")
+        verbose_name_plural = _("Associations")
+
+
 class GroupInstitutionUsers(models.Model):
     """
     Main model.
@@ -21,6 +42,7 @@ class GroupInstitutionUsers(models.Model):
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+    is_staff = models.BooleanField(_("Is staff"), default=False)
 
     def __str__(self):
         return f"{self.user}, {self.group}, {self.institution}"
@@ -109,7 +131,7 @@ class User(AbstractUser):
                         return True
             return False
 
-    def has_institution(self, institution_id):
+    def is_in_institution(self, institution_id):
         """
         Checks if a user is linked to an institution.
         """
@@ -117,6 +139,40 @@ class User(AbstractUser):
             GroupInstitutionUsers.objects.get(
                 user_id=self.pk, institution_id=institution_id
             )
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def is_admin_in_institution(self, institution_id):
+        """
+        Checks if a user is linked as manager to an institution.
+        """
+        try:
+            GroupInstitutionUsers.objects.get(
+                user_id=self.pk, institution_id=institution_id, is_staff=True
+            )
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def is_in_association(self, association_id):
+        """
+        Checks if a user can read an association.
+        """
+        try:
+            AssociationUsers.objects.get(user_id=self.pk, association_id=association_id)
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def is_president_in_association(self, association_id):
+        """
+        Checks if a user can write in an association.
+        """
+        try:
+            AssociationUsers.objects.filter(
+                models.Q(is_president=True) | models.Q(can_be_president=True)
+            ).get(user_id=self.pk, association_id=association_id)
             return True
         except ObjectDoesNotExist:
             return False
