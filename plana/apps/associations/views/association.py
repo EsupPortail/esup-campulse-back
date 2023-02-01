@@ -105,6 +105,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
             acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
             is_public = self.request.query_params.get("is_public")
+            if not self.request.user.has_perm("view_association_not_enabled"):
+                is_enabled = True
+            if not self.request.user.has_perm("view_association_not_public"):
+                is_public = True
             is_site = self.request.query_params.get("is_site")
             institution = self.request.query_params.get("institution")
             institution_component = self.request.query_params.get(
@@ -223,6 +227,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = AssociationAllDataSerializer
         return super().get_serializer_class()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
