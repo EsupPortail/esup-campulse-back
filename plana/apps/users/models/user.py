@@ -89,7 +89,10 @@ class User(AbstractUser):
         except SocialAccount.DoesNotExist:
             return None
 
-    def has_perm(self, permission_name):
+    def has_perm(self, perm, obj=None):
+        """
+        Overriden has_perm to check for institutions.
+        """
         if self.is_superuser:
             return True
         else:
@@ -99,11 +102,17 @@ class User(AbstractUser):
             for group_institution_user in groups_institutions_user:
                 group_user = Group.objects.get(id=group_institution_user.group_id)
                 for permission in group_user.permissions.all():
-                    if permission.codename == permission_name:
+                    if (
+                        perm
+                        == f"{permission.content_type.app_label}.{permission.codename}"
+                    ):
                         return True
             return False
 
     def has_institution(self, institution_id):
+        """
+        Checks if a user is linked to an institution.
+        """
         try:
             GroupInstitutionUsers.objects.get(
                 user_id=self.pk, institution_id=institution_id

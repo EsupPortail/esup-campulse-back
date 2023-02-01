@@ -651,15 +651,6 @@
     "model": "auth.permission",
     "pk": 73,
     "fields": {
-      "name": "Can create an association from the same institution.",
-      "content_type": 18,
-      "codename": "add_association_same_institution"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "pk": 74,
-    "fields": {
       "name": "Can create an association from any institution.",
       "content_type": 18,
       "codename": "add_association_any_institution"
@@ -667,16 +658,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 75,
-    "fields": {
-      "name": "Can change most fields of an association from the same institution.",
-      "content_type": 18,
-      "codename": "change_association_same_institution"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "pk": 76,
+    "pk": 74,
     "fields": {
       "name": "Can change fields for an association from any institution.",
       "content_type": 18,
@@ -685,7 +667,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 77,
+    "pk": 75,
     "fields": {
       "name": "Can change fields for an association from any president.",
       "content_type": 18,
@@ -694,7 +676,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 78,
+    "pk": 76,
     "fields": {
       "name": "Can change institution_id, is_enabled, is_public, is_site for an association.",
       "content_type": 18,
@@ -703,16 +685,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 79,
-    "fields": {
-      "name": "Can delete an association from the same institution.",
-      "content_type": 18,
-      "codename": "delete_association_same_institution"
-    }
-  },
-  {
-    "model": "auth.permission",
-    "pk": 80,
+    "pk": 77,
     "fields": {
       "name": "Can delete an association from any institution.",
       "content_type": 18,
@@ -721,7 +694,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 81,
+    "pk": 78,
     "fields": {
       "name": "Can view a not enabled association.",
       "content_type": 18,
@@ -730,7 +703,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 82,
+    "pk": 79,
     "fields": {
       "name": "Can view a not public association.",
       "content_type": 18,
@@ -739,7 +712,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 83,
+    "pk": 80,
     "fields": {
       "name": "Can add GDPR Consent",
       "content_type": 19,
@@ -748,7 +721,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 84,
+    "pk": 81,
     "fields": {
       "name": "Can change GDPR Consent",
       "content_type": 19,
@@ -757,7 +730,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 85,
+    "pk": 82,
     "fields": {
       "name": "Can delete GDPR Consent",
       "content_type": 19,
@@ -766,7 +739,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 86,
+    "pk": 83,
     "fields": {
       "name": "Can view GDPR Consent",
       "content_type": 19,
@@ -775,7 +748,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 87,
+    "pk": 84,
     "fields": {
       "name": "Can add Institution",
       "content_type": 20,
@@ -784,7 +757,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 88,
+    "pk": 85,
     "fields": {
       "name": "Can change Institution",
       "content_type": 20,
@@ -793,7 +766,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 89,
+    "pk": 86,
     "fields": {
       "name": "Can delete Institution",
       "content_type": 20,
@@ -802,7 +775,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 90,
+    "pk": 87,
     "fields": {
       "name": "Can view Institution",
       "content_type": 20,
@@ -811,7 +784,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 91,
+    "pk": 88,
     "fields": {
       "name": "Can add Institution component",
       "content_type": 21,
@@ -820,7 +793,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 92,
+    "pk": 89,
     "fields": {
       "name": "Can change Institution component",
       "content_type": 21,
@@ -829,7 +802,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 93,
+    "pk": 90,
     "fields": {
       "name": "Can delete Institution component",
       "content_type": 21,
@@ -838,7 +811,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 94,
+    "pk": 91,
     "fields": {
       "name": "Can view Institution component",
       "content_type": 21,
@@ -847,7 +820,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 95,
+    "pk": 92,
     "fields": {
       "name": "Can add User Institution Groups",
       "content_type": 22,
@@ -856,7 +829,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 96,
+    "pk": 93,
     "fields": {
       "name": "Can change User Institution Groups",
       "content_type": 22,
@@ -865,7 +838,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 97,
+    "pk": 94,
     "fields": {
       "name": "Can delete User Institution Groups",
       "content_type": 22,
@@ -874,7 +847,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 98,
+    "pk": 95,
     "fields": {
       "name": "Can view User Institution Groups",
       "content_type": 22,
@@ -883,7 +856,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 99,
+    "pk": 96,
     "fields": {
       "name": "Can add Association",
       "content_type": 24,
@@ -892,7 +865,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 100,
+    "pk": 97,
     "fields": {
       "name": "Can change Association",
       "content_type": 24,
@@ -901,7 +874,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 101,
+    "pk": 98,
     "fields": {
       "name": "Can delete Association",
       "content_type": 24,
@@ -910,7 +883,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 102,
+    "pk": 99,
     "fields": {
       "name": "Can view Association",
       "content_type": 24,
@@ -919,7 +892,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 103,
+    "pk": 100,
     "fields": {
       "name": "Can add GDPR Consent User",
       "content_type": 25,
@@ -928,7 +901,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 104,
+    "pk": 101,
     "fields": {
       "name": "Can change GDPR Consent User",
       "content_type": 25,
@@ -937,7 +910,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 105,
+    "pk": 102,
     "fields": {
       "name": "Can delete GDPR Consent User",
       "content_type": 25,
@@ -946,7 +919,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 106,
+    "pk": 103,
     "fields": {
       "name": "Can view GDPR Consent User",
       "content_type": 25,
@@ -955,7 +928,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 107,
+    "pk": 104,
     "fields": {
       "name": "Can add Template variable",
       "content_type": 26,
@@ -964,7 +937,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 108,
+    "pk": 105,
     "fields": {
       "name": "Can change Template variable",
       "content_type": 26,
@@ -973,7 +946,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 109,
+    "pk": 106,
     "fields": {
       "name": "Can delete Template variable",
       "content_type": 26,
@@ -982,7 +955,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 110,
+    "pk": 107,
     "fields": {
       "name": "Can view Template variable",
       "content_type": 26,
@@ -991,7 +964,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 111,
+    "pk": 108,
     "fields": {
       "name": "Can add Mail template",
       "content_type": 27,
@@ -1000,7 +973,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 112,
+    "pk": 109,
     "fields": {
       "name": "Can change Mail template",
       "content_type": 27,
@@ -1009,7 +982,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 113,
+    "pk": 110,
     "fields": {
       "name": "Can delete Mail template",
       "content_type": 27,
@@ -1018,7 +991,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 114,
+    "pk": 111,
     "fields": {
       "name": "Can view Mail template",
       "content_type": 27,

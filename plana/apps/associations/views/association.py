@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import filters, generics, response, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
@@ -140,7 +140,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
@@ -153,53 +153,48 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        if request.user.has_perm("add_association_same_institution"):
-            if "name" in request.data and "institution" in request.data:
-                association_name = request.data["name"]
-            else:
-                return response.Response(
-                    {"error": _("No association name or institution given.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if not request.user.has_perm(
-                "add_association_any_institution"
-            ) and not request.user.has_institution(request.data["institution"]):
-                return response.Response(
-                    {
-                        "error": _(
-                            "Not allowed to create an association for this institution."
-                        )
-                    },
-                    status=status.HTTP_403_FORBIDDEN,
-                )
+        if "name" in request.data and "institution" in request.data:
+            association_name = request.data["name"]
+        else:
+            return response.Response(
+                {"error": _("No association name or institution given.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not request.user.has_perm(
+            "add_association_any_institution"
+        ) and not request.user.has_institution(request.data["institution"]):
+            return response.Response(
+                {
+                    "error": _(
+                        "Not allowed to create an association for this institution."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
-            # Removes spaces, uppercase and accented characters to avoid similar association names.
-            new_association_name = (
+        # Removes spaces, uppercase and accented characters to avoid similar association names.
+        new_association_name = (
+            unicodedata.normalize(
+                "NFD", association_name.strip().replace(" ", "").lower()
+            )
+            .encode("ascii", "ignore")
+            .decode("utf-8")
+        )
+        associations = Association.objects.all()
+        for association in associations:
+            existing_association_name = (
                 unicodedata.normalize(
-                    "NFD", association_name.strip().replace(" ", "").lower()
+                    "NFD", association.name.strip().replace(" ", "").lower()
                 )
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
-            associations = Association.objects.all()
-            for association in associations:
-                existing_association_name = (
-                    unicodedata.normalize(
-                        "NFD", association.name.strip().replace(" ", "").lower()
-                    )
-                    .encode("ascii", "ignore")
-                    .decode("utf-8")
+            if new_association_name == existing_association_name:
+                return response.Response(
+                    {"error": _("Association name already taken.")},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
-                if new_association_name == existing_association_name:
-                    return response.Response(
-                        {"error": _("Association name already taken.")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-            return super().create(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        return super().create(request, *args, **kwargs)
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -217,7 +212,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self):
         if self.request.method in ("PATCH", "DELETE"):
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
@@ -333,45 +328,40 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if request.user.has_perm("delete_association_same_institution"):
-            if association.is_enabled is True:
-                return response.Response(
-                    {"error": _("Can't delete an enabled association.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        if association.is_enabled is True:
+            return response.Response(
+                {"error": _("Can't delete an enabled association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-            if not request.user.has_perm(
-                "delete_association_any_institution"
-            ) and not request.user.has_institution(association.institution):
-                return response.Response(
-                    {
-                        "error": _(
-                            "Not allowed to delete an association for this institution."
-                        )
-                    },
-                    status=status.HTTP_403_FORBIDDEN,
-                )
+        if not request.user.has_perm(
+            "delete_association_any_institution"
+        ) and not request.user.has_institution(association.institution):
+            return response.Response(
+                {
+                    "error": _(
+                        "Not allowed to delete an association for this institution."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
-            if association.email:
-                current_site = get_current_site(request)
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                }
-                template = MailTemplate.objects.get(code="ASSOCIATION_DELETE")
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=association.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(request.user, request, context),
-                )
-            return self.destroy(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        if association.email:
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="ASSOCIATION_DELETE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=association.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+        return self.destroy(request, *args, **kwargs)
 
 
 class AssociationActivityFieldList(generics.ListAPIView):

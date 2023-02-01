@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "group": 1,
-      "permission": 73
+      "permission": 69
     }
   },
   {
@@ -12,7 +12,7 @@
     "pk": 2,
     "fields": {
       "group": 1,
-      "permission": 74
+      "permission": 73
     }
   },
   {
@@ -20,7 +20,7 @@
     "pk": 3,
     "fields": {
       "group": 1,
-      "permission": 75
+      "permission": 70
     }
   },
   {
@@ -28,7 +28,7 @@
     "pk": 4,
     "fields": {
       "group": 1,
-      "permission": 76
+      "permission": 74
     }
   },
   {
@@ -36,7 +36,7 @@
     "pk": 5,
     "fields": {
       "group": 1,
-      "permission": 77
+      "permission": 75
     }
   },
   {
@@ -44,7 +44,7 @@
     "pk": 6,
     "fields": {
       "group": 1,
-      "permission": 78
+      "permission": 76
     }
   },
   {
@@ -52,7 +52,7 @@
     "pk": 7,
     "fields": {
       "group": 1,
-      "permission": 79
+      "permission": 71
     }
   },
   {
@@ -60,7 +60,7 @@
     "pk": 8,
     "fields": {
       "group": 1,
-      "permission": 80
+      "permission": 77
     }
   },
   {
@@ -68,7 +68,7 @@
     "pk": 9,
     "fields": {
       "group": 1,
-      "permission": 81
+      "permission": 78
     }
   },
   {
@@ -76,7 +76,7 @@
     "pk": 10,
     "fields": {
       "group": 1,
-      "permission": 82
+      "permission": 79
     }
   },
   {
@@ -84,7 +84,7 @@
     "pk": 11,
     "fields": {
       "group": 2,
-      "permission": 73
+      "permission": 69
     }
   },
   {
@@ -92,7 +92,7 @@
     "pk": 12,
     "fields": {
       "group": 2,
-      "permission": 75
+      "permission": 70
     }
   },
   {
@@ -100,7 +100,7 @@
     "pk": 13,
     "fields": {
       "group": 2,
-      "permission": 77
+      "permission": 75
     }
   },
   {
@@ -108,7 +108,7 @@
     "pk": 14,
     "fields": {
       "group": 2,
-      "permission": 78
+      "permission": 76
     }
   },
   {
@@ -116,7 +116,7 @@
     "pk": 15,
     "fields": {
       "group": 2,
-      "permission": 79
+      "permission": 71
     }
   },
   {
@@ -124,7 +124,7 @@
     "pk": 16,
     "fields": {
       "group": 2,
-      "permission": 81
+      "permission": 78
     }
   },
   {
@@ -132,7 +132,7 @@
     "pk": 17,
     "fields": {
       "group": 2,
-      "permission": 82
+      "permission": 79
     }
   },
   {
@@ -140,7 +140,7 @@
     "pk": 18,
     "fields": {
       "group": 3,
-      "permission": 73
+      "permission": 69
     }
   },
   {
@@ -148,7 +148,7 @@
     "pk": 19,
     "fields": {
       "group": 3,
-      "permission": 75
+      "permission": 70
     }
   },
   {
@@ -156,7 +156,7 @@
     "pk": 20,
     "fields": {
       "group": 3,
-      "permission": 77
+      "permission": 75
     }
   },
   {
@@ -164,7 +164,7 @@
     "pk": 21,
     "fields": {
       "group": 3,
-      "permission": 78
+      "permission": 76
     }
   },
   {
@@ -172,7 +172,7 @@
     "pk": 22,
     "fields": {
       "group": 3,
-      "permission": 79
+      "permission": 71
     }
   },
   {
@@ -180,7 +180,7 @@
     "pk": 23,
     "fields": {
       "group": 3,
-      "permission": 81
+      "permission": 78
     }
   },
   {
@@ -188,7 +188,7 @@
     "pk": 24,
     "fields": {
       "group": 3,
-      "permission": 82
+      "permission": 79
     }
   },
   {
@@ -196,7 +196,7 @@
     "pk": 25,
     "fields": {
       "group": 4,
-      "permission": 82
+      "permission": 79
     }
   },
   {
@@ -204,7 +204,7 @@
     "pk": 26,
     "fields": {
       "group": 5,
-      "permission": 82
+      "permission": 79
     }
   },
   {
@@ -212,7 +212,7 @@
     "pk": 27,
     "fields": {
       "group": 6,
-      "permission": 75
+      "permission": 70
     }
   },
   {
@@ -220,7 +220,7 @@
     "pk": 28,
     "fields": {
       "group": 7,
-      "permission": 75
+      "permission": 70
     }
   }
 ]

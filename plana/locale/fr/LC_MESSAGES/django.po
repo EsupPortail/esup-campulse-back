@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-31 15:52+0100\n"
+"POT-Creation-Date: 2023-02-01 10:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,51 +142,42 @@ msgstr "Association"
 msgid "Associations"
 msgstr "Associations"
 
-#: plana/apps/associations/views/association.py:161
-msgid "No association name given."
-msgstr "Aucun nom d'association donné."
+#: plana/apps/associations/views/association.py:160
+msgid "No association name or institution given."
+msgstr "Aucun nom d'association ou d'institution donné."
 
-#: plana/apps/associations/views/association.py:172
+#: plana/apps/associations/views/association.py:169
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:197
+#: plana/apps/associations/views/association.py:194
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:202
-#: plana/apps/associations/views/association.py:362
-#: plana/apps/users/views/association_users.py:126
-#: plana/apps/users/views/association_users.py:237
-#: plana/apps/users/views/gdpr_consent_users.py:71
-#: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
-#: plana/apps/users/views/user.py:159 plana/apps/users/views/user.py:172
-#: plana/apps/users/views/user.py:222 plana/apps/users/views/user.py:278
-#: plana/apps/users/views/user_groups.py:103
-#: plana/apps/users/views/user_groups.py:142
-msgid "Bad request."
-msgstr "Erreur de requête."
-
-#: plana/apps/associations/views/association.py:244
-#: plana/apps/associations/views/association.py:334
+#: plana/apps/associations/views/association.py:237
+#: plana/apps/associations/views/association.py:327
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:277
+#: plana/apps/associations/views/association.py:270
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:282
+#: plana/apps/associations/views/association.py:275
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:306
+#: plana/apps/associations/views/association.py:299
 msgid "No office link between association and user found."
 msgstr "L'utilisateur n'est pas membre du bureau de cette association."
 
-#: plana/apps/associations/views/association.py:341
+#: plana/apps/associations/views/association.py:333
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
+
+#: plana/apps/associations/views/association.py:343
+msgid "Not allowed to delete an association for this institution."
+msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #: plana/apps/consents/models/consent.py:13
 msgid "GDPR Consent title"
@@ -211,7 +202,7 @@ msgstr "Composantes"
 
 #: plana/apps/users/models/association_users.py:17
 #: plana/apps/users/models/gdpr_consent_users.py:17
-#: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:110
+#: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:126
 msgid "User"
 msgstr "Utilisateur"
 
@@ -259,11 +250,11 @@ msgstr "Nom de famille"
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:59
+#: plana/apps/users/models/user.py:60
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:111
+#: plana/apps/users/models/user.py:127
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -321,6 +312,17 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 #: plana/apps/users/views/association_users.py:103
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
+
+#: plana/apps/users/views/association_users.py:126
+#: plana/apps/users/views/association_users.py:237
+#: plana/apps/users/views/gdpr_consent_users.py:71
+#: plana/apps/users/views/user.py:82 plana/apps/users/views/user.py:130
+#: plana/apps/users/views/user.py:159 plana/apps/users/views/user.py:172
+#: plana/apps/users/views/user.py:222 plana/apps/users/views/user.py:278
+#: plana/apps/users/views/user_groups.py:103
+#: plana/apps/users/views/user_groups.py:142
+msgid "Bad request."
+msgstr "Erreur de requête."
 
 #: plana/apps/users/views/association_users.py:162
 #: plana/apps/users/views/association_users.py:229

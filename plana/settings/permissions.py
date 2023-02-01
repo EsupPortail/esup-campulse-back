@@ -4,32 +4,32 @@
 
 PERMISSIONS_GROUPS = {
     "MANAGER_GENERAL": [
-        "add_association_same_institution",
+        "add_association",
         "add_association_any_institution",
-        "change_association_same_institution",
+        "change_association",
         "change_association_any_institution",
         "change_association_any_president",
         "change_association_all_fields",
-        "delete_association_same_institution",
+        "delete_association",
         "delete_association_any_institution",
         "view_association_not_enabled",
         "view_association_not_public",
     ],
     "MANAGER_INSTITUTION": [
-        "add_association_same_institution",
-        "change_association_same_institution",
+        "add_association",
+        "change_association",
         "change_association_any_president",
         "change_association_all_fields",
-        "delete_association_same_institution",
+        "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
     ],
     "MANAGER_MISC": [
-        "add_association_same_institution",
-        "change_association_same_institution",
+        "add_association",
+        "change_association",
         "change_association_any_president",
         "change_association_all_fields",
-        "delete_association_same_institution",
+        "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
     ],
@@ -40,10 +40,10 @@ PERMISSIONS_GROUPS = {
         "view_association_not_public",
     ],
     "STUDENT_INSTITUTION": [
-        "change_association_same_institution",
+        "change_association",
     ],
     "STUDENT_MISC": [
-        "change_association_same_institution",
+        "change_association",
     ],
 }
 
