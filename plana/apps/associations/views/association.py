@@ -154,18 +154,16 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if request.user.has_perm("add_association_same_institution"):
-            if "name" in request.data:
+            if "name" in request.data and "institution" in request.data:
                 association_name = request.data["name"]
             else:
                 return response.Response(
-                    {"error": _("No association name given.")},
+                    {"error": _("No association name or institution given.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            if (
-                "institution" in request.data
-                and not request.user.has_perm("add_association_any_institution")
-                and not request.user.has_institution(request.data["institution"])
-            ):
+            if not request.user.has_perm(
+                "add_association_any_institution"
+            ) and not request.user.has_institution(request.data["institution"]):
                 return response.Response(
                     {
                         "error": _(
@@ -335,11 +333,23 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if request.user.is_svu_manager:
+        if request.user.has_perm("delete_association_same_institution"):
             if association.is_enabled is True:
                 return response.Response(
                     {"error": _("Can't delete an enabled association.")},
                     status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if not request.user.has_perm(
+                "delete_association_any_institution"
+            ) and not request.user.has_institution(association.institution):
+                return response.Response(
+                    {
+                        "error": _(
+                            "Not allowed to delete an association for this institution."
+                        )
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
                 )
 
             if association.email:
