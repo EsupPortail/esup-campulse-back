@@ -9,9 +9,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -24,12 +23,12 @@ class UserViewsManagerTests(TestCase):
         "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
         "auth_group.json",
+        "consents_gdprconsent.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",

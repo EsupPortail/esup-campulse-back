@@ -6,8 +6,7 @@ from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from django.test import Client, TestCase
 from rest_framework import status
 
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 
 
 class UserViewsAnonymousTests(TestCase):
@@ -18,9 +17,9 @@ class UserViewsAnonymousTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
         "auth_group.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationusers.json",
