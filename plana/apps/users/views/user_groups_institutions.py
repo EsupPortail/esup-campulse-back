@@ -15,7 +15,7 @@ from plana.apps.users.serializers.user_groups_institutions import (
 )
 
 
-class UserGroupsListCreate(generics.ListCreateAPIView):
+class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all groups linked to a user (student), or all groups of all users (manager).
 
@@ -28,7 +28,7 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "GET":
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
@@ -96,7 +96,7 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
-class UserGroupsRetrieve(generics.RetrieveAPIView):
+class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
     """
     GET : Lists all groups linked to a user (manager).
     """
@@ -121,7 +121,7 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-class UserGroupsDestroy(generics.DestroyAPIView):
+class UserGroupsInstitutionsDestroy(generics.DestroyAPIView):
     """
     DELETE : Deletes a group linked to a user (manager).
     """

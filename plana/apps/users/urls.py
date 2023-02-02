@@ -5,9 +5,9 @@ from django.conf import settings
 from django.urls import include, path, re_path
 
 from .views.association_users import (
-    AssociationUsersDestroyUpdate,
     AssociationUsersListCreate,
     AssociationUsersRetrieve,
+    AssociationUsersUpdateDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
@@ -37,8 +37,8 @@ urlpatterns = [
     ),
     path(
         "associations/<int:user_id>/<int:association_id>",
-        AssociationUsersDestroyUpdate.as_view(),
-        name="user_associations_destroy",
+        AssociationUsersUpdateDestroy.as_view(),
+        name="user_associations_update_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),

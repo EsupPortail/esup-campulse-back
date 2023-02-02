@@ -32,7 +32,13 @@ class AssociationUsers(models.Model):
     class Meta:
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
-        permissions = []
+        permissions = [
+            ("view_associationusers_anyone", "Can view all associations for a user."),
+            (
+                "delete_associationusers_any_institution",
+                "Can delete associations for all users.",
+            ),
+        ]
 
 
 class GroupInstitutionUsers(models.Model):
@@ -51,7 +57,7 @@ class GroupInstitutionUsers(models.Model):
         verbose_name = _("User Institution Groups")
         verbose_name_plural = _("Users Institution Groups")
         permissions = [
-            ("view_groupinstitutionusers_anyone", "Can view all group users.")
+            ("view_groupinstitutionusers_anyone", "Can view all groups for a user.")
         ]
 
 
