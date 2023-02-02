@@ -43,7 +43,6 @@ class GroupInstitutionUsers(models.Model):
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
-    is_staff = models.BooleanField(_("Is staff"), default=False)
 
     def __str__(self):
         return f"{self.user}, {self.group}, {self.institution}"
@@ -51,7 +50,9 @@ class GroupInstitutionUsers(models.Model):
     class Meta:
         verbose_name = _("User Institution Groups")
         verbose_name_plural = _("Users Institution Groups")
-        permissions = []
+        permissions = [
+            ("view_groupinstitutionusers_anyone", "Can view all group users.")
+        ]
 
 
 class User(AbstractUser):
@@ -139,24 +140,15 @@ class User(AbstractUser):
         Checks if a user is linked as manager to an institution.
         """
 
-        try:
-            GroupInstitutionUsers.objects.get(
-                user_id=self.pk, institution_id=institution_id, is_staff=True
-            )
-            return True
-        except ObjectDoesNotExist:
-            return False
-
-    def is_staff(self):
-        """
-        Checks if a user is linked as manager to an institution.
-        """
-
-        try:
-            GroupInstitutionUsers.objects.get(user_id=self.pk, is_staff=True)
-            return True
-        except ObjectDoesNotExist:
-            return False
+        if self.is_staff:
+            try:
+                GroupInstitutionUsers.objects.get(
+                    user_id=self.pk, institution_id=institution_id
+                )
+                return True
+            except ObjectDoesNotExist:
+                return False
+        return False
 
     def is_in_association(self, association_id):
         """

@@ -18,10 +18,10 @@ from .views.user import (
     UserListCreate,
     UserRetrieveUpdateDestroy,
 )
-from .views.user_groups import (
-    UserGroupsDestroy,
-    UserGroupsListCreate,
-    UserGroupsRetrieve,
+from .views.user_groups_institutions import (
+    UserGroupsInstitutionsDestroy,
+    UserGroupsInstitutionsListCreate,
+    UserGroupsInstitutionsRetrieve,
 )
 
 urlpatterns = [
@@ -65,16 +65,20 @@ urlpatterns = [
     ),
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
-    path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
+    path(
+        "groups/",
+        UserGroupsInstitutionsListCreate.as_view(),
+        name="user_groups_institutions_list_create",
+    ),
     path(
         "groups/<int:user_id>",
-        UserGroupsRetrieve.as_view(),
-        name="user_groups_retrieve",
+        UserGroupsInstitutionsRetrieve.as_view(),
+        name="user_groups_institutions_retrieve",
     ),
     path(
         "groups/<int:user_id>/<int:group_id>",
-        UserGroupsDestroy.as_view(),
-        name="user_groups_destroy",
+        UserGroupsInstitutionsDestroy.as_view(),
+        name="user_groups_institutions_destroy",
     ),
 ]
 

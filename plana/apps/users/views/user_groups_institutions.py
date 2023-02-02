@@ -6,11 +6,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.groups.serializers.group import GroupSerializer
-from plana.apps.users.models.user import User
-from plana.apps.users.serializers.user_groups import UserGroupsSerializer
+from plana.apps.users.models.user import GroupInstitutionUsers, User
+from plana.apps.users.serializers.user_groups_institutions import (
+    UserGroupsInstitutionsSerializer,
+)
 
 
 class UserGroupsListCreate(generics.ListCreateAPIView):
@@ -35,8 +37,16 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
         if self.request.method == "GET":
             self.serializer_class = GroupSerializer
         else:
-            self.serializer_class = UserGroupsSerializer
+            self.serializer_class = UserGroupsInstitutionsSerializer
         return super().get_serializer_class()
+
+    def get(self, request, *args, **kwargs):
+        if request.user.has_perm("view_groupinstitutionusers_anyone"):
+            return self.list(request, *args, **kwargs)
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     def post(self, request, *args, **kwargs):
         try:
@@ -49,23 +59,22 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.is_validated_by_admin and (
-            user.is_svu_manager or user.is_crous_manager or user.is_superuser
-        ):
-            return response.Response(
-                {"error": _("Groups for a manager cannot be changed.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         if request.user.is_anonymous and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit groups for this account.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if user.is_superuser or user.is_staff:
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             not request.user.is_anonymous
+            and not request.user.is_staff
             and user.is_validated_by_admin
-            and not request.user.is_svu_manager
-            and not request.user.is_crous_manager
         ):
             return response.Response(
                 {"error": _("Only managers can edit groups.")},
@@ -79,7 +88,10 @@ class UserGroupsListCreate(generics.ListCreateAPIView):
         )
         for id_group in groups:
             group = Group.objects.get(id=id_group)
-            user.groups.add(group)
+            if not group.startsWith("MANAGER_"):
+                GroupInstitutionUsers.objects.add(
+                    user_id=user.pk, group_id=id_group, institution_id=None
+                )
 
         return response.Response({}, status=status.HTTP_200_OK)
 
@@ -90,11 +102,14 @@ class UserGroupsRetrieve(generics.RetrieveAPIView):
     """
 
     queryset = Group.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     serializer_class = GroupSerializer
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
+        if (
+            request.user.has_perm("view_groupinstitutionusers_anyone")
+            or kwargs["user_id"] == request.user.pk
+        ):
             serializer = self.serializer_class(
                 self.get_queryset().filter(user=kwargs["user_id"]), many=True
             )
@@ -112,33 +127,28 @@ class UserGroupsDestroy(generics.DestroyAPIView):
     """
 
     queryset = Group.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     serializer_class = GroupSerializer
 
     def delete(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            try:
-                user = User.objects.get(id=kwargs["user_id"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("No user found.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if user.is_validated_by_admin and (
-                user.is_svu_manager or user.is_crous_manager or user.is_superuser
-            ):
-                return response.Response(
-                    {"error": _("Groups for a manager cannot be changed.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if user.groups.count() > 1:
-                user.groups.remove(kwargs["group_id"])
-                return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+        try:
+            user = User.objects.get(id=kwargs["user_id"])
+        except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("User should have at least one group.")},
+                {"error": _("No user found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        if user.is_superuser or user.is_staff:
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if user.groups.count() > 1:
+            GroupInstitutionUsers.objects.remove(
+                user_id=user.pk, group_id=kwargs["group_id"]
+            )
+            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
         return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
+            {"error": _("User should have at least one group.")},
+            status=status.HTTP_400_BAD_REQUEST,
         )

@@ -7,7 +7,7 @@ from rest_framework import serializers
 from plana.apps.users.models.user import User
 
 
-class UserGroupsSerializer(serializers.ModelSerializer):
+class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
     """
     Main serializer.
     """

@@ -162,7 +162,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if user.is_staff():
+            if user.is_superuser or user.is_staff:
                 return response.Response(
                     {"error": _("Bad request.")},
                     status=status.HTTP_403_FORBIDDEN,
@@ -227,7 +227,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.is_superuser is True or user.is_staff() is True:
+        if user.is_superuser is True or user.is_staff is True:
             return response.Response(
                 {"error": _("Cannot delete superuser.")},
                 status=status.HTTP_403_FORBIDDEN,
