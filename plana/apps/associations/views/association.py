@@ -282,8 +282,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            not request.user.has_perm("change_association_any_president")
-            and not request.user.is_president_in_association(association_id)
+            not request.user.is_president_in_association(association_id)
             and not request.user.has_perm("change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):

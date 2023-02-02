@@ -107,12 +107,8 @@ class Association(models.Model):
                 "Can change fields for an association from any institution.",
             ),
             (
-                "change_association_any_president",
-                "Can change fields for an association from any president.",
-            ),
-            (
                 "change_association_all_fields",
-                "Can change institution_id, is_enabled, is_public, is_site for an association.",
+                "Can change institution_id, is_enabled, is_site for an association.",
             ),
             (
                 "delete_association_any_institution",

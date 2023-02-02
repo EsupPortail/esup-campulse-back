@@ -88,6 +88,7 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         )
         for id_group in groups:
             group = Group.objects.get(id=id_group)
+            # TODO Find a better way to avoid registration as manager.
             if not group.startsWith("MANAGER_"):
                 GroupInstitutionUsers.objects.add(
                     user_id=user.pk, group_id=id_group, institution_id=None

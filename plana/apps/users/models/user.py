@@ -1,6 +1,7 @@
 """
 Models describing users and most of its details.
 """
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ObjectDoesNotExist
@@ -33,11 +34,15 @@ class AssociationUsers(models.Model):
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
         permissions = [
-            ("view_associationusers_anyone", "Can view all associations for a user."),
+            (
+                "change_associationusers_any_institution",
+                "Can change associations for all users.",
+            ),
             (
                 "delete_associationusers_any_institution",
                 "Can delete associations for all users.",
             ),
+            ("view_associationusers_anyone", "Can view all associations for a user."),
         ]
 
 
@@ -128,15 +133,14 @@ class User(AbstractUser):
         except SocialAccount.DoesNotExist:
             return False
 
-    def is_in_institution(self, institution_id):
+    def has_validated_email_user(self):
         """
-        Checks if a user is linked to an institution.
+        Returns True if the user account has a validated email
+        (checks if a related row is in emailaddress table).
         """
 
         try:
-            GroupInstitutionUsers.objects.get(
-                user_id=self.pk, institution_id=institution_id
-            )
+            EmailAddress.objects.get(user_id=self.pk, email=self.email, verified=True)
             return True
         except ObjectDoesNotExist:
             return False
@@ -183,7 +187,4 @@ class User(AbstractUser):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
-        permissions = [
-            ("change_user_anyone", "Can change all users."),
-            ("view_user_anyone", "Can view all users."),
-        ]
+        permissions = []

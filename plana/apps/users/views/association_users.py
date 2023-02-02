@@ -181,9 +181,11 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             president = False
 
-        if request.user.is_staff_in_institution(
-            kwargs["association_id"]
-        ) or request.user.is_president_in_association(kwargs["association_id"]):
+        if (
+            request.user.has_perm("change_associationusers_any_institution")
+            or request.user.is_staff_in_institution(kwargs["association_id"])
+            or request.user.is_president_in_association(kwargs["association_id"])
+        ):
             if 'role_name' in request.data:
                 asso_user.role_name = request.data['role_name']
 

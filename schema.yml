@@ -1087,13 +1087,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserGroupsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserGroupsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UserGroupsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -1104,7 +1104,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroups'
+                $ref: '#/components/schemas/UserGroupsInstitutions'
           description: ''
   /users/groups/{user_id}:
     get:
@@ -1999,6 +1999,9 @@ components:
         is_cas:
           type: boolean
           readOnly: true
+        has_validated_email:
+          type: boolean
+          readOnly: true
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
@@ -2017,11 +2020,12 @@ components:
       - email
       - first_name
       - groups
+      - has_validated_email
       - id
       - is_cas
       - last_name
       - username
-    UserGroups:
+    UserGroupsInstitutions:
       type: object
       description: Main serializer.
       properties:
@@ -2043,7 +2047,7 @@ components:
       - groups
       - id
       - username
-    UserGroupsRequest:
+    UserGroupsInstitutionsRequest:
       type: object
       description: Main serializer.
       properties:
