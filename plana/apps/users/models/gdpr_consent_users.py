@@ -26,3 +26,4 @@ class GDPRConsentUsers(models.Model):
     class Meta:
         verbose_name = _("GDPR Consent User")
         verbose_name_plural = _("GDPR Consents Users")
+        permissions = []

@@ -24,6 +24,7 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # TODO Refactor permissions when GDPR Consent will be used.
         if self.request.user.is_svu_manager or self.request.user.is_crous_manager:
             queryset = GDPRConsentUsers.objects.all()
         else:
@@ -62,6 +63,7 @@ class UserConsentsRetrieve(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        # TODO Refactor permissions when GDPR Consent will be used.
         if request.user.is_svu_manager or request.user.is_crous_manager:
             serializer = self.serializer_class(
                 self.queryset.filter(user_id=kwargs["user_id"]), many=True

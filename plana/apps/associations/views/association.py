@@ -23,7 +23,6 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
 )
-from plana.apps.users.models.user import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -166,7 +165,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
         if not request.user.has_perm(
             "add_association_any_institution"
-        ) and not request.user.is_admin_in_institution(request.data["institution"]):
+        ) and not request.user.is_staff_in_institution(request.data["institution"]):
             return response.Response(
                 {
                     "error": _(
@@ -286,7 +285,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             not request.user.has_perm("change_association_any_president")
             and not request.user.is_president_in_association(association_id)
             and not request.user.has_perm("change_association_any_institution")
-            and not request.user.is_admin_in_institution(association.institution_id)
+            and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
                 {"error": _("No rights to edit this association.")},
@@ -346,19 +345,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ):
                 request.data["is_public"] = False
 
-        if not request.user.is_svu_manager:
-            try:
-                AssociationUsers.objects.get(
-                    user_id=request.user.pk,
-                    association_id=association_id,
-                    can_be_president=True,
-                )
-            except (ObjectDoesNotExist, MultiValueDictKeyError):
-                return response.Response(
-                    {"error": _("No office link between association and user found.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
         current_site = get_current_site(request)
         context = {
             "site_domain": current_site.domain,
@@ -395,7 +381,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if not request.user.has_perm(
             "delete_association_any_institution"
-        ) and not request.user.is_admin_in_institution(association.institution):
+        ) and not request.user.is_staff_in_institution(association.institution):
             return response.Response(
                 {
                     "error": _(

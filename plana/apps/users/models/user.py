@@ -32,6 +32,7 @@ class AssociationUsers(models.Model):
     class Meta:
         verbose_name = _("Association")
         verbose_name_plural = _("Associations")
+        permissions = []
 
 
 class GroupInstitutionUsers(models.Model):
@@ -50,6 +51,7 @@ class GroupInstitutionUsers(models.Model):
     class Meta:
         verbose_name = _("User Institution Groups")
         verbose_name_plural = _("Users Institution Groups")
+        permissions = []
 
 
 class User(AbstractUser):
@@ -87,30 +89,6 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-    def is_cas_user(self):
-        """
-        Returns True if the user account was generated through CAS on signup
-        (checks if a related row is in socialaccount table).
-        """
-
-        try:
-            self.socialaccount_set.get(provider=CASProvider.id)
-            return True
-        except SocialAccount.DoesNotExist:
-            return False
-
-    def get_cas_user(self):
-        """
-        Returns user account CAS details if it was generated through CAS on signup
-        (from a related row in socialaccount table).
-        """
-
-        try:
-            account = self.socialaccount_set.get(provider=CASProvider.id)
-            return account
-        except SocialAccount.DoesNotExist:
-            return None
-
     def has_perm(self, perm, obj=None):
         """
         Overriden has_perm to check for institutions.
@@ -131,10 +109,23 @@ class User(AbstractUser):
                         return True
             return False
 
+    def is_cas_user(self):
+        """
+        Returns True if the user account was generated through CAS on signup
+        (checks if a related row is in socialaccount table).
+        """
+
+        try:
+            self.socialaccount_set.get(provider=CASProvider.id)
+            return True
+        except SocialAccount.DoesNotExist:
+            return False
+
     def is_in_institution(self, institution_id):
         """
         Checks if a user is linked to an institution.
         """
+
         try:
             GroupInstitutionUsers.objects.get(
                 user_id=self.pk, institution_id=institution_id
@@ -143,10 +134,11 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
-    def is_admin_in_institution(self, institution_id):
+    def is_staff_in_institution(self, institution_id):
         """
         Checks if a user is linked as manager to an institution.
         """
+
         try:
             GroupInstitutionUsers.objects.get(
                 user_id=self.pk, institution_id=institution_id, is_staff=True
@@ -155,10 +147,22 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
+    def is_staff(self):
+        """
+        Checks if a user is linked as manager to an institution.
+        """
+
+        try:
+            GroupInstitutionUsers.objects.get(user_id=self.pk, is_staff=True)
+            return True
+        except ObjectDoesNotExist:
+            return False
+
     def is_in_association(self, association_id):
         """
         Checks if a user can read an association.
         """
+
         try:
             AssociationUsers.objects.get(user_id=self.pk, association_id=association_id)
             return True
@@ -169,6 +173,7 @@ class User(AbstractUser):
         """
         Checks if a user can write in an association.
         """
+
         try:
             AssociationUsers.objects.filter(
                 models.Q(is_president=True) | models.Q(can_be_president=True)
@@ -178,6 +183,9 @@ class User(AbstractUser):
             return False
 
     class Meta:
-        default_permissions = []
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+        permissions = [
+            ("change_user_anyone", "Can change all users."),
+            ("view_user_anyone", "Can view all users."),
+        ]
