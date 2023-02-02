@@ -13,10 +13,12 @@ class UsersModelsTests(TestCase):
     """
 
     fixtures = [
+        "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_groupinstitutionusers.json",

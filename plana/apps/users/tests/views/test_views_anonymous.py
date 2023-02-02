@@ -24,7 +24,7 @@ class UserViewsAnonymousTests(TestCase):
         "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def setUp(self):
@@ -116,31 +116,28 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "test@pas-unistra.fr",
+                "user": "etudiant-asso-hors-site@mail.tld",
                 "association": 2,
                 "can_be_president": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
-        # TODO Enable the test when association_user view TODO is done.
-        """
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "prenom.nom@adressemail.fr",
+                "user": "compte-non-valide@mail.tld",
                 "association": 2,
                 "is_president": True,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-        """
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 2,
+                "user": "compte-non-valide@mail.tld",
+                "association": 5,
                 "can_be_president": False,
             },
         )
@@ -149,8 +146,8 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 2,
+                "user": "compte-non-valide@mail.tld",
+                "association": 5,
                 "can_be_president": False,
             },
         )
@@ -169,7 +166,7 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "prenom.nom@adressemail.fr",
+                "user": "compte-non-valide@mail.tld",
                 "association": 99,
                 "can_be_president": False,
             },
@@ -187,7 +184,7 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
-                "user": "prenom.nom@adressemail.fr",
+                "user": "compte-non-valide@mail.tld",
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
@@ -200,6 +197,14 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.get("/users/associations/2")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_patch_association_users(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.anonymous_client.patch("/users/associations/1/2")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_anonymous_delete_association_user(self):
         """
         DELETE /users/associations/{user_id}/{association_id}
@@ -210,14 +215,6 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.delete(
             f"/users/associations/{user_id}/{asso_user.id}"
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_anonymous_patch_association_users(self):
-        """
-        PATCH /users/associations/{user_id}/{association_id}
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.patch("/users/associations/1/2")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_post_password_reset(self):
@@ -235,7 +232,7 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/auth/password/reset/confirm/
         - An anonymous user can execute this request.
         """
-        user_id = 3
+        user_id = 4
         user = User.objects.get(id=user_id)
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/confirm/",
@@ -367,19 +364,24 @@ class UserViewsAnonymousTests(TestCase):
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": "test@pas-unistra.fr", "groups": [1, 2]},
+            {"username": "etudiant-asso-hors-site@mail.tld", "groups": [1, 2]},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
+            {"username": "compte-non-valide@mail.tld", "groups": [1, 2]},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": "patricia-CAS", "groups": [1, 2]},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.client.post(
+            "/users/groups/", {"username": "compte-non-valide@mail.tld", "groups": [66]}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 

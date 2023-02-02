@@ -29,7 +29,7 @@ class UserViewsStudentTests(TestCase):
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def setUp(self):

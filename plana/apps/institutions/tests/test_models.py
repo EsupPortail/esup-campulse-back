@@ -37,4 +37,4 @@ class AssociationsModelsTests(TestCase):
         There's at least one institution component in the database.
         """
         component = InstitutionComponent.objects.first()
-        self.assertEqual(str(component), f"{component.name}")
+        self.assertEqual(str(component), f"{component.name} ({component.institution})")
