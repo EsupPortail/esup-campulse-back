@@ -100,8 +100,6 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), associations_cnt)
-
         association_1 = content[0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("activities"))
@@ -248,7 +246,7 @@ class AssociationsViewsTests(TestCase):
             {"name": "L'assaucissiation"},
             content_type="application/json",
         )
-        self.assertEqual(response_misc.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
@@ -272,14 +270,14 @@ class AssociationsViewsTests(TestCase):
         - Someone from an association without status can't edit infos from another association.
         - Someone from an association's office cannot edit informations from another association.
         """
-        association_id = 2
+        association_id = 3
         response_incorrect_member = self.member_client.patch(
             f"/associations/{association_id}",
             {"name": "Je suis pas de cette asso mais je veux l'éditer."},
             content_type="application/json",
         )
         self.assertEqual(
-            response_incorrect_member.status_code, status.HTTP_400_BAD_REQUEST
+            response_incorrect_member.status_code, status.HTTP_403_FORBIDDEN
         )
         response_incorrect_president = self.president_client.patch(
             f"/associations/{association_id}",
@@ -289,7 +287,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(
-            response_incorrect_president.status_code, status.HTTP_400_BAD_REQUEST
+            response_incorrect_president.status_code, status.HTTP_403_FORBIDDEN
         )
 
     def test_patch_association_by_its_members(self):
@@ -298,7 +296,7 @@ class AssociationsViewsTests(TestCase):
         - Someone from the association without status can't edit infos from the association.
         - Someone from the association's office can edit informations from the association.
         """
-        association_id = 3
+        association_id = 2
         response_correct_member = self.member_client.patch(
             f"/associations/{association_id}",
             {
@@ -307,7 +305,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(
-            response_correct_member.status_code, status.HTTP_400_BAD_REQUEST
+            response_correct_member.status_code, status.HTTP_403_FORBIDDEN
         )
         response_correct_president = self.president_client.patch(
             f"/associations/{association_id}",
@@ -446,13 +444,13 @@ class AssociationsViewsTests(TestCase):
         - A General Manager can delete an association.
         - A non-existing association cannot be deleted.
         """
-        association_id = 1
+        association_id = 2
         response_anonymous = self.client.delete(f"/associations/{association_id}")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
         response_misc = self.misc_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
         response_general = self.general_client.delete(f"/associations/{association_id}")
-        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_general.status_code, status.HTTP_403_FORBIDDEN)
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": False},

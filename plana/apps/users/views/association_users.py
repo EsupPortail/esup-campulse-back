@@ -241,7 +241,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             return response.Response(
                 {"error": _("Bad request.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         AssociationUsers.objects.filter(

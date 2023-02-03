@@ -160,7 +160,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        if "name" in request.data and "institution" in request.data:
+        if "name" in request.data:
             association_name = request.data["name"]
         else:
             return response.Response(
@@ -238,7 +238,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No association id given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if request.user.is_anonymous and (
@@ -287,9 +287,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.is_president_in_association(association_id)
-            and not request.user.has_perm(
-                "associations.change_association_any_institution"
-            )
+            and not request.user.has_perm("associations.change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
@@ -381,7 +379,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if association.is_enabled is True:
             return response.Response(
                 {"error": _("Can't delete an enabled association.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if not request.user.has_perm(

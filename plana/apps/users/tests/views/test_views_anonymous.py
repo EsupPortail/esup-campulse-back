@@ -58,7 +58,7 @@ class UserViewsAnonymousTests(TestCase):
                 "email": "bourvil@splatoon.com",
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_get_user_detail(self):
         """

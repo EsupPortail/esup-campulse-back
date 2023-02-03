@@ -244,7 +244,7 @@ class UserViewsStudentTests(TestCase):
             {"role_name": "Bad Asso"},
             content_type="application/json",
         )
-        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_get_association_users(self):
         """

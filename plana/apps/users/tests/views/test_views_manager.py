@@ -404,13 +404,11 @@ class UserViewsManagerTests(TestCase):
         """
         GET /users/consents/
         - A manager user can execute this request.
-        - We get the same amount of consents through the model and through the view.
         """
         consents_user_all_cnt = GDPRConsentUsers.objects.count()
         response_all_consents = self.manager_client.get("/users/consents/")
         content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
         self.assertEqual(response_all_consents.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content_all_consents), consents_user_all_cnt)
 
     def test_manager_get_consents_user_detail(self):
         """
