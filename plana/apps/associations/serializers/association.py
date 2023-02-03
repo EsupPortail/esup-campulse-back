@@ -5,12 +5,12 @@ from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.models.institution import Institution
-from plana.apps.associations.models.institution_component import InstitutionComponent
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
-from plana.apps.associations.serializers.institution import InstitutionSerializer
-from plana.apps.associations.serializers.institution_component import (
+from plana.apps.institutions.models.institution import Institution
+from plana.apps.institutions.models.institution_component import InstitutionComponent
+from plana.apps.institutions.serializers.institution import InstitutionSerializer
+from plana.apps.institutions.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
 
@@ -88,4 +88,5 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "institution",
         ]

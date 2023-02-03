@@ -6,8 +6,7 @@ from rest_framework import serializers
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 
 
 class AssociationUsersSerializer(serializers.ModelSerializer):
@@ -26,8 +25,8 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "role_name",
-            "has_office_status",
             "is_president",
+            "can_be_president",
             "association",
         ]
 
@@ -46,8 +45,8 @@ class AssociationUsersCreationSerializer(serializers.ModelSerializer):
         fields = [
             "user",
             "role_name",
-            "has_office_status",
             "is_president",
+            "can_be_president",
             "association",
         ]
 
@@ -61,6 +60,6 @@ class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
         model = AssociationUsers
         fields = [
             "role_name",
-            "has_office_status",
             "is_president",
+            "can_be_president",
         ]

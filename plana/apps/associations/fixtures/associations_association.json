@@ -9,12 +9,12 @@
       "activities": "L'équipe pense l'architecture de l'application, la conçoit et la teste.",
       "address": "Université de Strasbourg (Le Portique, 3ème étage), Rue René Descartes, 67000 Strasbourg",
       "phone": "0 118 999 881 999 119 725 3",
-      "phone_pres": "+33 6 00 11 22 33",
       "email": "test@unistra.fr",
       "siret": 1234567890,
       "website": "https://www.unistra.fr/",
       "student_count": 150,
       "president_names": "Ministère de l'Enseignement Supérieur et de la Recherche",
+      "president_phone": "+33 6 00 11 22 33",
       "creation_date": "2022-10-26T15:45:35.000Z",
       "approval_date": "2022-10-27T15:45:35.000Z",
       "last_goa_date": "2022-10-28T15:45:35.000Z",
@@ -59,6 +59,7 @@
       "name": "Association Hors Site",
       "acronym": "AssoHorsSite",
       "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 1,
       "is_site": false,
       "is_public": false,
       "is_enabled": true
@@ -72,11 +73,11 @@
       "acronym": "AssoSite2",
       "creation_date": "2022-10-27T14:12:11.000Z",
       "activity_field_id": 3,
-      "institution_id": 2,
+      "institution_id": 3,
       "institution_component_id": 1,
       "is_site": true,
-      "is_public": true,
-      "is_enabled": true
+      "is_public": false,
+      "is_enabled": false
     }
   },
   {
@@ -86,9 +87,10 @@
       "name": "Association Hors Site 2",
       "acronym": "AssoHorsSite2",
       "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 5,
       "is_site": false,
       "is_public": false,
-      "is_enabled": true
+      "is_enabled": false
     }
   }
 ]

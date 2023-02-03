@@ -18,30 +18,17 @@
     "model": "users.User",
     "pk": 2,
     "fields": {
-      "first_name": "test",
-      "last_name": "test",
-      "username": "test@pas-unistra.fr",
-      "email": "test@pas-unistra.fr",
-      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-      "is_validated_by_admin": true,
-      "is_active": true
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "username": "compte-non-valide@mail.tld",
+      "email": "compte-non-valide@mail.tld",
+      "is_validated_by_admin": false,
+      "is_active": false
     }
   },
   {
     "model": "users.User",
     "pk": 3,
-    "fields": {
-      "first_name": "Prénom",
-      "last_name": "Nom",
-      "username": "prenom.nom@adressemail.fr",
-      "email": "prenom.nom@adressemail.fr",
-      "is_validated_by_admin": false,
-      "is_active": true
-    }
-  },
-  {
-    "model": "users.User",
-    "pk": 4,
     "fields": {
       "first_name": "SVU",
       "last_name": "Gestionnaire",
@@ -49,7 +36,22 @@
       "email": "gestionnaire-svu@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
-      "is_active": true
+      "is_active": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 4,
+    "fields": {
+      "first_name": "UHA",
+      "last_name": "Gestionnaire",
+      "username": "gestionnaire-uha@mail.tld",
+      "email": "gestionnaire-uha@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_staff": true
     }
   },
   {
@@ -62,7 +64,8 @@
       "email": "gestionnaire-crous@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
-      "is_active": true
+      "is_active": true,
+      "is_staff": true
     }
   },
   {
@@ -108,10 +111,10 @@
     "model": "users.User",
     "pk": 9,
     "fields": {
-      "first_name": "Étudiant + Culture-ActionS + FSDIE/IdEx",
-      "last_name": "Commission",
-      "username": "etudiant-commissions@mail.tld",
-      "email": "etudiant-commissions@mail.tld",
+      "first_name": "Porteur",
+      "last_name": "Étudiant",
+      "username": "etudiant-porteur@mail.tld",
+      "email": "etudiant-porteur@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
@@ -173,39 +176,13 @@
     "model": "users.User",
     "pk": 14,
     "fields": {
-      "first_name": "Président Hors Site + Étudiant Site",
+      "first_name": "Président Site + Étudiant Hors Site + Porteur + Commissions",
       "last_name": "Étudiant",
-      "username": "president-asso-hors-site-etudiant-asso-site@mail.tld",
-      "email": "president-asso-hors-site-etudiant-asso-site@mail.tld",
+      "username": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
+      "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
       "is_active": true
-    }
-  },
-  {
-    "model": "users.User",
-    "pk": 15,
-    "fields": {
-      "first_name": "Président Site + Étudiant Hors Site",
-      "last_name": "Étudiant",
-      "username": "president-asso-site-etudiant-asso-hors-site@mail.tld",
-      "email": "president-asso-site-etudiant-asso-hors-site@mail.tld",
-      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-      "is_validated_by_admin": true,
-      "is_active": true
-    }
-  },
-  {
-    "model": "users.User",
-    "pk": 16,
-    "fields": {
-      "first_name": "Compte Inactif",
-      "last_name": "Étudiant",
-      "username": "inactive-test@mail.tld",
-      "email": "inactive-test@mail.tld",
-      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
-      "is_validated_by_admin": false,
-      "is_active": false
     }
   }
 ]

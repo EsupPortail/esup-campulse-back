@@ -1,0 +1,10 @@
+[
+  {
+    "model": "institutions.InstitutionComponent",
+    "pk": 1,
+    "fields": {
+      "name": "Faculté de médecine",
+      "institution_id": 2
+    }
+  }
+]

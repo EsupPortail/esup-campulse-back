@@ -4,10 +4,10 @@
     "pk": 1,
     "fields": {
       "user_id": 2,
-      "association_id": 1,
-      "role_name": "Test",
-      "has_office_status": true,
-      "is_president": false
+      "association_id": 2,
+      "role_name": "Membre",
+      "is_president": false,
+      "can_be_president": false
     }
   },
   {
@@ -17,8 +17,8 @@
       "user_id": 10,
       "association_id": 3,
       "role_name": "Membre",
-      "has_office_status": false,
-      "is_president": false
+      "is_president": false,
+      "can_be_president": false
     }
   },
   {
@@ -28,8 +28,8 @@
       "user_id": 11,
       "association_id": 2,
       "role_name": "Membre",
-      "has_office_status": false,
-      "is_president": false
+      "is_president": false,
+      "can_be_president": false
     }
   },
   {
@@ -39,8 +39,8 @@
       "user_id": 12,
       "association_id": 3,
       "role_name": "Président",
-      "has_office_status": true,
-      "is_president": true
+      "is_president": true,
+      "can_be_president": true
     }
   },
   {
@@ -50,8 +50,8 @@
       "user_id": 13,
       "association_id": 2,
       "role_name": "Président",
-      "has_office_status": true,
-      "is_president": true
+      "is_president": true,
+      "can_be_president": true
     }
   },
   {
@@ -59,10 +59,10 @@
     "pk": 6,
     "fields": {
       "user_id": 14,
-      "association_id": 5,
+      "association_id": 4,
       "role_name": "Président",
-      "has_office_status": true,
-      "is_president": true
+      "is_president": true,
+      "can_be_president": true
     }
   },
   {
@@ -70,43 +70,10 @@
     "pk": 7,
     "fields": {
       "user_id": 14,
-      "association_id": 2,
+      "association_id": 5,
       "role_name": "Membre",
-      "has_office_status": false,
-      "is_president": false
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 8,
-    "fields": {
-      "user_id": 15,
-      "association_id": 4,
-      "role_name": "Président",
-      "has_office_status": true,
-      "is_president": true
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 9,
-    "fields": {
-      "user_id": 15,
-      "association_id": 3,
-      "role_name": "Membre",
-      "has_office_status": false,
-      "is_president": false
-    }
-  },
-  {
-    "model": "users.AssociationUsers",
-    "pk": 10,
-    "fields": {
-      "user_id": 3,
-      "association_id": 1,
-      "role_name": "Pas valide",
-      "has_office_status": false,
-      "is_president": false
+      "is_president": false,
+      "can_be_president": false
     }
   }
 ]

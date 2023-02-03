@@ -1,5 +1,5 @@
 """
-Models describing associations institutions (Crous, Unistra, UHA, ...).
+Models describing institutions (Crous, Unistra, UHA, ...).
 """
 from django.db import models
 from django.utils.translation import gettext_lazy as _

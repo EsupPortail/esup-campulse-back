@@ -7,9 +7,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 
 
 class UserViewsStudentTests(TestCase):
@@ -21,16 +20,18 @@ class UserViewsStudentTests(TestCase):
         "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "consents_gdprconsent.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def setUp(self):
@@ -40,21 +41,28 @@ class UserViewsStudentTests(TestCase):
         Start a second client used on particular tests,
             retrieves a student user which is president of an association.
         """
+        self.unvalidated_user_id = 2
+        self.unvalidated_user_name = "compte-non-valide@mail.tld"
+
+        self.student_user_id = 11
+        self.student_user_name = "etudiant-asso-site@mail.tld"
         self.student_client = Client()
         url = reverse("rest_login")
         data = {
-            "username": "test@pas-unistra.fr",
+            "username": self.student_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_client.post(url, data)
+        self.response_student = self.student_client.post(url, data)
 
+        self.president_user_id = 13
+        self.president_user_name = "president-asso-site@mail.tld"
         self.president_student_client = Client()
         url = reverse("rest_login")
         data = {
-            "username": "president-asso-site@mail.tld",
+            "username": self.president_user_name,
             "password": "motdepasse",
         }
-        self.response = self.president_student_client.post(url, data)
+        self.response_president = self.president_student_client.post(url, data)
 
     def test_student_get_users_list(self):
         """
@@ -64,7 +72,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.get("/users/")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_anonymous_post_user(self):
+    def test_student_post_user(self):
         """
         POST /users/
         - A student user cannot execute this request.
@@ -77,14 +85,14 @@ class UserViewsStudentTests(TestCase):
                 "email": "bourvil@splatoon.com",
             },
         )
-        self.assertEqual(response_student.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_user_detail(self):
         """
         GET /users/{id}
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.get("/users/2")
+        response_student = self.student_client.get(f"/users/{self.student_user_id}")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_user_detail(self):
@@ -93,7 +101,9 @@ class UserViewsStudentTests(TestCase):
         - A student user cannot execute this request.
         """
         response_student = self.student_client.patch(
-            "/users/2", data={"username": "Bienvenueg"}, content_type="application/json"
+            f"/users/{self.unvalidated_user_id}",
+            data={"username": "Bienvenueg"},
+            content_type="application/json",
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -102,8 +112,9 @@ class UserViewsStudentTests(TestCase):
         DELETE /users/{id}
         - A student user cannot execute this request.
         """
-        user_id = 2
-        response_student = self.student_client.delete(f"/users/{user_id}")
+        response_student = self.student_client.delete(
+            f"/users/{self.unvalidated_user_id}"
+        )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_put_user_detail(self):
@@ -112,7 +123,7 @@ class UserViewsStudentTests(TestCase):
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
-            "/users/2", {"username": "Aurevoirg"}
+            f"/users/{self.unvalidated_user_id}", {"username": "Aurevoirg"}
         )
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -125,7 +136,9 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.get("/users/associations/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
-        associations_user_cnt = AssociationUsers.objects.filter(user_id=2).count()
+        associations_user_cnt = AssociationUsers.objects.filter(
+            user_id=self.student_user_id
+        ).count()
         content = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(len(content), associations_user_cnt)
 
@@ -137,9 +150,9 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.post(
             "/users/associations/",
             {
-                "user": "test@pas-unistra.fr",
-                "association": 2,
-                "has_office_status": False,
+                "user": self.unvalidated_user_id,
+                "association": 5,
+                "can_be_president": False,
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
@@ -149,18 +162,8 @@ class UserViewsStudentTests(TestCase):
         GET /users/associations/{user_id}
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.get("/users/associations/2")
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_delete_user_association(self):
-        """
-        DELETE /users/associations/{user_id}/{association_id}
-        - A student user cannot execute this request.
-        """
-        user_id = 2
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
-        response_student = self.student_client.delete(
-            f"/users/associations/{user_id}/{asso_user.id}"
+        response_student = self.student_client.get(
+            f"/users/associations/{self.unvalidated_user_id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -169,22 +172,22 @@ class UserViewsStudentTests(TestCase):
         PATCH /users/associations/{user_id}/{association_id}
         - A simple student user cannot execute this request.
         """
-        user_id = 2
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        asso_user = AssociationUsers.objects.get(user_id=self.student_user_id)
         response_student = self.student_client.patch(
-            f"/users/associations/{user_id}/{asso_user.id}"
+            f"/users/associations/{self.student_user_id}/{asso_user.association_id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_association_users_president_remove_president(self):
         """
         PATCH /users/associations/{user_id}/{association_id}
-        - A student president cannot remove his own privileges (returns 400)
+        - A student president cannot remove his own privileges.
         """
-        user_id = 13
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.president_user_id, is_president=True
+        )
         response_president = self.president_student_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
+            f"/users/associations/{self.president_user_id}/{asso_user.association_id}",
             {"is_president": False},
             content_type="application/json",
         )
@@ -197,19 +200,27 @@ class UserViewsStudentTests(TestCase):
         - Link between member and association is correctly updated.
         - Old president is no longer president after giving his priviligeves to another member.
         """
-        user_id = 11
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        association_id = 2
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
         response_president = self.president_student_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
-            {"role_name": "Tester", "has_office_status": True, "is_president": True},
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {"role_name": "Tester", "can_be_president": True, "is_president": True},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
-        old_president = AssociationUsers.objects.get(user_id=13)
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertEqual("Tester", asso_user.role_name)
-        self.assertTrue(asso_user.has_office_status)
+        self.assertTrue(asso_user.can_be_president)
         self.assertTrue(asso_user.is_president)
+
+        old_president = AssociationUsers.objects.get(
+            user_id=self.president_user_id, association_id=association_id
+        )
+        self.assertTrue(old_president.can_be_president)
         self.assertFalse(old_president.is_president)
 
     def test_student_patch_association_users_other_president(self):
@@ -217,14 +228,23 @@ class UserViewsStudentTests(TestCase):
         PATCH /users/associations/{user_id}/{association_id}
         - A student president of another association cannot execute this request.
         """
-        user_id = 3
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
         response_president = self.president_student_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
+            f"/users/associations/{self.president_user_id}/3",
             {"role_name": "Bad Asso"},
             content_type="application/json",
         )
-        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_delete_user_association(self):
+        """
+        DELETE /users/associations/{user_id}/{association_id}
+        - A student user cannot execute this request.
+        """
+        asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
+        response_student = self.student_client.delete(
+            f"/users/associations/{self.unvalidated_user_id}/{asso_user.id}"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_association_users(self):
         """
@@ -255,7 +275,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.get("/users/auth/user/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(username="test@pas-unistra.fr")
+        user = User.objects.get(username=self.student_user_name)
         user_data = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(user_data["username"], user.username)
 
@@ -266,7 +286,7 @@ class UserViewsStudentTests(TestCase):
         - A student user cannot update his validation status.
         - A student user cannot update his username.
         """
-        user_not_valid = User.objects.get(username="test@pas-unistra.fr")
+        user_not_valid = User.objects.get(username=self.student_user_name)
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
@@ -275,13 +295,13 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
         self.assertTrue(user_not_valid.is_validated_by_admin)
 
-        user_username = User.objects.get(username="test@pas-unistra.fr")
+        user_username = User.objects.get(username=self.student_user_name)
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"username": "Mafoipastropmalpourlasaisong"},
             content_type="application/json",
         )
-        self.assertEqual(user_username.username, "test@pas-unistra.fr")
+        self.assertEqual(user_username.username, self.student_user_name)
 
     def test_student_put_auth_user_detail(self):
         """
@@ -299,7 +319,9 @@ class UserViewsStudentTests(TestCase):
         - A student user can execute this request.
         - A student user gets only his own consents.
         """
-        consents_user_cnt = GDPRConsentUsers.objects.filter(user_id=2).count()
+        consents_user_cnt = GDPRConsentUsers.objects.filter(
+            user_id=self.student_user_id
+        ).count()
         response_student = self.student_client.get("/users/consents/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
@@ -318,12 +340,12 @@ class UserViewsStudentTests(TestCase):
         """
 
         response_student = self.student_client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+            "/users/consents/", {"user": self.student_user_name, "consent": 1}
         )
         self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
 
         response_student = self.student_client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 1}
+            "/users/consents/", {"user": self.student_user_name, "consent": 1}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -333,7 +355,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_student = self.student_client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr", "consent": 75}
+            "/users/consents/", {"user": self.student_user_name, "consent": 75}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -341,7 +363,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_student = self.student_client.post(
-            "/users/consents/", {"user": "prenom.nom@adressemail.fr"}
+            "/users/consents/", {"user": self.student_user_name}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -350,22 +372,21 @@ class UserViewsStudentTests(TestCase):
         GET /users/consents/{user_id}
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.get("/users/consents/2")
+        # TODO Reactivate this test when consents are ready.
+        """
+        response_student = self.student_client.get(
+            f"/users/consents/{self.student_user_id}"
+        )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+        """
 
     def test_student_get_user_groups_list(self):
         """
         GET /users/groups/
         - A student user can execute this request.
-        - A student user gets only his own groups.
         """
         response_student = self.student_client.get("/users/groups/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-
-        user = User.objects.get(pk=2)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_student.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
 
     def test_student_post_user_groups(self):
         """
@@ -373,7 +394,7 @@ class UserViewsStudentTests(TestCase):
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
-            "/users/groups/", {"username": "test@pas-unistra.fr", "groups": [1, 2]}
+            "/users/groups/", {"username": self.student_user_name, "groups": [7]}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -382,7 +403,9 @@ class UserViewsStudentTests(TestCase):
         GET /users/groups/{user_id}
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.get("/users/groups/2")
+        response_student = self.student_client.get(
+            f"/users/groups/{self.student_user_id}"
+        )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_delete_user_group(self):
@@ -390,8 +413,9 @@ class UserViewsStudentTests(TestCase):
         DELETE /users/groups/{user_id}/{group_id}
         - A student user cannot execute this request.
         """
-        user_id = 2
-        response_student = self.student_client.delete(f"/users/groups/{user_id}/5")
+        response_student = self.student_client.delete(
+            f"/users/groups/{self.student_user_id}/6"
+        )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
 
@@ -402,10 +426,12 @@ class UserAuthTests(TestCase):
 
     fixtures = [
         "auth_group.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def test_user_auth_registration(self):

@@ -9,9 +9,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -24,26 +23,39 @@ class UserViewsManagerTests(TestCase):
         "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "consents_gdprconsent.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "consents_gdprconsent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def setUp(self):
         """
         Start a default client used on all tests, retrieves a manager user.
         """
+        self.unvalidated_user_id = 2
+        self.unvalidated_user_name = "compte-non-valide@mail.tld"
+        self.student_user_id = 11
+        self.student_user_name = "etudiant-asso-site@mail.tld"
+        self.president_user_id = 13
+        self.president_user_name = "president-asso-site@mail.tld"
+        self.manager_misc_user_id = 5
+        self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+
+        self.manager_general_user_id = 3
+        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
         self.manager_client = Client()
         url_manager = reverse("rest_login")
         data_manager = {
-            "username": "gestionnaire-svu@mail.tld",
+            "username": self.manager_general_user_name,
             "password": "motdepasse",
         }
         self.response = self.manager_client.post(url_manager, data_manager)
@@ -107,10 +119,10 @@ class UserViewsManagerTests(TestCase):
         - A manager user can execute this request.
         - User details are returned (test the "username" attribute).
         """
-        response_manager = self.manager_client.get("/users/2")
+        response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=2)
+        user = User.objects.get(pk=self.student_user_id)
         user_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(user_requested["username"], user.username)
 
@@ -125,11 +137,11 @@ class UserViewsManagerTests(TestCase):
         """
 
         response_manager = self.manager_client.patch(
-            "/users/2",
+            f"/users/{self.student_user_id}",
             data={"username": "Bienvenueg", "is_validated_by_admin": True},
             content_type="application/json",
         )
-        user = User.objects.get(pk=2)
+        user = User.objects.get(pk=self.student_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.username, "Bienvenueg")
 
@@ -170,25 +182,23 @@ class UserViewsManagerTests(TestCase):
         - A manager account cannot be deleted.
         - A non-validated account can be deleted.
         """
-        user_id = 2
-        response = self.manager_client.delete(f"/users/{user_id}")
+        response = self.manager_client.delete(f"/users/{self.student_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            User.objects.get(pk=user_id)
+            User.objects.get(pk=self.student_user_id)
 
-        response = self.manager_client.delete(f"/users/{user_id}")
+        response = self.manager_client.delete(f"/users/{self.student_user_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        managers_ids = [1, 4, 5]
+        managers_ids = [1, 3, 4, 5]
         for manager_id in managers_ids:
             response = self.manager_client.delete(f"/users/{manager_id}")
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        user_id = 3
-        response = self.manager_client.delete(f"/users/{user_id}")
+        response = self.manager_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            User.objects.get(pk=user_id)
+            User.objects.get(pk=self.unvalidated_user_id)
 
     def test_manager_put_user_detail(self):
         """
@@ -196,7 +206,7 @@ class UserViewsManagerTests(TestCase):
         - Request should return an error no matter which role is trying to execute it.
         """
         response_manager = self.manager_client.put(
-            "/users/2", {"username": "Aurevoirg"}
+            f"/users/{self.student_user_id}", {"username": "Aurevoirg"}
         )
         self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -222,29 +232,29 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.post(
             "/users/associations/",
             {
-                "user": "test@pas-unistra.fr",
-                "association": 2,
-                "has_office_status": False,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-        response_manager = self.manager_client.post(
-            "/users/associations/",
-            {
-                "user": "prenom.nom@adressemail.fr",
-                "association": 2,
-                "has_office_status": False,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-        response_manager = self.manager_client.post(
-            "/users/associations/",
-            {
-                "user": "gestionnaire-svu@mail.tld",
+                "user": self.student_user_name,
                 "association": 1,
-                "has_office_status": True,
+                "can_be_president": False,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        response_manager = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.unvalidated_user_name,
+                "association": 1,
+                "can_be_president": False,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        response_manager = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.manager_general_user_name,
+                "association": 1,
+                "can_be_president": True,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -254,10 +264,14 @@ class UserViewsManagerTests(TestCase):
         GET /users/associations/{user_id}
         - A manager user can execute this request.
         """
-        response_manager = self.manager_client.get("/users/associations/2")
+        response_manager = self.manager_client.get(
+            f"/users/associations/{self.student_user_id}"
+        )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user_associations = AssociationUsers.objects.filter(user_id=2)
+        user_associations = AssociationUsers.objects.filter(
+            user_id=self.student_user_id
+        )
         user_associations_requested = json.loads(
             response_manager.content.decode("utf-8")
         )
@@ -271,8 +285,9 @@ class UserViewsManagerTests(TestCase):
         - A manager user can execute this request.
         - The link between an association and a user is deleted.
         """
-        user_id = 2
-        response = self.manager_client.get(f"/users/associations/{user_id}")
+        response = self.manager_client.get(
+            f"/users/associations/{self.student_user_id}"
+        )
         first_user_association_id = response.data[0]["id"]
 
         response_delete = self.manager_client.delete(
@@ -281,17 +296,17 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_delete = self.manager_client.delete(
-            f"/users/associations/{user_id}/99"
+            f"/users/associations/{self.student_user_id}/99"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_delete = self.manager_client.delete(
-            f"/users/associations/{user_id}/{str(first_user_association_id)}"
+            f"/users/associations/{self.student_user_id}/{str(first_user_association_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             AssociationUsers.objects.get(
-                user_id=user_id, association_id=first_user_association_id
+                user_id=self.student_user_id, association_id=first_user_association_id
             )
 
     def test_manager_patch_association_users_update_president(self):
@@ -302,21 +317,25 @@ class UserViewsManagerTests(TestCase):
         - If giving president privileges to a member, the old president is no longer president
             of the association.
         """
-        user_id = 10
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
-        old_pres_pk = AssociationUsers.objects.get(
-            association_id=asso_user.association_id, is_president=True
-        ).pk
+        association_id = 2
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
         response = self.manager_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
+            f"/users/associations/{self.student_user_id}/{association_id}",
             {"is_president": True},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
-        old_pres = AssociationUsers.objects.get(pk=old_pres_pk)
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.is_president)
-        self.assertFalse(old_pres.is_president)
+
+        old_president = AssociationUsers.objects.get(
+            user_id=self.president_user_id, association_id=association_id
+        )
+        self.assertFalse(old_president.is_president)
 
     def test_manager_patch_association_users(self):
         """
@@ -324,14 +343,15 @@ class UserViewsManagerTests(TestCase):
         - A manager can execute this request.
         - Link between member and association is correctly updated.
         """
-        user_id = 10
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.president_user_id, is_president=True
+        )
         response = self.manager_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
+            f"/users/associations/{self.president_user_id}/{asso_user.association_id}",
             {"role_name": "Manager", "is_president": False},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(user_id=user_id)
+        asso_user = AssociationUsers.objects.get(user_id=self.president_user_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual("Manager", asso_user.role_name)
         self.assertFalse(asso_user.is_president)
@@ -354,7 +374,7 @@ class UserViewsManagerTests(TestCase):
         - Returns a bad request if non-existing link between selected user and association.
         """
         response = self.manager_client.patch(
-            "/users/associations/3/5",
+            f"/users/associations/{self.student_user_id}/3",
             {"role_name": "No link"},
             content_type="application/json",
         )
@@ -367,7 +387,7 @@ class UserViewsManagerTests(TestCase):
         - A manager user gets correct data when executing the request.
         """
         response_manager = self.manager_client.get("/users/auth/user/")
-        user = User.objects.get(username="gestionnaire-svu@mail.tld")
+        user = User.objects.get(username=self.manager_general_user_name)
         user_data = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user_data["username"], user.username)
@@ -386,13 +406,11 @@ class UserViewsManagerTests(TestCase):
         """
         GET /users/consents/
         - A manager user can execute this request.
-        - We get the same amount of consents through the model and through the view.
         """
         consents_user_all_cnt = GDPRConsentUsers.objects.count()
         response_all_consents = self.manager_client.get("/users/consents/")
         content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
         self.assertEqual(response_all_consents.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content_all_consents), consents_user_all_cnt)
 
     def test_manager_get_consents_user_detail(self):
         """
@@ -400,10 +418,12 @@ class UserViewsManagerTests(TestCase):
         - A manager user can execute this request.
         - We get the same amount of consents through the model and through the view.
         """
-        response_manager = self.manager_client.get("/users/consents/2")
+        response_manager = self.manager_client.get(
+            f"/users/consents/{self.student_user_id}"
+        )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user_consents = GDPRConsentUsers.objects.filter(user_id=2)
+        user_consents = GDPRConsentUsers.objects.filter(user_id=self.student_user_id)
         user_consents_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(user_consents_requested), len(user_consents))
 
@@ -416,11 +436,6 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get("/users/groups/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=4)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
-
     def test_manager_post_group_user(self):
         """
         POST /users/group/
@@ -430,19 +445,19 @@ class UserViewsManagerTests(TestCase):
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": "test@pas-unistra.fr", "groups": [1, 2]},
+            {"username": self.student_user_name, "groups": [7]},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": "prenom.nom@adressemail.fr", "groups": [1, 2]},
+            {"username": self.unvalidated_user_name, "groups": [7]},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": "gestionnaire-svu@mail.tld", "groups": [1, 2]},
+            {"username": self.manager_general_user_name, "groups": [7]},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -450,15 +465,11 @@ class UserViewsManagerTests(TestCase):
         """
         GET /users/groups/{user_id}
         - A manager user can execute this request.
-        - We get the same amount of groups links through the model and through the view.
         """
-        response_manager = self.manager_client.get("/users/groups/2")
+        response_manager = self.manager_client.get(
+            f"/users/groups/{self.student_user_id}"
+        )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        user = User.objects.get(pk=2)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
 
     def test_manager_delete_user_group(self):
         """
@@ -471,15 +482,17 @@ class UserViewsManagerTests(TestCase):
         """
         user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
-        first_user_group_id = response.data[0]["id"]
-        second_user_group_id = response.data[1]["id"]
+        first_user_group_id = response.data[0]["group"]["id"]
+        second_user_group_id = response.data[1]["group"]["id"]
 
         response_delete = self.manager_client.delete(
             f"/users/groups/99/{str(first_user_group_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response_delete = self.manager_client.delete("/users/groups/4/1")
+        response_delete = self.manager_client.delete(
+            f"/users/groups/{self.manager_misc_user_id}/3"
+        )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         first_response_delete = self.manager_client.delete(

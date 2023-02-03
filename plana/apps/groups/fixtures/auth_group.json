@@ -3,35 +3,49 @@
     "model": "auth.group",
     "pk": 1,
     "fields": {
-      "name": "Gestionnaire SVU"
+      "name": "MANAGER_GENERAL"
     }
   },
   {
     "model": "auth.group",
     "pk": 2,
     "fields": {
-      "name": "Gestionnaire Crous"
+      "name": "MANAGER_INSTITUTION"
     }
   },
   {
     "model": "auth.group",
     "pk": 3,
     "fields": {
-      "name": "Membre de Commission FSDIE/IdEx"
+      "name": "MANAGER_MISC"
     }
   },
   {
     "model": "auth.group",
     "pk": 4,
     "fields": {
-      "name": "Membre de Commission Culture-ActionS"
+      "name": "COMMISSION_GENERAL"
     }
   },
   {
     "model": "auth.group",
     "pk": 5,
     "fields": {
-      "name": "Étudiante ou Étudiant"
+      "name": "COMMISSION_MISC"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 6,
+    "fields": {
+      "name": "STUDENT_INSTITUTION"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 7,
+    "fields": {
+      "name": "STUDENT_MISC"
     }
   }
 ]

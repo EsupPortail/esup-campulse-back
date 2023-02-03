@@ -15,11 +15,10 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
@@ -51,7 +50,7 @@ class UserListCreate(generics.ListCreateAPIView):
     """
 
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_queryset(self):
         queryset = User.objects.filter(is_active=True).order_by("id")
@@ -76,7 +75,7 @@ class UserListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
+        if request.user.has_perm("users.view_user"):
             return self.list(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},
@@ -84,52 +83,42 @@ class UserListCreate(generics.ListCreateAPIView):
         )
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            request.data.update(
-                {
-                    "username": request.data["email"],
-                    "is_validated_by_admin": True,
-                }
-            )
-            user_response = self.create(request, *args, **kwargs)
-
-            user = User.objects.get(id=user_response.data["id"])
-            password = User.objects.make_random_password()
-            user.set_password(password)
-            user.save(update_fields=['password'])
-            EmailAddress.objects.create(
-                email=user.email, verified=True, primary=True, user_id=user.id
-            )
-
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "username": request.data["email"],
-                "first_name": request.data["first_name"],
-                "last_name": request.data["last_name"],
-                "manager_email_address": request.data["email"],
-                "documentation_url": settings.APP_DOCUMENTATION_URL,
-                "password": password,
-                "password_change_url": settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL,
-            }
-            template = MailTemplate.objects.get(
-                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
-            )
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=request.data["email"],
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-            return user_response
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_401_UNAUTHORIZED,
+        request.data.update(
+            {"username": request.data["email"], "is_validated_by_admin": True}
         )
+        user_response = self.create(request, *args, **kwargs)
+
+        user = User.objects.get(id=user_response.data["id"])
+        password = User.objects.make_random_password()
+        user.set_password(password)
+        user.save(update_fields=['password'])
+        EmailAddress.objects.create(
+            email=user.email, verified=True, primary=True, user_id=user.id
+        )
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "username": request.data["email"],
+            "first_name": request.data["first_name"],
+            "last_name": request.data["last_name"],
+            "manager_email_address": request.data["email"],
+            "documentation_url": settings.APP_DOCUMENTATION_URL,
+            "password": password,
+            "password_change_url": settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL,
+        }
+        template = MailTemplate.objects.get(
+            code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
+        )
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=request.data["email"],
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+
+        return user_response
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -149,11 +138,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
+        if request.user.has_perm("users.view_user"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},
@@ -164,120 +153,111 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            try:
-                user = User.objects.get(id=kwargs["pk"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Bad request.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        try:
+            user = User.objects.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-            if user.get_cas_user():
-                for restricted_field in [
-                    "username",
-                    "email",
-                    "first_name",
-                    "last_name",
-                ]:
-                    request.data.pop(restricted_field, False)
+        if user.is_superuser is True or user.is_staff is True:
+            return response.Response(
+                {"error": _("Cannot edit superuser.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
-            if (
-                "is_validated_by_admin" in request.data
-                and to_bool(request.data["is_validated_by_admin"]) is True
-            ):
-                current_site = get_current_site(request)
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                    "username": user.username,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "manager_email_address": request.user.email,
-                    "documentation_url": settings.APP_DOCUMENTATION_URL,
-                }
-                if user.get_cas_user():
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
-                    )
-                else:
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_ACCOUNT_CONFIRMATION"
-                    )
-                    uid = user_pk_to_url_str(user)
-                    token = default_token_generator.make_token(user)
-                    context[
-                        "password_reset_url"
-                    ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(user, request, context),
-                )
-            return self.partial_update(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        if user.is_cas_user():
+            for restricted_field in [
+                "username",
+                "email",
+                "first_name",
+                "last_name",
+            ]:
+                request.data.pop(restricted_field, False)
 
-    def delete(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            try:
-                user = User.objects.get(id=kwargs["pk"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("No user found.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if (
-                (user.is_superuser is True)
-                or user.is_svu_manager
-                or user.is_crous_manager
-            ):
-                return response.Response(
-                    {"error": _("Cannot delete superuser.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
-
+        if (
+            "is_validated_by_admin" in request.data
+            and to_bool(request.data["is_validated_by_admin"]) is True
+        ):
             current_site = get_current_site(request)
-            if user.is_validated_by_admin is False:
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                    "manager_email_address": request.user.email,
-                }
-                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(request.user, request, context),
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "manager_email_address": request.user.email,
+                "documentation_url": settings.APP_DOCUMENTATION_URL,
+            }
+            if user.is_cas_user():
+                template = MailTemplate.objects.get(
+                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
                 )
             else:
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                }
-                template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(request.user, request, context),
-                )
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_CONFIRMATION")
+                uid = user_pk_to_url_str(user)
+                token = default_token_generator.make_token(user)
+                context[
+                    "password_reset_url"
+                ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(user, request, context),
+            )
+        return self.partial_update(request, *args, **kwargs)
 
-            return self.destroy(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+    def delete(self, request, *args, **kwargs):
+        try:
+            user = User.objects.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No user found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user.is_superuser is True or user.is_staff is True:
+            return response.Response(
+                {"error": _("Cannot delete superuser.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        current_site = get_current_site(request)
+        if user.is_validated_by_admin is False:
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "manager_email_address": request.user.email,
+            }
+            template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+        else:
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+        return self.destroy(request, *args, **kwargs)
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
@@ -299,7 +279,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
     def patch(self, request, *args, **kwargs):
         if "is_validated_by_admin" in request.data:
             request.data.pop("is_validated_by_admin", False)
-        if request.user.get_cas_user():
+        if request.user.is_cas_user():
             for restricted_field in ["username", "email", "first_name", "last_name"]:
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
@@ -313,12 +293,12 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}",
                 }
                 template = MailTemplate.objects.get(
-                    code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+                    code="GENERAL_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
                 # manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=settings.DEFAULT_MANAGER_SVU_EMAIL,
+                    to_=settings.DEFAULT_MANAGER_GENERAL_EMAIL,
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
                     ),
@@ -356,16 +336,16 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         }
         if associations_site.count() > 0:
             template = MailTemplate.objects.get(
-                code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
             # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
-            email = settings.DEFAULT_MANAGER_SVU_EMAIL
+            email = settings.DEFAULT_MANAGER_GENERAL_EMAIL
         else:
             template = MailTemplate.objects.get(
-                code="CROUS_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
             # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
-            email = settings.DEFAULT_MANAGER_CROUS_EMAIL
+            email = settings.DEFAULT_MANAGER_MISC_EMAIL
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=email,

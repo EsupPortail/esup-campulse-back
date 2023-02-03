@@ -1,6 +1,8 @@
 from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 
+from .permissions import *
+
 ######################
 # Path configuration #
 ######################
@@ -30,8 +32,8 @@ MANAGERS = ADMINS
 
 DEFAULT_FROM_EMAIL = "plan-a.noreply@unistra.fr"
 
-DEFAULT_MANAGER_SVU_EMAIL = "plan-a.noreply@unistra.fr"
-DEFAULT_MANAGER_CROUS_EMAIL = "plan-a.noreply@unistra.fr"
+DEFAULT_MANAGER_GENERAL_EMAIL = "plan-a.noreply@unistra.fr"
+DEFAULT_MANAGER_MISC_EMAIL = "plan-a.noreply@unistra.fr"
 
 
 ##########################
@@ -280,6 +282,7 @@ LOCAL_APPS = [
     "plana.apps.associations",
     "plana.apps.consents",
     "plana.apps.groups",
+    "plana.apps.institutions",
     "plana.apps.users",
     "plana.libs.mail_template",
 ]

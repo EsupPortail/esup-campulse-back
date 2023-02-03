@@ -33,6 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     phone = serializers.CharField(required=False, allow_blank=True)
     is_cas = serializers.SerializerMethodField("is_cas_user")
+    has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
     groups = GroupSerializer(many=True, read_only=True)
 
@@ -41,6 +42,12 @@ class UserSerializer(serializers.ModelSerializer):
         Content from calculated field "is_cas" (True if user registred through CAS, or False).
         """
         return user.is_cas_user()
+
+    def has_validated_email_user(self, user) -> bool:
+        """
+        Content from calculated field "has_validated_email" (True if user finished the registration, or False).
+        """
+        return user.has_validated_email_user()
 
     class Meta:
         model = User
@@ -52,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "phone",
             "is_cas",
+            "has_validated_email",
             "is_validated_by_admin",
             "associations",
             "groups",

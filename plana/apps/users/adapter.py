@@ -35,7 +35,7 @@ class PlanAAdapter(DefaultAccountAdapter):
         context["username"] = user.username
         context["first_name"] = user.first_name
         context["last_name"] = user.last_name
-        context["manager_email_address"] = settings.DEFAULT_MANAGER_SVU_EMAIL
+        context["manager_email_address"] = settings.DEFAULT_MANAGER_GENERAL_EMAIL
 
         if (
             template_prefix == "account/email/email_confirmation_signup"

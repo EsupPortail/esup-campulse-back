@@ -3,10 +3,10 @@
     "model": "account.emailaddress",
     "pk": 1,
     "fields": {
-      "email": "test@pas-unistra.fr",
+      "email": "admin@admin.admin",
       "verified": true,
       "primary": true,
-      "user_id": 2
+      "user_id": 1
     }
   },
   {
@@ -16,12 +16,22 @@
       "email": "gestionnaire-svu@mail.tld",
       "verified": true,
       "primary": true,
-      "user_id": 4
+      "user_id": 3
     }
   },
   {
     "model": "account.emailaddress",
     "pk": 3,
+    "fields": {
+      "email": "gestionnaire-uha@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 4
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 4,
     "fields": {
       "email": "gestionnaire-crous@mail.tld",
       "verified": true,
@@ -31,7 +41,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "email": "membre-fsdie-idex@mail.tld",
       "verified": true,
@@ -41,7 +51,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 5,
+    "pk": 6,
     "fields": {
       "email": "membre-culture-actions@mail.tld",
       "verified": true,
@@ -51,7 +61,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 6,
+    "pk": 7,
     "fields": {
       "email": "membre-commissions@mail.tld",
       "verified": true,
@@ -61,9 +71,9 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 7,
+    "pk": 8,
     "fields": {
-      "email": "etudiant-commissions@mail.tld",
+      "email": "etudiant-porteur@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 9
@@ -71,7 +81,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 8,
+    "pk": 9,
     "fields": {
       "email": "etudiant-asso-hors-site@mail.tld",
       "verified": true,
@@ -81,7 +91,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 9,
+    "pk": 10,
     "fields": {
       "email": "etudiant-asso-site@mail.tld",
       "verified": true,
@@ -91,7 +101,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 10,
+    "pk": 11,
     "fields": {
       "email": "president-asso-hors-site@mail.tld",
       "verified": true,
@@ -101,7 +111,7 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 11,
+    "pk": 12,
     "fields": {
       "email": "president-asso-site@mail.tld",
       "verified": true,
@@ -111,22 +121,12 @@
   },
   {
     "model": "account.emailaddress",
-    "pk": 12,
+    "pk": 13,
     "fields": {
-      "email": "president-asso-hors-site-etudiant-asso-site@mail.tld",
+      "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
       "verified": true,
       "primary": true,
       "user_id": 14
-    }
-  },
-  {
-    "model": "account.emailaddress",
-    "pk": 13,
-    "fields": {
-      "email": "president-asso-site-etudiant-asso-hors-site@mail.tld",
-      "verified": true,
-      "primary": true,
-      "user_id": 15
     }
   }
 ]

@@ -5,9 +5,9 @@ from django.conf import settings
 from django.urls import include, path, re_path
 
 from .views.association_users import (
-    AssociationUsersDestroyUpdate,
     AssociationUsersListCreate,
     AssociationUsersRetrieve,
+    AssociationUsersUpdateDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
@@ -18,10 +18,10 @@ from .views.user import (
     UserListCreate,
     UserRetrieveUpdateDestroy,
 )
-from .views.user_groups import (
-    UserGroupsDestroy,
-    UserGroupsListCreate,
-    UserGroupsRetrieve,
+from .views.user_groups_institutions import (
+    UserGroupsInstitutionsDestroy,
+    UserGroupsInstitutionsListCreate,
+    UserGroupsInstitutionsRetrieve,
 )
 
 urlpatterns = [
@@ -37,8 +37,8 @@ urlpatterns = [
     ),
     path(
         "associations/<int:user_id>/<int:association_id>",
-        AssociationUsersDestroyUpdate.as_view(),
-        name="user_associations_destroy",
+        AssociationUsersUpdateDestroy.as_view(),
+        name="user_associations_update_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
@@ -65,16 +65,20 @@ urlpatterns = [
     ),
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
-    path("groups/", UserGroupsListCreate.as_view(), name="user_groups_list_create"),
+    path(
+        "groups/",
+        UserGroupsInstitutionsListCreate.as_view(),
+        name="user_groups_institutions_list_create",
+    ),
     path(
         "groups/<int:user_id>",
-        UserGroupsRetrieve.as_view(),
-        name="user_groups_retrieve",
+        UserGroupsInstitutionsRetrieve.as_view(),
+        name="user_groups_institutions_retrieve",
     ),
     path(
         "groups/<int:user_id>/<int:group_id>",
-        UserGroupsDestroy.as_view(),
-        name="user_groups_destroy",
+        UserGroupsInstitutionsDestroy.as_view(),
+        name="user_groups_institutions_destroy",
     ),
 ]
 

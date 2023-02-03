@@ -95,20 +95,21 @@ $ python manage.py runserver
 
 ### Comptes de test des fixtures
 
-Mot de passe commun : `motdepasse`
-- `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
-- `gestionnaire-svu@mail.tld`
-- `gestionnaire-crous@mail.tld`
-- `membre-fsdie-idex@mail.tld`
-- `membre-culture-actions@mail.tld`
-- `membre-commissions@mail.tld`
-- `etudiant-commissions@mail.tld`
-- `etudiant-asso-hors-site@mail.tld`
-- `etudiant-asso-site@mail.tld`
-- `president-asso-hors-site@mail.tld`
-- `president-asso-site@mail.tld`
-- `president-asso-hors-site-etudiant-asso-site@mail.tld`
-- `president-asso-site-etudiant-asso-hors-site@mail.tld`
+Mot de passe commun (sauf `compte-non-valide@mail.tld`): `motdepasse`
+1. `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
+2. `compte-non-valide@mail.tld`
+3. `gestionnaire-svu@mail.tld`
+4. `gestionnaire-uha@mail.tld`
+5. `gestionnaire-crous@mail.tld`
+6. `membre-fsdie-idex@mail.tld`
+7. `membre-culture-actions@mail.tld`
+8. `membre-commissions@mail.tld`
+9. `etudiant-porteur@mail.tld`
+10. `etudiant-asso-hors-site@mail.tld`
+11. `etudiant-asso-site@mail.tld`
+12. `president-asso-hors-site@mail.tld`
+13. `president-asso-site@mail.tld`
+14. `president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld`
 
 ### Détecter de nouvelles chaînes de caractères à traduire
 
@@ -143,6 +144,14 @@ $ pylint plana --output-format=json:pylint.json
 $ python manage.py spectacular --file schema.yml
 ```
 
+### Réinitialiser les permissions des groupes et les récupérer dans les fixtures
+
+```sh
+$ python manage.py reset_permissions
+$ python manage.py dumpdata auth.permission --indent 2 -o plana/apps/groups/fixtures/auth_permission.json
+$ python manage.py dumpdata auth.group_permissions --indent 2 -o plana/apps/groups/fixtures/auth_group_permissions.json
+```
+
 ### Exécuter les tests localement
 
 ```sh
@@ -168,4 +177,12 @@ $ ./generate_requirements.sh
 ```sh
 $ fab tag:develop test deploy -u root
 $ fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root
+$ fab test custom_manage_cmd:loaddata\ plana/libs/*/fixtures/*.json -u root
+```
+
+### Déployer sur le serveur de prod
+
+```sh
+$ fab tag:release/X.X.X prod deploy -u root
+$ fab prod custom_manage_cmd:initial_import -u root
 ```

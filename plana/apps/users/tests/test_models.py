@@ -3,9 +3,8 @@ List of tests done on users models.
 """
 from django.test import Client, TestCase
 
-from plana.apps.users.models.association_users import AssociationUsers
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 
 
 class UsersModelsTests(TestCase):
@@ -16,11 +15,13 @@ class UsersModelsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "associations_institution.json",
-        "associations_institutioncomponent.json",
+        "auth_group.json",
         "consents_gdprconsent.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
+        "users_groupinstitutionusers.json",
         "users_user.json",
     ]
 
@@ -44,7 +45,7 @@ class UsersModelsTests(TestCase):
         asso_user = AssociationUsers.objects.first()
         self.assertEqual(
             str(asso_user),
-            f"{asso_user.user}, {asso_user.association}, office : {asso_user.has_office_status}",
+            f"{asso_user.user}, {asso_user.association}, office : {asso_user.can_be_president}",
         )
 
     def test_gdpr_consent_users_model(self):
@@ -55,4 +56,14 @@ class UsersModelsTests(TestCase):
         self.assertEqual(
             str(consent_user),
             f"{consent_user.user}, {consent_user.consent}, date : {consent_user.date_consented}",
+        )
+
+    def test_group_institution_users_model(self):
+        """
+        There's at least one user linked to a group in the database.
+        """
+        group_user = GroupInstitutionUsers.objects.first()
+        self.assertEqual(
+            str(group_user),
+            f"{group_user.user}, {group_user.group}, {group_user.institution}",
         )

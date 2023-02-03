@@ -7,11 +7,10 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.association_users import AssociationUsers
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreationSerializer,
     AssociationUsersSerializer,
@@ -30,7 +29,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     serializer_class = AssociationUsersCreationSerializer
 
     def get_queryset(self):
-        if self.request.user.is_svu_manager or self.request.user.is_crous_manager:
+        if self.request.user.has_perm("users.view_associationusers_anyone"):
             queryset = AssociationUsers.objects.all()
         else:
             queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
@@ -38,7 +37,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "GET":
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
@@ -58,6 +57,13 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 {"error": _("No user name or association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if request.user.is_anonymous and user.is_validated_by_admin:
+            return response.Response(
+                {"error": _("Only managers can edit associations for this account.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         association_users = AssociationUsers.objects.filter(
             user_id=user.pk, association_id=association_id
         )
@@ -67,8 +73,12 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # TODO Reject in register form if association has already a president.
-        """
+        if user.is_superuser or user.is_staff:
+            return response.Response(
+                {"error": _("A manager cannot have an association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             "is_president" in request.data
             and to_bool(request.data["is_president"]) is True
@@ -81,23 +91,11 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                     {"error": _("President already in association.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-        """
 
-        if user.is_svu_manager or user.is_crous_manager or user.is_superuser:
-            return response.Response(
-                {"error": _("A manager cannot have an association.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if request.user.is_anonymous and user.is_validated_by_admin:
-            return response.Response(
-                {"error": _("Only managers can edit associations for this account.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         if (
             not request.user.is_anonymous
+            and not request.user.is_staff
             and user.is_validated_by_admin
-            and not request.user.is_svu_manager
-            and not request.user.is_crous_manager
         ):
             return response.Response(
                 {"error": _("Only managers can edit associations.")},
@@ -114,10 +112,13 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
 
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
+        if (
+            request.user.has_perm("users.view_associationusers_anyone")
+            or kwargs["user_id"] == request.user.pk
+        ):
             serializer = self.serializer_class(
                 self.queryset.filter(user_id=kwargs["user_id"]), many=True
             )
@@ -130,7 +131,7 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
 
 
 @extend_schema(methods=["PUT", "GET"], exclude=True)
-class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
+class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     PATCH : Updates user role in an association (manager and president).
 
@@ -138,7 +139,7 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = AssociationUsers.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -180,7 +181,11 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             president = False
 
-        if request.user.is_svu_manager or request.user.is_crous_manager or president:
+        if (
+            request.user.has_perm("users.change_associationusers_any_institution")
+            or request.user.is_staff_in_institution(kwargs["association_id"])
+            or request.user.is_president_in_association(kwargs["association_id"])
+        ):
             if 'role_name' in request.data:
                 asso_user.role_name = request.data['role_name']
 
@@ -192,7 +197,7 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
                     asso_user.is_president = True
                     actual_president.is_president = False
                     actual_president.save()
-                elif request.user.is_svu_manager or request.user.is_crous_manager:
+                elif request.user.is_staff_in_institution(kwargs["association_id"]):
                     try:
                         actual_president = AssociationUsers.objects.get(
                             association_id=kwargs["association_id"], is_president=True
@@ -208,11 +213,11 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
             ):
                 if president:
                     return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
-                elif request.user.is_svu_manager or request.user.is_crous_manager:
+                elif request.user.is_staff_in_institution(kwargs["association_id"]):
                     asso_user.is_president = False
 
-            if 'has_office_status' in request.data:
-                asso_user.has_office_status = to_bool(request.data['has_office_status'])
+            if 'can_be_president' in request.data:
+                asso_user.can_be_president = to_bool(request.data['can_be_president'])
 
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
@@ -220,20 +225,26 @@ class AssociationUsersDestroyUpdate(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, *args, **kwargs):
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            try:
-                User.objects.get(id=kwargs["user_id"])
-                Association.objects.get(id=kwargs["association_id"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("No user or association found.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            AssociationUsers.objects.filter(
-                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
-            ).delete()
-            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        try:
+            User.objects.get(id=kwargs["user_id"])
+            association = Association.objects.get(id=kwargs["association_id"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No user or association found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            not request.user.has_perm("users.delete_associationusers_any_institution")
+            and not request.user.is_staff_in_institution(association.institution_id)
+            and request.user.pk != kwargs["user_id"]
+        ):
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        AssociationUsers.objects.filter(
+            user_id=kwargs["user_id"], association_id=kwargs["association_id"]
+        ).delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
