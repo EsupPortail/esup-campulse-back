@@ -32,8 +32,8 @@ MANAGERS = ADMINS
 
 DEFAULT_FROM_EMAIL = "plan-a.noreply@unistra.fr"
 
-DEFAULT_MANAGER_SVU_EMAIL = "plan-a.noreply@unistra.fr"
-DEFAULT_MANAGER_CROUS_EMAIL = "plan-a.noreply@unistra.fr"
+DEFAULT_MANAGER_GENERAL_EMAIL = "plan-a.noreply@unistra.fr"
+DEFAULT_MANAGER_MISC_EMAIL = "plan-a.noreply@unistra.fr"
 
 
 ##########################

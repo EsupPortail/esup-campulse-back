@@ -95,21 +95,21 @@ $ python manage.py runserver
 
 ### Comptes de test des fixtures
 
-Mot de passe commun : `motdepasse`
-- `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
-- `compte-non-valide@mail.tld`
-- `gestionnaire-svu@mail.tld`
-- `gestionnaire-uha@mail.tld`
-- `gestionnaire-crous@mail.tld`
-- `membre-fsdie-idex@mail.tld`
-- `membre-culture-actions@mail.tld`
-- `membre-commissions@mail.tld`
-- `etudiant-porteur@mail.tld`
-- `etudiant-asso-hors-site@mail.tld`
-- `etudiant-asso-site@mail.tld`
-- `president-asso-hors-site@mail.tld`
-- `president-asso-site@mail.tld`
-- `president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld`
+Mot de passe commun (sauf `compte-non-valide@mail.tld`): `motdepasse`
+1. `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
+2. `compte-non-valide@mail.tld`
+3. `gestionnaire-svu@mail.tld`
+4. `gestionnaire-uha@mail.tld`
+5. `gestionnaire-crous@mail.tld`
+6. `membre-fsdie-idex@mail.tld`
+7. `membre-culture-actions@mail.tld`
+8. `membre-commissions@mail.tld`
+9. `etudiant-porteur@mail.tld`
+10. `etudiant-asso-hors-site@mail.tld`
+11. `etudiant-asso-site@mail.tld`
+12. `president-asso-hors-site@mail.tld`
+13. `president-asso-site@mail.tld`
+14. `president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld`
 
 ### Détecter de nouvelles chaînes de caractères à traduire
 

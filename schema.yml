@@ -109,7 +109,7 @@ paths:
       description: |-
         GET : Lists an association with all its details.
 
-        PATCH : Edit association details (with different permissions for SVU and president).
+        PATCH : Edit association details (with different permissions for manager and president).
 
         DELETE : Removes an entire association.
       parameters:
@@ -136,7 +136,7 @@ paths:
       description: |-
         GET : Lists an association with all its details.
 
-        PATCH : Edit association details (with different permissions for SVU and president).
+        PATCH : Edit association details (with different permissions for manager and president).
 
         DELETE : Removes an entire association.
       parameters:
@@ -173,7 +173,7 @@ paths:
       description: |-
         GET : Lists an association with all its details.
 
-        PATCH : Edit association details (with different permissions for SVU and president).
+        PATCH : Edit association details (with different permissions for manager and president).
 
         DELETE : Removes an entire association.
       parameters:
@@ -1035,7 +1035,17 @@ paths:
   /users/consents/{user_id}:
     get:
       operationId: users_consents_retrieve
-      description: 'GET : Lists all GDPR consents linked to a user (manager).'
+      description: |-
+        if request.user.is_svu_manager or request.user.is_crous_manager:
+            serializer = self.serializer_class(
+                self.queryset.filter(user_id=kwargs["user_id"]), many=True
+            )
+        else:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return response.Response(serializer.data)
       parameters:
       - in: path
         name: user_id

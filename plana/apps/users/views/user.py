@@ -300,12 +300,12 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}",
                 }
                 template = MailTemplate.objects.get(
-                    code="SVU_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+                    code="GENERAL_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
                 # manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=settings.DEFAULT_MANAGER_SVU_EMAIL,
+                    to_=settings.DEFAULT_MANAGER_GENERAL_EMAIL,
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
                     ),
@@ -343,16 +343,16 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         }
         if associations_site.count() > 0:
             template = MailTemplate.objects.get(
-                code="SVU_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
             # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
-            email = settings.DEFAULT_MANAGER_SVU_EMAIL
+            email = settings.DEFAULT_MANAGER_GENERAL_EMAIL
         else:
             template = MailTemplate.objects.get(
-                code="CROUS_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
             )
             # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
-            email = settings.DEFAULT_MANAGER_CROUS_EMAIL
+            email = settings.DEFAULT_MANAGER_MISC_EMAIL
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=email,
