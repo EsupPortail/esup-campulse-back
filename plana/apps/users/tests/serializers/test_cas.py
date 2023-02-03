@@ -12,7 +12,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
 from plana.apps.users.adapter import CASAdapter
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import GroupInstitutionUsers, User
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.views.cas import CASLogin
@@ -137,7 +137,7 @@ class CASSerializerTest(TestCase):
             username="username", email="username@unistra.fr"
         )
         group = Group.objects.create(name="Bonjourg")
-        user.groups.add(group)
+        GroupInstitutionUsers.objects.create(user_id=user.pk, group_id=group.pk)
         SocialAccount.objects.create(
             user=user,
             provider=CASProvider.id,

@@ -10,13 +10,14 @@ from allauth_cas.views import AuthAction
 from cas import CASClient, CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
 from plana.apps.users.adapter import CASAdapter
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import GroupInstitutionUsers, User
 from plana.apps.users.provider import CASProvider
 
 if typing.TYPE_CHECKING:  # pragma: no cover
@@ -75,8 +76,8 @@ class CASSerializer(LoginSerializer):
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
             try:
-                user.groups.all()[0]
-            except IndexError as exc:
+                GroupInstitutionUsers.objects.get(user_id=user.pk)
+            except ObjectDoesNotExist as exc:
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")
                 ) from exc

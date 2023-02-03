@@ -75,7 +75,12 @@ class UserListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        if request.user.has_perm("users.view_user"):
+            return self.list(request, *args, **kwargs)
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     def post(self, request, *args, **kwargs):
         request.data.update(
@@ -137,7 +142,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_user_anyone"):
+        if request.user.has_perm("users.view_user"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},
@@ -148,70 +153,63 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if request.user.has_perm("users.change_user_anyone"):
-            try:
-                user = User.objects.get(id=kwargs["pk"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Bad request.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        try:
+            user = User.objects.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-            if user.is_superuser or user.is_staff:
-                return response.Response(
-                    {"error": _("Bad request.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
+        if user.is_superuser is True or user.is_staff is True:
+            return response.Response(
+                {"error": _("Cannot edit superuser.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
+        if user.is_cas_user():
+            for restricted_field in [
+                "username",
+                "email",
+                "first_name",
+                "last_name",
+            ]:
+                request.data.pop(restricted_field, False)
+
+        if (
+            "is_validated_by_admin" in request.data
+            and to_bool(request.data["is_validated_by_admin"]) is True
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "manager_email_address": request.user.email,
+                "documentation_url": settings.APP_DOCUMENTATION_URL,
+            }
             if user.is_cas_user():
-                for restricted_field in [
-                    "username",
-                    "email",
-                    "first_name",
-                    "last_name",
-                ]:
-                    request.data.pop(restricted_field, False)
-
-            if (
-                "is_validated_by_admin" in request.data
-                and to_bool(request.data["is_validated_by_admin"]) is True
-            ):
-                current_site = get_current_site(request)
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                    "username": user.username,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "manager_email_address": request.user.email,
-                    "documentation_url": settings.APP_DOCUMENTATION_URL,
-                }
-                if user.is_cas_user():
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
-                    )
-                else:
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_ACCOUNT_CONFIRMATION"
-                    )
-                    uid = user_pk_to_url_str(user)
-                    token = default_token_generator.make_token(user)
-                    context[
-                        "password_reset_url"
-                    ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(user, request, context),
+                template = MailTemplate.objects.get(
+                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
                 )
-            return self.partial_update(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+            else:
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_CONFIRMATION")
+                uid = user_pk_to_url_str(user)
+                token = default_token_generator.make_token(user)
+                context[
+                    "password_reset_url"
+                ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(user, request, context),
+            )
+        return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         try:

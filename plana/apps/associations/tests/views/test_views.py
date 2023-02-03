@@ -304,9 +304,7 @@ class AssociationsViewsTests(TestCase):
             },
             content_type="application/json",
         )
-        self.assertEqual(
-            response_correct_member.status_code, status.HTTP_403_FORBIDDEN
-        )
+        self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
         response_correct_president = self.president_client.patch(
             f"/associations/{association_id}",
             {"name": "Moi je peux vraiment éditer l'asso, nananère."},

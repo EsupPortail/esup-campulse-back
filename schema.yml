@@ -1083,7 +1083,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Group'
+                  $ref: '#/components/schemas/UserGroupsInstitutions'
           description: ''
     post:
       operationId: users_groups_create
@@ -1136,7 +1136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Group'
+                $ref: '#/components/schemas/UserGroupsInstitutions'
           description: ''
   /users/groups/{user_id}/{group_id}:
     delete:
@@ -1716,6 +1716,23 @@ components:
       required:
       - id
       - name
+    InstitutionRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
+      required:
+      - acronym
+      - name
     JWT:
       type: object
       description: Serializer for JWT authentication.
@@ -2042,40 +2059,31 @@ components:
         id:
           type: integer
           readOnly: true
-        username:
+        user:
           type: string
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        groups:
-          type: array
-          items:
-            type: string
+        group:
+          $ref: '#/components/schemas/Group'
+        institution:
+          $ref: '#/components/schemas/Institution'
       required:
-      - groups
+      - group
       - id
-      - username
+      - institution
+      - user
     UserGroupsInstitutionsRequest:
       type: object
       description: Main serializer.
       properties:
-        username:
+        user:
           type: string
-          minLength: 1
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        groups:
-          type: array
-          items:
-            type: string
+        group:
+          $ref: '#/components/schemas/GroupRequest'
+        institution:
+          $ref: '#/components/schemas/InstitutionRequest'
       required:
-      - groups
-      - username
+      - group
+      - institution
+      - user
     UserRequest:
       type: object
       description: Main serializer.

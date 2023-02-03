@@ -10,7 +10,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -47,6 +47,8 @@ class UserViewsManagerTests(TestCase):
         self.student_user_name = "etudiant-asso-site@mail.tld"
         self.president_user_id = 13
         self.president_user_name = "president-asso-site@mail.tld"
+        self.manager_misc_user_id = 5
+        self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
 
         self.manager_general_user_id = 3
         self.manager_general_user_name = "gestionnaire-svu@mail.tld"
@@ -263,7 +265,7 @@ class UserViewsManagerTests(TestCase):
         - A manager user can execute this request.
         """
         response_manager = self.manager_client.get(
-            f"/users/associations/{self.student_user_name}"
+            f"/users/associations/{self.student_user_id}"
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
@@ -372,7 +374,7 @@ class UserViewsManagerTests(TestCase):
         - Returns a bad request if non-existing link between selected user and association.
         """
         response = self.manager_client.patch(
-            f"/users/associations/{self.student_user_id}/2",
+            f"/users/associations/{self.student_user_id}/3",
             {"role_name": "No link"},
             content_type="application/json",
         )
@@ -434,11 +436,6 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get("/users/groups/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=self.student_user_id)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
-
     def test_manager_post_group_user(self):
         """
         POST /users/group/
@@ -468,17 +465,11 @@ class UserViewsManagerTests(TestCase):
         """
         GET /users/groups/{user_id}
         - A manager user can execute this request.
-        - We get the same amount of groups links through the model and through the view.
         """
         response_manager = self.manager_client.get(
             f"/users/groups/{self.student_user_id}"
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        user = User.objects.get(pk=self.student_user_id)
-        groups = list(user.groups.all().values("id", "name"))
-        get_groups = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(get_groups, groups)
 
     def test_manager_delete_user_group(self):
         """
@@ -491,8 +482,8 @@ class UserViewsManagerTests(TestCase):
         """
         user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
-        first_user_group_id = response.data[0]["id"]
-        second_user_group_id = response.data[1]["id"]
+        first_user_group_id = response.data[0]["group"]["id"]
+        second_user_group_id = response.data[1]["group"]["id"]
 
         response_delete = self.manager_client.delete(
             f"/users/groups/99/{str(first_user_group_id)}"
@@ -500,7 +491,7 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_delete = self.manager_client.delete(
-            f"/users/groups/{self.manager_general_user_id}/1"
+            f"/users/groups/{self.manager_misc_user_id}/3"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
