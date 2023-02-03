@@ -104,9 +104,13 @@ class AssociationListCreate(generics.ListCreateAPIView):
             acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
             is_public = self.request.query_params.get("is_public")
-            if not self.request.user.has_perm("view_association_not_enabled"):
+            if not self.request.user.has_perm(
+                "associations.view_association_not_enabled"
+            ):
                 is_enabled = True
-            if not self.request.user.has_perm("view_association_not_public"):
+            if not self.request.user.has_perm(
+                "associations.view_association_not_public"
+            ):
                 is_public = True
             is_site = self.request.query_params.get("is_site")
             institution = self.request.query_params.get("institution")
@@ -164,7 +168,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if not request.user.has_perm(
-            "add_association_any_institution"
+            "associations.add_association_any_institution"
         ) and not request.user.is_staff_in_institution(request.data["institution"]):
             return response.Response(
                 {
@@ -247,7 +251,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             association.is_enabled == False
-            and not request.user.has_perm("view_association_not_enabled")
+            and not request.user.has_perm("associations.view_association_not_enabled")
             and not request.user.is_in_association(association_id)
         ):
             return response.Response(
@@ -257,7 +261,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             association.is_public == False
-            and not request.user.has_perm("view_association_not_public")
+            and not request.user.has_perm("associations.view_association_not_public")
             and not request.user.is_in_association(association_id)
         ):
             return response.Response(
@@ -283,7 +287,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.is_president_in_association(association_id)
-            and not request.user.has_perm("change_association_any_institution")
+            and not request.user.has_perm(
+                "associations.change_association_any_institution"
+            )
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
@@ -317,7 +323,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        if request.user.has_perm("change_association_all_fields"):
+        if request.user.has_perm("associations.change_association_all_fields"):
             if "is_site" in request.data:
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:
@@ -379,7 +385,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if not request.user.has_perm(
-            "delete_association_any_institution"
+            "associations.delete_association_any_institution"
         ) and not request.user.is_staff_in_institution(association.institution):
             return response.Response(
                 {

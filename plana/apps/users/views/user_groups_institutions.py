@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.groups.serializers.group import GroupSerializer
 from plana.apps.users.models.user import GroupInstitutionUsers, User
 from plana.apps.users.serializers.user_groups_institutions import (
     UserGroupsInstitutionsSerializer,
@@ -22,9 +21,8 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
     POST : Creates a new link between a non-validated user and a group.
     """
 
-    def get_queryset(self):
-        queryset = self.request.user.groups.all()
-        return queryset
+    queryset = GroupInstitutionUsers.objects.all()
+    serializer_class = UserGroupsInstitutionsSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -33,16 +31,12 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
             self.permission_classes = [AllowAny]
         return super().get_permissions()
 
-    def get_serializer_class(self):
-        if self.request.method == "GET":
-            self.serializer_class = GroupSerializer
-        else:
-            self.serializer_class = UserGroupsInstitutionsSerializer
-        return super().get_serializer_class()
-
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("view_groupinstitutionusers_anyone"):
-            return self.list(request, *args, **kwargs)
+        if request.user.has_perm("users.view_groupinstitutionusers_anyone"):
+            serializer = self.serializer_class(
+                GroupInstitutionUsers.objects.all(), many=True
+            )
+            return response.Response(serializer.data)
         return response.Response(
             {"error": _("Bad request.")},
             status=status.HTTP_403_FORBIDDEN,
@@ -87,11 +81,17 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
             else list(map(int, groups_ids.split(",")))
         )
         for id_group in groups:
-            group = Group.objects.get(id=id_group)
-            # TODO Find a better way to avoid registration as manager.
-            if not group.startsWith("MANAGER_"):
-                GroupInstitutionUsers.objects.add(
-                    user_id=user.pk, group_id=id_group, institution_id=None
+            try:
+                group = Group.objects.get(id=id_group)
+                # TODO Find a better way to avoid registration as manager.
+                if not group.name.startswith("MANAGER_"):
+                    GroupInstitutionUsers.objects.create(
+                        user_id=user.pk, group_id=id_group, institution_id=None
+                    )
+            except Group.DoesNotExist:
+                return response.Response(
+                    {"error": _("Group does not exist.")},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
         return response.Response({}, status=status.HTTP_200_OK)
@@ -102,24 +102,24 @@ class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
     GET : Lists all groups linked to a user (manager).
     """
 
-    queryset = Group.objects.all()
+    queryset = GroupInstitutionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    serializer_class = GroupSerializer
+    serializer_class = UserGroupsInstitutionsSerializer
 
     def get(self, request, *args, **kwargs):
         if (
-            request.user.has_perm("view_groupinstitutionusers_anyone")
+            request.user.has_perm("users.view_groupinstitutionusers_anyone")
             or kwargs["user_id"] == request.user.pk
         ):
             serializer = self.serializer_class(
-                self.get_queryset().filter(user=kwargs["user_id"]), many=True
+                GroupInstitutionUsers.objects.filter(user_id=kwargs["user_id"]),
+                many=True,
             )
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        return response.Response(serializer.data)
+            return response.Response(serializer.data)
+        return response.Response(
+            {"error": _("Bad request.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
 
 class UserGroupsInstitutionsDestroy(generics.DestroyAPIView):
@@ -127,9 +127,9 @@ class UserGroupsInstitutionsDestroy(generics.DestroyAPIView):
     DELETE : Deletes a group linked to a user (manager).
     """
 
-    queryset = Group.objects.all()
+    queryset = GroupInstitutionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    serializer_class = GroupSerializer
+    serializer_class = UserGroupsInstitutionsSerializer
 
     def delete(self, request, *args, **kwargs):
         try:

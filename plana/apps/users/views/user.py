@@ -75,12 +75,7 @@ class UserListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("view_user_anyone"):
-            return self.list(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         request.data.update(
@@ -142,7 +137,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("view_user_anyone"):
+        if request.user.has_perm("users.view_user_anyone"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},
@@ -153,7 +148,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if request.user.has_perm("change_user_anyone"):
+        if request.user.has_perm("users.change_user_anyone"):
             try:
                 user = User.objects.get(id=kwargs["pk"])
             except ObjectDoesNotExist:

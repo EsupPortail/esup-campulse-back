@@ -22,6 +22,8 @@ class AssociationsViewsTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",

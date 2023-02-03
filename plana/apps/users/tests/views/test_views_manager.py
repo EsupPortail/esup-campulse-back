@@ -24,6 +24,8 @@ class UserViewsManagerTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -343,7 +345,7 @@ class UserViewsManagerTests(TestCase):
             user_id=self.president_user_id, is_president=True
         )
         response = self.manager_client.patch(
-            f"/users/associations/{user_id}/{asso_user.association_id}",
+            f"/users/associations/{self.president_user_id}/{asso_user.association_id}",
             {"role_name": "Manager", "is_president": False},
             content_type="application/json",
         )
@@ -475,7 +477,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=self.student_user_name)
+        user = User.objects.get(pk=self.student_user_id)
         groups = list(user.groups.all().values("id", "name"))
         get_groups = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(get_groups, groups)

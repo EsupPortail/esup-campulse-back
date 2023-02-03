@@ -21,6 +21,8 @@ class UserViewsStudentTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -427,10 +429,12 @@ class UserAuthTests(TestCase):
 
     fixtures = [
         "auth_group.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_user.json",
-        "users_user_groups.json",
+        "users_groupinstitutionusers.json",
     ]
 
     def test_user_auth_registration(self):

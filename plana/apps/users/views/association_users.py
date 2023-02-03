@@ -29,7 +29,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     serializer_class = AssociationUsersCreationSerializer
 
     def get_queryset(self):
-        if self.request.user.has_perm("view_associationusers_anyone"):
+        if self.request.user.has_perm("users.view_associationusers_anyone"):
             queryset = AssociationUsers.objects.all()
         else:
             queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
@@ -116,7 +116,7 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         if (
-            request.user.has_perm("view_associationusers_anyone")
+            request.user.has_perm("users.view_associationusers_anyone")
             or kwargs["user_id"] == request.user.pk
         ):
             serializer = self.serializer_class(
@@ -182,7 +182,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             president = False
 
         if (
-            request.user.has_perm("change_associationusers_any_institution")
+            request.user.has_perm("users.change_associationusers_any_institution")
             or request.user.is_staff_in_institution(kwargs["association_id"])
             or request.user.is_president_in_association(kwargs["association_id"])
         ):
@@ -235,10 +235,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            not request.user.has_perm("delete_associationusers_any_institution")
-            and not request.user.is_staff_in_institution(
-                self, association.institution_id
-            )
+            not request.user.has_perm("users.delete_associationusers_any_institution")
+            and not request.user.is_staff_in_institution(association.institution_id)
             and request.user.pk != kwargs["user_id"]
         ):
             return response.Response(
