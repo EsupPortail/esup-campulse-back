@@ -10,7 +10,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.provider import CASProvider
 
 

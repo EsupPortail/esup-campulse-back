@@ -6,14 +6,15 @@ from plana.settings.permissions import PERMISSIONS_GROUPS
 
 class Command(BaseCommand):
     help = (
-        'Applies permissions to groups according to the settings/permissions.py file.'
+        "Applies permissions to groups according to the settings/permissions.py file."
     )
 
     def handle(self, *args, **options):
+        user.first_name = options["first_name"]
         for group in Group.objects.all():
             group.permissions.clear()
             for new_group_permission in PERMISSIONS_GROUPS[group.name]:
                 group.permissions.add(
                     Permission.objects.get(codename=new_group_permission)
                 )
-        self.stdout.write('Updated all group permissions.')
+        self.stdout.write("Updated all group permissions.")
