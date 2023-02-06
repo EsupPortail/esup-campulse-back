@@ -160,7 +160,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        if "name" in request.data:
+        if "name" in request.data and "institution" in request.data:
             association_name = request.data["name"]
         else:
             return response.Response(
@@ -250,9 +250,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            association.is_enabled == False
-            and not request.user.has_perm("associations.view_association_not_enabled")
+            not request.user.is_anonymous
+            and association.is_enabled == False
             and not request.user.is_in_association(association_id)
+            and not request.user.has_perm("associations.view_association_not_enabled")
         ):
             return response.Response(
                 {"error": _("Association not enabled.")},
@@ -260,9 +261,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            association.is_public == False
-            and not request.user.has_perm("associations.view_association_not_public")
+            not request.user.is_anonymous
+            and association.is_public == False
             and not request.user.is_in_association(association_id)
+            and not request.user.has_perm("associations.view_association_not_public")
         ):
             return response.Response(
                 {"error": _("Association not public.")},

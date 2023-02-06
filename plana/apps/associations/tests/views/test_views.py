@@ -67,6 +67,15 @@ class AssociationsViewsTests(TestCase):
         }
         self.response = self.misc_client.post(url_login, data_misc)
 
+        self.manager_institution_user_id = 4
+        self.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        self.institution_client = Client()
+        data_institution = {
+            "username": self.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.institution_client.post(url_login, data_institution)
+
         self.manager_general_user_id = 3
         self.manager_general_user_name = "gestionnaire-svu@mail.tld"
         self.general_client = Client()
@@ -158,7 +167,9 @@ class AssociationsViewsTests(TestCase):
     def test_post_association(self):
         """
         POST /associations/
+        - Name and institution are mandatory.
         - A General Manager can add an association.
+        - An Institution manager cannot add an association.
         - A Misc manager cannot add an association.
         - Another user cannot add an association.
         - An association cannot be added twice, neither associations with similar names.
@@ -170,12 +181,34 @@ class AssociationsViewsTests(TestCase):
                 "name": "Les Fans de Georges la Saucisse",
             },
         )
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {"institution": 2},
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {"name": "Les Fans de Georges la Saucisse", "institution": 2},
+        )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
+
+        response_institution = self.institution_client.post(
+            "/associations/",
+            {
+                "name": "Le réalisateur de Star Wars c'est George LuCAS.",
+                "institution": 2,
+            },
+        )
+        self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
 
         response_misc = self.misc_client.post(
             "/associations/",
             {
                 "name": "Quand Brice de Nice se connecte via CAS, c'est CASsé.",
+                "institution": 2,
             },
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
@@ -184,6 +217,7 @@ class AssociationsViewsTests(TestCase):
             "/associations/",
             {
                 "name": "Quelle chanteuse se connecte sans compte à l'application ? Patricia CAS",
+                "institution": 2,
             },
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -198,7 +232,7 @@ class AssociationsViewsTests(TestCase):
         for similar_name in similar_names:
             response_general = self.general_client.post(
                 "/associations/",
-                {"name": similar_name},
+                {"name": similar_name, "institution": 2},
             )
             self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -439,10 +473,11 @@ class AssociationsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         - A Misc Manager cannot delete an association.
         - An enabled association cannot be deleted.
+        - An Institution Manager cannot delete an association from another institution.
         - A General Manager can delete an association.
         - A non-existing association cannot be deleted.
         """
-        association_id = 2
+        association_id = 1
         response_anonymous = self.client.delete(f"/associations/{association_id}")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
         response_misc = self.misc_client.delete(f"/associations/{association_id}")
@@ -454,6 +489,10 @@ class AssociationsViewsTests(TestCase):
             {"is_enabled": False},
             content_type="application/json",
         )
+        response_institution = self.institution_client.delete(
+            f"/associations/{association_id}"
+        )
+        self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
         response_general = self.general_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_general.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
