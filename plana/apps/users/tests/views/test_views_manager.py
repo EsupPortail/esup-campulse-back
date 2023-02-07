@@ -482,8 +482,8 @@ class UserViewsManagerTests(TestCase):
         """
         user_id = 8
         response = self.manager_client.get(f"/users/groups/{user_id}")
-        first_user_group_id = response.data[0]["group"]["id"]
-        second_user_group_id = response.data[1]["group"]["id"]
+        first_user_group_id = response.data[0]["group"]
+        second_user_group_id = response.data[1]["group"]
 
         response_delete = self.manager_client.delete(
             f"/users/groups/99/{str(first_user_group_id)}"

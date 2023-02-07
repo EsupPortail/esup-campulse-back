@@ -18,8 +18,11 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 from plana.apps.users.serializers.user import UserSerializer
+from plana.apps.users.serializers.user_groups_institutions import (
+    UserGroupsInstitutionsSerializer,
+)
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -272,6 +275,15 @@ class UserAuthView(DJRestAuthUserDetailsView):
     """
     Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
     """
+
+    def get(self, request, *args, **kwargs):
+        groups_institutions = GroupInstitutionUsers.objects.filter(
+            user_id=request.user.pk
+        )
+        serializer = UserGroupsInstitutionsSerializer(groups_institutions, many=True)
+        user_response = self.retrieve(request, *args, **kwargs)
+        user_response.data["groups"] = serializer.data
+        return user_response
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)

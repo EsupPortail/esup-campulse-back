@@ -4,9 +4,8 @@ Serializers describing fields used on links between users and auth groups.
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from plana.apps.institutions.serializers.institution import InstitutionSerializer
-from plana.apps.users.models.user import User
-from plana.apps.users.serializers.user import GroupSerializer
+from plana.apps.institutions.models.institution import Institution
+from plana.apps.users.models.user import GroupInstitutionUsers, User
 
 
 class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
@@ -14,12 +13,12 @@ class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
     Main serializer.
     """
 
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+    institution = serializers.PrimaryKeyRelatedField(
+        queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    group = GroupSerializer()
-    institution = InstitutionSerializer()
 
     class Meta:
-        model = User
-        fields = ["id", "user", "group", "institution"]
+        model = GroupInstitutionUsers
+        fields = "__all__"

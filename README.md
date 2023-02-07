@@ -172,6 +172,12 @@ $ poetry install --sync
 $ ./generate_requirements.sh
 ```
 
+### Créer un utilisateur gestionnaire (gestionnaire général si institution non spécifiée).
+
+```sh
+$ python manage.py createmanageruser --email EMAIL --firstname FIRST_NAME --lastname LAST_NAME --group GROUP_NAME [--institution INSTITUTION]
+```
+
 ### Déployer sur le serveur de test
 
 ```sh

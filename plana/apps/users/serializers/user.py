@@ -15,13 +15,18 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import exceptions, serializers
 
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
 from plana.apps.groups.serializers.group import GroupSerializer
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import GroupInstitutionUsers, User
+from plana.apps.users.serializers.user_groups_institutions import (
+    UserGroupsInstitutionsSerializer,
+)
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -35,11 +40,11 @@ class UserSerializer(serializers.ModelSerializer):
     is_cas = serializers.SerializerMethodField("is_cas_user")
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
-    groups = GroupSerializer(many=True, read_only=True)
+    groups = UserGroupsInstitutionsSerializer(many=True, read_only=True)
 
     def is_cas_user(self, user) -> bool:
         """
-        Content from calculated field "is_cas" (True if user registred through CAS, or False).
+        Content from calculated field "is_cas" (True if user registered through CAS, or False).
         """
         return user.is_cas_user()
 
