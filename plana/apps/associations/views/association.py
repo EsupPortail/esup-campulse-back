@@ -104,14 +104,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
             acronym = self.request.query_params.get("acronym")
             is_enabled = self.request.query_params.get("is_enabled")
             is_public = self.request.query_params.get("is_public")
-            if not self.request.user.has_perm(
-                "associations.view_association_not_enabled"
-            ):
-                is_enabled = True
-            if not self.request.user.has_perm(
-                "associations.view_association_not_public"
-            ):
-                is_public = True
             is_site = self.request.query_params.get("is_site")
             institution = self.request.query_params.get("institution")
             institution_component = self.request.query_params.get(
@@ -205,7 +197,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
         if "is_site" not in request.data:
             request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
 
-        print(request.data)
         return super().create(request, *args, **kwargs)
 
 

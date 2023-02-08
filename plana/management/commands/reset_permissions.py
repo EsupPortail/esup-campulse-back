@@ -10,7 +10,6 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        user.first_name = options["first_name"]
         for group in Group.objects.all():
             group.permissions.clear()
             for new_group_permission in PERMISSIONS_GROUPS[group.name]:

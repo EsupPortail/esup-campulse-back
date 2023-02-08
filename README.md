@@ -96,7 +96,7 @@ $ python manage.py runserver
 ### Comptes de test des fixtures
 
 Mot de passe commun (sauf `compte-non-valide@mail.tld`): `motdepasse`
-1. `admin@admin.admin` ([https://localhost:8000/admin/](https://localhost:8000/admin/))
+1. `admin@admin.admin` ([http://localhost:8000/admin/](http://localhost:8000/admin/))
 2. `compte-non-valide@mail.tld`
 3. `gestionnaire-svu@mail.tld`
 4. `gestionnaire-uha@mail.tld`
