@@ -138,12 +138,15 @@ class UserViewsManagerTests(TestCase):
 
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
-            data={"username": "Bienvenueg", "is_validated_by_admin": True},
+            data={
+                "phone": "0 118 999 881 999 119 725 3",
+                "is_validated_by_admin": True,
+            },
             content_type="application/json",
         )
         user = User.objects.get(pk=self.student_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        self.assertEqual(user.username, "Bienvenueg")
+        self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
 
         response_manager = self.manager_client.patch(
             "/users/1000",

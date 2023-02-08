@@ -41,7 +41,10 @@ class PlanAAdapter(DefaultAccountAdapter):
             template_prefix == "account/email/email_confirmation_signup"
             or template_prefix == "account/email/email_confirmation"
         ):
-            template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+            if template_prefix == "account/email/email_confirmation_signup":
+                template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+            elif template_prefix == "account/email/email_confirmation":
+                template = MailTemplate.objects.get(code="EMAIL_RECONFIRMATION_MESSAGE")
             key = context['key']
             context[
                 "activate_url"

@@ -2,8 +2,9 @@
 Views directly linked to users and their links with other models.
 """
 
+from allauth.account.adapter import get_adapter
 from allauth.account.forms import default_token_generator
-from allauth.account.models import EmailAddress
+from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
@@ -11,6 +12,7 @@ from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import IntegrityError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -18,6 +20,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.users.adapter import PlanAAdapter
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
@@ -161,6 +164,8 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        request.data.pop("username", False)
+
         if user.is_superuser is True or user.is_staff is True:
             return response.Response(
                 {"error": _("Cannot edit superuser.")},
@@ -169,12 +174,13 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if user.is_cas_user():
             for restricted_field in [
-                "username",
                 "email",
                 "first_name",
                 "last_name",
             ]:
                 request.data.pop(restricted_field, False)
+        elif "email" in request.data:
+            request.data.update({"username": request.data["email"]})
 
         if (
             "is_validated_by_admin" in request.data
@@ -277,6 +283,11 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
         if "is_validated_by_admin" in request.data:
             request.data.pop("is_validated_by_admin", False)
         if request.user.is_cas_user():
@@ -285,13 +296,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
-                current_site = get_current_site(request)
                 user_id = request.user.id
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                    "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}",
-                }
+                context[
+                    "account_url"
+                ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}"
                 template = MailTemplate.objects.get(
                     code="GENERAL_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
@@ -305,12 +313,32 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     message=template.parse_vars(request.user, request, context),
                 )
 
-        return self.partial_update(request, *args, **kwargs)
+        user_response = self.partial_update(request, *args, **kwargs)
+        new_user_email = user_response.data["email"]
+        if "email" in request.data and request.data["email"] == request.data["email"]:
+            try:
+                new_user_email_object = EmailAddress.objects.create(
+                    email=new_user_email, user_id=request.user.pk
+                )
+                context["key"] = EmailConfirmationHMAC(
+                    email_address=new_user_email_object
+                ).key
+            except IntegrityError:
+                return response.Response(
+                    {"error": _("Email address already taken.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            get_adapter().send_mail(
+                template_prefix="account/email/email_confirmation",
+                email=new_user_email,
+                context=context,
+            )
+        return user_response
 
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    Overrided VerifyEmailView to send an email to a manager.
+    Overrided VerifyEmailView to send an email to a manager (or not if user revalidates an email address).
     """
 
     def post(self, request, *args, **kwargs):
@@ -321,36 +349,50 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
-        associations_ids = AssociationUsers.objects.filter(user_id=user.id).values_list(
-            'association_id', flat=True
-        )
-        associations_site = Association.objects.filter(
-            id__in=associations_ids, is_site=True
-        )
+        email_addresses = EmailAddress.objects.filter(user_id=user.pk)
 
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-            "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
-        }
-        if associations_site.count() > 0:
-            template = MailTemplate.objects.get(
-                code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+        if email_addresses.count() == 1:
+            associations_ids = AssociationUsers.objects.filter(
+                user_id=user.id
+            ).values_list('association_id', flat=True)
+            associations_site = Association.objects.filter(
+                id__in=associations_ids, is_site=True
             )
-            # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
-            email = settings.DEFAULT_MANAGER_GENERAL_EMAIL
-        else:
-            template = MailTemplate.objects.get(
-                code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
+            }
+            if associations_site.count() > 0:
+                template = MailTemplate.objects.get(
+                    code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                )
+                # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
+                email = settings.DEFAULT_MANAGER_GENERAL_EMAIL
+            else:
+                template = MailTemplate.objects.get(
+                    code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                )
+                # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
+                email = settings.DEFAULT_MANAGER_MISC_EMAIL
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(user, request, context),
             )
-            # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
-            email = settings.DEFAULT_MANAGER_MISC_EMAIL
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(user, request, context),
-        )
+        elif email_addresses.count() > 1:
+            for email_address in email_addresses:
+                if email_address.email == confirmation.email_address.email:
+                    email_address.primary = True
+                    email_address.save()
+                else:
+                    email_address.delete()
+            user.username = confirmation.email_address.email
+            user.save()
 
         return response.Response({'detail': _('ok')}, status=status.HTTP_200_OK)

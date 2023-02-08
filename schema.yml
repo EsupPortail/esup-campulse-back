@@ -865,7 +865,8 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: Overrided VerifyEmailView to send an email to a manager.
+      description: Overrided VerifyEmailView to send an email to a manager (or not
+        if user revalidates an email address).
       tags:
       - users
       requestBody:
@@ -1395,6 +1396,9 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        is_site:
+          type: boolean
+          title: Site ?
         institution:
           type: integer
           nullable: true
@@ -1413,6 +1417,9 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        is_site:
+          type: boolean
+          title: Site ?
         institution:
           type: integer
           nullable: true
@@ -1670,17 +1677,6 @@ components:
       required:
       - id
       - name
-    GroupRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 150
-      required:
-      - name
     Institution:
       type: object
       description: Main serializer.
@@ -1717,23 +1713,6 @@ components:
           title: Etablissement
       required:
       - id
-      - name
-    InstitutionRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
-          maxLength: 30
-      required:
-      - acronym
       - name
     JWT:
       type: object
@@ -2040,9 +2019,8 @@ components:
             $ref: '#/components/schemas/AssociationMandatoryData'
           readOnly: true
         groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
+          type: object
+          additionalProperties: {}
           readOnly: true
       required:
       - associations
@@ -2062,29 +2040,29 @@ components:
           type: integer
           readOnly: true
         user:
-          type: string
+          type: integer
         group:
-          $ref: '#/components/schemas/Group'
+          type: integer
         institution:
-          $ref: '#/components/schemas/Institution'
+          type: integer
+          nullable: true
       required:
       - group
       - id
-      - institution
       - user
     UserGroupsInstitutionsRequest:
       type: object
       description: Main serializer.
       properties:
         user:
-          type: string
+          type: integer
         group:
-          $ref: '#/components/schemas/GroupRequest'
+          type: integer
         institution:
-          $ref: '#/components/schemas/InstitutionRequest'
+          type: integer
+          nullable: true
       required:
       - group
-      - institution
       - user
     UserRequest:
       type: object

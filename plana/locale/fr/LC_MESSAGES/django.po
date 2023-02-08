@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-03 16:18+0100\n"
+"POT-Creation-Date: 2023-02-08 14:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,10 @@ msgstr "Association"
 msgid "Associations"
 msgstr "Associations"
 
+#: plana/apps/associations/serializers/fields.py:19
+msgid "URL for each thumbnail size"
+msgstr "Lien pour chaque taille de miniature"
+
 #: plana/apps/associations/views/association.py:167
 msgid "No association name or institution given."
 msgstr "Aucun nom d'association ou d'institution donné."
@@ -152,41 +156,41 @@ msgstr "Non autorisé à créer une association pour cet établissement."
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:240
-#: plana/apps/associations/views/association.py:284
-#: plana/apps/associations/views/association.py:377
+#: plana/apps/associations/views/association.py:245
+#: plana/apps/associations/views/association.py:291
+#: plana/apps/associations/views/association.py:384
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:248
+#: plana/apps/associations/views/association.py:253
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:258
+#: plana/apps/associations/views/association.py:264
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:268
+#: plana/apps/associations/views/association.py:275
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:296
+#: plana/apps/associations/views/association.py:303
 msgid "No rights to edit this association."
 msgstr "Aucun droit d'éditer les associations."
 
-#: plana/apps/associations/views/association.py:312
+#: plana/apps/associations/views/association.py:319
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:317
+#: plana/apps/associations/views/association.py:324
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:383
+#: plana/apps/associations/views/association.py:390
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:393
+#: plana/apps/associations/views/association.py:400
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -292,17 +296,17 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:100
+#: plana/apps/users/serializers/user.py:108
 msgid "Unistra users cannot create local accounts."
 msgstr ""
 "Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de "
 "comptes locaux."
 
-#: plana/apps/users/serializers/user.py:125
+#: plana/apps/users/serializers/user.py:133
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:162
+#: plana/apps/users/serializers/user.py:170
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -332,8 +336,8 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
 #: plana/apps/users/views/association_users.py:127
 #: plana/apps/users/views/association_users.py:243
-#: plana/apps/users/views/user.py:81 plana/apps/users/views/user.py:148
-#: plana/apps/users/views/user.py:160
+#: plana/apps/users/views/user.py:84 plana/apps/users/views/user.py:151
+#: plana/apps/users/views/user.py:163
 #: plana/apps/users/views/user_groups_institutions.py:46
 #: plana/apps/users/views/user_groups_institutions.py:122
 msgid "Bad request."
@@ -356,19 +360,23 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:166
+#: plana/apps/users/views/user.py:171
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:219
+#: plana/apps/users/views/user.py:225
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:225
+#: plana/apps/users/views/user.py:231
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:356
+#: plana/apps/users/views/user.py:328
+msgid "Email address already taken."
+msgstr "Adresse email déjà enregistrée."
+
+#: plana/apps/users/views/user.py:398
 msgid "ok"
 msgstr "ok"
 
@@ -381,7 +389,7 @@ msgid "Only managers can edit groups for this account."
 msgstr "Seuls les gestionnaires peuvent changer les groupes de ce compte."
 
 #: plana/apps/users/views/user_groups_institutions.py:69
-#: plana/apps/users/views/user_groups_institutions.py:148
+#: plana/apps/users/views/user_groups_institutions.py:150
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
@@ -393,11 +401,11 @@ msgstr "Seuls les gestionnaires peuvent changer les groupes."
 msgid "Group does not exist."
 msgstr "Ce groupe n'existe pas."
 
-#: plana/apps/users/views/user_groups_institutions.py:143
+#: plana/apps/users/views/user_groups_institutions.py:145
 msgid "No user or link to group found."
 msgstr "Aucun utilisateur ou groupe trouvé."
 
-#: plana/apps/users/views/user_groups_institutions.py:155
+#: plana/apps/users/views/user_groups_institutions.py:157
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
@@ -501,4 +509,3 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
-

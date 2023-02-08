@@ -231,5 +231,24 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 14,
+    "fields": {
+      "code": "EMAIL_RECONFIRMATION_MESSAGE",
+      "label": "Email Changed Confirmation Message",
+      "description": "Changement de l'adresse email liée au compte",
+      "subject": "{{ site_name }} – Changement de votre adresse mail",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Vous avez changé l'adresse mail liée à votre compte sur l’application {{ site_name }}.<br/>Pour la valider, merci de cliquer sur ce lien : <a href='{{ activate_url }}'>{{ activate_url }}</a>.<br/>Si vous rencontrez des difficultés merci de nous contacter à <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        6,
+        8
+      ]
+    }
   }
 ]

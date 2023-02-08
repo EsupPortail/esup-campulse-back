@@ -15,6 +15,8 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import exceptions, serializers
 
 from plana.apps.associations.serializers.association import (
@@ -36,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
     groups = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """
         Return groups-institutions-users links.
