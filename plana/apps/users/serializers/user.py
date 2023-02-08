@@ -40,7 +40,13 @@ class UserSerializer(serializers.ModelSerializer):
     is_cas = serializers.SerializerMethodField("is_cas_user")
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
-    groups = UserGroupsInstitutionsSerializer(many=True, read_only=True)
+    groups = serializers.SerializerMethodField()
+
+    def get_groups(self, user):
+        """
+        Return groups-institutions-users links.
+        """
+        return GroupInstitutionUsers.objects.filter(user_id=user.pk).values()
 
     def is_cas_user(self, user) -> bool:
         """

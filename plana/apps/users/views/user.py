@@ -276,15 +276,6 @@ class UserAuthView(DJRestAuthUserDetailsView):
     Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
     """
 
-    def get(self, request, *args, **kwargs):
-        groups_institutions = GroupInstitutionUsers.objects.filter(
-            user_id=request.user.pk
-        )
-        serializer = UserGroupsInstitutionsSerializer(groups_institutions, many=True)
-        user_response = self.retrieve(request, *args, **kwargs)
-        user_response.data["groups"] = serializer.data
-        return user_response
-
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
