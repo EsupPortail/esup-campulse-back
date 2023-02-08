@@ -201,6 +201,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     {"error": _("Association name already taken.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+        if "is_site" not in request.data:
+            request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
+
+        print(request.data)
         return super().create(request, *args, **kwargs)
 
 

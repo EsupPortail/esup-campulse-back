@@ -544,3 +544,6 @@ APPEND_SLASH = False
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
+
+# Default value for is_site setting.
+ASSOCIATION_IS_SITE_DEFAULT = False

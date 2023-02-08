@@ -88,5 +88,6 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "is_site",
             "institution",
         ]
