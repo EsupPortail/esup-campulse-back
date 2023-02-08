@@ -118,30 +118,30 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 "institution_component"
             )
             activity_field = self.request.query_params.get("activity_field")
-            if name is not None:
+            if name is not None and name != "":
                 name = str(name).strip()
                 queryset = queryset.filter(
                     name__nospaces__unaccent__icontains=name.replace(" ", "")
                 )
-            if acronym is not None:
+            if acronym is not None and acronym != "":
                 acronym = str(acronym).strip()
                 queryset = queryset.filter(acronym__icontains=acronym)
-            if is_enabled is not None:
+            if is_enabled is not None and is_enabled != "":
                 queryset = queryset.filter(is_enabled=to_bool(is_enabled))
-            if is_public is not None:
+            if is_public is not None and is_public != "":
                 queryset = queryset.filter(is_public=to_bool(is_public))
-            if is_site is not None:
+            if is_site is not None and is_site != "":
                 queryset = queryset.filter(is_site=to_bool(is_site))
-            if institution is not None:
-                if institution == "":
-                    queryset = queryset.filter(institution_id__isnull=True)
-                else:
-                    queryset = queryset.filter(institution_id=institution)
+            if institution is not None and institution != "":
+                queryset = queryset.filter(institution_id=institution)
             if institution_component is not None:
-                queryset = queryset.filter(
-                    institution_component_id=institution_component
-                )
-            if activity_field is not None:
+                if institution_component == "":
+                    queryset = queryset.filter(institution_component_id__isnull=True)
+                else:
+                    queryset = queryset.filter(
+                        institution_component_id=institution_component
+                    )
+            if activity_field is not None and activity_field != "":
                 queryset = queryset.filter(activity_field_id=activity_field)
         return queryset
 
