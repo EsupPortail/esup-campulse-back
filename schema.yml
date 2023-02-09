@@ -2056,9 +2056,14 @@ components:
         institution:
           type: integer
           nullable: true
+        permissions:
+          type: object
+          additionalProperties: {}
+          readOnly: true
       required:
       - group
       - id
+      - permissions
       - user
     UserGroupsInstitutionsRequest:
       type: object
