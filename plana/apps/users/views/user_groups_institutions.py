@@ -37,15 +37,10 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
                 GroupInstitutionUsers.objects.all(), many=True
             )
             return response.Response(serializer.data)
-        elif request.user.has_perm("users.view_groupinstitutionusers"):
-            serializer = self.serializer_class(
-                GroupInstitutionUsers.objects.filter(user_id=request.user.pk), many=True
-            )
-            return response.Response(serializer.data)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
+        serializer = self.serializer_class(
+            GroupInstitutionUsers.objects.filter(user_id=request.user.pk), many=True
         )
+        return response.Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         try:

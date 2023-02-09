@@ -150,7 +150,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.post(
             "/users/associations/",
             {
-                "user": self.unvalidated_user_id,
+                "user": self.student_user_name,
                 "association": 5,
                 "can_be_president": False,
             },
@@ -285,6 +285,7 @@ class UserViewsStudentTests(TestCase):
         - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
+        - A student user cannot update his email address with an address from another account.
         - A student user can update his email address.
         - Updating the email address doesn't change the username without validation.
         """
@@ -304,6 +305,14 @@ class UserViewsStudentTests(TestCase):
         )
         student_user = User.objects.get(username=self.student_user_name)
         self.assertEqual(student_user.username, self.student_user_name)
+
+        new_email = self.president_user_name
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"email": new_email},
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
         new_email = "cle-a-molette@ok-motors.com"
         response_student = self.student_client.patch(

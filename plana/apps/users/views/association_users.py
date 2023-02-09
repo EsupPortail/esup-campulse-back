@@ -142,6 +142,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_serializer_class(self):
+        # TODO Serializers aren't used, find a way to use them.
         if self.request.method == "PATCH":
             self.serializer_class = AssociationUsersUpdateSerializer
         else:

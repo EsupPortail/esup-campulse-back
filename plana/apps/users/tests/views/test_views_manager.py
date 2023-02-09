@@ -134,11 +134,13 @@ class UserViewsManagerTests(TestCase):
         - A non-existing user cannot be updated.
         - A manager user cannot update restricted CAS user details.
         - A manager user can validate a CAS user.
+        - A manager user cannot edit another one.
         """
 
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
             data={
+                "email": "aymar-venceslas@oui.org",
                 "phone": "0 118 999 881 999 119 725 3",
                 "is_validated_by_admin": True,
             },
@@ -147,6 +149,7 @@ class UserViewsManagerTests(TestCase):
         user = User.objects.get(pk=self.student_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
+        self.assertEqual(user.username, "aymar-venceslas@oui.org")
 
         response_manager = self.manager_client.patch(
             "/users/1000",
@@ -175,6 +178,16 @@ class UserViewsManagerTests(TestCase):
         )
         user_cas = User.objects.get(username="PatriciaCAS")
         self.assertEqual(user_cas.is_validated_by_admin, True)
+
+        user_manager = User.objects.get(email=self.manager_misc_user_name)
+        response_manager = self.manager_client.patch(
+            f"/users/{user_manager.pk}",
+            data={"email": "gestionnaire-saucisse@mail.tld"},
+            content_type="application/json",
+        )
+        user_manager = User.objects.get(email=self.manager_misc_user_name)
+        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(user_manager.email, self.manager_misc_user_name)
 
     def test_manager_delete_user_detail(self):
         """
@@ -280,45 +293,14 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
-    def test_manager_delete_association_users(self):
-        """
-        DELETE /users/associations/{user_id}/{association_id}
-        - The user must exist.
-        - The association must exist.
-        - A manager user can execute this request.
-        - The link between an association and a user is deleted.
-        """
-        response = self.manager_client.get(
-            f"/users/associations/{self.student_user_id}"
-        )
-        first_user_association_id = response.data[0]["id"]
-
-        response_delete = self.manager_client.delete(
-            f"/users/associations/99/{str(first_user_association_id)}"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_delete = self.manager_client.delete(
-            f"/users/associations/{self.student_user_id}/99"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_delete = self.manager_client.delete(
-            f"/users/associations/{self.student_user_id}/{str(first_user_association_id)}"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
-        with self.assertRaises(ObjectDoesNotExist):
-            AssociationUsers.objects.get(
-                user_id=self.student_user_id, association_id=first_user_association_id
-            )
-
     def test_manager_patch_association_users_update_president(self):
         """
         PATCH /users/associations/{user_id}/{association_id}
         - A manager can execute this request.
         - Link between member and association is correctly updated.
-        - If giving president privileges to a member, the old president is no longer president
-            of the association.
+        - If giving president privileges to a member,
+              the old president is no longer president of the association.
+        - A manager can add a president to an association without one.
         """
         association_id = 2
         asso_user = AssociationUsers.objects.get(
@@ -339,6 +321,25 @@ class UserViewsManagerTests(TestCase):
             user_id=self.president_user_id, association_id=association_id
         )
         self.assertFalse(old_president.is_president)
+
+        association_id = 5
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_name,
+                "association": association_id,
+            },
+        )
+        response = self.manager_client.patch(
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {"is_president": True},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(asso_user.is_president)
 
     def test_manager_patch_association_users(self):
         """
@@ -382,6 +383,38 @@ class UserViewsManagerTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_manager_delete_association_users(self):
+        """
+        DELETE /users/associations/{user_id}/{association_id}
+        - The user must exist.
+        - The association must exist.
+        - A manager user can execute this request.
+        - The link between an association and a user is deleted.
+        """
+        response = self.manager_client.get(
+            f"/users/associations/{self.student_user_id}"
+        )
+        first_user_association_id = response.data[0]["id"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/associations/99/{str(first_user_association_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_delete = self.manager_client.delete(
+            f"/users/associations/{self.student_user_id}/99"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_delete = self.manager_client.delete(
+            f"/users/associations/{self.student_user_id}/{str(first_user_association_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist):
+            AssociationUsers.objects.get(
+                user_id=self.student_user_id, association_id=first_user_association_id
+            )
 
     def test_manager_get_auth_user_detail(self):
         """

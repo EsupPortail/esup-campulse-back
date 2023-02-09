@@ -231,7 +231,7 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_registration(self):
         """
-        POST /users/auth/registration
+        POST /users/auth/registration/
         - An account with an Unistra email can't be created.
         - An account can be created by an anonymous user.
         """
@@ -281,7 +281,6 @@ class UserViewsAnonymousTests(TestCase):
                 "token": default_token_generator.make_token(user),
             },
         )
-        print(response_anonymous.data)
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
     def test_anonymous_post_registration_verify_email(self):
@@ -289,6 +288,8 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/auth/registration/verify-email/
         - An anonymous user can execute this request.
         - An anonymous user with association where is_site is false can execute this request.
+        - An anonymous user with association where is_site is true can execute this request.
+        - An anonymous user can verify a new email address associated to an account.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
@@ -307,22 +308,42 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
+        email = "damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": "damien.mayonnaise@je-prefere-les-crackers-au-sel.org",
+                "email": email,
                 "first_name": "Damien",
                 "last_name": "Mayonnaise",
             },
         )
-        user = User.objects.get(
-            email="damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
-        )
+        user = User.objects.get(email=email)
         AssociationUsers.objects.create(user_id=user.id, association_id=3)
-        email_address = EmailAddress.objects.get(
-            email="damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
-        )
+        email_address = EmailAddress.objects.get(email=email)
         key = EmailConfirmationHMAC(email_address=email_address).key
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/verify-email/", {"key": key}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+        email_address.verified = False
+        email_address.save()
+        AssociationUsers.objects.create(user_id=user.id, association_id=2)
+        key = EmailConfirmationHMAC(email_address=email_address).key
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/verify-email/", {"key": key}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+        new_email = (
+            "damien.mayonnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
+        )
+        user.email = new_email
+        user.save()
+        new_email_address = EmailAddress.objects.create(
+            user_id=user.id, email=new_email
+        )
+        key = EmailConfirmationHMAC(email_address=new_email_address).key
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/verify-email/", {"key": key}
         )

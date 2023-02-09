@@ -315,19 +315,13 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
         user_response = self.partial_update(request, *args, **kwargs)
         new_user_email = user_response.data["email"]
-        if "email" in request.data and request.data["email"] == request.data["email"]:
-            try:
-                new_user_email_object = EmailAddress.objects.create(
-                    email=new_user_email, user_id=request.user.pk
-                )
-                context["key"] = EmailConfirmationHMAC(
-                    email_address=new_user_email_object
-                ).key
-            except IntegrityError:
-                return response.Response(
-                    {"error": _("Email address already taken.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        if "email" in request.data and request.data["email"] == new_user_email:
+            new_user_email_object = EmailAddress.objects.create(
+                email=new_user_email, user_id=request.user.pk
+            )
+            context["key"] = EmailConfirmationHMAC(
+                email_address=new_user_email_object
+            ).key
             get_adapter().send_mail(
                 template_prefix="account/email/email_confirmation",
                 email=new_user_email,

@@ -18,6 +18,11 @@ class UserViewsTests(TestCase):
     Main tests class.
     """
 
+    fixtures = [
+        "mailtemplates",
+        "mailtemplatevars",
+    ]
+
     @patch('plana.apps.users.serializers.cas.CASSerializer.validate')
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
     def setUp(self, validate):
@@ -25,7 +30,7 @@ class UserViewsTests(TestCase):
             username="PatriciaCAS",
             password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
             email="patriciacas@unistra.fr",
-            is_validated_by_admin=True,
+            is_validated_by_admin=False,
         )
         SocialAccount.objects.create(
             user=user,
@@ -35,7 +40,7 @@ class UserViewsTests(TestCase):
         )
         EmailAddress.objects.create(
             user=user,
-            email="test@unistra.fr",
+            email="patriciacas@unistra.fr",
             verified=True,
             primary=True,
         )
@@ -61,8 +66,8 @@ class UserViewsTests(TestCase):
         user_cas = User.objects.get(username="PatriciaCAS")
         response_not_modified = self.cas_client.patch(
             "/users/auth/user/",
-            data={"username": "GeorgeLuCAS"},
+            data={"email": "george-lucas@unistra.fr"},
             content_type="application/json",
         )
-        self.assertEqual(user_cas.username, "PatriciaCAS")
+        self.assertEqual(user_cas.email, "patriciacas@unistra.fr")
         self.assertEqual(response_not_modified.status_code, status.HTTP_200_OK)
