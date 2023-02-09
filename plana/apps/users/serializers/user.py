@@ -103,7 +103,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
     def save(self, request):
         self.cleaned_data = request.data
-        if self.cleaned_data["email"].endswith("unistra.fr"):
+        if self.cleaned_data["email"].endswith("@unistra.fr"):
             raise exceptions.ValidationError(
                 {"detail": [_("Unistra users cannot create local accounts.")]}
             )

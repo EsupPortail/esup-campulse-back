@@ -246,18 +246,42 @@ class AssociationsViewsTests(TestCase):
         - Main association details are returned (test the "name" attribute).
         - All associations details are returned (test the "activities" attribute).
         - A non-existing association can't be returned.
+        - A non-public association can't be seen by an anonymous user.
+        - A non-enabled association can't be seen by a student user who's not in it.
+        - A non-public association can't be seen by a student user who's not in it.
+        - A non-enabled association can be seen by a student user who's in it.
+        - A non-public association can be seen by a student user who's in it.
         """
         association = Association.objects.get(pk=1)
 
         response = self.client.get("/associations/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        association_1 = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(association_1["name"], association.name)
-        self.assertEqual(association_1["activities"], association.activities)
+        public_association = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(public_association["name"], association.name)
+        self.assertEqual(public_association["activities"], association.activities)
 
-        not_found_response = self.client.get("/associations/50")
+        not_found_response = self.client.get("/associations/9001")
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
+
+        non_public_response = self.client.get("/associations/3")
+        self.assertEqual(non_public_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        non_enabled_not_member_response = self.member_client.get("/associations/5")
+        self.assertEqual(
+            non_enabled_not_member_response.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+        non_public_not_member_response = self.member_client.get("/associations/3")
+        self.assertEqual(
+            non_public_not_member_response.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+        non_enabled_member_response = self.member_client.get("/associations/2")
+        self.assertEqual(non_enabled_member_response.status_code, status.HTTP_200_OK)
+
+        non_public_member_response = self.member_client.get("/associations/2")
+        self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
 
     def test_patch_association_authors(self):
         """

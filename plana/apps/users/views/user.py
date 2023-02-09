@@ -20,7 +20,6 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.adapter import PlanAAdapter
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
@@ -283,6 +282,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        request.data.pop("username", False)
         current_site = get_current_site(request)
         context = {
             "site_domain": current_site.domain,
@@ -291,7 +291,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         if "is_validated_by_admin" in request.data:
             request.data.pop("is_validated_by_admin", False)
         if request.user.is_cas_user():
-            for restricted_field in ["username", "email", "first_name", "last_name"]:
+            for restricted_field in ["email", "first_name", "last_name"]:
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
 

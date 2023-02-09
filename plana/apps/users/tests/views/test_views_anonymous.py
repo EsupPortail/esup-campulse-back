@@ -3,6 +3,7 @@ List of tests done on users views with an anonymous user.
 """
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from allauth.account.utils import user_pk_to_url_str
 from django.test import Client, TestCase
 from rest_framework import status
 
@@ -228,6 +229,33 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_post_registration(self):
+        """
+        POST /users/auth/registration
+        - An account with an Unistra email can't be created.
+        - An account can be created by an anonymous user.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/",
+            {
+                "email": "gaufre-a-la-menthe@unistra.fr",
+                "first_name": "Gaufre",
+                "last_name": "Menthe",
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/registration/",
+            {
+                "email": "gaufre-a-la-menthe@jean-michmail.fr",
+                "first_name": "Gaufre",
+                "last_name": "Menthe",
+                "phone": "36 30",
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
+
     def test_anonymous_post_password_reset(self):
         """
         POST /users/auth/password/reset/
@@ -243,19 +271,18 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/auth/password/reset/confirm/
         - An anonymous user can execute this request.
         """
-        """
         user = User.objects.get(id=self.student_user_id)
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/confirm/",
             {
                 "new_password1": "saucisse",
                 "new_password2": "saucisse",
-                "uid": self.student_user_id,
+                "uid": user_pk_to_url_str(user),
                 "token": default_token_generator.make_token(user),
             },
         )
+        print(response_anonymous.data)
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
-        """
 
     def test_anonymous_post_registration_verify_email(self):
         """

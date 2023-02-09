@@ -285,23 +285,36 @@ class UserViewsStudentTests(TestCase):
         - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
+        - A student user can update his email address.
+        - Updating the email address doesn't change the username without validation.
         """
-        user_not_valid = User.objects.get(username=self.student_user_name)
+        student_user = User.objects.get(username=self.student_user_name)
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
             content_type="application/json",
         )
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-        self.assertTrue(user_not_valid.is_validated_by_admin)
+        self.assertTrue(student_user.is_validated_by_admin)
 
-        user_username = User.objects.get(username=self.student_user_name)
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"username": "Mafoipastropmalpourlasaisong"},
             content_type="application/json",
         )
-        self.assertEqual(user_username.username, self.student_user_name)
+        student_user = User.objects.get(username=self.student_user_name)
+        self.assertEqual(student_user.username, self.student_user_name)
+
+        new_email = "cle-a-molette@ok-motors.com"
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"email": new_email},
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        student_user = User.objects.get(email=new_email)
+        self.assertEqual(student_user.email, new_email)
+        self.assertEqual(student_user.username, self.student_user_name)
 
     def test_student_put_auth_user_detail(self):
         """
