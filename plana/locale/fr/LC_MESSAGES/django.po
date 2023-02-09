@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 14:06+0100\n"
+"POT-Creation-Date: 2023-02-09 14:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,53 +144,53 @@ msgstr "Associations"
 msgid "URL for each thumbnail size"
 msgstr "Lien pour chaque taille de miniature"
 
-#: plana/apps/associations/views/association.py:159
+#: plana/apps/associations/views/association.py:170
 msgid "No association name or institution given."
 msgstr "Aucun nom d'association ou d'institution donné."
 
-#: plana/apps/associations/views/association.py:168
+#: plana/apps/associations/views/association.py:179
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:193
+#: plana/apps/associations/views/association.py:204
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:236
-#: plana/apps/associations/views/association.py:282
-#: plana/apps/associations/views/association.py:375
+#: plana/apps/associations/views/association.py:247
+#: plana/apps/associations/views/association.py:293
+#: plana/apps/associations/views/association.py:386
 msgid "No association id given."
 msgstr "Pas d'identifiant d'association donné."
 
-#: plana/apps/associations/views/association.py:244
+#: plana/apps/associations/views/association.py:255
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:255
+#: plana/apps/associations/views/association.py:266
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:266
+#: plana/apps/associations/views/association.py:277
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:294
+#: plana/apps/associations/views/association.py:305
 msgid "No rights to edit this association."
 msgstr "Aucun droit d'éditer les associations."
 
-#: plana/apps/associations/views/association.py:310
+#: plana/apps/associations/views/association.py:321
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:315
+#: plana/apps/associations/views/association.py:326
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:381
+#: plana/apps/associations/views/association.py:392
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:391
+#: plana/apps/associations/views/association.py:402
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -336,8 +336,8 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
 #: plana/apps/users/views/association_users.py:127
 #: plana/apps/users/views/association_users.py:244
-#: plana/apps/users/views/user.py:83 plana/apps/users/views/user.py:150
-#: plana/apps/users/views/user.py:162
+#: plana/apps/users/views/user.py:93 plana/apps/users/views/user.py:160
+#: plana/apps/users/views/user.py:172
 #: plana/apps/users/views/user_groups_institutions.py:117
 msgid "Bad request."
 msgstr "Erreur de requête."
@@ -359,19 +359,19 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:170
+#: plana/apps/users/views/user.py:180
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:224
+#: plana/apps/users/views/user.py:234
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:230
+#: plana/apps/users/views/user.py:240
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:388
+#: plana/apps/users/views/user.py:402
 msgid "ok"
 msgstr "ok"
 

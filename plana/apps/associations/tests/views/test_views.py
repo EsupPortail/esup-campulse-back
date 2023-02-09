@@ -10,6 +10,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.users.models.user import AssociationUsers
 
 
 class AssociationsViewsTests(TestCase):
@@ -101,6 +102,8 @@ class AssociationsViewsTests(TestCase):
         - Associations with a specific institution ID can be filtered.
         - Associations with a specific institution component ID can be filtered.
         - Associations with a specific institution activity field can be filtered.
+        - Associations with a specific user_id cannot be filtered by an anonymous.
+        - Associations with a specific user_id can be filtered by a manager.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -163,6 +166,22 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/?activity_field=3")
         for association in response.data:
             self.assertEqual(association["activity_field"]["id"], 3)
+
+        response = self.client.get(f"/associations/?user_id={self.student_user_id}")
+        content = json.loads(response.content.decode("utf-8"))
+        links_cnt = AssociationUsers.objects.filter(
+            user_id=self.student_user_id
+        ).count()
+        self.assertNotEqual(len(content), links_cnt)
+
+        response = self.general_client.get(
+            f"/associations/?user_id={self.student_user_id}"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        links_cnt = AssociationUsers.objects.filter(
+            user_id=self.student_user_id
+        ).count()
+        self.assertEqual(len(content), links_cnt)
 
     def test_post_association(self):
         """

@@ -23,6 +23,7 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationPartialDataSerializer,
 )
+from plana.apps.users.models.user import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -78,6 +79,12 @@ from plana.utils import send_mail, to_bool
                 OpenApiParameter.QUERY,
                 description="Filter by Activity Field ID.",
             ),
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
         ]
     )
 )
@@ -110,6 +117,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 "institution_component"
             )
             activity_field = self.request.query_params.get("activity_field")
+            user_id = self.request.query_params.get("user_id")
             if name is not None and name != "":
                 name = str(name).strip()
                 queryset = queryset.filter(
@@ -135,6 +143,17 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     )
             if activity_field is not None and activity_field != "":
                 queryset = queryset.filter(activity_field_id=activity_field)
+            if (
+                user_id is not None
+                and user_id != ""
+                and self.request.user.has_perm("users.view_user")
+            ):
+                assos_users_query = (
+                    AssociationUsers.objects.filter(user_id=user_id)
+                    .values_list("association_id", flat=True)
+                    .all()
+                )
+                queryset = queryset.filter(id__in=assos_users_query)
         return queryset
 
     def get_permissions(self):
