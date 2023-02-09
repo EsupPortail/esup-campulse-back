@@ -466,7 +466,7 @@ class AssociationsViewsTests(TestCase):
         """
         # This association is not enabled and not site by default
         association_id = 3
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_public": True},
             content_type="application/json",
@@ -475,12 +475,12 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(association.is_public, False)
 
         # Association public status can be true only if is_site and is_enabled are true
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": False, "is_site": True},
             content_type="application/json",
         )
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_public": True},
             content_type="application/json",
@@ -488,12 +488,12 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.is_public, False)
 
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": True},
             content_type="application/json",
         )
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_public": True},
             content_type="application/json",
@@ -502,7 +502,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(association.is_public, True)
 
         # Association losting its public status by changing to is_site to false
-        response_general = self.general_client.patch(
+        self.general_client.patch(
             f"/associations/{association_id}",
             {"is_site": False},
             content_type="application/json",

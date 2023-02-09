@@ -257,7 +257,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if request.user.is_anonymous and (
-            association.is_enabled == False or association.is_public == False
+            not association.is_enabled or not association.is_public
         ):
             return response.Response(
                 {"error": _("Association not visible.")},
@@ -266,7 +266,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.is_anonymous
-            and association.is_enabled == False
+            and not association.is_enabled
             and not request.user.is_in_association(association_id)
             and not request.user.has_perm("associations.view_association_not_enabled")
         ):
@@ -277,7 +277,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.is_anonymous
-            and association.is_public == False
+            and not association.is_public
             and not request.user.is_in_association(association_id)
             and not request.user.has_perm("associations.view_association_not_public")
         ):
@@ -315,13 +315,15 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         try:
-            sn = (
+            social_networks_data = (
                 request.data["social_networks"]
                 if "social_networks" in request.data
                 else []
             )
             social_networks = (
-                json.loads(sn) if type(sn) == str else json.loads(json.dumps(sn))
+                json.loads(social_networks_data)
+                if isinstance(social_networks_data, str)
+                else json.loads(json.dumps(social_networks_data))
             )
             for social_network in social_networks:
                 if sorted(list(social_network.keys())) != sorted(['type', 'location']):

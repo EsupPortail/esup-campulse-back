@@ -1,7 +1,7 @@
 """
 Serializers describing fields used on links between users and auth groups.
 """
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers

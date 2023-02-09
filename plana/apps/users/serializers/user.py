@@ -53,7 +53,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def has_validated_email_user(self, user) -> bool:
         """
-        Content from calculated field "has_validated_email" (True if user finished the registration, or False).
+        Content from calculated field "has_validated_email"
+            (True if user finished the registration, or False).
         """
         return user.has_validated_email_user()
 

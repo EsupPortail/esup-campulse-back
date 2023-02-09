@@ -107,19 +107,13 @@ class User(AbstractUser):
         """
         if self.is_superuser:
             return True
-        else:
-            groups_institutions_user = GroupInstitutionUsers.objects.filter(
-                user_id=self.pk
-            )
-            for group_institution_user in groups_institutions_user:
-                group_user = Group.objects.get(id=group_institution_user.group_id)
-                for permission in group_user.permissions.all():
-                    if (
-                        perm
-                        == f"{permission.content_type.app_label}.{permission.codename}"
-                    ):
-                        return True
-            return False
+        groups_institutions_user = GroupInstitutionUsers.objects.filter(user_id=self.pk)
+        for group_institution_user in groups_institutions_user:
+            group_user = Group.objects.get(id=group_institution_user.group_id)
+            for permission in group_user.permissions.all():
+                if perm == f"{permission.content_type.app_label}.{permission.codename}":
+                    return True
+        return False
 
     def is_cas_user(self):
         """

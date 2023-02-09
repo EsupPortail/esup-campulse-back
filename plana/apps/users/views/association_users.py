@@ -214,7 +214,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ):
                 if president:
                     return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
-                elif request.user.is_staff_in_institution(kwargs["association_id"]):
+                if request.user.is_staff_in_institution(kwargs["association_id"]):
                     asso_user.is_president = False
 
             if 'can_be_president' in request.data:

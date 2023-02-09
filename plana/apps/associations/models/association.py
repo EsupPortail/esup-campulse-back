@@ -13,6 +13,9 @@ from plana.apps.institutions.models import Institution, InstitutionComponent
 
 
 def get_logo_path(instance, filename):
+    """
+    Used by association path_logo field.
+    """
     file_basename, extension = os.path.splitext(filename)
     year = datetime.datetime.now().strftime('%Y')
     return (

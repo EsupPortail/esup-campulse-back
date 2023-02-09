@@ -37,10 +37,10 @@ class PlanAAdapter(DefaultAccountAdapter):
         context["last_name"] = user.last_name
         context["manager_email_address"] = settings.DEFAULT_MANAGER_GENERAL_EMAIL
 
-        if (
-            template_prefix == "account/email/email_confirmation_signup"
-            or template_prefix == "account/email/email_confirmation"
-        ):
+        if template_prefix in [
+            "account/email/email_confirmation_signup",
+            "account/email/email_confirmation",
+        ]:
             if template_prefix == "account/email/email_confirmation_signup":
                 template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
             elif template_prefix == "account/email/email_confirmation":

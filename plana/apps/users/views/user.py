@@ -346,7 +346,8 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    Overrided VerifyEmailView to send an email to a manager (or not if user revalidates an email address).
+    Overrided VerifyEmailView to send an email to a manager
+        (or not if user revalidates an email address).
     """
 
     def post(self, request, *args, **kwargs):

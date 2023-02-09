@@ -875,8 +875,9 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: Overrided VerifyEmailView to send an email to a manager (or not
-        if user revalidates an email address).
+      description: |-
+        Overrided VerifyEmailView to send an email to a manager
+            (or not if user revalidates an email address).
       tags:
       - users
       requestBody:

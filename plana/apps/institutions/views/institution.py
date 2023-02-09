@@ -1,7 +1,6 @@
 """
 Views directly linked to associations.
 """
-from django.utils.translation import gettext_lazy as _
 from rest_framework import generics
 
 from plana.apps.institutions.models.institution import Institution
