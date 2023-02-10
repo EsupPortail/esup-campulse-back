@@ -20,16 +20,6 @@ class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    permissions = serializers.SerializerMethodField()
-
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_permissions(self, group_institution_user):
-        """
-        Return permissions links.
-        """
-        return Group.objects.get(
-            id=group_institution_user.group_id
-        ).permissions.values_list('codename', flat=True)
 
     class Meta:
         model = GroupInstitutionUsers

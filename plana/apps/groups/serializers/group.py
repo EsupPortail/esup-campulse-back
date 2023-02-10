@@ -19,9 +19,7 @@ class GroupSerializer(serializers.ModelSerializer):
         """
         Return permissions links.
         """
-        return Group.objects.get(id=group.id).permissions.values_list(
-            'codename', flat=True
-        )
+        return group.permissions.values_list('codename', flat=True)
 
     class Meta:
         model = Group

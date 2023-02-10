@@ -12,6 +12,7 @@ from dj_rest_auth.serializers import (
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
@@ -37,6 +38,22 @@ class UserSerializer(serializers.ModelSerializer):
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
     groups = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.OBJECT)
+    def get_permissions(self, user):
+        """
+        Return permissions linked to the user.
+        """
+        permissions = []
+        user_groups_ids = GroupInstitutionUsers.objects.filter(user_id=user.id).values(
+            'group_id'
+        )
+        groups = Group.objects.filter(id__in=user_groups_ids)
+        for group in groups:
+            permissions.append(group.permissions.values_list('codename', flat=True))
+        return permissions
+        # return user.get_group_permissions()
 
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
@@ -72,6 +89,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_validated_by_admin",
             "associations",
             "groups",
+            "permissions",
         ]
 
 
