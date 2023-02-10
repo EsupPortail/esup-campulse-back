@@ -547,3 +547,6 @@ APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
 
 # Default value for is_site setting.
 ASSOCIATION_IS_SITE_DEFAULT = False
+
+# Avoid registration with following email domains.
+RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
