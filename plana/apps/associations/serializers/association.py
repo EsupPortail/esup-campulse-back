@@ -91,3 +91,17 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
             "is_site",
             "institution",
         ]
+
+
+class AssociationNameSerializer(serializers.ModelSerializer):
+    """
+    Smaller serializer to return only the name of an association
+    (used in a simple name list of all associations).
+    """
+
+    class Meta:
+        model = Association
+        fields = [
+            "id",
+            "name",
+        ]

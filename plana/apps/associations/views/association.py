@@ -21,6 +21,7 @@ from plana.apps.associations.serializers.association import (
     AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
+    AssociationNameSerializer,
     AssociationPartialDataSerializer,
 )
 from plana.apps.users.models.user import AssociationUsers
@@ -442,3 +443,14 @@ class AssociationActivityFieldList(generics.ListAPIView):
 
     def get_queryset(self):
         return ActivityField.objects.all().order_by("name")
+
+
+class AssociationNameList(generics.ListAPIView):
+    """
+    GET : Lists name of all associations.
+    """
+
+    serializer_class = AssociationNameSerializer
+
+    def get_queryset(self):
+        return Association.objects.all().order_by("name")

@@ -572,3 +572,25 @@ class AssociationsViewsTests(TestCase):
 
         activity_field_1 = content[0]
         self.assertTrue(activity_field_1.get("name"))
+
+    def test_get_association_names_list(self):
+        """
+        GET /associations/names
+        - There's at least one association name in the association names list.
+        - The route can be accessed by anyone.
+        - We get the same amount of associations through the model and through the view.
+        - Only id and names of the associations are returned.
+        """
+        asso_names_cnt = Association.objects.count()
+        self.assertTrue(asso_names_cnt > 0)
+
+        response = self.client.get("/associations/names")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), asso_names_cnt)
+
+        asso_name_1 = content[0]
+        self.assertTrue(asso_name_1.get("name"))
+        self.assertTrue(asso_name_1.get("id"))
+        self.assertFalse(asso_name_1.get("institution"))
