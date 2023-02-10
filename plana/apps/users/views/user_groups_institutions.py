@@ -46,11 +46,10 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             user_id = request.data["user"]
-            #            groups_ids = request.data["groups"]
+            # groups_ids = request.data["groups"]
             group_id = request.data["group"]
             user = User.objects.get(pk=user_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError) as e:
-            print(e)
+        except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No user name or groups ids given.")},
                 status=status.HTTP_400_BAD_REQUEST,

@@ -496,19 +496,19 @@ class UserViewsManagerTests(TestCase):
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "groups": [7]},
+            {"user": self.student_user_id, "group": 7},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "groups": [7]},
+            {"user": self.unvalidated_user_id, "group": 7},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.manager_general_user_name, "groups": [7]},
+            {"user": self.manager_general_user_id, "group": 7},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 

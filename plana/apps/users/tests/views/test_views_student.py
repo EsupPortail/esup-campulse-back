@@ -416,7 +416,7 @@ class UserViewsStudentTests(TestCase):
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
-            "/users/groups/", {"username": self.student_user_name, "groups": [7]}
+            "/users/groups/", {"user": self.student_user_id, "group": 7}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 

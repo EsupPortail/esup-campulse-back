@@ -213,6 +213,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
+  /associations/names:
+    get:
+      operationId: associations_names_list
+      description: 'GET : Lists name of all associations.'
+      tags:
+      - associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssociationName'
+          description: ''
   /consents/:
     get:
       operationId: consents_list
@@ -1437,6 +1455,22 @@ components:
           title: Etablissement
       required:
       - name
+    AssociationName:
+      type: object
+      description: |-
+        Smaller serializer to return only the name of an association
+        (used in a simple name list of all associations).
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+      - name
     AssociationPartialData:
       type: object
       description: |-
@@ -1685,9 +1719,14 @@ components:
           type: string
           title: Nom
           maxLength: 150
+        permissions:
+          type: object
+          additionalProperties: {}
+          readOnly: true
       required:
       - id
       - name
+      - permissions
     Institution:
       type: object
       description: Main serializer.
@@ -2033,6 +2072,10 @@ components:
           type: object
           additionalProperties: {}
           readOnly: true
+        permissions:
+          type: object
+          additionalProperties: {}
+          readOnly: true
       required:
       - associations
       - email
@@ -2042,6 +2085,7 @@ components:
       - id
       - is_cas
       - last_name
+      - permissions
       - username
     UserGroupsInstitutions:
       type: object
@@ -2057,14 +2101,9 @@ components:
         institution:
           type: integer
           nullable: true
-        permissions:
-          type: object
-          additionalProperties: {}
-          readOnly: true
       required:
       - group
       - id
-      - permissions
       - user
     UserGroupsInstitutionsRequest:
       type: object
