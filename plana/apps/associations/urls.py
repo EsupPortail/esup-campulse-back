@@ -6,6 +6,7 @@ from django.urls import path
 from .views.association import (
     AssociationActivityFieldList,
     AssociationListCreate,
+    AssociationNameList,
     AssociationRetrieveUpdateDestroy,
 )
 
@@ -20,5 +21,10 @@ urlpatterns = [
         "activity_fields",
         AssociationActivityFieldList.as_view(),
         name="association_activity_field_list",
+    ),
+    path(
+        "names",
+        AssociationNameList.as_view(),
+        name="association_name_list",
     ),
 ]
