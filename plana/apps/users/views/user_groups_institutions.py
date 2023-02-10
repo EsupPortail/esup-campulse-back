@@ -1,6 +1,7 @@
 """
 Views linked to links between users and auth groups.
 """
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
@@ -44,10 +45,12 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            username = request.data["username"]
-            groups_ids = request.data["groups"]
-            user = User.objects.get(username=username)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            user_id = request.data["user"]
+            #            groups_ids = request.data["groups"]
+            group_id = request.data["group"]
+            user = User.objects.get(pk=user_id)
+        except (ObjectDoesNotExist, MultiValueDictKeyError) as e:
+            print(e)
             return response.Response(
                 {"error": _("No user name or groups ids given.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -75,6 +78,8 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # In case we revert to a multi-group linking to users system
+        """
         groups = (
             groups_ids
             if isinstance(groups_ids, list)
@@ -84,15 +89,38 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
             try:
                 group = Group.objects.get(id=id_group)
                 # TODO Find a better way to avoid registration as manager.
-                if not group.name.startswith("MANAGER_"):
+                if group.name in settings.PUBLIC_GROUPS:
                     GroupInstitutionUsers.objects.create(
                         user_id=user.pk, group_id=id_group, institution_id=None
+                    )
+                else:
+                    return response.Response(
+                        {"error": _("Adding users in this group is not allowed.")},
+                        status=status.HTTP_400_BAD_REQUEST,
                     )
             except Group.DoesNotExist:
                 return response.Response(
                     {"error": _("Group does not exist.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        """
+        try:
+            group = Group.objects.get(pk=group_id)
+            # TODO : What should we do with the institution parameter ??
+            if group.name in settings.PUBLIC_GROUPS:
+                GroupInstitutionUsers.objects.create(
+                    user_id=user.pk, group_id=group_id, institution_id=None
+                )
+            else:
+                return response.Response(
+                    {"error": _("Adding users in this group is not allowed.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        except Group.DoesNotExist:
+            return response.Response(
+                {"error": _("Group does not exist.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         return response.Response({}, status=status.HTTP_200_OK)
 
