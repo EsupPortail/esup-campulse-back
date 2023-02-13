@@ -394,7 +394,7 @@ class UserViewsStudentTests(TestCase):
         GET /users/consents/{user_id}
         - A student user cannot execute this request.
         """
-        # TODO Reactivate this test when consents are ready.
+        # TODO Reactivate this test when consents will be ready.
         """
         response_student = self.student_client.get(
             f"/users/consents/{self.student_user_id}"

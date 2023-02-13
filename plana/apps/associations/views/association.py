@@ -119,6 +119,21 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
             activity_field = self.request.query_params.get("activity_field")
             user_id = self.request.query_params.get("user_id")
+
+            if self.request.user.is_anonymous:
+                is_enabled = True
+                is_public = True
+
+            if not self.request.user.is_anonymous and not self.request.user.has_perm(
+                "associations.view_association_not_enabled"
+            ):
+                is_enabled = True
+
+            if not self.request.user.is_anonymous and not self.request.user.has_perm(
+                "associations.view_association_not_public"
+            ):
+                is_public = True
+
             if name is not None and name != "":
                 name = str(name).strip()
                 queryset = queryset.filter(

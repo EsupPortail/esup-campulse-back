@@ -46,6 +46,12 @@ from plana.utils import send_mail, to_bool
                 OpenApiParameter.QUERY,
                 description="Filter by Association ID.",
             ),
+            OpenApiParameter(
+                "institution_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution ID.",
+            ),
         ]
     )
 )
@@ -64,6 +70,7 @@ class UserListCreate(generics.ListCreateAPIView):
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
         is_cas = self.request.query_params.get("is_cas")
         association_id = self.request.query_params.get("association_id")
+        institution_id = self.request.query_params.get("institution_id")
 
         if is_validated_by_admin is not None and is_validated_by_admin != "":
             is_validated_by_admin = to_bool(is_validated_by_admin)
@@ -81,11 +88,18 @@ class UserListCreate(generics.ListCreateAPIView):
             )
 
         if association_id is not None and association_id != "":
-            assos_users_query = (
-                AssociationUsers.objects.filter(association_id=association_id)
-                .values_list("user_id", flat=True)
-                .all()
-            )
+            assos_users_query = AssociationUsers.objects.filter(
+                association_id=association_id
+            ).values_list("user_id", flat=True)
+            queryset = queryset.filter(id__in=assos_users_query)
+
+        if institution_id is not None and institution_id != "":
+            associations_ids = Association.objects.filter(
+                institution_id=institution_id
+            ).values_list("id", flat=True)
+            assos_users_query = AssociationUsers.objects.filter(
+                association_id__in=associations_ids
+            ).values_list("user_id", flat=True)
             queryset = queryset.filter(id__in=assos_users_query)
 
         return queryset

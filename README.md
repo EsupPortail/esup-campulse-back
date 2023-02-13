@@ -62,6 +62,7 @@ Consulter [le wiki d'aide au développement](https://git.unistra.fr/di/plan_a/pl
 - Charger les fixtures des templates de mails : `fab test custom_manage_cmd:loaddata\ plana/libs/*/fixtures/*.json -u root`.
 
 Le front est accessible à cette adresse : [https://plana-test.app.unistra.fr/](https://plana-test.app.unistra.fr/)
+
 Le back est accessible à cette adresse : [https://plana-api-test.app.unistra.fr/](https://plana-api-test.app.unistra.fr/)
 
 ### Déployer sur le serveur de prod
