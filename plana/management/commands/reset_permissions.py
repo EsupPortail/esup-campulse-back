@@ -11,22 +11,26 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        for group in Group.objects.all():
-            group.permissions.clear()
-            for new_group_permission in PERMISSIONS_GROUPS[group.name]:
-                group.permissions.add(
-                    Permission.objects.get(codename=new_group_permission)
-                )
-        management.call_command(
-            'dumpdata',
-            'auth.permission',
-            indent=2,
-            output='plana/apps/groups/fixtures/auth_permission.json',
-        )
-        management.call_command(
-            'dumpdata',
-            'auth.group_permissions',
-            indent=2,
-            output='plana/apps/groups/fixtures/auth_group_permissions.json',
-        )
-        self.stdout.write("Updated all group permissions.")
+        try:
+            for group in Group.objects.all():
+                group.permissions.clear()
+                for new_group_permission in PERMISSIONS_GROUPS[group.name]:
+                    group.permissions.add(
+                        Permission.objects.get(codename=new_group_permission)
+                    )
+            management.call_command(
+                'dumpdata',
+                'auth.permission',
+                indent=2,
+                output='plana/apps/groups/fixtures/auth_permission.json',
+            )
+            management.call_command(
+                'dumpdata',
+                'auth.group_permissions',
+                indent=2,
+                output='plana/apps/groups/fixtures/auth_group_permissions.json',
+            )
+            self.stdout.write(self.style.SUCCESS("Updated all group permissions."))
+
+        except Exception as e:
+            self.stdout.write(self.style.ERROR("Error : %s" % e))
