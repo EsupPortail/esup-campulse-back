@@ -236,8 +236,8 @@ django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.11" \
 django==3.2.17 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:59c39fc342b242fb42b6b040ad8b1b4c15df438706c1d970d416d63cdd73e7fd \
     --hash=sha256:644288341f06ebe4938eec6801b6bd59a6534a78e4aedde2a153075d11143894
-djangorestframework-camel-case==1.4.0 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:48d92fd65961ff6bb320a00c926aa7a5a6f7b0278d08fd1c5e96054b2708179f
+djangorestframework-camel-case==1.4.1 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:c838e5eef42a72fbf7c672d8c52074a5cd102e6335a08bfe930341fd1e2308a3
 djangorestframework-simplejwt==5.2.2 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:4c0d2e2513e12587d93501ac091781684a216c3ee614eb3b5a10586aef5ca845 \
     --hash=sha256:d27d4bcac2c6394f678dea8b4d0d511c6e18a7f2eb8aaeeb8a7de601aeb77c42

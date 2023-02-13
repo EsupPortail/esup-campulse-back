@@ -47,13 +47,13 @@ class UserSerializer(serializers.ModelSerializer):
         """
         permissions = []
         user_groups_ids = GroupInstitutionUsers.objects.filter(user_id=user.id).values(
-            'group_id'
+            "group_id"
         )
         groups = Group.objects.filter(id__in=user_groups_ids)
         for group in groups:
             permissions = [
                 *permissions,
-                *group.permissions.values_list('codename', flat=True),
+                *group.permissions.values_list("codename", flat=True),
             ]
         return permissions
         # return user.get_group_permissions()

@@ -1728,8 +1728,12 @@ components:
           type: object
           additionalProperties: {}
           readOnly: true
+        is_public:
+          type: boolean
+          readOnly: true
       required:
       - id
+      - is_public
       - name
       - permissions
     Institution:

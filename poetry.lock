@@ -807,13 +807,13 @@ pytz = "*"
 
 [[package]]
 name = "djangorestframework-camel-case"
-version = "1.4.0"
+version = "1.4.1"
 description = "Camel case JSON support for Django REST framework."
 category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "djangorestframework-camel-case-1.4.0.tar.gz", hash = "sha256:48d92fd65961ff6bb320a00c926aa7a5a6f7b0278d08fd1c5e96054b2708179f"},
+    {file = "djangorestframework-camel-case-1.4.1.tar.gz", hash = "sha256:c838e5eef42a72fbf7c672d8c52074a5cd102e6335a08bfe930341fd1e2308a3"},
 ]
 
 [[package]]
