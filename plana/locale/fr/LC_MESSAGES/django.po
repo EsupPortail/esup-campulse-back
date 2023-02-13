@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 16:05+0100\n"
+"POT-Creation-Date: 2023-02-13 09:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,17 +296,17 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:127
+#: plana/apps/users/serializers/user.py:130
 msgid "Unistra users cannot create local accounts."
 msgstr ""
 "Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de "
 "comptes locaux."
 
-#: plana/apps/users/serializers/user.py:152
+#: plana/apps/users/serializers/user.py:155
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:189
+#: plana/apps/users/serializers/user.py:192
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 

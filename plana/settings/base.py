@@ -551,5 +551,5 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
-# Groups choosable on user registration
+# Groups that can be chosen on user registration.
 PUBLIC_GROUPS = ["COMMISSION_GENERAL", "COMMISSION_MISC", "STUDENT_INSTITUTION", "STUDENT_MISC"]
