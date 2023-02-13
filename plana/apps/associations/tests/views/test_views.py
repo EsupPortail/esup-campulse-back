@@ -98,12 +98,14 @@ class AssociationsViewsTests(TestCase):
         - An association can be found with its acronym.
         - Non-enabled associations can be filtered.
         - Site associations can be filtered.
-        - Associations without institution component ID can be filtered.
         - Associations with a specific institution ID can be filtered.
         - Associations with a specific institution component ID can be filtered.
+        - Associations without a specific institution component ID can be filtered.
         - Associations with a specific institution activity field can be filtered.
         - Associations with a specific user_id cannot be filtered by an anonymous.
         - Associations with a specific user_id can be filtered by a manager.
+        - Non-enabled associations can be filtered by a manager.
+        - Non-public associations can be filtered by a manager.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -151,10 +153,6 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_site"], True)
 
-        response = self.client.get("/associations/?institution_component=")
-        for association in response.data:
-            self.assertEqual(association["institution_component"], None)
-
         response = self.client.get("/associations/?institution=1")
         for association in response.data:
             self.assertEqual(association["institution"]["id"], 1)
@@ -162,6 +160,10 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/?institution_component=1")
         for association in response.data:
             self.assertEqual(association["institution_component"]["id"], 1)
+
+        response = self.client.get("/associations/?institution_component=")
+        for association in response.data:
+            self.assertEqual(association["institution_component"], None)
 
         response = self.client.get("/associations/?activity_field=3")
         for association in response.data:
@@ -182,6 +184,14 @@ class AssociationsViewsTests(TestCase):
             user_id=self.student_user_id
         ).count()
         self.assertEqual(len(content), links_cnt)
+
+        response = self.general_client.get(f"/associations/?is_enabled=false")
+        for association in response.data:
+            self.assertEqual(association["is_enabled"], False)
+
+        response = self.general_client.get(f"/associations/?is_public=false")
+        for association in response.data:
+            self.assertEqual(association["is_public"], False)
 
     def test_post_association(self):
         """

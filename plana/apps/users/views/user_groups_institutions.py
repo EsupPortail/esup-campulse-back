@@ -105,7 +105,6 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         """
         try:
             group = Group.objects.get(pk=group_id)
-            # TODO : What should we do with the institution parameter ??
             if group.name in settings.PUBLIC_GROUPS:
                 GroupInstitutionUsers.objects.create(
                     user_id=user.pk, group_id=group_id, institution_id=None

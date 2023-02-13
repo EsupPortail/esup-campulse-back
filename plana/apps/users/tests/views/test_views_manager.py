@@ -9,6 +9,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.association import Association
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.provider import CASProvider
@@ -68,6 +69,7 @@ class UserViewsManagerTests(TestCase):
         - We get the same amount of users through the model and through the view.
         - is_validated_by_admin query parameter only returns a non-validated user.
         - association_id query parameter only returns users linked to this association.
+        - institution_id query parameter only returns users linked to this institution.
         """
         response_manager = self.manager_client.get("/users/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
@@ -91,6 +93,20 @@ class UserViewsManagerTests(TestCase):
         content = json.loads(response_manager.content.decode("utf-8"))
         links_cnt = AssociationUsers.objects.filter(
             association_id=association_id
+        ).count()
+        self.assertEqual(len(content), links_cnt)
+
+        institution_id = 2
+        response_manager = self.manager_client.get(
+            f"/users/?institution_id={institution_id}"
+        )
+        content = json.loads(response_manager.content.decode("utf-8"))
+
+        associations_ids = Association.objects.filter(
+            institution_id=institution_id
+        ).values_list("id", flat=True)
+        links_cnt = AssociationUsers.objects.filter(
+            association_id__in=associations_ids
         ).count()
         self.assertEqual(len(content), links_cnt)
 
@@ -491,6 +507,7 @@ class UserViewsManagerTests(TestCase):
         """
         POST /users/group/
         - A manager user can add a group to a validated student.
+        - A manager user cannot add a restricted group to a student.
         - A manager user can add a group to a non-validated student.
         - Groups for a manager cannot be changed.
         """
@@ -505,6 +522,12 @@ class UserViewsManagerTests(TestCase):
             {"user": self.unvalidated_user_id, "group": 7},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"user": self.unvalidated_user_id, "group": 1},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_manager = self.manager_client.post(
             "/users/groups/",

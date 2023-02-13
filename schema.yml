@@ -317,6 +317,11 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
+        name: institution_id
+        schema:
+          type: integer
+        description: Filter by Institution ID.
+      - in: query
         name: is_cas
         schema:
           type: boolean
