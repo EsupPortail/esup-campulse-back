@@ -7,12 +7,12 @@ attrs==22.2.0 ; python_version >= "3.8" and python_version < "3.11" \
 bleach==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414 \
     --hash=sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4
-boto3==1.26.68 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:bbb426a9b3afd3ccbac25e03b215d79e90b4c47905b1b08b3b9d86fc74096974 \
-    --hash=sha256:c92dd0fde7839c0ca9c16a989d67ceb7f80f53de19f2b087fd1182f2af41b2ae
-botocore==1.29.68 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:08fa8302a22553e69b70b1de2cc8cec61a3a878546658d091473e13d5b9d2ca4 \
-    --hash=sha256:8f5cb96dc0862809d29fe512087c77c15fe6328a2d8238f0a96cccb6eb77ec12
+boto3==1.26.69 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:9a0a29179957cb26fa8c3c1fddf66b18efaeaf633e08db5fb53815ffb0421419 \
+    --hash=sha256:eb8cde24a4c5755c35126e8cd460e6b51c63d04292419e7e95721232720c7e5b
+botocore==1.29.69 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:2a4ab8bcb3177daa425019e125c09996b9a6a1a62bb0baaaeeb86ffd552719cc \
+    --hash=sha256:7e1bebca013544fbc298cb58603bfccd5f71b49c720a5c33c07cf5dfc8145a1f
 certifi==2022.12.7 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3 \
     --hash=sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
@@ -206,8 +206,8 @@ da-vinci==0.3.0 ; python_version >= "3.8" and python_version < "3.11" \
 defusedxml==0.7.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
-dj-rest-auth==2.2.7 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:911bcf377df68c958a7f534def7715b61f3d887a46fbb53ca7666244b7c0b143
+dj-rest-auth==2.2.8 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:9fb3492888185ede8b2064ad6803120c7b0b83ab08e2347a02e9b44282374242
 django-allauth-cas==1.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:405185259c60f09b1b7dcb54acb2893dc900815e22eb5295c55cacc4cfa40250 \
     --hash=sha256:d8d62b050133526a7df03f254c481eb09fc673eb8947b6d35be2739af6cc6479
