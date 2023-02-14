@@ -21,7 +21,7 @@ class GroupSerializer(serializers.ModelSerializer):
         """
         Return permissions links.
         """
-        return group.permissions.values_list('codename', flat=True)
+        return group.permissions.values_list("codename", flat=True)
 
     def is_public_group(self, group) -> bool:
         """

@@ -49,7 +49,7 @@ class Command(BaseCommand):
                     user_id=user.pk, group_id=group.id, institution_id=institution.id
                 )
             else:
-                for institution_id in Institution.objects.values_list('id', flat=True):
+                for institution_id in Institution.objects.values_list("id", flat=True):
                     GroupInstitutionUsers.objects.create(
                         user_id=user.pk,
                         group_id=group.id,

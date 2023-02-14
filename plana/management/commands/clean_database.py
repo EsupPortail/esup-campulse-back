@@ -9,12 +9,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            call_command('flush')
-            call_command('migrate')
-            apps_fixtures = list(pathlib.Path().glob('plana/apps/*/fixtures/*.json'))
-            call_command('loaddata', *apps_fixtures)
-            libs_fixtures = list(pathlib.Path().glob('plana/libs/*/fixtures/*.json'))
-            call_command('loaddata', *libs_fixtures)
+            call_command("flush")
+            call_command("migrate")
+            apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
+            call_command("loaddata", *apps_fixtures)
+            libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
+            call_command("loaddata", *libs_fixtures)
             self.stdout.write(self.style.SUCCESS("Database regenerated."))
 
         except Exception as e:

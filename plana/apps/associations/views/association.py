@@ -98,11 +98,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        'name__nospaces__unaccent',
-        'acronym__nospaces__unaccent',
-        'activity_field__name__nospaces__unaccent',
-        'institution__name__nospaces__unaccent',
-        'institution_component__name__nospaces__unaccent',
+        "name__nospaces__unaccent",
+        "acronym__nospaces__unaccent",
+        "activity_field__name__nospaces__unaccent",
+        "institution__name__nospaces__unaccent",
+        "institution_component__name__nospaces__unaccent",
     ]
 
     def get_queryset(self):
@@ -344,7 +344,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 else json.loads(json.dumps(social_networks_data))
             )
             for social_network in social_networks:
-                if sorted(list(social_network.keys())) != sorted(['type', 'location']):
+                if sorted(list(social_network.keys())) != sorted(["type", "location"]):
                     return response.Response(
                         {"error": _("Wrong social_networks parameters")},
                         status=status.HTTP_400_BAD_REQUEST,

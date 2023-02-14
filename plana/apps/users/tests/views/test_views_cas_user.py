@@ -45,9 +45,9 @@ class UserViewsTests(TestCase):
             primary=True,
         )
         validate.return_value = {
-            'ticket': 'aaa',
-            'service': 'http://service.url',
-            'user': User.objects.get(username="PatriciaCAS"),
+            "ticket": "aaa",
+            "service": "http://service.url",
+            "user": User.objects.get(username="PatriciaCAS"),
         }
         self.cas_client = Client()
         url_cas = reverse("rest_cas_login")

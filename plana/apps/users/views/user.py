@@ -79,7 +79,7 @@ class UserListCreate(generics.ListCreateAPIView):
         if is_cas is not None and is_cas != "":
             is_cas = to_bool(is_cas)
             cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
-                'user_id', flat=True
+                "user_id", flat=True
             )
             queryset = (
                 queryset.filter(id__in=cas_ids_list)

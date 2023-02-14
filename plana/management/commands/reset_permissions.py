@@ -23,17 +23,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             if options["flush"] == True:
-                call_command('flush')
-                os.remove('plana/apps/groups/fixtures/auth_permission.json')
-                os.remove('plana/apps/groups/fixtures/auth_group_permissions.json')
+                call_command("flush")
+                os.remove("plana/apps/groups/fixtures/auth_permission.json")
+                os.remove("plana/apps/groups/fixtures/auth_group_permissions.json")
                 apps_fixtures = list(
-                    pathlib.Path().glob('plana/apps/*/fixtures/*.json')
+                    pathlib.Path().glob("plana/apps/*/fixtures/*.json")
                 )
-                call_command('loaddata', *apps_fixtures)
+                call_command("loaddata", *apps_fixtures)
                 libs_fixtures = list(
-                    pathlib.Path().glob('plana/libs/*/fixtures/*.json')
+                    pathlib.Path().glob("plana/libs/*/fixtures/*.json")
                 )
-                call_command('loaddata', *libs_fixtures)
+                call_command("loaddata", *libs_fixtures)
 
             for group in Group.objects.all():
                 group.permissions.clear()
@@ -42,16 +42,16 @@ class Command(BaseCommand):
                         Permission.objects.get(codename=new_group_permission)
                     )
             call_command(
-                'dumpdata',
-                'auth.permission',
+                "dumpdata",
+                "auth.permission",
                 indent=2,
-                output='plana/apps/groups/fixtures/auth_permission.json',
+                output="plana/apps/groups/fixtures/auth_permission.json",
             )
             call_command(
-                'dumpdata',
-                'auth.group_permissions',
+                "dumpdata",
+                "auth.group_permissions",
                 indent=2,
-                output='plana/apps/groups/fixtures/auth_group_permissions.json',
+                output="plana/apps/groups/fixtures/auth_group_permissions.json",
             )
             self.stdout.write(self.style.SUCCESS("Updated all group permissions."))
 
