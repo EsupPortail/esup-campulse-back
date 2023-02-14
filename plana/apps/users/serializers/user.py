@@ -105,7 +105,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "email", "first_name", "last_name", "phone")
+        fields = ("email", "first_name", "last_name", "phone")
 
     """
     def get_validation_exclusions(self):

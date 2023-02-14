@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.users.models.user import GroupInstitutionUsers, User
 from plana.apps.users.serializers.user_groups_institutions import (
+    UserGroupsInstitutionsCreateSerializer,
     UserGroupsInstitutionsSerializer,
 )
 
@@ -23,7 +24,7 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
     """
 
     queryset = GroupInstitutionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsSerializer
+    serializer_class = UserGroupsInstitutionsCreateSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -45,10 +46,9 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            user_id = request.data["user"]
             # groups_ids = request.data["groups"]
             group_id = request.data["group"]
-            user = User.objects.get(pk=user_id)
+            user = User.objects.get(username=request.data["username"])
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No user name or groups ids given.")},

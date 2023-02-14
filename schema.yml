@@ -1118,7 +1118,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserGroupsInstitutions'
+                  $ref: '#/components/schemas/UserGroupsInstitutionsCreate'
           description: ''
     post:
       operationId: users_groups_create
@@ -1132,13 +1132,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -1149,7 +1149,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroupsInstitutions'
+                $ref: '#/components/schemas/UserGroupsInstitutionsCreate'
           description: ''
   /users/groups/{user_id}:
     get:
@@ -2117,12 +2117,26 @@ components:
       - group
       - id
       - user
-    UserGroupsInstitutionsRequest:
+    UserGroupsInstitutionsCreate:
       type: object
-      description: Main serializer.
+      description: Serializer for user-groups creation.
       properties:
         user:
+          type: string
+        group:
           type: integer
+        institution:
+          type: integer
+          nullable: true
+      required:
+      - group
+      - user
+    UserGroupsInstitutionsCreateRequest:
+      type: object
+      description: Serializer for user-groups creation.
+      properties:
+        user:
+          type: string
         group:
           type: integer
         institution:

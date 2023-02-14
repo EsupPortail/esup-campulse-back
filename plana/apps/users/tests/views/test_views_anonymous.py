@@ -426,24 +426,24 @@ class UserViewsAnonymousTests(TestCase):
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"user": self.student_user_id, "group": 4},
+            {"username": self.student_user_name, "group": 4},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"user": self.unvalidated_user_id, "group": 7},
+            {"username": self.unvalidated_user_name, "group": 7},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"user": 99, "group": 6},
+            {"username": 99, "group": 6},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_anonymous = self.client.post(
-            "/users/groups/", {"user": self.unvalidated_user_id, "group": 66}
+            "/users/groups/", {"username": self.unvalidated_user_name, "group": 66}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -451,7 +451,7 @@ class UserViewsAnonymousTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_anonymous = self.client.post(
-            "/users/groups/", {"user": self.student_user_id}
+            "/users/groups/", {"username": self.student_user_name}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
