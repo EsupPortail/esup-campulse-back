@@ -114,6 +114,7 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/associations/
         - An anonymous user cannot add a link between a validated user and an association.
         - An association cannot have two presidents.
+        - An anonymous user cannot validate a link between a user and an association.
         - An anonymous user can add a link between a non-validated user and an association.
         - A user cannot be added twice in the same association.
         - A non-existing user cannot be added in an association.
@@ -138,6 +139,17 @@ class UserViewsAnonymousTests(TestCase):
                 "user": self.unvalidated_user_name,
                 "association": 3,
                 "is_president": True,
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/associations/",
+            {
+                "user": self.unvalidated_user_name,
+                "association": 5,
+                "can_be_president": False,
+                "is_validated_by_admin": True,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)

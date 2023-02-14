@@ -480,7 +480,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationUsersCreation'
+                  $ref: '#/components/schemas/AssociationUsersCreate'
           description: ''
     post:
       operationId: users_associations_create
@@ -494,13 +494,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreationRequest'
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -511,7 +511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationUsersCreation'
+                $ref: '#/components/schemas/AssociationUsersCreate'
           description: ''
   /users/associations/{user_id}:
     get:
@@ -1533,53 +1533,58 @@ components:
           readOnly: true
         user:
           type: string
-        role_name:
-          type: string
-          nullable: true
-          maxLength: 150
+        association:
+          $ref: '#/components/schemas/AssociationMandatoryData'
         is_president:
           type: boolean
         can_be_president:
           type: boolean
-        association:
-          $ref: '#/components/schemas/AssociationMandatoryData'
+        is_validated_by_admin:
+          type: boolean
+        is_secretary:
+          type: boolean
+        is_treasurer:
+          type: boolean
       required:
       - association
       - id
       - user
-    AssociationUsersCreation:
+    AssociationUsersCreate:
       type: object
-      description: Serializer to create the link (without all association details).
+      description: Serializer for user-associations creation.
       properties:
         user:
           type: string
-        role_name:
-          type: string
-          nullable: true
-          maxLength: 150
         is_president:
           type: boolean
         can_be_president:
+          type: boolean
+        is_validated_by_admin:
+          type: boolean
+        is_secretary:
+          type: boolean
+        is_treasurer:
           type: boolean
         association:
           type: integer
       required:
       - association
       - user
-    AssociationUsersCreationRequest:
+    AssociationUsersCreateRequest:
       type: object
-      description: Serializer to create the link (without all association details).
+      description: Serializer for user-associations creation.
       properties:
         user:
           type: string
-        role_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         is_president:
           type: boolean
         can_be_president:
+          type: boolean
+        is_validated_by_admin:
+          type: boolean
+        is_secretary:
+          type: boolean
+        is_treasurer:
           type: boolean
         association:
           type: integer
@@ -1588,15 +1593,17 @@ components:
       - user
     AssociationUsersUpdate:
       type: object
-      description: Serializer used to patch AssociationUsers fields.
+      description: Serializer for user-associations change.
       properties:
-        role_name:
-          type: string
-          nullable: true
-          maxLength: 150
         is_president:
           type: boolean
         can_be_president:
+          type: boolean
+        is_validated_by_admin:
+          type: boolean
+        is_secretary:
+          type: boolean
+        is_treasurer:
           type: boolean
     CAS:
       type: object
@@ -1954,16 +1961,17 @@ components:
           additionalProperties: {}
     PatchedAssociationUsersUpdateRequest:
       type: object
-      description: Serializer used to patch AssociationUsers fields.
+      description: Serializer for user-associations change.
       properties:
-        role_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         is_president:
           type: boolean
         can_be_president:
+          type: boolean
+        is_validated_by_admin:
+          type: boolean
+        is_secretary:
+          type: boolean
+        is_treasurer:
           type: boolean
     PatchedUserRequest:
       type: object
@@ -2119,7 +2127,7 @@ components:
       - user
     UserGroupsInstitutionsCreate:
       type: object
-      description: Serializer for user-groups creation.
+      description: Serializer for user-groups creation (with username instead of id).
       properties:
         user:
           type: string
@@ -2133,7 +2141,7 @@ components:
       - user
     UserGroupsInstitutionsCreateRequest:
       type: object
-      description: Serializer for user-groups creation.
+      description: Serializer for user-groups creation (with username instead of id).
       properties:
         user:
           type: string

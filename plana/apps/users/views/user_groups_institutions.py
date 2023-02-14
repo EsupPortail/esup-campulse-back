@@ -87,7 +87,6 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         for id_group in groups:
             try:
                 group = Group.objects.get(id=id_group)
-                # TODO Find a better way to avoid registration as manager.
                 if group.name in settings.PUBLIC_GROUPS:
                     GroupInstitutionUsers.objects.create(
                         user_id=user.pk, group_id=id_group, institution_id=None

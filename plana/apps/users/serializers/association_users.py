@@ -3,6 +3,7 @@ Serializers describing fields used on links between users and associations.
 """
 from rest_framework import serializers
 
+from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
@@ -21,19 +22,12 @@ class AssociationUsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssociationUsers
-        fields = [
-            "id",
-            "user",
-            "role_name",
-            "is_president",
-            "can_be_president",
-            "association",
-        ]
+        fields = "__all__"
 
 
-class AssociationUsersCreationSerializer(serializers.ModelSerializer):
+class AssociationUsersCreateSerializer(serializers.ModelSerializer):
     """
-    Serializer to create the link (without all association details).
+    Serializer for user-associations creation.
     """
 
     user = serializers.SlugRelatedField(
@@ -44,22 +38,42 @@ class AssociationUsersCreationSerializer(serializers.ModelSerializer):
         model = AssociationUsers
         fields = [
             "user",
-            "role_name",
             "is_president",
             "can_be_president",
+            "is_validated_by_admin",
+            "is_secretary",
+            "is_treasurer",
             "association",
         ]
 
 
 class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
     """
-    Serializer used to patch AssociationUsers fields.
+    Serializer for user-associations change.
     """
 
     class Meta:
         model = AssociationUsers
         fields = [
-            "role_name",
             "is_president",
             "can_be_president",
+            "is_validated_by_admin",
+            "is_secretary",
+            "is_treasurer",
+        ]
+
+
+class AssociationUsersDeleteSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user-associations deletion.
+    """
+
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
+
+    class Meta:
+        model = AssociationUsers
+        fields = [
+            "user",
+            "association",
         ]

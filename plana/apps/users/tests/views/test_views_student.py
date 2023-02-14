@@ -193,6 +193,25 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_student_patch_association_users_validation(self):
+        """
+        PATCH /users/associations/{user_id}/{association_id}
+        - A student president of an association cannot change the validation status.
+        """
+        association_id = 2
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {"is_validated_by_admin": False},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_student_patch_association_users_president(self):
         """
         PATCH /users/associations/{user_id}/{association_id}
@@ -206,14 +225,18 @@ class UserViewsStudentTests(TestCase):
         )
         response_president = self.president_student_client.patch(
             f"/users/associations/{self.student_user_id}/{association_id}",
-            {"role_name": "Tester", "can_be_president": True, "is_president": True},
+            {
+                "can_be_president": True,
+                "is_president": True,
+                "is_secretary": False,
+                "is_treasurer": False,
+            },
             content_type="application/json",
         )
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
-        self.assertEqual("Tester", asso_user.role_name)
         self.assertTrue(asso_user.can_be_president)
         self.assertTrue(asso_user.is_president)
 
@@ -230,7 +253,7 @@ class UserViewsStudentTests(TestCase):
         """
         response_president = self.president_student_client.patch(
             f"/users/associations/{self.president_user_id}/3",
-            {"role_name": "Bad Asso"},
+            {"is_secretary": True},
             content_type="application/json",
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
@@ -251,9 +274,7 @@ class UserViewsStudentTests(TestCase):
         GET /users/associations/{user_id}/{association_id}
         - Request should return an error no matter which role is trying to execute it.
         """
-        response_student = self.student_client.get(
-            "/users/associations/999/999", {"role_name": "NotFound"}
-        )
+        response_student = self.student_client.get("/users/associations/999/999")
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_student_put_association_users(self):
@@ -262,7 +283,7 @@ class UserViewsStudentTests(TestCase):
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
-            "/users/associations/999/999", {"role_name": "NotFound"}
+            "/users/associations/999/999", {"is_treasurer": True}
         )
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 

@@ -23,9 +23,13 @@ class AssociationUsers(models.Model):
     association = models.ForeignKey(
         Association, verbose_name=_("Association"), on_delete=models.CASCADE
     )
-    role_name = models.CharField(_("Role name"), max_length=150, default="", null=True)
     is_president = models.BooleanField(_("Is president"), default=False)
     can_be_president = models.BooleanField(_("Can be president"), default=False)
+    is_validated_by_admin = models.BooleanField(
+        _("Is validated by admin"), default=False
+    )
+    is_secretary = models.BooleanField(_("Is secretary"), default=False)
+    is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
 
     def __str__(self):
         return f"{self.user}, {self.association}, office : {self.can_be_president}"
@@ -158,7 +162,11 @@ class User(AbstractUser):
         """
 
         try:
-            AssociationUsers.objects.get(user_id=self.pk, association_id=association_id)
+            AssociationUsers.objects.get(
+                user_id=self.pk,
+                association_id=association_id,
+                is_validated_by_admin=True,
+            )
             return True
         except ObjectDoesNotExist:
             return False
@@ -171,7 +179,11 @@ class User(AbstractUser):
         try:
             AssociationUsers.objects.filter(
                 models.Q(is_president=True) | models.Q(can_be_president=True)
-            ).get(user_id=self.pk, association_id=association_id)
+            ).get(
+                user_id=self.pk,
+                association_id=association_id,
+                is_validated_by_admin=True,
+            )
             return True
         except ObjectDoesNotExist:
             return False

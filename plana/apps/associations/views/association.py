@@ -248,7 +248,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     DELETE : Removes an entire association.
     """
 
-    serializer_class = AssociationAllDataSerializer
     queryset = Association.objects.all()
 
     def get_permissions(self):

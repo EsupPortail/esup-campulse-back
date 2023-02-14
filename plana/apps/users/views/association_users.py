@@ -12,7 +12,8 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.association_users import (
-    AssociationUsersCreationSerializer,
+    AssociationUsersCreateSerializer,
+    AssociationUsersDeleteSerializer,
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
@@ -26,7 +27,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     POST : Creates a new link between a non-validated user and an association.
     """
 
-    serializer_class = AssociationUsersCreationSerializer
+    serializer_class = AssociationUsersCreateSerializer
 
     def get_queryset(self):
         if self.request.user.has_perm("users.view_associationusers_anyone"):
@@ -76,6 +77,24 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         if user.is_superuser or user.is_staff:
             return response.Response(
                 {"error": _("A manager cannot have an association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if "is_validated_by_admin" in request.data and (
+            request.user.is_anonymous
+            or (
+                not request.user.has_perm(
+                    "users.change_associationusers_any_institution"
+                )
+                and not request.user.is_staff_in_institution(kwargs["association_id"])
+            )
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Only managers can validate associations for this account."
+                    )
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -142,11 +161,10 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_serializer_class(self):
-        # TODO Serializers aren't used, find a way to use them.
         if self.request.method == "PATCH":
             self.serializer_class = AssociationUsersUpdateSerializer
-        else:
-            self.serializer_class = AssociationUsersSerializer
+        elif self.request.method == "DELETE":
+            self.serializer_class = AssociationUsersDeleteSerializer
         return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
@@ -159,6 +177,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             User.objects.get(id=kwargs["user_id"])
             Association.objects.get(id=kwargs["association_id"])
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or association found.")},
@@ -182,14 +202,24 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             president = False
 
+        if "is_validated_by_admin" in request.data and (
+            not request.user.has_perm("users.change_associationusers_any_institution")
+            and not request.user.is_staff_in_institution(kwargs["association_id"])
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Only managers can validate associations for this account."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             request.user.has_perm("users.change_associationusers_any_institution")
             or request.user.is_staff_in_institution(kwargs["association_id"])
             or request.user.is_president_in_association(kwargs["association_id"])
         ):
-            if 'role_name' in request.data:
-                asso_user.role_name = request.data['role_name']
-
             if 'is_president' in request.data and to_bool(request.data['is_president']):
                 if president:
                     actual_president = AssociationUsers.objects.get(
@@ -220,6 +250,12 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             if 'can_be_president' in request.data:
                 asso_user.can_be_president = to_bool(request.data['can_be_president'])
 
+            if 'is_secretary' in request.data:
+                asso_user.is_secretary = to_bool(request.data['is_secretary'])
+
+            if 'is_treasurer' in request.data:
+                asso_user.is_treasurer = to_bool(request.data['is_treasurer'])
+
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
 
@@ -227,8 +263,11 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            User.objects.get(id=kwargs["user_id"])
             association = Association.objects.get(id=kwargs["association_id"])
+            request.data["user"] = User.objects.get(id=kwargs["user_id"]).id
+            request.data["association"] = association.id
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or association found.")},

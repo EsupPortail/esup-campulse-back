@@ -45,7 +45,7 @@ class UsersModelsTests(TestCase):
         There's at least one user linked to an association in the database.
         The user is in the correct association.
         """
-        asso_user = AssociationUsers.objects.first()
+        asso_user = AssociationUsers.objects.filter(is_validated_by_admin=True).first()
         self.assertEqual(
             str(asso_user),
             f"{asso_user.user}, {asso_user.association}, office : {asso_user.can_be_president}",

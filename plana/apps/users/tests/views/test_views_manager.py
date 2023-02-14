@@ -379,12 +379,11 @@ class UserViewsManagerTests(TestCase):
         )
         response = self.manager_client.patch(
             f"/users/associations/{self.president_user_id}/{asso_user.association_id}",
-            {"role_name": "Manager", "is_president": False},
+            {"is_president": False},
             content_type="application/json",
         )
         asso_user = AssociationUsers.objects.get(user_id=self.president_user_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual("Manager", asso_user.role_name)
         self.assertFalse(asso_user.is_president)
 
     def test_manager_patch_association_users_unexisting_params(self):
@@ -394,7 +393,7 @@ class UserViewsManagerTests(TestCase):
         """
         response = self.manager_client.patch(
             "/users/associations/999/999",
-            {"role_name": "Unexisting"},
+            {"is_secretary": True},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -406,7 +405,7 @@ class UserViewsManagerTests(TestCase):
         """
         response = self.manager_client.patch(
             f"/users/associations/{self.student_user_id}/3",
-            {"role_name": "No link"},
+            {"is_treasurer": True},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
