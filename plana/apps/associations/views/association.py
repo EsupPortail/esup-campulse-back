@@ -231,6 +231,9 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         if "is_site" not in request.data:
             request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
+        else:
+            request.data["is_enabled"] = True
+            request.data["is_public"] = True
 
         return super().create(request, *args, **kwargs)
 
