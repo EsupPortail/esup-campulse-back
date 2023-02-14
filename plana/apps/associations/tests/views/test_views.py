@@ -198,6 +198,7 @@ class AssociationsViewsTests(TestCase):
         POST /associations/
         - Name and institution are mandatory.
         - A General Manager can add an association.
+        - A General Manager can add a site association.
         - An Institution manager cannot add an association.
         - A Misc manager cannot add an association.
         - Another user cannot add an association.
@@ -223,6 +224,20 @@ class AssociationsViewsTests(TestCase):
             {"name": "Les Fans de Georges la Saucisse", "institution": 2},
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
+        non_site_association = json.loads(response_general.content.decode("utf-8"))
+        self.assertFalse(non_site_association["isSite"])
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {
+                "name": "Les gens qui savent imiter Bourvil",
+                "institution": 2,
+                "is_site": True,
+            },
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
+        site_association = json.loads(response_general.content.decode("utf-8"))
+        self.assertTrue(site_association["isSite"])
 
         response_institution = self.institution_client.post(
             "/associations/",
