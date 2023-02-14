@@ -7,12 +7,12 @@ attrs==22.2.0 ; python_version >= "3.8" and python_version < "3.11" \
 bleach==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414 \
     --hash=sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4
-boto3==1.26.69 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:9a0a29179957cb26fa8c3c1fddf66b18efaeaf633e08db5fb53815ffb0421419 \
-    --hash=sha256:eb8cde24a4c5755c35126e8cd460e6b51c63d04292419e7e95721232720c7e5b
-botocore==1.29.69 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:2a4ab8bcb3177daa425019e125c09996b9a6a1a62bb0baaaeeb86ffd552719cc \
-    --hash=sha256:7e1bebca013544fbc298cb58603bfccd5f71b49c720a5c33c07cf5dfc8145a1f
+boto3==1.26.70 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:123cf34f3cc58772b4f806dfbb1ae9ffae47459de5088e971be9d3cd2b198975 \
+    --hash=sha256:5324c2a9dbc271d2b25eb79f7469b422de411665f9ab1c0b410e8ac820859b1a
+botocore==1.29.70 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:7d9abef42846c1c2f31dacaa559f8450f6fbda74c2c9e3dc6630e06e882ad026 \
+    --hash=sha256:caaa144f49ef0d01b5e8812c9afa729def2c3358d9c4d9204789be2b56c5e849
 certifi==2022.12.7 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3 \
     --hash=sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
@@ -236,8 +236,8 @@ django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.11" \
 django==3.2.17 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:59c39fc342b242fb42b6b040ad8b1b4c15df438706c1d970d416d63cdd73e7fd \
     --hash=sha256:644288341f06ebe4938eec6801b6bd59a6534a78e4aedde2a153075d11143894
-djangorestframework-camel-case==1.4.1 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:c838e5eef42a72fbf7c672d8c52074a5cd102e6335a08bfe930341fd1e2308a3
+djangorestframework-camel-case==1.4.2 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:cdae75846648abb6585c7470639a1d2fb064dc45f8e8b62aaa50be7f1a7a61f4
 djangorestframework-simplejwt==5.2.2 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:4c0d2e2513e12587d93501ac091781684a216c3ee614eb3b5a10586aef5ca845 \
     --hash=sha256:d27d4bcac2c6394f678dea8b4d0d511c6e18a7f2eb8aaeeb8a7de601aeb77c42
