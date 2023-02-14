@@ -550,3 +550,10 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
+
+
+ACCOUNTS_API_CONF = {}
+
+# External APIs
+ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
+ACCOUNTS_API_CONF = {}

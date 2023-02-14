@@ -98,3 +98,8 @@ AWS_S3_ENDPOINT_URL = '{{ s3_endpoint }}'
 
 DEFAULT_MANAGER_GENERAL_EMAIL = "appli-plana-test@unistra.fr"
 DEFAULT_MANAGER_MISC_EMAIL = "appli-plana-test@unistra.fr"
+
+# External APIs
+ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
+ACCOUNTS_API_CONF["BASE_URL"] = "{{ accounts_api_spore_description_file }}"
+ACCOUNTS_API_CONF["TOKEN"] = "{{ accounts_api_spore_token }}"
