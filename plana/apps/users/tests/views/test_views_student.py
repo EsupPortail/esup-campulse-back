@@ -215,9 +215,9 @@ class UserViewsStudentTests(TestCase):
     def test_student_patch_association_users_president(self):
         """
         PATCH /users/associations/{user_id}/{association_id}
+        - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
-        - Link between member and association is correctly updated.
-        - Old president is no longer president after giving his priviligeves to another member.
+        - A student president of an association can update secretary and treasurer.
         """
         association_id = 2
         asso_user = AssociationUsers.objects.get(
@@ -236,15 +236,46 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {
+                "can_be_president": True,
+                "is_secretary": True,
+                "is_treasurer": False,
+            },
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.can_be_president)
-        self.assertTrue(asso_user.is_president)
+        self.assertFalse(asso_user.is_president)
+        self.assertTrue(asso_user.is_secretary)
 
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {
+                "is_treasurer": True,
+            },
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertTrue(asso_user.is_treasurer)
+        self.assertFalse(asso_user.is_secretary)
+
+        """
         old_president = AssociationUsers.objects.get(
             user_id=self.president_user_id, association_id=association_id
         )
         self.assertTrue(old_president.can_be_president)
         self.assertFalse(old_president.is_president)
+        """
 
     def test_student_patch_association_users_other_president(self):
         """

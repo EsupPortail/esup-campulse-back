@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 14:51+0100\n"
+"POT-Creation-Date: 2023-02-14 16:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -348,7 +348,7 @@ msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
 #: plana/apps/users/views/association_users.py:146
-#: plana/apps/users/views/association_users.py:283
+#: plana/apps/users/views/association_users.py:299
 #: plana/apps/users/views/user.py:111 plana/apps/users/views/user.py:178
 #: plana/apps/users/views/user.py:190
 #: plana/apps/users/views/user_groups_institutions.py:142
@@ -356,7 +356,7 @@ msgid "Bad request."
 msgstr "Erreur de requête."
 
 #: plana/apps/users/views/association_users.py:184
-#: plana/apps/users/views/association_users.py:273
+#: plana/apps/users/views/association_users.py:289
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 

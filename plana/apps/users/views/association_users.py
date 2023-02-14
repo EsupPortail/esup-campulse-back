@@ -221,14 +221,18 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             or request.user.is_president_in_association(kwargs["association_id"])
         ):
             if 'is_president' in request.data and to_bool(request.data['is_president']):
+                """
                 if president:
                     actual_president = AssociationUsers.objects.get(
                         association_id=kwargs["association_id"], user_id=request.user.pk
                     )
                     asso_user.is_president = True
+                    asso_user.is_secretary = False
+                    asso_user.is_treasurer = False
                     actual_president.is_president = False
                     actual_president.save()
-                elif request.user.is_staff_in_institution(kwargs["association_id"]):
+                """
+                if request.user.is_staff_in_institution(kwargs["association_id"]):
                     try:
                         actual_president = AssociationUsers.objects.get(
                             association_id=kwargs["association_id"], is_president=True
@@ -238,6 +242,10 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     except ObjectDoesNotExist:
                         pass
                     asso_user.is_president = True
+                    asso_user.is_secretary = False
+                    asso_user.is_treasurer = False
+                else:
+                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
             if 'is_president' in request.data and not to_bool(
                 request.data['is_president']
@@ -251,10 +259,18 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 asso_user.can_be_president = to_bool(request.data['can_be_president'])
 
             if 'is_secretary' in request.data:
-                asso_user.is_secretary = to_bool(request.data['is_secretary'])
+                is_secretary = to_bool(request.data['is_secretary'])
+                asso_user.is_secretary = is_secretary
+                if is_secretary:
+                    asso_user.is_president = False
+                    asso_user.is_treasurer = False
 
             if 'is_treasurer' in request.data:
-                asso_user.is_treasurer = to_bool(request.data['is_treasurer'])
+                is_treasurer = to_bool(request.data['is_treasurer'])
+                asso_user.is_treasurer = is_treasurer
+                if is_treasurer:
+                    asso_user.is_president = False
+                    asso_user.is_secretary = False
 
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
