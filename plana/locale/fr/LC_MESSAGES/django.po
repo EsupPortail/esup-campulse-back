@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 14:34+0100\n"
+"POT-Creation-Date: 2023-02-14 09:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,14 +48,12 @@ msgid "Logo description"
 msgstr "Description du logo"
 
 #: plana/apps/associations/models/association.py:52
-#: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
-#: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
-msgid "Description"
-msgstr "Description"
+msgid "Social object"
+msgstr "Objet social"
 
 #: plana/apps/associations/models/association.py:53
-msgid "Activities"
-msgstr "Activités"
+msgid "Current projects"
+msgstr "Projets en cours"
 
 #: plana/apps/associations/models/association.py:54
 msgid "Address"
@@ -434,6 +432,11 @@ msgstr "Le corps du message contient des variables inconnues : "
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:6
 msgid "Code"
 msgstr "Code"
+
+#: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
+#: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
+msgid "Description"
+msgstr "Description"
 
 #: plana/libs/mail_template/models.py:14
 msgid "Fake vars"

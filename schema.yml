@@ -1242,11 +1242,10 @@ components:
           type: string
           nullable: true
           title: Logo description
-        description:
+        social_object:
           type: string
-        activities:
+        current_projects:
           type: string
-          title: Activités
         address:
           type: string
           title: Adresse
@@ -1345,11 +1344,10 @@ components:
           type: string
           nullable: true
           title: Logo description
-        description:
+        social_object:
           type: string
-        activities:
+        current_projects:
           type: string
-          title: Activités
         address:
           type: string
           title: Adresse
@@ -1880,13 +1878,12 @@ components:
           type: string
           nullable: true
           title: Logo description
-        description:
+        social_object:
           type: string
           minLength: 1
-        activities:
+        current_projects:
           type: string
           minLength: 1
-          title: Activités
         address:
           type: string
           minLength: 1

@@ -233,9 +233,9 @@ django-summernote==0.8.20.0 ; python_version >= "3.8" and python_version < "3.11
 django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:0c26ff03762beb7b6bec01edc6f012eba05085bc235cdc598d388487c3542e61 \
     --hash=sha256:ffcc1223da4c0d4eb764ca28cd79f702dff62936ab583d8f59b5ec07e0ce2365
-django==3.2.17 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:59c39fc342b242fb42b6b040ad8b1b4c15df438706c1d970d416d63cdd73e7fd \
-    --hash=sha256:644288341f06ebe4938eec6801b6bd59a6534a78e4aedde2a153075d11143894
+django==3.2.18 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:08208dfe892eb64fff073ca743b3b952311104f939e7f6dae954fe72dcc533ba \
+    --hash=sha256:4d492d9024c7b3dfababf49f94511ab6a58e2c9c3c7207786f1ba4eb77750706
 djangorestframework-camel-case==1.4.2 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:cdae75846648abb6585c7470639a1d2fb064dc45f8e8b62aaa50be7f1a7a61f4
 djangorestframework-simplejwt==5.2.2 ; python_version >= "3.8" and python_version < "3.11" \

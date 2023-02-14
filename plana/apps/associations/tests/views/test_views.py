@@ -93,7 +93,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
         - Main associations details are returned (test the "name" attribute).
-        - All associations details aren't returned (test the "activities" attribute).
+        - All associations details aren't returned (test the "current_projects" attribute).
         - An association can be found with its name.
         - An association can be found with its acronym.
         - Non-enabled associations can be filtered.
@@ -116,7 +116,7 @@ class AssociationsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         association_1 = content[0]
         self.assertTrue(association_1.get("name"))
-        self.assertFalse(association_1.get("activities"))
+        self.assertFalse(association_1.get("current_projects"))
 
         similar_names = [
             "Plateforme de Liaison et ANnuaire Associatif",
@@ -273,7 +273,7 @@ class AssociationsViewsTests(TestCase):
         GET /associations/{id}
         - The route can be accessed by anyone.
         - Main association details are returned (test the "name" attribute).
-        - All associations details are returned (test the "activities" attribute).
+        - All associations details are returned (test the "current_projects" attribute).
         - A non-existing association can't be returned.
         - A non-public association can't be seen by an anonymous user.
         - A non-enabled association can't be seen by a student user who's not in it.
@@ -288,7 +288,9 @@ class AssociationsViewsTests(TestCase):
 
         public_association = json.loads(response.content.decode("utf-8"))
         self.assertEqual(public_association["name"], association.name)
-        self.assertEqual(public_association["activities"], association.activities)
+        self.assertEqual(
+            public_association["currentProjects"], association.current_projects
+        )
 
         not_found_response = self.client.get("/associations/9001")
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)

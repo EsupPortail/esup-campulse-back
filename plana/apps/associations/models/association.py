@@ -49,8 +49,8 @@ class Association(models.Model):
     alt_logo = models.TextField(
         _("Logo description"), default="", null=True, blank=True
     )
-    description = models.TextField(_("Description"), default="")
-    activities = models.TextField(_("Activities"), default="")
+    social_object = models.TextField(_("Social object"), default="")
+    current_projects = models.TextField(_("Current projects"), default="")
     address = models.TextField(_("Address"), default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
     email = models.CharField(_("Email"), default="", max_length=256)
