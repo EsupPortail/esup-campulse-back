@@ -1,5 +1,12 @@
-from .ldap import LdapAccountsAPI
-from .spore import SporeAccountsAPI
+try:
+    from .ldap import LdapAccountsAPI
+except ImportError:
+    pass
+
+try:
+    from .spore import SporeAccountsAPI
+except ImportError:
+    pass
 
 from importlib import import_module
 
