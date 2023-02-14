@@ -19,7 +19,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
 from plana.apps.users.serializers.user import UserSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
@@ -331,10 +331,12 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 template = MailTemplate.objects.get(
                     code="GENERAL_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
-                # manager = User.objects.filter(groups__name="Gestionnaire SVU").first()
+                managers_emails = request.user.get_user_institutions().values_list(
+                    "email"
+                )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=settings.DEFAULT_MANAGER_GENERAL_EMAIL,
+                    to_=managers_emails,
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
                     ),
@@ -375,12 +377,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         email_addresses = EmailAddress.objects.filter(user_id=user.pk)
 
         if email_addresses.count() == 1:
-            associations_ids = AssociationUsers.objects.filter(
-                user_id=user.id
-            ).values_list('association_id', flat=True)
-            associations_site = Association.objects.filter(
-                id__in=associations_ids, is_site=True
-            )
+            assos_user = AssociationUsers.objects.filter(user_id=user.id)
 
             current_site = get_current_site(request)
             context = {
@@ -388,21 +385,22 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 "site_name": current_site.name,
                 "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
             }
-            if associations_site.count() > 0:
+            if assos_user.count() > 0:
                 template = MailTemplate.objects.get(
                     code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                # email = User.objects.filter(groups__name="Gestionnaire SVU").first().email
-                email = settings.DEFAULT_MANAGER_GENERAL_EMAIL
+                managers_emails = user.get_user_institutions().values_list("email")
             else:
                 template = MailTemplate.objects.get(
                     code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                # email = User.objects.filter(groups__name="Gestionnaire Crous").first().email
-                email = settings.DEFAULT_MANAGER_MISC_EMAIL
+                managers_emails = []
+                for user_to_check in User.objects.all():
+                    if user_to_check.has_perm("view_user_misc"):
+                        managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
+                to_=managers_emails,
                 subject=template.subject.replace(
                     "{{ site_name }}", context["site_name"]
                 ),

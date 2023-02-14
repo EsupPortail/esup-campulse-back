@@ -1749,8 +1749,14 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 254
       required:
       - acronym
+      - email
       - id
       - name
     InstitutionComponent:

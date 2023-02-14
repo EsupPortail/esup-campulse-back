@@ -957,6 +957,42 @@
     "model": "auth.permission",
     "pk": 107,
     "fields": {
+      "name": "Can add a user with no association linked.",
+      "content_type": 24,
+      "codename": "add_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 108,
+    "fields": {
+      "name": "Can change a user with no association linked.",
+      "content_type": 24,
+      "codename": "change_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 109,
+    "fields": {
+      "name": "Can delete a user with no association linked.",
+      "content_type": 24,
+      "codename": "delete_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 110,
+    "fields": {
+      "name": "Can view a user with no association linked.",
+      "content_type": 24,
+      "codename": "view_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 111,
+    "fields": {
       "name": "Can add GDPR Consent User",
       "content_type": 25,
       "codename": "add_gdprconsentusers"
@@ -964,7 +1000,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 108,
+    "pk": 112,
     "fields": {
       "name": "Can change GDPR Consent User",
       "content_type": 25,
@@ -973,7 +1009,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 109,
+    "pk": 113,
     "fields": {
       "name": "Can delete GDPR Consent User",
       "content_type": 25,
@@ -982,7 +1018,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 110,
+    "pk": 114,
     "fields": {
       "name": "Can view GDPR Consent User",
       "content_type": 25,
@@ -991,7 +1027,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 111,
+    "pk": 115,
     "fields": {
       "name": "Can add Template variable",
       "content_type": 26,
@@ -1000,7 +1036,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 112,
+    "pk": 116,
     "fields": {
       "name": "Can change Template variable",
       "content_type": 26,
@@ -1009,7 +1045,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 113,
+    "pk": 117,
     "fields": {
       "name": "Can delete Template variable",
       "content_type": 26,
@@ -1018,7 +1054,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 114,
+    "pk": 118,
     "fields": {
       "name": "Can view Template variable",
       "content_type": 26,
@@ -1027,7 +1063,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 115,
+    "pk": 119,
     "fields": {
       "name": "Can add Mail template",
       "content_type": 27,
@@ -1036,7 +1072,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 116,
+    "pk": 120,
     "fields": {
       "name": "Can change Mail template",
       "content_type": 27,
@@ -1045,7 +1081,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 117,
+    "pk": 121,
     "fields": {
       "name": "Can delete Mail template",
       "content_type": 27,
@@ -1054,7 +1090,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 118,
+    "pk": 122,
     "fields": {
       "name": "Can view Mail template",
       "content_type": 27,

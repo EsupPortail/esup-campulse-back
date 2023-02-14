@@ -95,5 +95,4 @@ AWS_S3_ENDPOINT_URL = '{{ s3_endpoint }}'
 # Misc #
 ########
 
-DEFAULT_MANAGER_GENERAL_EMAIL = "appli-plana-pprd@unistra.fr"
-DEFAULT_MANAGER_MISC_EMAIL = "appli-plana-pprd@unistra.fr"
+DEFAULT_FROM_EMAIL = "appli-plana-pprd@unistra.fr"

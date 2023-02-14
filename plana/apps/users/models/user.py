@@ -16,7 +16,7 @@ from plana.apps.users.provider import CASProvider
 
 class AssociationUsers(models.Model):
     """
-    Main model.
+    Model that defines the link between a user and an association.
     """
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
@@ -48,7 +48,8 @@ class AssociationUsers(models.Model):
 
 class GroupInstitutionUsers(models.Model):
     """
-    Main model.
+    Model that defines the link between a user, a group
+        (and an institution if user is a manager).
     """
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
@@ -115,17 +116,17 @@ class User(AbstractUser):
                     return True
         return False
 
-    def is_cas_user(self):
+    def get_user_institutions(self):
         """
-        Returns True if the user account was generated through CAS on signup
-        (checks if a related row is in socialaccount table).
+        Returns a list of Institution objects linked to an association linked to a user.
         """
-
-        try:
-            self.socialaccount_set.get(provider=CASProvider.id)
-            return True
-        except SocialAccount.DoesNotExist:
-            return False
+        return Institution.objects.filter(
+            id__in=Association.objects.filter(
+                id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+                    "association_id"
+                )
+            ).values_list("institution_id")
+        )
 
     def has_validated_email_user(self):
         """
@@ -139,20 +140,17 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
-    def is_staff_in_institution(self, institution_id):
+    def is_cas_user(self):
         """
-        Checks if a user is linked as manager to an institution.
+        Returns True if the user account was generated through CAS on signup
+        (checks if a related row is in socialaccount table).
         """
 
-        if self.is_staff:
-            try:
-                GroupInstitutionUsers.objects.get(
-                    user_id=self.pk, institution_id=institution_id
-                )
-                return True
-            except ObjectDoesNotExist:
-                return False
-        return False
+        try:
+            self.socialaccount_set.get(provider=CASProvider.id)
+            return True
+        except SocialAccount.DoesNotExist:
+            return False
 
     def is_in_association(self, association_id):
         """
@@ -178,7 +176,27 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
+    def is_staff_in_institution(self, institution_id):
+        """
+        Checks if a user is linked as manager to an institution.
+        """
+
+        if self.is_staff:
+            try:
+                GroupInstitutionUsers.objects.get(
+                    user_id=self.pk, institution_id=institution_id
+                )
+                return True
+            except ObjectDoesNotExist:
+                return False
+        return False
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
-        permissions = []
+        permissions = [
+            ("add_user_misc", "Can add a user with no association linked."),
+            ("change_user_misc", "Can change a user with no association linked."),
+            ("delete_user_misc", "Can delete a user with no association linked."),
+            ("view_user_misc", "Can view a user with no association linked."),
+        ]

@@ -12,6 +12,7 @@ class Institution(models.Model):
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
     acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
+    email = models.EmailField(_("Email"), blank=False)
 
     def __str__(self):
         return f"{self.name} ({self.acronym})"
