@@ -13,6 +13,7 @@ from plana.apps.institutions.serializers.institution import InstitutionSerialize
 from plana.apps.institutions.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
+from plana.apps.users.models.user import AssociationUsers
 
 
 class AssociationAllDataSerializer(serializers.ModelSerializer):
@@ -95,13 +96,23 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
 
 class AssociationNameSerializer(serializers.ModelSerializer):
     """
-    Smaller serializer to return only the name of an association
-    (used in a simple name list of all associations).
+    Smaller serializer used in a simple name list of all associations.
     """
+
+    has_president = serializers.SerializerMethodField("is_president_in_association")
+
+    def is_president_in_association(self, association) -> bool:
+        """
+        Checks if a president has been linked to an association.
+        """
+        return AssociationUsers.objects.filter(
+            association_id=association.id, is_president=True
+        ).exists()
 
     class Meta:
         model = Association
         fields = [
             "id",
             "name",
+            "has_president",
         ]

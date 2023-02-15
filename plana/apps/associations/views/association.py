@@ -464,7 +464,7 @@ class AssociationActivityFieldList(generics.ListAPIView):
 
 class AssociationNameList(generics.ListAPIView):
     """
-    GET : Lists name of all associations.
+    GET : Lists names of all associations.
     """
 
     serializer_class = AssociationNameSerializer

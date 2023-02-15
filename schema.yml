@@ -216,7 +216,7 @@ paths:
   /associations/names:
     get:
       operationId: associations_names_list
-      description: 'GET : Lists name of all associations.'
+      description: 'GET : Lists names of all associations.'
       tags:
       - associations
       security:
@@ -1460,9 +1460,7 @@ components:
       - name
     AssociationName:
       type: object
-      description: |-
-        Smaller serializer to return only the name of an association
-        (used in a simple name list of all associations).
+      description: Smaller serializer used in a simple name list of all associations.
       properties:
         id:
           type: integer
@@ -1471,7 +1469,11 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        has_president:
+          type: boolean
+          readOnly: true
       required:
+      - has_president
       - id
       - name
     AssociationPartialData:
