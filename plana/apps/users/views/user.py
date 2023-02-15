@@ -371,7 +371,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         serializer.is_valid(raise_exception=True)
         self.kwargs['key'] = serializer.validated_data['key']
         confirmation = self.get_object()
-        # confirmation.confirm(self.request)
+        confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
         email_addresses = EmailAddress.objects.filter(user_id=user.pk)
