@@ -101,11 +101,11 @@
     "model": "mail_template.MailTemplate",
     "pk": 6,
     "fields": {
-      "code": "GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
-      "label": "General Manager Local Account Confirmation",
-      "description": "Message reçu par le gestionnaire général si un compte local non Site Alsace doit être validé",
+      "code": "MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
+      "label": "Misc Manager Local Account Confirmation",
+      "description": "Message reçu par le gestionnaire divers si un compte local non Site Alsace doit être validé",
       "subject": "{{ site_name }} – Demande de création de compte local hors Site Alsace",
-      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local lié à au moins une association n'appartenant pas au Site Alsace vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local non lié à une association appartenant au Site Alsace vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -117,9 +117,9 @@
     "model": "mail_template.MailTemplate",
     "pk": 7,
     "fields": {
-      "code": "MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
-      "label": "Misc Manager Local Account Confirmation",
-      "description": "Message reçu par le gestionnaire divers si un compte local doit être validé",
+      "code": "GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
+      "label": "General Manager Local Account Confirmation",
+      "description": "Message reçu par le gestionnaire général si un compte local doit être validé",
       "subject": "{{ site_name }} – Demande de création de compte local",
       "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,

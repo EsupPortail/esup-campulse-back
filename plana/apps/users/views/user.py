@@ -371,7 +371,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         serializer.is_valid(raise_exception=True)
         self.kwargs['key'] = serializer.validated_data['key']
         confirmation = self.get_object()
-        confirmation.confirm(self.request)
+        # confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
         email_addresses = EmailAddress.objects.filter(user_id=user.pk)
@@ -389,7 +389,9 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 template = MailTemplate.objects.get(
                     code="GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                managers_emails = user.get_user_institutions().values_list("email")
+                managers_emails = list(
+                    user.get_user_institutions().values_list("email", flat=True)
+                )
             else:
                 template = MailTemplate.objects.get(
                     code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
