@@ -215,6 +215,9 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if request.user.is_staff_in_institution(kwargs["association_id"]):
+            asso_user.is_validated_by_admin = True
+
         if (
             request.user.has_perm("users.change_associationusers_any_institution")
             or request.user.is_staff_in_institution(kwargs["association_id"])
