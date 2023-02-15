@@ -199,7 +199,8 @@ class AssociationsViewsTests(TestCase):
         - Name and institution are mandatory.
         - A General Manager can add an association.
         - A General Manager can add a site association.
-        - An Institution manager cannot add an association.
+        - An Institution Manager cannot add an association not from the same institution.
+        - An Institution Manager can add an association from the same institution.
         - A Misc manager cannot add an association.
         - Another user cannot add an association.
         - An association cannot be added twice, neither associations with similar names.
@@ -247,6 +248,16 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_institution = self.institution_client.post(
+            "/associations/",
+            {
+                "name": "Le plat phare du sud-ouest de la France c'est le CASsoulet.",
+            },
+        )
+        self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
+        new_association = json.loads(response_institution.content.decode("utf-8"))
+        self.assertEqual(new_association["institution"], 3)
 
         response_misc = self.misc_client.post(
             "/associations/",

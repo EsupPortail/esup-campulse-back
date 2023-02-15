@@ -187,13 +187,27 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def post(self, request, *args, **kwargs):
-        if "name" in request.data and "institution" in request.data:
+        if "name" in request.data:
             association_name = request.data["name"]
         else:
             return response.Response(
-                {"error": _("No association name or institution given.")},
+                {"error": _("No association name given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if (
+            not "institution" in request.data
+            and request.user.get_user_institutions().count() == 1
+        ):
+            request.data["institution"] = (
+                request.user.get_user_institutions().first().id
+            )
+        elif not "institution" in request.data:
+            return response.Response(
+                {"error": _("No institution given.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not request.user.has_perm(
             "associations.add_association_any_institution"
         ) and not request.user.is_staff_in_institution(request.data["institution"]):

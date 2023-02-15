@@ -122,15 +122,22 @@ class User(AbstractUser):
 
     def get_user_institutions(self):
         """
-        Returns a list of Institution objects linked to an association linked to a user.
+        Returns a list of Institution objects linked to a user.
         """
-        return Institution.objects.filter(
-            id__in=Association.objects.filter(
-                id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
-                    "association_id"
-                )
-            ).values_list("institution_id")
-        )
+        if self.is_staff:
+            return Institution.objects.filter(
+                id__in=GroupInstitutionUsers.objects.filter(
+                    user_id=self.pk
+                ).values_list("institution_id")
+            )
+        else:
+            return Institution.objects.filter(
+                id__in=Association.objects.filter(
+                    id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+                        "association_id"
+                    )
+                ).values_list("institution_id")
+            )
 
     def has_validated_email_user(self):
         """
