@@ -1,11 +1,9 @@
 from functools import wraps
-from typing import Union
+from typing import Generator, Union
 
 from ldap3 import Server, Connection, ALL
+
 from django.conf import settings
-
-
-__mapping = settings.ACCOUNTS_API_MAPPING
 
 
 def first_entry(func):
@@ -13,7 +11,7 @@ def first_entry(func):
     def wrapper(*args, **kwargs):
         entries = func(*args, **kwargs)
         if isinstance(entries, list):
-            return entries[0]
+            return entries[0] if entries else {}
         return entries or {}
 
     return wrapper
@@ -35,6 +33,10 @@ class LdapClient:
     def decode_value(value: Union[bytes, str]) -> str:
         return value.decode("utf8") if isinstance(value, bytes) else value
 
+    @staticmethod
+    def get_mapping(attrs: list[str]) -> dict[str, str]:
+        return getattr(settings, 'ACCOUNTS_API_MAPPING', dict(zip(attrs, attrs)))
+
     def search(self, **kwargs):
         conf = getattr(settings, f'{self.api_name.upper()}_API_CONF')
 
@@ -43,13 +45,13 @@ class LdapClient:
             conf['HOST'], port=conf['PORT'], use_ssl=conf['USE_TLS'], get_info=ALL
         )
         ldap_filter = conf['FILTER'].format(**kwargs)
+        mapping = self.get_mapping(conf['ATTRIBUTES'])
         with Connection(server, conf['BIND_DN'], conf['PASSWORD']) as conn:
-            attributes = conf['ATTRIBUTES']
             conn.search(conf['BASE_DN'], ldap_filter, attributes=conf['ATTRIBUTES'])
             for entry in conn.response:
                 result = {}
                 attributes = entry['attributes']
-                for mapped_attr, ldap_attr in __mapping.items():
+                for mapped_attr, ldap_attr in mapping.items():
                     if ldap_val := attributes.get(ldap_attr):
                         value = (
                             ldap_val[0]
