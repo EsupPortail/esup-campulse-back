@@ -361,6 +361,11 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        'external_accounts': {
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': True
+        },
     },
 }
 
