@@ -217,6 +217,12 @@ paths:
     get:
       operationId: associations_names_list
       description: 'GET : Lists names of all associations.'
+      parameters:
+      - in: query
+        name: institution
+        schema:
+          type: integer
+        description: Filter by Institution ID.
       tags:
       - associations
       security:

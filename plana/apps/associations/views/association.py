@@ -476,6 +476,18 @@ class AssociationActivityFieldList(generics.ListAPIView):
         return ActivityField.objects.all().order_by("name")
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "institution",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution ID.",
+            ),
+        ]
+    )
+)
 class AssociationNameList(generics.ListAPIView):
     """
     GET : Lists names of all associations.
@@ -484,4 +496,8 @@ class AssociationNameList(generics.ListAPIView):
     serializer_class = AssociationNameSerializer
 
     def get_queryset(self):
-        return Association.objects.all().order_by("name")
+        queryset = Association.objects.all()
+        institution = self.request.query_params.get("institution")
+        if institution is not None and institution != "":
+            queryset = queryset.filter(institution_id=institution)
+        return queryset.order_by("name")

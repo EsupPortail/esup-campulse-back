@@ -621,6 +621,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
         - Only id and names of the associations are returned.
+        - We get the same amount of associations filtered by institution through the model and through the view.
         """
         asso_names_cnt = Association.objects.count()
         self.assertTrue(asso_names_cnt > 0)
@@ -635,3 +636,10 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(asso_name_1.get("name"))
         self.assertTrue(asso_name_1.get("id"))
         self.assertFalse(asso_name_1.get("institution_component"))
+
+        asso_names_cnt_institution = Association.objects.filter(
+            institution_id=2
+        ).count()
+        response = self.client.get("/associations/names?institution=2")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), asso_names_cnt_institution)
