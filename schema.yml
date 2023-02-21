@@ -219,10 +219,10 @@ paths:
       description: 'GET : Lists names of all associations.'
       parameters:
       - in: query
-        name: institution
+        name: institutions
         schema:
-          type: integer
-        description: Filter by Institution ID.
+          type: string
+        description: Filter by Institutions IDs.
       tags:
       - associations
       security:

@@ -638,8 +638,8 @@ class AssociationsViewsTests(TestCase):
         self.assertFalse(asso_name_1.get("institution_component"))
 
         asso_names_cnt_institution = Association.objects.filter(
-            institution_id=2
+            institution_id__in=[2, 3]
         ).count()
-        response = self.client.get("/associations/names?institution=2")
+        response = self.client.get("/associations/names?institutions=2,3")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_institution)

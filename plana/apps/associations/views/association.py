@@ -480,10 +480,10 @@ class AssociationActivityFieldList(generics.ListAPIView):
     get=extend_schema(
         parameters=[
             OpenApiParameter(
-                "institution",
-                OpenApiTypes.INT,
+                "institutions",
+                OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
-                description="Filter by Institution ID.",
+                description="Filter by Institutions IDs.",
             ),
         ]
     )
@@ -497,7 +497,7 @@ class AssociationNameList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Association.objects.all()
-        institution = self.request.query_params.get("institution")
-        if institution is not None and institution != "":
-            queryset = queryset.filter(institution_id=institution)
+        institutions = self.request.query_params.get("institutions")
+        if institutions is not None and institutions != "":
+            queryset = queryset.filter(institution_id__in=institutions.split(","))
         return queryset.order_by("name")
