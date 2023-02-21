@@ -250,5 +250,22 @@
         8
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 15,
+    "fields": {
+      "code": "ACCOUNT_EXPIRATION",
+      "label": "Account expiration",
+      "description": "Alerte de l'expiration prochaine du compte",
+      "subject": "{{ site_name }} – Votre compte va expirer",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Sans connexion de votre part sur l'application {{ site_name }}, votre compte arrivera à expiration dans 1 mois et sera alors supprimé.<br/><br/>Merci de votre compréhension,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5
+      ]
+    }
   }
 ]
