@@ -239,6 +239,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
         site_association = json.loads(response_general.content.decode("utf-8"))
         self.assertTrue(site_association["isSite"])
+        self.assertTrue(site_association["isPublic"])
 
         response_institution = self.institution_client.post(
             "/associations/",
@@ -256,6 +257,8 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
+        no_site_association = json.loads(response_institution.content.decode("utf-8"))
+        self.assertFalse(no_site_association["isPublic"])
         new_association = json.loads(response_institution.content.decode("utf-8"))
         self.assertEqual(new_association["institution"], 3)
 
