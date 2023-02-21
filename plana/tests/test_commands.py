@@ -7,7 +7,6 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-
 User = get_user_model()
 
 

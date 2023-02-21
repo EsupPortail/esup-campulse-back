@@ -1428,6 +1428,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
         is_site:
           type: boolean
           title: Site ?
@@ -1449,6 +1453,10 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
         is_site:
           type: boolean
           title: Site ?
@@ -1472,6 +1480,10 @@ components:
         has_president:
           type: boolean
           readOnly: true
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
       required:
       - has_president
       - id

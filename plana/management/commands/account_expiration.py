@@ -9,7 +9,6 @@ from django.db.models import Q
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
-
 User = get_user_model()
 
 

@@ -634,4 +634,4 @@ class AssociationsViewsTests(TestCase):
         asso_name_1 = content[0]
         self.assertTrue(asso_name_1.get("name"))
         self.assertTrue(asso_name_1.get("id"))
-        self.assertFalse(asso_name_1.get("institution"))
+        self.assertFalse(asso_name_1.get("institution_component"))
