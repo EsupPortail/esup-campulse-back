@@ -80,6 +80,9 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # TODO Re-enable this feature when association validation is OK Métier.
+        request.data["is_validated_by_admin"] = True
+        """
         if "is_validated_by_admin" in request.data and (
             request.user.is_anonymous
             or (
@@ -97,6 +100,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        """
 
         if (
             "is_president" in request.data
@@ -202,6 +206,9 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             president = False
 
+        # TODO Re-enable this feature when association validation is OK Métier.
+        request.data["is_validated_by_admin"] = True
+        """
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationusers_any_institution")
             and not request.user.is_staff_in_institution(kwargs["association_id"])
@@ -214,6 +221,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        """
 
         if (
             request.user.has_perm("users.change_associationusers_any_institution")

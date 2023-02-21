@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 15:35+0100\n"
+"POT-Creation-Date: 2023-02-21 13:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -337,34 +337,28 @@ msgstr "L'utilisateur est déjà membre de l'association."
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:95
-#: plana/apps/users/views/association_users.py:212
-msgid "Only managers can validate associations for this account."
-msgstr ""
-"Seuls les gestionnaires peuvent valider les associations pour ce compte"
-
-#: plana/apps/users/views/association_users.py:110
+#: plana/apps/users/views/association_users.py:114
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:120
+#: plana/apps/users/views/association_users.py:124
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:146
-#: plana/apps/users/views/association_users.py:302
+#: plana/apps/users/views/association_users.py:150
+#: plana/apps/users/views/association_users.py:307
 #: plana/apps/users/views/user.py:111 plana/apps/users/views/user.py:178
 #: plana/apps/users/views/user.py:190
 #: plana/apps/users/views/user_groups_institutions.py:142
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/association_users.py:184
-#: plana/apps/users/views/association_users.py:292
+#: plana/apps/users/views/association_users.py:188
+#: plana/apps/users/views/association_users.py:297
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:194
+#: plana/apps/users/views/association_users.py:198
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
@@ -530,3 +524,7 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "Only managers can validate associations for this account."
+#~ msgstr ""
+#~ "Seuls les gestionnaires peuvent valider les associations pour ce compte"

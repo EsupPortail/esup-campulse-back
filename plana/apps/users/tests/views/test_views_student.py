@@ -210,7 +210,8 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
-        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        # TODO Re-enable this feature when association validation is OK Métier.
+        # self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_patch_association_users_president(self):
         """
