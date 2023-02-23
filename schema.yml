@@ -223,6 +223,11 @@ paths:
         schema:
           type: string
         description: Filter by Institutions IDs.
+      - in: query
+        name: is_public
+        schema:
+          type: boolean
+        description: Filter for associations shown in the public list.
       tags:
       - associations
       security:

@@ -485,6 +485,12 @@ class AssociationActivityFieldList(generics.ListAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter by Institutions IDs.",
             ),
+            OpenApiParameter(
+                "is_public",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations shown in the public list.",
+            ),
         ]
     )
 )
@@ -498,6 +504,9 @@ class AssociationNameList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Association.objects.all()
         institutions = self.request.query_params.get("institutions")
+        is_public = self.request.query_params.get("is_public")
         if institutions is not None and institutions != "":
             queryset = queryset.filter(institution_id__in=institutions.split(","))
+        if is_public is not None and is_public != "":
+            queryset = queryset.filter(is_public=to_bool(is_public))
         return queryset.order_by("name")

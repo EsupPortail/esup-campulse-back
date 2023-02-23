@@ -643,3 +643,8 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names?institutions=2,3")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_institution)
+
+        asso_names_cnt_public = Association.objects.filter(is_public=True).count()
+        response = self.client.get("/associations/names?is_public=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), asso_names_cnt_public)
