@@ -1,6 +1,4 @@
-"""
-Serializers describing fields used on associations.
-"""
+"""Serializers describing fields used on associations."""
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
@@ -17,9 +15,7 @@ from plana.apps.users.models.user import AssociationUsers
 
 
 class AssociationAllDataSerializer(serializers.ModelSerializer):
-    """
-    Main serializer.
-    """
+    """Main serializer."""
 
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
@@ -32,9 +28,7 @@ class AssociationAllDataSerializer(serializers.ModelSerializer):
 
 
 class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
-    """
-    Serializer without name details about sub-tables.
-    """
+    """Serializer without name details about sub-tables."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
     institution_component = serializers.PrimaryKeyRelatedField(
@@ -50,10 +44,7 @@ class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
 
 
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
-    """
-    Smaller serializer to return only some of the informations of an association
-    (used in a table list of all associations).
-    """
+    """Smaller serializer to return only some of the informations of an association (used in a table list of all associations)."""
 
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
@@ -79,10 +70,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
 
 
 class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
-    """
-    Smaller serializer to return only the main informations of an association
-    (used in a simple name list of all associations).
-    """
+    """Smaller serializer to return only the main informations of an association (used in a simple name list of all associations)."""
 
     class Meta:
         model = Association
@@ -97,16 +85,12 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
 
 
 class AssociationNameSerializer(serializers.ModelSerializer):
-    """
-    Smaller serializer used in a simple name list of all associations.
-    """
+    """Smaller serializer used in a simple name list of all associations."""
 
     has_president = serializers.SerializerMethodField("is_president_in_association")
 
     def is_president_in_association(self, association) -> bool:
-        """
-        Checks if a president has been linked to an association.
-        """
+        """Check if a president has been linked to an association."""
         return AssociationUsers.objects.filter(
             association_id=association.id, is_president=True
         ).exists()

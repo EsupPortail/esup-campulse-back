@@ -1,6 +1,4 @@
-"""
-Models describing users and most of its details.
-"""
+"""Models describing users and most of its details."""
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group
@@ -15,9 +13,7 @@ from plana.apps.users.provider import CASProvider
 
 
 class AssociationUsers(models.Model):
-    """
-    Model that defines the link between a user and an association.
-    """
+    """Model that defines the link between a user and an association."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     association = models.ForeignKey(
@@ -51,10 +47,7 @@ class AssociationUsers(models.Model):
 
 
 class GroupInstitutionUsers(models.Model):
-    """
-    Model that defines the link between a user, a group
-        (and an institution if user is a manager).
-    """
+    """Model that defines the link between a user, a group (and an institution if user is a manager)."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
@@ -74,6 +67,7 @@ class GroupInstitutionUsers(models.Model):
 class User(AbstractUser):
     """
     Model that extends the abstract User class.
+
     Following fields from Django User class are used :
     - username
     - password
@@ -107,9 +101,7 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
     def has_perm(self, perm, obj=None):
-        """
-        Overriden has_perm to check for institutions.
-        """
+        """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
         groups_institutions_user = GroupInstitutionUsers.objects.filter(user_id=self.pk)
@@ -121,9 +113,7 @@ class User(AbstractUser):
         return False
 
     def get_user_institutions(self):
-        """
-        Returns a list of Institution objects linked to a user.
-        """
+        """Return a list of Institution objects linked to a user."""
         if self.is_staff:
             return Institution.objects.filter(
                 id__in=GroupInstitutionUsers.objects.filter(
@@ -140,11 +130,7 @@ class User(AbstractUser):
             )
 
     def has_validated_email_user(self):
-        """
-        Returns True if the user account has a validated email
-        (checks if a related row is in emailaddress table).
-        """
-
+        """Return True if the user account has a validated email (checks if a related row is in emailaddress table)."""
         try:
             EmailAddress.objects.get(user_id=self.pk, email=self.email, verified=True)
             return True
@@ -152,11 +138,7 @@ class User(AbstractUser):
             return False
 
     def is_cas_user(self):
-        """
-        Returns True if the user account was generated through CAS on signup
-        (checks if a related row is in socialaccount table).
-        """
-
+        """Return True if the user account was generated through CAS on signup (checks if a related row is in socialaccount table)."""
         try:
             self.socialaccount_set.get(provider=CASProvider.id)
             return True
@@ -164,10 +146,7 @@ class User(AbstractUser):
             return False
 
     def is_in_association(self, association_id):
-        """
-        Checks if a user can read an association.
-        """
-
+        """Check if a user can read an association."""
         try:
             AssociationUsers.objects.get(
                 user_id=self.pk,
@@ -179,10 +158,7 @@ class User(AbstractUser):
             return False
 
     def is_president_in_association(self, association_id):
-        """
-        Checks if a user can write in an association.
-        """
-
+        """Check if a user can write in an association."""
         try:
             AssociationUsers.objects.filter(
                 models.Q(is_president=True) | models.Q(can_be_president=True)
@@ -196,10 +172,7 @@ class User(AbstractUser):
             return False
 
     def is_staff_in_institution(self, institution_id):
-        """
-        Checks if a user is linked as manager to an institution.
-        """
-
+        """Check if a user is linked as manager to an institution."""
         if self.is_staff:
             try:
                 GroupInstitutionUsers.objects.get(

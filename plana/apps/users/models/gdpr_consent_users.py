@@ -1,7 +1,4 @@
-"""
-Models describing links between GDPR consents and users
-(which user has given which consent and when).
-"""
+"""Models describing links between GDPR consents and users (which user has given which consent and when)."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -10,9 +7,7 @@ from plana.apps.users.models.user import User
 
 
 class GDPRConsentUsers(models.Model):
-    """
-    Main model.
-    """
+    """Main model."""
 
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     consent = models.ForeignKey(

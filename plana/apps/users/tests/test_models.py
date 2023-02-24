@@ -1,6 +1,4 @@
-"""
-List of tests done on users models.
-"""
+"""List of tests done on users models."""
 from django.test import Client, TestCase
 
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
@@ -8,9 +6,7 @@ from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers
 
 
 class UsersModelsTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "associations_activityfield.json",
@@ -26,25 +22,17 @@ class UsersModelsTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests.
-        """
+        """Start a default client used on all tests."""
         self.client = Client()
 
     def test_user_model(self):
-        """
-        There's at least one user in the database.
-        The user is superuser.
-        """
+        """There's at least one user in the database. The user is superuser."""
         user = User.objects.filter(is_superuser=True).first()
         self.assertEqual(str(user), f"{user.first_name} {user.last_name}")
         self.assertEqual(user.has_perm("bonjourg"), True)
 
     def test_association_users_model(self):
-        """
-        There's at least one user linked to an association in the database.
-        The user is in the correct association.
-        """
+        """There's at least one user linked to an association in the database. The user is in the correct association."""
         asso_user = AssociationUsers.objects.filter(is_validated_by_admin=True).first()
         self.assertEqual(
             str(asso_user),
@@ -54,9 +42,7 @@ class UsersModelsTests(TestCase):
         self.assertEqual(asso_user.user.is_in_association(7), False)
 
     def test_gdpr_consent_users_model(self):
-        """
-        There's at least one user linked to a GDPR consent in the database.
-        """
+        """There's at least one user linked to a GDPR consent in the database."""
         consent_user = GDPRConsentUsers.objects.first()
         self.assertEqual(
             str(consent_user),
@@ -64,9 +50,7 @@ class UsersModelsTests(TestCase):
         )
 
     def test_group_institution_users_model(self):
-        """
-        There's at least one user linked to a group in the database.
-        """
+        """There's at least one user linked to a group in the database."""
         group_user = GroupInstitutionUsers.objects.first()
         self.assertEqual(
             str(group_user),

@@ -1,6 +1,4 @@
-"""
-Serializers describing fields used on users and related forms.
-"""
+"""Serializers describing fields used on users and related forms."""
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
@@ -29,9 +27,7 @@ from plana.utils import send_mail
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """
-    Main serializer.
-    """
+    """Main serializer."""
 
     phone = serializers.CharField(required=False, allow_blank=True)
     is_cas = serializers.SerializerMethodField("is_cas_user")
@@ -42,9 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_permissions(self, user):
-        """
-        Return permissions linked to the user.
-        """
+        """Return permissions linked to the user."""
         permissions = []
         user_groups_ids = GroupInstitutionUsers.objects.filter(user_id=user.id).values(
             "group_id"
@@ -60,22 +54,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
-        """
-        Return groups-institutions-users links.
-        """
+        """Return groups-institutions-users links."""
         return GroupInstitutionUsers.objects.filter(user_id=user.pk).values()
 
     def is_cas_user(self, user) -> bool:
-        """
-        Content from calculated field "is_cas" (True if user registered through CAS, or False).
-        """
+        """Content from calculated field "is_cas" (True if user registered through CAS, or False)."""
         return user.is_cas_user()
 
     def has_validated_email_user(self, user) -> bool:
-        """
-        Content from calculated field "has_validated_email"
-            (True if user finished the registration, or False).
-        """
+        """Content from calculated field "has_validated_email" (True if user finished the registration, or False)."""
         return user.has_validated_email_user()
 
     class Meta:
@@ -97,9 +84,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):
-    """
-    Used for the user registration form (to parse the phone field).
-    """
+    """Used for the user registration form (to parse the phone field)."""
 
     phone = serializers.CharField(required=False, allow_blank=True)
 
@@ -142,9 +127,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
 
 class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
-    """
-    Overrided PasswordChangeSerializer to prevent CAS users to change their passwords.
-    """
+    """Overrided PasswordChangeSerializer to prevent CAS users to change their passwords."""
 
     def save(self):
         request = self.context.get("request")
@@ -164,9 +147,7 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
 
 
 class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
-    """
-    Overrided PasswordResetSerializer to prevent CAS users to reset their passwords.
-    """
+    """Overrided PasswordResetSerializer to prevent CAS users to reset their passwords."""
 
     def save(self):
         if "allauth" in settings.INSTALLED_APPS:
@@ -197,9 +178,7 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
 
 
 class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
-    """
-    Overrided PasswordResetConfirmSerializer to send a email when password is reset.
-    """
+    """Overrided PasswordResetConfirmSerializer to send a email when password is reset."""
 
     def save(self):
         request = None

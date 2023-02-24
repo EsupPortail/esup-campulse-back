@@ -1,6 +1,4 @@
-"""
-Views directly linked to associations.
-"""
+"""Views directly linked to associations."""
 import json
 import unicodedata
 
@@ -466,9 +464,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AssociationActivityFieldList(generics.ListAPIView):
-    """
-    GET : Lists all activity fields.
-    """
+    """GET : Lists all activity fields."""
 
     serializer_class = ActivityFieldSerializer
 
@@ -495,9 +491,7 @@ class AssociationActivityFieldList(generics.ListAPIView):
     )
 )
 class AssociationNameList(generics.ListAPIView):
-    """
-    GET : Lists names of all associations.
-    """
+    """GET : Lists names of all associations."""
 
     serializer_class = AssociationNameSerializer
 

@@ -1,6 +1,4 @@
-"""
-Storage field from octant. https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/serializers/fields.py
-"""
+"""Storage field from octant. https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/serializers/fields.py ."""
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -11,9 +9,7 @@ from thumbnails.files import ThumbnailedImageFile
 
 @extend_schema_field(OpenApiTypes.OBJECT)
 class ThumbnailField(serializers.ReadOnlyField):
-    """
-    Read-only field for all sizes of a Thumbnail image.
-    """
+    """Read-only field for all sizes of a Thumbnail image."""
 
     def __init__(self, **kwargs):
         help_text = kwargs.pop("help_text", _("URL for each thumbnail size"))

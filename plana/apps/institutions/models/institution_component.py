@@ -1,14 +1,10 @@
-"""
-Models describing institutions components (faculté de médecine, IUT, ...).
-"""
+"""Models describing institutions components (faculté de médecine, IUT, ...)."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
 class InstitutionComponent(models.Model):
-    """
-    Main model.
-    """
+    """Main model."""
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
     institution = models.ForeignKey(

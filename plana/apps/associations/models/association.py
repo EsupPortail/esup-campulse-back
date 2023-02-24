@@ -1,6 +1,4 @@
-"""
-Models describing associations and most of its details.
-"""
+"""Models describing associations and most of its details."""
 import datetime
 import os
 
@@ -13,9 +11,7 @@ from plana.apps.institutions.models import Institution, InstitutionComponent
 
 
 def get_logo_path(instance, filename):
-    """
-    Used by association path_logo field.
-    """
+    """Is used by association path_logo field."""
     file_basename, extension = os.path.splitext(filename)
     year = datetime.datetime.now().strftime('%Y')
     return (
@@ -30,9 +26,7 @@ def get_logo_path(instance, filename):
 
 
 class Association(models.Model):
-    """
-    Main model.
-    """
+    """Main model."""
 
     name = models.CharField(
         _("Name"), max_length=250, null=False, blank=False, unique=True
@@ -123,10 +117,7 @@ class Association(models.Model):
 
 
 class SpaceRemovedValue(models.Transform):
-    """
-    Custom lookup function to compare two strings with or without spaces on a queryset.
-    Thanks StackOverflow https://stackoverflow.com/a/30375271
-    """
+    """Custom lookup function to compare two strings with or without spaces on a queryset. Thanks StackOverflow https://stackoverflow.com/a/30375271 ."""
 
     lookup_name = 'nospaces'
 

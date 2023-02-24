@@ -1,6 +1,4 @@
-"""
-Views linked to links between users and GDPR consents.
-"""
+"""Views linked to links between users and GDPR consents."""
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -57,9 +55,7 @@ class UserConsentsListCreate(generics.ListCreateAPIView):
 
 
 class UserConsentsRetrieve(generics.RetrieveAPIView):
-    """
-    GET : Lists all GDPR consents linked to a user (manager).
-    """
+    """GET : Lists all GDPR consents linked to a user (manager)."""
 
     serializer_class = GDPRConsentUsersSerializer
     queryset = GDPRConsentUsers.objects.all()

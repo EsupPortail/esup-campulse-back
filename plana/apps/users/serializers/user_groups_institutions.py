@@ -1,6 +1,4 @@
-"""
-Serializers describing fields used on links between users and auth groups.
-"""
+"""Serializers describing fields used on links between users and auth groups."""
 from django.contrib.auth.models import Group
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
@@ -11,9 +9,7 @@ from plana.apps.users.models.user import GroupInstitutionUsers, User
 
 
 class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
-    """
-    Main serializer.
-    """
+    """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
@@ -27,9 +23,7 @@ class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
 
 
 class UserGroupsInstitutionsCreateSerializer(serializers.ModelSerializer):
-    """
-    Serializer for user-groups creation (with username instead of id).
-    """
+    """Serializer for user-groups creation (with username instead of id)."""
 
     user = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()

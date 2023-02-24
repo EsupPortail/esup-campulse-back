@@ -1,6 +1,4 @@
-"""
-Views linked to links between users and associations.
-"""
+"""Views linked to links between users and associations."""
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
@@ -129,15 +127,14 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
 
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
-    """
-    GET : Lists all associations linked to a user (manager).
-    """
+    """Lists all associations linked to a user (manager)."""
 
     serializer_class = AssociationUsersSerializer
     queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get(self, request, *args, **kwargs):
+        """GET : Lists all associations linked to a user (manager)."""
         if (
             request.user.has_perm("users.view_associationusers_anyone")
             or kwargs["user_id"] == request.user.pk

@@ -1,6 +1,4 @@
-"""
-Special serializer to interact with CAS.
-"""
+"""Special serializer to interact with CAS."""
 import requests
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
@@ -14,9 +12,7 @@ from plana.apps.users.serializers.cas import CASSerializer
 
 
 class CASLogin(SocialLoginView):
-    """
-    POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
-    """
+    """POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth."""
 
     adapter_class = CASAdapter
     serializer_class = CASSerializer
@@ -40,9 +36,7 @@ class CASLogout(LogoutView):
 
 
 def cas_test(request):  # pragma: no cover
-    """
-    Debug function to test the CAS server.
-    """
+    """Debug function to test the CAS server."""
     service_url = reverse("cas_verify")
     service_url = urlencode({"service": request.build_absolute_uri(service_url)})
     redirect_url = f"{settings.CAS_SERVER}login?{service_url}"
@@ -50,9 +44,7 @@ def cas_test(request):  # pragma: no cover
 
 
 def cas_verify(request):  # pragma: no cover
-    """
-    Debug function to test the ticket.
-    """
+    """Debug function to test the ticket."""
     service_url = request.build_absolute_uri(reverse("cas_verify"))
     ticket = request.GET.get("ticket")
 

@@ -1,6 +1,4 @@
-"""
-List of tests done on users views with a student user.
-"""
+"""List of tests done on users views with a student user."""
 import json
 
 from django.test import Client, TestCase
@@ -12,9 +10,7 @@ from plana.apps.users.models.user import AssociationUsers, User
 
 
 class UserViewsStudentTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "account_emailaddress.json",
@@ -35,12 +31,7 @@ class UserViewsStudentTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests,
-            retrieves a simple student user.
-        Start a second client used on particular tests,
-            retrieves a student user which is president of an association.
-        """
+        """Start a default client used on all tests, retrieves a simple student user. Start a second client used on particular tests, retrieves a student user which is president of an association."""
         self.unvalidated_user_id = 2
         self.unvalidated_user_name = "compte-non-valide@mail.tld"
 
@@ -66,7 +57,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_users_list(self):
         """
-        GET /users/
+        GET /users/ .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get("/users/")
@@ -74,7 +66,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_post_user(self):
         """
-        POST /users/
+        POST /users/ .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.post(
@@ -89,7 +82,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_user_detail(self):
         """
-        GET /users/{id}
+        GET /users/{id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get(f"/users/{self.student_user_id}")
@@ -97,7 +91,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_user_detail(self):
         """
-        PATCH /users/{id}
+        PATCH /users/{id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.patch(
@@ -109,7 +104,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_delete_user_detail(self):
         """
-        DELETE /users/{id}
+        DELETE /users/{id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.delete(
@@ -119,7 +115,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_put_user_detail(self):
         """
-        PUT /users/{id}
+        PUT /users/{id} .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
@@ -129,7 +126,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_associations_user_list(self):
         """
-        GET /users/associations/
+        GET /users/associations/ .
+
         - A student user can execute this request.
         - A student user gets correct association user list data.
         """
@@ -144,7 +142,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_post_association_user(self):
         """
-        POST /users/associations/
+        POST /users/associations/ .
+
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
@@ -159,7 +158,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_associations_user_detail(self):
         """
-        GET /users/associations/{user_id}
+        GET /users/associations/{user_id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get(
@@ -169,7 +169,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A simple student user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.student_user_id)
@@ -180,7 +181,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_president_remove_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A student president cannot remove his own privileges.
         """
         asso_user = AssociationUsers.objects.get(
@@ -195,7 +197,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_validation(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A student president of an association cannot change the validation status.
         """
         association_id = 2
@@ -215,7 +218,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
         - A student president of an association can update secretary and treasurer.
@@ -280,7 +284,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_other_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A student president of another association cannot execute this request.
         """
         response_president = self.president_student_client.patch(
@@ -292,7 +297,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_delete_user_association(self):
         """
-        DELETE /users/associations/{user_id}/{association_id}
+        DELETE /users/associations/{user_id}/{association_id} .
+
         - A student user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
@@ -303,7 +309,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_association_users(self):
         """
-        GET /users/associations/{user_id}/{association_id}
+        GET /users/associations/{user_id}/{association_id} .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.get("/users/associations/999/999")
@@ -311,7 +318,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_put_association_users(self):
         """
-        PUT /users/associations/{user_id}/{association_id}
+        PUT /users/associations/{user_id}/{association_id} .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
@@ -321,7 +329,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_auth_user_detail(self):
         """
-        GET /users/auth/user/
+        GET /users/auth/user/ .
+
         - A student user can execute this request.
         - A student user gets correct data when executing the request.
         """
@@ -334,7 +343,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_auth_user_detail(self):
         """
-        PATCH /users/auth/user/
+        PATCH /users/auth/user/ .
+
         - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
@@ -380,7 +390,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_put_auth_user_detail(self):
         """
-        PUT /users/auth/user/
+        PUT /users/auth/user/ .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
@@ -390,7 +401,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_consents_user_list(self):
         """
-        GET /users/consents/
+        GET /users/consents/ .
+
         - A student user can execute this request.
         - A student user gets only his own consents.
         """
@@ -405,7 +417,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_post_user_consents(self):
         """
-        POST /users/consents/
+        POST /users/consents/ .
+
         - A student user can execute this request.
         - A student user cannot give the same consent twice.
         - A non-existing user cannot have a consent.
@@ -413,7 +426,6 @@ class UserViewsStudentTests(TestCase):
         - user field is mandatory.
         - consent field is mandatory.
         """
-
         response_student = self.student_client.post(
             "/users/consents/", {"user": self.student_user_name, "consent": 1}
         )
@@ -444,7 +456,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_consents_user_detail(self):
         """
-        GET /users/consents/{user_id}
+        GET /users/consents/{user_id} .
+
         - A student user cannot execute this request.
         """
         # TODO Reactivate this test when consents will be ready.
@@ -457,7 +470,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_user_groups_list(self):
         """
-        GET /users/groups/
+        GET /users/groups/ .
+
         - A student user can execute this request.
         """
         response_student = self.student_client.get("/users/groups/")
@@ -465,7 +479,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_post_user_groups(self):
         """
-        POST /users/groups/
+        POST /users/groups/ .
+
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
@@ -475,7 +490,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_user_groups_detail(self):
         """
-        GET /users/groups/{user_id}
+        GET /users/groups/{user_id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get(
@@ -485,7 +501,8 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_delete_user_group(self):
         """
-        DELETE /users/groups/{user_id}/{group_id}
+        DELETE /users/groups/{user_id}/{group_id} .
+
         - A student user cannot execute this request.
         """
         response_student = self.student_client.delete(
@@ -495,9 +512,7 @@ class UserViewsStudentTests(TestCase):
 
 
 class UserAuthTests(TestCase):
-    """
-    Special tests class.
-    """
+    """Special tests class."""
 
     fixtures = [
         "auth_group.json",
@@ -511,7 +526,8 @@ class UserAuthTests(TestCase):
 
     def test_user_auth_registration(self):
         """
-        POST /users/auth/registration/
+        POST /users/auth/registration/ .
+
         - A user can be created.
         - The same user can't be created twice.
         """

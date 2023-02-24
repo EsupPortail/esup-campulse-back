@@ -1,6 +1,4 @@
-"""
-Views linked to links between users and auth groups.
-"""
+"""Views linked to links between users and auth groups."""
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
@@ -123,15 +121,14 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
 
 
 class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
-    """
-    GET : Lists all groups linked to a user (manager).
-    """
+    """Lists all groups linked to a user (manager)."""
 
     queryset = GroupInstitutionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     serializer_class = UserGroupsInstitutionsSerializer
 
     def get(self, request, *args, **kwargs):
+        """GET : Lists all groups linked to a user (manager)."""
         if request.user.has_perm("users.view_groupinstitutionusers_anyone"):
             serializer = self.serializer_class(
                 GroupInstitutionUsers.objects.filter(user_id=kwargs["user_id"]),
@@ -145,15 +142,14 @@ class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
 
 
 class UserGroupsInstitutionsDestroy(generics.DestroyAPIView):
-    """
-    DELETE : Deletes a group linked to a user (manager).
-    """
+    """Deletes a group linked to a user (manager)."""
 
     queryset = GroupInstitutionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     serializer_class = UserGroupsInstitutionsSerializer
 
     def delete(self, request, *args, **kwargs):
+        """DELETE : Deletes a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
             user_groups = GroupInstitutionUsers.objects.filter(user_id=user.pk)

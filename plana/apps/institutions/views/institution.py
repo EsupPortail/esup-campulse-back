@@ -1,6 +1,4 @@
-"""
-Views directly linked to associations.
-"""
+"""Views directly linked to associations."""
 from rest_framework import generics
 
 from plana.apps.institutions.models.institution import Institution
@@ -12,22 +10,20 @@ from plana.apps.institutions.serializers.institution_component import (
 
 
 class AssociationInstitutionComponentList(generics.ListAPIView):
-    """
-    GET : Lists all institution components.
-    """
+    """Lists all institution components."""
 
     serializer_class = InstitutionComponentSerializer
 
     def get_queryset(self):
+        """GET : Lists all institution components."""
         return InstitutionComponent.objects.all().order_by("name")
 
 
 class AssociationInstitutionList(generics.ListAPIView):
-    """
-    GET : Lists all institutions.
-    """
+    """Lists all institutions."""
 
     serializer_class = InstitutionSerializer
 
     def get_queryset(self):
+        """GET : Lists all institutions."""
         return Institution.objects.all().order_by("name")

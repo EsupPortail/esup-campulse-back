@@ -1,6 +1,4 @@
-"""
-List of tests done on password serializers.
-"""
+"""List of tests done on password serializers."""
 from allauth.socialaccount.models import SocialAccount
 from django.test import TestCase
 from django.urls import reverse
@@ -15,9 +13,7 @@ from plana.apps.users.serializers.user import (
 
 
 class TestLocalUserPasswordChangeSerializer(TestCase):
-    """
-    Testing password change for an authenticated non-CAS user.
-    """
+    """Testing password change for an authenticated non-CAS user."""
 
     @classmethod
     def setUpTestData(cls):
@@ -35,9 +31,7 @@ class TestLocalUserPasswordChangeSerializer(TestCase):
         cls.user = user
 
     def test_change_password_as_local_user(self):
-        """
-        Raises an AttributeError because form is valid.
-        """
+        """Raises an AttributeError because form is valid."""
         passwords = {"new_password1": "passedemot", "new_password2": "passedemot"}
         serializer = PasswordChangeSerializer(
             reverse("rest_password_change"),
@@ -49,9 +43,7 @@ class TestLocalUserPasswordChangeSerializer(TestCase):
 
 
 class TestLocalUserPasswordResetSerializer(TestCase):
-    """
-    Testing password reset for a non-authenticated non-CAS user.
-    """
+    """Testing password reset for a non-authenticated non-CAS user."""
 
     @classmethod
     def setUpTestData(cls):
@@ -68,9 +60,7 @@ class TestLocalUserPasswordResetSerializer(TestCase):
         cls.user = user
 
     def test_reset_password_as_local_user(self):
-        """
-        Raises an AttributeError because form is valid.
-        """
+        """Raises an AttributeError because form is valid."""
         passwords = {
             "new_password1": "passedemot",
             "new_password2": "passedemot",
@@ -87,9 +77,7 @@ class TestLocalUserPasswordResetSerializer(TestCase):
 
 
 class TestCASUserPasswordChangeSerializer(TestCase):
-    """
-    Testing password change for an authenticated CAS user.
-    """
+    """Testing password change for an authenticated CAS user."""
 
     @classmethod
     def setUpTestData(cls):
@@ -108,9 +96,7 @@ class TestCASUserPasswordChangeSerializer(TestCase):
         cls.user = user
 
     def test_change_password_as_cas_user(self):
-        """
-        Raises a ValidationError triggered by the custom Serializer.
-        """
+        """Raises a ValidationError triggered by the custom Serializer."""
         passwords = {
             "new_password1": "passedemot",
             "new_password2": "passedemot",
@@ -124,9 +110,7 @@ class TestCASUserPasswordChangeSerializer(TestCase):
 
 
 class TestCASUserPasswordResetSerializer(TestCase):
-    """
-    Testing password reset for a non-authenticated CAS user.
-    """
+    """Testing password reset for a non-authenticated CAS user."""
 
     @classmethod
     def setUpTestData(cls):
@@ -144,9 +128,7 @@ class TestCASUserPasswordResetSerializer(TestCase):
         cls.user = user
 
     def test_reset_password_as_cas_user(self):
-        """
-        Raises a ValidationError triggered by the custom Serializer.
-        """
+        """Raises a ValidationError triggered by the custom Serializer."""
         passwords = {
             "new_password1": "passedemot",
             "new_password2": "passedemot",

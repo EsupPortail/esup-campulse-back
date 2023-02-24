@@ -1,6 +1,4 @@
-"""
-Views directly linked to users and their links with other models.
-"""
+"""Views directly linked to users and their links with other models."""
 
 from allauth.account.adapter import get_adapter
 from allauth.account.forms import default_token_generator
@@ -294,17 +292,12 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
-    """
-    POST : Blank redirection to make the password reset work
-    (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html ).
-    """
+    """POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html )."""
 
 
 @extend_schema(methods=["PUT"], exclude=True)
 class UserAuthView(DJRestAuthUserDetailsView):
-    """
-    Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
-    """
+    """Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields."""
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
@@ -361,10 +354,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
-    """
-    Overrided VerifyEmailView to send an email to a manager
-        (or not if user revalidates an email address).
-    """
+    """Overrided VerifyEmailView to send an email to a manager (or not if user revalidates an email address)."""
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

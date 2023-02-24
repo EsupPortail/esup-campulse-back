@@ -1,6 +1,4 @@
-"""
-List of tests done on users views with an anonymous user.
-"""
+"""List of tests done on users views with an anonymous user."""
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from allauth.account.utils import user_pk_to_url_str
@@ -11,9 +9,7 @@ from plana.apps.users.models.user import AssociationUsers, User
 
 
 class UserViewsAnonymousTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "associations_activityfield.json",
@@ -29,9 +25,7 @@ class UserViewsAnonymousTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests.
-        """
+        """Start a default client used on all tests."""
         self.anonymous_client = Client()
         self.unvalidated_user_id = 2
         self.unvalidated_user_name = "compte-non-valide@mail.tld"
@@ -40,7 +34,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_users_list(self):
         """
-        GET /users/
+        GET /users/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/")
@@ -48,7 +43,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_user(self):
         """
-        POST /users/
+        POST /users/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.post(
@@ -63,7 +59,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_user_detail(self):
         """
-        GET /users/{id}
+        GET /users/{id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
@@ -73,7 +70,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_patch_user_detail(self):
         """
-        PATCH /users/{id}
+        PATCH /users/{id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.patch(
@@ -83,7 +81,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_delete_user_detail(self):
         """
-        DELETE /users/{id}
+        DELETE /users/{id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.delete(
@@ -93,7 +92,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_put_user_detail(self):
         """
-        PUT /users/{id}
+        PUT /users/{id} .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_anonymous = self.anonymous_client.put(
@@ -103,7 +103,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_associations_user_list(self):
         """
-        GET /users/associations/
+        GET /users/associations/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/associations/")
@@ -111,7 +112,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_association_user(self):
         """
-        POST /users/associations/
+        POST /users/associations/ .
+
         - An anonymous user cannot add a link between a validated user and an association.
         - An association cannot have two presidents.
         - An anonymous user cannot validate a link between a user and an association.
@@ -122,7 +124,6 @@ class UserViewsAnonymousTests(TestCase):
         - user field is mandatory.
         - association field is mandatory.
         """
-
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
             {
@@ -214,7 +215,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_associations_user_detail(self):
         """
-        GET /users/associations/{user_id}
+        GET /users/associations/{user_id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
@@ -224,7 +226,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_patch_association_users(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.patch(
@@ -234,7 +237,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_delete_association_user(self):
         """
-        DELETE /users/associations/{user_id}/{association_id}
+        DELETE /users/associations/{user_id}/{association_id} .
+
         - An anonymous user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
@@ -245,7 +249,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_registration(self):
         """
-        POST /users/auth/registration/
+        POST /users/auth/registration/ .
+
         - An account with an Unistra email can't be created.
         - An account can be created by an anonymous user.
         """
@@ -272,7 +277,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_password_reset(self):
         """
-        POST /users/auth/password/reset/
+        POST /users/auth/password/reset/ .
+
         - An anonymous user can execute this request.
         """
         response_anonymous = self.anonymous_client.post(
@@ -282,7 +288,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_password_reset_confirm(self):
         """
-        POST /users/auth/password/reset/confirm/
+        POST /users/auth/password/reset/confirm/ .
+
         - An anonymous user can execute this request.
         """
         user = User.objects.get(id=self.student_user_id)
@@ -299,7 +306,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_registration_verify_email(self):
         """
-        POST /users/auth/registration/verify-email/
+        POST /users/auth/registration/verify-email/ .
+
         - An anonymous user can execute this request.
         - An anonymous user with association where is_site is false can execute this request.
         - An anonymous user with association where is_site is true can execute this request.
@@ -365,7 +373,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_auth_user_detail(self):
         """
-        GET /users/auth/user/
+        GET /users/auth/user/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/auth/user/")
@@ -373,7 +382,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_patch_auth_user_detail(self):
         """
-        PATCH /users/auth/user/
+        PATCH /users/auth/user/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.patch(
@@ -383,7 +393,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_put_auth_user_detail(self):
         """
-        PUT /users/auth/user/
+        PUT /users/auth/user/ .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_anonymous = self.anonymous_client.put(
@@ -393,7 +404,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_self_consents_user_list(self):
         """
-        GET /users/consents/
+        GET /users/consents/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/consents/")
@@ -401,7 +413,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_user_consents(self):
         """
-        POST /users/consents/
+        POST /users/consents/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.post(
@@ -411,7 +424,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_consents_user_list(self):
         """
-        GET /users/consents/{user_id}
+        GET /users/consents/{user_id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
@@ -421,7 +435,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_user_groups_list(self):
         """
-        GET /users/groups/
+        GET /users/groups/ .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get("/users/groups/")
@@ -429,7 +444,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_post_user_groups(self):
         """
-        POST /users/groups/
+        POST /users/groups/ .
+
         - An anonymous user cannot add a link between a validated user and a group.
         - An anonymous user can add a link between a non-validated user and a group.
         - A non-existing user cannot be added in a group.
@@ -437,7 +453,6 @@ class UserViewsAnonymousTests(TestCase):
         - username field is mandatory.
         - groups field is mandatory.
         """
-
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.student_user_name, "group": 4},
@@ -471,7 +486,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_user_groups_detail(self):
         """
-        GET /users/groups/{user_id}
+        GET /users/groups/{user_id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
@@ -481,7 +497,8 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_delete_user_group(self):
         """
-        DELETE /users/groups/{user_id}/{group_id}
+        DELETE /users/groups/{user_id}/{group_id} .
+
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.client.delete(

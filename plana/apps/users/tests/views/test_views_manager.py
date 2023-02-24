@@ -1,6 +1,4 @@
-"""
-List of tests done on users views with a manager user.
-"""
+"""List of tests done on users views with a manager user."""
 import json
 
 from allauth.socialaccount.models import SocialAccount
@@ -16,9 +14,7 @@ from plana.apps.users.provider import CASProvider
 
 
 class UserViewsManagerTests(TestCase):
-    """
-    Main tests class.
-    """
+    """aMain tests class."""
 
     fixtures = [
         "account_emailaddress.json",
@@ -39,9 +35,7 @@ class UserViewsManagerTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests, retrieves a manager user.
-        """
+        """Start a default client used on all tests, retrieves a manager user."""
         self.unvalidated_user_id = 2
         self.unvalidated_user_name = "compte-non-valide@mail.tld"
         self.student_user_id = 11
@@ -63,7 +57,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_users_list(self):
         """
-        GET /users/
+        GET /users/ .
+
         - A manager user can execute this request.
         - There's at least one user in the users list.
         - We get the same amount of users through the model and through the view.
@@ -112,7 +107,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_users_list_is_cas(self):
         """
-        GET /users/
+        GET /users/ .
+
         - Getting only non-cas users in the filter, only returns non-cas users
         - Getting only cas users in the filter, only returns cas users
         """
@@ -126,7 +122,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_post_user(self):
         """
-        POST /users/
+        POST /users/ .
+
         - A manager user can execute this request.
         - The user has been created.
         """
@@ -142,7 +139,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_user_detail(self):
         """
-        GET /users/{id}
+        GET /users/{id} .
+
         - A manager user can execute this request.
         - User details are returned (test the "username" attribute).
         """
@@ -155,7 +153,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_patch_user_detail(self):
         """
-        PATCH /users/{id}
+        PATCH /users/{id} .
+
         - A manager user can execute this request.
         - A manager user can update user details.
         - A non-existing user cannot be updated.
@@ -163,7 +162,6 @@ class UserViewsManagerTests(TestCase):
         - A manager user can validate a CAS user.
         - A manager user cannot edit another one.
         """
-
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
             data={
@@ -218,7 +216,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_detail(self):
         """
-        DELETE /users/{id}
+        DELETE /users/{id} .
+
         - A manager user can execute this request.
         - A user can be deleted.
         - A non-existing user cannot be deleted.
@@ -245,7 +244,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_put_user_detail(self):
         """
-        PUT /users/{id}
+        PUT /users/{id} .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_manager = self.manager_client.put(
@@ -255,7 +255,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_associations_user_list(self):
         """
-        GET /users/associations/
+        GET /users/associations/ .
+
         - A manager user can execute this request.
         - Links between user and associations are returned.
         """
@@ -267,7 +268,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_post_association_user(self):
         """
-        POST /users/associations/
+        POST /users/associations/ .
+
         - A manager user can add an association to a validated student.
         - A manager user can add an association to a non-validated student.
         - A manager cannot be added in an association.
@@ -304,7 +306,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_associations_user_detail(self):
         """
-        GET /users/associations/{user_id}
+        GET /users/associations/{user_id} .
+
         - A manager user can execute this request.
         """
         response_manager = self.manager_client.get(
@@ -322,7 +325,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_patch_association_users_update_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A manager can execute this request.
         - Link between member and association is correctly updated.
         - If giving president privileges to a member,
@@ -370,7 +374,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_patch_association_users(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - A manager can execute this request.
         - Link between member and association is correctly updated.
         """
@@ -388,7 +393,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_patch_association_users_unexisting_params(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - Returns a bad request if non-existing user or association in parameters.
         """
         response = self.manager_client.patch(
@@ -400,7 +406,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_patch_association_users_unexisting_link(self):
         """
-        PATCH /users/associations/{user_id}/{association_id}
+        PATCH /users/associations/{user_id}/{association_id} .
+
         - Returns a bad request if non-existing link between selected user and association.
         """
         response = self.manager_client.patch(
@@ -412,7 +419,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_association_users(self):
         """
-        DELETE /users/associations/{user_id}/{association_id}
+        DELETE /users/associations/{user_id}/{association_id} .
+
         - The user must exist.
         - The association must exist.
         - A manager user can execute this request.
@@ -444,7 +452,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_auth_user_detail(self):
         """
-        GET /users/auth/user/
+        GET /users/auth/user/ .
+
         - A manager user can execute this request.
         - A manager user gets correct data when executing the request.
         """
@@ -456,7 +465,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_put_auth_user_detail(self):
         """
-        PUT /users/auth/user/
+        PUT /users/auth/user/ .
+
         - Request should return an error no matter which role is trying to execute it.
         """
         response_manager = self.manager_client.put(
@@ -466,7 +476,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_consents_user_list(self):
         """
-        GET /users/consents/
+        GET /users/consents/ .
+
         - A manager user can execute this request.
         """
         # TODO Reactivate this test when consents will be ready.
@@ -480,7 +491,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_consents_user_detail(self):
         """
-        GET /users/consents/{user_id}
+        GET /users/consents/{user_id} .
+
         - A manager user can execute this request.
         - We get the same amount of consents through the model and through the view.
         """
@@ -495,7 +507,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_user_groups_list(self):
         """
-        GET /users/groups/
+        GET /users/groups/ .
+
         - A manager user can execute this request.
         - We get the same amount of groups links through the model and through the view.
         """
@@ -504,7 +517,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_post_group_user(self):
         """
-        POST /users/group/
+        POST /users/group/ .
+
         - A manager user can add a group to a validated student.
         - A manager user cannot add a restricted group to a student.
         - A manager user can add a group to a non-validated student.
@@ -536,7 +550,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_get_user_groups_detail(self):
         """
-        GET /users/groups/{user_id}
+        GET /users/groups/{user_id} .
+
         - A manager user can execute this request.
         """
         response_manager = self.manager_client.get(
@@ -546,7 +561,8 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_group(self):
         """
-        DELETE /users/groups/{user_id}/{group_id}
+        DELETE /users/groups/{user_id}/{group_id} .
+
         - The user must exist.
         - Groups for a validated manager user can't be deleted.
         - A manager user can execute this request.

@@ -1,6 +1,4 @@
-"""
-List of URLs directly linked to operations that can be done on associations.
-"""
+"""List of URLs directly linked to operations that can be done on associations."""
 from django.urls import path
 
 from .views.association import (

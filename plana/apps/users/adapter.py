@@ -1,6 +1,4 @@
-"""
-Links the CAS provider to the CAS views.
-"""
+"""Links the CAS provider to the CAS views."""
 import re
 
 from allauth.account.adapter import DefaultAccountAdapter
@@ -17,14 +15,10 @@ from .provider import CASProvider
 
 
 class PlanAAdapter(DefaultAccountAdapter):
-    """
-    Default adapter for local accounts.
-    """
+    """Default adapter for local accounts."""
 
     def send_mail(self, template_prefix, email, context):
-        """
-        Overrided send_mail django-allauth method to use the one from the utils file.
-        """
+        """Overrided send_mail django-allauth method to use the one from the utils file."""
         user = User.objects.get(email=email)
         request = context.get("request")
         current_site = get_current_site(request)
@@ -69,24 +63,18 @@ class PlanAAdapter(DefaultAccountAdapter):
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
-    """
-    Default adapter for CAS accounts.
-    """
+    """Default adapter for CAS accounts."""
 
     pass
 
 
 class CASAdapter(AllAuthCASAdapter):
-    """
-    Subclass CASAdapter to give the configuration as a CAS client.
-    """
+    """Subclass CASAdapter to give the configuration as a CAS client."""
 
     provider_id = CASProvider.id
     url = settings.CAS_SERVER
     version = settings.CAS_VERSION
 
     def get_provider(self, request):
-        """
-        Get the provider.
-        """
+        """Get the provider."""
         return self.provider

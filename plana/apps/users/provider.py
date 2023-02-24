@@ -1,22 +1,16 @@
-"""
-Describes the used CAS service and the fields retrieved from it.
-"""
+"""Describes the used CAS service and the fields retrieved from it."""
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth_cas.providers import CASProvider as AllAuthCASProvider
 
 
 class CASAccount(ProviderAccount):
-    """
-    Default CAS Account.
-    """
+    """Default CAS Account."""
 
     pass
 
 
 class CASProvider(AllAuthCASProvider):
-    """
-    The CASProvider subclass defines how to process data returned by the CAS server.
-    """
+    """The CASProvider subclass defines how to process data returned by the CAS server."""
 
     id = "cas"
     name = "CAS Unistra"

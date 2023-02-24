@@ -263,7 +263,7 @@ paths:
   /groups/:
     get:
       operationId: groups_list
-      description: 'GET : Lists all groups.'
+      description: Lists all groups.
       tags:
       - groups
       security:
@@ -281,7 +281,7 @@ paths:
   /institutions/institution_components:
     get:
       operationId: institutions_institution_components_list
-      description: 'GET : Lists all institution components.'
+      description: Lists all institution components.
       tags:
       - institutions
       security:
@@ -299,7 +299,7 @@ paths:
   /institutions/institutions:
     get:
       operationId: institutions_institutions_list
-      description: 'GET : Lists all institutions.'
+      description: Lists all institutions.
       tags:
       - institutions
       security:
@@ -909,9 +909,8 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: |-
-        Overrided VerifyEmailView to send an email to a manager
-            (or not if user revalidates an email address).
+      description: Overrided VerifyEmailView to send an email to a manager (or not
+        if user revalidates an email address).
       tags:
       - users
       requestBody:
@@ -1428,8 +1427,7 @@ components:
       - name
     AssociationMandatoryData:
       type: object
-      description: |-
-        Smaller serializer to return only the main informations of an association
+      description: Smaller serializer to return only the main informations of an association
         (used in a simple name list of all associations).
       properties:
         id:
@@ -1455,8 +1453,7 @@ components:
       - name
     AssociationMandatoryDataRequest:
       type: object
-      description: |-
-        Smaller serializer to return only the main informations of an association
+      description: Smaller serializer to return only the main informations of an association
         (used in a simple name list of all associations).
       properties:
         name:
@@ -1501,9 +1498,8 @@ components:
       - name
     AssociationPartialData:
       type: object
-      description: |-
-        Smaller serializer to return only some of the informations of an association
-        (used in a table list of all associations).
+      description: Smaller serializer to return only some of the informations of an
+        association (used in a table list of all associations).
       properties:
         id:
           type: integer

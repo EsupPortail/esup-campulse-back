@@ -1,6 +1,4 @@
-"""
-List of tests done on associations views.
-"""
+"""List of tests done on associations views."""
 import json
 
 from django.test import Client, TestCase
@@ -11,9 +9,7 @@ from plana.apps.institutions.models.institution_component import InstitutionComp
 
 
 class AssociationsViewsTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "institutions_institution.json",
@@ -21,14 +17,13 @@ class AssociationsViewsTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests.
-        """
+        """Start a default client used on all tests."""
         self.client = Client()
 
     def test_get_institution_components_list(self):
         """
-        GET /institutions/institution_components
+        GET /institutions/institution_components .
+
         - There's at least one institution component in the institution components list.
         - The route can be accessed by anyone.
         - We get the same amount of institution components through the model and through the view.
@@ -48,7 +43,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_institutions_list(self):
         """
-        GET /institutions/institutions
+        GET /institutions/institutions .
+
         - There's at least one institution in the institutions list.
         - The route can be accessed by anyone.
         - We get the same amount of institutions through the model and through the view.

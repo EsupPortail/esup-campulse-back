@@ -1,6 +1,4 @@
-"""
-Storage management from octant. https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/storages.py
-"""
+"""Storage management from octant. https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/storages.py ."""
 from django.db import models
 from django.db.models.fields.files import FieldFile
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -20,9 +18,7 @@ class MediaStorage(S3Boto3Storage):
 
 
 class UpdateACLStorage(S3Boto3Storage):
-    """
-    Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd
-    """
+    """Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd ."""
 
     def update_acl(self, name, acl=None):
         acl = acl or self.default_acl
@@ -83,9 +79,7 @@ class DynamicStorageFileField(models.FileField):
 
 
 class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
-    """
-    FieldFile used with django-thumbnails
-    """
+    """FieldFile used with django-thumbnails."""
 
     querystring_expire = 60 * 60 * 24
 
@@ -121,9 +115,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
 
 
 class DynamicThumbnailImageField(ThumbnailImageField):
-    """
-    ImageField used with django-thumbnails
-    """
+    """ImageField used with django-thumbnails."""
 
     attr_class = DynamicStorageThumbnailedFieldFile
 

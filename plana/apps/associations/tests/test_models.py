@@ -1,6 +1,4 @@
-"""
-List of tests done on associations models.
-"""
+"""List of tests done on associations models."""
 from django.test import Client, TestCase
 
 from plana.apps.associations.models.activity_field import ActivityField
@@ -8,9 +6,7 @@ from plana.apps.associations.models.association import Association
 
 
 class AssociationsModelsTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "associations_activityfield.json",
@@ -20,23 +16,17 @@ class AssociationsModelsTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests.
-        """
+        """Start a default client used on all tests."""
         self.client = Client()
 
     def test_association_model(self):
-        """
-        There's at least one association in the database.
-        """
+        """There's at least one association in the database."""
         association = Association.objects.first()
         self.assertEqual(
             str(association), f"{association.name} ({association.acronym})"
         )
 
     def test_activity_field_model(self):
-        """
-        There's at least one activity field in the database.
-        """
+        """There's at least one activity field in the database."""
         activity_field = ActivityField.objects.first()
         self.assertEqual(str(activity_field), f"{activity_field.name}")

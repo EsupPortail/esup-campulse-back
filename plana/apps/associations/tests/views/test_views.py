@@ -1,6 +1,4 @@
-"""
-List of tests done on associations views.
-"""
+"""List of tests done on associations views."""
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,9 +12,7 @@ from plana.apps.users.models.user import AssociationUsers
 
 
 class AssociationsViewsTests(TestCase):
-    """
-    Main tests class.
-    """
+    """Main tests class."""
 
     fixtures = [
         "account_emailaddress.json",
@@ -35,9 +31,7 @@ class AssociationsViewsTests(TestCase):
     ]
 
     def setUp(self):
-        """
-        Start a default client used on all tests.
-        """
+        """Start a default client used on all tests."""
         self.client = Client()
         url_login = reverse("rest_login")
 
@@ -88,7 +82,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_associations_list(self):
         """
-        GET /associations/
+        GET /associations/ .
+
         - There's at least one association in the associations list.
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
@@ -195,7 +190,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_post_association(self):
         """
-        POST /associations/
+        POST /associations/ .
+
         - Name and institution are mandatory.
         - A General Manager can add an association.
         - A General Manager can add a site association.
@@ -299,7 +295,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_association_retrieve(self):
         """
-        GET /associations/{id}
+        GET /associations/{id} .
+
         - The route can be accessed by anyone.
         - Main association details are returned (test the "name" attribute).
         - All associations details are returned (test the "current_projects" attribute).
@@ -345,7 +342,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_authors(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - An anonymous user cannot execute this request.
         - A Misc Manager cannot edit an association.
         - A General Manager can edit an association.
@@ -384,7 +382,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_not_members(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - Someone from an association without status can't edit infos from another association.
         - Someone from an association's office cannot edit informations from another association.
         """
@@ -410,7 +409,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_by_its_members(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - Someone from the association without status can't edit infos from the association.
         - Someone from the association's office can edit informations from the association.
         """
@@ -437,7 +437,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_non_existing(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - A non-existing association cannot be edited.
         """
         association_id = 99
@@ -450,7 +451,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_social_networks(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - A General Manager can edit an association's social networks.
         - Association's social networks are correctly updated with provided data.
         """
@@ -469,7 +471,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_wrong_social_networks(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - Association's social networks are not updated if the keys are not valid (400).
         - Association's social networks are not updated if the values are not strings (400).
         """
@@ -501,7 +504,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_public_or_not(self):
         """
-        PATCH /associations/{id}
+        PATCH /associations/{id} .
+
         - An association can't be public if not enabled and not site.
         - An association must lost public status if enabled or site is removed.
         """
@@ -553,7 +557,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_delete_association(self):
         """
-        DELETE /associations/{id}
+        DELETE /associations/{id} .
+
         - An anonymous user cannot execute this request.
         - A Misc Manager cannot delete an association.
         - An enabled association cannot be deleted.
@@ -586,7 +591,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_put_association(self):
         """
-        PUT /associations/{id}
+        PUT /associations/{id} .
+
         - Request should return an error.
         """
         response = self.client.put(
@@ -596,7 +602,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_activity_fields_list(self):
         """
-        GET /associations/activity_fields
+        GET /associations/activity_fields .
+
         - There's at least one activity field in the activity fields list.
         - The route can be accessed by anyone.
         - We get the same amount of activity fields through the model and through the view.
@@ -616,7 +623,8 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_association_names_list(self):
         """
-        GET /associations/names
+        GET /associations/names .
+
         - There's at least one association name in the association names list.
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
