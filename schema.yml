@@ -318,7 +318,7 @@ paths:
     get:
       operationId: users_list
       description: |-
-        GET : Lists all users.
+        GET : Lists all users for manager, or users sharing the same association.
 
         POST : Create an account for another person as a manager.
       parameters:
@@ -354,12 +354,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/UserPartialData'
           description: ''
     post:
       operationId: users_create
       description: |-
-        GET : Lists all users.
+        GET : Lists all users for manager, or users sharing the same association.
 
         POST : Create an account for another person as a manager.
       tags:
@@ -368,13 +368,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/UserPartialDataRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/UserPartialDataRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/UserPartialDataRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -384,7 +384,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserPartialData'
           description: ''
   /users/{id}:
     get:
@@ -2174,18 +2174,26 @@ components:
       required:
       - group
       - user
-    UserRequest:
+    UserPartialData:
       type: object
-      description: Main serializer.
+      description: Used to get data from another student in the same associations.
       properties:
-        username:
+        first_name:
           type: string
-          minLength: 1
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
           maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+      required:
+      - first_name
+      - last_name
+    UserPartialDataRequest:
+      type: object
+      description: Used to get data from another student in the same associations.
+      properties:
         first_name:
           type: string
           minLength: 1
@@ -2194,22 +2202,12 @@ components:
           type: string
           minLength: 1
           maxLength: 150
-        email:
-          type: string
-          format: email
-          minLength: 1
-          title: Courriel
-          maxLength: 254
-        phone:
-          type: string
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
       required:
-      - email
       - first_name
       - last_name
-      - username
     VerifyEmailRequest:
       type: object
       properties:

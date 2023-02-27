@@ -59,10 +59,14 @@ class UserViewsStudentTests(TestCase):
         """
         GET /users/ .
 
-        - A student user cannot execute this request.
+        - A student user get users in the same associations with partial data.
         """
         response_student = self.student_client.get("/users/")
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+        users = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(users[0]["firstName"])
+        with self.assertRaises(KeyError):
+            users[0]["email"]
 
     def test_student_post_user(self):
         """

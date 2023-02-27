@@ -160,7 +160,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             if (
                 user_id is not None
                 and user_id != ""
-                and self.request.user.has_perm("users.view_user")
+                and self.request.user.has_perm("users.view_user_anyone")
             ):
                 assos_users_query = (
                     AssociationUsers.objects.filter(user_id=user_id)

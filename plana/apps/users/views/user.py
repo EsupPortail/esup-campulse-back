@@ -17,8 +17,8 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
-from plana.apps.users.serializers.user import UserSerializer
+from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.serializers.user import UserPartialDataSerializer, UserSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -55,13 +55,22 @@ from plana.utils import send_mail, to_bool
 )
 class UserListCreate(generics.ListCreateAPIView):
     """
-    GET : Lists all users.
+    GET : Lists all users for manager, or users sharing the same association.
 
     POST : Create an account for another person as a manager.
     """
 
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
+    def get_serializer_class(self):
+        if not self.request.user.has_perm(
+            "users.view_user_anyone"
+        ) and not self.request.user.has_perm("users.view_user_misc"):
+            self.serializer_class = UserPartialDataSerializer
+        else:
+            self.serializer_class = UserSerializer
+        return super().get_serializer_class()
 
     def get_queryset(self):
         queryset = User.objects.all().order_by("id")
@@ -70,35 +79,44 @@ class UserListCreate(generics.ListCreateAPIView):
         association_id = self.request.query_params.get("association_id")
         institution_id = self.request.query_params.get("institution_id")
 
-        if is_validated_by_admin is not None and is_validated_by_admin != "":
-            is_validated_by_admin = to_bool(is_validated_by_admin)
-            queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
-
-        if is_cas is not None and is_cas != "":
-            is_cas = to_bool(is_cas)
-            cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
-                "user_id", flat=True
+        if not self.request.user.has_perm(
+            "users.view_user_anyone"
+        ) and not self.request.user.has_perm("users.view_user_misc"):
+            queryset = queryset.filter(
+                id__in=AssociationUsers.objects.filter(
+                    association_id__in=self.request.user.get_user_associations()
+                ).values_list("user_id")
             )
-            queryset = (
-                queryset.filter(id__in=cas_ids_list)
-                if is_cas
-                else queryset.exclude(id__in=cas_ids_list)
-            )
+        else:
+            if is_validated_by_admin is not None and is_validated_by_admin != "":
+                is_validated_by_admin = to_bool(is_validated_by_admin)
+                queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
 
-        if association_id is not None and association_id != "":
-            assos_users_query = AssociationUsers.objects.filter(
-                association_id=association_id
-            ).values_list("user_id", flat=True)
-            queryset = queryset.filter(id__in=assos_users_query)
+            if is_cas is not None and is_cas != "":
+                is_cas = to_bool(is_cas)
+                cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
+                    "user_id", flat=True
+                )
+                queryset = (
+                    queryset.filter(id__in=cas_ids_list)
+                    if is_cas
+                    else queryset.exclude(id__in=cas_ids_list)
+                )
 
-        if institution_id is not None and institution_id != "":
-            associations_ids = Association.objects.filter(
-                institution_id=institution_id
-            ).values_list("id", flat=True)
-            assos_users_query = AssociationUsers.objects.filter(
-                association_id__in=associations_ids
-            ).values_list("user_id", flat=True)
-            queryset = queryset.filter(id__in=assos_users_query)
+            if association_id is not None and association_id != "":
+                assos_users_query = AssociationUsers.objects.filter(
+                    association_id=association_id
+                ).values_list("user_id", flat=True)
+                queryset = queryset.filter(id__in=assos_users_query)
+
+            if institution_id is not None and institution_id != "":
+                associations_ids = Association.objects.filter(
+                    institution_id=institution_id
+                ).values_list("id", flat=True)
+                assos_users_query = AssociationUsers.objects.filter(
+                    association_id__in=associations_ids
+                ).values_list("user_id", flat=True)
+                queryset = queryset.filter(id__in=assos_users_query)
 
         return queryset
 
@@ -170,7 +188,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_user"):
+        if request.user.has_perm("users.view_user_anyone"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
             {"error": _("Bad request.")},

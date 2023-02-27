@@ -140,7 +140,7 @@
     "pk": 18,
     "fields": {
       "group": 1,
-      "permission": 92
+      "permission": 111
     }
   },
   {
@@ -148,7 +148,7 @@
     "pk": 19,
     "fields": {
       "group": 1,
-      "permission": 95
+      "permission": 92
     }
   },
   {
@@ -156,7 +156,7 @@
     "pk": 20,
     "fields": {
       "group": 1,
-      "permission": 93
+      "permission": 95
     }
   },
   {
@@ -164,7 +164,7 @@
     "pk": 21,
     "fields": {
       "group": 1,
-      "permission": 96
+      "permission": 93
     }
   },
   {
@@ -172,7 +172,7 @@
     "pk": 22,
     "fields": {
       "group": 1,
-      "permission": 94
+      "permission": 96
     }
   },
   {
@@ -180,7 +180,7 @@
     "pk": 23,
     "fields": {
       "group": 1,
-      "permission": 97
+      "permission": 94
     }
   },
   {
@@ -188,7 +188,7 @@
     "pk": 24,
     "fields": {
       "group": 1,
-      "permission": 100
+      "permission": 97
     }
   },
   {
@@ -196,7 +196,7 @@
     "pk": 25,
     "fields": {
       "group": 1,
-      "permission": 101
+      "permission": 100
     }
   },
   {
@@ -204,15 +204,15 @@
     "pk": 26,
     "fields": {
       "group": 1,
-      "permission": 102
+      "permission": 101
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 27,
     "fields": {
-      "group": 2,
-      "permission": 69
+      "group": 1,
+      "permission": 102
     }
   },
   {
@@ -220,7 +220,7 @@
     "pk": 28,
     "fields": {
       "group": 2,
-      "permission": 70
+      "permission": 69
     }
   },
   {
@@ -228,7 +228,7 @@
     "pk": 29,
     "fields": {
       "group": 2,
-      "permission": 75
+      "permission": 70
     }
   },
   {
@@ -236,7 +236,7 @@
     "pk": 30,
     "fields": {
       "group": 2,
-      "permission": 71
+      "permission": 75
     }
   },
   {
@@ -244,7 +244,7 @@
     "pk": 31,
     "fields": {
       "group": 2,
-      "permission": 77
+      "permission": 71
     }
   },
   {
@@ -252,7 +252,7 @@
     "pk": 32,
     "fields": {
       "group": 2,
-      "permission": 78
+      "permission": 77
     }
   },
   {
@@ -260,7 +260,7 @@
     "pk": 33,
     "fields": {
       "group": 2,
-      "permission": 103
+      "permission": 78
     }
   },
   {
@@ -268,7 +268,7 @@
     "pk": 34,
     "fields": {
       "group": 2,
-      "permission": 104
+      "permission": 103
     }
   },
   {
@@ -276,7 +276,7 @@
     "pk": 35,
     "fields": {
       "group": 2,
-      "permission": 105
+      "permission": 104
     }
   },
   {
@@ -284,7 +284,7 @@
     "pk": 36,
     "fields": {
       "group": 2,
-      "permission": 106
+      "permission": 105
     }
   },
   {
@@ -292,7 +292,7 @@
     "pk": 37,
     "fields": {
       "group": 2,
-      "permission": 92
+      "permission": 106
     }
   },
   {
@@ -300,7 +300,7 @@
     "pk": 38,
     "fields": {
       "group": 2,
-      "permission": 93
+      "permission": 111
     }
   },
   {
@@ -308,7 +308,7 @@
     "pk": 39,
     "fields": {
       "group": 2,
-      "permission": 94
+      "permission": 92
     }
   },
   {
@@ -316,7 +316,7 @@
     "pk": 40,
     "fields": {
       "group": 2,
-      "permission": 97
+      "permission": 93
     }
   },
   {
@@ -324,7 +324,7 @@
     "pk": 41,
     "fields": {
       "group": 2,
-      "permission": 100
+      "permission": 94
     }
   },
   {
@@ -332,7 +332,7 @@
     "pk": 42,
     "fields": {
       "group": 2,
-      "permission": 101
+      "permission": 97
     }
   },
   {
@@ -340,23 +340,23 @@
     "pk": 43,
     "fields": {
       "group": 2,
-      "permission": 102
+      "permission": 100
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 44,
     "fields": {
-      "group": 3,
-      "permission": 69
+      "group": 2,
+      "permission": 101
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 45,
     "fields": {
-      "group": 3,
-      "permission": 70
+      "group": 2,
+      "permission": 102
     }
   },
   {
@@ -364,7 +364,7 @@
     "pk": 46,
     "fields": {
       "group": 3,
-      "permission": 75
+      "permission": 69
     }
   },
   {
@@ -372,7 +372,7 @@
     "pk": 47,
     "fields": {
       "group": 3,
-      "permission": 71
+      "permission": 70
     }
   },
   {
@@ -380,7 +380,7 @@
     "pk": 48,
     "fields": {
       "group": 3,
-      "permission": 77
+      "permission": 75
     }
   },
   {
@@ -388,7 +388,7 @@
     "pk": 49,
     "fields": {
       "group": 3,
-      "permission": 78
+      "permission": 71
     }
   },
   {
@@ -396,7 +396,7 @@
     "pk": 50,
     "fields": {
       "group": 3,
-      "permission": 103
+      "permission": 77
     }
   },
   {
@@ -404,7 +404,7 @@
     "pk": 51,
     "fields": {
       "group": 3,
-      "permission": 107
+      "permission": 78
     }
   },
   {
@@ -412,7 +412,7 @@
     "pk": 52,
     "fields": {
       "group": 3,
-      "permission": 104
+      "permission": 103
     }
   },
   {
@@ -420,7 +420,7 @@
     "pk": 53,
     "fields": {
       "group": 3,
-      "permission": 108
+      "permission": 107
     }
   },
   {
@@ -428,7 +428,7 @@
     "pk": 54,
     "fields": {
       "group": 3,
-      "permission": 105
+      "permission": 104
     }
   },
   {
@@ -436,7 +436,7 @@
     "pk": 55,
     "fields": {
       "group": 3,
-      "permission": 109
+      "permission": 108
     }
   },
   {
@@ -444,7 +444,7 @@
     "pk": 56,
     "fields": {
       "group": 3,
-      "permission": 106
+      "permission": 105
     }
   },
   {
@@ -452,7 +452,7 @@
     "pk": 57,
     "fields": {
       "group": 3,
-      "permission": 110
+      "permission": 109
     }
   },
   {
@@ -460,7 +460,7 @@
     "pk": 58,
     "fields": {
       "group": 3,
-      "permission": 92
+      "permission": 106
     }
   },
   {
@@ -468,7 +468,7 @@
     "pk": 59,
     "fields": {
       "group": 3,
-      "permission": 93
+      "permission": 110
     }
   },
   {
@@ -476,7 +476,7 @@
     "pk": 60,
     "fields": {
       "group": 3,
-      "permission": 94
+      "permission": 92
     }
   },
   {
@@ -484,7 +484,7 @@
     "pk": 61,
     "fields": {
       "group": 3,
-      "permission": 97
+      "permission": 93
     }
   },
   {
@@ -492,7 +492,7 @@
     "pk": 62,
     "fields": {
       "group": 3,
-      "permission": 100
+      "permission": 94
     }
   },
   {
@@ -500,7 +500,7 @@
     "pk": 63,
     "fields": {
       "group": 3,
-      "permission": 101
+      "permission": 97
     }
   },
   {
@@ -508,23 +508,23 @@
     "pk": 64,
     "fields": {
       "group": 3,
-      "permission": 102
+      "permission": 100
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 65,
     "fields": {
-      "group": 4,
-      "permission": 78
+      "group": 3,
+      "permission": 101
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 66,
     "fields": {
-      "group": 4,
-      "permission": 106
+      "group": 3,
+      "permission": 102
     }
   },
   {
@@ -532,7 +532,7 @@
     "pk": 67,
     "fields": {
       "group": 4,
-      "permission": 110
+      "permission": 78
     }
   },
   {
@@ -540,7 +540,7 @@
     "pk": 68,
     "fields": {
       "group": 4,
-      "permission": 94
+      "permission": 106
     }
   },
   {
@@ -548,31 +548,31 @@
     "pk": 69,
     "fields": {
       "group": 4,
-      "permission": 101
+      "permission": 110
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 70,
     "fields": {
-      "group": 5,
-      "permission": 78
+      "group": 4,
+      "permission": 111
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 71,
     "fields": {
-      "group": 5,
-      "permission": 106
+      "group": 4,
+      "permission": 94
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 72,
     "fields": {
-      "group": 5,
-      "permission": 110
+      "group": 4,
+      "permission": 101
     }
   },
   {
@@ -580,7 +580,7 @@
     "pk": 73,
     "fields": {
       "group": 5,
-      "permission": 94
+      "permission": 78
     }
   },
   {
@@ -588,39 +588,39 @@
     "pk": 74,
     "fields": {
       "group": 5,
-      "permission": 101
+      "permission": 106
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 75,
     "fields": {
-      "group": 6,
-      "permission": 70
+      "group": 5,
+      "permission": 110
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 76,
     "fields": {
-      "group": 6,
-      "permission": 92
+      "group": 5,
+      "permission": 111
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 77,
     "fields": {
-      "group": 6,
-      "permission": 93
+      "group": 5,
+      "permission": 94
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 78,
     "fields": {
-      "group": 6,
-      "permission": 94
+      "group": 5,
+      "permission": 101
     }
   },
   {
@@ -628,12 +628,52 @@
     "pk": 79,
     "fields": {
       "group": 6,
-      "permission": 101
+      "permission": 70
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 80,
+    "fields": {
+      "group": 6,
+      "permission": 106
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 81,
+    "fields": {
+      "group": 6,
+      "permission": 92
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 82,
+    "fields": {
+      "group": 6,
+      "permission": 93
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 83,
+    "fields": {
+      "group": 6,
+      "permission": 94
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 84,
+    "fields": {
+      "group": 6,
+      "permission": 101
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 85,
     "fields": {
       "group": 7,
       "permission": 101

@@ -21,6 +21,7 @@ PERMISSIONS_GROUPS = {
         "delete_user_misc",
         "view_user",
         "view_user_misc",
+        "view_user_anyone",
         "change_associationusers",
         "change_associationusers_any_institution",
         "delete_associationusers",
@@ -42,6 +43,7 @@ PERMISSIONS_GROUPS = {
         "change_user",
         "delete_user",
         "view_user",
+        "view_user_anyone",
         "change_associationusers",
         "delete_associationusers",
         "view_associationusers",
@@ -77,6 +79,7 @@ PERMISSIONS_GROUPS = {
         "view_association_not_public",
         "view_user",
         "view_user_misc",
+        "view_user_anyone",
         "view_associationusers",
         "view_groupinstitutionusers",
     ],
@@ -84,11 +87,13 @@ PERMISSIONS_GROUPS = {
         "view_association_not_public",
         "view_user",
         "view_user_misc",
+        "view_user_anyone",
         "view_associationusers",
         "view_groupinstitutionusers",
     ],
     "STUDENT_INSTITUTION": [
         "change_association",
+        "view_user",
         "change_associationusers",
         "delete_associationusers",
         "view_associationusers",
@@ -98,4 +103,3 @@ PERMISSIONS_GROUPS = {
         "view_groupinstitutionusers",
     ],
 }
-

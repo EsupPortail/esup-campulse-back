@@ -112,6 +112,14 @@ class User(AbstractUser):
                     return True
         return False
 
+    def get_user_associations(self):
+        """Return a list of Association IDs linked to a user."""
+        return Association.objects.filter(
+            id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+                "association_id"
+            )
+        ).values_list("id")
+
     def get_user_institutions(self):
         """Return a list of Institution objects linked to a user."""
         if self.is_staff:
@@ -191,4 +199,5 @@ class User(AbstractUser):
             ("change_user_misc", "Can change a user with no association linked."),
             ("delete_user_misc", "Can delete a user with no association linked."),
             ("view_user_misc", "Can view a user with no association linked."),
+            ("view_user_anyone", "Can view all users."),
         ]

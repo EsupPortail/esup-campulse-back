@@ -83,6 +83,18 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserPartialDataSerializer(serializers.ModelSerializer):
+    """Used to get data from another student in the same associations."""
+
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "is_validated_by_admin",
+        ]
+
+
 class CustomRegisterSerializer(serializers.ModelSerializer):
     """Used for the user registration form (to parse the phone field)."""
 

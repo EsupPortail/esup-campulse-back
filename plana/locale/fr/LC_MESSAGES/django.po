@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 08:37+0100\n"
+"POT-Creation-Date: 2023-02-27 09:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,7 +220,7 @@ msgstr "Composantes"
 
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:18 plana/apps/users/models/user.py:52
-#: plana/apps/users/models/user.py:187
+#: plana/apps/users/models/user.py:195
 msgid "User"
 msgstr "Utilisateur"
 
@@ -280,7 +280,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:188
+#: plana/apps/users/models/user.py:196
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -307,17 +307,17 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:115
+#: plana/apps/users/serializers/user.py:127
 msgid "Unistra users cannot create local accounts."
 msgstr ""
 "Les utilisateurs disposant d'un compte Unistra ne peuvent pas créer de "
 "comptes locaux."
 
-#: plana/apps/users/serializers/user.py:138
+#: plana/apps/users/serializers/user.py:150
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:173
+#: plana/apps/users/serializers/user.py:185
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -347,8 +347,8 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
 #: plana/apps/users/views/association_users.py:147
 #: plana/apps/users/views/association_users.py:304
-#: plana/apps/users/views/user.py:109 plana/apps/users/views/user.py:176
-#: plana/apps/users/views/user.py:188
+#: plana/apps/users/views/user.py:127 plana/apps/users/views/user.py:194
+#: plana/apps/users/views/user.py:206
 #: plana/apps/users/views/user_groups_institutions.py:139
 msgid "Bad request."
 msgstr "Erreur de requête."
@@ -370,19 +370,19 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:196
+#: plana/apps/users/views/user.py:214
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:250
+#: plana/apps/users/views/user.py:268
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:256
+#: plana/apps/users/views/user.py:274
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:411
+#: plana/apps/users/views/user.py:429
 msgid "ok"
 msgstr "ok"
 
@@ -524,7 +524,3 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
-
-#~ msgid "Only managers can validate associations for this account."
-#~ msgstr ""
-#~ "Seuls les gestionnaires peuvent valider les associations pour ce compte"
