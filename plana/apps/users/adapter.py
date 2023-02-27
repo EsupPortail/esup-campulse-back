@@ -65,8 +65,6 @@ class PlanAAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     """Default adapter for CAS accounts."""
 
-    pass
-
 
 class CASAdapter(AllAuthCASAdapter):
     """Subclass CASAdapter to give the configuration as a CAS client."""

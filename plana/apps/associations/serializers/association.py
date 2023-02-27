@@ -44,7 +44,7 @@ class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
 
 
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
-    """Smaller serializer to return only some of the informations of an association (used in a table list of all associations)."""
+    """Smaller serializer to return only some of the informations of an association."""
 
     institution = InstitutionSerializer()
     institution_component = InstitutionComponentSerializer()
@@ -70,7 +70,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
 
 
 class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
-    """Smaller serializer to return only the main informations of an association (used in a simple name list of all associations)."""
+    """Smaller serializer to return only the main informations of an association."""
 
     class Meta:
         model = Association

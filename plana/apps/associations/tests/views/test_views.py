@@ -180,20 +180,20 @@ class AssociationsViewsTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
-        response = self.general_client.get(f"/associations/?is_enabled=false")
+        response = self.general_client.get("/associations/?is_enabled=false")
         for association in response.data:
             self.assertEqual(association["is_enabled"], False)
 
-        response = self.member_client.get(f"/associations/?is_enabled=false")
+        response = self.member_client.get("/associations/?is_enabled=false")
         content = json.loads(response.content.decode("utf-8"))
         for association in response.data:
             self.assertEqual(association["is_enabled"], True)
 
-        response = self.general_client.get(f"/associations/?is_public=false")
+        response = self.general_client.get("/associations/?is_public=false")
         for association in response.data:
             self.assertEqual(association["is_public"], False)
 
-        response = self.member_client.get(f"/associations/?is_public=false")
+        response = self.member_client.get("/associations/?is_public=false")
         content = json.loads(response.content.decode("utf-8"))
         for association in response.data:
             self.assertEqual(association["is_public"], True)
@@ -639,7 +639,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
         - Only id and names of the associations are returned.
-        - We get the same amount of associations filtered by institution through the model and through the view.
+        - Get the same amount of associations by institution through model and view.
         """
         asso_names_cnt = Association.objects.count()
         self.assertTrue(asso_names_cnt > 0)

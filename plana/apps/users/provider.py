@@ -6,8 +6,6 @@ from allauth_cas.providers import CASProvider as AllAuthCASProvider
 class CASAccount(ProviderAccount):
     """Default CAS Account."""
 
-    pass
-
 
 class CASProvider(AllAuthCASProvider):
     """The CASProvider subclass defines how to process data returned by the CAS server."""

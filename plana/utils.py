@@ -33,9 +33,7 @@ def send_mail(
 
 
 def to_bool(attr):
-    """
-    Used to translate strings like "true"/"false" into boolean
-    """
+    """Translate strings like "true"/"false" into boolean."""
     if isinstance(attr, bool):
         return attr
     if isinstance(attr, str):

@@ -14,7 +14,7 @@ from plana.apps.users.provider import CASProvider
 
 
 class UserViewsManagerTests(TestCase):
-    """aMain tests class."""
+    """Main tests class."""
 
     fixtures = [
         "account_emailaddress.json",

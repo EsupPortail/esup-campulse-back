@@ -243,7 +243,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         if "is_site" not in request.data:
             request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
-        elif to_bool(request.data["is_site"]) == True:
+        elif to_bool(request.data["is_site"]) is True:
             request.data["is_enabled"] = True
             request.data["is_public"] = True
 

@@ -32,7 +32,7 @@ class UsersModelsTests(TestCase):
         self.assertEqual(user.has_perm("bonjourg"), True)
 
     def test_association_users_model(self):
-        """There's at least one user linked to an association in the database. The user is in the correct association."""
+        """There's at least one user linked to the correct association in the database."""
         asso_user = AssociationUsers.objects.filter(is_validated_by_admin=True).first()
         self.assertEqual(
             str(asso_user),

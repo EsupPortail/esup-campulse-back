@@ -305,7 +305,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
-    """POST : Blank redirection to make the password reset work (see https://dj-rest-auth.readthedocs.io/en/latest/faq.html )."""
+    """
+    POST : Blank redirection to make the password reset work.
+
+    https://dj-rest-auth.readthedocs.io/en/latest/faq.html
+    """
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -367,7 +371,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
-    """Overrided VerifyEmailView to send an email to a manager (or not if user revalidates an email address)."""
+    """VerifyEmailView to send an email to a manager (not if user revalidates an email address)."""
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

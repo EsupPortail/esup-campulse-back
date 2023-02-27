@@ -117,7 +117,11 @@ class Association(models.Model):
 
 
 class SpaceRemovedValue(models.Transform):
-    """Custom lookup function to compare two strings with or without spaces on a queryset. Thanks StackOverflow https://stackoverflow.com/a/30375271 ."""
+    """
+    Custom lookup function to compare two strings with or without spaces on a queryset.
+
+    Thanks StackOverflow https://stackoverflow.com/a/30375271
+    """
 
     lookup_name = 'nospaces'
 

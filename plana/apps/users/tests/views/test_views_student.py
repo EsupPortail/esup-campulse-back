@@ -31,7 +31,7 @@ class UserViewsStudentTests(TestCase):
     ]
 
     def setUp(self):
-        """Start a default client used on all tests, retrieves a simple student user. Start a second client used on particular tests, retrieves a student user which is president of an association."""
+        """Clients used on all tests (simple student user, president of an association)."""
         self.unvalidated_user_id = 2
         self.unvalidated_user_name = "compte-non-valide@mail.tld"
 
@@ -66,7 +66,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(users[0]["firstName"])
         with self.assertRaises(KeyError):
-            users[0]["email"]
+            print(users[0]["email"])
 
     def test_student_post_user(self):
         """
@@ -205,8 +205,10 @@ class UserViewsStudentTests(TestCase):
 
         - A student president of an association cannot change the validation status.
         """
+        # TODO Re-enable this feature when association validation is OK Métier.
+        """
         association_id = 2
-        asso_user = AssociationUsers.objects.get(
+        AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         response_president = self.president_student_client.patch(
@@ -214,11 +216,11 @@ class UserViewsStudentTests(TestCase):
             {"is_validated_by_admin": False},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
-        # TODO Re-enable this feature when association validation is OK Métier.
-        # self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        """
 
     def test_student_patch_association_users_president(self):
         """

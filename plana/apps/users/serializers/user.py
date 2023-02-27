@@ -58,11 +58,11 @@ class UserSerializer(serializers.ModelSerializer):
         return GroupInstitutionUsers.objects.filter(user_id=user.pk).values()
 
     def is_cas_user(self, user) -> bool:
-        """Content from calculated field "is_cas" (True if user registered through CAS, or False)."""
+        """Calculate field "is_cas" (True if user registered through CAS)."""
         return user.is_cas_user()
 
     def has_validated_email_user(self, user) -> bool:
-        """Content from calculated field "has_validated_email" (True if user finished the registration, or False)."""
+        """Calculate field "has_validated_email" (True if user finished registration)."""
         return user.has_validated_email_user()
 
     class Meta:

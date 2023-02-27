@@ -30,7 +30,13 @@ class CASSerializer(LoginSerializer):
     password = serializers.CharField(required=False)
 
     def validate(self, attrs):
-        """We get the username from the CAS Server from the ticket and service url, log in the user, and add it to the serializer attributes."""
+        """
+        CAS Validation.
+
+        Get the username from the CAS Server from the ticket and service url.
+        Log in the user.
+        Add it to the serializer attributes.
+        """
         view = self.context.get("view")
         request = self.context.get("request")
 

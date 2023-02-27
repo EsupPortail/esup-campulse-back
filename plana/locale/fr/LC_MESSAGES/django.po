@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 10:28+0100\n"
+"POT-Creation-Date: 2023-02-27 11:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,7 +139,7 @@ msgstr "Association"
 msgid "Associations"
 msgstr "Associations"
 
-#: plana/apps/associations/serializers/fields.py:15
+#: plana/apps/associations/serializers/fields.py:19
 msgid "URL for each thumbnail size"
 msgstr "Lien pour chaque taille de miniature"
 
@@ -220,7 +220,7 @@ msgstr "Composantes"
 
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:18 plana/apps/users/models/user.py:52
-#: plana/apps/users/models/user.py:195
+#: plana/apps/users/models/user.py:194
 msgid "User"
 msgstr "Utilisateur"
 
@@ -280,29 +280,29 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:196
+#: plana/apps/users/models/user.py:195
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: plana/apps/users/serializers/cas.py:39
+#: plana/apps/users/serializers/cas.py:45
 msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
-#: plana/apps/users/serializers/cas.py:55
+#: plana/apps/users/serializers/cas.py:61
 #: plana/apps/users/tests/serializers/test_cas.py:180
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:75
+#: plana/apps/users/serializers/cas.py:81
 msgid "Account registration must be completed."
 msgstr "L'inscription de ce compte n'est pas terminée."
 
-#: plana/apps/users/serializers/cas.py:83
+#: plana/apps/users/serializers/cas.py:89
 #, python-brace-format
 msgid "{value} is not a valid service"
 msgstr "{value} n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:112
+#: plana/apps/users/serializers/cas.py:118
 #: plana/apps/users/tests/serializers/test_cas.py:47
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -381,7 +381,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:424
+#: plana/apps/users/views/user.py:428
 msgid "ok"
 msgstr "ok"
 

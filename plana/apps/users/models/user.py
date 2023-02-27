@@ -47,7 +47,7 @@ class AssociationUsers(models.Model):
 
 
 class GroupInstitutionUsers(models.Model):
-    """Model that defines the link between a user, a group (and an institution if user is a manager)."""
+    """Define the link between a user, a group (and an institution if user is a manager)."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
@@ -128,17 +128,16 @@ class User(AbstractUser):
                     user_id=self.pk
                 ).values_list("institution_id")
             )
-        else:
-            return Institution.objects.filter(
-                id__in=Association.objects.filter(
-                    id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
-                        "association_id"
-                    )
-                ).values_list("institution_id")
-            )
+        return Institution.objects.filter(
+            id__in=Association.objects.filter(
+                id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+                    "association_id"
+                )
+            ).values_list("institution_id")
+        )
 
     def has_validated_email_user(self):
-        """Return True if the user account has a validated email (checks if a related row is in emailaddress table)."""
+        """Return True if the user account has a validated email."""
         try:
             EmailAddress.objects.get(user_id=self.pk, email=self.email, verified=True)
             return True
@@ -146,7 +145,7 @@ class User(AbstractUser):
             return False
 
     def is_cas_user(self):
-        """Return True if the user account was generated through CAS on signup (checks if a related row is in socialaccount table)."""
+        """Return True if the user account was generated through CAS on signup."""
         try:
             self.socialaccount_set.get(provider=CASProvider.id)
             return True

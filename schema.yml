@@ -909,8 +909,8 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: Overrided VerifyEmailView to send an email to a manager (or not
-        if user revalidates an email address).
+      description: VerifyEmailView to send an email to a manager (not if user revalidates
+        an email address).
       tags:
       - users
       requestBody:
@@ -1427,8 +1427,7 @@ components:
       - name
     AssociationMandatoryData:
       type: object
-      description: Smaller serializer to return only the main informations of an association
-        (used in a simple name list of all associations).
+      description: Smaller serializer to return only the main informations of an association.
       properties:
         id:
           type: integer
@@ -1453,8 +1452,7 @@ components:
       - name
     AssociationMandatoryDataRequest:
       type: object
-      description: Smaller serializer to return only the main informations of an association
-        (used in a simple name list of all associations).
+      description: Smaller serializer to return only the main informations of an association.
       properties:
         name:
           type: string
@@ -1499,7 +1497,7 @@ components:
     AssociationPartialData:
       type: object
       description: Smaller serializer to return only some of the informations of an
-        association (used in a table list of all associations).
+        association.
       properties:
         id:
           type: integer
