@@ -121,12 +121,7 @@ class UserListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_user"):
-            return self.list(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Bad request.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         request.data.update(

@@ -99,8 +99,8 @@ class AssociationsViewsTests(TestCase):
         - Associations with a specific institution activity field can be filtered.
         - Associations with a specific user_id cannot be filtered by an anonymous.
         - Associations with a specific user_id can be filtered by a manager.
-        - Non-enabled associations can be filtered by a manager.
-        - Non-public associations can be filtered by a manager.
+        - Non-enabled associations can be filtered by a manager, not by student.
+        - Non-public associations can be filtered by a manager, not by student.
         """
         associations_cnt = Association.objects.count()
         self.assertTrue(associations_cnt > 0)
@@ -184,9 +184,19 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_enabled"], False)
 
+        response = self.member_client.get(f"/associations/?is_enabled=false")
+        content = json.loads(response.content.decode("utf-8"))
+        for association in response.data:
+            self.assertEqual(association["is_enabled"], True)
+
         response = self.general_client.get(f"/associations/?is_public=false")
         for association in response.data:
             self.assertEqual(association["is_public"], False)
+
+        response = self.member_client.get(f"/associations/?is_public=false")
+        content = json.loads(response.content.decode("utf-8"))
+        for association in response.data:
+            self.assertEqual(association["is_public"], True)
 
     def test_post_association(self):
         """
