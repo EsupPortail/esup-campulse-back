@@ -191,5 +191,13 @@
       "user_id": 14,
       "group_id": 7
     }
+  },
+  {
+    "model": "users.groupinstitutionusers",
+    "pk": 24,
+    "fields": {
+      "user_id": 15,
+      "group_id": 7
+    }
   }
 ]

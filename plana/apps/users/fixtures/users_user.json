@@ -23,7 +23,7 @@
       "username": "compte-non-valide@mail.tld",
       "email": "compte-non-valide@mail.tld",
       "is_validated_by_admin": false,
-      "is_active": false
+      "is_active": true
     }
   },
   {
@@ -182,6 +182,18 @@
       "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
       "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.User",
+    "pk": 15,
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "username": "compte-presque-valide@mail.tld",
+      "email": "compte-presque-valide@mail.tld",
+      "is_validated_by_admin": false,
       "is_active": true
     }
   }

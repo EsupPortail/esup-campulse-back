@@ -90,7 +90,13 @@ class UserListCreate(generics.ListCreateAPIView):
         else:
             if is_validated_by_admin is not None and is_validated_by_admin != "":
                 is_validated_by_admin = to_bool(is_validated_by_admin)
-                queryset = queryset.filter(is_validated_by_admin=is_validated_by_admin)
+                email_validated_user_ids = EmailAddress.objects.filter(
+                    verified=True
+                ).values_list("user_id", flat=True)
+                queryset = queryset.filter(
+                    is_validated_by_admin=is_validated_by_admin,
+                    id__in=email_validated_user_ids,
+                )
 
             if is_cas is not None and is_cas != "":
                 is_cas = to_bool(is_cas)

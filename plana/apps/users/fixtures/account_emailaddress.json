@@ -138,5 +138,15 @@
       "primary": true,
       "user_id": 14
     }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 15,
+    "fields": {
+      "email": "compte-presque-valide@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 15
+    }
   }
 ]
