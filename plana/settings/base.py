@@ -358,6 +358,11 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        'external_accounts': {
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': True
+        },
     },
 }
 
@@ -550,3 +555,7 @@ RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
 # Groups that can be chosen on user registration.
 PUBLIC_GROUPS = ["COMMISSION_GENERAL", "COMMISSION_MISC", "STUDENT_INSTITUTION", "STUDENT_MISC"]
+
+# External APIs
+ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
+ACCOUNTS_API_CONF = {}

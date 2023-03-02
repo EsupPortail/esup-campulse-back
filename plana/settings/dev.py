@@ -119,3 +119,13 @@ CAS_AUTHORIZED_SERVICES = [
     "http://localhost:3000/cas-login",
     "http://localhost:3000/cas-register",
 ]
+
+
+########
+# Misc #
+########
+
+# External APIs
+ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get('ACCOUNTS_API_SPORE_DESCRIPTION_FILE')
+ACCOUNTS_API_CONF["BASE_URL"] = environ.get('ACCOUNTS_API_SPORE_BASE_URL')
+ACCOUNTS_API_CONF["TOKEN"] = environ.get('ACCOUNTS_API_SPORE_TOKEN')

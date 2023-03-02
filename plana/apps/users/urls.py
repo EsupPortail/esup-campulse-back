@@ -8,6 +8,7 @@ from .views.association_users import (
     AssociationUsersUpdateDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
+from .views.external import ExternalUserRetrieve
 from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 from .views.user import (
     PasswordResetConfirm,
@@ -77,6 +78,11 @@ urlpatterns = [
         "groups/<int:user_id>/<int:group_id>",
         UserGroupsInstitutionsDestroy.as_view(),
         name="user_groups_institutions_destroy",
+    ),
+    path(
+        "external/",
+        ExternalUserRetrieve.as_view(),
+        name="external_user_retrieve",
     ),
 ]
 

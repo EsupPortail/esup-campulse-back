@@ -96,3 +96,8 @@ AWS_S3_ENDPOINT_URL = '{{ s3_endpoint }}'
 ########
 
 DEFAULT_FROM_EMAIL = "appli-plana-pprd@unistra.fr"
+
+# External APIs
+ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
+ACCOUNTS_API_CONF["BASE_URL"] = "{{ accounts_api_spore_base_url }}"
+ACCOUNTS_API_CONF["TOKEN"] = "{{ accounts_api_spore_token }}"
