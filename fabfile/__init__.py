@@ -117,7 +117,7 @@ def test():
         's3_bucket': "AWS_STORAGE_BUCKET_NAME",
         's3_endpoint': "AWS_S3_ENDPOINT_URL",
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
     }
     execute(build_env)
@@ -149,7 +149,7 @@ def preprod():
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'secret_key': 'SECRET_KEY',
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
     }
     execute(build_env)
@@ -181,7 +181,7 @@ def prod():
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'secret_key': 'SECRET_KEY',
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
     }
     execute(build_env)

@@ -54,5 +54,5 @@ sentry_init(STAGE)
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
-ACCOUNTS_API_CONF["BASE_URL"] = "{{ accounts_api_spore_description_file }}"
+ACCOUNTS_API_CONF["BASE_URL"] = "{{ accounts_api_spore_base_url }}"
 ACCOUNTS_API_CONF["TOKEN"] = "{{ accounts_api_spore_token }}"
