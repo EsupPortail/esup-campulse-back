@@ -10,7 +10,6 @@ from britney.errors import (
     SporeMethodStatusError,
 )
 from britney.middleware import auth, base
-
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 

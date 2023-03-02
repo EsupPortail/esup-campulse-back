@@ -251,7 +251,7 @@ DJANGO_APPS = [
     # Uncomment the next line to enable the admin:
     "django.contrib.admin",
     # 'django.contrib.admindocs',
-    "django.contrib.postgres"
+    "django.contrib.postgres",
 ]
 
 THIRD_PARTY_APPS = [
@@ -361,7 +361,7 @@ LOGGING = {
         'external_accounts': {
             'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
-            'propagate': True
+            'propagate': True,
         },
     },
 }
@@ -408,21 +408,36 @@ THUMBNAILS = {
     "SIZES": {
         "list": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 100, "height": 100, "method": "fit"},
+                {
+                    "PATH": "thumbnails.processors.resize",
+                    "width": 100,
+                    "height": 100,
+                    "method": "fit",
+                },
             ]
         },
         "detail": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 150, "height": 150, "method": "fit"},
+                {
+                    "PATH": "thumbnails.processors.resize",
+                    "width": 150,
+                    "height": 150,
+                    "method": "fit",
+                },
             ]
         },
         "base": {
             "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 250, "height": 250, "method": "fit"},
+                {
+                    "PATH": "thumbnails.processors.resize",
+                    "width": 250,
+                    "height": 250,
+                    "method": "fit",
+                },
                 {"PATH": "thumbnails.processors.crop", "width": 250, "height": 250},
             ]
-        }
-    }
+        },
+    },
 }
 
 
@@ -554,7 +569,12 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
 # Groups that can be chosen on user registration.
-PUBLIC_GROUPS = ["COMMISSION_GENERAL", "COMMISSION_MISC", "STUDENT_INSTITUTION", "STUDENT_MISC"]
+PUBLIC_GROUPS = [
+    "COMMISSION_GENERAL",
+    "COMMISSION_MISC",
+    "STUDENT_INSTITUTION",
+    "STUDENT_MISC",
+]
 
 # External APIs
 ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'

@@ -1,13 +1,11 @@
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 from allauth.account.models import EmailAddress
-from rest_framework import status
-
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
+from rest_framework import status
 
 User = get_user_model()
 

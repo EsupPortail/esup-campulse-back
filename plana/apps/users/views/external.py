@@ -1,13 +1,13 @@
+from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from django.http import Http404
-from django.utils.translation import gettext_lazy as _
-
 from plana.libs.api.accounts import Client
+
 from ..serializers.external import ExternalUserSerializer
 
 

@@ -1,9 +1,9 @@
+from collections.abc import Generator
 from functools import wraps
-from typing import Generator, Union
-
-from ldap3 import Server, Connection, ALL
+from typing import Union
 
 from django.conf import settings
+from ldap3 import ALL, Connection, Server
 
 
 def first_entry(func):

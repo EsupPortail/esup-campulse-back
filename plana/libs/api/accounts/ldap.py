@@ -1,5 +1,5 @@
+from ..ldap_client import LdapClient, first_entry
 from .base import BaseAccountsAPI
-from ..ldap_client import first_entry, LdapClient
 
 
 class LdapAccountsAPI(BaseAccountsAPI, LdapClient):

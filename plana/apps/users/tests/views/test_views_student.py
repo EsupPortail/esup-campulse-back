@@ -205,8 +205,6 @@ class UserViewsStudentTests(TestCase):
 
         - A student president of an association cannot change the validation status.
         """
-        # TODO Re-enable this feature when association validation is OK Métier.
-        """
         association_id = 2
         AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
@@ -220,7 +218,6 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
-        """
 
     def test_student_patch_association_users_president(self):
         """
@@ -261,6 +258,7 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
+        print(response_president.data)
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.can_be_president)
         self.assertFalse(asso_user.is_president)

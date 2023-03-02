@@ -107,8 +107,8 @@ class UserViewsManagerTests(TestCase):
         """
         GET /users/ .
 
-        - Getting only non-cas users in the filter, only returns non-cas users
-        - Getting only cas users in the filter, only returns cas users
+        - Getting only non-cas users in the filter, only returns non-cas users.
+        - Getting only cas users in the filter, only returns cas users.
         """
         response_manager_cas_false = self.manager_client.get("/users/?is_cas=false")
         for user in response_manager_cas_false.data:

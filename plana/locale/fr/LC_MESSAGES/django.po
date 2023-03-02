@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 11:23+0100\n"
+"POT-Creation-Date: 2023-03-02 15:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,29 +335,39 @@ msgstr "L'utilisateur est déjà membre de l'association."
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:112
+#: plana/apps/users/views/association_users.py:94
+#: plana/apps/users/views/association_users.py:211
+msgid "Only managers can validate associations for this account."
+msgstr ""
+"Seuls les gestionnaires peuvent valider les associations pour ce compte"
+
+#: plana/apps/users/views/association_users.py:109
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:122
+#: plana/apps/users/views/association_users.py:119
 msgid "Only managers can edit associations."
 msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
-#: plana/apps/users/views/association_users.py:147
-#: plana/apps/users/views/association_users.py:304
+#: plana/apps/users/views/association_users.py:144
+#: plana/apps/users/views/association_users.py:298
 #: plana/apps/users/views/user.py:217 plana/apps/users/views/user.py:229
 #: plana/apps/users/views/user_groups_institutions.py:139
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/association_users.py:185
-#: plana/apps/users/views/association_users.py:294
+#: plana/apps/users/views/association_users.py:182
+#: plana/apps/users/views/association_users.py:288
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:195
+#: plana/apps/users/views/association_users.py:192
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
+
+#: plana/apps/users/views/external.py:42
+msgid "No username given."
+msgstr "Aucun nom d'utilisateur donné."
 
 #: plana/apps/users/views/gdpr_consent_users.py:42
 msgid "No user name or consent id given."
@@ -415,6 +425,11 @@ msgstr "Aucun utilisateur ou groupe trouvé."
 #: plana/apps/users/views/user_groups_institutions.py:173
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
+
+#: plana/libs/api/spore_client.py:27
+#, python-brace-format
+msgid "Unable to get information about {object_type}s"
+msgstr "Impossible de trouver des infos sur les {object_type}s"
 
 #: plana/libs/mail_template/admin_forms.py:43
 msgid "You don't have the required privileges"
@@ -496,6 +511,11 @@ msgstr "Preview du template de mail"
 msgid "Available vars for this message"
 msgstr "Variables disponibles pour ce message"
 
+#: plana/libs/mail_template/tests/test_views.py:49
+#: plana/libs/mail_template/views.py:76
+msgid "Error : no template id"
+msgstr "Erreur : pas d'ID de template"
+
 #: plana/libs/mail_template/views.py:20
 msgid "No body for this template provided"
 msgstr "Pas de corps de texte fourni pour ce template"
@@ -509,10 +529,6 @@ msgstr "Le template #%s n'a pas été trouvé"
 #, python-format
 msgid "A syntax error occured in template #%s"
 msgstr "Une erreur de syntaxe est survenur dans le template #%s"
-
-#: plana/libs/mail_template/views.py:76
-msgid "Error : no template id"
-msgstr "Erreur : pas d'ID de template"
 
 #: plana/templates/404.html:6
 msgid "Page not found"

@@ -1109,6 +1109,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/GDPRConsentUsers'
           description: ''
+  /users/external/:
+    get:
+      operationId: users_external_retrieve
+      description: 'GET : Retrieve an external user'
+      parameters:
+      - in: query
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalUser'
+          description: ''
   /users/groups/:
     get:
       operationId: users_groups_list
@@ -1689,6 +1711,16 @@ components:
       - email
       - first_name
       - last_name
+    ExternalUser:
+      type: object
+      description: External user serializer.
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        mail:
+          type: string
     GDPRConsent:
       type: object
       description: Main serializer.
