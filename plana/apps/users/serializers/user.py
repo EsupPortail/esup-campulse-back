@@ -124,7 +124,13 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         self.cleaned_data = request.data
         if self.cleaned_data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
             raise exceptions.ValidationError(
-                {"detail": [_("Unistra users cannot create local accounts.")]}
+                {
+                    "detail": [
+                        _(
+                            "This email address cannot be used to create a local account."
+                        )
+                    ]
+                }
             )
         adapter = get_adapter()
         user = adapter.new_user(request)

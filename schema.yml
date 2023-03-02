@@ -328,10 +328,10 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
-        name: institution_id
+        name: institutions
         schema:
-          type: integer
-        description: Filter by Institution ID.
+          type: string
+        description: Filter by Institutions IDs.
       - in: query
         name: is_cas
         schema:

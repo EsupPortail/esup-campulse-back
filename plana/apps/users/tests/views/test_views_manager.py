@@ -91,14 +91,12 @@ class UserViewsManagerTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
-        institution_id = 2
-        response_manager = self.manager_client.get(
-            f"/users/?institution_id={institution_id}"
-        )
+        institution_ids = [2, 3]
+        response_manager = self.manager_client.get("/users/?institutions=2,3")
         content = json.loads(response_manager.content.decode("utf-8"))
 
         associations_ids = Association.objects.filter(
-            institution_id=institution_id
+            institution_id__in=institution_ids
         ).values_list("id", flat=True)
         links_cnt = AssociationUsers.objects.filter(
             association_id__in=associations_ids

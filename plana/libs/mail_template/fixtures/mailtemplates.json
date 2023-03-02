@@ -117,7 +117,7 @@
     "model": "mail_template.MailTemplate",
     "pk": 7,
     "fields": {
-      "code": "GENERAL_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
+      "code": "INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
       "label": "General Manager Local Account Confirmation",
       "description": "Message reçu par le gestionnaire général si un compte local doit être validé",
       "subject": "{{ site_name }} – Demande de création de compte local",
