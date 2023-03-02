@@ -24,8 +24,8 @@ class Command(BaseCommand):
             # Get all users in groups
             queryset = User.objects.filter(groups=True)
 
-            # Send emails to nearly expired accounts (not connected since 11 months)
-            mail_sending_due_date = today - datetime.timedelta(days=(365 - 31))
+            # Send emails to nearly expired accounts (not connected since 23 months)
+            mail_sending_due_date = today - datetime.timedelta(days=(2 * 365 - 31))
             mail_sending_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date=mail_sending_due_date)
                 | Q(last_login__isnull=False, last_login__date=mail_sending_due_date)
@@ -46,8 +46,8 @@ class Command(BaseCommand):
                     message=template.parse_vars(user, None),
                 )
 
-            # Delete expired accounts (not connected since 1 year)
-            deletion_due_date = today - datetime.timedelta(days=365)
+            # Delete expired accounts (not connected since 2 years)
+            deletion_due_date = today - datetime.timedelta(days=2 * 365)
             deletion_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date__lte=deletion_due_date)
                 | Q(last_login__isnull=False, last_login__date__lte=deletion_due_date)

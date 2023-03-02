@@ -3,6 +3,7 @@ import json
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from ..models import MailTemplate, MailTemplateVar
 
@@ -45,5 +46,5 @@ class ViewsTestCase(TestCase):
         url = reverse('mail_template:available_vars-list', kwargs={'template_id': 0})
         response = self.client.get(url, **self.headers)
         content = json.loads(response.content.decode())
-        self.assertEqual(content["msg"], "Error : no template id")
+        self.assertEqual(content["msg"], _("Error : no template id"))
         self.assertEqual(content['data'], [])

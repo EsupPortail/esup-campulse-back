@@ -39,7 +39,7 @@ class AccountExpirationCommandTest(TestCase):
 
     def test_account_without_connection_expiration_mail(self):
         self.group_user.date_joined = timezone.now() - datetime.timedelta(
-            days=(365 - 31)
+            days=(2 * 365 - 31)
         )
         self.group_user.save()
         call_command('account_expiration')
@@ -48,7 +48,7 @@ class AccountExpirationCommandTest(TestCase):
 
     def test_account_without_recent_connection_expiration_mail(self):
         self.group_user.last_login = timezone.now() - datetime.timedelta(
-            days=(365 - 31)
+            days=(2 * 365 - 31)
         )
         self.group_user.save()
         call_command('account_expiration')
