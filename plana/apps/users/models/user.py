@@ -81,6 +81,9 @@ class User(AbstractUser):
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
     phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
+    password_last_change_date = models.DateField(
+        _("Password last change date"), null=True
+    )
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )

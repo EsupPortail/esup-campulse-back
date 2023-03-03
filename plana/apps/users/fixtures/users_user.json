@@ -8,6 +8,7 @@
       "username": "admin@admin.admin",
       "email": "admin@admin.admin",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true,
       "is_superuser": true,
@@ -35,6 +36,7 @@
       "username": "gestionnaire-svu@mail.tld",
       "email": "gestionnaire-svu@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true,
       "is_staff": true
@@ -49,6 +51,7 @@
       "username": "gestionnaire-uha@mail.tld",
       "email": "gestionnaire-uha@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true,
       "is_staff": true
@@ -63,6 +66,7 @@
       "username": "gestionnaire-crous@mail.tld",
       "email": "gestionnaire-crous@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true,
       "is_staff": true
@@ -77,6 +81,7 @@
       "username": "membre-fsdie-idex@mail.tld",
       "email": "membre-fsdie-idex@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -90,6 +95,7 @@
       "username": "membre-culture-actions@mail.tld",
       "email": "membre-culture-actions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -103,6 +109,7 @@
       "username": "membre-commissions@mail.tld",
       "email": "membre-commissions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -116,6 +123,7 @@
       "username": "etudiant-porteur@mail.tld",
       "email": "etudiant-porteur@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -129,6 +137,7 @@
       "username": "etudiant-asso-hors-site@mail.tld",
       "email": "etudiant-asso-hors-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -142,6 +151,7 @@
       "username": "etudiant-asso-site@mail.tld",
       "email": "etudiant-asso-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -155,6 +165,7 @@
       "username": "president-asso-hors-site@mail.tld",
       "email": "president-asso-hors-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -168,6 +179,7 @@
       "username": "president-asso-site@mail.tld",
       "email": "president-asso-site@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }
@@ -181,6 +193,7 @@
       "username": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
       "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
       "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
       "is_validated_by_admin": true,
       "is_active": true
     }

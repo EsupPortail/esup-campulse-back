@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 11:53+0100\n"
+"POT-Creation-Date: 2023-03-03 16:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,7 +135,7 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:96
-#: plana/apps/users/models/user.py:35 plana/apps/users/models/user.py:88
+#: plana/apps/users/models/user.py:35 plana/apps/users/models/user.py:91
 msgid "Associations"
 msgstr "Associations"
 
@@ -206,7 +206,7 @@ msgstr "Titre du consentement RGPD"
 msgid "GDPR Consent"
 msgstr "Consentement RGPD"
 
-#: plana/apps/consents/models/consent.py:16 plana/apps/users/models/user.py:91
+#: plana/apps/consents/models/consent.py:16 plana/apps/users/models/user.py:94
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
 
@@ -220,7 +220,7 @@ msgstr "Composantes"
 
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:18 plana/apps/users/models/user.py:52
-#: plana/apps/users/models/user.py:194
+#: plana/apps/users/models/user.py:197
 msgid "User"
 msgstr "Utilisateur"
 
@@ -273,14 +273,18 @@ msgid "Last name"
 msgstr "Nom de famille"
 
 #: plana/apps/users/models/user.py:85
+msgid "Password last change date"
+msgstr "Date de dernier changement du mot de passe"
+
+#: plana/apps/users/models/user.py:88
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:95
+#: plana/apps/users/models/user.py:98
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:195
+#: plana/apps/users/models/user.py:198
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -307,15 +311,15 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:130
+#: plana/apps/users/serializers/user.py:132
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
-#: plana/apps/users/serializers/user.py:156
+#: plana/apps/users/serializers/user.py:158
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
-#: plana/apps/users/serializers/user.py:191
+#: plana/apps/users/serializers/user.py:195
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
@@ -351,7 +355,7 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations."
 
 #: plana/apps/users/views/association_users.py:181
 #: plana/apps/users/views/association_users.py:334
-#: plana/apps/users/views/user.py:237 plana/apps/users/views/user.py:249
+#: plana/apps/users/views/user.py:240 plana/apps/users/views/user.py:252
 #: plana/apps/users/views/user_groups_institutions.py:139
 msgid "Bad request."
 msgstr "Erreur de requête."
@@ -377,19 +381,19 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:257
+#: plana/apps/users/views/user.py:260
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:311
+#: plana/apps/users/views/user.py:314
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:317
+#: plana/apps/users/views/user.py:320
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:480
+#: plana/apps/users/views/user.py:483
 msgid "ok"
 msgstr "ok"
 

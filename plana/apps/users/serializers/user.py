@@ -1,4 +1,6 @@
 """Serializers describing fields used on users and related forms."""
+import datetime
+
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
@@ -156,6 +158,8 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
                     {"detail": [_("Unable to change the password of a CAS account.")]}
                 )
             self.set_password_form.save()
+            user.password_last_change_date = datetime.datetime.today()
+            user.save(update_fields=["password_last_change_date"])
             if not self.logout_on_password_change:
                 from django.contrib.auth import update_session_auth_hash
 
@@ -199,6 +203,8 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
     """Overrided PasswordResetConfirmSerializer to send a email when password is reset."""
 
     def save(self):
+        self.user.password_last_change_date = datetime.datetime.today()
+        self.user.save(update_fields=["password_last_change_date"])
         request = None
         current_site = get_current_site(request)
         context = {

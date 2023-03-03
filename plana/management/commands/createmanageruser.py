@@ -1,3 +1,5 @@
+import datetime
+
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -40,6 +42,7 @@ class Command(BaseCommand):
             )
             password = get_user_model().objects.make_random_password()
             user.set_password(password)
+            user.password_last_change_date = datetime.datetime.today()
             user.first_name = options["firstname"]
             user.last_name = options["lastname"]
             user.is_active = True

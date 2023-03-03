@@ -13,7 +13,6 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-
     help = 'Expired accounts policy'
 
     def handle(self, *args, **options):

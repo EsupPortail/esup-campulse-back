@@ -261,7 +261,7 @@
     "pk": 15,
     "fields": {
       "code": "ACCOUNT_EXPIRATION",
-      "label": "Account expiration",
+      "label": "Account Expiration",
       "description": "Alerte de l'expiration prochaine du compte",
       "subject": "{{ site_name }} – Votre compte va expirer",
       "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Sans connexion de votre part sur l'application {{ site_name }}, votre compte arrivera à expiration dans 1 mois et sera alors supprimé.<br/><br/>Merci de votre compréhension,<br/>L’équipe {{ site_name }}",
@@ -270,6 +270,42 @@
         2,
         4,
         5
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 16,
+    "fields": {
+      "code": "PASSWORD_RESET_ADVISED",
+      "label": "Password Reset Advised",
+      "description": "Alerte du changement de mot de passe conseillé",
+      "subject": "{{ site_name }} – Merci de prochainement changer votre mot de passe",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre mot de passe n'a pas été changé depuis un certain temps, merci de bien vouloir cliquer sur le lien suivant pour le modifier : <a href='{{ password_reset_url }}'>{{ password_reset_url }}</a>.<br/>Sans action de votre part, votre mot de passe actuel ne sera bientôt plus valide.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        9
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 17,
+    "fields": {
+      "code": "PASSWORD_RESET_MANDATORY",
+      "label": "Password Reset Mandatory",
+      "description": "Alerte du changement de mot de passe requis",
+      "subject": "{{ site_name }} – Merci de changer votre mot de passe",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre mot de passe n'a pas été changé depuis un certain temps, il n'est donc plus utilisable, merci de bien vouloir cliquer sur le lien suivant pour le modifier : <a href='{{ password_reset_url }}'>{{ password_reset_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        9
       ]
     }
   }
