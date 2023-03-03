@@ -3,7 +3,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -18,6 +19,24 @@ from plana.apps.users.serializers.association_users import (
 from plana.utils import to_bool
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_validated_by_admin",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members not validated by an admin",
+            ),
+            OpenApiParameter(
+                "institutions",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Institutions IDs.",
+            ),
+        ]
+    )
+)
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all associations linked to a user, or all associations of all users.
@@ -32,6 +51,25 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             queryset = AssociationUsers.objects.all()
         else:
             queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
+
+        is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
+        institutions = self.request.query_params.get("institutions")
+
+        if is_validated_by_admin is not None and is_validated_by_admin != "":
+            queryset = queryset.filter(
+                is_validated_by_admin=to_bool(is_validated_by_admin)
+            )
+
+        if institutions is not None and institutions != "":
+            institutions_ids = institutions.split(",")
+            if "" in institutions_ids:
+                del institutions_ids[institutions_ids.index("")]
+            queryset = queryset.filter(
+                association_id__in=Association.objects.filter(
+                    institution_id__in=institutions_ids
+                ).values_list("id", flat=True)
+            )
+
         return queryset
 
     def get_permissions(self):

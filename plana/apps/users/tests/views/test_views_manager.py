@@ -105,6 +105,7 @@ class UserViewsManagerTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
+        # TODO Update the tests when new permissions linked to projects will be available (need to get misc students also in associations).
         response_manager = self.manager_client.get("/users/?institutions=")
         content = json.loads(response_manager.content.decode("utf-8"))
         misc_users_cnt = User.objects.exclude(
@@ -288,12 +289,41 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can execute this request.
         - Links between user and associations are returned.
+        - Filter by is_validated_by_admin is possible.
+        - Filter by institutions is possible.
         """
         associations_user_all_cnt = AssociationUsers.objects.count()
         response_all_asso = self.manager_client.get("/users/associations/")
         content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
         self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
+
+        associations_user_validated_cnt = AssociationUsers.objects.filter(
+            is_validated_by_admin=False
+        ).count()
+        response_validated_asso = self.manager_client.get(
+            "/users/associations/?is_validated_by_admin=false"
+        )
+        content_validated_asso = json.loads(
+            response_validated_asso.content.decode("utf-8")
+        )
+        self.assertEqual(len(content_validated_asso), associations_user_validated_cnt)
+
+        institutions_ids = [2, 3]
+        associations_user_institutions_cnt = AssociationUsers.objects.filter(
+            association_id__in=Association.objects.filter(
+                institution_id__in=institutions_ids
+            ).values_list("id", flat=True)
+        ).count()
+        response_institutions_asso = self.manager_client.get(
+            "/users/associations/?institutions=2,3,"
+        )
+        content_institutions_asso = json.loads(
+            response_institutions_asso.content.decode("utf-8")
+        )
+        self.assertEqual(
+            len(content_institutions_asso), associations_user_institutions_cnt
+        )
 
     def test_manager_post_association_user(self):
         """

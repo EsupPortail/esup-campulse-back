@@ -479,6 +479,17 @@ paths:
         GET : Lists all associations linked to a user, or all associations of all users.
 
         POST : Creates a new link between a non-validated user and an association.
+      parameters:
+      - in: query
+        name: institutions
+        schema:
+          type: string
+        description: Filter by Institutions IDs.
+      - in: query
+        name: is_validated_by_admin
+        schema:
+          type: boolean
+        description: Filter for members not validated by an admin
       tags:
       - users
       security:

@@ -118,6 +118,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(id__in=assos_users_query)
 
             if institutions is not None:
+                # TODO Update the query when new permissions linked to projects will be available (need to get misc students also in associations).
                 misc_users_query = User.objects.exclude(
                     id__in=AssociationUsers.objects.all().values_list(
                         "user_id", flat=True
