@@ -137,6 +137,7 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can execute this request.
         - The user has been created.
+        - A CAS user can be created.
         """
         username = "bourvil@splatoon.com"
         response_manager = self.manager_client.post(
@@ -147,6 +148,23 @@ class UserViewsManagerTests(TestCase):
 
         user = User.objects.get(username=username)
         self.assertEqual(user.username, username)
+
+        username = "opaline"
+        email = "opaline@unistra.fr"
+        response_manager = self.manager_client.post(
+            "/users/",
+            {
+                "first_name": "Opaline",
+                "last_name": "Gropif",
+                "username": username,
+                "email": email,
+                "is_cas": True,
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+
+        user = SocialAccount.objects.get(uid=username)
+        self.assertEqual(user.uid, username)
 
     def test_manager_get_user_detail(self):
         """
