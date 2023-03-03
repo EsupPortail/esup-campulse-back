@@ -64,7 +64,9 @@ class UserViewsManagerTests(TestCase):
         - We get the same amount of users through the model and through the view.
         - is_validated_by_admin query parameter only returns a non-validated user.
         - association_id query parameter only returns users linked to this association.
-        - institution_id query parameter only returns users linked to this institution.
+        - institutions query parameter only returns users linked to these institutions.
+        - Empty institutions query parameter only returns users linked to no institutions.
+        - Test a mix of the two last conditions.
         """
         response_manager = self.manager_client.get("/users/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
@@ -102,6 +104,17 @@ class UserViewsManagerTests(TestCase):
             association_id__in=associations_ids
         ).count()
         self.assertEqual(len(content), links_cnt)
+
+        response_manager = self.manager_client.get("/users/?institutions=")
+        content = json.loads(response_manager.content.decode("utf-8"))
+        misc_users_cnt = User.objects.exclude(
+            id__in=AssociationUsers.objects.all().values_list("user_id", flat=True)
+        ).count()
+        self.assertEqual(len(content), misc_users_cnt)
+
+        response_manager = self.manager_client.get("/users/?institutions=2,3,")
+        content = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(len(content), links_cnt + misc_users_cnt)
 
     def test_manager_get_users_list_is_cas(self):
         """

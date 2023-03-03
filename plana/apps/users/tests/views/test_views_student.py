@@ -258,7 +258,6 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
-        print(response_president.data)
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.can_be_president)
         self.assertFalse(asso_user.is_president)
