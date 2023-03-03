@@ -2,6 +2,7 @@
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from allauth.account.utils import user_pk_to_url_str
+from django.conf import settings
 from django.test import Client, TestCase
 from rest_framework import status
 
@@ -249,13 +250,13 @@ class UserViewsAnonymousTests(TestCase):
         """
         POST /users/auth/registration/ .
 
-        - An account with an Unistra email can't be created.
+        - An account with a restricted email can't be created.
         - An account can be created by an anonymous user.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": "gaufre-a-la-menthe@unistra.fr",
+                "email": f"gaufre-a-la-menthe@{settings.RESTRICTED_DOMAINS[0]}",
                 "first_name": "Gaufre",
                 "last_name": "Menthe",
             },

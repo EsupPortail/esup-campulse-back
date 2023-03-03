@@ -1,4 +1,5 @@
 from allauth.account.models import EmailAddress
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
@@ -11,19 +12,25 @@ class Command(BaseCommand):
     help = "Creates a new manager user."
 
     def add_arguments(self, parser):
+        group_choices = Group.objects.exclude(
+            name__in=settings.PUBLIC_GROUPS
+        ).values_list("name", flat=True)
+        institution_choices = Institution.objects.all().values_list(
+            "acronym", flat=True
+        )
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
         parser.add_argument(
             "--group",
             help="Group codename.",
-            choices=["MANAGER_GENERAL", "MANAGER_INSTITUTION", "MANAGER_MISC"],
+            choices=group_choices,
             required=True,
         )
         parser.add_argument(
             "--institution",
             help="Institution codename.",
-            choices=["Crous", "Unistra", "UHA", "INSA", "HEAR", "ENGEES", "ENSAS"],
+            choices=institution_choices,
         )
 
     def handle(self, *args, **options):

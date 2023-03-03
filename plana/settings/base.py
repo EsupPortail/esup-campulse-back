@@ -459,6 +459,8 @@ S3_LOGO_FILEPATH = 'associations_logos'
 # AUTHENTICATION #
 ##################
 
+CAS_ID = "cas"
+CAS_NAME = "CAS Unistra"
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
 
