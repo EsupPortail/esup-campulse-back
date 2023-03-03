@@ -19,6 +19,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.user import UserPartialDataSerializer, UserSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
@@ -152,15 +153,16 @@ class UserListCreate(generics.ListCreateAPIView):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        request.data.update(
-            {"username": request.data["email"], "is_validated_by_admin": True}
-        )
-        user_response = self.create(request, *args, **kwargs)
+        is_cas = True
+        if not "is_cas" in request.data or (
+            "is_cas" in request.data and request.data["is_cas"] is False
+        ):
+            is_cas = False
+            request.data.update({"username": request.data["email"]})
 
+        request.data.update({"is_validated_by_admin": True})
+        user_response = self.create(request, *args, **kwargs)
         user = User.objects.get(id=user_response.data["id"])
-        password = User.objects.make_random_password()
-        user.set_password(password)
-        user.save(update_fields=['password'])
         EmailAddress.objects.create(
             email=user.email, verified=True, primary=True, user_id=user.id
         )
@@ -169,17 +171,34 @@ class UserListCreate(generics.ListCreateAPIView):
         context = {
             "site_domain": current_site.domain,
             "site_name": current_site.name,
-            "username": request.data["email"],
-            "first_name": request.data["first_name"],
-            "last_name": request.data["last_name"],
-            "manager_email_address": request.data["email"],
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "manager_email_address": request.user.email,
             "documentation_url": settings.APP_DOCUMENTATION_URL,
-            "password": password,
-            "password_change_url": settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL,
         }
-        template = MailTemplate.objects.get(
-            code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
-        )
+
+        template = None
+        if not is_cas:
+            password = User.objects.make_random_password()
+            user.set_password(password)
+            user.save(update_fields=['password'])
+            context["password"] = password
+            context["password_change_url"] = settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL
+            template = MailTemplate.objects.get(
+                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
+            )
+        else:
+            SocialAccount.objects.create(
+                user=user,
+                provider=CASProvider.id,
+                uid=user.username,
+                extra_data={},
+            )
+            template = MailTemplate.objects.get(
+                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION_LDAP"
+            )
+
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=request.data["email"],
