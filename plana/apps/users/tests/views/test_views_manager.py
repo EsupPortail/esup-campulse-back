@@ -2,6 +2,7 @@
 import json
 
 from allauth.socialaccount.models import SocialAccount
+from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -10,7 +11,8 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import AssociationUsers, User
-from plana.apps.users.provider import CASProvider
+
+# from plana.apps.users.provider import CASProvider
 
 
 class UserViewsManagerTests(TestCase):
@@ -138,14 +140,17 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can execute this request.
         - The user has been created.
+        - An email is received if creation is successful.
         - A CAS user can be created.
         """
+        self.assertFalse(len(mail.outbox))
         username = "bourvil@splatoon.com"
         response_manager = self.manager_client.post(
             "/users/",
             {"first_name": "Bourvil", "last_name": "André", "email": username},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(len(mail.outbox))
 
         user = User.objects.get(username=username)
         self.assertEqual(user.username, username)
@@ -187,11 +192,13 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can execute this request.
         - A manager user can update user details.
+        - An email is received if validation is successful.
         - A non-existing user cannot be updated.
         - A manager user cannot update restricted CAS user details.
         - A manager user can validate a CAS user.
-        - A manager user cannot edit another one.
+        - A manager user cannot edit another manager.
         """
+        self.assertFalse(len(mail.outbox))
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
             data={
@@ -205,6 +212,7 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
+        self.assertTrue(len(mail.outbox))
 
         response_manager = self.manager_client.patch(
             "/users/1000",
@@ -213,6 +221,8 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
+        """
+        # CAS users are auto-validated, uncomment if it's not the case anymore.
         user = User.objects.create_user(
             username="PatriciaCAS",
             password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
@@ -233,6 +243,7 @@ class UserViewsManagerTests(TestCase):
         )
         user_cas = User.objects.get(username="PatriciaCAS")
         self.assertEqual(user_cas.is_validated_by_admin, True)
+        """
 
         user_manager = User.objects.get(email=self.manager_misc_user_name)
         response_manager = self.manager_client.patch(
@@ -250,14 +261,17 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can execute this request.
         - A user can be deleted.
+        - An email is received if deletion is successful.
         - A non-existing user cannot be deleted.
         - A manager account cannot be deleted.
         - A non-validated account can be deleted.
         """
+        self.assertFalse(len(mail.outbox))
         response = self.manager_client.delete(f"/users/{self.student_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             User.objects.get(pk=self.student_user_id)
+        self.assertTrue(len(mail.outbox))
 
         response = self.manager_client.delete(f"/users/{self.student_user_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

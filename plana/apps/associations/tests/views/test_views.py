@@ -1,6 +1,7 @@
 """List of tests done on associations views."""
 import json
 
+from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -357,6 +358,7 @@ class AssociationsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         - A Misc Manager cannot edit an association.
         - A General Manager can edit an association.
+        - An email is received if change is successful.
         """
         association_id = 1
 
@@ -374,6 +376,7 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
+        self.assertFalse(len(mail.outbox))
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {
@@ -389,6 +392,7 @@ class AssociationsViewsTests(TestCase):
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
         self.assertEqual(association.institution_id, 1)
+        self.assertTrue(len(mail.outbox))
 
     def test_patch_association_not_members(self):
         """
@@ -423,6 +427,7 @@ class AssociationsViewsTests(TestCase):
 
         - Someone from the association without status can't edit infos from the association.
         - Someone from the association's office can edit informations from the association.
+        - An email is received if change is successful.
         """
         association_id = 2
         response_correct_member = self.member_client.patch(
@@ -433,6 +438,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(len(mail.outbox))
         response_correct_president = self.president_client.patch(
             f"/associations/{association_id}",
             {"name": "Moi je peux vraiment éditer l'asso, nananère."},
@@ -444,6 +450,7 @@ class AssociationsViewsTests(TestCase):
             association.name,
             "Moi je peux vraiment éditer l'asso, nananère.",
         )
+        self.assertTrue(len(mail.outbox))
 
     def test_patch_association_non_existing(self):
         """
@@ -574,6 +581,7 @@ class AssociationsViewsTests(TestCase):
         - An enabled association cannot be deleted.
         - An Institution Manager cannot delete an association from another institution.
         - A General Manager can delete an association.
+        - An email is received if deletion is successful.
         - A non-existing association cannot be deleted.
         """
         association_id = 1
@@ -583,6 +591,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
         response_general = self.general_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_general.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(len(mail.outbox))
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": False},
@@ -594,6 +603,7 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
         response_general = self.general_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_general.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertTrue(len(mail.outbox))
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
         response_general = self.general_client.delete("/associations/99")

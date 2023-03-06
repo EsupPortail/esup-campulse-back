@@ -3,6 +3,7 @@ from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from allauth.account.utils import user_pk_to_url_str
 from django.conf import settings
+from django.core import mail
 from django.test import Client, TestCase
 from rest_framework import status
 
@@ -252,6 +253,7 @@ class UserViewsAnonymousTests(TestCase):
 
         - An account with a restricted email can't be created.
         - An account can be created by an anonymous user.
+        - An email is received if registration is successful.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
@@ -262,6 +264,7 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(len(mail.outbox))
 
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
@@ -273,23 +276,27 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_post_password_reset(self):
         """
         POST /users/auth/password/reset/ .
 
         - An anonymous user can execute this request.
+        - An email is received if reset is successful.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/", {"email": self.student_user_name}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_post_password_reset_confirm(self):
         """
         POST /users/auth/password/reset/confirm/ .
 
         - An anonymous user can execute this request.
+        - An email is received if confirmation reset is successful.
         """
         user = User.objects.get(id=self.student_user_id)
         response_anonymous = self.anonymous_client.post(
@@ -302,16 +309,19 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_post_registration_verify_email(self):
         """
         POST /users/auth/registration/verify-email/ .
 
         - An anonymous user can execute this request.
+        - An email is received if verification is successful.
         - An anonymous user with association where is_site is false can execute this request.
         - An anonymous user with association where is_site is true can execute this request.
         - An anonymous user can verify a new email address associated to an account.
         """
+        self.assertFalse(len(mail.outbox))
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
@@ -328,6 +338,7 @@ class UserViewsAnonymousTests(TestCase):
             "/users/auth/registration/verify-email/", {"key": key}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
 
         email = "damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
         response_anonymous = self.anonymous_client.post(
