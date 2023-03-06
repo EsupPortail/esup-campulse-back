@@ -31,23 +31,7 @@ class Command(BaseCommand):
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
             for user in mail_sending_queryset:
-                context["first_name"] = user.first_name
-                context["last_name"] = user.last_name
-
-                uid = user_pk_to_url_str(user)
-                token = default_token_generator.make_token(user)
-                context[
-                    "password_reset_url"
-                ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
-
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(user, None, context),
-                )
+                self.send_password_mail(user, context, template)
 
             # Invalidate expired passwords (not changed in 12 months)
             change_due_date = today - datetime.timedelta(days=365)
@@ -60,24 +44,24 @@ class Command(BaseCommand):
                 password = User.objects.make_random_password()
                 user.set_password(password)
                 user.save()
-
-                context["first_name"] = user.first_name
-                context["last_name"] = user.last_name
-
-                uid = user_pk_to_url_str(user)
-                token = default_token_generator.make_token(user)
-                context[
-                    "password_reset_url"
-                ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
-
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(user, None, context),
-                )
+                self.send_password_mail(user, context, template)
 
         except Exception as e:
             self.stdout.write(self.style.ERROR("Error : %s" % e))
+
+    def send_password_mail(self, user, context, template):
+        context["first_name"] = user.first_name
+        context["last_name"] = user.last_name
+
+        uid = user_pk_to_url_str(user)
+        token = default_token_generator.make_token(user)
+        context[
+            "password_reset_url"
+        ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=user.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(user, None, context),
+        )

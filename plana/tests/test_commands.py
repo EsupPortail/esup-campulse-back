@@ -11,7 +11,6 @@ User = get_user_model()
 
 
 class AccountExpirationCommandTest(TestCase):
-
     fixtures = ['auth_group', 'mailtemplatevars', 'mailtemplates']
 
     def setUp(self):
@@ -61,3 +60,48 @@ class AccountExpirationCommandTest(TestCase):
         call_command('account_expiration')
         self.assertFalse(len(mail.outbox))
         self.assertFalse(User.objects.filter(pk=self.group_user.pk).exists())
+
+
+class PasswordExpirationCommandTest(TestCase):
+    """Test password_expiration command."""
+
+    fixtures = [
+        "mailtemplates",
+        "mailtemplatevars",
+        "users_user.json",
+    ]
+
+    def setUp(self):
+        """Cache all users."""
+        self.users = User.objects.all()
+        self.today = datetime.date.today()
+
+    def test_no_password_reset(self):
+        """Nothing should change if password was changed recently."""
+        self.users.update(password_last_change_date=self.today)
+        call_command("password_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_almost_password_reset(self):
+        """Nothing should change if password was changed recently."""
+        self.users.update(
+            password_last_change_date=(self.today - datetime.timedelta(days=(365 - 31)))
+        )
+        call_command("password_expiration")
+        self.assertTrue(len(mail.outbox))
+
+    def test_almost_password_reset_but_no_password_reset(self):
+        """Nothing should change if password was changed recently."""
+        self.users.update(
+            password_last_change_date=(self.today - datetime.timedelta(days=(365 - 45)))
+        )
+        call_command("password_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_password_reset(self):
+        """Nothing should change if password was changed recently."""
+        self.users.update(
+            password_last_change_date=(self.today - datetime.timedelta(days=365))
+        )
+        call_command("password_expiration")
+        self.assertTrue(len(mail.outbox))
