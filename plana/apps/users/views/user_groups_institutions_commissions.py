@@ -7,22 +7,22 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.users.models.user import GroupInstitutionUsers, User
-from plana.apps.users.serializers.user_groups_institutions import (
-    UserGroupsInstitutionsCreateSerializer,
-    UserGroupsInstitutionsSerializer,
+from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
+from plana.apps.users.serializers.user_groups_institutions_commissions import (
+    UserGroupsInstitutionsCommissionsCreateSerializer,
+    UserGroupsInstitutionsCommissionsSerializer,
 )
 
 
-class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
+class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all groups linked to a user (student), or all groups of all users (manager).
 
     POST : Creates a new link between a non-validated user and a group.
     """
 
-    queryset = GroupInstitutionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCreateSerializer
+    queryset = GroupInstitutionCommissionUsers.objects.all()
+    serializer_class = UserGroupsInstitutionsCommissionsCreateSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -32,13 +32,14 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_groupinstitutionusers_anyone"):
+        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
             serializer = self.serializer_class(
-                GroupInstitutionUsers.objects.all(), many=True
+                GroupInstitutionCommissionUsers.objects.all(), many=True
             )
             return response.Response(serializer.data)
         serializer = self.serializer_class(
-            GroupInstitutionUsers.objects.filter(user_id=request.user.pk), many=True
+            GroupInstitutionCommissionUsers.objects.filter(user_id=request.user.pk),
+            many=True,
         )
         return response.Response(serializer.data)
 
@@ -86,7 +87,7 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
             try:
                 group = Group.objects.get(id=id_group)
                 if group.name in settings.PUBLIC_GROUPS:
-                    GroupInstitutionUsers.objects.create(
+                    GroupInstitutionCommissionUsers.objects.create(
                         user_id=user.pk, group_id=id_group, institution_id=None
                     )
                 else:
@@ -103,7 +104,7 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         try:
             group = Group.objects.get(pk=group_id)
             if group.name in settings.PUBLIC_GROUPS:
-                GroupInstitutionUsers.objects.create(
+                GroupInstitutionCommissionUsers.objects.create(
                     user_id=user.pk, group_id=group_id, institution_id=None
                 )
             else:
@@ -120,18 +121,20 @@ class UserGroupsInstitutionsListCreate(generics.ListCreateAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
-class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
+class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
     """Lists all groups linked to a user (manager)."""
 
-    queryset = GroupInstitutionUsers.objects.all()
+    queryset = GroupInstitutionCommissionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    serializer_class = UserGroupsInstitutionsSerializer
+    serializer_class = UserGroupsInstitutionsCommissionsSerializer
 
     def get(self, request, *args, **kwargs):
         """GET : Lists all groups linked to a user (manager)."""
-        if request.user.has_perm("users.view_groupinstitutionusers_anyone"):
+        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
             serializer = self.serializer_class(
-                GroupInstitutionUsers.objects.filter(user_id=kwargs["user_id"]),
+                GroupInstitutionCommissionUsers.objects.filter(
+                    user_id=kwargs["user_id"]
+                ),
                 many=True,
             )
             return response.Response(serializer.data)
@@ -141,19 +144,21 @@ class UserGroupsInstitutionsRetrieve(generics.RetrieveAPIView):
         )
 
 
-class UserGroupsInstitutionsDestroy(generics.DestroyAPIView):
+class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
     """Deletes a group linked to a user (manager)."""
 
-    queryset = GroupInstitutionUsers.objects.all()
+    queryset = GroupInstitutionCommissionUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    serializer_class = UserGroupsInstitutionsSerializer
+    serializer_class = UserGroupsInstitutionsCommissionsSerializer
 
     def delete(self, request, *args, **kwargs):
         """DELETE : Deletes a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionUsers.objects.filter(user_id=user.pk)
-            user_group_to_delete = GroupInstitutionUsers.objects.get(
+            user_groups = GroupInstitutionCommissionUsers.objects.filter(
+                user_id=user.pk
+            )
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
                 user_id=user.pk, group_id=kwargs["group_id"]
             )
         except ObjectDoesNotExist:

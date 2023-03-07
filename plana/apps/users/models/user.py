@@ -7,6 +7,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.consents.models.consent import GDPRConsent
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
@@ -26,6 +27,7 @@ class AssociationUsers(models.Model):
     )
     is_secretary = models.BooleanField(_("Is secretary"), default=False)
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
+    can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
 
     def __str__(self):
         return f"{self.user}, {self.association}, office : {self.can_be_president}"
@@ -46,21 +48,25 @@ class AssociationUsers(models.Model):
         ]
 
 
-class GroupInstitutionUsers(models.Model):
-    """Define the link between a user, a group (and an institution if user is a manager)."""
+class GroupInstitutionCommissionUsers(models.Model):
+    """Define the link between a user, a group (and an institution if user is a manager) (and a commission if user is a commission member)."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+    commission = models.ForeignKey(Commission, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.user}, {self.group}, {self.institution}"
+        return f"{self.user}, {self.group}, {self.institution}, {self.commission}"
 
     class Meta:
-        verbose_name = _("User Institution Groups")
-        verbose_name_plural = _("Users Institution Groups")
+        verbose_name = _("User Institution Commission Groups")
+        verbose_name_plural = _("Users Institution Commission Groups")
         permissions = [
-            ("view_groupinstitutionusers_anyone", "Can view all groups for a user.")
+            (
+                "view_groupinstitutioncommissionusers_anyone",
+                "Can view all groups for a user.",
+            )
         ]
 
 
@@ -96,7 +102,7 @@ class User(AbstractUser):
     groups_institutions = models.ManyToManyField(
         Group,
         verbose_name=_("Groups"),
-        through="GroupInstitutionUsers",
+        through="GroupInstitutionCommissionUsers",
         related_name="group_institution_set",
     )
 
@@ -107,7 +113,9 @@ class User(AbstractUser):
         """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
-        groups_institutions_user = GroupInstitutionUsers.objects.filter(user_id=self.pk)
+        groups_institutions_user = GroupInstitutionCommissionUsers.objects.filter(
+            user_id=self.pk
+        )
         for group_institution_user in groups_institutions_user:
             group_user = Group.objects.get(id=group_institution_user.group_id)
             for permission in group_user.permissions.all():
@@ -127,7 +135,7 @@ class User(AbstractUser):
         """Return a list of Institution objects linked to a user."""
         if self.is_staff:
             return Institution.objects.filter(
-                id__in=GroupInstitutionUsers.objects.filter(
+                id__in=GroupInstitutionCommissionUsers.objects.filter(
                     user_id=self.pk
                 ).values_list("institution_id")
             )
@@ -185,7 +193,7 @@ class User(AbstractUser):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
             try:
-                GroupInstitutionUsers.objects.get(
+                GroupInstitutionCommissionUsers.objects.get(
                     user_id=self.pk, institution_id=institution_id
                 )
                 return True

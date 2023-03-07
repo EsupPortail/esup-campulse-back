@@ -8,7 +8,7 @@ from unittest.mock import Mock
 from django.core.files.storage import default_storage
 from django.test import TestCase
 
-from plana.apps.associations.storages import (
+from plana.storages import (
     DynamicStorageFieldFile,
     PrivateFileStorage,
     PublicFileStorage,

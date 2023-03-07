@@ -277,9 +277,12 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "plana",
     "plana.apps.associations",
+    "plana.apps.commissions",
     "plana.apps.consents",
+    "plana.apps.documents",
     "plana.apps.groups",
     "plana.apps.institutions",
+    "plana.apps.projects",
     "plana.apps.users",
     "plana.libs.mail_template",
 ]
@@ -445,7 +448,7 @@ THUMBNAILS = {
 # S3 storage config #
 #####################
 
-DEFAULT_FILE_STORAGE = 'plana.apps.associations.storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'plana.storages.MediaStorage'
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
 AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID', '')
@@ -453,6 +456,8 @@ AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY', '')
 AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME', '')
 AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
 S3_LOGO_FILEPATH = 'associations_logos'
+S3_TEMPLATES_FILEPATH = 'associations_documents_templates'
+S3_DOCUMENTS_FILEPATH = 'associations_documents'
 
 
 ##################
@@ -572,8 +577,7 @@ RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
 # Groups that can be chosen on user registration.
 PUBLIC_GROUPS = [
-    "COMMISSION_GENERAL",
-    "COMMISSION_MISC",
+    "COMMISSION",
     "STUDENT_INSTITUTION",
     "STUDENT_MISC",
 ]

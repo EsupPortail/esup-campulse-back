@@ -24,26 +24,19 @@
     "model": "auth.group",
     "pk": 4,
     "fields": {
-      "name": "COMMISSION_GENERAL"
+      "name": "COMMISSION"
     }
   },
   {
     "model": "auth.group",
     "pk": 5,
     "fields": {
-      "name": "COMMISSION_MISC"
-    }
-  },
-  {
-    "model": "auth.group",
-    "pk": 6,
-    "fields": {
       "name": "STUDENT_INSTITUTION"
     }
   },
   {
     "model": "auth.group",
-    "pk": 7,
+    "pk": 6,
     "fields": {
       "name": "STUDENT_MISC"
     }

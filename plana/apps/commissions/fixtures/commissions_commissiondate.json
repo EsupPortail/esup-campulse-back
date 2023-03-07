@@ -1,0 +1,38 @@
+[
+  {
+    "model": "commissions.CommissionDate",
+    "pk": 1,
+    "fields": {
+      "submission_date": "2023-10-06",
+      "commission_date": "2023-10-20",
+      "commission_id": 1
+    }
+  },
+  {
+    "model": "commissions.CommissionDate",
+    "pk": 2,
+    "fields": {
+      "submission_date": "2023-10-06",
+      "commission_date": "2023-10-20",
+      "commission_id": 2
+    }
+  },
+  {
+    "model": "commissions.CommissionDate",
+    "pk": 3,
+    "fields": {
+      "submission_date": "2023-10-06",
+      "commission_date": "2023-10-20",
+      "commission_id": 3
+    }
+  },
+  {
+    "model": "commissions.CommissionDate",
+    "pk": 4,
+    "fields": {
+      "submission_date": "2023-05-18",
+      "commission_date": "2023-06-01",
+      "commission_id": 1
+    }
+  }
+]

@@ -22,13 +22,14 @@ class AssociationsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_commission.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def setUp(self):

@@ -17,10 +17,10 @@ from .views.user import (
     UserListCreate,
     UserRetrieveUpdateDestroy,
 )
-from .views.user_groups_institutions import (
-    UserGroupsInstitutionsDestroy,
-    UserGroupsInstitutionsListCreate,
-    UserGroupsInstitutionsRetrieve,
+from .views.user_groups_institutions_commissions import (
+    UserGroupsInstitutionsCommissionsDestroy,
+    UserGroupsInstitutionsCommissionsListCreate,
+    UserGroupsInstitutionsCommissionsRetrieve,
 )
 
 urlpatterns = [
@@ -66,18 +66,18 @@ urlpatterns = [
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(
         "groups/",
-        UserGroupsInstitutionsListCreate.as_view(),
-        name="user_groups_institutions_list_create",
+        UserGroupsInstitutionsCommissionsListCreate.as_view(),
+        name="user_groups_institutions_commissions_list_create",
     ),
     path(
         "groups/<int:user_id>",
-        UserGroupsInstitutionsRetrieve.as_view(),
-        name="user_groups_institutions_retrieve",
+        UserGroupsInstitutionsCommissionsRetrieve.as_view(),
+        name="user_groups_institutions_commissions_retrieve",
     ),
     path(
         "groups/<int:user_id>/<int:group_id>",
-        UserGroupsInstitutionsDestroy.as_view(),
-        name="user_groups_institutions_destroy",
+        UserGroupsInstitutionsCommissionsDestroy.as_view(),
+        name="user_groups_institutions_commissions_destroy",
     ),
     path(
         "external/",

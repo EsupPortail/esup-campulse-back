@@ -1,0 +1,29 @@
+[
+  {
+    "model": "commissions.Commission",
+    "pk": 1,
+    "fields": {
+      "name": "Fonds de Solidarité et de Développement des Initiatives Étudiantes",
+      "acronym": "FSDIE",
+      "institution_id": 2
+    }
+  },
+  {
+    "model": "commissions.Commission",
+    "pk": 2,
+    "fields": {
+      "name": "Initiative d'Excellence « Creative Thinkers »",
+      "acronym": "IdEx",
+      "institution_id": 2
+    }
+  },
+  {
+    "model": "commissions.Commission",
+    "pk": 3,
+    "fields": {
+      "name": "Culture-ActionS",
+      "acronym": "Culture-ActionS",
+      "institution_id": 1
+    }
+  }
+]

@@ -17,13 +17,14 @@ class UserViewsAnonymousTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "commissions_commission.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationusers.json",
         "users_user.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def setUp(self):
@@ -471,7 +472,7 @@ class UserViewsAnonymousTests(TestCase):
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 7},
+            {"username": self.unvalidated_user_name, "group": 6},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
@@ -486,7 +487,7 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response_anonymous = self.client.post("/users/groups/", {"group": 7})
+        response_anonymous = self.client.post("/users/groups/", {"group": 6})
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_anonymous = self.client.post(

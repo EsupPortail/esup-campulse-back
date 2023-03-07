@@ -3,11 +3,10 @@
 from django.db import migrations, models
 
 import plana.apps.associations.models.association
-import plana.apps.associations.storages
+import plana.storages
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('associations', '0020_alter_association_path_logo'),
     ]
@@ -21,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='association',
             name='path_logo',
-            field=plana.apps.associations.storages.DynamicThumbnailImageField(
+            field=plana.storages.DynamicThumbnailImageField(
                 blank=True,
                 null=True,
                 upload_to=plana.apps.associations.models.association.get_logo_path,

@@ -6,8 +6,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.associations.storages import DynamicThumbnailImageField
 from plana.apps.institutions.models import Institution, InstitutionComponent
+from plana.storages import DynamicThumbnailImageField
 
 
 def get_logo_path(instance, filename):
@@ -52,10 +52,23 @@ class Association(models.Model):
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.IntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
-    president_phone = models.CharField(_("President Phone"), default="", max_length=32)
+    president_phone = models.CharField(_("President phone"), default="", max_length=32)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
+    can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
+    charter_status = models.CharField(
+        _("Charter status"),
+        max_length=32,
+        choices=[
+            ("CHARTER_DRAFT", _("Charter Draft")),
+            ("CHARTER_REJECTED", _("Charter Rejected")),
+            ("CHARTER_PROCESSING", _("Charter Processing")),
+            ("CHARTER_VALIDATED", _("Charter Validated")),
+            ("CHARTER_EXPIRED", _("Charter Expired")),
+        ],
+        default="CHARTER_DRAFT",
+    )
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateTimeField(
         _("Approval date"), null=True

@@ -23,7 +23,7 @@ from rest_framework import exceptions, serializers
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
-from plana.apps.users.models.user import GroupInstitutionUsers, User
+from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -42,9 +42,9 @@ class UserSerializer(serializers.ModelSerializer):
     def get_permissions(self, user):
         """Return permissions linked to the user."""
         permissions = []
-        user_groups_ids = GroupInstitutionUsers.objects.filter(user_id=user.id).values(
-            "group_id"
-        )
+        user_groups_ids = GroupInstitutionCommissionUsers.objects.filter(
+            user_id=user.id
+        ).values("group_id")
         groups = Group.objects.filter(id__in=user_groups_ids)
         for group in groups:
             permissions = [
@@ -57,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionUsers.objects.filter(user_id=user.pk).values()
+        return GroupInstitutionCommissionUsers.objects.filter(user_id=user.pk).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""

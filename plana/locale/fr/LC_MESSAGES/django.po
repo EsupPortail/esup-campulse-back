@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 16:28+0100\n"
+"POT-Creation-Date: 2023-03-07 16:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,13 +20,17 @@ msgstr ""
 
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:32
+#: plana/apps/commissions/models/commission.py:11
+#: plana/apps/documents/models/document.py:33
 #: plana/apps/institutions/models/institution.py:9
 #: plana/apps/institutions/models/institution_component.py:9
+#: plana/apps/projects/models/category.py:10
+#: plana/apps/projects/models/project.py:13
 msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
-#: plana/apps/associations/models/association.py:86
+#: plana/apps/associations/models/association.py:99
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -35,6 +39,7 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:34
+#: plana/apps/commissions/models/commission.py:12
 #: plana/apps/institutions/models/institution.py:10
 msgid "Acronym"
 msgstr "Acronyme"
@@ -60,13 +65,13 @@ msgid "Address"
 msgstr "Adresse"
 
 #: plana/apps/associations/models/association.py:49
-#: plana/apps/users/models/user.py:83
+#: plana/apps/users/models/user.py:89
 msgid "Phone"
 msgstr "Téléphone"
 
 #: plana/apps/associations/models/association.py:50
 #: plana/apps/institutions/models/institution.py:11
-#: plana/apps/users/models/user.py:80
+#: plana/apps/users/models/user.py:86
 msgid "Email"
 msgstr "Courriel"
 
@@ -87,7 +92,7 @@ msgid "President names"
 msgstr "Noms du président"
 
 #: plana/apps/associations/models/association.py:55
-msgid "President Phone"
+msgid "President phone"
 msgstr "Numéro de téléphone du président"
 
 #: plana/apps/associations/models/association.py:56
@@ -103,39 +108,72 @@ msgid "Is site"
 msgstr "Est site"
 
 #: plana/apps/associations/models/association.py:59
+#: plana/apps/users/models/user.py:30
+msgid "Can submit projects"
+msgstr "Peut soumettre des projets"
+
+#: plana/apps/associations/models/association.py:61
+msgid "Charter status"
+msgstr "Statut de la charte"
+
+#: plana/apps/associations/models/association.py:64
+msgid "Charter Draft"
+msgstr "Charte en Brouillon"
+
+#: plana/apps/associations/models/association.py:65
+msgid "Charter Rejected"
+msgstr "Charte Rejetée"
+
+#: plana/apps/associations/models/association.py:66
+msgid "Charter Processing"
+msgstr "Charte en Traitement"
+
+#: plana/apps/associations/models/association.py:67
+msgid "Charter Validated"
+msgstr "Charte Validée"
+
+#: plana/apps/associations/models/association.py:68
+msgid "Charter Expired"
+msgstr "Charte Expirée"
+
+#: plana/apps/associations/models/association.py:72
+#: plana/apps/projects/models/project.py:66
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:61
+#: plana/apps/associations/models/association.py:74
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:64
+#: plana/apps/associations/models/association.py:77
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:66
+#: plana/apps/associations/models/association.py:79
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:72
+#: plana/apps/associations/models/association.py:85
+#: plana/apps/commissions/models/commission.py:15
 #: plana/apps/institutions/models/institution.py:17
 #: plana/apps/institutions/models/institution_component.py:12
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:79
+#: plana/apps/associations/models/association.py:92
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:95
-#: plana/apps/users/models/user.py:20 plana/apps/users/models/user.py:34
+#: plana/apps/associations/models/association.py:108
+#: plana/apps/documents/models/document_association_user.py:48
+#: plana/apps/projects/models/project.py:21 plana/apps/users/models/user.py:21
+#: plana/apps/users/models/user.py:36
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:96
-#: plana/apps/users/models/user.py:35 plana/apps/users/models/user.py:91
+#: plana/apps/associations/models/association.py:109
+#: plana/apps/users/models/user.py:37 plana/apps/users/models/user.py:97
 msgid "Associations"
 msgstr "Associations"
 
@@ -197,6 +235,32 @@ msgstr "Une association activée ne peut être supprimée."
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
+#: plana/apps/commissions/models/commission.py:23
+#: plana/apps/commissions/models/commission_date.py:13
+msgid "Commission"
+msgstr "Commission"
+
+#: plana/apps/commissions/models/commission.py:24
+msgid "Commissions"
+msgstr "Commissions"
+
+#: plana/apps/commissions/models/commission_date.py:9
+msgid "Project submission limit date"
+msgstr "Date de fin de soumission du projet"
+
+#: plana/apps/commissions/models/commission_date.py:10
+msgid "Commission date"
+msgstr "Date de commission"
+
+#: plana/apps/commissions/models/commission_date.py:21
+#: plana/apps/projects/models/project_commission_date.py:19
+msgid "Commission Date"
+msgstr "Date de Commission"
+
+#: plana/apps/commissions/models/commission_date.py:22
+msgid "Commissions Dates"
+msgstr "Dates de Commissions"
+
 #: plana/apps/consents/models/consent.py:9
 msgid "GDPR Consent title"
 msgstr "Titre du consentement RGPD"
@@ -206,9 +270,84 @@ msgstr "Titre du consentement RGPD"
 msgid "GDPR Consent"
 msgstr "Consentement RGPD"
 
-#: plana/apps/consents/models/consent.py:16 plana/apps/users/models/user.py:94
+#: plana/apps/consents/models/consent.py:16 plana/apps/users/models/user.py:100
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
+
+#: plana/apps/documents/models/document.py:34
+#: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
+#: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
+msgid "Description"
+msgstr "Description"
+
+#: plana/apps/documents/models/document.py:35
+msgid "Contact address"
+msgstr "Adresse de contact"
+
+#: plana/apps/documents/models/document.py:36
+msgid "Is multiple"
+msgstr "Est multiple"
+
+#: plana/apps/documents/models/document.py:38
+msgid "Days before document expiration"
+msgstr "Nombre de jours avant expiration du document"
+
+#: plana/apps/documents/models/document.py:55
+#: plana/apps/documents/models/document_association_user.py:37
+msgid "Document"
+msgstr "Document"
+
+#: plana/apps/documents/models/document.py:56
+msgid "Documents"
+msgstr "Documents"
+
+#: plana/apps/documents/models/document_association_user.py:42
+#: plana/apps/projects/models/project.py:18
+#: plana/apps/users/models/gdpr_consent_users.py:12
+#: plana/apps/users/models/user.py:19 plana/apps/users/models/user.py:54
+#: plana/apps/users/models/user.py:205
+msgid "User"
+msgstr "Utilisateur"
+
+#: plana/apps/documents/models/document_association_user.py:54
+#: plana/apps/projects/models/project.py:89
+#: plana/apps/projects/models/project_category.py:12
+#: plana/apps/projects/models/project_commission_date.py:14
+msgid "Project"
+msgstr "Projet"
+
+#: plana/apps/documents/models/document_association_user.py:58
+msgid "Upload date"
+msgstr "Date d'envoi"
+
+#: plana/apps/documents/models/document_association_user.py:60
+msgid "Uploaded file"
+msgstr "Fichier envoyé"
+
+#: plana/apps/documents/models/document_association_user.py:64
+#: plana/apps/projects/models/project.py:52
+msgid "Status"
+msgstr "Statut"
+
+#: plana/apps/documents/models/document_association_user.py:67
+msgid "Document Rejected"
+msgstr "Document Rejeté"
+
+#: plana/apps/documents/models/document_association_user.py:68
+msgid "Document Processing"
+msgstr "Document en Traitement"
+
+#: plana/apps/documents/models/document_association_user.py:69
+msgid "Document Validated"
+msgstr "Document Validé"
+
+#: plana/apps/documents/models/document_association_user.py:78
+msgid "Document from association or user"
+msgstr "Document d'une association ou d'un utilisateur"
+
+#: plana/apps/documents/models/document_association_user.py:79
+msgid "Documents from associations or users"
+msgstr "Documents d'associations ou d'utilisateurs"
 
 #: plana/apps/institutions/models/institution.py:18
 msgid "Institutions"
@@ -218,11 +357,196 @@ msgstr "Établissements"
 msgid "Institution components"
 msgstr "Composantes"
 
-#: plana/apps/users/models/gdpr_consent_users.py:12
-#: plana/apps/users/models/user.py:18 plana/apps/users/models/user.py:52
-#: plana/apps/users/models/user.py:197
-msgid "User"
-msgstr "Utilisateur"
+#: plana/apps/projects/models/category.py:16
+msgid "Category"
+msgstr "Catégorie"
+
+#: plana/apps/projects/models/category.py:17
+msgid "Categories"
+msgstr "Catégories"
+
+#: plana/apps/projects/models/project.py:14
+#: plana/apps/projects/models/project.py:70
+msgid "Start date"
+msgstr "Date de début"
+
+#: plana/apps/projects/models/project.py:15
+#: plana/apps/projects/models/project.py:71
+msgid "End date"
+msgstr "Date de fin"
+
+#: plana/apps/projects/models/project.py:16
+msgid "Location"
+msgstr "Lieu"
+
+#: plana/apps/projects/models/project.py:24
+msgid "Budget on previous edition"
+msgstr "Budget de l'édition précédente"
+
+#: plana/apps/projects/models/project.py:26
+msgid "Target audience"
+msgstr "Public visé"
+
+#: plana/apps/projects/models/project.py:28
+msgid "Type of people in target audience (student, employees, ...)"
+msgstr "Type de public visé (étudiants, employés, ...)"
+
+#: plana/apps/projects/models/project.py:33
+msgid "Amount of people in target audience"
+msgstr "Nombre de personnes dans le public visé"
+
+#: plana/apps/projects/models/project.py:36
+msgid "Amount of students in target audience"
+msgstr "Nombre d'étudiants dans le public visé"
+
+#: plana/apps/projects/models/project.py:39
+msgid "Amount of money asked for each person"
+msgstr "Quantité d'argent demandée par personne"
+
+#: plana/apps/projects/models/project.py:42
+msgid "Amount of money needed by person"
+msgstr "Quantité d'argent nécessaire par personne"
+
+#: plana/apps/projects/models/project.py:44
+msgid "Goals"
+msgstr "Objectifs"
+
+#: plana/apps/projects/models/project.py:45
+msgid "Summary"
+msgstr "Résumé"
+
+#: plana/apps/projects/models/project.py:46
+msgid "Planned activites"
+msgstr "Activités prévues"
+
+#: plana/apps/projects/models/project.py:48
+msgid "Planned prevention and safety actions"
+msgstr "Actions de prévention et de sécurité prévues"
+
+#: plana/apps/projects/models/project.py:50
+msgid "Marketing campaign"
+msgstr "Campagne de communication"
+
+#: plana/apps/projects/models/project.py:55
+msgid "Project Draft"
+msgstr "Projet en Brouillon"
+
+#: plana/apps/projects/models/project.py:56
+msgid "Project Rejected"
+msgstr "Projet Rejeté"
+
+#: plana/apps/projects/models/project.py:57
+msgid "Project Processing"
+msgstr "Projet en Traitement"
+
+#: plana/apps/projects/models/project.py:58
+msgid "Project Validated"
+msgstr "Projet Validé"
+
+#: plana/apps/projects/models/project.py:59
+msgid "Project Review Draft"
+msgstr "Bilan de Projet en Brouillon"
+
+#: plana/apps/projects/models/project.py:60
+msgid "Project Review Rejected"
+msgstr "Bilan de Projet Rejeté"
+
+#: plana/apps/projects/models/project.py:61
+msgid "Project Review Processing"
+msgstr "Bilan de Projet en Traitement"
+
+#: plana/apps/projects/models/project.py:62
+msgid "Project Review Validated"
+msgstr "Bilan de Projet validé"
+
+#: plana/apps/projects/models/project.py:67
+msgid "Edition date"
+msgstr "Date de dernière mise à jour"
+
+#: plana/apps/projects/models/project.py:68
+msgid "Outcome"
+msgstr "Dépenses"
+
+#: plana/apps/projects/models/project.py:69
+msgid "Income"
+msgstr "Recettes"
+
+#: plana/apps/projects/models/project.py:72
+msgid "Organizer name"
+msgstr "Nom de l'organisateur"
+
+#: plana/apps/projects/models/project.py:73
+msgid "Organizer phone"
+msgstr "Téléphone de l'organisateur"
+
+#: plana/apps/projects/models/project.py:74
+msgid "Organizer email"
+msgstr "Adresse mail de l'organisateur"
+
+#: plana/apps/projects/models/project.py:76
+msgid "Review (amount of students, partnerships, ...)"
+msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
+
+#: plana/apps/projects/models/project.py:78
+msgid "Impact on students"
+msgstr "Impact sur les é&tudiants"
+
+#: plana/apps/projects/models/project.py:80
+msgid "Description (activities done, changes from planning, ...)"
+msgstr ""
+"Description (activités réalisées, changements par rapport au planning, ...)"
+
+#: plana/apps/projects/models/project.py:82
+msgid "Difficulties"
+msgstr "Difficultés"
+
+#: plana/apps/projects/models/project.py:83
+msgid "Improvements"
+msgstr "Améliorations"
+
+#: plana/apps/projects/models/project.py:90
+msgid "Projects"
+msgstr "Projets"
+
+#: plana/apps/projects/models/project_category.py:17
+msgid "Project Category"
+msgstr "Catégorie de Projet"
+
+#: plana/apps/projects/models/project_category.py:25
+msgid "Project category"
+msgstr "Catégorie de projet"
+
+#: plana/apps/projects/models/project_category.py:26
+msgid "Projects categories"
+msgstr "Catégories de projets"
+
+#: plana/apps/projects/models/project_commission_date.py:22
+msgid "Is first edition"
+msgstr "Est la première édition"
+
+#: plana/apps/projects/models/project_commission_date.py:24
+msgid "Amount asked on previous edition"
+msgstr "Montant demandé à l'édition précédente"
+
+#: plana/apps/projects/models/project_commission_date.py:27
+msgid "Amount earned on previous edition"
+msgstr "Montant obtenu à l'édition précédente"
+
+#: plana/apps/projects/models/project_commission_date.py:29
+msgid "Amount asked"
+msgstr "Montant demandé"
+
+#: plana/apps/projects/models/project_commission_date.py:30
+msgid "Amount earned"
+msgstr "Montant obtenu"
+
+#: plana/apps/projects/models/project_commission_date.py:36
+msgid "Project commission date"
+msgstr "Date de commission liée au projet"
+
+#: plana/apps/projects/models/project_commission_date.py:37
+msgid "Projects commissions dates"
+msgstr "Dates de commissions liées aux projets"
 
 #: plana/apps/users/models/gdpr_consent_users.py:16
 msgid "Consent date"
@@ -236,55 +560,55 @@ msgstr "Consentement RGPD de l'utilisateur"
 msgid "GDPR Consents Users"
 msgstr "Consentements RPGD des utilisateurs"
 
-#: plana/apps/users/models/user.py:22
+#: plana/apps/users/models/user.py:23
 msgid "Is president"
 msgstr "Dirige l'association"
 
-#: plana/apps/users/models/user.py:23
+#: plana/apps/users/models/user.py:24
 msgid "Can be president"
 msgstr "Peut diriger l'association"
 
-#: plana/apps/users/models/user.py:25
+#: plana/apps/users/models/user.py:26
 msgid "Is validated by admin"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:27
+#: plana/apps/users/models/user.py:28
 msgid "Is secretary"
 msgstr "Est secrétaire"
 
-#: plana/apps/users/models/user.py:28
+#: plana/apps/users/models/user.py:29
 msgid "Is treasurer"
 msgstr "Est trésorier"
 
-#: plana/apps/users/models/user.py:60
-msgid "User Institution Groups"
-msgstr "Groupes-établissements de l'utilisateur"
+#: plana/apps/users/models/user.py:63
+msgid "User Institution Commission Groups"
+msgstr "Groupes-établissements-commissions de l'utilisateur"
 
-#: plana/apps/users/models/user.py:61
-msgid "Users Institution Groups"
-msgstr "Groupes-établissements des utilisateurs"
+#: plana/apps/users/models/user.py:64
+msgid "Users Institution Commission Groups"
+msgstr "Groupes-établissements-commissions des utilisateurs"
 
-#: plana/apps/users/models/user.py:81
+#: plana/apps/users/models/user.py:87
 msgid "First name"
 msgstr "Prénom"
 
-#: plana/apps/users/models/user.py:82
+#: plana/apps/users/models/user.py:88
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/models/user.py:85
+#: plana/apps/users/models/user.py:91
 msgid "Password last change date"
 msgstr "Date de dernier changement du mot de passe"
 
-#: plana/apps/users/models/user.py:88
+#: plana/apps/users/models/user.py:94
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:98
+#: plana/apps/users/models/user.py:104
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:198
+#: plana/apps/users/models/user.py:206
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -293,7 +617,7 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:61
-#: plana/apps/users/tests/serializers/test_cas.py:180
+#: plana/apps/users/tests/serializers/test_cas.py:182
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
@@ -356,7 +680,7 @@ msgstr "Seuls les gestionnaires peuvent éditer les associations."
 #: plana/apps/users/views/association_users.py:181
 #: plana/apps/users/views/association_users.py:334
 #: plana/apps/users/views/user.py:240 plana/apps/users/views/user.py:252
-#: plana/apps/users/views/user_groups_institutions.py:139
+#: plana/apps/users/views/user_groups_institutions_commissions.py:142
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -397,36 +721,36 @@ msgstr "Suppression de superutilisateur impossible."
 msgid "ok"
 msgstr "ok"
 
-#: plana/apps/users/views/user_groups_institutions.py:52
+#: plana/apps/users/views/user_groups_institutions_commissions.py:53
 msgid "No user name or groups ids given."
 msgstr "Aucun nom d'utilisateur ou identifiant de groupe donné."
 
-#: plana/apps/users/views/user_groups_institutions.py:58
+#: plana/apps/users/views/user_groups_institutions_commissions.py:59
 msgid "Only managers can edit groups for this account."
 msgstr "Seuls les gestionnaires peuvent changer les groupes de ce compte."
 
-#: plana/apps/users/views/user_groups_institutions.py:64
-#: plana/apps/users/views/user_groups_institutions.py:166
+#: plana/apps/users/views/user_groups_institutions_commissions.py:65
+#: plana/apps/users/views/user_groups_institutions_commissions.py:171
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups_institutions.py:74
+#: plana/apps/users/views/user_groups_institutions_commissions.py:75
 msgid "Only managers can edit groups."
 msgstr "Seuls les gestionnaires peuvent changer les groupes."
 
-#: plana/apps/users/views/user_groups_institutions.py:111
+#: plana/apps/users/views/user_groups_institutions_commissions.py:112
 msgid "Adding users in this group is not allowed."
 msgstr "Ajouter des utilisateurs dans ce groupe n'est pas autorisé."
 
-#: plana/apps/users/views/user_groups_institutions.py:116
+#: plana/apps/users/views/user_groups_institutions_commissions.py:117
 msgid "Group does not exist."
 msgstr "Ce groupe n'existe pas."
 
-#: plana/apps/users/views/user_groups_institutions.py:161
+#: plana/apps/users/views/user_groups_institutions_commissions.py:166
 msgid "No user or link to group found."
 msgstr "Aucun utilisateur ou groupe trouvé."
 
-#: plana/apps/users/views/user_groups_institutions.py:173
+#: plana/apps/users/views/user_groups_institutions_commissions.py:178
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
@@ -461,11 +785,6 @@ msgstr "Le corps du message contient des variables inconnues : "
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:6
 msgid "Code"
 msgstr "Code"
-
-#: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
-#: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
-msgid "Description"
-msgstr "Description"
 
 #: plana/libs/mail_template/models.py:14
 msgid "Fake vars"
@@ -541,3 +860,6 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "Example template file"
+#~ msgstr "Fichier de template d'exemple"

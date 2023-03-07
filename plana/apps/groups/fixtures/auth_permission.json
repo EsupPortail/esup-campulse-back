@@ -705,404 +705,692 @@
     "model": "auth.permission",
     "pk": 79,
     "fields": {
-      "name": "Can add GDPR Consent",
+      "name": "Can add Commission",
       "content_type": 19,
-      "codename": "add_gdprconsent"
+      "codename": "add_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 80,
     "fields": {
-      "name": "Can change GDPR Consent",
+      "name": "Can change Commission",
       "content_type": 19,
-      "codename": "change_gdprconsent"
+      "codename": "change_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 81,
     "fields": {
-      "name": "Can delete GDPR Consent",
+      "name": "Can delete Commission",
       "content_type": 19,
-      "codename": "delete_gdprconsent"
+      "codename": "delete_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 82,
     "fields": {
-      "name": "Can view GDPR Consent",
+      "name": "Can view Commission",
       "content_type": 19,
-      "codename": "view_gdprconsent"
+      "codename": "view_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 83,
     "fields": {
-      "name": "Can add Institution",
+      "name": "Can add Commission Date",
       "content_type": 20,
-      "codename": "add_institution"
+      "codename": "add_commissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 84,
     "fields": {
-      "name": "Can change Institution",
+      "name": "Can change Commission Date",
       "content_type": 20,
-      "codename": "change_institution"
+      "codename": "change_commissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 85,
     "fields": {
-      "name": "Can delete Institution",
+      "name": "Can delete Commission Date",
       "content_type": 20,
-      "codename": "delete_institution"
+      "codename": "delete_commissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 86,
     "fields": {
-      "name": "Can view Institution",
+      "name": "Can view Commission Date",
       "content_type": 20,
-      "codename": "view_institution"
+      "codename": "view_commissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 87,
     "fields": {
-      "name": "Can add Institution component",
+      "name": "Can add GDPR Consent",
       "content_type": 21,
-      "codename": "add_institutioncomponent"
+      "codename": "add_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 88,
     "fields": {
-      "name": "Can change Institution component",
+      "name": "Can change GDPR Consent",
       "content_type": 21,
-      "codename": "change_institutioncomponent"
+      "codename": "change_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 89,
     "fields": {
-      "name": "Can delete Institution component",
+      "name": "Can delete GDPR Consent",
       "content_type": 21,
-      "codename": "delete_institutioncomponent"
+      "codename": "delete_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 90,
     "fields": {
-      "name": "Can view Institution component",
+      "name": "Can view GDPR Consent",
       "content_type": 21,
-      "codename": "view_institutioncomponent"
+      "codename": "view_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 91,
     "fields": {
-      "name": "Can add Association",
+      "name": "Can add Document",
       "content_type": 22,
-      "codename": "add_associationusers"
+      "codename": "add_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 92,
     "fields": {
-      "name": "Can change Association",
+      "name": "Can change Document",
       "content_type": 22,
-      "codename": "change_associationusers"
+      "codename": "change_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 93,
     "fields": {
-      "name": "Can delete Association",
+      "name": "Can delete Document",
       "content_type": 22,
-      "codename": "delete_associationusers"
+      "codename": "delete_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 94,
     "fields": {
-      "name": "Can view Association",
+      "name": "Can view Document",
       "content_type": 22,
-      "codename": "view_associationusers"
+      "codename": "view_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 95,
     "fields": {
-      "name": "Can change associations for all users.",
-      "content_type": 22,
-      "codename": "change_associationusers_any_institution"
+      "name": "Can add Document from association or user",
+      "content_type": 23,
+      "codename": "add_documentassociationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 96,
     "fields": {
-      "name": "Can delete associations for all users.",
-      "content_type": 22,
-      "codename": "delete_associationusers_any_institution"
+      "name": "Can change Document from association or user",
+      "content_type": 23,
+      "codename": "change_documentassociationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 97,
     "fields": {
-      "name": "Can view all associations for a user.",
-      "content_type": 22,
-      "codename": "view_associationusers_anyone"
+      "name": "Can delete Document from association or user",
+      "content_type": 23,
+      "codename": "delete_documentassociationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 98,
     "fields": {
-      "name": "Can add User Institution Groups",
+      "name": "Can view Document from association or user",
       "content_type": 23,
-      "codename": "add_groupinstitutionusers"
+      "codename": "view_documentassociationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 99,
     "fields": {
-      "name": "Can change User Institution Groups",
-      "content_type": 23,
-      "codename": "change_groupinstitutionusers"
+      "name": "Can add Institution",
+      "content_type": 24,
+      "codename": "add_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 100,
     "fields": {
-      "name": "Can delete User Institution Groups",
-      "content_type": 23,
-      "codename": "delete_groupinstitutionusers"
+      "name": "Can change Institution",
+      "content_type": 24,
+      "codename": "change_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 101,
     "fields": {
-      "name": "Can view User Institution Groups",
-      "content_type": 23,
-      "codename": "view_groupinstitutionusers"
+      "name": "Can delete Institution",
+      "content_type": 24,
+      "codename": "delete_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 102,
     "fields": {
-      "name": "Can view all groups for a user.",
-      "content_type": 23,
-      "codename": "view_groupinstitutionusers_anyone"
+      "name": "Can view Institution",
+      "content_type": 24,
+      "codename": "view_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 103,
     "fields": {
-      "name": "Can add User",
-      "content_type": 24,
-      "codename": "add_user"
+      "name": "Can add Institution component",
+      "content_type": 25,
+      "codename": "add_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 104,
     "fields": {
-      "name": "Can change User",
-      "content_type": 24,
-      "codename": "change_user"
+      "name": "Can change Institution component",
+      "content_type": 25,
+      "codename": "change_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 105,
     "fields": {
-      "name": "Can delete User",
-      "content_type": 24,
-      "codename": "delete_user"
+      "name": "Can delete Institution component",
+      "content_type": 25,
+      "codename": "delete_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 106,
     "fields": {
-      "name": "Can view User",
-      "content_type": 24,
-      "codename": "view_user"
+      "name": "Can view Institution component",
+      "content_type": 25,
+      "codename": "view_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 107,
     "fields": {
-      "name": "Can add a user with no association linked.",
-      "content_type": 24,
-      "codename": "add_user_misc"
+      "name": "Can add Category",
+      "content_type": 26,
+      "codename": "add_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 108,
     "fields": {
-      "name": "Can change a user with no association linked.",
-      "content_type": 24,
-      "codename": "change_user_misc"
+      "name": "Can change Category",
+      "content_type": 26,
+      "codename": "change_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 109,
     "fields": {
-      "name": "Can delete a user with no association linked.",
-      "content_type": 24,
-      "codename": "delete_user_misc"
+      "name": "Can delete Category",
+      "content_type": 26,
+      "codename": "delete_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 110,
     "fields": {
-      "name": "Can view a user with no association linked.",
-      "content_type": 24,
-      "codename": "view_user_misc"
+      "name": "Can view Category",
+      "content_type": 26,
+      "codename": "view_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 111,
     "fields": {
-      "name": "Can view all users.",
-      "content_type": 24,
-      "codename": "view_user_anyone"
+      "name": "Can add Project",
+      "content_type": 27,
+      "codename": "add_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 112,
     "fields": {
-      "name": "Can add GDPR Consent User",
-      "content_type": 25,
-      "codename": "add_gdprconsentusers"
+      "name": "Can change Project",
+      "content_type": 27,
+      "codename": "change_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 113,
     "fields": {
-      "name": "Can change GDPR Consent User",
-      "content_type": 25,
-      "codename": "change_gdprconsentusers"
+      "name": "Can delete Project",
+      "content_type": 27,
+      "codename": "delete_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 114,
     "fields": {
-      "name": "Can delete GDPR Consent User",
-      "content_type": 25,
-      "codename": "delete_gdprconsentusers"
+      "name": "Can view Project",
+      "content_type": 27,
+      "codename": "view_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 115,
     "fields": {
-      "name": "Can view GDPR Consent User",
-      "content_type": 25,
-      "codename": "view_gdprconsentusers"
+      "name": "Can add Project category",
+      "content_type": 28,
+      "codename": "add_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 116,
     "fields": {
-      "name": "Can add Template variable",
-      "content_type": 26,
-      "codename": "add_mailtemplatevar"
+      "name": "Can change Project category",
+      "content_type": 28,
+      "codename": "change_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 117,
     "fields": {
-      "name": "Can change Template variable",
-      "content_type": 26,
-      "codename": "change_mailtemplatevar"
+      "name": "Can delete Project category",
+      "content_type": 28,
+      "codename": "delete_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 118,
     "fields": {
-      "name": "Can delete Template variable",
-      "content_type": 26,
-      "codename": "delete_mailtemplatevar"
+      "name": "Can view Project category",
+      "content_type": 28,
+      "codename": "view_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 119,
     "fields": {
-      "name": "Can view Template variable",
-      "content_type": 26,
-      "codename": "view_mailtemplatevar"
+      "name": "Can add Project commission date",
+      "content_type": 29,
+      "codename": "add_projectcommissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 120,
     "fields": {
-      "name": "Can add Mail template",
-      "content_type": 27,
-      "codename": "add_mailtemplate"
+      "name": "Can change Project commission date",
+      "content_type": 29,
+      "codename": "change_projectcommissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 121,
     "fields": {
-      "name": "Can change Mail template",
-      "content_type": 27,
-      "codename": "change_mailtemplate"
+      "name": "Can delete Project commission date",
+      "content_type": 29,
+      "codename": "delete_projectcommissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 122,
     "fields": {
-      "name": "Can delete Mail template",
-      "content_type": 27,
-      "codename": "delete_mailtemplate"
+      "name": "Can view Project commission date",
+      "content_type": 29,
+      "codename": "view_projectcommissiondate"
     }
   },
   {
     "model": "auth.permission",
     "pk": 123,
     "fields": {
+      "name": "Can add Association",
+      "content_type": 30,
+      "codename": "add_associationusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 124,
+    "fields": {
+      "name": "Can change Association",
+      "content_type": 30,
+      "codename": "change_associationusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 125,
+    "fields": {
+      "name": "Can delete Association",
+      "content_type": 30,
+      "codename": "delete_associationusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 126,
+    "fields": {
+      "name": "Can view Association",
+      "content_type": 30,
+      "codename": "view_associationusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 127,
+    "fields": {
+      "name": "Can change associations for all users.",
+      "content_type": 30,
+      "codename": "change_associationusers_any_institution"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 128,
+    "fields": {
+      "name": "Can delete associations for all users.",
+      "content_type": 30,
+      "codename": "delete_associationusers_any_institution"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 129,
+    "fields": {
+      "name": "Can view all associations for a user.",
+      "content_type": 30,
+      "codename": "view_associationusers_anyone"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 130,
+    "fields": {
+      "name": "Can add User Institution Commission Groups",
+      "content_type": 31,
+      "codename": "add_groupinstitutioncommissionusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 131,
+    "fields": {
+      "name": "Can change User Institution Commission Groups",
+      "content_type": 31,
+      "codename": "change_groupinstitutioncommissionusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 132,
+    "fields": {
+      "name": "Can delete User Institution Commission Groups",
+      "content_type": 31,
+      "codename": "delete_groupinstitutioncommissionusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 133,
+    "fields": {
+      "name": "Can view User Institution Commission Groups",
+      "content_type": 31,
+      "codename": "view_groupinstitutioncommissionusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 134,
+    "fields": {
+      "name": "Can view all groups for a user.",
+      "content_type": 31,
+      "codename": "view_groupinstitutioncommissionusers_anyone"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 135,
+    "fields": {
+      "name": "Can add User",
+      "content_type": 32,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 136,
+    "fields": {
+      "name": "Can change User",
+      "content_type": 32,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 137,
+    "fields": {
+      "name": "Can delete User",
+      "content_type": 32,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 138,
+    "fields": {
+      "name": "Can view User",
+      "content_type": 32,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 139,
+    "fields": {
+      "name": "Can add a user with no association linked.",
+      "content_type": 32,
+      "codename": "add_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 140,
+    "fields": {
+      "name": "Can change a user with no association linked.",
+      "content_type": 32,
+      "codename": "change_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 141,
+    "fields": {
+      "name": "Can delete a user with no association linked.",
+      "content_type": 32,
+      "codename": "delete_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 142,
+    "fields": {
+      "name": "Can view a user with no association linked.",
+      "content_type": 32,
+      "codename": "view_user_misc"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 143,
+    "fields": {
+      "name": "Can view all users.",
+      "content_type": 32,
+      "codename": "view_user_anyone"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 144,
+    "fields": {
+      "name": "Can add GDPR Consent User",
+      "content_type": 33,
+      "codename": "add_gdprconsentusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 145,
+    "fields": {
+      "name": "Can change GDPR Consent User",
+      "content_type": 33,
+      "codename": "change_gdprconsentusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 146,
+    "fields": {
+      "name": "Can delete GDPR Consent User",
+      "content_type": 33,
+      "codename": "delete_gdprconsentusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 147,
+    "fields": {
+      "name": "Can view GDPR Consent User",
+      "content_type": 33,
+      "codename": "view_gdprconsentusers"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 148,
+    "fields": {
+      "name": "Can add Template variable",
+      "content_type": 34,
+      "codename": "add_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 149,
+    "fields": {
+      "name": "Can change Template variable",
+      "content_type": 34,
+      "codename": "change_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 150,
+    "fields": {
+      "name": "Can delete Template variable",
+      "content_type": 34,
+      "codename": "delete_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 151,
+    "fields": {
+      "name": "Can view Template variable",
+      "content_type": 34,
+      "codename": "view_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 152,
+    "fields": {
+      "name": "Can add Mail template",
+      "content_type": 35,
+      "codename": "add_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 153,
+    "fields": {
+      "name": "Can change Mail template",
+      "content_type": 35,
+      "codename": "change_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 154,
+    "fields": {
+      "name": "Can delete Mail template",
+      "content_type": 35,
+      "codename": "delete_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 155,
+    "fields": {
       "name": "Can view Mail template",
-      "content_type": 27,
+      "content_type": 35,
       "codename": "view_mailtemplate"
     }
   }

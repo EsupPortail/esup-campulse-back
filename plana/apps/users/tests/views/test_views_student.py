@@ -19,6 +19,7 @@ class UserViewsStudentTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_commission.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -27,7 +28,7 @@ class UserViewsStudentTests(TestCase):
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def setUp(self):
@@ -487,7 +488,7 @@ class UserViewsStudentTests(TestCase):
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
-            "/users/groups/", {"username": self.student_user_name, "group": 7}
+            "/users/groups/", {"username": self.student_user_name, "group": 6}
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -519,12 +520,13 @@ class UserAuthTests(TestCase):
 
     fixtures = [
         "auth_group.json",
+        "commissions_commission.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_user.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def test_user_auth_registration(self):

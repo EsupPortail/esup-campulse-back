@@ -25,6 +25,7 @@ class UserViewsManagerTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_commission.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -33,7 +34,7 @@ class UserViewsManagerTests(TestCase):
         "users_associationusers.json",
         "users_gdprconsentusers.json",
         "users_user.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def setUp(self):
@@ -599,13 +600,13 @@ class UserViewsManagerTests(TestCase):
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "group": 7},
+            {"username": self.student_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 7},
+            {"username": self.unvalidated_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
@@ -617,7 +618,7 @@ class UserViewsManagerTests(TestCase):
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.manager_general_user_name, "group": 7},
+            {"username": self.manager_general_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 

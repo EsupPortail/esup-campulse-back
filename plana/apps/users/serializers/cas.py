@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, serializers
 
 from plana.apps.users.adapter import CASAdapter
-from plana.apps.users.models.user import GroupInstitutionUsers, User
+from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
 from plana.apps.users.provider import CASProvider
 
 if typing.TYPE_CHECKING:  # pragma: no cover
@@ -75,7 +75,7 @@ class CASSerializer(LoginSerializer):
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
             try:
-                GroupInstitutionUsers.objects.get(user_id=user.pk)
+                GroupInstitutionCommissionUsers.objects.get(user_id=user.pk)
             except ObjectDoesNotExist as exc:
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")

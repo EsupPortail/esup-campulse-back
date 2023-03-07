@@ -2,7 +2,11 @@
 from django.test import Client, TestCase
 
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import AssociationUsers, GroupInstitutionUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 
 
 class UsersModelsTests(TestCase):
@@ -12,12 +16,13 @@ class UsersModelsTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "commissions_commission.json",
         "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
-        "users_groupinstitutionusers.json",
+        "users_groupinstitutioncommissionusers.json",
         "users_user.json",
     ]
 
@@ -51,8 +56,8 @@ class UsersModelsTests(TestCase):
 
     def test_group_institution_users_model(self):
         """There's at least one user linked to a group in the database."""
-        group_user = GroupInstitutionUsers.objects.first()
+        group_user = GroupInstitutionCommissionUsers.objects.first()
         self.assertEqual(
             str(group_user),
-            f"{group_user.user}, {group_user.group}, {group_user.institution}",
+            f"{group_user.user}, {group_user.group}, {group_user.institution}, {group_user.commission}",
         )

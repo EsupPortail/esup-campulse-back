@@ -1161,7 +1161,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserGroupsInstitutionsCreate'
+                  $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreate'
           description: ''
     post:
       operationId: users_groups_create
@@ -1175,13 +1175,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCreateRequest'
+              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -1192,7 +1192,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroupsInstitutionsCreate'
+                $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreate'
           description: ''
   /users/groups/{user_id}:
     get:
@@ -1214,7 +1214,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroupsInstitutions'
+                $ref: '#/components/schemas/UserGroupsInstitutionsCommissions'
           description: ''
   /users/groups/{user_id}/{group_id}:
     delete:
@@ -1326,6 +1326,10 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        can_submit_projects:
+          type: boolean
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
         creation_date:
           type: string
           format: date-time
@@ -1428,6 +1432,10 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        can_submit_projects:
+          type: boolean
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
         creation_date:
           type: string
           format: date-time
@@ -1597,6 +1605,8 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+        can_submit_projects:
+          type: boolean
       required:
       - association
       - id
@@ -1698,6 +1708,14 @@ components:
       required:
       - service
       - ticket
+    CharterStatusEnum:
+      enum:
+      - CHARTER_DRAFT
+      - CHARTER_REJECTED
+      - CHARTER_PROCESSING
+      - CHARTER_VALIDATED
+      - CHARTER_EXPIRED
+      type: string
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -2003,6 +2021,10 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        can_submit_projects:
+          type: boolean
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
         approval_date:
           type: string
           format: date-time
@@ -2169,7 +2191,7 @@ components:
       - last_name
       - permissions
       - username
-    UserGroupsInstitutions:
+    UserGroupsInstitutionsCommissions:
       type: object
       description: Main serializer.
       properties:
@@ -2183,11 +2205,14 @@ components:
         institution:
           type: integer
           nullable: true
+        commission:
+          type: integer
+          nullable: true
       required:
       - group
       - id
       - user
-    UserGroupsInstitutionsCreate:
+    UserGroupsInstitutionsCommissionsCreate:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:
@@ -2201,7 +2226,7 @@ components:
       required:
       - group
       - user
-    UserGroupsInstitutionsCreateRequest:
+    UserGroupsInstitutionsCommissionsCreateRequest:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:

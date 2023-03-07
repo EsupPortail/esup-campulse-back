@@ -3,10 +3,10 @@ from django.contrib.auth.models import Group
 from rest_framework import serializers
 
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionUsers, User
+from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
 
 
-class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
+class UserGroupsInstitutionsCommissionsSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -16,11 +16,11 @@ class UserGroupsInstitutionsSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = GroupInstitutionUsers
+        model = GroupInstitutionCommissionUsers
         fields = "__all__"
 
 
-class UserGroupsInstitutionsCreateSerializer(serializers.ModelSerializer):
+class UserGroupsInstitutionsCommissionsCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-groups creation (with username instead of id)."""
 
     user = serializers.SlugRelatedField(
@@ -32,5 +32,5 @@ class UserGroupsInstitutionsCreateSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = GroupInstitutionUsers
+        model = GroupInstitutionCommissionUsers
         fields = ["user", "group", "institution"]

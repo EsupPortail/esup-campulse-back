@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionUsers
+from plana.apps.users.models.user import GroupInstitutionCommissionUsers
 
 
 class Command(BaseCommand):
@@ -55,12 +55,12 @@ class Command(BaseCommand):
             group = Group.objects.get(name=options["group"])
             if options["institution"] is not None:
                 institution = Institution.objects.get(acronym=options["institution"])
-                GroupInstitutionUsers.objects.create(
+                GroupInstitutionCommissionUsers.objects.create(
                     user_id=user.pk, group_id=group.id, institution_id=institution.id
                 )
             else:
                 for institution_id in Institution.objects.values_list("id", flat=True):
-                    GroupInstitutionUsers.objects.create(
+                    GroupInstitutionCommissionUsers.objects.create(
                         user_id=user.pk,
                         group_id=group.id,
                         institution_id=institution_id,
