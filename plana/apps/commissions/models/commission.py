@@ -17,7 +17,7 @@ class Commission(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} ({self.acronym})"
 
     class Meta:
         verbose_name = _("Commission")

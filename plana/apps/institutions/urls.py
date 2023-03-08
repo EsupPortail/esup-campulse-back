@@ -8,13 +8,13 @@ from .views.institution import (
 
 urlpatterns = [
     path(
+        "",
+        AssociationInstitutionList.as_view(),
+        name="association_institution_list",
+    ),
+    path(
         "institution_components",
         AssociationInstitutionComponentList.as_view(),
         name="association_institution_component_list",
-    ),
-    path(
-        "institutions",
-        AssociationInstitutionList.as_view(),
-        name="association_institution_list",
     ),
 ]

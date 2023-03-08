@@ -9,16 +9,6 @@ from plana.apps.institutions.serializers.institution_component import (
 )
 
 
-class AssociationInstitutionComponentList(generics.ListAPIView):
-    """Lists all institution components."""
-
-    serializer_class = InstitutionComponentSerializer
-
-    def get_queryset(self):
-        """GET : Lists all institution components."""
-        return InstitutionComponent.objects.all().order_by("name")
-
-
 class AssociationInstitutionList(generics.ListAPIView):
     """Lists all institutions."""
 
@@ -27,3 +17,13 @@ class AssociationInstitutionList(generics.ListAPIView):
     def get_queryset(self):
         """GET : Lists all institutions."""
         return Institution.objects.all().order_by("name")
+
+
+class AssociationInstitutionComponentList(generics.ListAPIView):
+    """Lists all institution components."""
+
+    serializer_class = InstitutionComponentSerializer
+
+    def get_queryset(self):
+        """GET : Lists all institution components."""
+        return InstitutionComponent.objects.all().order_by("name")

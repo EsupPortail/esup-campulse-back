@@ -20,6 +20,27 @@ class AssociationsViewsTests(TestCase):
         """Start a default client used on all tests."""
         self.client = Client()
 
+    def test_get_institutions_list(self):
+        """
+        GET /institutions/ .
+
+        - There's at least one institution in the institutions list.
+        - The route can be accessed by anyone.
+        - We get the same amount of institutions through the model and through the view.
+        - Institutions details are returned (test the "name" attribute).
+        """
+        institutions_cnt = Institution.objects.count()
+        self.assertTrue(institutions_cnt > 0)
+
+        response = self.client.get("/institutions/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), institutions_cnt)
+
+        institution_1 = content[0]
+        self.assertTrue(institution_1.get("name"))
+
     def test_get_institution_components_list(self):
         """
         GET /institutions/institution_components .
@@ -40,24 +61,3 @@ class AssociationsViewsTests(TestCase):
 
         institution_component_1 = content[0]
         self.assertTrue(institution_component_1.get("name"))
-
-    def test_get_institutions_list(self):
-        """
-        GET /institutions/institutions .
-
-        - There's at least one institution in the institutions list.
-        - The route can be accessed by anyone.
-        - We get the same amount of institutions through the model and through the view.
-        - Institutions details are returned (test the "name" attribute).
-        """
-        institutions_cnt = Institution.objects.count()
-        self.assertTrue(institutions_cnt > 0)
-
-        response = self.client.get("/institutions/institutions")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), institutions_cnt)
-
-        institution_1 = content[0]
-        self.assertTrue(institution_1.get("name"))

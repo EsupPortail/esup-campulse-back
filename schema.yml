@@ -242,6 +242,42 @@ paths:
                 items:
                   $ref: '#/components/schemas/AssociationName'
           description: ''
+  /commissions/:
+    get:
+      operationId: commissions_list
+      description: Lists all Commissions.
+      tags:
+      - commissions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Commission'
+          description: ''
+  /commissions/commission_dates:
+    get:
+      operationId: commissions_commission_dates_list
+      description: Lists all Commissions Dates.
+      tags:
+      - commissions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommissionDate'
+          description: ''
   /consents/:
     get:
       operationId: consents_list
@@ -259,6 +295,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GDPRConsent'
+          description: ''
+  /documents/:
+    get:
+      operationId: documents_list
+      description: Lists all Documents.
+      tags:
+      - documents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
           description: ''
   /groups/:
     get:
@@ -278,6 +332,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/Group'
           description: ''
+  /institutions/:
+    get:
+      operationId: institutions_list
+      description: Lists all institutions.
+      tags:
+      - institutions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Institution'
+          description: ''
   /institutions/institution_components:
     get:
       operationId: institutions_institution_components_list
@@ -296,12 +368,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/InstitutionComponent'
           description: ''
-  /institutions/institutions:
+  /projects/categories:
     get:
-      operationId: institutions_institutions_list
-      description: Lists all institutions.
+      operationId: projects_categories_list
+      description: Lists all Categories.
       tags:
-      - institutions
+      - projects
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -312,7 +384,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Institution'
+                  $ref: '#/components/schemas/Category'
           description: ''
   /users/:
     get:
@@ -1708,6 +1780,20 @@ components:
       required:
       - service
       - ticket
+    Category:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+      required:
+      - id
+      - name
     CharterStatusEnum:
       enum:
       - CHARTER_DRAFT
@@ -1716,6 +1802,50 @@ components:
       - CHARTER_VALIDATED
       - CHARTER_EXPIRED
       type: string
+    Commission:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        institution:
+          type: integer
+          title: Etablissement
+      required:
+      - acronym
+      - id
+      - institution
+      - name
+    CommissionDate:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        submission_date:
+          type: string
+          format: date
+          title: Project submission limit date
+        commission_date:
+          type: string
+          format: date
+        commission:
+          type: integer
+      required:
+      - commission
+      - commission_date
+      - id
+      - submission_date
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -1740,6 +1870,36 @@ components:
       - email
       - first_name
       - last_name
+    Document:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        description:
+          type: string
+        contact:
+          type: string
+          title: Contact address
+        is_multiple:
+          type: boolean
+        days_before_expiration:
+          type: string
+          title: Days before document expiration
+        mime_types:
+          type: array
+          items:
+            type: string
+            maxLength: 128
+      required:
+      - contact
+      - id
+      - name
     ExternalUser:
       type: object
       description: External user serializer.
