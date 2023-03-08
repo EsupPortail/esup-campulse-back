@@ -20,8 +20,8 @@ class Command(BaseCommand):
             today = datetime.date.today()
 
             # FIXME: comptes inactifs ?
-            # Get all users in groups
-            queryset = User.objects.filter(groups=True)
+            # Get all users which aren't managers.
+            queryset = User.objects.filter(is_staff=False)
 
             # Send emails to nearly expired accounts (not connected since 23 months)
             mail_sending_due_date = today - datetime.timedelta(days=(2 * 365 - 31))
