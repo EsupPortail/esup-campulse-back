@@ -514,6 +514,17 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_student_delete_auth_user(self):
+        """
+        DELETE /users/auth/user/ .
+
+        - A user should be able to delete his own account.
+        """
+        response_student = self.student_client.delete("/users/auth/user/")
+        student_user_query = User.objects.filter(username=self.student_user_name)
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(student_user_query), 0)
+
 
 class UserAuthTests(TestCase):
     """Special tests class."""

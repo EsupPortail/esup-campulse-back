@@ -516,3 +516,12 @@ class UserViewsAnonymousTests(TestCase):
             f"/users/groups/{self.unvalidated_user_id}/6"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_student_delete_auth_user(self):
+        """
+        DELETE /users/auth/user/ .
+
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.client.delete("/users/auth/user/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -367,6 +367,15 @@ class PasswordResetConfirm(generics.GenericAPIView):
 class UserAuthView(DJRestAuthUserDetailsView):
     """Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields."""
 
+    def delete(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
+        try:
+            user = self.request.user
+            user.delete()
+            return response.Response({}, status=status.HTTP_200_OK)
+        except:
+            return response.Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
