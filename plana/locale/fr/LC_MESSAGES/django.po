@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-08 10:41+0100\n"
+"POT-Creation-Date: 2023-03-08 11:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -664,7 +664,7 @@ msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
 #: plana/apps/users/views/association_users.py:131
-#: plana/apps/users/views/association_users.py:247
+#: plana/apps/users/views/association_users.py:244
 msgid "Only managers can validate associations for this account."
 msgstr ""
 "Seuls les gestionnaires peuvent valider les associations pour ce compte"
@@ -673,23 +673,19 @@ msgstr ""
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:156
-msgid "Only managers can edit associations."
-msgstr "Seuls les gestionnaires peuvent éditer les associations."
-
-#: plana/apps/users/views/association_users.py:181
-#: plana/apps/users/views/association_users.py:334
+#: plana/apps/users/views/association_users.py:178
+#: plana/apps/users/views/association_users.py:331
 #: plana/apps/users/views/user.py:240 plana/apps/users/views/user.py:252
 #: plana/apps/users/views/user_groups_institutions_commissions.py:142
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/association_users.py:219
-#: plana/apps/users/views/association_users.py:324
+#: plana/apps/users/views/association_users.py:216
+#: plana/apps/users/views/association_users.py:321
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:229
+#: plana/apps/users/views/association_users.py:226
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
@@ -717,7 +713,7 @@ msgstr "Aucun utilisateur trouvé."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:483
+#: plana/apps/users/views/user.py:492
 msgid "ok"
 msgstr "ok"
 
@@ -860,3 +856,6 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#~ msgid "Only managers can edit associations."
+#~ msgstr "Seuls les gestionnaires peuvent éditer les associations."

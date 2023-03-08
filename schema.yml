@@ -1109,6 +1109,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+    delete:
+      operationId: users_auth_user_destroy
+      description: Overrided UserDetailsView to prevent CAS users to change their
+        own auto-generated fields.
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /users/consents/:
     get:
       operationId: users_consents_list

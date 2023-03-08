@@ -149,7 +149,8 @@ class UserViewsStudentTests(TestCase):
         """
         POST /users/associations/ .
 
-        - An admin-validated student user cannot execute this request.
+        - An admin-validated student user can execute this request.
+        - An admin-validated student cannot validate its own link.
         """
         response_student = self.student_client.post(
             "/users/associations/",
@@ -159,7 +160,11 @@ class UserViewsStudentTests(TestCase):
                 "can_be_president": False,
             },
         )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
+        user_asso = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=5
+        )
+        self.assertFalse(user_asso.is_validated_by_admin)
 
     def test_student_get_associations_user_detail(self):
         """

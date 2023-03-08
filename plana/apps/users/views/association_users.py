@@ -152,10 +152,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             and not request.user.is_staff
             and user.is_validated_by_admin
         ):
-            return response.Response(
-                {"error": _("Only managers can edit associations.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            request.data["is_validated_by_admin"] = False
 
         return super().create(request, *args, **kwargs)
 
