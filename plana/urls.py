@@ -22,9 +22,12 @@ urlpatterns = [
         r'^media/(?P<path>.*)$', serve, kwargs={'document_root': settings.MEDIA_ROOT}
     ),
     path("associations/", include("plana.apps.associations.urls")),
+    path("commissions/", include("plana.apps.commissions.urls")),
     path("consents/", include("plana.apps.consents.urls")),
+    path("documents/", include("plana.apps.documents.urls")),
     path("groups/", include("plana.apps.groups.urls")),
     path("institutions/", include("plana.apps.institutions.urls")),
+    path("projects/", include("plana.apps.projects.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
     path(
