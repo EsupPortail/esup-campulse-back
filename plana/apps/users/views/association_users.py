@@ -82,8 +82,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == "POST":
             self.serializer_class = AssociationUsersCreateSerializer
-        elif self.request.method == "GET":
-            self.serializer_class = AssociationUsersSerializer
         return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):

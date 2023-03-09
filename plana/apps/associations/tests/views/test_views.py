@@ -651,6 +651,7 @@ class AssociationsViewsTests(TestCase):
         - We get the same amount of associations through the model and through the view.
         - Only id and names of the associations are returned.
         - Get the same amount of associations by institution through model and view.
+        - Get a different amount of associations with allow_new_users filter.
         """
         asso_names_cnt = Association.objects.count()
         self.assertTrue(asso_names_cnt > 0)
@@ -677,3 +678,10 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names?is_public=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_public)
+
+        """
+        # TODO Test allow_new_users filter.
+        response = self.client.get("/associations/names?allow_new_users=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertNotEqual(len(content), asso_names_cnt)
+        """

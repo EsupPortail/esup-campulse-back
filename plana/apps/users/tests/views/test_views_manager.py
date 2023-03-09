@@ -11,6 +11,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.provider import CASProvider
 
 # from plana.apps.users.provider import CASProvider
 
@@ -222,8 +223,6 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
-        """
-        # CAS users are auto-validated, uncomment if it's not the case anymore.
         user = User.objects.create_user(
             username="PatriciaCAS",
             password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
@@ -239,12 +238,16 @@ class UserViewsManagerTests(TestCase):
         user_cas = User.objects.get(username="PatriciaCAS")
         self.manager_client.patch(
             f"/users/{user_cas.pk}",
-            data={"username": "JesuisCASg", "is_validated_by_admin": True},
+            data={
+                "username": "JesuisCASg",
+                "email": "coincoincoing@zut.com",
+                "is_validated_by_admin": True,
+            },
             content_type="application/json",
         )
         user_cas = User.objects.get(username="PatriciaCAS")
         self.assertEqual(user_cas.is_validated_by_admin, True)
-        """
+        self.assertEqual(user_cas.email, "test@unistra.fr")
 
         user_manager = User.objects.get(email=self.manager_misc_user_name)
         response_manager = self.manager_client.patch(

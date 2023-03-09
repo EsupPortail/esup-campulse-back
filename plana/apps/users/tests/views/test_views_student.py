@@ -231,7 +231,7 @@ class UserViewsStudentTests(TestCase):
 
         - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
-        - A student president of an association can update secretary and treasurer.
+        - A student president of an association can update vice-president, secretary and treasurer.
         """
         association_id = 2
         asso_user = AssociationUsers.objects.get(
@@ -268,6 +268,8 @@ class UserViewsStudentTests(TestCase):
         self.assertTrue(asso_user.can_be_president)
         self.assertFalse(asso_user.is_president)
         self.assertTrue(asso_user.is_secretary)
+        self.assertFalse(asso_user.is_treasurer)
+        self.assertFalse(asso_user.is_vice_president)
 
         response_president = self.president_student_client.patch(
             f"/users/associations/{self.student_user_id}/{association_id}",
@@ -280,8 +282,26 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
-        self.assertTrue(asso_user.is_treasurer)
+        self.assertFalse(asso_user.is_president)
         self.assertFalse(asso_user.is_secretary)
+        self.assertTrue(asso_user.is_treasurer)
+        self.assertFalse(asso_user.is_vice_president)
+
+        response_president = self.president_student_client.patch(
+            f"/users/associations/{self.student_user_id}/{association_id}",
+            {
+                "is_vice_president": True,
+            },
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.student_user_id, association_id=association_id
+        )
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertFalse(asso_user.is_president)
+        self.assertFalse(asso_user.is_secretary)
+        self.assertFalse(asso_user.is_treasurer)
+        self.assertTrue(asso_user.is_vice_president)
 
         """
         old_president = AssociationUsers.objects.get(

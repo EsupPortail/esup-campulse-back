@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 10:16+0100\n"
+"POT-Creation-Date: 2023-03-09 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -664,49 +664,49 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:101
+#: plana/apps/users/views/association_users.py:100
 msgid "No user name or association id given."
 msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 
-#: plana/apps/users/views/association_users.py:107
+#: plana/apps/users/views/association_users.py:106
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:116
+#: plana/apps/users/views/association_users.py:115
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:122
+#: plana/apps/users/views/association_users.py:121
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:138
-#: plana/apps/users/views/association_users.py:263
+#: plana/apps/users/views/association_users.py:137
+#: plana/apps/users/views/association_users.py:261
 msgid "Only managers can validate associations for this account."
 msgstr ""
 "Seuls les gestionnaires peuvent valider les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:153
+#: plana/apps/users/views/association_users.py:152
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:166
+#: plana/apps/users/views/association_users.py:164
 msgid "Too many users in association."
 msgstr "Trop d'utilisateurs dans l'association."
 
-#: plana/apps/users/views/association_users.py:197
-#: plana/apps/users/views/association_users.py:361
+#: plana/apps/users/views/association_users.py:195
+#: plana/apps/users/views/association_users.py:359
 #: plana/apps/users/views/user.py:240 plana/apps/users/views/user.py:252
 #: plana/apps/users/views/user_groups_institutions_commissions.py:142
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/association_users.py:235
-#: plana/apps/users/views/association_users.py:351
+#: plana/apps/users/views/association_users.py:233
+#: plana/apps/users/views/association_users.py:349
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:245
+#: plana/apps/users/views/association_users.py:243
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 

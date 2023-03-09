@@ -7,6 +7,7 @@ from django.core import mail
 from django.test import Client, TestCase
 from rest_framework import status
 
+from plana.apps.associations.models.association import Association
 from plana.apps.users.models.user import AssociationUsers, User
 
 
@@ -120,6 +121,7 @@ class UserViewsAnonymousTests(TestCase):
         - An anonymous user cannot add a link between a validated user and an association.
         - An association cannot have two presidents.
         - An anonymous user cannot validate a link between a user and an association.
+        - An anonymous user cannot add a link if association is full.
         - An anonymous user can add a link between a non-validated user and an association.
         - A user cannot be added twice in the same association.
         - A non-existing user cannot be added in an association.
@@ -156,6 +158,21 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        association = Association.objects.get(id=5)
+        old_amount_members_allowed = association.amount_members_allowed
+        association.amount_members_allowed = 1
+        association.save()
+        response_anonymous = self.anonymous_client.post(
+            "/users/associations/",
+            {
+                "user": self.unvalidated_user_name,
+                "association": 5,
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        association.amount_members_allowed = old_amount_members_allowed
+        association.save()
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",

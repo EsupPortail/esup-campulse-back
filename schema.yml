@@ -579,7 +579,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationUsers'
+                  $ref: '#/components/schemas/AssociationUsersCreate'
           description: ''
     post:
       operationId: users_associations_create
