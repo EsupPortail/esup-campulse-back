@@ -1,6 +1,6 @@
 import os
-from setuptools import find_packages, setup
 
+from setuptools import find_packages, setup
 
 with open('README.md') as readme:
     long_description = readme.read()
@@ -15,8 +15,7 @@ def recursive_requirements(requirement_file, libs, links, path=''):
                 requirement_file = requirement.split()[1]
                 if not path:
                     path = requirement_file.rsplit('/', 1)[0]
-                recursive_requirements(requirement_file, libs, links,
-                                       path=path)
+                recursive_requirements(requirement_file, libs, links, path=path)
             elif requirement.startswith('-f'):
                 links.append(requirement.split()[1])
             elif requirement.startswith('-e'):
@@ -30,7 +29,7 @@ recursive_requirements('requirements.txt', libraries, dependency_links)
 
 setup(
     name='plana',
-    version='0.1.0',
+    version='0.1.20230309',
     packages=find_packages(),
     install_requires=libraries,
     dependency_links=dependency_links,
