@@ -123,7 +123,8 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             )
 
         if "is_validated_by_admin" in request.data and (
-            request.user.is_anonymous
+            to_bool(request.data["is_validated_by_admin"]) is True
+            and request.user.is_anonymous
             or (
                 not request.user.has_perm(
                     "users.change_associationusers_any_institution"
