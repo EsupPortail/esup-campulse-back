@@ -408,6 +408,17 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_student_delete_auth_user(self):
+        """
+        DELETE /users/auth/user/ .
+
+        - A user should be able to delete his own account.
+        """
+        response_student = self.student_client.delete("/users/auth/user/")
+        student_user_query = User.objects.filter(username=self.student_user_name)
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(student_user_query), 0)
+
     def test_student_get_consents_user_list(self):
         """
         GET /users/consents/ .
@@ -518,17 +529,6 @@ class UserViewsStudentTests(TestCase):
             f"/users/groups/{self.student_user_id}/6"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_student_delete_auth_user(self):
-        """
-        DELETE /users/auth/user/ .
-
-        - A user should be able to delete his own account.
-        """
-        response_student = self.student_client.delete("/users/auth/user/")
-        student_user_query = User.objects.filter(username=self.student_user_name)
-        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(student_user_query), 0)
 
 
 class UserAuthTests(TestCase):

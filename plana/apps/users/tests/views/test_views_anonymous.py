@@ -152,7 +152,6 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": self.unvalidated_user_name,
                 "association": 5,
-                "can_be_president": False,
                 "is_validated_by_admin": True,
             },
         )
@@ -163,7 +162,6 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": self.unvalidated_user_name,
                 "association": 5,
-                "can_be_president": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
@@ -173,7 +171,6 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": self.unvalidated_user_name,
                 "association": 5,
-                "can_be_president": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
@@ -183,7 +180,6 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": "george-luCAS",
                 "association": 2,
-                "can_be_president": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
@@ -193,7 +189,6 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": self.unvalidated_user_name,
                 "association": 99,
-                "can_be_president": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
@@ -413,6 +408,15 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_anonymous_delete_auth_user(self):
+        """
+        DELETE /users/auth/user/ .
+
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.client.delete("/users/auth/user/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_anonymous_get_self_consents_user_list(self):
         """
         GET /users/consents/ .
@@ -515,13 +519,4 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.client.delete(
             f"/users/groups/{self.unvalidated_user_id}/6"
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_student_delete_auth_user(self):
-        """
-        DELETE /users/auth/user/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.client.delete("/users/auth/user/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)

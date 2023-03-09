@@ -32,12 +32,12 @@ class AssociationUsersCreateSerializer(serializers.ModelSerializer):
         model = AssociationUsers
         fields = [
             "user",
+            "association",
             "is_president",
-            "can_be_president",
             "is_validated_by_admin",
+            "is_vice_president",
             "is_secretary",
             "is_treasurer",
-            "association",
         ]
 
 
@@ -49,9 +49,13 @@ class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
         fields = [
             "is_president",
             "can_be_president",
+            "can_be_president_from",
+            "can_be_president_to",
             "is_validated_by_admin",
+            "is_vice_president",
             "is_secretary",
             "is_treasurer",
+            "can_submit_projects",
         ]
 
 

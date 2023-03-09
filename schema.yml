@@ -219,6 +219,11 @@ paths:
       description: 'GET : Lists names of all associations.'
       parameters:
       - in: query
+        name: allow_new_users
+        schema:
+          type: boolean
+        description: Filter for associations where registration is possible.
+      - in: query
         name: institutions
         schema:
           type: string
@@ -574,7 +579,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationUsersCreate'
+                  $ref: '#/components/schemas/AssociationUsers'
           description: ''
     post:
       operationId: users_associations_create
@@ -1410,6 +1415,11 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        amount_members_allowed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of members allowed
         can_submit_projects:
           type: boolean
         charter_status:
@@ -1516,6 +1526,11 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        amount_members_allowed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of members allowed
         can_submit_projects:
           type: boolean
         charter_status:
@@ -1683,7 +1698,17 @@ components:
           type: boolean
         can_be_president:
           type: boolean
+        can_be_president_from:
+          type: string
+          format: date
+          nullable: true
+        can_be_president_to:
+          type: string
+          format: date
+          nullable: true
         is_validated_by_admin:
+          type: boolean
+        is_vice_president:
           type: boolean
         is_secretary:
           type: boolean
@@ -1701,18 +1726,18 @@ components:
       properties:
         user:
           type: string
+        association:
+          type: integer
         is_president:
           type: boolean
-        can_be_president:
-          type: boolean
         is_validated_by_admin:
+          type: boolean
+        is_vice_president:
           type: boolean
         is_secretary:
           type: boolean
         is_treasurer:
           type: boolean
-        association:
-          type: integer
       required:
       - association
       - user
@@ -1722,18 +1747,18 @@ components:
       properties:
         user:
           type: string
+        association:
+          type: integer
         is_president:
           type: boolean
-        can_be_president:
-          type: boolean
         is_validated_by_admin:
+          type: boolean
+        is_vice_president:
           type: boolean
         is_secretary:
           type: boolean
         is_treasurer:
           type: boolean
-        association:
-          type: integer
       required:
       - association
       - user
@@ -1745,11 +1770,23 @@ components:
           type: boolean
         can_be_president:
           type: boolean
+        can_be_president_from:
+          type: string
+          format: date
+          nullable: true
+        can_be_president_to:
+          type: string
+          format: date
+          nullable: true
         is_validated_by_admin:
+          type: boolean
+        is_vice_president:
           type: boolean
         is_secretary:
           type: boolean
         is_treasurer:
+          type: boolean
+        can_submit_projects:
           type: boolean
     CAS:
       type: object
@@ -1908,6 +1945,10 @@ components:
           items:
             type: string
             maxLength: 128
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
       required:
       - contact
       - id
@@ -2193,6 +2234,11 @@ components:
         is_site:
           type: boolean
           title: Site ?
+        amount_members_allowed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of members allowed
         can_submit_projects:
           type: boolean
         charter_status:
@@ -2223,11 +2269,23 @@ components:
           type: boolean
         can_be_president:
           type: boolean
+        can_be_president_from:
+          type: string
+          format: date
+          nullable: true
+        can_be_president_to:
+          type: string
+          format: date
+          nullable: true
         is_validated_by_admin:
+          type: boolean
+        is_vice_president:
           type: boolean
         is_secretary:
           type: boolean
         is_treasurer:
+          type: boolean
+        can_submit_projects:
           type: boolean
     PatchedUserRequest:
       type: object

@@ -367,15 +367,6 @@ class PasswordResetConfirm(generics.GenericAPIView):
 class UserAuthView(DJRestAuthUserDetailsView):
     """Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields."""
 
-    def delete(self, request, *args, **kwargs):
-        self.permission_classes = [IsAuthenticated]
-        try:
-            user = self.request.user
-            user.delete()
-            return response.Response({}, status=status.HTTP_200_OK)
-        except:
-            return response.Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
@@ -394,15 +385,13 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
 
-            """
-            # CAS users are auto-validated, uncomment this if it's not the case anymore.
             if request.user.is_validated_by_admin is False:
                 user_id = request.user.id
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}"
                 template = MailTemplate.objects.get(
-                    code="GENERAL_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
                 )
                 managers_emails = request.user.get_user_institutions().values_list(
                     "email"
@@ -415,7 +404,6 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
-            """
 
         user_response = self.partial_update(request, *args, **kwargs)
         new_user_email = user_response.data["email"]
@@ -432,6 +420,15 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 context=context,
             )
         return user_response
+
+    def delete(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
+        try:
+            user = self.request.user
+            user.delete()
+            return response.Response({}, status=status.HTTP_200_OK)
+        except:
+            return response.Response({}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):

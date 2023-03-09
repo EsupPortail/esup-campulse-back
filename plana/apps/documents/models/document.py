@@ -7,7 +7,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.storages import DynamicStorageFileField
+from plana.apps.institutions.models.institution import Institution
+
+# from plana.storages import DynamicStorageFileField
 
 
 def get_template_path(instance, filename):
@@ -30,7 +32,7 @@ def get_template_path(instance, filename):
 class Document(models.Model):
     """Main model."""
 
-    name = models.CharField(_("Name"), max_length=250, blank=False)
+    name = models.CharField(_("Name"), max_length=250, blank=False, unique=True)
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), blank=False)
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
@@ -47,6 +49,12 @@ class Document(models.Model):
     )
     """
     mime_types = ArrayField(base_field=models.CharField(max_length=128), default=list)
+    institution = models.ForeignKey(
+        Institution,
+        verbose_name=_("Institution"),
+        on_delete=models.RESTRICT,
+        null=True,
+    )
 
     def __str__(self):
         return f"{self.name}"

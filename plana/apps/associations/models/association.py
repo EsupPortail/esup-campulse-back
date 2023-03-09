@@ -56,6 +56,10 @@ class Association(models.Model):
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=False)
+    amount_members_allowed = models.IntegerField(
+        _("Amount of members allowed"),
+        default=settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED,
+    )
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     charter_status = models.CharField(
         _("Charter status"),
@@ -118,7 +122,7 @@ class Association(models.Model):
             ),
             (
                 "change_association_all_fields",
-                "Can change institution_id, is_enabled, is_site for an association.",
+                "Can change restricted fields for an association.",
             ),
             (
                 "delete_association_any_institution",

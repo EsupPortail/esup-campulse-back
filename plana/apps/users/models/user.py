@@ -1,4 +1,6 @@
 """Models describing users and most of its details."""
+import datetime
+
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group
@@ -22,9 +24,12 @@ class AssociationUsers(models.Model):
     )
     is_president = models.BooleanField(_("Is president"), default=False)
     can_be_president = models.BooleanField(_("Can be president"), default=False)
+    can_be_president_from = models.DateField(_("Can be president from"), null=True)
+    can_be_president_to = models.DateField(_("Can be president to"), null=True)
     is_validated_by_admin = models.BooleanField(
         _("Is validated by admin"), default=False
     )
+    is_vice_president = models.BooleanField(_("Is vice president"), default=False)
     is_secretary = models.BooleanField(_("Is secretary"), default=False)
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
@@ -178,8 +183,14 @@ class User(AbstractUser):
     def is_president_in_association(self, association_id):
         """Check if a user can write in an association."""
         try:
+            now = datetime.datetime.now()
             AssociationUsers.objects.filter(
-                models.Q(is_president=True) | models.Q(can_be_president=True)
+                models.Q(is_president=True)
+                | models.Q(
+                    can_be_president=True,
+                    can_be_president_from__gte=now,
+                    can_be_president_to__lte=now,
+                )
             ).get(
                 user_id=self.pk,
                 association_id=association_id,

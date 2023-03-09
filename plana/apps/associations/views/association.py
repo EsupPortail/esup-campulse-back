@@ -385,10 +385,12 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         else:
             for restricted_field in [
+                "can_submit_projects",
+                "charter_status",
+                "creation_date",
                 "institution_id",
                 "is_enabled",
                 "is_site",
-                "creation_date",
             ]:
                 request.data.pop(restricted_field, False)
 
@@ -487,6 +489,12 @@ class AssociationActivityFieldList(generics.ListAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter for associations shown in the public list.",
             ),
+            OpenApiParameter(
+                "allow_new_users",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations where registration is possible.",
+            ),
         ]
     )
 )
@@ -499,8 +507,26 @@ class AssociationNameList(generics.ListAPIView):
         queryset = Association.objects.all()
         institutions = self.request.query_params.get("institutions")
         is_public = self.request.query_params.get("is_public")
+        allow_new_users = self.request.query_params.get("allow_new_users")
         if institutions is not None and institutions != "":
             queryset = queryset.filter(institution_id__in=institutions.split(","))
         if is_public is not None and is_public != "":
             queryset = queryset.filter(is_public=to_bool(is_public))
+        if (
+            allow_new_users is not None
+            and allow_new_users != ""
+            and to_bool(allow_new_users) is True
+        ):
+            assos_ids_to_exclude = []
+            for association in queryset:
+                association_users = AssociationUsers.objects.filter(
+                    association_id=association.id
+                )
+                if (
+                    not association.amount_members_allowed is None
+                    and association_users.count() >= association.amount_members_allowed
+                ):
+                    assos_ids_to_exclude.append(association.id)
+            queryset = queryset.exclude(id__in=assos_ids_to_exclude)
+
         return queryset.order_by("name")

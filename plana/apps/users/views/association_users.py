@@ -79,6 +79,13 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             self.permission_classes = [AllowAny]
         return super().get_permissions()
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = AssociationUsersCreateSerializer
+        elif self.request.method == "GET":
+            self.serializer_class = AssociationUsersSerializer
+        return super().get_serializer_class()
+
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
@@ -89,6 +96,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             username = request.data["user"]
             association_id = request.data["association"]
             user = User.objects.get(username=username)
+            association = Association.objects.get(id=association_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No user name or association id given.")},
@@ -101,10 +109,10 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        association_users = AssociationUsers.objects.filter(
+        association_user = AssociationUsers.objects.filter(
             user_id=user.pk, association_id=association_id
         )
-        if association_users.count() > 0:
+        if association_user.count() > 0:
             return response.Response(
                 {"error": _("User already in association.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -147,12 +155,23 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+        association_users = AssociationUsers.objects.filter(
+            association_id=association_id
+        )
         if (
-            not request.user.is_anonymous
-            and not request.user.is_staff
-            and user.is_validated_by_admin
+            not association.amount_members_allowed is None
+            and association_users.count() >= association.amount_members_allowed
         ):
-            request.data["is_validated_by_admin"] = False
+            return response.Response(
+                {"error": _("Too many users in association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not request.user.is_anonymous and user.is_validated_by_admin:
+            if request.user.is_staff:
+                request.data["is_validated_by_admin"] = True
+            else:
+                request.data["is_validated_by_admin"] = False
 
         return super().create(request, *args, **kwargs)
 
@@ -252,7 +271,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             or request.user.is_staff_in_institution(kwargs["association_id"])
             or request.user.is_president_in_association(kwargs["association_id"])
         ):
-            if 'is_president' in request.data and to_bool(request.data['is_president']):
+            if "is_president" in request.data and to_bool(request.data["is_president"]):
                 """
                 if president:
                     actual_president = AssociationUsers.objects.get(
@@ -274,34 +293,45 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     except ObjectDoesNotExist:
                         pass
                     asso_user.is_president = True
+                    asso_user.is_vice_president = False
                     asso_user.is_secretary = False
                     asso_user.is_treasurer = False
                 else:
                     return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-            if 'is_president' in request.data and not to_bool(
-                request.data['is_president']
+            if "is_president" in request.data and not to_bool(
+                request.data["is_president"]
             ):
                 if president:
                     return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
                 if request.user.is_staff_in_institution(kwargs["association_id"]):
                     asso_user.is_president = False
 
-            if 'can_be_president' in request.data:
-                asso_user.can_be_president = to_bool(request.data['can_be_president'])
+            if "can_be_president" in request.data:
+                asso_user.can_be_president = to_bool(request.data["can_be_president"])
 
-            if 'is_secretary' in request.data:
-                is_secretary = to_bool(request.data['is_secretary'])
+            if "is_vice_president" in request.data:
+                is_vice_president = to_bool(request.data["is_vice_president"])
+                asso_user.is_vice_president = is_vice_president
+                if is_vice_president:
+                    asso_user.is_president = False
+                    asso_user.is_secretary = False
+                    asso_user.is_treasurer = False
+
+            if "is_secretary" in request.data:
+                is_secretary = to_bool(request.data["is_secretary"])
                 asso_user.is_secretary = is_secretary
                 if is_secretary:
                     asso_user.is_president = False
+                    asso_user.is_vice_president = False
                     asso_user.is_treasurer = False
 
-            if 'is_treasurer' in request.data:
-                is_treasurer = to_bool(request.data['is_treasurer'])
+            if "is_treasurer" in request.data:
+                is_treasurer = to_bool(request.data["is_treasurer"])
                 asso_user.is_treasurer = is_treasurer
                 if is_treasurer:
                     asso_user.is_president = False
+                    asso_user.is_vice_president = False
                     asso_user.is_secretary = False
 
             asso_user.save()
