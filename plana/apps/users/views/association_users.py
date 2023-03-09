@@ -34,6 +34,12 @@ from plana.utils import to_bool
                 OpenApiParameter.QUERY,
                 description="Filter by Institutions IDs.",
             ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
         ]
     )
 )
@@ -44,10 +50,19 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     POST : Creates a new link between a non-validated user and an association.
     """
 
-    serializer_class = AssociationUsersCreateSerializer
-
     def get_queryset(self):
-        if self.request.user.has_perm("users.view_associationusers_anyone"):
+        association_id = self.request.query_params.get("association_id")
+
+        if (
+            association_id is not None
+            and association_id != ""
+            and (
+                self.request.user.has_perm("users.view_associationusers_anyone")
+                or self.request.user.is_president_in_association(association_id)
+            )
+        ):
+            queryset = AssociationUsers.objects.filter(association_id=association_id)
+        elif self.request.user.has_perm("users.view_associationusers_anyone"):
             queryset = AssociationUsers.objects.all()
         else:
             queryset = AssociationUsers.objects.filter(user_id=self.request.user.pk)
@@ -82,12 +97,9 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == "POST":
             self.serializer_class = AssociationUsersCreateSerializer
+        elif self.request.method == "GET":
+            self.serializer_class = AssociationUsersSerializer
         return super().get_serializer_class()
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.serializer_class(queryset, many=True)
-        return response.Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         try:

@@ -55,7 +55,6 @@ class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
             "is_vice_president",
             "is_secretary",
             "is_treasurer",
-            "can_submit_projects",
         ]
 
 

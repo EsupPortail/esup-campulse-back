@@ -145,6 +145,15 @@ class UserViewsStudentTests(TestCase):
         content = json.loads(response_student.content.decode("utf-8"))
         self.assertEqual(len(content), associations_user_cnt)
 
+        response_president = self.president_student_client.get(
+            "/users/associations/?association_id=2"
+        )
+        associations_user_cnt = AssociationUsers.objects.filter(
+            association_id=2
+        ).count()
+        content = json.loads(response_president.content.decode("utf-8"))
+        self.assertEqual(len(content), associations_user_cnt)
+
     def test_student_post_association_user(self):
         """
         POST /users/associations/ .
