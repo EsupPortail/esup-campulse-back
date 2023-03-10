@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 
 # from plana.storages import DynamicStorageFileField
@@ -33,6 +34,7 @@ class Document(models.Model):
     """Main model."""
 
     name = models.CharField(_("Name"), max_length=250, blank=False, unique=True)
+    acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), blank=False)
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
@@ -54,6 +56,29 @@ class Document(models.Model):
         verbose_name=_("Institution"),
         on_delete=models.RESTRICT,
         null=True,
+    )
+    commission = models.ForeignKey(
+        Commission,
+        verbose_name=_("Commission"),
+        on_delete=models.RESTRICT,
+        null=True,
+    )
+    process_type = models.CharField(
+        _("Status"),
+        max_length=32,
+        choices=[
+            ("CHARTER_ASSOCIATION", _("Charter for Association")),
+            (
+                "CHARTER_ASSOCIATION_INSTITUTION",
+                _("Charter for Association Institution"),
+            ),
+            ("CHARTER_PROJECT_COMMISSION", _("Charter for Project Commission")),
+            ("DOCUMENT_ASSOCIATION", _("Document for Association")),
+            ("DOCUMENT_USER", _("Document for User")),
+            ("DOCUMENT_PROJECT", _("Document for Project")),
+            ("DOCUMENT_PROJECT_REVIEW", _("Document for Project Review")),
+        ],
+        default="DOCUMENT_PROCESSING",
     )
 
     def __str__(self):

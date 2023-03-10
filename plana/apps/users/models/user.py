@@ -32,7 +32,6 @@ class AssociationUsers(models.Model):
     is_vice_president = models.BooleanField(_("Is vice president"), default=False)
     is_secretary = models.BooleanField(_("Is secretary"), default=False)
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
-    can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
 
     def __str__(self):
         return f"{self.user}, {self.association}, office : {self.can_be_president}"
@@ -92,6 +91,7 @@ class User(AbstractUser):
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
     phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
+    can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     password_last_change_date = models.DateField(
         _("Password last change date"), null=True
     )
