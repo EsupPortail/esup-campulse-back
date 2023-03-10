@@ -380,7 +380,6 @@ class UserAuthView(DJRestAuthUserDetailsView):
         if "is_validated_by_admin" in request.data and not request.user.is_cas_user():
             request.data.pop("is_validated_by_admin", False)
         if request.user.is_cas_user():
-            request.data["is_validated_by_admin"] = True
             for restricted_field in ["email", "first_name", "last_name"]:
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
