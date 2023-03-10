@@ -2,7 +2,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import generics, status
+from rest_framework import filters, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -11,7 +11,7 @@ from plana.libs.api.accounts import Client
 from ..serializers.external import ExternalUserSerializer
 
 
-class ExternalUserRetrieve(generics.RetrieveAPIView):
+class ExternalUserRetrieve(generics.ListAPIView):
     """
     GET : Retrieve an external user
     """
@@ -22,7 +22,7 @@ class ExternalUserRetrieve(generics.RetrieveAPIView):
     @extend_schema(
         parameters=[
             OpenApiParameter(
-                "username",
+                "last_name",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 required=True,
@@ -31,15 +31,13 @@ class ExternalUserRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         try:
-            if username := self.request.query_params.get("username"):
-                if data := Client().get_user(username=username):
-                    serializer = self.get_serializer(data)
-                    return Response(serializer.data)
-                else:
-                    return Response(status=status.HTTP_404_NOT_FOUND)
+            if last_name := self.request.query_params.get("last_name"):
+                data = Client().list_users(last_name=last_name)
+                serializer = self.get_serializer(data, many=True)
+                return Response(serializer.data)
             else:
                 return Response(
-                    {"error": _("No username given.")},
+                    {"error": _("No last name given.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         except Exception as e:

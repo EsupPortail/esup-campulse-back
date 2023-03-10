@@ -3,6 +3,5 @@ from .base import BaseAccountsAPI
 
 
 class LdapAccountsAPI(BaseAccountsAPI, LdapClient):
-    @first_entry
-    def get_user(self, username):
-        return self.search(username=username)
+    def list_users(self, *args, **kwargs):
+        return self.search(**kwargs)
