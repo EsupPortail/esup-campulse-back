@@ -11,7 +11,9 @@ class DocumentsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "commissions_commission.json",
         "documents_document.json",
+        "institutions_institution.json",
     ]
 
     def setUp(self):
