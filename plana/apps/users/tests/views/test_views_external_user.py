@@ -39,38 +39,42 @@ class ExternalUserViewsTests(TestCase):
     @patch('plana.apps.users.views.external.Client')
     def test_external_user_detail_success(self, mock_client):
         mock_instance = mock_client.return_value
-        mock_instance.get_user.return_value = {
-            'first_name': 'John',
-            'last_name': 'Doe',
-            'mail': 'john.doe@mail.tld',
-        }
+        mock_instance.list_users.return_value = [
+            {
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'mail': 'john.doe@mail.tld',
+            }
+        ]
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'username': 'toto'}
+            reverse('external_user_retrieve'), {'last_name': 'doe'}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['mail'], 'john.doe@mail.tld')
+        self.assertEqual(response.data[0]['mail'], 'john.doe@mail.tld')
 
-    def test_external_user_detail_missing_username(self):
-        response = self.manager_client.get(reverse('external_user_retrieve'))
+    def test_external_user_detail_missing_last_name(self):
+        response = self.manager_client.get(
+            reverse('external_user_retrieve'), {'wrong': 'wrong'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @patch('plana.apps.users.views.external.Client')
     def test_external_user_detail_empty(self, mock_client):
         mock_instance = mock_client.return_value
-        mock_instance.get_user.return_value = {}
+        mock_instance.list_users.return_value = []
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'username': 'toto'}
+            reverse('external_user_retrieve'), {'last_name': 'toto'}
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data)
 
     @patch('plana.apps.users.views.external.Client', autospec=True)
     def test_external_user_detail_internal_error(self, mock_client):
         mock_instance = mock_client.return_value
-        mock_instance.get_user.side_effect = Exception('error')
+        mock_instance.list_users.side_effect = Exception('error')
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'username': 'toto'}
+            reverse('external_user_retrieve'), {'last_name': 'toto'}
         )
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)

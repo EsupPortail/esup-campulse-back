@@ -3,13 +3,14 @@ from .base import BaseAccountsAPI
 
 
 class SporeAccountsAPI(BaseAccountsAPI, SporeClient):
-    def get_user(self, username, *args, **kwargs):
+    def list_users(self, *args, **kwargs):
         @format_json
         @check_status('external_accounts')
-        def get_spore_user():
-            return self.get_client().get_user(username=username)
+        def list_spore_users():
+            params = {'establishment': 'uds'}
+            return self.get_client().list_accounts(**params, **kwargs)
 
         try:
-            return get_spore_user()
+            return list_spore_users()
         except WSError:
             return {}
