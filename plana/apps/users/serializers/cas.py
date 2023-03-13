@@ -3,12 +3,11 @@ from __future__ import annotations
 
 import typing
 
-from allauth.socialaccount.models import SocialLogin
+from allauth.socialaccount.models import EmailAddress, SocialLogin
 from allauth_cas.views import AuthAction
 from cas import CASClient, CASClientBase
 from dj_rest_auth.serializers import LoginSerializer
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -68,6 +67,12 @@ class CASSerializer(LoginSerializer):
         if not login.is_existing:
             try:
                 login.save(request, connect=True)
+                EmailAddress.objects.create(
+                    email=login.account.user.email,
+                    verified=True,
+                    primary=True,
+                    user_id=login.account.user.id,
+                )
                 attrs["user"] = login.account.user
             except IntegrityError:
                 ...

@@ -20,7 +20,11 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.user import UserPartialDataSerializer, UserSerializer
 from plana.libs.mail_template.models import MailTemplate
@@ -126,13 +130,21 @@ class UserListCreate(generics.ListCreateAPIView):
                         "user_id", flat=True
                     )
                 ).values_list("id", flat=True)
+                commission_users_query = User.objects.filter(
+                    id__in=GroupInstitutionCommissionUsers.objects.filter(
+                        commission_id__isnull=False
+                    ).values_list("user_id", flat=True)
+                ).values_list("id", flat=True)
                 if institutions == "":
-                    queryset = queryset.filter(id__in=misc_users_query)
+                    queryset = queryset.filter(
+                        models.Q(id__in=misc_users_query)
+                        | models.Q(id__in=commission_users_query)
+                    )
                 else:
                     institutions_ids = institutions.split(",")
-                    check_misc_users = False
+                    check_other_users = False
                     if "" in institutions_ids:
-                        check_misc_users = True
+                        check_other_users = True
                         del institutions_ids[institutions_ids.index("")]
 
                     associations_ids = Association.objects.filter(
@@ -142,10 +154,11 @@ class UserListCreate(generics.ListCreateAPIView):
                         association_id__in=associations_ids
                     ).values_list("user_id", flat=True)
 
-                    if check_misc_users is True:
+                    if check_other_users is True:
                         queryset = queryset.filter(
                             models.Q(id__in=assos_users_query)
                             | models.Q(id__in=misc_users_query)
+                            | models.Q(id__in=commission_users_query)
                         )
                     else:
                         queryset = queryset.filter(id__in=assos_users_query)
