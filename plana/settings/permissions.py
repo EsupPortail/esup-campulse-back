@@ -31,6 +31,7 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_anyone",
+        "delete_document",
     ],
     "MANAGER_INSTITUTION": [
         "add_association",
