@@ -2,6 +2,7 @@
 import json
 
 from django.test import Client, TestCase
+from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.documents.models.document import Document
@@ -14,11 +15,28 @@ class DocumentsViewsTests(TestCase):
         "commissions_commission.json",
         "documents_document.json",
         "institutions_institution.json",
+        "users_user.json",
+        "account_emailaddress.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "users_groupinstitutioncommissionusers.json",
     ]
 
     def setUp(self):
-        """Start a default client used on all tests."""
+        """Start a default anonymous client."""
         self.client = Client()
+        url_login = reverse("rest_login")
+
+        """ Start a manager general cliant used on a majority of tests. """
+        self.manager_general_user_id = 3
+        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        self.general_client = Client()
+        data_general = {
+            "username": self.manager_general_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.general_client.post(url_login, data_general)
 
     def test_get_documents_list(self):
         """
@@ -40,3 +58,69 @@ class DocumentsViewsTests(TestCase):
 
         document_1 = content[0]
         self.assertTrue(document_1.get("name"))
+
+    def test_get_document_by_id_anonymous(self):
+        """
+        GET /documents/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/documents/1")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_document_by_id(self):
+        """
+        GET /documents/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - Correct documents details are returned (test the "name" attribute).
+        """
+        document_id = 1
+        doc_test = Document.objects.get(id=document_id)
+        response = self.general_client.get(f"/documents/{document_id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        document = content
+        self.assertEqual(document["name"], doc_test.name)
+
+    def test_get_document_by_id_404(self):
+        """
+        GET /documents/{id} .
+
+        - The route returns a 404 if a wrong document id is given.
+        """
+        response = self.general_client.get("/documents/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_document_by_id_anonymous(self):
+        """
+        DELETE /documents/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.delete("/documents/1")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_delete_document_by_id(self):
+        """
+        DELETE /documents/{id} .
+
+        - The route can be accessed by an authenticated user with correct permissions.
+        - The document is correctly deleted.
+        """
+        document_id = 1
+        response = self.general_client.delete(f"/documents/{document_id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        doc_deleted = Document.objects.filter(id=document_id)
+        self.assertEqual(len(doc_deleted), 0)
+
+    def test_delete_document_by_id_404(self):
+        """
+        DELETE /documents/{id} .
+
+        - The route returns a 404 if a wrong document id is given.
+        """
+        response = self.general_client.delete("/documents/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

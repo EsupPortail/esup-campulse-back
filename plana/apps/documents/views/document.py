@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.serializers.document import DocumentSerializer
@@ -33,7 +33,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         if self.request.method in ("DELETE"):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
-            self.permission_classes = [AllowAny]
+            self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
@@ -54,7 +54,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No document id given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         # TODO: define proper permissions to delete a document type
