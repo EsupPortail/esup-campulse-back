@@ -16,7 +16,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import generics, response, status
+from rest_framework import exceptions, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -174,6 +174,15 @@ class UserListCreate(generics.ListCreateAPIView):
             "is_cas" in request.data and request.data["is_cas"] is False
         ):
             is_cas = False
+            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+                return response.Response(
+                    {
+                        "error": _(
+                            "This email address cannot be used for a local account."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             request.data.update({"username": request.data["email"]})
 
         request.data.update({"is_validated_by_admin": True})
@@ -282,6 +291,15 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ]:
                 request.data.pop(restricted_field, False)
         elif "email" in request.data:
+            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+                return response.Response(
+                    {
+                        "error": _(
+                            "This email address cannot be used for a local account."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             request.data.update({"username": request.data["email"]})
 
         if (
@@ -416,6 +434,17 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
+        elif "email" in request.data:
+            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+                return response.Response(
+                    {
+                        "error": _(
+                            "This email address cannot be used for a local account."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            request.data.update({"username": request.data["email"]})
 
         user_response = self.partial_update(request, *args, **kwargs)
         new_user_email = user_response.data["email"]

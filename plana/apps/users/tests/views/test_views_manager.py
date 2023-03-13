@@ -2,6 +2,7 @@
 import json
 
 from allauth.socialaccount.models import SocialAccount
+from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -153,12 +154,25 @@ class UserViewsManagerTests(TestCase):
         """
         POST /users/ .
 
+        - An account with a restricted mail cannot be created.
         - A manager user can execute this request.
         - The user has been created.
         - An email is received if creation is successful.
         - A CAS user can be created.
         """
         self.assertFalse(len(mail.outbox))
+
+        response_manager = self.manager_client.post(
+            "/users/",
+            {
+                "first_name": "Poin-Poin-Poin-Poin-Poin",
+                "last_name": "Vicetone",
+                "email": f"astronomia@{settings.RESTRICTED_DOMAINS[0]}",
+            },
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(len(mail.outbox))
+
         username = "bourvil@splatoon.com"
         response_manager = self.manager_client.post(
             "/users/",
@@ -183,6 +197,7 @@ class UserViewsManagerTests(TestCase):
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(len(mail.outbox))
 
         user = SocialAccount.objects.get(uid=username)
         self.assertEqual(user.uid, username)

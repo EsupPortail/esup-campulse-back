@@ -1,6 +1,7 @@
 """List of tests done on users views with a student user."""
 import json
 
+from django.conf import settings
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -415,6 +416,14 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
+        new_email = f"mon-esprit-est-mortadelle@{settings.RESTRICTED_DOMAINS[0]}"
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"email": new_email},
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+
         new_email = "cle-a-molette@ok-motors.com"
         response_student = self.student_client.patch(
             "/users/auth/user/",
@@ -424,7 +433,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
         student_user = User.objects.get(email=new_email)
         self.assertEqual(student_user.email, new_email)
-        self.assertEqual(student_user.username, self.student_user_name)
+        self.assertEqual(student_user.username, new_email)
 
     def test_student_put_auth_user_detail(self):
         """
