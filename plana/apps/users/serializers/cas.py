@@ -75,7 +75,7 @@ class CASSerializer(LoginSerializer):
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
             try:
-                GroupInstitutionCommissionUsers.objects.get(user_id=user.pk)
+                GroupInstitutionCommissionUsers.objects.filter(user_id=user.pk)
             except ObjectDoesNotExist as exc:
                 raise serializers.ValidationError(
                     _("Account registration must be completed.")
