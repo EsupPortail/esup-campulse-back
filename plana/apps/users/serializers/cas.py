@@ -74,12 +74,13 @@ class CASSerializer(LoginSerializer):
         else:
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
-            try:
-                GroupInstitutionCommissionUsers.objects.filter(user_id=user.pk)
-            except ObjectDoesNotExist as exc:
-                raise serializers.ValidationError(
+            if (
+                GroupInstitutionCommissionUsers.objects.filter(user_id=user.pk).count()
+                == 0
+            ):
+                raise exceptions.ValidationError(
                     _("Account registration must be completed.")
-                ) from exc
+                )
 
         return attrs
 
