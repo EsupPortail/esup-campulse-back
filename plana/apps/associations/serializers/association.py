@@ -101,6 +101,5 @@ class AssociationNameSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "has_president",
-            "amount_members_allowed",
             "institution",
         ]
