@@ -57,17 +57,13 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # TODO: define proper permissions to delete a document type
-        #        if not request.user.has_perm(
-        #            "associations.delete_association_any_institution"
-        #        ) and not request.user.is_staff_in_institution(association.institution):
-        #            return response.Response(
-        #                {
-        #                    "error": _(
-        #                        "Not allowed to delete an association for this institution."
-        #                    )
-        #                },
-        #                status=status.HTTP_403_FORBIDDEN,
-        #            )
+        # TODO: permissions for documents linked to a commission
+        if not request.user.has_perm(
+            "documents.delete_document_any_institution"
+        ) and not request.user.is_staff_in_institution(document.institution):
+            return response.Response(
+                {"error": _("Not allowed to delete a document for this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         return self.destroy(request, *args, **kwargs)
