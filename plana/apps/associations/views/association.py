@@ -385,6 +385,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         else:
             for restricted_field in [
+                "amount_members_allowed",
                 "can_submit_projects",
                 "charter_status",
                 "creation_date",

@@ -97,4 +97,10 @@ class AssociationNameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Association
-        fields = ["id", "name", "has_president", "institution"]
+        fields = [
+            "id",
+            "name",
+            "has_president",
+            "amount_members_allowed",
+            "institution",
+        ]
