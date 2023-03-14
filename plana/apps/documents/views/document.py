@@ -9,14 +9,32 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.serializers.document import DocumentSerializer
 
 
-class DocumentList(generics.ListAPIView):
-    """Lists all Documents."""
+class DocumentList(generics.ListCreateAPIView):
+    """
+    GET : Lists all Documents types.
+
+    POST : Creates a new Document type.
+    """
 
     serializer_class = DocumentSerializer
 
     def get_queryset(self):
         """GET : Lists all documents."""
         return Document.objects.all()
+
+    # TODO: add permission add_document_any_institution + unittests
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm("documents.add_document"):
+            return response.Response(
+                {"error": _("Not allowed to add a new document type.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        elif request.user.get_user_institutions().count() == 1:
+            request.data["institution"] = (
+                request.user.get_user_institutions().first().id
+            )
+
+        return super().create(request, *args, **kwargs)
 
 
 class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
