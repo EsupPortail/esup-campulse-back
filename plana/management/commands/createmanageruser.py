@@ -23,6 +23,7 @@ class Command(BaseCommand):
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
+        parser.add_argument("--password", help="Password.")
         parser.add_argument(
             "--group",
             help="Group codename.",
@@ -40,7 +41,10 @@ class Command(BaseCommand):
             user = get_user_model().objects.create_user(
                 username=options["email"], email=options["email"]
             )
-            password = get_user_model().objects.make_random_password()
+            if options["password"] is None:
+                password = get_user_model().objects.make_random_password()
+            else:
+                password = options["password"]
             user.set_password(password)
             user.password_last_change_date = datetime.datetime.today()
             user.first_name = options["firstname"]
