@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-15 09:02+0100\n"
+"POT-Creation-Date: 2023-03-15 09:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -346,7 +346,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:18
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:58
-#: plana/apps/users/models/user.py:221
+#: plana/apps/users/models/user.py:231
 msgid "User"
 msgstr "Utilisateur"
 
@@ -385,10 +385,18 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:45
-#: plana/apps/documents/views/document.py:56
+#: plana/apps/documents/views/document.py:29
+msgid "Not allowed to add a new document type."
+msgstr "Non autorisé de créer un nouveau type de document."
+
+#: plana/apps/documents/views/document.py:63
+#: plana/apps/documents/views/document.py:74
 msgid "No document id given."
 msgstr "Pas d'identifiant de document donné."
+
+#: plana/apps/documents/views/document.py:83
+msgid "Not allowed to delete a document for this institution."
+msgstr "Non autorisé à supprimer un document pour cet établissement."
 
 #: plana/apps/institutions/models/institution.py:18
 msgid "Institutions"
@@ -661,7 +669,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:222
+#: plana/apps/users/models/user.py:232
 msgid "Users"
 msgstr "Utilisateurs"
 
