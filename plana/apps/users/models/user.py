@@ -217,6 +217,16 @@ class User(AbstractUser):
                 return False
         return False
 
+    def is_member_in_commission(self, commission_id):
+        """Check if a user is linked as member to a commission."""
+        try:
+            GroupInstitutionCommissionUsers.objects.get(
+                user_id=self.pk, commission_id=commission_id
+            )
+            return True
+        except ObjectDoesNotExist:
+            return False
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")

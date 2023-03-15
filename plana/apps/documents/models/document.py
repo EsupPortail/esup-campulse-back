@@ -87,3 +87,9 @@ class Document(models.Model):
     class Meta:
         verbose_name = _("Document")
         verbose_name_plural = _("Documents")
+        permissions = [
+            (
+                "delete_document_any_institution",
+                "Can delete documents linked to any institution.",
+            )
+        ]

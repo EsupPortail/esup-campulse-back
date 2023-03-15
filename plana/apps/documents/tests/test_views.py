@@ -28,7 +28,7 @@ class DocumentsViewsTests(TestCase):
         self.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general cliant used on a majority of tests. """
+        """ Start a manager general client used on a majority of tests. """
         self.manager_general_user_id = 3
         self.manager_general_user_name = "gestionnaire-svu@mail.tld"
         self.general_client = Client()
@@ -37,6 +37,16 @@ class DocumentsViewsTests(TestCase):
             "password": "motdepasse",
         }
         self.response = self.general_client.post(url_login, data_general)
+
+        """ Start a manager institution client used on some permissions tests. """
+        self.manager_institution_user_id = 3
+        self.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        self.institution_client = Client()
+        data_institution = {
+            "username": self.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.institution_client.post(url_login, data_institution)
 
     def test_get_documents_list(self):
         """
@@ -115,6 +125,16 @@ class DocumentsViewsTests(TestCase):
 
         doc_deleted = Document.objects.filter(id=document_id)
         self.assertEqual(len(doc_deleted), 0)
+
+    def test_delete_document_by_id_forbidden_institution(self):
+        """
+        DELETE /documents/{id} .
+
+        - A document linked to an institution cannot be deleted by a user who's not linked to the same institution.
+        """
+        document_id = 1
+        response = self.institution_client.delete(f"/documents/{document_id}")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_document_by_id_404(self):
         """
