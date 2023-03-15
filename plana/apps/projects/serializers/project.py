@@ -24,4 +24,10 @@ class ProjectSerializer(serializers.ModelSerializer):
             "user",
             "association",
             "categories",
+            "target_audience",
+            "type_target_audience",
+            "amount_target_audience",
+            "amount_students_target_audience",
+            "ticket_price",
+            "individual_cost",
         ]

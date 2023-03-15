@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import User
 
 
@@ -84,6 +85,16 @@ class Project(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    #    def is_first_edition(self):
+    #        """Check if a project is a first edition or not."""
+    #        try:
+    #            projects = ProjectCommissionDate.objects.filter(
+    #                project_id=self.pk,
+    #            )
+    #            return True if len(projects.values()) == 0 else False
+    #        except ObjectDoesNotExist:
+    #            return True
 
     class Meta:
         verbose_name = _("Project")
