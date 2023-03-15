@@ -45,6 +45,33 @@ class ProjectsViewsTests(TestCase):
         }
         self.response = self.general_client.post(url_login, data_general)
 
+    def test_post_project_anonymous(self):
+        """
+        POST /projects/ .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.post("/projects/", {"name": "Testing anonymous"})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_post_project(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user with correct permissions.
+        - Project is created in database.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "goals": "Goals",
+            "location": "address",
+        }
+        response = self.general_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        results = Project.objects.filter(name="Testing creation")
+        self.assertEqual(len(results), 1)
+
     def test_get_project_by_id_anonymous(self):
         """
         GET /projects/{id} .
