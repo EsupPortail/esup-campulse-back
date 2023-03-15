@@ -54,4 +54,5 @@ class ProjectSerializer(serializers.ModelSerializer):
             "planned_activities",
             "prevention_safety",
             "marketing_campaign",
+            "status",
         ]
