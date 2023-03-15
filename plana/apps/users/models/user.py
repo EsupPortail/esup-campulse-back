@@ -188,6 +188,11 @@ class User(AbstractUser):
                 models.Q(is_president=True)
                 | models.Q(
                     can_be_president=True,
+                    can_be_president_from__isnull=True,
+                    can_be_president_to__isnull=True,
+                )
+                | models.Q(
+                    can_be_president=True,
                     can_be_president_from__gte=now,
                     can_be_president_to__lte=now,
                 )

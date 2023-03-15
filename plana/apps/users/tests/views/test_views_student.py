@@ -241,6 +241,7 @@ class UserViewsStudentTests(TestCase):
 
         - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
+        - A can_be_president of an association cannot PATCH can_be_president.
         - A student president of an association can update vice-president, secretary and treasurer.
         """
         association_id = 2
@@ -280,6 +281,19 @@ class UserViewsStudentTests(TestCase):
         self.assertTrue(asso_user.is_secretary)
         self.assertFalse(asso_user.is_treasurer)
         self.assertFalse(asso_user.is_vice_president)
+
+        response_student = self.student_client.patch(
+            f"/users/associations/{self.unvalidated_user_id}/{association_id}",
+            {
+                "can_be_president": True,
+            },
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.unvalidated_user_id, association_id=association_id
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(asso_user.can_be_president)
 
         response_president = self.president_student_client.patch(
             f"/users/associations/{self.student_user_id}/{association_id}",

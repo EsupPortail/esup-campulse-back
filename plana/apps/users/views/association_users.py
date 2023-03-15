@@ -308,18 +308,34 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     asso_user.is_secretary = False
                     asso_user.is_treasurer = False
                 else:
-                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return response.Response(
+                        {"error": _("Only managers can edit president.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
             if "is_president" in request.data and not to_bool(
                 request.data["is_president"]
             ):
                 if president:
-                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return response.Response(
+                        {"error": _("President cannot self-edit.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
                 if request.user.is_staff_in_institution(kwargs["association_id"]):
                     asso_user.is_president = False
 
             if "can_be_president" in request.data:
-                asso_user.can_be_president = to_bool(request.data["can_be_president"])
+                if president or request.user.is_staff_in_institution(
+                    kwargs["association_id"]
+                ):
+                    asso_user.can_be_president = to_bool(
+                        request.data["can_be_president"]
+                    )
+                else:
+                    return response.Response(
+                        {"error": _("Can't give can_be_president to another user.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
             if "is_vice_president" in request.data:
                 is_vice_president = to_bool(request.data["is_vice_president"])
@@ -348,7 +364,10 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             asso_user.save()
             return response.Response({}, status=status.HTTP_200_OK)
 
-        return response.Response({}, status=status.HTTP_403_FORBIDDEN)
+        return response.Response(
+            {"error": _("No edition rights on this link.")},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     def delete(self, request, *args, **kwargs):
         try:

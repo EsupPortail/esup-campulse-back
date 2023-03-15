@@ -319,6 +319,51 @@ paths:
                 items:
                   $ref: '#/components/schemas/Document'
           description: ''
+  /documents/{id}:
+    get:
+      operationId: documents_retrieve
+      description: |-
+        GET : Lists a document type with all its details.
+
+        DELETE : Removes an entire document type.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+    delete:
+      operationId: documents_destroy
+      description: |-
+        GET : Lists a document type with all its details.
+
+        DELETE : Removes an entire document type.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /groups/:
     get:
       operationId: groups_list
@@ -558,6 +603,11 @@ paths:
         POST : Creates a new link between a non-validated user and an association.
       parameters:
       - in: query
+        name: association_id
+        schema:
+          type: integer
+        description: Filter by Association ID.
+      - in: query
         name: institutions
         schema:
           type: string
@@ -579,7 +629,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationUsersCreate'
+                  $ref: '#/components/schemas/AssociationUsers'
           description: ''
     post:
       operationId: users_associations_create
@@ -1211,11 +1261,11 @@ paths:
           description: ''
   /users/external/:
     get:
-      operationId: users_external_retrieve
+      operationId: users_external_list
       description: 'GET : Retrieve an external user'
       parameters:
       - in: query
-        name: username
+        name: last_name
         schema:
           type: string
         required: true
@@ -1229,7 +1279,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalUser'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalUser'
           description: ''
   /users/groups/:
     get:
@@ -1714,8 +1766,6 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-        can_submit_projects:
-          type: boolean
       required:
       - association
       - id
@@ -1785,8 +1835,6 @@ components:
         is_secretary:
           type: boolean
         is_treasurer:
-          type: boolean
-        can_submit_projects:
           type: boolean
     CAS:
       type: object
@@ -1930,6 +1978,9 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
         description:
           type: string
         contact:
@@ -1945,10 +1996,17 @@ components:
           items:
             type: string
             maxLength: 128
+        process_type:
+          allOf:
+          - $ref: '#/components/schemas/ProcessTypeEnum'
+          title: État
         institution:
           type: integer
           nullable: true
           title: Etablissement
+        commission:
+          type: integer
+          nullable: true
       required:
       - contact
       - id
@@ -2285,8 +2343,6 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-        can_submit_projects:
-          type: boolean
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -2318,6 +2374,16 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
+    ProcessTypeEnum:
+      enum:
+      - CHARTER_ASSOCIATION
+      - CHARTER_ASSOCIATION_INSTITUTION
+      - CHARTER_PROJECT_COMMISSION
+      - DOCUMENT_ASSOCIATION
+      - DOCUMENT_USER
+      - DOCUMENT_PROJECT
+      - DOCUMENT_PROJECT_REVIEW
+      type: string
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -2474,6 +2540,13 @@ components:
       type: object
       description: Used to get data from another student in the same associations.
       properties:
+        username:
+          type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
         first_name:
           type: string
           maxLength: 150
@@ -2486,10 +2559,19 @@ components:
       required:
       - first_name
       - last_name
+      - username
     UserPartialDataRequest:
       type: object
       description: Used to get data from another student in the same associations.
       properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
         first_name:
           type: string
           minLength: 1
@@ -2504,6 +2586,7 @@ components:
       required:
       - first_name
       - last_name
+      - username
     VerifyEmailRequest:
       type: object
       properties:

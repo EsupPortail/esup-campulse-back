@@ -55,7 +55,8 @@ class ExternalUserViewsTests(TestCase):
 
     def test_external_user_detail_missing_last_name(self):
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'wrong': 'wrong'})
+            reverse('external_user_retrieve'), {'wrong': 'wrong'}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @patch('plana.apps.users.views.external.Client')
