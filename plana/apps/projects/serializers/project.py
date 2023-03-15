@@ -30,4 +30,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             "amount_students_target_audience",
             "ticket_price",
             "individual_cost",
+            "goals",
+            "summary",
+            "planned_activities",
+            "prevention_safety",
+            "marketing_campaign",
         ]
