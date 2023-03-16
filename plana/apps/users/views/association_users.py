@@ -1,5 +1,7 @@
 """Views linked to links between users and associations."""
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -9,14 +11,19 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreateSerializer,
     AssociationUsersDeleteSerializer,
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
-from plana.utils import to_bool
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
@@ -372,7 +379,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         try:
             association = Association.objects.get(id=kwargs["association_id"])
-            request.data["user"] = User.objects.get(id=kwargs["user_id"]).id
+            user = User.objects.get(id=kwargs["user_id"])
+            request.data["user"] = user.id
             request.data["association"] = association.id
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -395,4 +403,27 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         AssociationUsers.objects.filter(
             user_id=kwargs["user_id"], association_id=kwargs["association_id"]
         ).delete()
+        if (
+            AssociationUsers.objects.filter(user_id=kwargs["user_id"]).count() < 1
+            and GroupInstitutionCommissionUsers.objects.filter(
+                user_id=kwargs["user_id"]
+            ).count()
+            == 1
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+            user.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
