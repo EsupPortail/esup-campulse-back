@@ -56,3 +56,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             "marketing_campaign",
             "status",
         ]
+
+
+class ProjectPartialDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["name", "association", "user", "edition_date", "status"]

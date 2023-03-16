@@ -8,7 +8,10 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.serializers.project import ProjectSerializer
+from plana.apps.projects.serializers.project import (
+    ProjectPartialDataSerializer,
+    ProjectSerializer,
+)
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -19,10 +22,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
     """
 
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
-    # TODO: add filters to get projects + add a lighter serializer with mandatory informations
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = ProjectSerializer
+        else:
+            self.serializer_class = ProjectPartialDataSerializer
+        return super().get_serializer_class()
+
+    # TODO: add filters to get projects
 
     # TODO: add proper permissions
     def post(self, request, *args, **kwargs):
