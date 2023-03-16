@@ -24,3 +24,4 @@ class ExternalUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     mail = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
