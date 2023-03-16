@@ -60,12 +60,6 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if user.is_superuser or user.is_staff:
-            return response.Response(
-                {"error": _("Groups for a manager cannot be changed.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if (
             not request.user.is_anonymous
             and not request.user.is_staff
@@ -73,6 +67,14 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         ):
             return response.Response(
                 {"error": _("Only managers can edit groups.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (user.is_superuser or user.is_staff) and not request.user.has_perm(
+            "users.add_groupinstitutioncommissionusers_any_group"
+        ):
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -103,7 +105,9 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         """
         try:
             group = Group.objects.get(pk=group_id)
-            if group.name in settings.PUBLIC_GROUPS:
+            if group.name in settings.PUBLIC_GROUPS or request.user.has_perm(
+                "users.add_groupinstitutioncommissionusers_any_group"
+            ):
                 GroupInstitutionCommissionUsers.objects.create(
                     user_id=user.pk, group_id=group_id, institution_id=None
                 )

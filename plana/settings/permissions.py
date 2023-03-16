@@ -28,6 +28,7 @@ PERMISSIONS_GROUPS = {
         "delete_associationusers_any_institution",
         "view_associationusers",
         "view_associationusers_anyone",
+        "add_groupinstitutioncommissionusers_any_group",
         "delete_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_anyone",

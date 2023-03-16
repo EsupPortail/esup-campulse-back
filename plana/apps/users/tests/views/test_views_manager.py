@@ -622,12 +622,11 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_post_group_user(self):
         """
-        POST /users/group/ .
+        POST /users/groups/ .
 
         - A manager user can add a group to a validated student.
-        - A manager user cannot add a restricted group to a student.
         - A manager user can add a group to a non-validated student.
-        - Groups for a manager cannot be changed.
+        - Groups for a manager can be changed.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
@@ -643,15 +642,9 @@ class UserViewsManagerTests(TestCase):
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 1},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_manager = self.manager_client.post(
-            "/users/groups/",
             {"username": self.manager_general_user_name, "group": 6},
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
     def test_manager_get_user_groups_detail(self):
         """
