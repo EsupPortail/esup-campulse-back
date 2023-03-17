@@ -36,14 +36,14 @@ class AccountExpirationCommandTest(TestCase):
         self.assertTrue(User.objects.filter(pk=self.superuser.pk).exists())
 
     def test_account_without_connection_expiration_mail(self):
-        self.user.date_joined = timezone.now() - datetime.timedelta(days=(2 * 365 - 31))
+        self.user.date_joined = timezone.now() - datetime.timedelta(days=(365 - 31))
         self.user.save()
         call_command('account_expiration')
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
 
     def test_account_without_recent_connection_expiration_mail(self):
-        self.user.last_login = timezone.now() - datetime.timedelta(days=(2 * 365 - 31))
+        self.user.last_login = timezone.now() - datetime.timedelta(days=(365 - 31))
         self.user.save()
         call_command('account_expiration')
         self.assertEqual(len(mail.outbox), 1)
