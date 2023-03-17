@@ -19,6 +19,7 @@ class ProjectsViewsTests(TestCase):
         "commissions_commission.json",
         "commissions_commissiondate.json",
         "associations_association.json",
+        "users_associationusers.json",
         "associations_activityfield.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -44,6 +45,40 @@ class ProjectsViewsTests(TestCase):
             "password": "motdepasse",
         }
         self.response = self.general_client.post(url_login, data_general)
+
+        """ Start a user member of an association that cannot submit personal or association projects. """
+        self.student_offsite_user_id = 10
+        self.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
+        self.student_offsite_client = Client()
+        data_student_offsite = {
+            "username": self.student_offsite_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_offsite_client.post(
+            url_login, data_student_offsite
+        )
+
+        """ Start a user member of an association that can submit projects. """
+        self.student_site_user_id = 11
+        self.student_site_user_name = "etudiant-asso-site@mail.tld"
+        self.student_site_client = Client()
+        data_student_site = {
+            "username": self.student_site_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_site_client.post(url_login, data_student_site)
+
+        """ Start a user president of an association that can submit projects. """
+        self.student_president_user_id = 13
+        self.student_president_user_name = "president-asso-site@mail.tld"
+        self.student_president_client = Client()
+        data_student_president = {
+            "username": self.student_president_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_president_client.post(
+            url_login, data_student_president
+        )
 
     def test_post_project_anonymous(self):
         """
@@ -79,23 +114,78 @@ class ProjectsViewsTests(TestCase):
         response = self.general_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    #    def test_post_project(self):
-    #        """
-    #        POST /projects/ .
-    #
-    #        - The route can be accessed by any authenticated user with correct permissions.
-    #        - Project is created in database.
-    #        """
-    #        project_data = {
-    #            "name": "Testing creation",
-    #            "goals": "Goals",
-    #            "location": "address",
-    #        }
-    #        response = self.general_client.post("/projects/", project_data)
-    #        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #
-    #        results = Project.objects.filter(name="Testing creation")
-    #        self.assertEqual(len(results), 1)
+    def test_post_project_forbidden_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - User must have 'can_submit_projects' attribute set to True to sumbit a project.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "goals": "Goals",
+            "location": "address",
+            "user": 10,
+        }
+        response = self.student_offsite_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_forbidden_association(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - Association must have 'can_submit_associations' attribute set to True to submit projects.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "goals": "Goals",
+            "location": "address",
+            "association": 3,
+        }
+        response = self.student_offsite_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_forbidden_association_role(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be a member of the association to create projects related to it.
+        - User must be president or delegated president of its association to submit projects.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "goals": "Goals",
+            "location": "address",
+            "association": 1,
+        }
+        response = self.student_site_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        project_data["association"] = 2
+        response = self.student_site_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_success(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - To create a project for an association, the authenticated user must be president.
+        - Project is created in database.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "goals": "Goals",
+            "location": "address",
+            "association": 2,
+        }
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        results = Project.objects.filter(name="Testing creation")
+        self.assertEqual(len(results), 1)
 
     def test_get_project_by_id_anonymous(self):
         """

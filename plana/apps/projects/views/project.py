@@ -35,7 +35,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     # TODO: add filters to get projects
 
-    # TODO: add unittests and make some permissions adjustments
     def post(self, request, *args, **kwargs):
         if (
             "association" in request.data
