@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 15:56+0100\n"
+"POT-Creation-Date: 2023-03-17 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -744,7 +744,8 @@ msgstr "Non autorisé à ajouter une association de cet établissement."
 
 #: plana/apps/users/views/association_users.py:227
 #: plana/apps/users/views/association_users.py:423
-#: plana/apps/users/views/user.py:264 plana/apps/users/views/user.py:276
+#: plana/apps/users/views/external.py:37 plana/apps/users/views/user.py:264
+#: plana/apps/users/views/user.py:276
 #: plana/apps/users/views/user_groups_institutions_commissions.py:201
 msgid "Bad request."
 msgstr "Erreur de requête."
@@ -778,7 +779,7 @@ msgstr "Impossible d'attribuer les droits de président à un autre utilisateur.
 msgid "No edition rights on this link."
 msgstr "Aucun droit d'éditer ce lien entre association et utilisateur."
 
-#: plana/apps/users/views/external.py:40
+#: plana/apps/users/views/external.py:48
 msgid "No last name given."
 msgstr "Aucun nom de famille donné."
 

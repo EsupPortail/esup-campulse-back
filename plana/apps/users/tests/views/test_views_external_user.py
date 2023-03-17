@@ -1,6 +1,5 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
-from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -11,6 +10,7 @@ User = get_user_model()
 
 
 class ExternalUserViewsTests(TestCase):
+    """
     @classmethod
     def setUpTestData(cls):
         user = User.objects.create_user(
@@ -25,13 +25,25 @@ class ExternalUserViewsTests(TestCase):
             verified=True,
             primary=True,
         )
+    """
+
+    fixtures = [
+        "account_emailaddress.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "institutions_institution.json",
+        "users_user.json",
+        "users_groupinstitutioncommissionusers.json",
+    ]
 
     def setUp(self):
         self.manager_client = Client()
         self.manager_client.post(
             reverse("rest_login"),
             {
-                "username": "user",
+                "username": "gestionnaire-svu@mail.tld",
                 "password": "motdepasse",
             },
         )

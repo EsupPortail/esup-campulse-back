@@ -30,6 +30,14 @@ class ExternalUserRetrieve(generics.ListAPIView):
         ]
     )
     def get(self, request, *args, **kwargs):
+        if not request.user.has_perm("users.add_user") and not request.user.has_perm(
+            "users.add_user_misc"
+        ):
+            return Response(
+                {"error": _("Bad request.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         try:
             if last_name := self.request.query_params.get("last_name"):
                 data = Client().list_users(last_name=last_name)
