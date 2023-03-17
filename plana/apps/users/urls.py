@@ -19,6 +19,7 @@ from .views.user import (
 )
 from .views.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsDestroy,
+    UserGroupsInstitutionsCommissionsDestroyWithCommission,
     UserGroupsInstitutionsCommissionsListCreate,
     UserGroupsInstitutionsCommissionsRetrieve,
 )
@@ -78,6 +79,11 @@ urlpatterns = [
         "groups/<int:user_id>/<int:group_id>",
         UserGroupsInstitutionsCommissionsDestroy.as_view(),
         name="user_groups_institutions_commissions_destroy",
+    ),
+    path(
+        "groups/<int:user_id>/<int:group_id>/<int:commission_id>",
+        UserGroupsInstitutionsCommissionsDestroyWithCommission.as_view(),
+        name="user_groups_institutions_commissions_destroy_with_commission",
     ),
     path(
         "external/",

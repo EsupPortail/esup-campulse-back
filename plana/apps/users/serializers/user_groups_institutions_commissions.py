@@ -2,6 +2,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
 
@@ -13,6 +14,9 @@ class UserGroupsInstitutionsCommissionsSerializer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
+    )
+    commission = serializers.PrimaryKeyRelatedField(
+        queryset=Commission.objects.all(), allow_null=True, required=False
     )
 
     class Meta:
@@ -30,7 +34,10 @@ class UserGroupsInstitutionsCommissionsCreateSerializer(serializers.ModelSeriali
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
+    commission = serializers.PrimaryKeyRelatedField(
+        queryset=Commission.objects.all(), allow_null=True, required=False
+    )
 
     class Meta:
         model = GroupInstitutionCommissionUsers
-        fields = ["user", "group", "institution"]
+        fields = ["user", "group", "institution", "commission"]

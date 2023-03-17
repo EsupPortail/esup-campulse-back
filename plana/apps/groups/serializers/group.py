@@ -19,7 +19,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     def is_public_group(self, group) -> bool:
         """Is true if the group can be selected on normal registration."""
-        return group.name in settings.PUBLIC_GROUPS
+        return settings.GROUPS_STRUCTURE[group.name]["REGISTRATION_ALLOWED"]
 
     class Meta:
         model = Group
