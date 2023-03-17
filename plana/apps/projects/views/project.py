@@ -67,7 +67,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
             "user" in request.data
             and request.data["user"] != None
             and request.data["user"] != ""
-            and not request.user.can_submit_projects
+            and (
+                not request.user.can_submit_projects
+                or int(request.data["user"]) != request.user.pk
+            )
         ):
             return response.Response(
                 {"error": _("Not allowed to create a new project.")},

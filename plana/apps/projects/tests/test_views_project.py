@@ -120,6 +120,7 @@ class ProjectsViewsTests(TestCase):
 
         - The route can be accessed by any authenticated user.
         - User must have 'can_submit_projects' attribute set to True to sumbit a project.
+        - User in the request must be the authenticated user.
         """
         project_data = {
             "name": "Testing creation",
@@ -128,6 +129,10 @@ class ProjectsViewsTests(TestCase):
             "user": 10,
         }
         response = self.student_offsite_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        project_data["user"] = 999
+        response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_forbidden_association(self):
@@ -167,7 +172,7 @@ class ProjectsViewsTests(TestCase):
         response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_success(self):
+    def test_post_project_association_success(self):
         """
         POST /projects/ .
 
@@ -176,7 +181,7 @@ class ProjectsViewsTests(TestCase):
         - Project is created in database.
         """
         project_data = {
-            "name": "Testing creation",
+            "name": "Testing creation association",
             "goals": "Goals",
             "location": "address",
             "association": 2,
@@ -184,7 +189,27 @@ class ProjectsViewsTests(TestCase):
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        results = Project.objects.filter(name="Testing creation")
+        results = Project.objects.filter(name="Testing creation association")
+        self.assertEqual(len(results), 1)
+
+    def test_post_project_user_success(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - The user in the request must be the authenticated user.
+        - Project is created in database.
+        """
+        project_data = {
+            "name": "Testing creation user",
+            "goals": "Goals",
+            "location": "address",
+            "user": 11,
+        }
+        response = self.student_site_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        results = Project.objects.filter(name="Testing creation user")
         self.assertEqual(len(results), 1)
 
     def test_get_project_by_id_anonymous(self):
