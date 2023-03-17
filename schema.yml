@@ -1805,7 +1805,7 @@ components:
           type: integer
           readOnly: true
         user:
-          type: string
+          $ref: '#/components/schemas/UserPartialData'
         association:
           $ref: '#/components/schemas/AssociationMandatoryData'
         is_president:
@@ -2655,6 +2655,9 @@ components:
       type: object
       description: Used to get data from another student in the same associations.
       properties:
+        id:
+          type: integer
+          readOnly: true
         username:
           type: string
           title: Nom d’utilisateur
@@ -2673,6 +2676,7 @@ components:
           title: Is validated by administrator
       required:
       - first_name
+      - id
       - last_name
       - username
     UserPartialDataRequest:

@@ -586,32 +586,32 @@ ACCOUNTS_API_CONF = {}
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
         "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_ALLOWED": True,
-        "COMMISSION_ID_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
     },
     "MANAGER_INSTITUTION": {
         "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_ALLOWED": True,
-        "COMMISSION_ID_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
     },
     "MANAGER_MISC": {
         "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_ALLOWED": True,
-        "COMMISSION_ID_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
     },
     "COMMISSION": {
         "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_ALLOWED": False,
-        "COMMISSION_ID_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": True,
     },
     "STUDENT_INSTITUTION": {
         "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_ALLOWED": False,
-        "COMMISSION_ID_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": False,
     },
     "STUDENT_MISC": {
         "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_ALLOWED": False,
-        "COMMISSION_ID_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": False,
     },
 }

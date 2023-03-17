@@ -185,6 +185,18 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            request.user.is_staff
+            and not request.user.has_perm(
+                "users.change_associationusers_any_institution"
+            )
+            and not request.user.is_staff_in_institution(association_id)
+        ):
+            return response.Response(
+                {"error": _("Cannot add an association from this institution.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not request.user.is_anonymous and user.is_validated_by_admin:
             if request.user.is_staff:
                 request.data["is_validated_by_admin"] = True
@@ -270,6 +282,18 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ).is_president
         except ObjectDoesNotExist:
             president = False
+
+        if (
+            request.user.is_staff
+            and not request.user.has_perm(
+                "users.change_associationusers_any_institution"
+            )
+            and not request.user.is_staff_in_institution(kwargs["association_id"])
+        ):
+            return response.Response(
+                {"error": _("Cannot change an association from this institution.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationusers_any_institution")

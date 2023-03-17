@@ -52,10 +52,12 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
             group_id = request.data["group"]
             group = Group.objects.get(pk=group_id)
             user = User.objects.get(username=request.data["username"])
+            institution = None
             institution_id = None
             if "institution" in request.data and request.data["institution"] != "":
                 institution = Institution.objects.get(id=request.data["institution"])
                 institution_id = institution.id
+            commission = None
             commission_id = None
             if "commission" in request.data and request.data["commission"] != "":
                 commission = Commission.objects.get(id=request.data["commission"])
@@ -118,44 +120,55 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
             if group_structure_name == group.name:
                 if (
-                    not request.user.has_perm(
+                    group_structure["REGISTRATION_ALLOWED"] is False
+                    and not request.user.has_perm(
                         "users.add_groupinstitutioncommissionusers_any_group"
                     )
                     and (
-                        request.user.is_anonymous
+                        not request.user.is_staff
                         or (
-                            not request.user.is_anonymous
+                            request.user.is_staff
                             and group in request.user.get_user_groups()
                         )
                     )
-                    and group_structure["REGISTRATION_ALLOWED"] is False
                 ):
                     return response.Response(
                         {"error": _("Registering in this group is not allowed.")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
-                if (
-                    institution_id is not None
-                    and group_structure["INSTITUTION_ID_ALLOWED"] is False
-                ):
-                    return response.Response(
-                        {
-                            "error": _(
-                                "Adding institution in this group is not allowed."
-                            )
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+                if institution_id is not None:
+                    if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
+                        not request.user.has_perm(
+                            "users.add_groupinstitutioncommissionusers_any_group"
+                        )
+                        and not institution in request.user.get_user_institutions()
+                    ):
+                        return response.Response(
+                            {
+                                "error": _(
+                                    "Adding institution in this group is not possible."
+                                )
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
 
-                if (
-                    commission_id is not None
-                    and group_structure["COMMISSION_ID_ALLOWED"] is False
-                ):
-                    return response.Response(
-                        {"error": _("Adding commission in this group is not allowed.")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+                if commission_id is not None:
+                    if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
+                        not request.user.has_perm(
+                            "users.add_groupinstitutioncommissionusers_any_group"
+                        )
+                        and not commission.institution_id
+                        in request.user.get_user_institutions()
+                    ):
+                        return response.Response(
+                            {
+                                "error": _(
+                                    "Adding commission in this group is not possible."
+                                )
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
 
         GroupInstitutionCommissionUsers.objects.create(
             user_id=user.pk,
