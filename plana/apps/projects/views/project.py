@@ -7,11 +7,13 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
+from plana.apps.associations.models.association import Association
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectSerializer,
 )
+from plana.apps.users.models.user import AssociationUsers
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -33,27 +35,51 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     # TODO: add filters to get projects
 
-    # TODO: add proper permissions
+    # TODO: add unittests and make some permissions adjustments
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        if request.data["user"] == None and request.data["association"] == None:
-            return response.Response(
-                {"error": _("Missing affectation of the new project.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if request.data["user"] != None and request.data["association"] != None:
+        if (
+            "association" in request.data
+            and request.data["association"] != None
+            and request.data["association"] != ""
+        ) and (
+            "user" in request.data
+            and request.data["user"] != None
+            and request.data["user"] != ""
+        ):
             return response.Response(
                 {"error": _("A project can only have one affectation.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        if (
+            not "association" in request.data
+            or request.data["association"] == None
+            or request.data["association"] == ""
+        ) and (
+            not "user" in request.data
+            or request.data["user"] == None
+            or request.data["user"] == ""
+        ):
+            return response.Response(
+                {"error": _("Missing affectation of the new project.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        if request.data["user"] != None and not request.user.can_submit_projects:
+        if (
+            "user" in request.data
+            and request.data["user"] != None
+            and request.data["user"] != ""
+            and not request.user.can_submit_projects
+        ):
             return response.Response(
                 {"error": _("Not allowed to create a new project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        elif request.data["association"] != None:
-            association = {}
+
+        if (
+            "association" in request.data
+            and request.data["association"] != None
+            and request.data["association"] != ""
+        ):
             try:
                 association = Association.objects.get(pk=request.data["association"])
             except ObjectDoesNotExist:
@@ -62,7 +88,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if association != {} and association.can_submit_projects:
+            if association.can_submit_projects:
                 try:
                     AssociationUsers.objects.get(
                         association_id=request.data["association"],
@@ -73,6 +99,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         {"error": _("Not allowed to create a new project.")},
                         status=status.HTTP_403_FORBIDDEN,
                     )
+            else:
+                return response.Response(
+                    {"error": _("Not allowed to create a new project.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
         request.data["creation_date"] = datetime.now()
         request.data["edition_date"] = datetime.now()
