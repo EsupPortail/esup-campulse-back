@@ -14,9 +14,13 @@ class Command(BaseCommand):
     help = "Creates a new manager user."
 
     def add_arguments(self, parser):
-        group_choices = Group.objects.exclude(
-            name__in=settings.PUBLIC_GROUPS
-        ).values_list("name", flat=True)
+        allowed_groups_names = []
+        for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
+            if group_structure["REGISTRATION_ALLOWED"] is False:
+                allowed_groups_names.append(group_structure_name)
+        group_choices = Group.objects.filter(name__in=allowed_groups_names).values_list(
+            "name", flat=True
+        )
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )

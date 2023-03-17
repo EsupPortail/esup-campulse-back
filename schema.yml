@@ -1413,6 +1413,35 @@ paths:
       responses:
         '204':
           description: No response body
+  /users/groups/{user_id}/{group_id}/{commission_id}:
+    delete:
+      operationId: users_groups_destroy_with_commission
+      description: 'DELETE : Deletes a group linked to a user with commission argument
+        (manager).'
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: group_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
 components:
   schemas:
     ActivityField:
@@ -2099,6 +2128,8 @@ components:
           type: string
         mail:
           type: string
+        username:
+          type: string
     GDPRConsent:
       type: object
       description: Main serializer.
@@ -2597,6 +2628,9 @@ components:
         institution:
           type: integer
           nullable: true
+        commission:
+          type: integer
+          nullable: true
       required:
       - group
       - user
@@ -2609,6 +2643,9 @@ components:
         group:
           type: integer
         institution:
+          type: integer
+          nullable: true
+        commission:
           type: integer
           nullable: true
       required:

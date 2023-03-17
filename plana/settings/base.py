@@ -578,12 +578,39 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
-# Groups that can be chosen on user registration.
-PUBLIC_GROUPS = [
-    "COMMISSION",
-    "STUDENT_INSTITUTION",
-    "STUDENT_MISC",
-]
+# Groups that can be chosen on user registration, and have linked IDs.
+GROUPS_STRUCTURE = {
+    "MANAGER_GENERAL": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_ALLOWED": True,
+        "COMMISSION_ID_ALLOWED": True,
+    },
+    "MANAGER_INSTITUTION": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_ALLOWED": True,
+        "COMMISSION_ID_ALLOWED": True,
+    },
+    "MANAGER_MISC": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_ALLOWED": True,
+        "COMMISSION_ID_ALLOWED": True,
+    },
+    "COMMISSION": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_ALLOWED": False,
+        "COMMISSION_ID_ALLOWED": True,
+    },
+    "STUDENT_INSTITUTION": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_ALLOWED": False,
+        "COMMISSION_ID_ALLOWED": False,
+    },
+    "STUDENT_MISC": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_ALLOWED": False,
+        "COMMISSION_ID_ALLOWED": False,
+    },
+}
 
 # External APIs
 ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
