@@ -6,14 +6,13 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
 from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.serializers.user import UserPartialDataSerializer
 
 
 class AssociationUsersSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
-    )
+    user = UserPartialDataSerializer()
     association = AssociationMandatoryDataSerializer()
 
     class Meta:
