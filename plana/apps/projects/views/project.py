@@ -90,10 +90,15 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
             if association.can_submit_projects:
                 try:
-                    AssociationUsers.objects.get(
+                    member = AssociationUsers.objects.get(
                         association_id=request.data["association"],
                         user_id=request.user.pk,
                     )
+                    if not member.is_president and not member.can_be_president:
+                        return response.Response(
+                            {"error": _("Not allowed to create a new project.")},
+                            status=status.HTTP_403_FORBIDDEN,
+                        )
                 except ObjectDoesNotExist:
                     return response.Response(
                         {"error": _("Not allowed to create a new project.")},
