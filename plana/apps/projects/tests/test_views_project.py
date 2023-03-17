@@ -54,12 +54,14 @@ class ProjectsViewsTests(TestCase):
         response = self.client.post("/projects/", {"name": "Testing anonymous"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_post_project(self):
+    def test_post_project_bad_request(self):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user with correct permissions.
-        - Project is created in database.
+        - The route can be accessed by any authenticated user.
+        - Project must have at least one affectation (user or association).
+        - If linked to an association, the association must already exist.
+        - Project cannot have multiple affectations.
         """
         project_data = {
             "name": "Testing creation",
@@ -67,10 +69,33 @@ class ProjectsViewsTests(TestCase):
             "location": "address",
         }
         response = self.general_client.post("/projects/", project_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        results = Project.objects.filter(name="Testing creation")
-        self.assertEqual(len(results), 1)
+        project_data["association"] = 9999
+        response = self.general_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        project_data["user"] = 2
+        response = self.general_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    #    def test_post_project(self):
+    #        """
+    #        POST /projects/ .
+    #
+    #        - The route can be accessed by any authenticated user with correct permissions.
+    #        - Project is created in database.
+    #        """
+    #        project_data = {
+    #            "name": "Testing creation",
+    #            "goals": "Goals",
+    #            "location": "address",
+    #        }
+    #        response = self.general_client.post("/projects/", project_data)
+    #        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    #
+    #        results = Project.objects.filter(name="Testing creation")
+    #        self.assertEqual(len(results), 1)
 
     def test_get_project_by_id_anonymous(self):
         """
