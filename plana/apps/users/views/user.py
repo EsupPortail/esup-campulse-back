@@ -92,7 +92,9 @@ class UserListCreate(generics.ListCreateAPIView):
         ) and not self.request.user.has_perm("users.view_user_misc"):
             queryset = queryset.filter(
                 id__in=AssociationUsers.objects.filter(
-                    association_id__in=self.request.user.get_user_associations()
+                    association_id__in=self.request.user.get_user_associations().values_list(
+                        "id"
+                    )
                 ).values_list("user_id")
             )
         else:

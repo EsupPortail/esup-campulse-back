@@ -138,7 +138,23 @@ class User(AbstractUser):
             id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
                 "association_id"
             )
-        ).values_list("id")
+        )
+
+    def get_user_commissions(self):
+        """Return a list of Commission objects linked to a user."""
+        return Commission.objects.filter(
+            id__in=GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk
+            ).values_list("commission_id")
+        )
+
+    def get_user_groups(self):
+        """Return a list of Group objects linked to a user."""
+        return Group.objects.filter(
+            id__in=GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk
+            ).values_list("group_id")
+        )
 
     def get_user_institutions(self):
         """Return a list of Institution objects linked to a user."""

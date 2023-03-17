@@ -578,7 +578,11 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
-# Groups that can be chosen on user registration, and have linked IDs.
+# External APIs
+ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
+ACCOUNTS_API_CONF = {}
+
+# Special permissions for user_groups links.
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
         "REGISTRATION_ALLOWED": False,
@@ -611,7 +615,3 @@ GROUPS_STRUCTURE = {
         "COMMISSION_ID_ALLOWED": False,
     },
 }
-
-# External APIs
-ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
-ACCOUNTS_API_CONF = {}

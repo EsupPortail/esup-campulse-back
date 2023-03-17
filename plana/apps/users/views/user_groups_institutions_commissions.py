@@ -121,12 +121,20 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                     not request.user.has_perm(
                         "users.add_groupinstitutioncommissionusers_any_group"
                     )
+                    and (
+                        request.user.is_anonymous
+                        or (
+                            not request.user.is_anonymous
+                            and group in request.user.get_user_groups()
+                        )
+                    )
                     and group_structure["REGISTRATION_ALLOWED"] is False
                 ):
                     return response.Response(
                         {"error": _("Registering in this group is not allowed.")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+
                 if (
                     institution_id is not None
                     and group_structure["INSTITUTION_ID_ALLOWED"] is False
@@ -139,6 +147,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                         },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+
                 if (
                     commission_id is not None
                     and group_structure["COMMISSION_ID_ALLOWED"] is False
