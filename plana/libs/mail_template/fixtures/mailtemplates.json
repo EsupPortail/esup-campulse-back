@@ -101,8 +101,40 @@
     "model": "mail_template.MailTemplate",
     "pk": 6,
     "fields": {
+      "code": "INSTITUTION_MANAGER_LDAP_ACCOUNT_CONFIRMATION",
+      "label": "Institution Manager LDAP Account Confirmation",
+      "description": "Message reçu par le gestionnaire établissement si un compte Ernest doit être validé",
+      "subject": "{{ site_name }} – Demande de création de compte Ernest",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte via Ernest vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        10
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 7,
+    "fields": {
+      "code": "MISC_MANAGER_LDAP_ACCOUNT_CONFIRMATION",
+      "label": "Misc Manager LDAP Account Confirmation",
+      "description": "Message reçu par le gestionnaire divers si un compte Ernest non Site Alsace doit être validé",
+      "subject": "{{ site_name }} – Demande de création de compte Ernest hors Site Alsace",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte Ernest non lié à une association appartenant au Site Alsace vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        10
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 8,
+    "fields": {
       "code": "INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
-      "label": "General Manager Local Account Confirmation",
+      "label": "Institution Manager Local Account Confirmation",
       "description": "Message reçu par le gestionnaire établissement si un compte local doit être validé",
       "subject": "{{ site_name }} – Demande de création de compte local",
       "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
@@ -115,7 +147,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 7,
+    "pk": 9,
     "fields": {
       "code": "MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION",
       "label": "Misc Manager Local Account Confirmation",
@@ -131,7 +163,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 8,
+    "pk": 10,
     "fields": {
       "code": "ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION",
       "label": "Account Created By Manager Confirmation",
@@ -154,7 +186,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 9,
+    "pk": 11,
     "fields": {
       "code": "ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION_LDAP",
       "label": "Account Created By Manager Confirmation (LDAP)",
@@ -175,7 +207,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 10,
+    "pk": 12,
     "fields": {
       "code": "MANAGER_ACCOUNT_REJECTION",
       "label": "Manager Account Rejection",
@@ -191,7 +223,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 11,
+    "pk": 13,
     "fields": {
       "code": "ASSOCIATION_CONTENT_CHANGE",
       "label": "Association Content Change",
@@ -209,7 +241,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 12,
+    "pk": 14,
     "fields": {
       "code": "ASSOCIATION_DELETE",
       "label": "Association Delete",
@@ -224,7 +256,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 13,
+    "pk": 15,
     "fields": {
       "code": "ACCOUNT_DELETE",
       "label": "Account Delete",
@@ -239,7 +271,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 14,
+    "pk": 16,
     "fields": {
       "code": "EMAIL_RECONFIRMATION_MESSAGE",
       "label": "Email Changed Confirmation Message",
@@ -258,7 +290,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 15,
+    "pk": 17,
     "fields": {
       "code": "ACCOUNT_EXPIRATION",
       "label": "Account Expiration",
@@ -275,7 +307,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 16,
+    "pk": 18,
     "fields": {
       "code": "PASSWORD_RESET_ADVISED",
       "label": "Password Reset Advised",
@@ -293,7 +325,7 @@
   },
   {
     "model": "mail_template.MailTemplate",
-    "pk": 17,
+    "pk": 19,
     "fields": {
       "code": "PASSWORD_RESET_MANDATORY",
       "label": "Password Reset Mandatory",

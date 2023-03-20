@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-20 15:43+0100\n"
+"POT-Creation-Date: 2023-03-20 16:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -747,7 +747,7 @@ msgstr "Non autorisé à ajouter une association de cet établissement."
 #: plana/apps/users/views/external.py:37
 #: plana/apps/users/views/gdpr_consent_users.py:68
 #: plana/apps/users/views/user.py:261 plana/apps/users/views/user.py:273
-#: plana/apps/users/views/user_groups_institutions_commissions.py:208
+#: plana/apps/users/views/user_groups_institutions_commissions.py:211
 msgid "Bad request."
 msgstr "Erreur de requête."
 
@@ -805,11 +805,11 @@ msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:344
+#: plana/apps/users/views/user.py:376
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:350
+#: plana/apps/users/views/user.py:382
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
@@ -817,43 +817,43 @@ msgstr "Suppression de superutilisateur impossible."
 msgid "ok"
 msgstr "ok"
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:71
+#: plana/apps/users/views/user_groups_institutions_commissions.py:74
 msgid "Wrong ids given."
 msgstr "Mauvais identifiants donnés."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:77
+#: plana/apps/users/views/user_groups_institutions_commissions.py:80
 msgid "Only managers can edit groups for this account."
 msgstr "Seuls les gestionnaires peuvent changer les groupes de ce compte."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:87
+#: plana/apps/users/views/user_groups_institutions_commissions.py:90
 msgid "Only managers can edit groups."
 msgstr "Seuls les gestionnaires peuvent changer les groupes."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:95
-#: plana/apps/users/views/user_groups_institutions_commissions.py:241
-#: plana/apps/users/views/user_groups_institutions_commissions.py:285
+#: plana/apps/users/views/user_groups_institutions_commissions.py:98
+#: plana/apps/users/views/user_groups_institutions_commissions.py:244
+#: plana/apps/users/views/user_groups_institutions_commissions.py:288
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:140
+#: plana/apps/users/views/user_groups_institutions_commissions.py:143
 msgid "Registering in this group is not allowed."
 msgstr "S'inscrire dans ce groupe n'est pas autorisé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:154
+#: plana/apps/users/views/user_groups_institutions_commissions.py:157
 msgid "Adding institution in this group is not possible."
 msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:171
+#: plana/apps/users/views/user_groups_institutions_commissions.py:174
 msgid "Adding commission in this group is not possible."
 msgstr "Ajouter une commission dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:236
-#: plana/apps/users/views/user_groups_institutions_commissions.py:280
+#: plana/apps/users/views/user_groups_institutions_commissions.py:239
+#: plana/apps/users/views/user_groups_institutions_commissions.py:283
 msgid "No user or link to group found."
 msgstr "Aucun utilisateur ou groupe trouvé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:248
-#: plana/apps/users/views/user_groups_institutions_commissions.py:292
+#: plana/apps/users/views/user_groups_institutions_commissions.py:251
+#: plana/apps/users/views/user_groups_institutions_commissions.py:295
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
