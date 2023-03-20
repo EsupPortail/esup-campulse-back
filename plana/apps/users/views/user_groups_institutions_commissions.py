@@ -17,6 +17,10 @@ from plana.apps.users.serializers.user_groups_institutions_commissions import (
 )
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/groups"]),
+    post=extend_schema(tags=["users/groups"]),
+)
 class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all groups linked to a user (student), or all groups of all users (manager).
@@ -180,6 +184,9 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/groups"]),
+)
 class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
     """Lists all groups linked to a user (manager)."""
 
@@ -203,7 +210,9 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
         )
 
 
-@extend_schema_view(delete=extend_schema(operation_id="users_groups_destroy"))
+@extend_schema_view(
+    delete=extend_schema(operation_id="users_groups_destroy", tags=["users/groups"])
+)
 class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
     """Deletes a group linked to a user (manager)."""
 
@@ -243,7 +252,9 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
 
 # TODO Optimize this route to avoid code duplication with previous delete.
 @extend_schema_view(
-    delete=extend_schema(operation_id="users_groups_destroy_with_commission")
+    delete=extend_schema(
+        operation_id="users_groups_destroy_with_commission", tags=["users/groups"]
+    )
 )
 class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPIView):
     """Deletes a group linked to a user with commission argument (manager)."""

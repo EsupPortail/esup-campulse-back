@@ -1,4 +1,4 @@
-"""Views directly linked to projects."""
+"""Views linked to projects categories."""
 from rest_framework import generics
 
 from plana.apps.projects.models.category import Category

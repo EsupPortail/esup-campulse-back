@@ -156,13 +156,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataNoSubTableRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -171,7 +171,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationAllDataNoSubTable'
+                $ref: '#/components/schemas/AssociationAllData'
           description: ''
     delete:
       operationId: associations_destroy
@@ -282,24 +282,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CommissionDate'
-          description: ''
-  /consents/:
-    get:
-      operationId: consents_list
-      description: 'GET : Lists all GDPR types of consents.'
-      tags:
-      - consents
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GDPRConsent'
           description: ''
   /documents/:
     get:
@@ -627,75 +609,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/associations/:
-    get:
-      operationId: users_associations_list
-      description: |-
-        GET : Lists all associations linked to a user, or all associations of all users.
-
-        POST : Creates a new link between a non-validated user and an association.
-      parameters:
-      - in: query
-        name: association_id
-        schema:
-          type: integer
-        description: Filter by Association ID.
-      - in: query
-        name: institutions
-        schema:
-          type: string
-        description: Filter by Institutions IDs.
-      - in: query
-        name: is_validated_by_admin
-        schema:
-          type: boolean
-        description: Filter for members not validated by an admin
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AssociationUsers'
-          description: ''
-    post:
-      operationId: users_associations_create
-      description: |-
-        GET : Lists all associations linked to a user, or all associations of all users.
-
-        POST : Creates a new link between a non-validated user and an association.
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssociationUsersCreate'
-          description: ''
-  /users/associations/{user_id}:
+  /users/{user_id}/associations/:
     get:
       operationId: users_associations_retrieve
       description: 'GET : Lists all associations linked to a user (manager).'
@@ -706,7 +620,7 @@ paths:
           type: integer
         required: true
       tags:
-      - users
+      - users/associations
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -717,7 +631,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationUsers'
           description: ''
-  /users/associations/{user_id}/{association_id}:
+  /users/{user_id}/associations/{association_id}:
     patch:
       operationId: users_associations_partial_update
       description: |-
@@ -736,7 +650,7 @@ paths:
           type: integer
         required: true
       tags:
-      - users
+      - users/associations
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -776,13 +690,155 @@ paths:
           type: integer
         required: true
       tags:
-      - users
+      - users/associations
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
       responses:
         '204':
           description: No response body
+  /users/{user_id}/groups/:
+    get:
+      operationId: users_groups_retrieve
+      description: 'GET : Lists all groups linked to a user (manager).'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users/groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroupsInstitutionsCommissions'
+          description: ''
+  /users/{user_id}/groups/{group_id}:
+    delete:
+      operationId: users_groups_destroy
+      description: 'DELETE : Deletes a group linked to a user (manager).'
+      parameters:
+      - in: path
+        name: group_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users/groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/{user_id}/groups/{group_id}/commissions/{commission_id}:
+    delete:
+      operationId: users_groups_destroy_with_commission
+      description: 'DELETE : Deletes a group linked to a user with commission argument
+        (manager).'
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: group_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users/groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/associations/:
+    get:
+      operationId: users_associations_list
+      description: |-
+        GET : Lists all associations linked to a user, or all associations of all users.
+
+        POST : Creates a new link between a non-validated user and an association.
+      parameters:
+      - in: query
+        name: association_id
+        schema:
+          type: integer
+        description: Filter by Association ID.
+      - in: query
+        name: institutions
+        schema:
+          type: string
+        description: Filter by Institutions IDs.
+      - in: query
+        name: is_validated_by_admin
+        schema:
+          type: boolean
+        description: Filter for members not validated by an admin
+      tags:
+      - users/associations
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssociationUsers'
+          description: ''
+    post:
+      operationId: users_associations_create
+      description: |-
+        GET : Lists all associations linked to a user, or all associations of all users.
+
+        POST : Creates a new link between a non-validated user and an association.
+      tags:
+      - users/associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUsersCreate'
+          description: ''
   /users/auth/cas/login/:
     post:
       operationId: users_auth_cas_login_create
@@ -1209,89 +1265,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/consents/:
-    get:
-      operationId: users_consents_list
-      description: |-
-        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
-
-        POST : Creates a new link between a user and a consent (authenticated).
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
-    post:
-      operationId: users_consents_create
-      description: |-
-        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
-
-        POST : Creates a new link between a user and a consent (authenticated).
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
-  /users/consents/{user_id}:
-    get:
-      operationId: users_consents_retrieve
-      description: |-
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["user_id"]), many=True
-            )
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        return response.Response(serializer.data)
-      parameters:
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
   /users/external/:
     get:
       operationId: users_external_list
@@ -1324,7 +1297,7 @@ paths:
 
         POST : Creates a new link between a non-validated user and a group.
       tags:
-      - users
+      - users/groups
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -1344,7 +1317,7 @@ paths:
 
         POST : Creates a new link between a non-validated user and a group.
       tags:
-      - users
+      - users/groups
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -1368,80 +1341,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreate'
           description: ''
-  /users/groups/{user_id}:
-    get:
-      operationId: users_groups_retrieve
-      description: 'GET : Lists all groups linked to a user (manager).'
-      parameters:
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserGroupsInstitutionsCommissions'
-          description: ''
-  /users/groups/{user_id}/{group_id}:
-    delete:
-      operationId: users_groups_destroy
-      description: 'DELETE : Deletes a group linked to a user (manager).'
-      parameters:
-      - in: path
-        name: group_id
-        schema:
-          type: integer
-        required: true
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '204':
-          description: No response body
-  /users/groups/{user_id}/{group_id}/{commission_id}:
-    delete:
-      operationId: users_groups_destroy_with_commission
-      description: 'DELETE : Deletes a group linked to a user with commission argument
-        (manager).'
-      parameters:
-      - in: path
-        name: commission_id
-        schema:
-          type: integer
-        required: true
-      - in: path
-        name: group_id
-        schema:
-          type: integer
-        required: true
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '204':
-          description: No response body
 components:
   schemas:
     ActivityField:
@@ -1466,11 +1365,11 @@ components:
           type: integer
           readOnly: true
         institution:
-          $ref: '#/components/schemas/Institution'
+          type: integer
         institution_component:
-          $ref: '#/components/schemas/InstitutionComponent'
+          type: integer
         activity_field:
-          $ref: '#/components/schemas/ActivityField'
+          type: integer
         path_logo:
           type: object
           additionalProperties: {}
@@ -1569,116 +1468,6 @@ components:
       - institution_component
       - name
       - path_logo
-    AssociationAllDataNoSubTable:
-      type: object
-      description: Serializer without name details about sub-tables.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        institution:
-          type: integer
-        institution_component:
-          type: integer
-        activity_field:
-          type: integer
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-        path_logo:
-          type: string
-          format: uri
-          nullable: true
-          title: Dynamic thumbnails for the logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
-        social_object:
-          type: string
-        current_projects:
-          type: string
-        address:
-          type: string
-          title: Adresse
-        phone:
-          type: string
-          title: Téléphone
-          maxLength: 32
-        email:
-          type: string
-          title: Courriel
-          maxLength: 256
-        siret:
-          type: string
-          maxLength: 14
-        website:
-          type: string
-          format: uri
-          title: Site
-          maxLength: 200
-        student_count:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Nombre d'étudiants
-        president_names:
-          type: string
-          maxLength: 256
-        president_phone:
-          type: string
-          maxLength: 32
-        is_enabled:
-          type: boolean
-        is_public:
-          type: boolean
-        is_site:
-          type: boolean
-          title: Site ?
-        amount_members_allowed:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Amount of members allowed
-        can_submit_projects:
-          type: boolean
-        charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
-        creation_date:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Date de création
-        approval_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date d'agrément
-        last_goa_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de la dernière AGO
-        cga_date:
-          type: string
-          format: date-time
-          nullable: true
-          title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
-      required:
-      - activity_field
-      - creation_date
-      - id
-      - institution
-      - institution_component
-      - name
     AssociationMandatoryData:
       type: object
       description: Smaller serializer to return only the main informations of an association.
@@ -1757,11 +1546,11 @@ components:
           type: integer
           readOnly: true
         institution:
-          $ref: '#/components/schemas/Institution'
+          type: integer
         institution_component:
-          $ref: '#/components/schemas/InstitutionComponent'
+          type: integer
         activity_field:
-          $ref: '#/components/schemas/ActivityField'
+          type: integer
         name:
           type: string
           title: Nom
@@ -1805,9 +1594,9 @@ components:
           type: integer
           readOnly: true
         user:
-          $ref: '#/components/schemas/UserPartialData'
+          type: integer
         association:
-          $ref: '#/components/schemas/AssociationMandatoryData'
+          type: integer
         is_president:
           type: boolean
         can_be_president:
@@ -2130,54 +1919,6 @@ components:
           type: string
         username:
           type: string
-    GDPRConsent:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        title:
-          type: string
-          title: GDPR Consent title
-          maxLength: 256
-      required:
-      - id
-      - title
-    GDPRConsentUsers:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          type: string
-        date_consented:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Consent date
-        consent:
-          type: integer
-          title: GDPR Consent
-      required:
-      - consent
-      - date_consented
-      - id
-      - user
-    GDPRConsentUsersRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        user:
-          type: string
-        consent:
-          type: integer
-          title: GDPR Consent
-      required:
-      - consent
-      - user
     Group:
       type: object
       description: Main serializer.
@@ -2322,9 +2063,9 @@ components:
           minLength: 1
       required:
       - email
-    PatchedAssociationAllDataNoSubTableRequest:
+    PatchedAssociationAllDataRequest:
       type: object
-      description: Serializer without name details about sub-tables.
+      description: Main serializer.
       properties:
         institution:
           type: integer
@@ -2342,11 +2083,6 @@ components:
           minLength: 1
           title: Acronyme
           maxLength: 30
-        path_logo:
-          type: string
-          format: binary
-          nullable: true
-          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
           nullable: true
@@ -2671,6 +2407,9 @@ components:
         last_name:
           type: string
           maxLength: 150
+        is_cas:
+          type: boolean
+          default: false
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
@@ -2699,6 +2438,9 @@ components:
           type: string
           minLength: 1
           maxLength: 150
+        is_cas:
+          type: boolean
+          default: false
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator

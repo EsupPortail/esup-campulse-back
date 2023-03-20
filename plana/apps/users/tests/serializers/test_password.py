@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from plana.apps.users.models.user import User
-from plana.apps.users.serializers.user import (
+from plana.apps.users.serializers.user_auth import (
     PasswordChangeSerializer,
     PasswordResetSerializer,
 )
