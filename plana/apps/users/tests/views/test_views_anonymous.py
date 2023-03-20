@@ -440,8 +440,10 @@ class UserViewsAnonymousTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
+        """
         response_anonymous = self.anonymous_client.get("/users/consents/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        """
 
     def test_anonymous_post_user_consents(self):
         """
@@ -449,10 +451,12 @@ class UserViewsAnonymousTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/consents/", {"user": self.student_user_name, "consent": 1}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        """
 
     def test_anonymous_get_consents_user_list(self):
         """
@@ -460,10 +464,12 @@ class UserViewsAnonymousTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
+        """
         response_anonymous = self.anonymous_client.get(
             f"/users/consents/{self.student_user_id}"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        """
 
     def test_anonymous_get_user_groups_list(self):
         """

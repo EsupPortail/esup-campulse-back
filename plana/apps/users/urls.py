@@ -9,7 +9,8 @@ from .views.association_users import (
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserRetrieve
-from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
+
+# from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 from .views.user import (
     PasswordResetConfirm,
     UserAuthVerifyEmailView,
@@ -55,14 +56,8 @@ urlpatterns = [
         name="rest_verify_email",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path(
-        "consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"
-    ),
-    path(
-        "consents/<int:user_id>",
-        UserConsentsRetrieve.as_view(),
-        name="user_consents_retrieve",
-    ),
+    # path("consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"),
+    # path("consents/<int:user_id>", UserConsentsRetrieve.as_view(), name="user_consents_retrieve",),
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(
