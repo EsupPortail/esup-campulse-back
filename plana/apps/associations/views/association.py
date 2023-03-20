@@ -14,7 +14,6 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
-    AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationNameSerializer,
@@ -259,6 +258,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = Association.objects.all()
+    serializer_class = AssociationAllDataSerializer
 
     def get_permissions(self):
         if self.request.method in ("PATCH", "DELETE"):
@@ -266,13 +266,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
-
-    def get_serializer_class(self):
-        if self.request.method == "PATCH":
-            self.serializer_class = AssociationAllDataNoSubTableSerializer
-        else:
-            self.serializer_class = AssociationAllDataSerializer
-        return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
         try:
