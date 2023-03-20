@@ -186,7 +186,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 )
 
         request.data["edition_date"] = datetime.now()
-        return super().update(request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
 
 
 @extend_schema(methods=["PUT"], exclude=True)

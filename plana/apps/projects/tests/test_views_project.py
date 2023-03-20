@@ -46,6 +46,16 @@ class ProjectsViewsTests(TestCase):
         }
         self.response = self.general_client.post(url_login, data_general)
 
+        """ Start a user misc that can submit personal projects. """
+        self.student_misc_user_id = 9
+        self.student_misc_user_name = "etudiant-porteur@mail.tld"
+        self.student_misc_client = Client()
+        data_student_misc = {
+            "username": self.student_misc_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_misc_client.post(url_login, data_student_misc)
+
         """ Start a user member of an association that cannot submit personal or association projects. """
         self.student_offsite_user_id = 10
         self.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
@@ -204,9 +214,9 @@ class ProjectsViewsTests(TestCase):
             "name": "Testing creation user",
             "goals": "Goals",
             "location": "address",
-            "user": 11,
+            "user": self.student_misc_user_id,
         }
-        response = self.student_site_client.post("/projects/", project_data)
+        response = self.student_misc_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         results = Project.objects.filter(name="Testing creation user")
@@ -244,3 +254,120 @@ class ProjectsViewsTests(TestCase):
         """
         response = self.general_client.get("/projects/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_put_project(self):
+        """
+        PUT /projects/{id} .
+
+        - Always returns a 404.
+        """
+        patch_data = {"name": "Test anonymous"}
+        response = self.general_client.put(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_anonymous(self):
+        """
+        PATCH /projects/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        patch_data = {"name": "Test anonymous"}
+        response = self.client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_project_not_found(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - Project must be existing.
+        """
+        patch_data = {"goals": "Testing patching"}
+        response = self.general_client.patch(
+            "/projects/999", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_wrong_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - Status must be in authorized status list.
+        """
+        patch_data = {"status": "PROJECT_REJECTED"}
+        response = self.general_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_forbidden_user(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The project owner must be the authenticated user.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.student_site_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_forbidden_association(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be a member of the association owning the project.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.student_offsite_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_forbidden_association_president(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be the president of the association owning the project.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.student_site_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_association_success(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The project is correctly updated in db.
+        """
+        patch_data = {
+            "description": "new desc",
+        }
+        response = self.student_president_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_patch_project_user_success(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The project is correctly updated in db.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.student_misc_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
