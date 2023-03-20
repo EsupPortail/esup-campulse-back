@@ -12,6 +12,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
+    ProjectRestrictedSerializer,
     ProjectSerializer,
 )
 from plana.apps.users.models.user import AssociationUsers
@@ -155,14 +156,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # TODO : Prevent user with perm "projects.change_project_restricted_fields" to update other fields than status
-        # TODO : add institution notion to update restricted fields
         authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
-        if (
-            "status" in request.data
-            and not request.data["status"] not in authorized_status
-            and not request.user.has_perm("projects.change_project_restricted_fields")
-        ):
+        if "status" in request.data and request.data["status"] not in authorized_status:
             return response.Response(
                 {"error": _("Wrong status.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -170,7 +165,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         if project.user != None and project.user != request.user:
             return response.Response(
-                {"error": _("Not allowed to update categories for this project.")},
+                {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -181,18 +176,44 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 )
                 if not member.is_president or not member.can_be_president:
                     return response.Response(
-                        {
-                            "error": _(
-                                "Not allowed to update categories for this project."
-                            )
-                        },
+                        {"error": _("Not allowed to update this project.")},
                         status=status.HTTP_403_FORBIDDEN,
                     )
             except ObjectDoesNotExist:
                 return response.Response(
-                    {"error": _("Not allowed to update categories for this project.")},
+                    {"error": _("Not allowed to update this project.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
         request.data["edition_date"] = datetime.now()
         return super().update(request, *args, **kwargs)
+
+
+@extend_schema(methods=["PUT"], exclude=True)
+class ProjectRestrictedUpdate(generics.UpdateAPIView):
+    """
+    PATCH : Update Project restricted details.
+    """
+
+    queryset = Project.objects.all()
+    serializer_class = ProjectRestrictedSerializer
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    # TODO : unittests
+    def patch(self, request, *args, **kwargs):
+        # TODO : add institution notion to update restricted fields
+        if request.user.has_perm("projects.change_project_restricted_fields"):
+            request.data["edition_date"] = datetime.now()
+            return super().update(request, *args, **kwargs)
+        else:
+            return response.Response(
+                {
+                    "error": _(
+                        "Not allowed to update restricted fields for this project."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )

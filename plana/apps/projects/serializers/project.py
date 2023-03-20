@@ -67,3 +67,9 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["name", "association", "user", "edition_date", "status"]
+
+
+class ProjectRestrictedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["status"]
