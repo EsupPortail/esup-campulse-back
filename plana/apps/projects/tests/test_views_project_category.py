@@ -6,6 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_category import ProjectCategory
 
 
 class ProjectsViewsTests(TestCase):
@@ -58,6 +59,28 @@ class ProjectsViewsTests(TestCase):
             url_login, data_student_offsite
         )
 
+        """ Start a user member of an association that can submit projects. """
+        self.student_site_user_id = 11
+        self.student_site_user_name = "etudiant-asso-site@mail.tld"
+        self.student_site_client = Client()
+        data_student_site = {
+            "username": self.student_site_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_site_client.post(url_login, data_student_site)
+
+        """ Start a user president of an association that can submit projects. """
+        self.student_president_user_id = 13
+        self.student_president_user_name = "president-asso-site@mail.tld"
+        self.student_president_client = Client()
+        data_student_president = {
+            "username": self.student_president_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_president_client.post(
+            url_login, data_student_president
+        )
+
     def test_post_project_categories_anonymous(self):
         """
         POST /projects/categories .
@@ -96,3 +119,66 @@ class ProjectsViewsTests(TestCase):
         }
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_forbidden_association_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be a member of the association owning the project.
+        """
+        post_data = {
+            "project": 2,
+            "category": 1,
+        }
+        response = self.student_offsite_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_forbidden_not_association_president(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be the president of the association owning the project.
+        """
+        post_data = {
+            "project": 2,
+            "category": 1,
+        }
+        response = self.student_site_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_association_success(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be the president of the association owning the project.
+        - The ProjectCategory link is created in db.
+        - If the same ProjectCategory is attempted to be created, returns a HTTP 200 and is not created twice in db.
+        """
+        post_data = {
+            "project": 2,
+            "category": 3,
+        }
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            1,
+            len(
+                ProjectCategory.objects.filter(
+                    project=post_data["project"], category=post_data["category"]
+                )
+            ),
+        )
+
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            1,
+            len(
+                ProjectCategory.objects.filter(
+                    project=post_data["project"], category=post_data["category"]
+                )
+            ),
+        )
