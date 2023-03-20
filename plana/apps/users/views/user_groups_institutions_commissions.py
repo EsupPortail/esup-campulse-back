@@ -58,12 +58,15 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
             user = User.objects.get(username=request.data["username"])
             institution = None
             institution_id = None
-            if "institution" in request.data and request.data["institution"] != "":
+            if (
+                "institution" in request.data
+                and request.data["institution"] is not None
+            ):
                 institution = Institution.objects.get(id=request.data["institution"])
                 institution_id = institution.id
             commission = None
             commission_id = None
-            if "commission" in request.data and request.data["commission"] != "":
+            if "commission" in request.data and request.data["commission"] is not None:
                 commission = Commission.objects.get(id=request.data["commission"])
                 commission_id = commission.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
