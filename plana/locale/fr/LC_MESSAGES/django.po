@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 16:24+0100\n"
+"POT-Creation-Date: 2023-03-20 08:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -744,8 +744,9 @@ msgstr "Non autorisé à ajouter une association de cet établissement."
 
 #: plana/apps/users/views/association_users.py:227
 #: plana/apps/users/views/association_users.py:423
-#: plana/apps/users/views/external.py:37 plana/apps/users/views/user.py:264
-#: plana/apps/users/views/user.py:276
+#: plana/apps/users/views/external.py:37
+#: plana/apps/users/views/gdpr_consent_users.py:68
+#: plana/apps/users/views/user.py:264 plana/apps/users/views/user.py:276
 #: plana/apps/users/views/user_groups_institutions_commissions.py:201
 msgid "Bad request."
 msgstr "Erreur de requête."
@@ -783,11 +784,11 @@ msgstr "Aucun droit d'éditer ce lien entre association et utilisateur."
 msgid "No last name given."
 msgstr "Aucun nom de famille donné."
 
-#: plana/apps/users/views/gdpr_consent_users.py:42
+#: plana/apps/users/views/gdpr_consent_users.py:39
 msgid "No user name or consent id given."
 msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 
-#: plana/apps/users/views/gdpr_consent_users.py:50
+#: plana/apps/users/views/gdpr_consent_users.py:47
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 

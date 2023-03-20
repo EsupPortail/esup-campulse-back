@@ -283,24 +283,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/CommissionDate'
           description: ''
-  /consents/:
-    get:
-      operationId: consents_list
-      description: 'GET : Lists all GDPR types of consents.'
-      tags:
-      - consents
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GDPRConsent'
-          description: ''
   /documents/:
     get:
       operationId: documents_list
@@ -1209,89 +1191,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /users/consents/:
-    get:
-      operationId: users_consents_list
-      description: |-
-        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
-
-        POST : Creates a new link between a user and a consent (authenticated).
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
-    post:
-      operationId: users_consents_create
-      description: |-
-        GET : Lists all consents linked to a user (student), or all consents of all users (manager).
-
-        POST : Creates a new link between a user and a consent (authenticated).
-      tags:
-      - users
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GDPRConsentUsersRequest'
-        required: true
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
-  /users/consents/{user_id}:
-    get:
-      operationId: users_consents_retrieve
-      description: |-
-        if request.user.is_svu_manager or request.user.is_crous_manager:
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["user_id"]), many=True
-            )
-        else:
-            return response.Response(
-                {"error": _("Bad request.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        return response.Response(serializer.data)
-      parameters:
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GDPRConsentUsers'
-          description: ''
   /users/external/:
     get:
       operationId: users_external_list
@@ -2130,54 +2029,6 @@ components:
           type: string
         username:
           type: string
-    GDPRConsent:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        title:
-          type: string
-          title: GDPR Consent title
-          maxLength: 256
-      required:
-      - id
-      - title
-    GDPRConsentUsers:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          type: string
-        date_consented:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Consent date
-        consent:
-          type: integer
-          title: GDPR Consent
-      required:
-      - consent
-      - date_consented
-      - id
-      - user
-    GDPRConsentUsersRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        user:
-          type: string
-        consent:
-          type: integer
-          title: GDPR Consent
-      required:
-      - consent
-      - user
     Group:
       type: object
       description: Main serializer.
