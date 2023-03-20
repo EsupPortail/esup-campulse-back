@@ -4,6 +4,7 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
@@ -118,14 +119,20 @@ class ProjectListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class ProjectRetrieve(generics.RetrieveAPIView):
+@extend_schema(methods=["PUT"], exclude=True)
+class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """
     GET : Get a Project with all its details.
+
+    PATCH : Update Project details.
     """
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -137,3 +144,55 @@ class ProjectRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return self.retrieve(request, *args, **kwargs)
+
+    # TODO : add unittests
+    def patch(self, request, *args, **kwargs):
+        try:
+            project = self.queryset.get(pk=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Project not found.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # TODO : Prevent user with perm "projects.change_project_restricted_fields" to update other fields than status
+        # TODO : add institution notion to update restricted fields
+        authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
+        if (
+            "status" in request.data
+            and not request.data["status"] not in authorized_status
+            and not request.user.has_perm("projects.change_project_restricted_fields")
+        ):
+            return response.Response(
+                {"error": _("Wrong status.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if project.user != None and project.user != request.user:
+            return response.Response(
+                {"error": _("Not allowed to update categories for this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if project.association != None:
+            try:
+                member = AssociationUsers.objects.get(
+                    user_id=request.user.pk, association_id=project.association.pk
+                )
+                if not member.is_president or not member.can_be_president:
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Not allowed to update categories for this project."
+                            )
+                        },
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Not allowed to update categories for this project.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+        request.data["edition_date"] = datetime.now()
+        return super().update(request, *args, **kwargs)

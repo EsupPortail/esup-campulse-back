@@ -99,3 +99,9 @@ class Project(models.Model):
     class Meta:
         verbose_name = _("Project")
         verbose_name_plural = _("Projects")
+        permissions = [
+            (
+                "change_project_restricted_fields",
+                "Can update projects restricted fields.",
+            )
+        ]

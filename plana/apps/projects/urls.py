@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views.category import CategoryListCreate
-from .views.project import ProjectListCreate, ProjectRetrieve
+from .views.project import ProjectListCreate, ProjectRetrieveUpdate
 from .views.project_category import ProjectCategoryDestroy
 
 urlpatterns = [
@@ -20,5 +20,5 @@ urlpatterns = [
     ),
     # Project urls
     path("", ProjectListCreate.as_view(), name="project_list_create"),
-    path("<int:pk>", ProjectRetrieve.as_view(), name="project_retrieve"),
+    path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
 ]
