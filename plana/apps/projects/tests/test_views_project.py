@@ -371,3 +371,40 @@ class ProjectsViewsTests(TestCase):
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_put_project_restricted(self):
+        """
+        PUT /projects/{id}/restricted .
+
+        - Always returns a 404.
+        """
+        patch_data = {"status": "PROJECT_REJECTED"}
+        response = self.general_client.put(
+            "/projects/1/restricted", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_restricted_anonymous(self):
+        """
+        PATCH /projects/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        patch_data = {"status": "PROJECT_REJECTED"}
+        response = self.client.patch(
+            "/projects/1/restricted", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_project_restricted_not_found(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - Project must be existing.
+        """
+        patch_data = {"status": "PROJECT_REJECTED"}
+        response = self.general_client.patch(
+            "/projects/999/restricted", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

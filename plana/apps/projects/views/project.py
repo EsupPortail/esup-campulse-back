@@ -203,8 +203,15 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     # TODO : unittests
+    # TODO : add institution notion to update restricted fields
     def patch(self, request, *args, **kwargs):
-        # TODO : add institution notion to update restricted fields
+        try:
+            project = self.queryset.get(pk=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Project not found.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         if request.user.has_perm("projects.change_project_restricted_fields"):
             request.data["edition_date"] = datetime.now()
             return super().update(request, *args, **kwargs)
