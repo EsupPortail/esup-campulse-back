@@ -32,12 +32,12 @@ urlpatterns = [
         name="user_associations_list_create",
     ),
     path(
-        "associations/<int:user_id>",
+        "<int:user_id>/associations/",
         AssociationUsersRetrieve.as_view(),
         name="user_associations_retrieve",
     ),
     path(
-        "associations/<int:user_id>/<int:association_id>",
+        "<int:user_id>/associations/<int:association_id>",
         AssociationUsersUpdateDestroy.as_view(),
         name="user_associations_update_destroy",
     ),
@@ -66,17 +66,17 @@ urlpatterns = [
         name="user_groups_institutions_commissions_list_create",
     ),
     path(
-        "groups/<int:user_id>",
+        "<int:user_id>/groups/",
         UserGroupsInstitutionsCommissionsRetrieve.as_view(),
         name="user_groups_institutions_commissions_retrieve",
     ),
     path(
-        "groups/<int:user_id>/<int:group_id>",
+        "<int:user_id>/groups/<int:group_id>",
         UserGroupsInstitutionsCommissionsDestroy.as_view(),
         name="user_groups_institutions_commissions_destroy",
     ),
     path(
-        "groups/<int:user_id>/<int:group_id>/<int:commission_id>",
+        "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
         UserGroupsInstitutionsCommissionsDestroyWithCommission.as_view(),
         name="user_groups_institutions_commissions_destroy_with_commission",
     ),

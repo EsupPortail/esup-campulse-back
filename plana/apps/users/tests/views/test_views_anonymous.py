@@ -228,35 +228,35 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_associations_user_detail(self):
         """
-        GET /users/associations/{user_id} .
+        GET /users/{user_id}/associations/ .
 
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
-            f"/users/associations/{self.unvalidated_user_id}"
+            f"/users/{self.unvalidated_user_id}/associations/"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_patch_association_users(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.patch(
-            f"/users/associations/{self.unvalidated_user_id}/2"
+            f"/users/{self.unvalidated_user_id}/associations/2"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_delete_association_user(self):
         """
-        DELETE /users/associations/{user_id}/{association_id} .
+        DELETE /users/{user_id}/associations/{association_id} .
 
         - An anonymous user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
         response_anonymous = self.anonymous_client.delete(
-            f"/users/associations/{self.unvalidated_user_id}/{asso_user.id}"
+            f"/users/{self.unvalidated_user_id}/associations/{asso_user.id}"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -524,22 +524,22 @@ class UserViewsAnonymousTests(TestCase):
 
     def test_anonymous_get_user_groups_detail(self):
         """
-        GET /users/groups/{user_id} .
+        GET /users/{user_id}/groups/ .
 
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.get(
-            f"/users/groups/{self.unvalidated_user_id}"
+            f"/users/{self.unvalidated_user_id}/groups/"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_anonymous_delete_user_group(self):
         """
-        DELETE /users/groups/{user_id}/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id} .
 
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.client.delete(
-            f"/users/groups/{self.unvalidated_user_id}/6"
+            f"/users/{self.unvalidated_user_id}/groups/6"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -47,8 +47,10 @@ from plana.utils import send_mail, to_bool
                 OpenApiParameter.QUERY,
                 description="Filter by Association ID.",
             ),
-        ]
-    )
+        ],
+        tags=["users/associations"],
+    ),
+    post=extend_schema(tags=["users/associations"]),
 )
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """
@@ -206,6 +208,9 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/associations"]),
+)
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
     """Lists all associations linked to a user (manager)."""
 
@@ -231,6 +236,10 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
 
 
 @extend_schema(methods=["PUT", "GET"], exclude=True)
+@extend_schema_view(
+    patch=extend_schema(tags=["users/associations"]),
+    delete=extend_schema(tags=["users/associations"]),
+)
 class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     PATCH : Updates user role in an association (manager and president).

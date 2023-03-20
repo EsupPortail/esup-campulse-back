@@ -6,7 +6,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
+# from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import AssociationUsers, User
 
 
@@ -178,30 +178,30 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_associations_user_detail(self):
         """
-        GET /users/associations/{user_id} .
+        GET /users/{user_id}/associations/ .
 
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get(
-            f"/users/associations/{self.unvalidated_user_id}"
+            f"/users/{self.unvalidated_user_id}/associations/"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_association_users(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - A simple student user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.student_user_id)
         response_student = self.student_client.patch(
-            f"/users/associations/{self.student_user_id}/{asso_user.association_id}"
+            f"/users/{self.student_user_id}/associations/{asso_user.association_id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_association_users_president_remove_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president cannot remove his own privileges.
         """
@@ -209,7 +209,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.president_user_id, is_president=True
         )
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.president_user_id}/{asso_user.association_id}",
+            f"/users/{self.president_user_id}/associations/{asso_user.association_id}",
             {"is_president": False},
             content_type="application/json",
         )
@@ -217,7 +217,7 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_validation(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president of an association cannot change the validation status.
         """
@@ -226,7 +226,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.student_user_id}/{association_id}",
+            f"/users/{self.student_user_id}/associations/{association_id}",
             {"is_validated_by_admin": False},
             content_type="application/json",
         )
@@ -237,7 +237,7 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
@@ -249,7 +249,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.student_user_id}/{association_id}",
+            f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "can_be_president": True,
                 "is_president": True,
@@ -264,7 +264,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.student_user_id}/{association_id}",
+            f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "can_be_president": True,
                 "is_secretary": True,
@@ -283,7 +283,7 @@ class UserViewsStudentTests(TestCase):
         self.assertFalse(asso_user.is_vice_president)
 
         response_student = self.student_client.patch(
-            f"/users/associations/{self.unvalidated_user_id}/{association_id}",
+            f"/users/{self.unvalidated_user_id}/associations/{association_id}",
             {
                 "can_be_president": True,
             },
@@ -296,7 +296,7 @@ class UserViewsStudentTests(TestCase):
         self.assertFalse(asso_user.can_be_president)
 
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.student_user_id}/{association_id}",
+            f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "is_treasurer": True,
             },
@@ -312,7 +312,7 @@ class UserViewsStudentTests(TestCase):
         self.assertFalse(asso_user.is_vice_president)
 
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.student_user_id}/{association_id}",
+            f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "is_vice_president": True,
             },
@@ -337,12 +337,12 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_patch_association_users_other_president(self):
         """
-        PATCH /users/associations/{user_id}/{association_id} .
+        PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president of another association cannot execute this request.
         """
         response_president = self.president_student_client.patch(
-            f"/users/associations/{self.president_user_id}/3",
+            f"/users/{self.president_user_id}/associations/3",
             {"is_secretary": True},
             content_type="application/json",
         )
@@ -350,33 +350,33 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_delete_user_association(self):
         """
-        DELETE /users/associations/{user_id}/{association_id} .
+        DELETE /users/{user_id}/associations/{association_id} .
 
         - A student user cannot execute this request.
         """
         asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
         response_student = self.student_client.delete(
-            f"/users/associations/{self.unvalidated_user_id}/{asso_user.id}"
+            f"/users/{self.unvalidated_user_id}/associations/{asso_user.id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_association_users(self):
         """
-        GET /users/associations/{user_id}/{association_id} .
+        GET /users/{user_id}/associations/{association_id} .
 
         - Request should return an error no matter which role is trying to execute it.
         """
-        response_student = self.student_client.get("/users/associations/999/999")
+        response_student = self.student_client.get("/users/999/associations/999")
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_student_put_association_users(self):
         """
-        PUT /users/associations/{user_id}/{association_id} .
+        PUT /users/{user_id}/associations/{association_id} .
 
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.put(
-            "/users/associations/999/999", {"is_treasurer": True}
+            "/users/999/associations/999", {"is_treasurer": True}
         )
         self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -565,23 +565,23 @@ class UserViewsStudentTests(TestCase):
 
     def test_student_get_user_groups_detail(self):
         """
-        GET /users/groups/{user_id} .
+        GET /users/{user_id}/groups/ .
 
         - A student user cannot execute this request.
         """
         response_student = self.student_client.get(
-            f"/users/groups/{self.student_user_id}"
+            f"/users/{self.student_user_id}/groups/"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_delete_user_group(self):
         """
-        DELETE /users/groups/{user_id}/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id} .
 
         - A student user cannot execute this request.
         """
         response_student = self.student_client.delete(
-            f"/users/groups/{self.student_user_id}/6"
+            f"/users/{self.student_user_id}/groups/6"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
