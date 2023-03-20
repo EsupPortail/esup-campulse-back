@@ -1,5 +1,7 @@
 """Views linked to links between users and associations."""
 
+import datetime
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -364,6 +366,11 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 if request.user.is_staff_in_institution(kwargs["association_id"]):
                     asso_user.is_president = False
 
+            if (not "can_be_president" in request.data) and (
+                "can_be_president_from" in request.data
+                or "can_be_president_to" in request.data
+            ):
+                request.data["can_be_president"] = True
             if "can_be_president" in request.data:
                 if president or request.user.is_staff_in_institution(
                     kwargs["association_id"]
@@ -373,9 +380,36 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 else:
                     return response.Response(
-                        {"error": _("Can't give can_be_president to another user.")},
+                        {
+                            "error": _(
+                                "Can't give president delegation to another user."
+                            )
+                        },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+
+            if (
+                "can_be_president_from" in request.data
+                and not "can_be_president_to" in request.data
+            ):
+                request.data["can_be_president_to"] = asso_user.can_be_president_to
+
+            if (
+                not "can_be_president_from" in request.data
+                and "can_be_president_to" in request.data
+            ):
+                request.data["can_be_president_from"] = datetime.date.today()
+
+            if (
+                "can_be_president_from" in request.data
+                and "can_be_president_to" in request.data
+                and request.data["can_be_president_from"]
+                > request.data["can_be_president_to"]
+            ):
+                return response.Response(
+                    {"error": _("Can't remove president delegation before giving it.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
             if "is_vice_president" in request.data:
                 is_vice_president = to_bool(request.data["is_vice_president"])
