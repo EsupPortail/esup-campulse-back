@@ -12,9 +12,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.association import (
     AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
@@ -464,15 +462,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
         return self.destroy(request, *args, **kwargs)
-
-
-class AssociationActivityFieldList(generics.ListAPIView):
-    """GET : Lists all activity fields."""
-
-    serializer_class = ActivityFieldSerializer
-
-    def get_queryset(self):
-        return ActivityField.objects.all().order_by("name")
 
 
 @extend_schema_view(

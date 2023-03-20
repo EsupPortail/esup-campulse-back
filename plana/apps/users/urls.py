@@ -11,13 +11,8 @@ from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserRetrieve
 
 # from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
-from .views.user import (
-    PasswordResetConfirm,
-    UserAuthVerifyEmailView,
-    UserAuthView,
-    UserListCreate,
-    UserRetrieveUpdateDestroy,
-)
+from .views.user import UserListCreate, UserRetrieveUpdateDestroy
+from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
 from .views.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsDestroy,
     UserGroupsInstitutionsCommissionsDestroyWithCommission,
