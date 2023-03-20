@@ -106,9 +106,9 @@ class ProjectsViewsTests(TestCase):
         response = self.general_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_post_project_forbidden_user(self):
+    def test_post_project_categories_forbidden_user(self):
         """
-        POST /projects/ .
+        POST /projects/categories .
 
         - The route can be accessed by any authenticated user.
         - The owner of the project must be the authenticated user.
@@ -120,9 +120,9 @@ class ProjectsViewsTests(TestCase):
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_forbidden_association_user(self):
+    def test_post_project_categories_forbidden_association_user(self):
         """
-        POST /projects/ .
+        POST /projects/categories .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be a member of the association owning the project.
@@ -134,9 +134,9 @@ class ProjectsViewsTests(TestCase):
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_forbidden_not_association_president(self):
+    def test_post_project_categories_forbidden_not_association_president(self):
         """
-        POST /projects/ .
+        POST /projects/categories .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be the president of the association owning the project.
@@ -148,9 +148,9 @@ class ProjectsViewsTests(TestCase):
         response = self.student_site_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_association_success(self):
+    def test_post_project_categories_association_success(self):
         """
-        POST /projects/ .
+        POST /projects/categories .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be the president of the association owning the project.
@@ -181,4 +181,98 @@ class ProjectsViewsTests(TestCase):
                     project=post_data["project"], category=post_data["category"]
                 )
             ),
+        )
+
+    def test_delete_project_categories_anonymous(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.delete("/projects/1/category/1")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_delete_project_categories_not_found(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The project must be existing.
+        """
+        project = 999
+        category = 1
+        response = self.general_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_project_categories_forbidden_user(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The owner of the project must be the authenticated user.
+        """
+        project = 1
+        category = 1
+        response = self.student_offsite_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_categories_forbidden_association_user(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be a member of the association owning the project.
+        """
+        project = 2
+        category = 1
+        response = self.student_offsite_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_categories_forbidden_not_association_president(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be the president of the association owning the project.
+        """
+        project = 2
+        category = 1
+        response = self.student_site_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_categories_association_success(self):
+        """
+        DELETE /projects/{project_id}/category/{category_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be the president of the association owning the project.
+        - The ProjectCategory link is deleted from db.
+        - If the same ProjectCategory is attempted to be deleted, returns a HTTP 200 and not throwing error.
+        """
+        project = 2
+        category = 1
+        response = self.student_president_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            0,
+            len(ProjectCategory.objects.filter(project=project, category=category)),
+        )
+
+        response = self.student_president_client.delete(
+            f"/projects/{project}/category/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            0,
+            len(ProjectCategory.objects.filter(project=project, category=category)),
         )

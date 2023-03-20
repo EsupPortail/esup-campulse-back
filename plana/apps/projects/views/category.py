@@ -41,7 +41,6 @@ class CategoryListCreate(generics.ListCreateAPIView):
             self.permission_classes = [AllowAny]
         return super().get_permissions()
 
-    # TODO : unittests
     # TODO : update project edition_date ?
     def post(self, request, *args, **kwargs):
         try:
@@ -59,7 +58,6 @@ class CategoryListCreate(generics.ListCreateAPIView):
             )
 
         if project.association != None:
-            print(project.association.pk)
             try:
                 association = Association.objects.get(pk=project.association.pk)
                 member = AssociationUsers.objects.get(
