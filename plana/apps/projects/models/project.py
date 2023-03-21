@@ -87,14 +87,14 @@ class Project(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-    def can_edit_project(self, user_id):
-        if self.user != None and self.user != user_id:
+    def can_edit_project(self, user_obj):
+        if self.user != None and self.user != user_obj:
             return False
 
         if self.association != None:
             try:
                 member = AssociationUsers.objects.get(
-                    user_id=request.user.pk, association_id=self.association.pk
+                    user_id=user_obj.pk, association_id=self.association.pk
                 )
                 if not member.is_president or not member.can_be_president:
                     return False

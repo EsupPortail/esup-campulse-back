@@ -5,6 +5,7 @@ from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.users.models.user import User
 
 
 class ProjectsModelsTests(TestCase):
@@ -15,13 +16,14 @@ class ProjectsModelsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "commissions_commissiondate.json",
         "commissions_commission.json",
-        "users_user.json",
+        "commissions_commissiondate.json",
         "associations_association.json",
         "associations_activityfield.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "users_associationusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):
@@ -51,3 +53,48 @@ class ProjectsModelsTests(TestCase):
         self.assertEqual(
             str(project_cd), f"{project_cd.project} {project_cd.commission_date}"
         )
+
+    def test_can_edit_project_success_user(self):
+        """
+        Testing can_update_project Project helper
+        - The project owner must be the authenticated user.
+        """
+        project = Project.objects.get(pk=1)
+        user = User.objects.get(username="etudiant-porteur@mail.tld")
+        self.assertTrue(project.can_edit_project(user))
+
+    def test_can_edit_project_forbidden_user(self):
+        """
+        Testing can_update_project Project helper
+        - The authenticated user must be the president of the association owning the project.
+        """
+        project = Project.objects.get(pk=1)
+        user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
+        self.assertFalse(project.can_edit_project(user))
+
+    def test_can_edit_project_success_association(self):
+        """
+        Testing can_update_project Project helper
+        - The authenticated user must be the president of the association owning the project.
+        """
+        project = Project.objects.get(pk=2)
+        user = User.objects.get(username="president-asso-site@mail.tld")
+        self.assertTrue(project.can_edit_project(user))
+
+    def test_can_edit_project_forbidden_association(self):
+        """
+        Testing can_update_project Project helper
+        - The authenticated user must be the president of the association owning the project.
+        """
+        project = Project.objects.get(pk=2)
+        user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
+        self.assertFalse(project.can_edit_project(user))
+
+    def test_can_edit_project_forbidden_president(self):
+        """
+        Testing can_update_project Project helper
+        - The authenticated user must be the president of the association owning the project.
+        """
+        project = Project.objects.get(pk=2)
+        user = User.objects.get(username="etudiant-asso-site@mail.tld")
+        self.assertFalse(project.can_edit_project(user))
