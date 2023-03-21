@@ -495,12 +495,8 @@ class AssociationNameList(generics.ListAPIView):
             queryset = queryset.filter(institution_id__in=institutions.split(","))
         if is_public is not None and is_public != "":
             queryset = queryset.filter(is_public=to_bool(is_public))
-        if (
-            allow_new_users is not None
-            and allow_new_users != ""
-            and to_bool(allow_new_users) is True
-        ):
-            assos_ids_to_exclude = []
+        if allow_new_users is not None and allow_new_users != "":
+            assos_ids_with_all_members = []
             for association in queryset:
                 association_users = AssociationUsers.objects.filter(
                     association_id=association.id
@@ -509,7 +505,10 @@ class AssociationNameList(generics.ListAPIView):
                     not association.amount_members_allowed is None
                     and association_users.count() >= association.amount_members_allowed
                 ):
-                    assos_ids_to_exclude.append(association.id)
-            queryset = queryset.exclude(id__in=assos_ids_to_exclude)
+                    assos_ids_with_all_members.append(association.id)
+            if to_bool(allow_new_users) is True:
+                queryset = queryset.exclude(id__in=assos_ids_with_all_members)
+            else:
+                queryset = queryset.filter(id__in=assos_ids_with_all_members)
 
         return queryset.order_by("name")
