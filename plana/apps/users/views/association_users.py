@@ -2,8 +2,6 @@
 
 import datetime
 
-from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -13,19 +11,14 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
-    User,
-)
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreateSerializer,
     AssociationUsersDeleteSerializer,
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
-from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import to_bool
 
 
 @extend_schema_view(
@@ -470,6 +463,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         AssociationUsers.objects.filter(
             user_id=kwargs["user_id"], association_id=kwargs["association_id"]
         ).delete()
+        """
+        # Delete the account if no association remains.
         if (
             AssociationUsers.objects.filter(user_id=kwargs["user_id"]).count() < 1
             and GroupInstitutionCommissionUsers.objects.filter(
@@ -493,4 +488,5 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
             user.delete()
+        """
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

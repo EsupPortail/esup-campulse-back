@@ -39,7 +39,9 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
+        if request.user.has_perm(
+            "users.view_groupinstitutioncommissionusers_any_group"
+        ):
             serializer = self.serializer_class(
                 GroupInstitutionCommissionUsers.objects.all(), many=True
             )
@@ -199,7 +201,9 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         """GET : Lists all groups linked to a user (manager)."""
-        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
+        if request.user.has_perm(
+            "users.view_groupinstitutioncommissionusers_any_group"
+        ):
             serializer = self.serializer_class(
                 GroupInstitutionCommissionUsers.objects.filter(
                     user_id=kwargs["user_id"]

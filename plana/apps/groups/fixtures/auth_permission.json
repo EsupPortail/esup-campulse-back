@@ -1218,14 +1218,23 @@
     "model": "auth.permission",
     "pk": 136,
     "fields": {
-      "name": "Can view all groups for a user.",
+      "name": "Can delete restricted groups to a user.",
       "content_type": 31,
-      "codename": "view_groupinstitutioncommissionusers_anyone"
+      "codename": "delete_groupinstitutioncommissionusers_any_group"
     }
   },
   {
     "model": "auth.permission",
     "pk": 137,
+    "fields": {
+      "name": "Can view all groups for a user.",
+      "content_type": 31,
+      "codename": "view_groupinstitutioncommissionusers_any_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 138,
     "fields": {
       "name": "Can add User",
       "content_type": 32,
@@ -1234,7 +1243,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 138,
+    "pk": 139,
     "fields": {
       "name": "Can change User",
       "content_type": 32,
@@ -1243,7 +1252,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 139,
+    "pk": 140,
     "fields": {
       "name": "Can delete User",
       "content_type": 32,
@@ -1252,7 +1261,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 140,
+    "pk": 141,
     "fields": {
       "name": "Can view User",
       "content_type": 32,
@@ -1261,7 +1270,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 141,
+    "pk": 142,
     "fields": {
       "name": "Can add a user with no association linked.",
       "content_type": 32,
@@ -1270,7 +1279,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 142,
+    "pk": 143,
     "fields": {
       "name": "Can change a user with no association linked.",
       "content_type": 32,
@@ -1279,7 +1288,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 143,
+    "pk": 144,
     "fields": {
       "name": "Can delete a user with no association linked.",
       "content_type": 32,
@@ -1288,7 +1297,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 144,
+    "pk": 145,
     "fields": {
       "name": "Can view a user with no association linked.",
       "content_type": 32,
@@ -1297,7 +1306,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 145,
+    "pk": 146,
     "fields": {
       "name": "Can view all users.",
       "content_type": 32,
@@ -1306,7 +1315,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 146,
+    "pk": 147,
     "fields": {
       "name": "Can add GDPR Consent User",
       "content_type": 33,
@@ -1315,7 +1324,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 147,
+    "pk": 148,
     "fields": {
       "name": "Can change GDPR Consent User",
       "content_type": 33,
@@ -1324,7 +1333,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 148,
+    "pk": 149,
     "fields": {
       "name": "Can delete GDPR Consent User",
       "content_type": 33,
@@ -1333,7 +1342,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 149,
+    "pk": 150,
     "fields": {
       "name": "Can view GDPR Consent User",
       "content_type": 33,
@@ -1342,7 +1351,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 150,
+    "pk": 151,
     "fields": {
       "name": "Can add Template variable",
       "content_type": 34,
@@ -1351,7 +1360,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 151,
+    "pk": 152,
     "fields": {
       "name": "Can change Template variable",
       "content_type": 34,
@@ -1360,7 +1369,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 152,
+    "pk": 153,
     "fields": {
       "name": "Can delete Template variable",
       "content_type": 34,
@@ -1369,7 +1378,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 153,
+    "pk": 154,
     "fields": {
       "name": "Can view Template variable",
       "content_type": 34,
@@ -1378,7 +1387,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 154,
+    "pk": 155,
     "fields": {
       "name": "Can add Mail template",
       "content_type": 35,
@@ -1387,7 +1396,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 155,
+    "pk": 156,
     "fields": {
       "name": "Can change Mail template",
       "content_type": 35,
@@ -1396,7 +1405,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 156,
+    "pk": 157,
     "fields": {
       "name": "Can delete Mail template",
       "content_type": 35,
@@ -1405,7 +1414,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 157,
+    "pk": 158,
     "fields": {
       "name": "Can view Mail template",
       "content_type": 35,

@@ -72,7 +72,11 @@ class GroupInstitutionCommissionUsers(models.Model):
                 "Can add restricted groups to a user.",
             ),
             (
-                "view_groupinstitutioncommissionusers_anyone",
+                "delete_groupinstitutioncommissionusers_any_group",
+                "Can delete restricted groups to a user.",
+            ),
+            (
+                "view_groupinstitutioncommissionusers_any_group",
                 "Can view all groups for a user.",
             ),
         ]
