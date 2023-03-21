@@ -8,6 +8,7 @@ from .views.project import (
     ProjectRetrieveUpdate,
 )
 from .views.project_category import ProjectCategoryDestroy
+from .views.project_commission_date import ProjectCommissionDateListCreate
 
 urlpatterns = [
     # Project categories urls
@@ -29,5 +30,10 @@ urlpatterns = [
         "<int:pk>/restricted",
         ProjectRestrictedUpdate.as_view(),
         name="project_restricted_update",
+    ),
+    path(
+        "commissions",
+        ProjectCommissionDateListCreate.as_view(),
+        name="project_commission_date_list_create",
     ),
 ]
