@@ -257,6 +257,7 @@ class User(AbstractUser):
         permissions = [
             ("add_user_misc", "Can add a user with no association linked."),
             ("change_user_misc", "Can change a user with no association linked."),
+            ("change_user_all_fields", "Can change can_submit_projects on a user."),
             ("delete_user_misc", "Can delete a user with no association linked."),
             ("view_user_misc", "Can view a user with no association linked."),
             ("view_user_anyone", "Can view all users."),

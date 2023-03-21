@@ -282,6 +282,16 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        if (
+            "can_submit_projects" in request.data
+            and to_bool(request.data["can_submit_projects"]) is True
+            and not self.request.user.has_perm("users.change_user_all_fields")
+        ):
+            return response.Response(
+                {"error": _("Only managers can edit this field.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         if user.is_cas_user():
             for restricted_field in [
                 "email",

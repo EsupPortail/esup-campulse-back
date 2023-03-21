@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, to_bool
 
 
 class PasswordResetConfirm(generics.GenericAPIView):
@@ -32,6 +32,16 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        if (
+            "can_submit_projects" in request.data
+            and to_bool(request.data["can_submit_projects"]) is True
+            and not self.request.user.has_perm("users.change_user_all_fields")
+        ):
+            return response.Response(
+                {"error": _("Only managers can edit this field.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         request.data.pop("username", False)
         current_site = get_current_site(request)
         context = {

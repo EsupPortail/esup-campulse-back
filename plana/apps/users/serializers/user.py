@@ -65,6 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_cas",
             "has_validated_email",
             "is_validated_by_admin",
+            "can_submit_projects",
             "associations",
             "groups",
             "permissions",

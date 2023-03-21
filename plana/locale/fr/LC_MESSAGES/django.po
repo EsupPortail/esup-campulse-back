@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 11:10+0100\n"
+"POT-Creation-Date: 2023-03-21 11:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -696,7 +696,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:119
+#: plana/apps/users/serializers/user.py:120
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -796,8 +796,8 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:180 plana/apps/users/views/user.py:297
-#: plana/apps/users/views/user_auth.py:72
+#: plana/apps/users/views/user.py:180 plana/apps/users/views/user.py:307
+#: plana/apps/users/views/user_auth.py:82
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
@@ -805,15 +805,19 @@ msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:376
+#: plana/apps/users/views/user.py:291 plana/apps/users/views/user_auth.py:41
+msgid "Only managers can edit this field."
+msgstr "Seuls les gestionnaires peuvent changer ce champ."
+
+#: plana/apps/users/views/user.py:386
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:382
+#: plana/apps/users/views/user.py:392
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user_auth.py:160
+#: plana/apps/users/views/user_auth.py:170
 msgid "ok"
 msgstr "ok"
 

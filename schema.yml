@@ -2219,6 +2219,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
+        can_submit_projects:
+          type: boolean
     ProcessTypeEnum:
       enum:
       - CHARTER_ASSOCIATION
@@ -2308,6 +2310,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
+        can_submit_projects:
+          type: boolean
         associations:
           type: array
           items:
