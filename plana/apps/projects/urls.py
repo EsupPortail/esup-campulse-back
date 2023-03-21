@@ -32,7 +32,7 @@ urlpatterns = [
         name="project_restricted_update",
     ),
     path(
-        "commissions",
+        "commission_dates",
         ProjectCommissionDateListCreate.as_view(),
         name="project_commission_date_list_create",
     ),
