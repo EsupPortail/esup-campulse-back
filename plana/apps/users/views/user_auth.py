@@ -59,7 +59,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 user_id = request.user.id
                 context[
                     "account_url"
-                ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user_id}"
+                ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
                 template = MailTemplate.objects.get(
                     code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
                 )
@@ -132,7 +132,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
-                "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
+                "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
             if assos_user.count() > 0:
                 template = MailTemplate.objects.get(

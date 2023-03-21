@@ -53,15 +53,3 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 ##########
 
 EMAIL_TEMPLATE_FRONTEND_URL = "http://localhost:3000/"
-EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "register-verify-email/"
-)
-EMAIL_TEMPLATE_PASSWORD_RESET_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "password-reset-confirm/"
-)
-EMAIL_TEMPLATE_PASSWORD_CHANGE_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/password-change-url/"
-)
-EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/validate-users/"
-)

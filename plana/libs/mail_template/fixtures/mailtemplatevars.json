@@ -119,5 +119,14 @@
       "description": "Nom d'une association.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 14,
+    "fields": {
+      "code": "{{ user_association_url }}",
+      "description": "URL menant vers une page de validation de lien entre association et utilisateur.",
+      "fake_vars": []
+    }
   }
 ]

@@ -678,10 +678,3 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names?is_public=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_public)
-
-        """
-        # TODO Test allow_new_users filter.
-        response = self.client.get("/associations/names?allow_new_users=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertNotEqual(len(content), asso_names_cnt)
-        """

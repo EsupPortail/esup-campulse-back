@@ -340,5 +340,57 @@
         9
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 20,
+    "fields": {
+      "code": "USER_ASSOCIATION_MANAGER_MESSAGE",
+      "label": "User Association Manager Message",
+      "description": "Message reçu par un gestionnaire devant valider un nouveau lien entre une association et un utilisateur.",
+      "subject": "{{ site_name }} – Nouveau lien entre association et utilisateur à valider",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de validation de lien entre utilisateur et association a été déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ user_association_url }}'>{{ user_association_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        14
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 21,
+    "fields": {
+      "code": "USER_ASSOCIATION_STUDENT_MESSAGE_CONFIRMATION",
+      "label": "User Association Student Message Confirmation",
+      "description": "Message reçu par un étudiant lié à une nouvelle association.",
+      "subject": "{{ site_name }} – Votre compte peut accéder à une nouvelle association",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Vous pouvez désormais accéder aux informations de l'association \"{{ association_name }}\" depuis votre compte sur {{ site_name }}.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        13
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 22,
+    "fields": {
+      "code": "USER_ASSOCIATION_STUDENT_MESSAGE_REJECTION",
+      "label": "User Association Student Message Rejection",
+      "description": "Message reçu par un étudiant dont la liaision à une nouvelle association a été rejetée.",
+      "subject": "{{ site_name }} – Votre demande d'accès à une association a été rejetée",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre demande d'accès aux détails de l'association \"{{ association_name }}\" depuis votre compte sur {{ site_name }} a été rejetée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        13
+      ]
+    }
   }
 ]

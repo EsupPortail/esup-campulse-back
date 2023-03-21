@@ -209,7 +209,9 @@ class UserListCreate(generics.ListCreateAPIView):
             user.password_last_change_date = datetime.datetime.today()
             user.save(update_fields=["password", "password_last_change_date"])
             context["password"] = password
-            context["password_change_url"] = settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_URL
+            context[
+                "password_change_url"
+            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
             template = MailTemplate.objects.get(
                 code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
             )
@@ -335,7 +337,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 token = default_token_generator.make_token(user)
                 context[
                     "password_reset_url"
-                ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+                ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
@@ -351,7 +353,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
-                "account_url": f"{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL}{user.id}",
+                "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
             if assos_user.count() > 0:
                 template = MailTemplate.objects.get(
