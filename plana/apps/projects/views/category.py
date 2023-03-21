@@ -51,32 +51,11 @@ class CategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if project.user != None and project.user != request.user:
+        if not project.can_edit_project(request.user):
             return response.Response(
                 {"error": _("Not allowed to update categories for this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-
-        if project.association != None:
-            try:
-                association = Association.objects.get(pk=project.association.pk)
-                member = AssociationUsers.objects.get(
-                    user_id=request.user.pk, association_id=association.pk
-                )
-                if not member.is_president or not member.can_be_president:
-                    return response.Response(
-                        {
-                            "error": _(
-                                "Not allowed to update categories for this project."
-                            )
-                        },
-                        status=status.HTTP_403_FORBIDDEN,
-                    )
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Not allowed to update categories for this project.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
 
         try:
             ProjectCategory.objects.get(

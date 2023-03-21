@@ -146,7 +146,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
         return self.retrieve(request, *args, **kwargs)
 
-    # TODO : add unittests
     def patch(self, request, *args, **kwargs):
         try:
             project = self.queryset.get(pk=kwargs["pk"])
@@ -163,27 +162,11 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if project.user != None and project.user != request.user:
+        if not project.can_edit_project(request.user):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-
-        if project.association != None:
-            try:
-                member = AssociationUsers.objects.get(
-                    user_id=request.user.pk, association_id=project.association.pk
-                )
-                if not member.is_president or not member.can_be_president:
-                    return response.Response(
-                        {"error": _("Not allowed to update this project.")},
-                        status=status.HTTP_403_FORBIDDEN,
-                    )
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Not allowed to update this project.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
 
         request.data["edition_date"] = datetime.now()
         return super().partial_update(request, *args, **kwargs)
