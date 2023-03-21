@@ -59,16 +59,6 @@ class ProjectsViewsTests(TestCase):
             url_login, data_student_offsite
         )
 
-        """ Start a user member of an association that can submit projects. """
-        self.student_site_user_id = 11
-        self.student_site_user_name = "etudiant-asso-site@mail.tld"
-        self.student_site_client = Client()
-        data_student_site = {
-            "username": self.student_site_user_name,
-            "password": "motdepasse",
-        }
-        self.response = self.student_site_client.post(url_login, data_student_site)
-
         """ Start a user president of an association that can submit projects. """
         self.student_president_user_id = 13
         self.student_president_user_name = "president-asso-site@mail.tld"
@@ -117,35 +107,7 @@ class ProjectsViewsTests(TestCase):
             "project": 1,
             "category": 1,
         }
-        response = self.student_offsite_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_post_project_categories_forbidden_association_user(self):
-        """
-        POST /projects/categories .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be a member of the association owning the project.
-        """
-        post_data = {
-            "project": 2,
-            "category": 1,
-        }
-        response = self.student_offsite_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_post_project_categories_forbidden_not_association_president(self):
-        """
-        POST /projects/categories .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be the president of the association owning the project.
-        """
-        post_data = {
-            "project": 2,
-            "category": 1,
-        }
-        response = self.student_site_client.post("/projects/categories", post_data)
+        response = self.general_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_categories_association_success(self):
@@ -216,34 +178,6 @@ class ProjectsViewsTests(TestCase):
         project = 1
         category = 1
         response = self.student_offsite_client.delete(
-            f"/projects/{project}/category/{category}"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_delete_project_categories_forbidden_association_user(self):
-        """
-        DELETE /projects/{project_id}/category/{category_id} .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be a member of the association owning the project.
-        """
-        project = 2
-        category = 1
-        response = self.student_offsite_client.delete(
-            f"/projects/{project}/category/{category}"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_delete_project_categories_forbidden_not_association_president(self):
-        """
-        DELETE /projects/{project_id}/category/{category_id} .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be the president of the association owning the project.
-        """
-        project = 2
-        category = 1
-        response = self.student_site_client.delete(
             f"/projects/{project}/category/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

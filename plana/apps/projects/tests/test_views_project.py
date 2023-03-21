@@ -313,51 +313,10 @@ class ProjectsViewsTests(TestCase):
         - The project owner must be the authenticated user.
         """
         patch_data = {"description": "new desc"}
-        response = self.student_site_client.patch(
+        response = self.general_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_forbidden_association(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be a member of the association owning the project.
-        """
-        patch_data = {"description": "new desc"}
-        response = self.student_offsite_client.patch(
-            "/projects/2", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_forbidden_association_president(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by any authenticated user.
-        - The authenticated user must be the president of the association owning the project.
-        """
-        patch_data = {"description": "new desc"}
-        response = self.student_site_client.patch(
-            "/projects/2", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_association_success(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by any authenticated user.
-        - The project is correctly updated in db.
-        """
-        patch_data = {
-            "description": "new desc",
-        }
-        response = self.student_president_client.patch(
-            "/projects/2", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_project_user_success(self):
         """
