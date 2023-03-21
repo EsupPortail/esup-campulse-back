@@ -143,13 +143,13 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         project_id = 1
         commission_id = 1
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_id,
+            "amount_asked": 500,
+        }
         response = self.student_misc_client.post(
-            "/projects/commission_dates",
-            {
-                "project": project_id,
-                "commission_date": commission_id,
-                "amount_asked": 500,
-            },
+            "/projects/commission_dates", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -157,3 +157,26 @@ class ProjectCommissionDateViewsTests(TestCase):
             project_id=project_id, commission_date_id=commission_id
         )
         self.assertEqual(len(results), 1)
+
+    def test_post_project_cd_already_exists(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route can be accessed by any authenticated user.
+        - Request returns a status 201 the first time and a status 400 next.
+        """
+        project_id = 1
+        commission_id = 2
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_id,
+            "amount_asked": 500,
+        }
+        response = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response_second = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
+        )
+        self.assertEqual(response_second.status_code, status.HTTP_400_BAD_REQUEST)

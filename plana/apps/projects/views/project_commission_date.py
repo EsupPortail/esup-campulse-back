@@ -68,4 +68,18 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        return super().create(request, *args, **kwargs)
+        try:
+            ProjectCommissionDate.objects.get(
+                project_id=request.data["project"],
+                commission_date_id=request.data["commission_date"],
+            )
+            return response.Response(
+                {
+                    "error": _(
+                        "Link between this project and this commission date already exists."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except ObjectDoesNotExist:
+            return super().create(request, *args, **kwargs)
