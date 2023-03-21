@@ -659,7 +659,7 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_group(self):
         """
-        DELETE /users/{user_id}/groups/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
 
         - The user must exist.
         - Groups for a validated manager user can't be deleted.
@@ -667,33 +667,33 @@ class UserViewsManagerTests(TestCase):
         - The link between a group and a user is deleted.
         - A user should have at least one group.
         """
-        user_id = 8
+        user_id = 6
         response = self.manager_client.get(f"/users/{user_id}/groups/")
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]
 
         response_delete = self.manager_client.delete(
-            f"/users/99/groups/{str(first_user_group_id)}"
+            f"/users/99/groups/{str(first_user_group_id)}/commissions/1"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_delete = self.manager_client.delete(
-            f"/users/{self.manager_misc_user_id}/groups/3"
+            f"/users/{self.manager_misc_user_id}/groups/3/commissions/1"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
         second_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(second_user_group_id)}"
+            f"/users/{user_id}/groups/{str(second_user_group_id)}/commissions/2"
         )
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST

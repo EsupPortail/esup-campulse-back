@@ -235,26 +235,46 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
                 user_id=user.pk
             )
             user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk,
-                group_id=kwargs["group_id"],
+                user_id=user.pk, group_id=kwargs["group_id"], commission_id=None
             )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or link to group found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user.is_superuser or user.is_staff:
+
+        if (
+            user.is_superuser
+            or user.is_staff
+            and not request.user.has_perm(
+                "users.delete_groupinstitutioncommissionusers_any_group"
+            )
+        ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user_groups.count() > 1:
-            user_group_to_delete.delete()
-            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-        return response.Response(
-            {"error": _("User should have at least one group.")},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+
+        if not request.user.has_perm(
+            "users.delete_groupinstitutioncommissionusers_any_group"
+        ) and (
+            user_group_to_delete.institution_id is not None
+            and not user_group_to_delete.institution_id
+            in request.user.get_user_institutions()
+        ):
+            return response.Response(
+                {"error": _("Not allowed to delete this link between user and group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user_groups.count() <= 1:
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_group_to_delete.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
 # TODO Optimize this route to avoid code duplication with previous delete.
@@ -287,15 +307,42 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
                 {"error": _("No user or link to group found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user.is_superuser or user.is_staff:
+
+        if (
+            user.is_superuser
+            or user.is_staff
+            and not request.user.has_perm(
+                "users.delete_groupinstitutioncommissionusers_any_group"
+            )
+        ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user_groups.count() > 1:
-            user_group_to_delete.delete()
-            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-        return response.Response(
-            {"error": _("User should have at least one group.")},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+
+        if not request.user.has_perm(
+            "users.delete_groupinstitutioncommissionusers_any_group"
+        ) and (
+            (
+                user_group_to_delete.institution_id is not None
+                and not user_group_to_delete.institution_id
+                in request.user.get_user_institutions()
+            )
+            or not Commission.objects.get(
+                id=user_group_to_delete.commission_id
+            ).institution_id
+            in request.user.get_user_institutions()
+        ):
+            return response.Response(
+                {"error": _("Not allowed to delete this link between user and group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user_groups.count() <= 1:
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_group_to_delete.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
