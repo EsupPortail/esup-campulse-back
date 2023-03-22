@@ -6,9 +6,11 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.documents.serializers.document_upload import DocumentUploadSerializer
 
 
-class DocumentUploadList(generics.ListAPIView):
+class DocumentUploadListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all DocumentUploads.
+
+    POST : Creates a new DocumentUploads.
     """
 
     serializer_class = DocumentUploadSerializer

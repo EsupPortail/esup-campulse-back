@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views.document import DocumentList, DocumentRetrieveDestroy
-from .views.document_upload import DocumentUploadList
+from .views.document_upload import DocumentUploadListCreate
 
 urlpatterns = [
     # Documents types urls
@@ -13,7 +13,7 @@ urlpatterns = [
     # Document uploads urls
     path(
         "uploads",
-        DocumentUploadList.as_view(),
-        name="document_upload_list",
+        DocumentUploadListCreate.as_view(),
+        name="document_upload_list_create",
     ),
 ]

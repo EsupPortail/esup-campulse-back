@@ -48,10 +48,13 @@ class PrivateFileStorage(UpdateACLStorage):
 class DynamicStorageFieldFile(FieldFile):
     def __init__(self, instance, field, name):
         super().__init__(instance, field, name)
-        if instance.is_public:
-            self.storage = PublicFileStorage()
-        else:
-            self.storage = PrivateFileStorage()
+        self.storage = PublicFileStorage()
+        # TODO no attribute is_public in db for the moment public by default.
+
+    #        if instance.is_public:
+    #            self.storage = PublicFileStorage()
+    #        else:
+    #            self.storage = PrivateFileStorage()
 
     def update_acl(self):
         if not self:
@@ -67,10 +70,12 @@ class DynamicStorageFileField(models.FileField):
     attr_class = DynamicStorageFieldFile
 
     def pre_save(self, model_instance, add):
-        if model_instance.is_public:
-            storage = PublicFileStorage()
-        else:
-            storage = PrivateFileStorage()
+        storage = PublicFileStorage()
+        # TODO no attribute is_public in db for the moment, public by default.
+        #        if model_instance.is_public:
+        #            storage = PublicFileStorage()
+        #        else:
+        #            storage = PrivateFileStorage()
 
         file = super().pre_save(model_instance, add)
         file.storage = storage

@@ -1,6 +1,7 @@
 """Models describing documents uploaded by an association or a user."""
 
 import datetime
+import os
 
 from django.conf import settings
 from django.db import models
