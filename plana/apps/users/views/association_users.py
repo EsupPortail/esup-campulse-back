@@ -401,7 +401,9 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             "can_be_president_from" in request.data
+            and request.data["can_be_president_from"] is not None
             and "can_be_president_to" in request.data
+            and request.data["can_be_president_to"] is not None
             and request.data["can_be_president_from"]
             > request.data["can_be_president_to"]
         ):

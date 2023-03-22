@@ -659,10 +659,10 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), asso_names_cnt)
+        content_all_assos = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content_all_assos), asso_names_cnt)
 
-        asso_name_1 = content[0]
+        asso_name_1 = content_all_assos[0]
         self.assertTrue(asso_name_1.get("name"))
         self.assertTrue(asso_name_1.get("id"))
         self.assertFalse(asso_name_1.get("institution_component"))
@@ -678,3 +678,22 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names?is_public=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_public)
+
+        AssociationUsers.objects.create(user_id=12, association_id=2)
+
+        response_assos_users_allowed = self.client.get(
+            "/associations/names?allow_new_users=true"
+        )
+        content_assos_users_allowed = json.loads(
+            response_assos_users_allowed.content.decode("utf-8")
+        )
+        response_assos_users_not_allowed = self.client.get(
+            "/associations/names?allow_new_users=false"
+        )
+        content_assos_users_not_allowed = json.loads(
+            response_assos_users_not_allowed.content.decode("utf-8")
+        )
+        self.assertEqual(
+            len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
+            len(content_all_assos),
+        )
