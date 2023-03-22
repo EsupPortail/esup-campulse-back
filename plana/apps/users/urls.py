@@ -9,16 +9,13 @@ from .views.association_users import (
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserRetrieve
-from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
-from .views.user import (
-    PasswordResetConfirm,
-    UserAuthVerifyEmailView,
-    UserAuthView,
-    UserListCreate,
-    UserRetrieveUpdateDestroy,
-)
+
+# from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
+from .views.user import UserListCreate, UserRetrieveUpdateDestroy
+from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
 from .views.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsDestroy,
+    UserGroupsInstitutionsCommissionsDestroyWithCommission,
     UserGroupsInstitutionsCommissionsListCreate,
     UserGroupsInstitutionsCommissionsRetrieve,
 )
@@ -30,12 +27,12 @@ urlpatterns = [
         name="user_associations_list_create",
     ),
     path(
-        "associations/<int:user_id>",
+        "<int:user_id>/associations/",
         AssociationUsersRetrieve.as_view(),
         name="user_associations_retrieve",
     ),
     path(
-        "associations/<int:user_id>/<int:association_id>",
+        "<int:user_id>/associations/<int:association_id>",
         AssociationUsersUpdateDestroy.as_view(),
         name="user_associations_update_destroy",
     ),
@@ -54,14 +51,8 @@ urlpatterns = [
         name="rest_verify_email",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path(
-        "consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"
-    ),
-    path(
-        "consents/<int:user_id>",
-        UserConsentsRetrieve.as_view(),
-        name="user_consents_retrieve",
-    ),
+    # path("consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"),
+    # path("consents/<int:user_id>", UserConsentsRetrieve.as_view(), name="user_consents_retrieve",),
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(
@@ -70,14 +61,19 @@ urlpatterns = [
         name="user_groups_institutions_commissions_list_create",
     ),
     path(
-        "groups/<int:user_id>",
+        "<int:user_id>/groups/",
         UserGroupsInstitutionsCommissionsRetrieve.as_view(),
         name="user_groups_institutions_commissions_retrieve",
     ),
     path(
-        "groups/<int:user_id>/<int:group_id>",
+        "<int:user_id>/groups/<int:group_id>",
         UserGroupsInstitutionsCommissionsDestroy.as_view(),
         name="user_groups_institutions_commissions_destroy",
+    ),
+    path(
+        "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
+        UserGroupsInstitutionsCommissionsDestroyWithCommission.as_view(),
+        name="user_groups_institutions_commissions_destroy_with_commission",
     ),
     path(
         "external/",

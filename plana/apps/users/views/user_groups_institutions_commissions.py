@@ -4,9 +4,12 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
+from plana.apps.commissions.models.commission import Commission
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
 from plana.apps.users.serializers.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsCreateSerializer,
@@ -14,6 +17,10 @@ from plana.apps.users.serializers.user_groups_institutions_commissions import (
 )
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/groups"]),
+    post=extend_schema(tags=["users/groups"]),
+)
 class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
     """
     GET : Lists all groups linked to a user (student), or all groups of all users (manager).
@@ -32,7 +39,9 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
+        if request.user.has_perm(
+            "users.view_groupinstitutioncommissionusers_any_group"
+        ):
             serializer = self.serializer_class(
                 GroupInstitutionCommissionUsers.objects.all(), many=True
             )
@@ -47,22 +56,30 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         try:
             # groups_ids = request.data["groups"]
             group_id = request.data["group"]
+            group = Group.objects.get(pk=group_id)
             user = User.objects.get(username=request.data["username"])
+            institution = None
+            institution_id = None
+            if (
+                "institution" in request.data
+                and request.data["institution"] is not None
+            ):
+                institution = Institution.objects.get(id=request.data["institution"])
+                institution_id = institution.id
+            commission = None
+            commission_id = None
+            if "commission" in request.data and request.data["commission"] is not None:
+                commission = Commission.objects.get(id=request.data["commission"])
+                commission_id = commission.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("No user name or groups ids given.")},
+                {"error": _("Wrong ids given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         if request.user.is_anonymous and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit groups for this account.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if user.is_superuser or user.is_staff:
-            return response.Response(
-                {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -73,6 +90,14 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         ):
             return response.Response(
                 {"error": _("Only managers can edit groups.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (user.is_superuser or user.is_staff) and not request.user.has_perm(
+            "users.add_groupinstitutioncommissionusers_any_group"
+        ):
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -101,26 +126,72 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         """
-        try:
-            group = Group.objects.get(pk=group_id)
-            if group.name in settings.PUBLIC_GROUPS:
-                GroupInstitutionCommissionUsers.objects.create(
-                    user_id=user.pk, group_id=group_id, institution_id=None
-                )
-            else:
-                return response.Response(
-                    {"error": _("Adding users in this group is not allowed.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        except Group.DoesNotExist:
-            return response.Response(
-                {"error": _("Group does not exist.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
+            if group_structure_name == group.name:
+                if (
+                    group_structure["REGISTRATION_ALLOWED"] is False
+                    and not request.user.has_perm(
+                        "users.add_groupinstitutioncommissionusers_any_group"
+                    )
+                    and (
+                        not request.user.is_staff
+                        or (
+                            request.user.is_staff
+                            and group in request.user.get_user_groups()
+                        )
+                    )
+                ):
+                    return response.Response(
+                        {"error": _("Registering in this group is not allowed.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                if institution_id is not None:
+                    if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
+                        not request.user.has_perm(
+                            "users.add_groupinstitutioncommissionusers_any_group"
+                        )
+                        and not institution in request.user.get_user_institutions()
+                    ):
+                        return response.Response(
+                            {
+                                "error": _(
+                                    "Adding institution in this group is not possible."
+                                )
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+                if commission_id is not None:
+                    if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
+                        not request.user.has_perm(
+                            "users.add_groupinstitutioncommissionusers_any_group"
+                        )
+                        and not commission.institution_id
+                        in request.user.get_user_institutions()
+                    ):
+                        return response.Response(
+                            {
+                                "error": _(
+                                    "Adding commission in this group is not possible."
+                                )
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+        GroupInstitutionCommissionUsers.objects.create(
+            user_id=user.pk,
+            group_id=group_id,
+            institution_id=institution_id,
+            commission_id=commission_id,
+        )
 
         return response.Response({}, status=status.HTTP_200_OK)
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/groups"]),
+)
 class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
     """Lists all groups linked to a user (manager)."""
 
@@ -130,7 +201,9 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         """GET : Lists all groups linked to a user (manager)."""
-        if request.user.has_perm("users.view_groupinstitutioncommissionusers_anyone"):
+        if request.user.has_perm(
+            "users.view_groupinstitutioncommissionusers_any_group"
+        ):
             serializer = self.serializer_class(
                 GroupInstitutionCommissionUsers.objects.filter(
                     user_id=kwargs["user_id"]
@@ -144,6 +217,9 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
         )
 
 
+@extend_schema_view(
+    delete=extend_schema(operation_id="users_groups_destroy", tags=["users/groups"])
+)
 class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
     """Deletes a group linked to a user (manager)."""
 
@@ -159,22 +235,114 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
                 user_id=user.pk
             )
             user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk, group_id=kwargs["group_id"]
+                user_id=user.pk, group_id=kwargs["group_id"], commission_id=None
             )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or link to group found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user.is_superuser or user.is_staff:
+
+        if (
+            user.is_superuser
+            or user.is_staff
+            and not request.user.has_perm(
+                "users.delete_groupinstitutioncommissionusers_any_group"
+            )
+        ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if user_groups.count() > 1:
-            user_group_to_delete.delete()
-            return response.Response({}, status=status.HTTP_204_NO_CONTENT)
-        return response.Response(
-            {"error": _("User should have at least one group.")},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+
+        if not request.user.has_perm(
+            "users.delete_groupinstitutioncommissionusers_any_group"
+        ) and (
+            user_group_to_delete.institution_id is not None
+            and not user_group_to_delete.institution_id
+            in request.user.get_user_institutions()
+        ):
+            return response.Response(
+                {"error": _("Not allowed to delete this link between user and group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user_groups.count() <= 1:
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_group_to_delete.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+# TODO Optimize this route to avoid code duplication with previous delete.
+@extend_schema_view(
+    delete=extend_schema(
+        operation_id="users_groups_destroy_with_commission", tags=["users/groups"]
+    )
+)
+class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPIView):
+    """Deletes a group linked to a user with commission argument (manager)."""
+
+    queryset = GroupInstitutionCommissionUsers.objects.all()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+
+    def delete(self, request, *args, **kwargs):
+        """DELETE : Deletes a group linked to a user with commission argument (manager)."""
+        try:
+            user = User.objects.get(id=kwargs["user_id"])
+            user_groups = GroupInstitutionCommissionUsers.objects.filter(
+                user_id=user.pk
+            )
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
+                user_id=user.pk,
+                group_id=kwargs["group_id"],
+                commission_id=kwargs["commission_id"],
+            )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No user or link to group found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            user.is_superuser
+            or user.is_staff
+            and not request.user.has_perm(
+                "users.delete_groupinstitutioncommissionusers_any_group"
+            )
+        ):
+            return response.Response(
+                {"error": _("Groups for a manager cannot be changed.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not request.user.has_perm(
+            "users.delete_groupinstitutioncommissionusers_any_group"
+        ) and (
+            (
+                user_group_to_delete.institution_id is not None
+                and not user_group_to_delete.institution_id
+                in request.user.get_user_institutions()
+            )
+            or not Commission.objects.get(
+                id=user_group_to_delete.commission_id
+            ).institution_id
+            in request.user.get_user_institutions()
+        ):
+            return response.Response(
+                {"error": _("Not allowed to delete this link between user and group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user_groups.count() <= 1:
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_group_to_delete.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)

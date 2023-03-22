@@ -68,18 +68,6 @@ CAS_AUTHORIZED_SERVICES = [
 ##########
 
 EMAIL_TEMPLATE_FRONTEND_URL = "https://plana-test.app.unistra.fr/"
-EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "register-verify-email/"
-)
-EMAIL_TEMPLATE_PASSWORD_RESET_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "password-reset-confirm/"
-)
-EMAIL_TEMPLATE_PASSWORD_CHANGE_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/password-change-url/"
-)
-EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL = (
-    EMAIL_TEMPLATE_FRONTEND_URL + "dashboard/validate-users/"
-)
 
 
 #####################

@@ -504,9 +504,9 @@ JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
-    "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetSerializer",
-    "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user.PasswordResetConfirmSerializer",
-    "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user.PasswordChangeSerializer",
+    "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetSerializer",
+    "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetConfirmSerializer",
+    "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordChangeSerializer",
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -553,6 +553,17 @@ SPECTACULAR_SETTINGS = {
 }
 
 
+################################
+# URL parts in email templates #
+################################
+
+EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH = "register-verify-email/"
+EMAIL_TEMPLATE_PASSWORD_RESET_PATH = "password-reset-confirm/"
+EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH = "dashboard/password-change-url/"
+EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH = "dashboard/validate-users/"
+EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/manage-users/"
+
+
 ########
 # Misc #
 ########
@@ -578,13 +589,40 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
-# Groups that can be chosen on user registration.
-PUBLIC_GROUPS = [
-    "COMMISSION",
-    "STUDENT_INSTITUTION",
-    "STUDENT_MISC",
-]
-
 # External APIs
 ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
 ACCOUNTS_API_CONF = {}
+
+# Special permissions for user_groups links.
+GROUPS_STRUCTURE = {
+    "MANAGER_GENERAL": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
+    },
+    "MANAGER_INSTITUTION": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
+    },
+    "MANAGER_MISC": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "COMMISSION_ID_POSSIBLE": False,
+    },
+    "COMMISSION": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": True,
+    },
+    "STUDENT_INSTITUTION": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": False,
+    },
+    "STUDENT_MISC": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "COMMISSION_ID_POSSIBLE": False,
+    },
+}

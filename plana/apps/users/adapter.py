@@ -41,7 +41,7 @@ class PlanAAdapter(DefaultAccountAdapter):
             key = context['key']
             context[
                 "activate_url"
-            ] = f"{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_URL}?key={key}"
+            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"
 
         elif template_prefix == "account/email/password_reset_key":
             template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
@@ -52,7 +52,7 @@ class PlanAAdapter(DefaultAccountAdapter):
             token = password_reset_url_parts.group(3)
             context[
                 "password_reset_url"
-            ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
 
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,

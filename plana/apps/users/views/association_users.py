@@ -1,5 +1,9 @@
 """Views linked to links between users and associations."""
 
+import datetime
+
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +13,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreateSerializer,
@@ -16,7 +21,8 @@ from plana.apps.users.serializers.association_users import (
     AssociationUsersSerializer,
     AssociationUsersUpdateSerializer,
 )
-from plana.utils import to_bool
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
@@ -40,8 +46,10 @@ from plana.utils import to_bool
                 OpenApiParameter.QUERY,
                 description="Filter by Association ID.",
             ),
-        ]
-    )
+        ],
+        tags=["users/associations"],
+    ),
+    post=extend_schema(tags=["users/associations"]),
 )
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """
@@ -178,15 +186,47 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            request.user.is_staff
+            and not request.user.has_perm(
+                "users.change_associationusers_any_institution"
+            )
+            and not request.user.is_staff_in_institution(association_id)
+        ):
+            return response.Response(
+                {"error": _("Cannot add an association from this institution.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not request.user.is_anonymous and user.is_validated_by_admin:
             if request.user.is_staff:
                 request.data["is_validated_by_admin"] = True
             else:
                 request.data["is_validated_by_admin"] = False
 
+        if not user.is_validated_by_admin:
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}{user.pk}",
+            }
+            template = MailTemplate.objects.get(code="USER_ASSOCIATION_MANAGER_MESSAGE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=Institution.objects.get(id=association.institution_id).email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         return super().create(request, *args, **kwargs)
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["users/associations"]),
+)
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
     """Lists all associations linked to a user (manager)."""
 
@@ -212,6 +252,10 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
 
 
 @extend_schema(methods=["PUT", "GET"], exclude=True)
+@extend_schema_view(
+    patch=extend_schema(tags=["users/associations"]),
+    delete=extend_schema(tags=["users/associations"]),
+)
 class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     PATCH : Updates user role in an association (manager and president).
@@ -237,8 +281,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         try:
-            User.objects.get(id=kwargs["user_id"])
-            Association.objects.get(id=kwargs["association_id"])
+            user = User.objects.get(id=kwargs["user_id"])
+            association = Association.objects.get(id=kwargs["association_id"])
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
@@ -264,6 +308,18 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             president = False
 
+        if (
+            request.user.is_staff
+            and not request.user.has_perm(
+                "users.change_associationusers_any_institution"
+            )
+            and not request.user.is_staff_in_institution(kwargs["association_id"])
+        ):
+            return response.Response(
+                {"error": _("Cannot change an association from this institution.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationusers_any_institution")
             and not request.user.is_staff_in_institution(kwargs["association_id"])
@@ -278,82 +334,156 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            request.user.has_perm("users.change_associationusers_any_institution")
-            or request.user.is_staff_in_institution(kwargs["association_id"])
-            or request.user.is_president_in_association(kwargs["association_id"])
+            not request.user.has_perm("users.change_associationusers_any_institution")
+            and not request.user.is_staff_in_institution(kwargs["association_id"])
+            and not request.user.is_president_in_association(kwargs["association_id"])
         ):
-            if "is_president" in request.data and to_bool(request.data["is_president"]):
-                """
-                if president:
+            return response.Response(
+                {"error": _("No edition rights on this link.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if "is_president" in request.data and to_bool(request.data["is_president"]):
+            """
+            if president:
+                actual_president = AssociationUsers.objects.get(
+                    association_id=kwargs["association_id"], user_id=request.user.pk
+                )
+                asso_user.is_president = True
+                asso_user.is_secretary = False
+                asso_user.is_treasurer = False
+                actual_president.is_president = False
+                actual_president.save()
+            """
+            if request.user.is_staff_in_institution(kwargs["association_id"]):
+                try:
                     actual_president = AssociationUsers.objects.get(
-                        association_id=kwargs["association_id"], user_id=request.user.pk
+                        association_id=kwargs["association_id"], is_president=True
                     )
-                    asso_user.is_president = True
-                    asso_user.is_secretary = False
-                    asso_user.is_treasurer = False
                     actual_president.is_president = False
                     actual_president.save()
-                """
-                if request.user.is_staff_in_institution(kwargs["association_id"]):
-                    try:
-                        actual_president = AssociationUsers.objects.get(
-                            association_id=kwargs["association_id"], is_president=True
-                        )
-                        actual_president.is_president = False
-                        actual_president.save()
-                    except ObjectDoesNotExist:
-                        pass
-                    asso_user.is_president = True
-                    asso_user.is_vice_president = False
-                    asso_user.is_secretary = False
-                    asso_user.is_treasurer = False
-                else:
-                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+                except ObjectDoesNotExist:
+                    pass
+                asso_user.is_president = True
+                asso_user.is_vice_president = False
+                asso_user.is_secretary = False
+                asso_user.is_treasurer = False
+            else:
+                return response.Response(
+                    {"error": _("Only managers can edit president.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-            if "is_president" in request.data and not to_bool(
-                request.data["is_president"]
+        if "is_president" in request.data and not to_bool(request.data["is_president"]):
+            if president:
+                return response.Response(
+                    {"error": _("President cannot self-edit.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if request.user.is_staff_in_institution(kwargs["association_id"]):
+                asso_user.is_president = False
+
+        if (not "can_be_president" in request.data) and (
+            "can_be_president_from" in request.data
+            or "can_be_president_to" in request.data
+        ):
+            request.data["can_be_president"] = True
+
+        if "can_be_president" in request.data:
+            if president or request.user.is_staff_in_institution(
+                kwargs["association_id"]
             ):
-                if president:
-                    return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
-                if request.user.is_staff_in_institution(kwargs["association_id"]):
-                    asso_user.is_president = False
-
-            if "can_be_president" in request.data:
                 asso_user.can_be_president = to_bool(request.data["can_be_president"])
+            else:
+                return response.Response(
+                    {"error": _("Can't give president delegation to another user.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-            if "is_vice_president" in request.data:
-                is_vice_president = to_bool(request.data["is_vice_president"])
-                asso_user.is_vice_president = is_vice_president
-                if is_vice_president:
-                    asso_user.is_president = False
-                    asso_user.is_secretary = False
-                    asso_user.is_treasurer = False
+        if (
+            "can_be_president_from" in request.data
+            and not "can_be_president_to" in request.data
+        ):
+            request.data["can_be_president_to"] = asso_user.can_be_president_to
 
-            if "is_secretary" in request.data:
-                is_secretary = to_bool(request.data["is_secretary"])
-                asso_user.is_secretary = is_secretary
-                if is_secretary:
-                    asso_user.is_president = False
-                    asso_user.is_vice_president = False
-                    asso_user.is_treasurer = False
+        if (
+            not "can_be_president_from" in request.data
+            and "can_be_president_to" in request.data
+        ):
+            request.data["can_be_president_from"] = datetime.date.today()
 
-            if "is_treasurer" in request.data:
-                is_treasurer = to_bool(request.data["is_treasurer"])
-                asso_user.is_treasurer = is_treasurer
-                if is_treasurer:
-                    asso_user.is_president = False
-                    asso_user.is_vice_president = False
-                    asso_user.is_secretary = False
+        if (
+            "can_be_president_from" in request.data
+            and "can_be_president_to" in request.data
+            and request.data["can_be_president_from"]
+            > request.data["can_be_president_to"]
+        ):
+            return response.Response(
+                {"error": _("Can't remove president delegation before giving it.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-            asso_user.save()
-            return response.Response({}, status=status.HTTP_200_OK)
+        if "is_vice_president" in request.data:
+            is_vice_president = to_bool(request.data["is_vice_president"])
+            asso_user.is_vice_president = is_vice_president
+            if is_vice_president:
+                asso_user.is_president = False
+                asso_user.is_secretary = False
+                asso_user.is_treasurer = False
 
-        return response.Response({}, status=status.HTTP_403_FORBIDDEN)
+        if "is_secretary" in request.data:
+            is_secretary = to_bool(request.data["is_secretary"])
+            asso_user.is_secretary = is_secretary
+            if is_secretary:
+                asso_user.is_president = False
+                asso_user.is_vice_president = False
+                asso_user.is_treasurer = False
+
+        if "is_treasurer" in request.data:
+            is_treasurer = to_bool(request.data["is_treasurer"])
+            asso_user.is_treasurer = is_treasurer
+            if is_treasurer:
+                asso_user.is_president = False
+                asso_user.is_vice_president = False
+                asso_user.is_secretary = False
+
+        asso_user.save()
+
+        if (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is True
+            and (
+                request.user.has_perm("users.change_associationusers_any_institution")
+                or request.user.is_staff_in_institution(kwargs["association_id"])
+            )
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "association_name": association.name,
+            }
+            template = MailTemplate.objects.get(
+                code="USER_ASSOCIATION_STUDENT_MESSAGE_CONFIRMATION"
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+        return response.Response({}, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         try:
             association = Association.objects.get(id=kwargs["association_id"])
-            request.data["user"] = User.objects.get(id=kwargs["user_id"]).id
+            user = User.objects.get(id=kwargs["user_id"])
+            request.data["user"] = user.id
             request.data["association"] = association.id
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -376,4 +506,52 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         AssociationUsers.objects.filter(
             user_id=kwargs["user_id"], association_id=kwargs["association_id"]
         ).delete()
+        if request.user.has_perm(
+            "users.delete_associationusers_any_institution"
+        ) or request.user.is_staff_in_institution(kwargs["association_id"]):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "association_name": association.name,
+            }
+            template = MailTemplate.objects.get(
+                code="USER_ASSOCIATION_STUDENT_MESSAGE_REJECTION"
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+        """
+        # Delete the account if no association remains.
+        if (
+            AssociationUsers.objects.filter(user_id=kwargs["user_id"]).count() < 1
+            and GroupInstitutionCommissionUsers.objects.filter(
+                user_id=kwargs["user_id"]
+            ).count()
+            == 1
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+            user.delete()
+        """
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

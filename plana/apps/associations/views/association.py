@@ -12,11 +12,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.association import (
-    AssociationAllDataNoSubTableSerializer,
     AssociationAllDataSerializer,
     AssociationMandatoryDataSerializer,
     AssociationNameSerializer,
@@ -261,6 +258,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = Association.objects.all()
+    serializer_class = AssociationAllDataSerializer
 
     def get_permissions(self):
         if self.request.method in ("PATCH", "DELETE"):
@@ -268,13 +266,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [AllowAny]
         return super().get_permissions()
-
-    def get_serializer_class(self):
-        if self.request.method == "PATCH":
-            self.serializer_class = AssociationAllDataNoSubTableSerializer
-        else:
-            self.serializer_class = AssociationAllDataSerializer
-        return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
         try:
@@ -466,15 +457,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-class AssociationActivityFieldList(generics.ListAPIView):
-    """GET : Lists all activity fields."""
-
-    serializer_class = ActivityFieldSerializer
-
-    def get_queryset(self):
-        return ActivityField.objects.all().order_by("name")
-
-
 @extend_schema_view(
     get=extend_schema(
         parameters=[
@@ -513,12 +495,8 @@ class AssociationNameList(generics.ListAPIView):
             queryset = queryset.filter(institution_id__in=institutions.split(","))
         if is_public is not None and is_public != "":
             queryset = queryset.filter(is_public=to_bool(is_public))
-        if (
-            allow_new_users is not None
-            and allow_new_users != ""
-            and to_bool(allow_new_users) is True
-        ):
-            assos_ids_to_exclude = []
+        if allow_new_users is not None and allow_new_users != "":
+            assos_ids_with_all_members = []
             for association in queryset:
                 association_users = AssociationUsers.objects.filter(
                     association_id=association.id
@@ -527,7 +505,10 @@ class AssociationNameList(generics.ListAPIView):
                     not association.amount_members_allowed is None
                     and association_users.count() >= association.amount_members_allowed
                 ):
-                    assos_ids_to_exclude.append(association.id)
-            queryset = queryset.exclude(id__in=assos_ids_to_exclude)
+                    assos_ids_with_all_members.append(association.id)
+            if to_bool(allow_new_users) is True:
+                queryset = queryset.exclude(id__in=assos_ids_with_all_members)
+            else:
+                queryset = queryset.filter(id__in=assos_ids_with_all_members)
 
         return queryset.order_by("name")

@@ -14,15 +14,20 @@ class Command(BaseCommand):
     help = "Creates a new manager user."
 
     def add_arguments(self, parser):
-        group_choices = Group.objects.exclude(
-            name__in=settings.PUBLIC_GROUPS
-        ).values_list("name", flat=True)
+        allowed_groups_names = []
+        for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
+            if group_structure["REGISTRATION_ALLOWED"] is False:
+                allowed_groups_names.append(group_structure_name)
+        group_choices = Group.objects.filter(name__in=allowed_groups_names).values_list(
+            "name", flat=True
+        )
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
+        parser.add_argument("--password", help="Password.")
         parser.add_argument(
             "--group",
             help="Group codename.",
@@ -40,7 +45,10 @@ class Command(BaseCommand):
             user = get_user_model().objects.create_user(
                 username=options["email"], email=options["email"]
             )
-            password = get_user_model().objects.make_random_password()
+            if options["password"] is None:
+                password = get_user_model().objects.make_random_password()
+            else:
+                password = options["password"]
             user.set_password(password)
             user.password_last_change_date = datetime.datetime.today()
             user.first_name = options["firstname"]

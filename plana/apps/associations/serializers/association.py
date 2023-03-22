@@ -3,32 +3,14 @@ from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
-from plana.apps.institutions.serializers.institution import InstitutionSerializer
-from plana.apps.institutions.serializers.institution_component import (
-    InstitutionComponentSerializer,
-)
 from plana.apps.users.models.user import AssociationUsers
 
 
 class AssociationAllDataSerializer(serializers.ModelSerializer):
     """Main serializer."""
-
-    institution = InstitutionSerializer()
-    institution_component = InstitutionComponentSerializer()
-    activity_field = ActivityFieldSerializer()
-    path_logo = ThumbnailField(sizes=["detail"])
-
-    class Meta:
-        model = Association
-        fields = "__all__"
-
-
-class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
-    """Serializer without name details about sub-tables."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
     institution_component = serializers.PrimaryKeyRelatedField(
@@ -37,6 +19,7 @@ class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
     activity_field = serializers.PrimaryKeyRelatedField(
         queryset=ActivityField.objects.all()
     )
+    path_logo = ThumbnailField(sizes=["detail"])
 
     class Meta:
         model = Association
@@ -46,9 +29,13 @@ class AssociationAllDataNoSubTableSerializer(serializers.ModelSerializer):
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """Smaller serializer to return only some of the informations of an association."""
 
-    institution = InstitutionSerializer()
-    institution_component = InstitutionComponentSerializer()
-    activity_field = ActivityFieldSerializer()
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
+    institution_component = serializers.PrimaryKeyRelatedField(
+        queryset=InstitutionComponent.objects.all()
+    )
+    activity_field = serializers.PrimaryKeyRelatedField(
+        queryset=ActivityField.objects.all()
+    )
     path_logo = ThumbnailField(sizes=["list"])
 
     class Meta:

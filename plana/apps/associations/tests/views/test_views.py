@@ -156,7 +156,7 @@ class AssociationsViewsTests(TestCase):
 
         response = self.client.get("/associations/?institution_component=1")
         for association in response.data:
-            self.assertEqual(association["institution_component"]["id"], 1)
+            self.assertEqual(association["institution_component"], 1)
 
         response = self.client.get("/associations/?institution_component=")
         for association in response.data:
@@ -164,7 +164,7 @@ class AssociationsViewsTests(TestCase):
 
         response = self.client.get("/associations/?activity_field=3")
         for association in response.data:
-            self.assertEqual(association["activity_field"]["id"], 3)
+            self.assertEqual(association["activity_field"], 3)
 
         response = self.client.get(f"/associations/?user_id={self.student_user_id}")
         content = json.loads(response.content.decode("utf-8"))
@@ -678,10 +678,3 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/names?is_public=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_public)
-
-        """
-        # TODO Test allow_new_users filter.
-        response = self.client.get("/associations/names?allow_new_users=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertNotEqual(len(content), asso_names_cnt)
-        """

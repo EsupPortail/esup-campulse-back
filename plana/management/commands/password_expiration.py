@@ -57,7 +57,7 @@ class Command(BaseCommand):
         token = default_token_generator.make_token(user)
         context[
             "password_reset_url"
-        ] = f"{settings.EMAIL_TEMPLATE_PASSWORD_RESET_URL}?uid={uid}&token={token}"
+        ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
 
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,

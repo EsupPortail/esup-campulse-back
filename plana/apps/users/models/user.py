@@ -68,9 +68,17 @@ class GroupInstitutionCommissionUsers(models.Model):
         verbose_name_plural = _("Users Institution Commission Groups")
         permissions = [
             (
-                "view_groupinstitutioncommissionusers_anyone",
+                "add_groupinstitutioncommissionusers_any_group",
+                "Can add restricted groups to a user.",
+            ),
+            (
+                "delete_groupinstitutioncommissionusers_any_group",
+                "Can delete restricted groups to a user.",
+            ),
+            (
+                "view_groupinstitutioncommissionusers_any_group",
                 "Can view all groups for a user.",
-            )
+            ),
         ]
 
 
@@ -134,7 +142,23 @@ class User(AbstractUser):
             id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
                 "association_id"
             )
-        ).values_list("id")
+        )
+
+    def get_user_commissions(self):
+        """Return a list of Commission objects linked to a user."""
+        return Commission.objects.filter(
+            id__in=GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk
+            ).values_list("commission_id")
+        )
+
+    def get_user_groups(self):
+        """Return a list of Group objects linked to a user."""
+        return Group.objects.filter(
+            id__in=GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk
+            ).values_list("group_id")
+        )
 
     def get_user_institutions(self):
         """Return a list of Institution objects linked to a user."""
@@ -188,6 +212,11 @@ class User(AbstractUser):
                 models.Q(is_president=True)
                 | models.Q(
                     can_be_president=True,
+                    can_be_president_from__isnull=True,
+                    can_be_president_to__isnull=True,
+                )
+                | models.Q(
+                    can_be_president=True,
                     can_be_president_from__gte=now,
                     can_be_president_to__lte=now,
                 )
@@ -228,6 +257,7 @@ class User(AbstractUser):
         permissions = [
             ("add_user_misc", "Can add a user with no association linked."),
             ("change_user_misc", "Can change a user with no association linked."),
+            ("change_user_all_fields", "Can change can_submit_projects on a user."),
             ("delete_user_misc", "Can delete a user with no association linked."),
             ("view_user_misc", "Can view a user with no association linked."),
             ("view_user_anyone", "Can view all users."),
