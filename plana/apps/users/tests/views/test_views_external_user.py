@@ -65,6 +65,20 @@ class ExternalUserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['mail'], 'john.doe@mail.tld')
 
+    def test_external_user_detail_wrong_permission(self):
+        student_client = Client()
+        student_client.post(
+            reverse("rest_login"),
+            {
+                "username": "president-asso-site@mail.tld",
+                "password": "motdepasse",
+            },
+        )
+        response = student_client.get(
+            reverse('external_user_retrieve'), {'last_name': 'jean-doux'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_external_user_detail_missing_last_name(self):
         response = self.manager_client.get(
             reverse('external_user_retrieve'), {'wrong': 'wrong'}

@@ -244,6 +244,7 @@ class UserViewsStudentTests(TestCase):
         - A student president of an association can execute this request.
         - A can_be_president of an association cannot PATCH can_be_president.
         - A student president of an association can update vice-president, secretary and treasurer.
+        - can_be_president_from cannot comes after can_be_president_to
         """
         association_id = 2
         asso_user = AssociationUsers.objects.get(
@@ -320,6 +321,7 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
+                "can_be_president_from": None,
                 "is_vice_president": True,
             },
             content_type="application/json",
@@ -340,6 +342,16 @@ class UserViewsStudentTests(TestCase):
         self.assertTrue(old_president.can_be_president)
         self.assertFalse(old_president.is_president)
         """
+
+        response_president = self.president_student_client.patch(
+            f"/users/{self.student_user_id}/associations/{association_id}",
+            {
+                "can_be_president_from": "2023-03-22",
+                "can_be_president_to": "2023-03-15",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_patch_association_users_other_president(self):
         """
@@ -407,6 +419,7 @@ class UserViewsStudentTests(TestCase):
         - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
+        - A student user cannot update his permission to submit projects.
         - A student user cannot update his email address with an address from another account.
         - A student user can update his email address.
         - Updating the email address doesn't change the username without validation.
@@ -427,6 +440,14 @@ class UserViewsStudentTests(TestCase):
         )
         student_user = User.objects.get(username=self.student_user_name)
         self.assertEqual(student_user.username, self.student_user_name)
+
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"can_submit_projects": False},
+            content_type="application/json",
+        )
+        student_user = User.objects.get(username=self.student_user_name)
+        self.assertTrue(student_user.can_submit_projects)
 
         new_email = self.president_user_name
         response_student = self.student_client.patch(

@@ -51,8 +51,18 @@ class UserViewsManagerTests(TestCase):
         self.student_user_name = "etudiant-asso-site@mail.tld"
         self.president_user_id = 13
         self.president_user_name = "president-asso-site@mail.tld"
+
         self.manager_misc_user_id = 5
         self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+        self.manager_misc_client = Client()
+        url_manager_misc = reverse("rest_login")
+        data_manager_misc = {
+            "username": self.manager_misc_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.manager_misc_client.post(
+            url_manager_misc, data_manager_misc
+        )
 
         self.manager_general_user_id = 3
         self.manager_general_user_name = "gestionnaire-svu@mail.tld"
@@ -374,10 +384,21 @@ class UserViewsManagerTests(TestCase):
         """
         POST /users/associations/ .
 
+        - A misc manager user cannot add an association from another institution.
         - A manager user can add an association to a validated student.
         - A manager user can add an association to a non-validated student.
         - A manager cannot be added in an association.
         """
+        response_manager_misc = self.manager_misc_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_name,
+                "association": 1,
+                "can_be_president": False,
+            },
+        )
+        self.assertEqual(response_manager_misc.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_manager = self.manager_client.post(
             "/users/associations/",
             {

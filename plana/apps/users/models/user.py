@@ -229,6 +229,21 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
+    def is_staff_for_association(self, association_id):
+        """Check if a user is linked as manager for an association."""
+        if self.is_staff:
+            try:
+                GroupInstitutionCommissionUsers.objects.get(
+                    user_id=self.pk,
+                    institution_id=Association.objects.get(
+                        id=association_id
+                    ).institution_id,
+                )
+                return True
+            except ObjectDoesNotExist:
+                return False
+        return False
+
     def is_staff_in_institution(self, institution_id):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:

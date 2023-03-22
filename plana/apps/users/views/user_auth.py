@@ -32,10 +32,8 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if (
-            "can_submit_projects" in request.data
-            and to_bool(request.data["can_submit_projects"]) is True
-            and not self.request.user.has_perm("users.change_user_all_fields")
+        if "can_submit_projects" in request.data and not self.request.user.has_perm(
+            "users.change_user_all_fields"
         ):
             return response.Response(
                 {"error": _("Only managers can edit this field.")},

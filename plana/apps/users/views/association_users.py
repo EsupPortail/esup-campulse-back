@@ -149,7 +149,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                 not request.user.has_perm(
                     "users.change_associationusers_any_institution"
                 )
-                and not request.user.is_staff_in_institution(association_id)
+                and not request.user.is_staff_for_association(association_id)
             )
         ):
             return response.Response(
@@ -191,7 +191,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             and not request.user.has_perm(
                 "users.change_associationusers_any_institution"
             )
-            and not request.user.is_staff_in_institution(association_id)
+            and not request.user.is_staff_for_association(association_id)
         ):
             return response.Response(
                 {"error": _("Cannot add an association from this institution.")},
@@ -310,7 +310,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.has_perm("users.change_associationusers_any_institution")
-            and not request.user.is_staff_in_institution(kwargs["association_id"])
+            and not request.user.is_staff_for_association(kwargs["association_id"])
             and not request.user.is_president_in_association(kwargs["association_id"])
         ):
             return response.Response(
@@ -342,7 +342,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationusers_any_institution")
-            and not request.user.is_staff_in_institution(kwargs["association_id"])
+            and not request.user.is_staff_for_association(kwargs["association_id"])
         ):
             return response.Response(
                 {
@@ -365,7 +365,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 actual_president.is_president = False
                 actual_president.save()
             """
-            if request.user.is_staff_in_institution(kwargs["association_id"]):
+            if request.user.is_staff_for_association(kwargs["association_id"]):
                 try:
                     actual_president = AssociationUsers.objects.get(
                         association_id=kwargs["association_id"], is_president=True
@@ -388,16 +388,6 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             or "can_be_president_to" in request.data
         ):
             request.data["can_be_president"] = True
-
-        if (
-            "can_be_president" in request.data
-            and not president
-            and not request.user.is_staff_in_institution(kwargs["association_id"])
-        ):
-            return response.Response(
-                {"error": _("Can't give president delegation to another user.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         if (
             "can_be_president_from" in request.data
@@ -463,7 +453,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.data["is_validated_by_admin"] is True
             and (
                 request.user.has_perm("users.change_associationusers_any_institution")
-                or request.user.is_staff_in_institution(kwargs["association_id"])
+                or request.user.is_staff_for_association(kwargs["association_id"])
             )
         ):
             current_site = get_current_site(request)
@@ -517,7 +507,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ).delete()
         if request.user.has_perm(
             "users.delete_associationusers_any_institution"
-        ) or request.user.is_staff_in_institution(kwargs["association_id"]):
+        ) or request.user.is_staff_for_association(kwargs["association_id"]):
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,
