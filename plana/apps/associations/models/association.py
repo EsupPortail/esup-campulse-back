@@ -74,13 +74,11 @@ class Association(models.Model):
         default="CHARTER_DRAFT",
     )
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
-    approval_date = models.DateTimeField(
-        _("Approval date"), null=True
-    )  # date d'agrément
-    last_goa_date = models.DateTimeField(
+    approval_date = models.DateField(_("Approval date"), null=True)  # date d'agrément
+    last_goa_date = models.DateField(
         _("Last GOA date"), null=True
     )  # date de dernière AGO
-    cga_date = models.DateTimeField(_("CGA date"), null=True)  # date d'AG constitutive
+    cga_date = models.DateField(_("CGA date"), null=True)  # date d'AG constitutive
     social_networks = models.JSONField(
         default=list
     )  # JSON format : [{"type": "sn_name", "location": "sn_url"}]

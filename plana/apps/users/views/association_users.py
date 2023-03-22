@@ -309,16 +309,36 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             president = False
 
         if (
-            request.user.is_staff
-            and not request.user.has_perm(
-                "users.change_associationusers_any_institution"
-            )
+            not request.user.has_perm("users.change_associationusers_any_institution")
             and not request.user.is_staff_in_institution(kwargs["association_id"])
+            and not request.user.is_president_in_association(kwargs["association_id"])
         ):
             return response.Response(
-                {"error": _("Cannot change an association from this institution.")},
+                {"error": _("No edition rights on this link.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            "is_president" in request.data
+            and president
+            and asso_user.user_id == request.user.pk
+        ):
+            return response.Response(
+                {"error": _("President cannot self-edit.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if (
+            "can_be_president_from" in request.data
+            and not "can_be_president_to" in request.data
+        ):
+            request.data["can_be_president_to"] = None
+
+        if (
+            "can_be_president_to" in request.data
+            and not "can_be_president_from" in request.data
+        ):
+            request.data["can_be_president_from"] = datetime.date.today()
 
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationusers_any_institution")
@@ -331,16 +351,6 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 },
                 status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            not request.user.has_perm("users.change_associationusers_any_institution")
-            and not request.user.is_staff_in_institution(kwargs["association_id"])
-            and not request.user.is_president_in_association(kwargs["association_id"])
-        ):
-            return response.Response(
-                {"error": _("No edition rights on this link.")},
-                status=status.HTTP_403_FORBIDDEN,
             )
 
         if "is_president" in request.data and to_bool(request.data["is_president"]):
@@ -364,24 +374,14 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     actual_president.save()
                 except ObjectDoesNotExist:
                     pass
-                asso_user.is_president = True
-                asso_user.is_vice_president = False
-                asso_user.is_secretary = False
-                asso_user.is_treasurer = False
+                request.data["is_vice_president"] = False
+                request.data["is_secretary"] = False
+                request.data["is_treasurer"] = False
             else:
                 return response.Response(
                     {"error": _("Only managers can edit president.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
-        if "is_president" in request.data and not to_bool(request.data["is_president"]):
-            if president:
-                return response.Response(
-                    {"error": _("President cannot self-edit.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if request.user.is_staff_in_institution(kwargs["association_id"]):
-                asso_user.is_president = False
 
         if (not "can_be_president" in request.data) and (
             "can_be_president_from" in request.data
@@ -389,28 +389,15 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             request.data["can_be_president"] = True
 
-        if "can_be_president" in request.data:
-            if president or request.user.is_staff_in_institution(
-                kwargs["association_id"]
-            ):
-                asso_user.can_be_president = to_bool(request.data["can_be_president"])
-            else:
-                return response.Response(
-                    {"error": _("Can't give president delegation to another user.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
         if (
-            "can_be_president_from" in request.data
-            and not "can_be_president_to" in request.data
+            "can_be_president" in request.data
+            and not president
+            and not request.user.is_staff_in_institution(kwargs["association_id"])
         ):
-            request.data["can_be_president_to"] = asso_user.can_be_president_to
-
-        if (
-            not "can_be_president_from" in request.data
-            and "can_be_president_to" in request.data
-        ):
-            request.data["can_be_president_from"] = datetime.date.today()
+            return response.Response(
+                {"error": _("Can't give president delegation to another user.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if (
             "can_be_president_from" in request.data
@@ -423,29 +410,49 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "is_vice_president" in request.data:
-            is_vice_president = to_bool(request.data["is_vice_president"])
-            asso_user.is_vice_president = is_vice_president
-            if is_vice_president:
-                asso_user.is_president = False
-                asso_user.is_secretary = False
-                asso_user.is_treasurer = False
+        if (
+            "is_vice_president" in request.data
+            and to_bool(request.data["is_vice_president"]) is True
+        ):
+            request.data["is_president"] = False
+            request.data["is_secretary"] = False
+            request.data["is_treasurer"] = False
 
-        if "is_secretary" in request.data:
-            is_secretary = to_bool(request.data["is_secretary"])
-            asso_user.is_secretary = is_secretary
-            if is_secretary:
-                asso_user.is_president = False
-                asso_user.is_vice_president = False
-                asso_user.is_treasurer = False
+        if (
+            "is_secretary" in request.data
+            and to_bool(request.data["is_secretary"]) is True
+        ):
+            request.data["is_president"] = False
+            request.data["is_vice_president"] = False
+            request.data["is_treasurer"] = False
 
-        if "is_treasurer" in request.data:
-            is_treasurer = to_bool(request.data["is_treasurer"])
-            asso_user.is_treasurer = is_treasurer
-            if is_treasurer:
-                asso_user.is_president = False
-                asso_user.is_vice_president = False
-                asso_user.is_secretary = False
+        if (
+            "is_treasurer" in request.data
+            and to_bool(request.data["is_treasurer"]) is True
+        ):
+            request.data["is_president"] = False
+            request.data["is_vice_president"] = False
+            request.data["is_secretary"] = False
+
+        fields = [
+            "is_president",
+            "can_be_president",
+            "can_be_president_from",
+            "can_be_president_to",
+            "is_validated_by_admin",
+            "is_vice_president",
+            "is_secretary",
+            "is_treasurer",
+        ]
+        for field in fields:
+            if field in request.data and request.data[field] is not None:
+                if field not in [
+                    "can_be_president_from",
+                    "can_be_president_to",
+                ]:
+                    setattr(asso_user, field, to_bool(request.data[field]))
+                else:
+                    setattr(asso_user, field, request.data[field])
 
         asso_user.save()
 

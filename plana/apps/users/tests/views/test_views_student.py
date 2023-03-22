@@ -1,4 +1,5 @@
 """List of tests done on users views with a student user."""
+import datetime
 import json
 
 from django.conf import settings
@@ -267,6 +268,8 @@ class UserViewsStudentTests(TestCase):
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "can_be_president": True,
+                "can_be_president_from": "2023-03-22",
+                "can_be_president_to": "2023-03-29",
                 "is_secretary": True,
                 "is_treasurer": False,
             },
@@ -276,6 +279,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(asso_user.can_be_president_from, datetime.date(2023, 3, 22))
         self.assertTrue(asso_user.can_be_president)
         self.assertFalse(asso_user.is_president)
         self.assertTrue(asso_user.is_secretary)
@@ -292,7 +296,7 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.unvalidated_user_id, association_id=association_id
         )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(asso_user.can_be_president)
 
         response_president = self.president_student_client.patch(
