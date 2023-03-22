@@ -1,9 +1,12 @@
 """Views directly linked to document uploads."""
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.documents.serializers.document_upload import DocumentUploadSerializer
+from plana.apps.projects.models.project import Project
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
@@ -19,3 +22,20 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         """GET : Lists all document uploads."""
         return DocumentUpload.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        if "project" in request.data:
+            try:
+                project = Project.objects.get(pk=request.data["project"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Project does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            if not project.can_edit_project(request.user):
+                return response.Response(
+                    {"error": _("Not allowed to upload documents for this project.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+        return super().create(request, *args, **kwargs)
