@@ -247,9 +247,6 @@ class UserViewsStudentTests(TestCase):
         - can_be_president_from cannot comes after can_be_president_to
         """
         association_id = 2
-        asso_user = AssociationUsers.objects.get(
-            user_id=self.student_user_id, association_id=association_id
-        )
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
@@ -264,6 +261,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(asso_user.is_president)
 
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
@@ -334,14 +332,6 @@ class UserViewsStudentTests(TestCase):
         self.assertFalse(asso_user.is_secretary)
         self.assertFalse(asso_user.is_treasurer)
         self.assertTrue(asso_user.is_vice_president)
-
-        """
-        old_president = AssociationUsers.objects.get(
-            user_id=self.president_user_id, association_id=association_id
-        )
-        self.assertTrue(old_president.can_be_president)
-        self.assertFalse(old_president.is_president)
-        """
 
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",

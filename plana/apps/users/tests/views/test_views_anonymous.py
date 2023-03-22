@@ -296,8 +296,15 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/auth/password/reset/ .
 
         - An anonymous user can execute this request.
+        - Nothing happens if email is wrong.
         - An email is received if reset is successful.
         """
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/", {"email": "auguste-cornouailles@melun.fr"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertFalse(len(mail.outbox))
+
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/", {"email": self.student_user_name}
         )
