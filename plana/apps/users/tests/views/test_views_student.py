@@ -302,6 +302,7 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
+                "can_be_president_to": None,
                 "is_treasurer": True,
             },
             content_type="application/json",
@@ -310,6 +311,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(asso_user.can_be_president_to, None)
         self.assertFalse(asso_user.is_president)
         self.assertFalse(asso_user.is_secretary)
         self.assertTrue(asso_user.is_treasurer)

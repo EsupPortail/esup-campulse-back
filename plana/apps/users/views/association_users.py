@@ -447,7 +447,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "is_treasurer",
         ]
         for field in fields:
-            if field in request.data and request.data[field] is not None:
+            if field in request.data:
                 if field not in [
                     "can_be_president_from",
                     "can_be_president_to",

@@ -75,7 +75,7 @@ class CASSerializer(LoginSerializer):
                 )
                 attrs["user"] = login.account.user
             except IntegrityError:
-                ...
+                pass
         else:
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
