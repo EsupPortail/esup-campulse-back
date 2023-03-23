@@ -93,6 +93,13 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
     serializer_class = ProjectCommissionDateDataSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            self.serializer_class = ProjectCommissionDateSerializer
+        else:
+            self.serializer_class = ProjectCommissionDateDataSerializer
+        return super().get_serializer_class()
+
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
@@ -122,3 +129,24 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
             )
 
         return super().update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {
+                    "error": _(
+                        "Link between this project and commission does not exists."
+                    )
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not pcd.project.can_edit_project(request.user):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return super().delete(request, *args, **kwargs)
