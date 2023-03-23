@@ -90,7 +90,6 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = ProjectCommissionDate.objects.all()
-    serializer_class = ProjectCommissionDateDataSerializer
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
