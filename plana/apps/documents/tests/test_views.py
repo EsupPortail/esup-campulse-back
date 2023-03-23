@@ -73,10 +73,10 @@ class DocumentsViewsTests(TestCase):
         """
         GET /documents/{id} .
 
-        - An anonymous user cannot execute this request.
+        - An anonymous user can execute this request.
         """
         response = self.client.get("/documents/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_document_by_id(self):
         """

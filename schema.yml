@@ -204,6 +204,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -238,6 +239,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -256,6 +258,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -274,6 +277,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -295,6 +299,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -352,6 +357,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -388,6 +394,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -406,6 +413,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -424,6 +432,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -442,6 +451,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:

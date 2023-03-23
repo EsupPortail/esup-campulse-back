@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.serializers.document import DocumentSerializer
@@ -21,6 +21,11 @@ class DocumentList(generics.ListCreateAPIView):
     def get_queryset(self):
         """GET : Lists all documents."""
         return Document.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
     # TODO: add permission add_document_any_institution + unittests
     def post(self, request, *args, **kwargs):
@@ -51,7 +56,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         if self.request.method in ("DELETE"):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         else:
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [AllowAny]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):

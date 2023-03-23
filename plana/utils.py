@@ -1,6 +1,4 @@
-"""
-Generic functions to send emails, and convert "true" and "false" to real booleans.
-"""
+"""Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
 
 from django.conf import settings

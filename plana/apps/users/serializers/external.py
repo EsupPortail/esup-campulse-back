@@ -1,6 +1,4 @@
-"""
-Serializers describing fields used on users and related forms.
-"""
+"""Serializers describing fields used on users and related forms."""
 from rest_framework import serializers
 
 

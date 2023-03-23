@@ -484,6 +484,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class AssociationNameList(generics.ListAPIView):
     """GET : Lists names of all associations."""
 
+    permission_classes = [AllowAny]
     serializer_class = AssociationNameSerializer
 
     def get_queryset(self):

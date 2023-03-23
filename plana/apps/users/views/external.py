@@ -12,9 +12,7 @@ from ..serializers.external import ExternalUserSerializer
 
 
 class ExternalUserRetrieve(generics.ListAPIView):
-    """
-    GET : Retrieve an external user.
-    """
+    """GET : Retrieve an external user."""
 
     serializer_class = ExternalUserSerializer
     permission_classes = [IsAuthenticated]

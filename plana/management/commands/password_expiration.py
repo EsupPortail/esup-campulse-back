@@ -50,9 +50,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("Error : %s" % e))
 
     def send_password_mail(self, user, context, template):
-        """
-        Generic function to send an email.
-        """
+        """Generic function to send an email."""
         context["first_name"] = user.first_name
         context["last_name"] = user.last_name
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 13:51+0100\n"
+"POT-Creation-Date: 2023-03-23 14:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -385,16 +385,16 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:29
+#: plana/apps/documents/views/document.py:34
 msgid "Not allowed to add a new document type."
 msgstr "Non autorisé de créer un nouveau type de document."
 
-#: plana/apps/documents/views/document.py:63
-#: plana/apps/documents/views/document.py:74
+#: plana/apps/documents/views/document.py:68
+#: plana/apps/documents/views/document.py:79
 msgid "No document id given."
 msgstr "Pas d'identifiant de document donné."
 
-#: plana/apps/documents/views/document.py:83
+#: plana/apps/documents/views/document.py:88
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
@@ -748,7 +748,7 @@ msgstr "Non autorisé à ajouter une association de cet établissement."
 
 #: plana/apps/users/views/association_users.py:258
 #: plana/apps/users/views/association_users.py:500
-#: plana/apps/users/views/external.py:37
+#: plana/apps/users/views/external.py:35
 #: plana/apps/users/views/gdpr_consent_users.py:68
 #: plana/apps/users/views/user.py:264 plana/apps/users/views/user.py:276
 #: plana/apps/users/views/user_groups_institutions_commissions.py:188
@@ -780,7 +780,7 @@ msgstr "Seuls les gestionnaires peuvent changer le président."
 msgid "Can't remove president delegation before giving it."
 msgstr "Impossible de retirer les droits de président avant de les donner."
 
-#: plana/apps/users/views/external.py:48
+#: plana/apps/users/views/external.py:46
 msgid "No last name given."
 msgstr "Aucun nom de famille donné."
 

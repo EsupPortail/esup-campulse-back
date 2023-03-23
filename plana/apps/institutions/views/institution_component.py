@@ -1,5 +1,6 @@
 """Views linked to institution components."""
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.institutions.serializers.institution_component import (
@@ -10,6 +11,7 @@ from plana.apps.institutions.serializers.institution_component import (
 class InstitutionComponentList(generics.ListAPIView):
     """Lists all institution components."""
 
+    permission_classes = [AllowAny]
     serializer_class = InstitutionComponentSerializer
 
     def get_queryset(self):
