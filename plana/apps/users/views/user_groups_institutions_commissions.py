@@ -105,31 +105,6 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # In case we revert to a multi-group linking to users system
-        """
-        groups = (
-            groups_ids
-            if isinstance(groups_ids, list)
-            else list(map(int, groups_ids.split(",")))
-        )
-        for id_group in groups:
-            try:
-                group = Group.objects.get(id=id_group)
-                if group.name in settings.PUBLIC_GROUPS:
-                    GroupInstitutionCommissionUsers.objects.create(
-                        user_id=user.pk, group_id=id_group, institution_id=None
-                    )
-                else:
-                    return response.Response(
-                        {"error": _("Adding users in this group is not allowed.")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-            except Group.DoesNotExist:
-                return response.Response(
-                    {"error": _("Group does not exist.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        """
         group_structure = settings.GROUPS_STRUCTURE[group.name]
         if (
             group_structure["REGISTRATION_ALLOWED"] is False

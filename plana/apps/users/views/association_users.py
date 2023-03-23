@@ -14,11 +14,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
-    User,
-)
+from plana.apps.users.models.user import AssociationUsers, User
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreateSerializer,
     AssociationUsersDeleteSerializer,
@@ -368,17 +364,6 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if "is_president" in request.data and to_bool(request.data["is_president"]):
-            """
-            if president:
-                actual_president = AssociationUsers.objects.get(
-                    association_id=kwargs["association_id"], user_id=request.user.pk
-                )
-                asso_user.is_president = True
-                asso_user.is_secretary = False
-                asso_user.is_treasurer = False
-                actual_president.is_president = False
-                actual_president.save()
-            """
             if request.user.is_staff_for_association(kwargs["association_id"]):
                 try:
                     actual_president = AssociationUsers.objects.get(
@@ -541,30 +526,4 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ),
                 message=template.parse_vars(request.user, request, context),
             )
-        """
-        # Delete the account if no association remains.
-        if (
-            AssociationUsers.objects.filter(user_id=kwargs["user_id"]).count() < 1
-            and GroupInstitutionCommissionUsers.objects.filter(
-                user_id=kwargs["user_id"]
-            ).count()
-            == 1
-        ):
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
-            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-            user.delete()
-        """
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

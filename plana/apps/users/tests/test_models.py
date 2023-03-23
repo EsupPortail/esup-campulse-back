@@ -1,7 +1,6 @@
 """List of tests done on users models."""
 from django.test import Client, TestCase
 
-from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import (
     AssociationUsers,
     GroupInstitutionCommissionUsers,

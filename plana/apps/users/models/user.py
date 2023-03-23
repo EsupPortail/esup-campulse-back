@@ -53,7 +53,12 @@ class AssociationUsers(models.Model):
 
 
 class GroupInstitutionCommissionUsers(models.Model):
-    """Define the link between a user, a group (and an institution if user is a manager) (and a commission if user is a commission member)."""
+    """
+    Define the link between a user and a group.
+
+    And an institution if user is a manager.
+    And a commission if user is a commission member.
+    """
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)

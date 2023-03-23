@@ -1297,7 +1297,7 @@ paths:
   /users/external/:
     get:
       operationId: users_external_list
-      description: 'GET : Retrieve an external user'
+      description: 'GET : Retrieve an external user.'
       parameters:
       - in: query
         name: last_name

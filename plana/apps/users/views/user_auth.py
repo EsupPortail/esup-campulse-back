@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.users.models.user import AssociationUsers, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import send_mail
 
 
 class PasswordResetConfirm(generics.GenericAPIView):

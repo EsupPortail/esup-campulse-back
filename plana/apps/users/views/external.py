@@ -1,8 +1,8 @@
-from django.http import Http404
+"""View interacting with LDAP API endpoint."""
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import filters, generics, status
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -13,7 +13,7 @@ from ..serializers.external import ExternalUserSerializer
 
 class ExternalUserRetrieve(generics.ListAPIView):
     """
-    GET : Retrieve an external user
+    GET : Retrieve an external user.
     """
 
     serializer_class = ExternalUserSerializer

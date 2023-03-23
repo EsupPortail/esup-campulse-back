@@ -1,9 +1,9 @@
+"""List of tests done with LDAP API endpoint."""
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 User = get_user_model()
