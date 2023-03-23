@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project_commission_date import (
+    ProjectCommissionDateDataSerializer,
     ProjectCommissionDateSerializer,
 )
 
@@ -83,3 +84,41 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             )
         except ObjectDoesNotExist:
             return super().create(request, *args, **kwargs)
+
+
+@extend_schema(methods=["PUT"], exclude=True)
+class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = ProjectCommissionDate.objects.all()
+    serializer_class = ProjectCommissionDateDataSerializer
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, *args, **kwargs):
+        try:
+            pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {
+                    "error": _(
+                        "Link between this project and commission does not exists."
+                    )
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not pcd.project.can_edit_project(request.user):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if "amount_earned" in request.data:
+            return response.Response(
+                {"error": _("Not allowed to update amount earned for this project.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return super().update(request, *args, **kwargs)

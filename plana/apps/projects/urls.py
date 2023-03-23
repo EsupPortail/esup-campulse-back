@@ -8,7 +8,10 @@ from .views.project import (
     ProjectRetrieveUpdate,
 )
 from .views.project_category import ProjectCategoryDestroy
-from .views.project_commission_date import ProjectCommissionDateListCreate
+from .views.project_commission_date import (
+    ProjectCommissionDateListCreate,
+    ProjectCommissionDateRetrieveUpdateDestroy,
+)
 
 urlpatterns = [
     # Project categories urls
@@ -35,5 +38,10 @@ urlpatterns = [
         "commission_dates",
         ProjectCommissionDateListCreate.as_view(),
         name="project_commission_date_list_create",
+    ),
+    path(
+        "commission_dates/<int:pk>",
+        ProjectCommissionDateRetrieveUpdateDestroy.as_view(),
+        name="project_commission_date_retrieve_update_destroy",
     ),
 ]
