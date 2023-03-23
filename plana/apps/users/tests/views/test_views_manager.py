@@ -5,7 +5,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -124,25 +124,39 @@ class UserViewsManagerTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
-        # TODO Update the tests when new permissions linked to projects will be available (need to get misc students also in associations).
-        response_manager = self.manager_client.get("/users/?institutions=")
-        content = json.loads(response_manager.content.decode("utf-8"))
-        misc_users_query = User.objects.exclude(
-            id__in=AssociationUsers.objects.all().values_list("user_id", flat=True)
+        multiple_groups_users_query = (
+            User.objects.annotate(num_groups=Count("groupinstitutioncommissionusers"))
+            .filter(num_groups__gt=1)
+            .values_list("id", flat=True)
         )
         commission_users_query = User.objects.filter(
             id__in=GroupInstitutionCommissionUsers.objects.filter(
                 commission_id__isnull=False
             ).values_list("user_id", flat=True)
         ).values_list("id", flat=True)
+
+        response_manager = self.manager_client.get("/users/?institutions=")
+        content = json.loads(response_manager.content.decode("utf-8"))
         users_query_cnt = User.objects.filter(
-            Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
+            Q(id__in=multiple_groups_users_query) | Q(id__in=commission_users_query)
         ).count()
         self.assertEqual(len(content), users_query_cnt)
 
+        associations_ids = Association.objects.filter(
+            institution_id__in=[2, 3]
+        ).values_list("id", flat=True)
+        assos_users_query = AssociationUsers.objects.filter(
+            association_id__in=associations_ids
+        ).values_list("user_id", flat=True)
+
         response_manager = self.manager_client.get("/users/?institutions=2,3,")
         content = json.loads(response_manager.content.decode("utf-8"))
-        # self.assertEqual(len(content), links_cnt + users_query_cnt)
+        users_query_cnt = User.objects.filter(
+            Q(id__in=assos_users_query)
+            | Q(id__in=multiple_groups_users_query)
+            | Q(id__in=commission_users_query)
+        ).count()
+        self.assertEqual(len(content), users_query_cnt)
 
     def test_manager_get_users_list_is_cas(self):
         """

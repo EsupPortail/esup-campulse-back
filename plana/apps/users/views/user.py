@@ -123,12 +123,13 @@ class UserListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(id__in=assos_users_query)
 
             if institutions is not None:
-                # TODO Update the query when new permissions linked to projects will be available (need to get misc students also in associations).
-                misc_users_query = User.objects.exclude(
-                    id__in=AssociationUsers.objects.all().values_list(
-                        "user_id", flat=True
+                multiple_groups_users_query = (
+                    User.objects.annotate(
+                        num_groups=models.Count("groupinstitutioncommissionusers")
                     )
-                ).values_list("id", flat=True)
+                    .filter(num_groups__gt=1)
+                    .values_list("id", flat=True)
+                )
                 commission_users_query = User.objects.filter(
                     id__in=GroupInstitutionCommissionUsers.objects.filter(
                         commission_id__isnull=False
@@ -136,7 +137,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 ).values_list("id", flat=True)
                 if institutions == "":
                     queryset = queryset.filter(
-                        models.Q(id__in=misc_users_query)
+                        models.Q(id__in=multiple_groups_users_query)
                         | models.Q(id__in=commission_users_query)
                     )
                 else:
@@ -156,7 +157,7 @@ class UserListCreate(generics.ListCreateAPIView):
                     if check_other_users is True:
                         queryset = queryset.filter(
                             models.Q(id__in=assos_users_query)
-                            | models.Q(id__in=misc_users_query)
+                            | models.Q(id__in=multiple_groups_users_query)
                             | models.Q(id__in=commission_users_query)
                         )
                     else:
