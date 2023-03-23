@@ -14,7 +14,11 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 from plana.apps.users.serializers.association_users import (
     AssociationUsersCreateSerializer,
     AssociationUsersDeleteSerializer,
@@ -139,6 +143,16 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
         if user.is_superuser or user.is_staff:
             return response.Response(
                 {"error": _("A manager cannot have an association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        has_associations_possible_group = False
+        for group in user.get_user_groups():
+            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"] is True:
+                has_associations_possible_group = True
+        if not has_associations_possible_group:
+            return response.Response(
+                {"error": _("The user hasn't any group that can have associations.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

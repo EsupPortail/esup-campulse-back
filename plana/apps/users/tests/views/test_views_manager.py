@@ -728,6 +728,7 @@ class UserViewsManagerTests(TestCase):
         DELETE /users/{user_id}/groups/{group_id} .
 
         - The user must exist.
+        - Deleting a group still linked to an association is not possible.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
@@ -742,6 +743,10 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
+        response_delete = self.manager_client.delete("/users/10/groups/5")
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        AssociationUsers.objects.filter(user_id=user_id).delete()
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}"
         )
@@ -764,6 +769,7 @@ class UserViewsManagerTests(TestCase):
         DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
 
         - The user must exist.
+        - A misc manager user cannot execute this request.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.

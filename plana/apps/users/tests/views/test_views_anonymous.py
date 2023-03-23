@@ -8,7 +8,11 @@ from django.test import Client, TestCase
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 
 
 class UserViewsAnonymousTests(TestCase):
@@ -123,6 +127,7 @@ class UserViewsAnonymousTests(TestCase):
         - An anonymous user cannot add a link between a validated user and an association.
         - An association cannot have two presidents.
         - An anonymous user cannot validate a link between a user and an association.
+        - Link cannot be added to a user without a group where associations can be linked.
         - An anonymous user cannot add a link if association is full.
         - An anonymous user can add a link between a non-validated user and an association.
         - A user cannot be added twice in the same association.
@@ -160,6 +165,21 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        GroupInstitutionCommissionUsers.objects.filter(
+            user_id=self.unvalidated_user_id, group_id=5
+        ).delete()
+        response_anonymous = self.anonymous_client.post(
+            "/users/associations/",
+            {
+                "user": self.unvalidated_user_name,
+                "association": 5,
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        GroupInstitutionCommissionUsers.objects.create(
+            user_id=self.unvalidated_user_id, group_id=5
+        )
 
         association = Association.objects.get(id=5)
         old_amount_members_allowed = association.amount_members_allowed

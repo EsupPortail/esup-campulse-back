@@ -10,7 +10,11 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
+from plana.apps.users.models.user import (
+    AssociationUsers,
+    GroupInstitutionCommissionUsers,
+    User,
+)
 from plana.apps.users.serializers.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsCreateSerializer,
     UserGroupsInstitutionsCommissionsSerializer,
@@ -126,64 +130,52 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         """
-        for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
-            if group_structure_name == group.name:
-                if (
-                    group_structure["REGISTRATION_ALLOWED"] is False
-                    and not request.user.has_perm(
-                        "users.add_groupinstitutioncommissionusers_any_group"
-                    )
-                    and (
-                        not request.user.is_staff
-                        or (
-                            request.user.is_staff
-                            and group in request.user.get_user_groups()
-                        )
-                    )
-                ):
-                    return response.Response(
-                        {"error": _("Registering in this group is not allowed.")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+        group_structure = settings.GROUPS_STRUCTURE[group.name]
+        if (
+            group_structure["REGISTRATION_ALLOWED"] is False
+            and not request.user.has_perm(
+                "users.add_groupinstitutioncommissionusers_any_group"
+            )
+            and (
+                not request.user.is_staff
+                or (request.user.is_staff and group in request.user.get_user_groups())
+            )
+        ):
+            return response.Response(
+                {"error": _("Registering in this group is not allowed.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-                if institution_id is not None:
-                    if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
-                        not request.user.has_perm(
-                            "users.add_groupinstitutioncommissionusers_any_group"
-                        )
-                        and (
-                            not request.user.is_anonymous
-                            and not institution in request.user.get_user_institutions()
-                        )
-                    ):
-                        return response.Response(
-                            {
-                                "error": _(
-                                    "Adding institution in this group is not possible."
-                                )
-                            },
-                            status=status.HTTP_400_BAD_REQUEST,
-                        )
+        if institution_id is not None:
+            if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
+                not request.user.has_perm(
+                    "users.add_groupinstitutioncommissionusers_any_group"
+                )
+                and (
+                    not request.user.is_anonymous
+                    and not institution in request.user.get_user_institutions()
+                )
+            ):
+                return response.Response(
+                    {"error": _("Adding institution in this group is not possible.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-                if commission_id is not None:
-                    if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
-                        not request.user.has_perm(
-                            "users.add_groupinstitutioncommissionusers_any_group"
-                        )
-                        and (
-                            not request.user.is_anonymous
-                            and not commission.institution_id
-                            in request.user.get_user_institutions()
-                        )
-                    ):
-                        return response.Response(
-                            {
-                                "error": _(
-                                    "Adding commission in this group is not possible."
-                                )
-                            },
-                            status=status.HTTP_400_BAD_REQUEST,
-                        )
+        if commission_id is not None:
+            if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
+                not request.user.has_perm(
+                    "users.add_groupinstitutioncommissionusers_any_group"
+                )
+                and (
+                    not request.user.is_anonymous
+                    and not commission.institution_id
+                    in request.user.get_user_institutions()
+                )
+            ):
+                return response.Response(
+                    {"error": _("Adding commission in this group is not possible.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         GroupInstitutionCommissionUsers.objects.create(
             user_id=user.pk,
@@ -250,6 +242,16 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or link to group found.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        group_name = Group.objects.get(id=kwargs["group_id"]).name
+        if (
+            settings.GROUPS_STRUCTURE[group_name]["ASSOCIATIONS_POSSIBLE"] is True
+            and AssociationUsers.objects.filter(user_id=user).count() > 0
+        ):
+            return response.Response(
+                {"error": _("User is still linked to an association.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
