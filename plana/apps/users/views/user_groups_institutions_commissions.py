@@ -223,6 +223,7 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
         )
 
 
+# TODO Optimize this route to avoid code duplication with other delete routes.
 @extend_schema_view(
     delete=extend_schema(operation_id="users_groups_destroy", tags=["users/groups"])
 )
@@ -241,35 +242,14 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
                 user_id=user.pk
             )
             user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk, group_id=kwargs["group_id"], commission_id=None
+                user_id=user.pk,
+                group_id=kwargs["group_id"],
+                institution_id=None,
+                commission_id=None,
             )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No user or link to group found.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            user.is_superuser
-            or user.is_staff
-            and not request.user.has_perm(
-                "users.delete_groupinstitutioncommissionusers_any_group"
-            )
-        ):
-            return response.Response(
-                {"error": _("Groups for a manager cannot be changed.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionusers_any_group"
-        ) and (
-            user_group_to_delete.institution_id is not None
-            and not user_group_to_delete.institution_id
-            in request.user.get_user_institutions()
-        ):
-            return response.Response(
-                {"error": _("Not allowed to delete this link between user and group.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -283,7 +263,6 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-# TODO Optimize this route to avoid code duplication with previous delete.
 @extend_schema_view(
     delete=extend_schema(
         operation_id="users_groups_destroy_with_commission", tags=["users/groups"]
@@ -306,6 +285,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
             user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
+                institution_id=None,
                 commission_id=kwargs["commission_id"],
             )
         except ObjectDoesNotExist:
@@ -314,31 +294,61 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            user.is_superuser
-            or user.is_staff
-            and not request.user.has_perm(
-                "users.delete_groupinstitutioncommissionusers_any_group"
-            )
+        if not request.user.has_perm(
+            "users.delete_groupinstitutioncommissionusers_any_group"
+        ) and (
+            not Commission.objects.get(id=kwargs["commission_id"]).institution_id
+            in request.user.get_user_institutions()
         ):
             return response.Response(
-                {"error": _("Groups for a manager cannot be changed.")},
+                {"error": _("Not allowed to delete this link between user and group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if user_groups.count() <= 1:
+            return response.Response(
+                {"error": _("User should have at least one group.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_group_to_delete.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema_view(
+    delete=extend_schema(
+        operation_id="users_groups_destroy_with_institution", tags=["users/groups"]
+    )
+)
+class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAPIView):
+    """Deletes a group linked to a user with institution argument (manager)."""
+
+    queryset = GroupInstitutionCommissionUsers.objects.all()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+
+    def delete(self, request, *args, **kwargs):
+        """DELETE : Deletes a group linked to a user with institution argument (manager)."""
+        try:
+            user = User.objects.get(id=kwargs["user_id"])
+            user_groups = GroupInstitutionCommissionUsers.objects.filter(
+                user_id=user.pk
+            )
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
+                user_id=user.pk,
+                group_id=kwargs["group_id"],
+                institution_id=kwargs["institution_id"],
+                commission_id=None,
+            )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No user or link to group found.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         if not request.user.has_perm(
             "users.delete_groupinstitutioncommissionusers_any_group"
-        ) and (
-            (
-                user_group_to_delete.institution_id is not None
-                and not user_group_to_delete.institution_id
-                in request.user.get_user_institutions()
-            )
-            or not Commission.objects.get(
-                id=user_group_to_delete.commission_id
-            ).institution_id
-            in request.user.get_user_institutions()
-        ):
+        ) and (not kwargs["institution_id"] in request.user.get_user_institutions()):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
                 status=status.HTTP_400_BAD_REQUEST,

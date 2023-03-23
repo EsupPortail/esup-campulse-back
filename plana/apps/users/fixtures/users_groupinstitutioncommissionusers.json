@@ -74,9 +74,8 @@
     "model": "users.groupinstitutioncommissionusers",
     "pk": 9,
     "fields": {
-      "user_id": 3,
-      "group_id": 1,
-      "institution_id": 1
+      "user_id": 2,
+      "group_id": 6
     }
   },
   {
@@ -85,7 +84,7 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 2
+      "institution_id": 1
     }
   },
   {
@@ -94,7 +93,7 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 3
+      "institution_id": 2
     }
   },
   {
@@ -103,7 +102,7 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 4
+      "institution_id": 3
     }
   },
   {
@@ -112,7 +111,7 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 5
+      "institution_id": 4
     }
   },
   {
@@ -121,7 +120,7 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 6
+      "institution_id": 5
     }
   },
   {
@@ -130,12 +129,21 @@
     "fields": {
       "user_id": 3,
       "group_id": 1,
-      "institution_id": 7
+      "institution_id": 6
     }
   },
   {
     "model": "users.groupinstitutioncommissionusers",
     "pk": 16,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 7
+    }
+  },
+  {
+    "model": "users.groupinstitutioncommissionusers",
+    "pk": 17,
     "fields": {
       "user_id": 4,
       "group_id": 2,
@@ -144,7 +152,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 17,
+    "pk": 18,
     "fields": {
       "user_id": 5,
       "group_id": 3,
@@ -153,7 +161,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 18,
+    "pk": 19,
     "fields": {
       "user_id": 6,
       "group_id": 4,
@@ -162,7 +170,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 19,
+    "pk": 20,
     "fields": {
       "user_id": 6,
       "group_id": 4,
@@ -171,7 +179,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 20,
+    "pk": 21,
     "fields": {
       "user_id": 7,
       "group_id": 4,
@@ -180,20 +188,11 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 21,
-    "fields": {
-      "user_id": 8,
-      "group_id": 4,
-      "commission_id": 1
-    }
-  },
-  {
-    "model": "users.groupinstitutioncommissionusers",
     "pk": 22,
     "fields": {
       "user_id": 8,
       "group_id": 4,
-      "commission_id": 2
+      "commission_id": 1
     }
   },
   {
@@ -202,7 +201,7 @@
     "fields": {
       "user_id": 8,
       "group_id": 4,
-      "commission_id": 3
+      "commission_id": 2
     }
   },
   {
@@ -210,12 +209,21 @@
     "pk": 24,
     "fields": {
       "user_id": 8,
-      "group_id": 5
+      "group_id": 4,
+      "commission_id": 3
     }
   },
   {
     "model": "users.groupinstitutioncommissionusers",
     "pk": 25,
+    "fields": {
+      "user_id": 8,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutioncommissionusers",
+    "pk": 26,
     "fields": {
       "user_id": 9,
       "group_id": 6
@@ -223,7 +231,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 26,
+    "pk": 27,
     "fields": {
       "user_id": 10,
       "group_id": 5
@@ -231,7 +239,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 27,
+    "pk": 28,
     "fields": {
       "user_id": 11,
       "group_id": 5
@@ -239,7 +247,7 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 28,
+    "pk": 29,
     "fields": {
       "user_id": 12,
       "group_id": 5
@@ -247,19 +255,10 @@
   },
   {
     "model": "users.groupinstitutioncommissionusers",
-    "pk": 29,
+    "pk": 30,
     "fields": {
       "user_id": 13,
       "group_id": 5
-    }
-  },
-  {
-    "model": "users.groupinstitutioncommissionusers",
-    "pk": 30,
-    "fields": {
-      "user_id": 14,
-      "group_id": 4,
-      "commission_id": 1
     }
   },
   {
@@ -268,7 +267,7 @@
     "fields": {
       "user_id": 14,
       "group_id": 4,
-      "commission_id": 2
+      "commission_id": 1
     }
   },
   {
@@ -277,7 +276,7 @@
     "fields": {
       "user_id": 14,
       "group_id": 4,
-      "commission_id": 3
+      "commission_id": 2
     }
   },
   {
@@ -285,7 +284,8 @@
     "pk": 33,
     "fields": {
       "user_id": 14,
-      "group_id": 5
+      "group_id": 4,
+      "commission_id": 3
     }
   },
   {
@@ -293,12 +293,20 @@
     "pk": 34,
     "fields": {
       "user_id": 14,
-      "group_id": 6
+      "group_id": 5
     }
   },
   {
     "model": "users.groupinstitutioncommissionusers",
     "pk": 35,
+    "fields": {
+      "user_id": 14,
+      "group_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutioncommissionusers",
+    "pk": 36,
     "fields": {
       "user_id": 15,
       "group_id": 6

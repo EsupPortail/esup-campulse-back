@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 09:03+0100\n"
+"POT-Creation-Date: 2023-03-23 10:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -830,8 +830,6 @@ msgid "Only managers can edit groups."
 msgstr "Seuls les gestionnaires peuvent changer les groupes."
 
 #: plana/apps/users/views/user_groups_institutions_commissions.py:100
-#: plana/apps/users/views/user_groups_institutions_commissions.py:260
-#: plana/apps/users/views/user_groups_institutions_commissions.py:325
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
@@ -847,20 +845,22 @@ msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 msgid "Adding commission in this group is not possible."
 msgstr "Ajouter une commission dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:248
-#: plana/apps/users/views/user_groups_institutions_commissions.py:313
+#: plana/apps/users/views/user_groups_institutions_commissions.py:252
+#: plana/apps/users/views/user_groups_institutions_commissions.py:293
+#: plana/apps/users/views/user_groups_institutions_commissions.py:345
 msgid "No user or link to group found."
 msgstr "Aucun utilisateur ou groupe trouvé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:272
-#: plana/apps/users/views/user_groups_institutions_commissions.py:343
-msgid "Not allowed to delete this link between user and group."
-msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
-
-#: plana/apps/users/views/user_groups_institutions_commissions.py:278
-#: plana/apps/users/views/user_groups_institutions_commissions.py:349
+#: plana/apps/users/views/user_groups_institutions_commissions.py:258
+#: plana/apps/users/views/user_groups_institutions_commissions.py:310
+#: plana/apps/users/views/user_groups_institutions_commissions.py:359
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
+
+#: plana/apps/users/views/user_groups_institutions_commissions.py:304
+#: plana/apps/users/views/user_groups_institutions_commissions.py:353
+msgid "Not allowed to delete this link between user and group."
+msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
 #: plana/libs/api/spore_client.py:27
 #, python-brace-format

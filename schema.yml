@@ -771,6 +771,35 @@ paths:
       responses:
         '204':
           description: No response body
+  /users/{user_id}/groups/{group_id}/institutions/{institution_id}:
+    delete:
+      operationId: users_groups_destroy_with_institution
+      description: 'DELETE : Deletes a group linked to a user with institution argument
+        (manager).'
+      parameters:
+      - in: path
+        name: group_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: institution_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users/groups
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /users/associations/:
     get:
       operationId: users_associations_list

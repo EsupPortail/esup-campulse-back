@@ -35,6 +35,8 @@ class UserViewsAnonymousTests(TestCase):
         self.unvalidated_user_name = "compte-non-valide@mail.tld"
         self.student_user_id = 11
         self.student_user_name = "etudiant-asso-site@mail.tld"
+        self.manager_general_user_id = 3
+        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
 
     def test_anonymous_get_users_list(self):
         """
@@ -492,15 +494,36 @@ class UserViewsAnonymousTests(TestCase):
         POST /users/groups/ .
 
         - An anonymous user cannot add a link between a validated user and a group.
+        - An anonymous user can't add a link with a restricted group to a user.
+        - institution field must be valid for the given group.
+        - commission field must be valid for the given group.
         - An anonymous user can add a link between a non-validated user and a group.
         - A non-existing user cannot be added in a group.
         - A user cannot be added in a non-existing group.
         - username field is mandatory.
-        - groups field is mandatory.
+        - group field is mandatory.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.student_user_name, "group": 4},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": self.unvalidated_user_name, "group": 1},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": self.unvalidated_user_name, "group": 6, "institution": 1},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": self.unvalidated_user_name, "group": 6, "commission": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 

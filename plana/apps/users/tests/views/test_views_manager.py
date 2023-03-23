@@ -672,6 +672,7 @@ class UserViewsManagerTests(TestCase):
         - A manager user can add a group to a validated student.
         - A manager user can add a group to a non-validated student.
         - Groups for a manager can be changed.
+        - Groups for a general manager can't be changed by another manager.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
@@ -691,6 +692,12 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
+        response_manager = self.manager_misc_client.post(
+            "/users/groups/",
+            {"username": self.manager_general_user_name, "group": 4},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_manager_get_user_groups_detail(self):
         """
         GET /users/{user_id}/groups/ .
@@ -704,10 +711,45 @@ class UserViewsManagerTests(TestCase):
 
     def test_manager_delete_user_group(self):
         """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - The user must exist.
+        - A manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A user should have at least one group.
+        """
+        user_id = 2
+        response = self.manager_client.get(f"/users/{user_id}/groups/")
+        first_user_group_id = response.data[0]["group"]
+        second_user_group_id = response.data[1]["group"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/99/groups/{str(first_user_group_id)}"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        second_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(second_user_group_id)}"
+        )
+        self.assertEqual(
+            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+    def test_manager_delete_user_group_commission(self):
+        """
         DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
 
         - The user must exist.
-        - Groups for a validated manager user can't be deleted.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
@@ -722,8 +764,8 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response_delete = self.manager_client.delete(
-            f"/users/{self.manager_misc_user_id}/groups/3/commissions/1"
+        response_delete = self.manager_misc_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -739,6 +781,51 @@ class UserViewsManagerTests(TestCase):
 
         second_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(second_user_group_id)}/commissions/2"
+        )
+        self.assertEqual(
+            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+    def test_manager_delete_user_group_institution(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id}/institutions/{institution_id} .
+
+        - The user must exist.
+        - A misc manager user cannot execute this request.
+        - A genral manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A user should have at least one group.
+        """
+        user_id = 4
+        GroupInstitutionCommissionUsers.objects.create(
+            user_id=user_id, group_id=2, institution_id=4
+        )
+        response = self.manager_client.get(f"/users/{user_id}/groups/")
+        first_user_group_id = response.data[0]["group"]
+        second_user_group_id = response.data[1]["group"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/99/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_delete = self.manager_misc_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+
+        second_response_delete = self.manager_client.delete(
+            f"/users/{user_id}/groups/{str(second_user_group_id)}/institutions/4"
         )
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST

@@ -16,6 +16,7 @@ from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, User
 from .views.user_groups_institutions_commissions import (
     UserGroupsInstitutionsCommissionsDestroy,
     UserGroupsInstitutionsCommissionsDestroyWithCommission,
+    UserGroupsInstitutionsCommissionsDestroyWithInstitution,
     UserGroupsInstitutionsCommissionsListCreate,
     UserGroupsInstitutionsCommissionsRetrieve,
 )
@@ -74,6 +75,11 @@ urlpatterns = [
         "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
         UserGroupsInstitutionsCommissionsDestroyWithCommission.as_view(),
         name="user_groups_institutions_commissions_destroy_with_commission",
+    ),
+    path(
+        "<int:user_id>/groups/<int:group_id>/institutions/<int:institution_id>",
+        UserGroupsInstitutionsCommissionsDestroyWithInstitution.as_view(),
+        name="user_groups_institutions_commissions_destroy_with_institution",
     ),
     path(
         "external/",
