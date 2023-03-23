@@ -12,7 +12,11 @@ from plana.apps.users.serializers.cas import CASSerializer
 
 
 class CASLogin(SocialLoginView):
-    """POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth."""
+    """
+    /users/auth/cas/login/ route
+
+    POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
+    """
 
     adapter_class = CASAdapter
     serializer_class = CASSerializer
@@ -20,6 +24,8 @@ class CASLogin(SocialLoginView):
 
 class CASLogout(LogoutView):
     """
+    /users/auth/cas/logout/ route
+
     GET : Logs out a user authenticated with CAS out.
 
     POST : Logs out a user authenticated with CAS out.

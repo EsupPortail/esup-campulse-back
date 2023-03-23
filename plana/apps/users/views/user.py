@@ -59,23 +59,9 @@ from plana.utils import send_mail, to_bool
     )
 )
 class UserListCreate(generics.ListCreateAPIView):
-    """
-    GET : Lists all users for manager, or users sharing the same association.
+    """/users/ route"""
 
-    POST : Create an account for another person as a manager.
-    """
-
-    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-
-    def get_serializer_class(self):
-        if not self.request.user.has_perm(
-            "users.view_user_anyone"
-        ) and not self.request.user.has_perm("users.view_user_misc"):
-            self.serializer_class = UserPartialDataSerializer
-        else:
-            self.serializer_class = UserSerializer
-        return super().get_serializer_class()
 
     def get_queryset(self):
         queryset = User.objects.all().order_by("id")
@@ -165,10 +151,21 @@ class UserListCreate(generics.ListCreateAPIView):
 
         return queryset
 
+    def get_serializer_class(self):
+        if not self.request.user.has_perm(
+            "users.view_user_anyone"
+        ) and not self.request.user.has_perm("users.view_user_misc"):
+            self.serializer_class = UserPartialDataSerializer
+        else:
+            self.serializer_class = UserSerializer
+        return super().get_serializer_class()
+
     def get(self, request, *args, **kwargs):
+        """Lists users sharing the same association, or all users (manager)."""
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """Create an account for another person (manager only)."""
         is_cas = True
         if not "is_cas" in request.data or (
             "is_cas" in request.data and request.data["is_cas"] is False
@@ -239,16 +236,10 @@ class UserListCreate(generics.ListCreateAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET : Lists a user with all details.
+    """/users/{id} route"""
 
-    PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
-
-    DELETE : Removes a user from the database (with a restriction on manager users).
-    """
-
-    serializer_class = UserSerializer
     queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -258,6 +249,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
+        """Retrieves a user with all details."""
         if request.user.has_perm("users.view_user_anyone"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
@@ -269,6 +261,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        """Updates a user field (with a restriction on CAS auto-generated fields)."""
         try:
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -340,6 +333,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Destroys a user from the database (with a restriction on manager users)."""
         try:
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

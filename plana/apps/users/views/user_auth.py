@@ -26,7 +26,11 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class UserAuthView(DJRestAuthUserDetailsView):
-    """Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields."""
+    """
+    /users/auth/user/ route
+
+    Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+    """
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
@@ -116,7 +120,11 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
-    """VerifyEmailView to send an email to a manager (not if user revalidates an email address)."""
+    """
+    /users/auth/registration/verify-email/ route
+
+    OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
+    """
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

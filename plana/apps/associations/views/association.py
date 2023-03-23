@@ -1,4 +1,5 @@
 """Views directly linked to associations."""
+
 import json
 import unicodedata
 
@@ -85,11 +86,7 @@ from plana.utils import send_mail, to_bool
     )
 )
 class AssociationListCreate(generics.ListCreateAPIView):
-    """
-    GET : Lists all associations currently active.
-
-    POST : Creates a new association with mandatory informations.
-    """
+    """/associations/ route"""
 
     filter_backends = [filters.SearchFilter]
     search_fields = [
@@ -99,6 +96,13 @@ class AssociationListCreate(generics.ListCreateAPIView):
         "institution__name__nospaces__unaccent",
         "institution_component__name__nospaces__unaccent",
     ]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        else:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
     def get_queryset(self):
         queryset = Association.objects.all().order_by("name")
@@ -167,13 +171,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(id__in=assos_users_query)
         return queryset
 
-    def get_permissions(self):
-        if self.request.method == "POST":
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
-            self.permission_classes = [AllowAny]
-        return super().get_permissions()
-
     def get_serializer_class(self):
         if self.request.method == "POST":
             self.serializer_class = AssociationMandatoryDataSerializer
@@ -181,7 +178,12 @@ class AssociationListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationPartialDataSerializer
         return super().get_serializer_class()
 
+    def get(self, request, *args, **kwargs):
+        """Lists all associations with many filters."""
+        return self.list(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        """Creates a new association with mandatory informations (manager only)."""
         if "name" in request.data:
             association_name = request.data["name"]
         else:
@@ -249,13 +251,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """
-    GET : Lists an association with all its details.
-
-    PATCH : Edit association details (with different permissions for manager and president).
-
-    DELETE : Removes an entire association.
-    """
+    """/associations/{id} route"""
 
     queryset = Association.objects.all()
     serializer_class = AssociationAllDataSerializer
@@ -268,6 +264,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
+        """Retrieves an association with all its details."""
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
@@ -314,6 +311,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     def patch(self, request, *args, **kwargs):
+        """Updates association details (president and manager only, restricted fields for president)."""
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
@@ -412,6 +410,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Destroys an entire association (manager only)."""
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
@@ -482,7 +481,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
 )
 class AssociationNameList(generics.ListAPIView):
-    """GET : Lists names of all associations."""
+    """/associations/names route"""
 
     permission_classes = [AllowAny]
     serializer_class = AssociationNameSerializer
@@ -513,3 +512,7 @@ class AssociationNameList(generics.ListAPIView):
                 queryset = queryset.filter(id__in=assos_ids_with_all_members)
 
         return queryset.order_by("name")
+
+    def get(self, request, *args, **kwargs):
+        """Lists minimal details for all associations with many filters."""
+        return self.list(request, *args, **kwargs)

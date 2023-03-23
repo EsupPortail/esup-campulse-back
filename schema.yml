@@ -7,10 +7,7 @@ paths:
   /associations/:
     get:
       operationId: associations_list
-      description: |-
-        GET : Lists all associations currently active.
-
-        POST : Creates a new association with mandatory informations.
+      description: Lists all associations with many filters.
       parameters:
       - in: query
         name: acronym
@@ -80,10 +77,8 @@ paths:
           description: ''
     post:
       operationId: associations_create
-      description: |-
-        GET : Lists all associations currently active.
-
-        POST : Creates a new association with mandatory informations.
+      description: Creates a new association with mandatory informations (manager
+        only).
       tags:
       - associations
       requestBody:
@@ -111,12 +106,7 @@ paths:
   /associations/{id}:
     get:
       operationId: associations_retrieve
-      description: |-
-        GET : Lists an association with all its details.
-
-        PATCH : Edit association details (with different permissions for manager and president).
-
-        DELETE : Removes an entire association.
+      description: Retrieves an association with all its details.
       parameters:
       - in: path
         name: id
@@ -138,12 +128,8 @@ paths:
           description: ''
     patch:
       operationId: associations_partial_update
-      description: |-
-        GET : Lists an association with all its details.
-
-        PATCH : Edit association details (with different permissions for manager and president).
-
-        DELETE : Removes an entire association.
+      description: Updates association details (president and manager only, restricted
+        fields for president).
       parameters:
       - in: path
         name: id
@@ -175,12 +161,7 @@ paths:
           description: ''
     delete:
       operationId: associations_destroy
-      description: |-
-        GET : Lists an association with all its details.
-
-        PATCH : Edit association details (with different permissions for manager and president).
-
-        DELETE : Removes an entire association.
+      description: Destroys an entire association (manager only).
       parameters:
       - in: path
         name: id
@@ -198,7 +179,7 @@ paths:
   /associations/activity_fields:
     get:
       operationId: associations_activity_fields_list
-      description: 'GET : Lists all activity fields.'
+      description: Lists all activity fields that can be linked to an association.
       tags:
       - associations
       security:
@@ -217,7 +198,7 @@ paths:
   /associations/names:
     get:
       operationId: associations_names_list
-      description: 'GET : Lists names of all associations.'
+      description: Lists minimal details for all associations with many filters.
       parameters:
       - in: query
         name: allow_new_users
@@ -252,7 +233,7 @@ paths:
   /commissions/:
     get:
       operationId: commissions_list
-      description: Lists all Commissions.
+      description: Lists all commission types.
       tags:
       - commissions
       security:
@@ -271,7 +252,7 @@ paths:
   /commissions/commission_dates:
     get:
       operationId: commissions_commission_dates_list
-      description: Lists all Commissions Dates.
+      description: Lists all commission dates.
       tags:
       - commissions
       security:
@@ -290,10 +271,7 @@ paths:
   /documents/:
     get:
       operationId: documents_list
-      description: |-
-        GET : Lists all Documents types.
-
-        POST : Creates a new Document type.
+      description: Lists all documents.
       tags:
       - documents
       security:
@@ -311,10 +289,7 @@ paths:
           description: ''
     post:
       operationId: documents_create
-      description: |-
-        GET : Lists all Documents types.
-
-        POST : Creates a new Document type.
+      description: Creates a new document type (manager only).
       tags:
       - documents
       requestBody:
@@ -342,10 +317,7 @@ paths:
   /documents/{id}:
     get:
       operationId: documents_retrieve
-      description: |-
-        GET : Lists a document type with all its details.
-
-        DELETE : Removes an entire document type.
+      description: Retrieves a document type with all its details.
       parameters:
       - in: path
         name: id
@@ -367,10 +339,7 @@ paths:
           description: ''
     delete:
       operationId: documents_destroy
-      description: |-
-        GET : Lists a document type with all its details.
-
-        DELETE : Removes an entire document type.
+      description: Destroys an entire document type (manager only).
       parameters:
       - in: path
         name: id
@@ -445,7 +414,7 @@ paths:
   /projects/categories:
     get:
       operationId: projects_categories_list
-      description: Lists all Categories.
+      description: Lists all categories that can be linked to a project.
       tags:
       - projects
       security:
@@ -464,10 +433,7 @@ paths:
   /users/:
     get:
       operationId: users_list
-      description: |-
-        GET : Lists all users for manager, or users sharing the same association.
-
-        POST : Create an account for another person as a manager.
+      description: Lists users sharing the same association, or all users (manager).
       parameters:
       - in: query
         name: association_id
@@ -505,10 +471,7 @@ paths:
           description: ''
     post:
       operationId: users_create
-      description: |-
-        GET : Lists all users for manager, or users sharing the same association.
-
-        POST : Create an account for another person as a manager.
+      description: Create an account for another person (manager only).
       tags:
       - users
       requestBody:
@@ -536,12 +499,7 @@ paths:
   /users/{id}:
     get:
       operationId: users_retrieve
-      description: |-
-        GET : Lists a user with all details.
-
-        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
-
-        DELETE : Removes a user from the database (with a restriction on manager users).
+      description: Retrieves a user with all details.
       parameters:
       - in: path
         name: id
@@ -562,12 +520,8 @@ paths:
           description: ''
     patch:
       operationId: users_partial_update
-      description: |-
-        GET : Lists a user with all details.
-
-        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
-
-        DELETE : Removes a user from the database (with a restriction on manager users).
+      description: Updates a user field (with a restriction on CAS auto-generated
+        fields).
       parameters:
       - in: path
         name: id
@@ -599,12 +553,8 @@ paths:
           description: ''
     delete:
       operationId: users_destroy
-      description: |-
-        GET : Lists a user with all details.
-
-        PATCH : Updates a user field (with a restriction on CAS auto-generated fields).
-
-        DELETE : Removes a user from the database (with a restriction on manager users).
+      description: Destroys a user from the database (with a restriction on manager
+        users).
       parameters:
       - in: path
         name: id
@@ -622,7 +572,7 @@ paths:
   /users/{user_id}/associations/:
     get:
       operationId: users_associations_retrieve
-      description: 'GET : Lists all associations linked to a user (manager).'
+      description: Retrieves all associations linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -644,10 +594,7 @@ paths:
   /users/{user_id}/associations/{association_id}:
     patch:
       operationId: users_associations_partial_update
-      description: |-
-        PATCH : Updates user role in an association (manager and president).
-
-        DELETE : Deletes an association linked to a user (manager).
+      description: Updates user role in an association (manager and president).
       parameters:
       - in: path
         name: association_id
@@ -684,10 +631,7 @@ paths:
           description: ''
     delete:
       operationId: users_associations_destroy
-      description: |-
-        PATCH : Updates user role in an association (manager and president).
-
-        DELETE : Deletes an association linked to a user (manager).
+      description: Destroys an association linked to a user.
       parameters:
       - in: path
         name: association_id
@@ -710,7 +654,7 @@ paths:
   /users/{user_id}/groups/:
     get:
       operationId: users_groups_retrieve
-      description: 'GET : Lists all groups linked to a user (manager).'
+      description: Lists all groups linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -732,7 +676,7 @@ paths:
   /users/{user_id}/groups/{group_id}:
     delete:
       operationId: users_groups_destroy
-      description: 'DELETE : Deletes a group linked to a user (manager).'
+      description: Destroys a group linked to a user (manager).
       parameters:
       - in: path
         name: group_id
@@ -755,8 +699,7 @@ paths:
   /users/{user_id}/groups/{group_id}/commissions/{commission_id}:
     delete:
       operationId: users_groups_destroy_with_commission
-      description: 'DELETE : Deletes a group linked to a user with commission argument
-        (manager).'
+      description: Destroys a group linked to a user with commission argument (manager).
       parameters:
       - in: path
         name: commission_id
@@ -784,8 +727,7 @@ paths:
   /users/{user_id}/groups/{group_id}/institutions/{institution_id}:
     delete:
       operationId: users_groups_destroy_with_institution
-      description: 'DELETE : Deletes a group linked to a user with institution argument
-        (manager).'
+      description: Destroys a group linked to a user with institution argument (manager).
       parameters:
       - in: path
         name: group_id
@@ -813,10 +755,8 @@ paths:
   /users/associations/:
     get:
       operationId: users_associations_list
-      description: |-
-        GET : Lists all associations linked to a user, or all associations of all users.
-
-        POST : Creates a new link between a non-validated user and an association.
+      description: Lists all associations linked to a user, or all associations of
+        all users (manager).
       parameters:
       - in: query
         name: association_id
@@ -849,10 +789,7 @@ paths:
           description: ''
     post:
       operationId: users_associations_create
-      description: |-
-        GET : Lists all associations linked to a user, or all associations of all users.
-
-        POST : Creates a new link between a non-validated user and an association.
+      description: Creates a new link between a user and an association.
       tags:
       - users/associations
       requestBody:
@@ -881,8 +818,10 @@ paths:
   /users/auth/cas/login/:
     post:
       operationId: users_auth_cas_login_create
-      description: 'POST : Authenticates a user through CAS with django-allauth-cas
-        and dj-rest-auth.'
+      description: |-
+        /users/auth/cas/login/ route
+
+        POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
       tags:
       - users
       requestBody:
@@ -912,6 +851,8 @@ paths:
     get:
       operationId: users_auth_cas_logout_retrieve
       description: |-
+        /users/auth/cas/logout/ route
+
         GET : Logs out a user authenticated with CAS out.
 
         POST : Logs out a user authenticated with CAS out.
@@ -931,6 +872,8 @@ paths:
     post:
       operationId: users_auth_cas_logout_create
       description: |-
+        /users/auth/cas/logout/ route
+
         GET : Logs out a user authenticated with CAS out.
 
         POST : Logs out a user authenticated with CAS out.
@@ -1175,8 +1118,10 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: VerifyEmailView to send an email to a manager (not if user revalidates
-        an email address).
+      description: |-
+        /users/auth/registration/verify-email/ route
+
+        OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
       tags:
       - users
       requestBody:
@@ -1251,8 +1196,10 @@ paths:
   /users/auth/user/:
     get:
       operationId: users_auth_user_retrieve
-      description: Overrided UserDetailsView to prevent CAS users to change their
-        own auto-generated fields.
+      description: |-
+        /users/auth/user/ route
+
+        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
       tags:
       - users
       security:
@@ -1267,8 +1214,10 @@ paths:
           description: ''
     patch:
       operationId: users_auth_user_partial_update
-      description: Overrided UserDetailsView to prevent CAS users to change their
-        own auto-generated fields.
+      description: |-
+        /users/auth/user/ route
+
+        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
       tags:
       - users
       requestBody:
@@ -1294,8 +1243,10 @@ paths:
           description: ''
     delete:
       operationId: users_auth_user_destroy
-      description: Overrided UserDetailsView to prevent CAS users to change their
-        own auto-generated fields.
+      description: |-
+        /users/auth/user/ route
+
+        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
       tags:
       - users
       security:
@@ -1307,7 +1258,7 @@ paths:
   /users/external/:
     get:
       operationId: users_external_list
-      description: 'GET : Retrieve an external user.'
+      description: Retrieves an external user from LDAP.
       parameters:
       - in: query
         name: last_name
@@ -1331,10 +1282,8 @@ paths:
   /users/groups/:
     get:
       operationId: users_groups_list
-      description: |-
-        GET : Lists all groups linked to a user (student), or all groups of all users (manager).
-
-        POST : Creates a new link between a non-validated user and a group.
+      description: Lists all groups linked to a user (student), or all groups of all
+        users (manager).
       tags:
       - users/groups
       security:
@@ -1351,10 +1300,7 @@ paths:
           description: ''
     post:
       operationId: users_groups_create
-      description: |-
-        GET : Lists all groups linked to a user (student), or all groups of all users (manager).
-
-        POST : Creates a new link between a non-validated user and a group.
+      description: Creates a new link between a non-validated user and a group.
       tags:
       - users/groups
       requestBody:

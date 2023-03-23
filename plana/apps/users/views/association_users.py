@@ -52,11 +52,7 @@ from plana.utils import send_mail, to_bool
     post=extend_schema(tags=["users/associations"]),
 )
 class AssociationUsersListCreate(generics.ListCreateAPIView):
-    """
-    GET : Lists all associations linked to a user, or all associations of all users.
-
-    POST : Creates a new link between a non-validated user and an association.
-    """
+    """/users/associations/ route"""
 
     def get_queryset(self):
         association_id = self.request.query_params.get("association_id")
@@ -109,7 +105,12 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationUsersSerializer
         return super().get_serializer_class()
 
+    def get(self, request, *args, **kwargs):
+        """Lists all associations linked to a user, or all associations of all users (manager)."""
+        return self.list(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        """Creates a new link between a user and an association."""
         try:
             username = request.data["user"]
             association_id = request.data["association"]
@@ -238,14 +239,14 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
     get=extend_schema(tags=["users/associations"]),
 )
 class AssociationUsersRetrieve(generics.RetrieveAPIView):
-    """Lists all associations linked to a user (manager)."""
+    """/users/{user_id}/associations/ route"""
 
-    serializer_class = AssociationUsersSerializer
-    queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = AssociationUsers.objects.all()
+    serializer_class = AssociationUsersSerializer
 
     def get(self, request, *args, **kwargs):
-        """GET : Lists all associations linked to a user (manager)."""
+        """Retrieves all associations linked to a user (manager)."""
         if (
             request.user.has_perm("users.view_associationusers_anyone")
             or kwargs["user_id"] == request.user.pk
@@ -261,20 +262,16 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-@extend_schema(methods=["PUT", "GET"], exclude=True)
+@extend_schema(methods=["GET", "PUT"], exclude=True)
 @extend_schema_view(
     patch=extend_schema(tags=["users/associations"]),
     delete=extend_schema(tags=["users/associations"]),
 )
 class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """
-    PATCH : Updates user role in an association (manager and president).
+    """/users/{user_id}/associations/{association_id} route"""
 
-    DELETE : Deletes an association linked to a user (manager).
-    """
-
-    queryset = AssociationUsers.objects.all()
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = AssociationUsers.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -290,6 +287,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        """Updates user role in an association (manager and president)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
             association = Association.objects.get(id=kwargs["association_id"])
@@ -478,6 +476,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
+        """Destroys an association linked to a user."""
         try:
             association = Association.objects.get(id=kwargs["association_id"])
             user = User.objects.get(id=kwargs["user_id"])

@@ -1,4 +1,5 @@
 """View interacting with LDAP API endpoint."""
+
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -12,10 +13,10 @@ from ..serializers.external import ExternalUserSerializer
 
 
 class ExternalUserRetrieve(generics.ListAPIView):
-    """GET : Retrieve an external user."""
+    """/users/external/ route"""
 
-    serializer_class = ExternalUserSerializer
     permission_classes = [IsAuthenticated]
+    serializer_class = ExternalUserSerializer
 
     @extend_schema(
         parameters=[
@@ -28,6 +29,7 @@ class ExternalUserRetrieve(generics.ListAPIView):
         ]
     )
     def get(self, request, *args, **kwargs):
+        """Retrieves an external user from LDAP."""
         if not request.user.has_perm("users.add_user") and not request.user.has_perm(
             "users.add_user_misc"
         ):

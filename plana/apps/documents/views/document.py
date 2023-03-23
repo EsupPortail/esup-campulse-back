@@ -1,4 +1,5 @@
 """Views directly linked to documents."""
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
@@ -10,25 +11,23 @@ from plana.apps.documents.serializers.document import DocumentSerializer
 
 
 class DocumentList(generics.ListCreateAPIView):
-    """
-    GET : Lists all Documents types.
+    """/documents/ route"""
 
-    POST : Creates a new Document type.
-    """
-
+    queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-
-    def get_queryset(self):
-        """GET : Lists all documents."""
-        return Document.objects.all()
 
     def get_permissions(self):
         if self.request.method == "GET":
             self.permission_classes = [AllowAny]
         return super().get_permissions()
 
+    def get(self, request, *args, **kwargs):
+        """Lists all documents."""
+        return self.list(request, *args, **kwargs)
+
     # TODO: add permission add_document_any_institution + unittests
     def post(self, request, *args, **kwargs):
+        """Creates a new document type (manager only)."""
         if not request.user.has_perm("documents.add_document"):
             return response.Response(
                 {"error": _("Not allowed to add a new document type.")},
@@ -43,11 +42,7 @@ class DocumentList(generics.ListCreateAPIView):
 
 
 class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
-    """
-    GET : Lists a document type with all its details.
-
-    DELETE : Removes an entire document type.
-    """
+    """/documents/{id} route"""
 
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
@@ -60,6 +55,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
+        """Retrieves a document type with all its details."""
         try:
             document_id = kwargs["pk"]
             document = self.queryset.get(id=document_id)
@@ -71,6 +67,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         return self.retrieve(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Destroys an entire document type (manager only)."""
         try:
             document_id = kwargs["pk"]
             document = self.queryset.get(id=document_id)
