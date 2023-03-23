@@ -32,17 +32,20 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
-        if (
-            "can_submit_projects" in request.data
-            and to_bool(request.data["can_submit_projects"]) is True
-            and not self.request.user.has_perm("users.change_user_all_fields")
+        if "can_submit_projects" in request.data and not self.request.user.has_perm(
+            "users.change_user_all_fields"
         ):
             return response.Response(
                 {"error": _("Only managers can edit this field.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        request.data.pop("username", False)
+        if "username" in request.data:
+            return response.Response(
+                {"error": _("Cannot edit this field.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         current_site = get_current_site(request)
         context = {
             "site_domain": current_site.domain,
@@ -61,10 +64,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
                 template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
+                    code="MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
-                managers_emails = request.user.get_user_institutions().values_list(
-                    "email"
+                managers_emails = list(
+                    request.user.get_user_institutions().values_list("email", flat=True)
                 )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,

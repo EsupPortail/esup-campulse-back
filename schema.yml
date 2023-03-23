@@ -1444,17 +1444,17 @@ components:
           title: Date de création
         approval_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date d'agrément
         last_goa_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date de la dernière AGO
         cga_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date de dernière AG constitutive
         social_networks:
@@ -2148,17 +2148,17 @@ components:
           $ref: '#/components/schemas/CharterStatusEnum'
         approval_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date d'agrément
         last_goa_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date de la dernière AGO
         cga_date:
           type: string
-          format: date-time
+          format: date
           nullable: true
           title: Date de dernière AG constitutive
         social_networks:

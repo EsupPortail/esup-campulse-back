@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 15:12+0100\n"
+"POT-Creation-Date: 2023-03-23 09:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
-#: plana/apps/associations/models/association.py:103
+#: plana/apps/associations/models/association.py:101
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -146,19 +146,19 @@ msgstr "Charte Expirée"
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:78
+#: plana/apps/associations/models/association.py:77
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:81
+#: plana/apps/associations/models/association.py:79
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:83
+#: plana/apps/associations/models/association.py:81
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:89
+#: plana/apps/associations/models/association.py:87
 #: plana/apps/commissions/models/commission.py:15
 #: plana/apps/documents/models/document.py:56
 #: plana/apps/institutions/models/institution.py:17
@@ -166,19 +166,19 @@ msgstr "Date de dernière AG constitutive"
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:96
+#: plana/apps/associations/models/association.py:94
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:112
+#: plana/apps/associations/models/association.py:110
 #: plana/apps/documents/models/document_association_user.py:48
 #: plana/apps/projects/models/project.py:21 plana/apps/users/models/user.py:23
 #: plana/apps/users/models/user.py:40
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:113
+#: plana/apps/associations/models/association.py:111
 #: plana/apps/users/models/user.py:41 plana/apps/users/models/user.py:110
 msgid "Associations"
 msgstr "Associations"
@@ -346,7 +346,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:18
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:58
-#: plana/apps/users/models/user.py:255
+#: plana/apps/users/models/user.py:270
 msgid "User"
 msgstr "Utilisateur"
 
@@ -669,7 +669,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:256
+#: plana/apps/users/models/user.py:271
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -708,51 +708,51 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:119
+#: plana/apps/users/views/association_users.py:120
 msgid "No user name or association id given."
 msgstr "Aucun nom d'utilisateur ou identifiant d'association donné."
 
-#: plana/apps/users/views/association_users.py:125
+#: plana/apps/users/views/association_users.py:126
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:134
+#: plana/apps/users/views/association_users.py:135
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:140
+#: plana/apps/users/views/association_users.py:141
 msgid "A manager cannot have an association."
 msgstr "Un gestionnaire ne peut avoir d'association."
 
-#: plana/apps/users/views/association_users.py:157
-#: plana/apps/users/views/association_users.py:330
+#: plana/apps/users/views/association_users.py:158
+#: plana/apps/users/views/association_users.py:350
 msgid "Only managers can validate associations for this account."
 msgstr ""
 "Seuls les gestionnaires peuvent valider les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:172
+#: plana/apps/users/views/association_users.py:173
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:184
+#: plana/apps/users/views/association_users.py:185
 msgid "Too many users in association."
 msgstr "Trop d'utilisateurs dans l'association."
 
-#: plana/apps/users/views/association_users.py:196
+#: plana/apps/users/views/association_users.py:197
 msgid "Cannot add an association from this institution."
 msgstr "Non autorisé à ajouter une association de cet établissement."
 
 #: plana/apps/users/views/association_users.py:248
-#: plana/apps/users/views/association_users.py:502
+#: plana/apps/users/views/association_users.py:501
 #: plana/apps/users/views/external.py:37
 #: plana/apps/users/views/gdpr_consent_users.py:68
 #: plana/apps/users/views/user.py:263 plana/apps/users/views/user.py:275
-#: plana/apps/users/views/user_groups_institutions_commissions.py:215
+#: plana/apps/users/views/user_groups_institutions_commissions.py:221
 msgid "Bad request."
 msgstr "Erreur de requête."
 
 #: plana/apps/users/views/association_users.py:290
-#: plana/apps/users/views/association_users.py:492
+#: plana/apps/users/views/association_users.py:491
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
@@ -760,27 +760,19 @@ msgstr "Aucun utilisateur ou association."
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
-#: plana/apps/users/views/association_users.py:319
-msgid "Cannot change an association from this institution."
-msgstr "Non autorisé à modifier une association de cet établissement."
-
-#: plana/apps/users/views/association_users.py:342
+#: plana/apps/users/views/association_users.py:317
 msgid "No edition rights on this link."
 msgstr "Aucun droit d'éditer ce lien entre association et utilisateur."
 
-#: plana/apps/users/views/association_users.py:373
-msgid "Only managers can edit president."
-msgstr "Seuls les gestionnaires peuvent changer le président."
-
-#: plana/apps/users/views/association_users.py:380
+#: plana/apps/users/views/association_users.py:327
 msgid "President cannot self-edit."
 msgstr "Le président ne peut s'auto-modifier."
 
-#: plana/apps/users/views/association_users.py:399
-msgid "Can't give president delegation to another user."
-msgstr "Impossible d'attribuer les droits de président à un autre utilisateur."
+#: plana/apps/users/views/association_users.py:382
+msgid "Only managers can edit president."
+msgstr "Seuls les gestionnaires peuvent changer le président."
 
-#: plana/apps/users/views/association_users.py:422
+#: plana/apps/users/views/association_users.py:401
 msgid "Can't remove president delegation before giving it."
 msgstr "Impossible de retirer les droits de président avant de les donner."
 
@@ -796,8 +788,8 @@ msgstr "Aucun nom d'utilisateur ou identifiant de consentement donné."
 msgid "User already consented."
 msgstr "L'utilisateur a déjà consenti à ce règlement."
 
-#: plana/apps/users/views/user.py:180 plana/apps/users/views/user.py:309
-#: plana/apps/users/views/user_auth.py:82
+#: plana/apps/users/views/user.py:180 plana/apps/users/views/user.py:299
+#: plana/apps/users/views/user_auth.py:85
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
@@ -805,19 +797,23 @@ msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:293 plana/apps/users/views/user_auth.py:41
-msgid "Only managers can edit this field."
-msgstr "Seuls les gestionnaires peuvent changer ce champ."
-
-#: plana/apps/users/views/user.py:388
+#: plana/apps/users/views/user.py:346
 msgid "No user found."
 msgstr "Aucun utilisateur trouvé."
 
-#: plana/apps/users/views/user.py:394
+#: plana/apps/users/views/user.py:352
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user_auth.py:170
+#: plana/apps/users/views/user_auth.py:39
+msgid "Only managers can edit this field."
+msgstr "Seuls les gestionnaires peuvent changer ce champ."
+
+#: plana/apps/users/views/user_auth.py:45
+msgid "Cannot edit this field."
+msgstr "Ce champ ne peut être édité."
+
+#: plana/apps/users/views/user_auth.py:173
 msgid "ok"
 msgstr "ok"
 
@@ -834,8 +830,8 @@ msgid "Only managers can edit groups."
 msgstr "Seuls les gestionnaires peuvent changer les groupes."
 
 #: plana/apps/users/views/user_groups_institutions_commissions.py:100
-#: plana/apps/users/views/user_groups_institutions_commissions.py:254
-#: plana/apps/users/views/user_groups_institutions_commissions.py:319
+#: plana/apps/users/views/user_groups_institutions_commissions.py:260
+#: plana/apps/users/views/user_groups_institutions_commissions.py:325
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
@@ -843,26 +839,26 @@ msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 msgid "Registering in this group is not allowed."
 msgstr "S'inscrire dans ce groupe n'est pas autorisé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:159
+#: plana/apps/users/views/user_groups_institutions_commissions.py:162
 msgid "Adding institution in this group is not possible."
 msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:176
+#: plana/apps/users/views/user_groups_institutions_commissions.py:182
 msgid "Adding commission in this group is not possible."
 msgstr "Ajouter une commission dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:242
-#: plana/apps/users/views/user_groups_institutions_commissions.py:307
+#: plana/apps/users/views/user_groups_institutions_commissions.py:248
+#: plana/apps/users/views/user_groups_institutions_commissions.py:313
 msgid "No user or link to group found."
 msgstr "Aucun utilisateur ou groupe trouvé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:266
-#: plana/apps/users/views/user_groups_institutions_commissions.py:337
+#: plana/apps/users/views/user_groups_institutions_commissions.py:272
+#: plana/apps/users/views/user_groups_institutions_commissions.py:343
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:272
-#: plana/apps/users/views/user_groups_institutions_commissions.py:343
+#: plana/apps/users/views/user_groups_institutions_commissions.py:278
+#: plana/apps/users/views/user_groups_institutions_commissions.py:349
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 

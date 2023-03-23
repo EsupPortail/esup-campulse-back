@@ -51,7 +51,7 @@ Consulter [le wiki d'aide au développement](https://git.unistra.fr/di/plan_a/pl
 ### Autres commandes
 
 - Réinitialiser la structure de la base de données et son contenu : `python manage.py clean_database`.
-- Créer un utilisateur gestionnaire : `python manage.py createmanageruser --email EMAIL --firstname FIRST_NAME --lastname LAST_NAME --group GROUP_NAME [--institution INSTITUTION]`.
+- Créer un utilisateur gestionnaire : `python manage.py createmanageruser --email EMAIL --firstname FIRST_NAME --lastname LAST_NAME --group GROUP_NAME [--institution INSTITUTION] [--password PASSWORD]`.
 - Réinitialiser les permissions et leurs fixtures : `python manage.py reset_permissions`.
 - Obtenir une liste des améliorations de code possibles (génère un fichier `pylint.json` à la racine) : `pylint plana --output-format=json:pylint.json`.
 - Visualiser le coverage des tests unitaires : `firefox htmlcov/index.html`.

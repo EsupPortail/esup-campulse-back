@@ -151,7 +151,10 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                         not request.user.has_perm(
                             "users.add_groupinstitutioncommissionusers_any_group"
                         )
-                        and not institution in request.user.get_user_institutions()
+                        and (
+                            not request.user.is_anonymous
+                            and not institution in request.user.get_user_institutions()
+                        )
                     ):
                         return response.Response(
                             {
@@ -167,8 +170,11 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                         not request.user.has_perm(
                             "users.add_groupinstitutioncommissionusers_any_group"
                         )
-                        and not commission.institution_id
-                        in request.user.get_user_institutions()
+                        and (
+                            not request.user.is_anonymous
+                            and not commission.institution_id
+                            in request.user.get_user_institutions()
+                        )
                     ):
                         return response.Response(
                             {

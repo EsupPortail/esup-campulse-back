@@ -1,4 +1,5 @@
 """List of tests done on users views with a student user."""
+import datetime
 import json
 
 from django.conf import settings
@@ -243,11 +244,9 @@ class UserViewsStudentTests(TestCase):
         - A student president of an association can execute this request.
         - A can_be_president of an association cannot PATCH can_be_president.
         - A student president of an association can update vice-president, secretary and treasurer.
+        - can_be_president_from cannot comes after can_be_president_to
         """
         association_id = 2
-        asso_user = AssociationUsers.objects.get(
-            user_id=self.student_user_id, association_id=association_id
-        )
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
@@ -262,11 +261,14 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(asso_user.is_president)
 
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
                 "can_be_president": True,
+                "can_be_president_from": "2023-03-22",
+                "can_be_president_to": "2023-03-29",
                 "is_secretary": True,
                 "is_treasurer": False,
             },
@@ -276,6 +278,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(asso_user.can_be_president_from, datetime.date(2023, 3, 22))
         self.assertTrue(asso_user.can_be_president)
         self.assertFalse(asso_user.is_president)
         self.assertTrue(asso_user.is_secretary)
@@ -292,12 +295,13 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.unvalidated_user_id, association_id=association_id
         )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(asso_user.can_be_president)
 
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
+                "can_be_president_to": None,
                 "is_treasurer": True,
             },
             content_type="application/json",
@@ -306,6 +310,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(asso_user.can_be_president_to, None)
         self.assertFalse(asso_user.is_president)
         self.assertFalse(asso_user.is_secretary)
         self.assertTrue(asso_user.is_treasurer)
@@ -314,6 +319,7 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
+                "can_be_president_from": None,
                 "is_vice_president": True,
             },
             content_type="application/json",
@@ -327,13 +333,15 @@ class UserViewsStudentTests(TestCase):
         self.assertFalse(asso_user.is_treasurer)
         self.assertTrue(asso_user.is_vice_president)
 
-        """
-        old_president = AssociationUsers.objects.get(
-            user_id=self.president_user_id, association_id=association_id
+        response_president = self.president_student_client.patch(
+            f"/users/{self.student_user_id}/associations/{association_id}",
+            {
+                "can_be_president_from": "2023-03-22",
+                "can_be_president_to": "2023-03-15",
+            },
+            content_type="application/json",
         )
-        self.assertTrue(old_president.can_be_president)
-        self.assertFalse(old_president.is_president)
-        """
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_patch_association_users_other_president(self):
         """
@@ -401,6 +409,7 @@ class UserViewsStudentTests(TestCase):
         - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
+        - A student user cannot update his permission to submit projects.
         - A student user cannot update his email address with an address from another account.
         - A student user can update his email address.
         - Updating the email address doesn't change the username without validation.
@@ -421,6 +430,14 @@ class UserViewsStudentTests(TestCase):
         )
         student_user = User.objects.get(username=self.student_user_name)
         self.assertEqual(student_user.username, self.student_user_name)
+
+        response_student = self.student_client.patch(
+            "/users/auth/user/",
+            data={"can_submit_projects": False},
+            content_type="application/json",
+        )
+        student_user = User.objects.get(username=self.student_user_name)
+        self.assertTrue(student_user.can_submit_projects)
 
         new_email = self.president_user_name
         response_student = self.student_client.patch(

@@ -51,8 +51,18 @@ class UserViewsManagerTests(TestCase):
         self.student_user_name = "etudiant-asso-site@mail.tld"
         self.president_user_id = 13
         self.president_user_name = "president-asso-site@mail.tld"
+
         self.manager_misc_user_id = 5
         self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+        self.manager_misc_client = Client()
+        url_manager_misc = reverse("rest_login")
+        data_manager_misc = {
+            "username": self.manager_misc_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.manager_misc_client.post(
+            url_manager_misc, data_manager_misc
+        )
 
         self.manager_general_user_id = 3
         self.manager_general_user_name = "gestionnaire-svu@mail.tld"
@@ -223,6 +233,7 @@ class UserViewsManagerTests(TestCase):
         - A manager user can update user details.
         - An email is received if validation is successful.
         - A non-existing user cannot be updated.
+        - Some email addresses should not be used for update.
         - A manager user cannot update restricted CAS user details.
         - A manager user can validate a CAS user.
         - A manager user cannot edit another manager.
@@ -246,6 +257,15 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.patch(
             "/users/1000",
             data={"username": "Joséphine Ange Gardien"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_manager = self.manager_client.patch(
+            f"/users/{self.student_user_id}",
+            data={
+                "email": f"camping-paradis-cest-mieux-que-la-vie@{settings.RESTRICTED_DOMAINS[0]}"
+            },
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -374,10 +394,21 @@ class UserViewsManagerTests(TestCase):
         """
         POST /users/associations/ .
 
+        - A misc manager user cannot add an association from another institution.
         - A manager user can add an association to a validated student.
         - A manager user can add an association to a non-validated student.
         - A manager cannot be added in an association.
         """
+        response_manager_misc = self.manager_misc_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_name,
+                "association": 1,
+                "can_be_president": False,
+            },
+        )
+        self.assertEqual(response_manager_misc.status_code, status.HTTP_400_BAD_REQUEST)
+
         response_manager = self.manager_client.post(
             "/users/associations/",
             {
@@ -435,6 +466,7 @@ class UserViewsManagerTests(TestCase):
         - Link between member and association is correctly updated.
         - If giving president privileges to a member,
               the old president is no longer president of the association.
+        - A manager can validate a UserAssociation link.
         - A manager can add a president to an association without one.
         """
         association_id = 2
@@ -456,6 +488,19 @@ class UserViewsManagerTests(TestCase):
             user_id=self.president_user_id, association_id=association_id
         )
         self.assertFalse(old_president.is_president)
+
+        self.assertFalse(len(mail.outbox))
+        response = self.manager_client.patch(
+            f"/users/{self.unvalidated_user_id}/associations/{association_id}",
+            {"is_validated_by_admin": True},
+            content_type="application/json",
+        )
+        asso_user = AssociationUsers.objects.get(
+            user_id=self.unvalidated_user_id, association_id=association_id
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(asso_user.is_validated_by_admin)
+        self.assertTrue(len(mail.outbox))
 
         association_id = 5
         response = self.manager_client.post(

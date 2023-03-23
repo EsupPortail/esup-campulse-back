@@ -40,7 +40,7 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
 
                 update_session_auth_hash(self.request, self.user)
         except ObjectDoesNotExist:
-            ...
+            pass
 
 
 class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
@@ -71,7 +71,7 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
                 )
             self.reset_form.save(**opts)
         except ObjectDoesNotExist:
-            ...
+            pass
 
 
 class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
