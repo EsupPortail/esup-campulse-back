@@ -336,38 +336,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ),
                 message=template.parse_vars(user, request, context),
             )
-        elif user.is_validated_by_admin is False:
-            assos_user = AssociationUsers.objects.filter(user_id=user.id)
-
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
-            }
-            if assos_user.count() > 0:
-                template = MailTemplate.objects.get(
-                    code="INSTITUTION_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
-                )
-                managers_emails = list(
-                    user.get_user_institutions().values_list("email", flat=True)
-                )
-            else:
-                template = MailTemplate.objects.get(
-                    code="MISC_MANAGER_LDAP_ACCOUNT_CONFIRMATION"
-                )
-                managers_emails = []
-                for user_to_check in User.objects.all():
-                    if user_to_check.has_perm("view_user_misc"):
-                        managers_emails.append(user_to_check.email)
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=managers_emails,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
-                message=template.parse_vars(user, request, context),
-            )
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
