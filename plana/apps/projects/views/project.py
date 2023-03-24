@@ -133,7 +133,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -183,7 +183,7 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # TODO : unittests
     # TODO : add institution notion to update restricted fields

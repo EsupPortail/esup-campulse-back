@@ -259,13 +259,13 @@ class ProjectsViewsTests(TestCase):
         """
         PUT /projects/{id} .
 
-        - Always returns a 404.
+        - Always returns a 405.
         """
         patch_data = {"name": "Test anonymous"}
         response = self.general_client.put(
             "/projects/1", patch_data, content_type="application/json"
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_anonymous(self):
         """
@@ -335,13 +335,13 @@ class ProjectsViewsTests(TestCase):
         """
         PUT /projects/{id}/restricted .
 
-        - Always returns a 404.
+        - Always returns a 405.
         """
         patch_data = {"status": "PROJECT_REJECTED"}
         response = self.general_client.put(
             "/projects/1/restricted", patch_data, content_type="application/json"
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_restricted_anonymous(self):
         """
