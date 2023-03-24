@@ -391,6 +391,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ):
                 request.data["is_public"] = False
 
+        if "path_logo" in request.data:
+            print(request.data["path_logo"])
+
         current_site = get_current_site(request)
         context = {
             "site_domain": current_site.domain,

@@ -6,6 +6,7 @@ https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/stora
 from django.db import models
 from django.db.models.fields.files import FieldFile
 from storages.backends.s3boto3 import S3Boto3Storage
+from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
 from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
 from thumbnails.models import Source
@@ -26,9 +27,7 @@ class UpdateACLStorage(S3Boto3Storage):
 
     def update_acl(self, name, acl=None):
         acl = acl or self.default_acl
-        # TODO self._clean_name() breaks unit tests.
-        # name = self._normalize_name(self._clean_name(name))
-        name = self._normalize_name(name)
+        name = self._normalize_name(clean_name(name))
         self.bucket.Object(name).Acl().put(ACL=acl)
 
 

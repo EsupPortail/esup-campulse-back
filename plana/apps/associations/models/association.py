@@ -39,7 +39,7 @@ class Association(models.Model):
         resize_source_to="base",
         pregenerated_sizes=["list", "detail"],
         upload_to=get_logo_path,
-    )  # By default images are stored in MEDIA_ROOT
+    )
     alt_logo = models.TextField(
         _("Logo description"), default="", null=True, blank=True
     )
