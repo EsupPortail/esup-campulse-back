@@ -1,0 +1,62 @@
+[
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 1,
+    "fields": {
+      "upload_date": "2023-03-14T15:30:00.000Z",
+      "path_file": "",
+      "document": 14,
+      "project": 1
+    }
+  },
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 2,
+    "fields": {
+      "upload_date": "2023-03-14T15:30:00.000Z",
+      "path_file": "",
+      "document": 15,
+      "project": 1
+    }
+  },
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 3,
+    "fields": {
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 16,
+      "project": 1
+    }
+  },
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 4,
+    "fields": {
+      "upload_date": "2023-03-14T15:30:00.000Z",
+      "path_file": "",
+      "document": 17,
+      "project": 1
+    }
+  },
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 5,
+    "fields": {
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 18,
+      "project": 1
+    }
+  },
+  {
+    "model": "documents.DocumentUpload",
+    "pk": 6,
+    "fields": {
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 14,
+      "project": 2
+    }
+  }
+]

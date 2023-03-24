@@ -1,0 +1,26 @@
+[
+  {
+    "model": "projects.ProjectCategory",
+    "pk": 1,
+    "fields": {
+      "category": 5,
+      "project": 1
+    }
+  },
+  {
+    "model": "projects.ProjectCategory",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "project": 2
+    }
+  },
+  {
+    "model": "projects.ProjectCategory",
+    "pk": 3,
+    "fields": {
+      "category": 11,
+      "project": 2
+    }
+  }
+]

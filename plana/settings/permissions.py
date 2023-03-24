@@ -37,6 +37,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "delete_document",
         "delete_document_any_institution",
+        "change_project_restricted_fields",
     ],
     "MANAGER_INSTITUTION": [
         "add_association",
@@ -60,6 +61,7 @@ PERMISSIONS_GROUPS = {
         "view_groupinstitutioncommissionusers_any_group",
         "add_document",
         "delete_document",
+        "change_project_restricted_fields",
     ],
     "MANAGER_MISC": [
         "add_association",
@@ -84,6 +86,7 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_any_group",
+        "change_project_restricted_fields",
     ],
     "COMMISSION": [
         "view_association_not_public",

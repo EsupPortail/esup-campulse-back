@@ -8,7 +8,7 @@ from django.conf import settings
 from django.db import migrations, models
 
 import plana.apps.documents.models.document
-import plana.apps.documents.models.document_association_user
+import plana.apps.documents.models.document_upload
 import plana.storages
 
 
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                 (
                     'path_file',
                     plana.storages.DynamicStorageFileField(
-                        upload_to=plana.apps.documents.models.document_association_user.get_file_path,
+                        upload_to=plana.apps.documents.models.document_upload.get_file_path,
                         verbose_name='Uploaded file',
                     ),
                 ),

@@ -1,4 +1,4 @@
-"""List of tests done on projects views."""
+"""List of tests done on projects categories views."""
 import json
 
 from django.test import Client, TestCase
@@ -7,7 +7,7 @@ from rest_framework import status
 from plana.apps.projects.models.category import Category
 
 
-class ProjectsViewsTests(TestCase):
+class ProjectsCategoriesViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [

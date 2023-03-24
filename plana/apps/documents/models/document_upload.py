@@ -1,6 +1,7 @@
 """Models describing documents uploaded by an association or a user."""
 
 import datetime
+import os
 
 from django.conf import settings
 from django.db import models
@@ -29,7 +30,7 @@ def get_file_path(instance, filename):
     )
 
 
-class DocumentAssociationUser(models.Model):
+class DocumentUpload(models.Model):
     """Main model."""
 
     document = models.ForeignKey(
