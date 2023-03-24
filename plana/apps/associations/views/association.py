@@ -307,7 +307,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     def patch(self, request, *args, **kwargs):

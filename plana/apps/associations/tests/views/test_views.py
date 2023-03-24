@@ -619,7 +619,7 @@ class AssociationsViewsTests(TestCase):
         response = self.client.put(
             "/associations/1", {"name": "Les aficionados d'endives au jambon"}
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_get_activity_fields_list(self):
         """

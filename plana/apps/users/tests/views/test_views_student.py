@@ -129,7 +129,9 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.put(
             f"/users/{self.unvalidated_user_id}", {"username": "Aurevoirg"}
         )
-        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_student.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_student_get_associations_user_list(self):
         """
@@ -375,7 +377,9 @@ class UserViewsStudentTests(TestCase):
         - Request should return an error no matter which role is trying to execute it.
         """
         response_student = self.student_client.get("/users/999/associations/999")
-        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_student.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_student_put_association_users(self):
         """
@@ -386,7 +390,9 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.put(
             "/users/999/associations/999", {"is_treasurer": True}
         )
-        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_student.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_student_get_auth_user_detail(self):
         """
@@ -475,7 +481,9 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.put(
             "/users/auth/user/", {"username": "Aurevoirg"}
         )
-        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_student.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_student_delete_auth_user(self):
         """

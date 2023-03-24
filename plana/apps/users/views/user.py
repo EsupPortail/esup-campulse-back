@@ -258,7 +258,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         )
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
         """Updates a user field (with a restriction on CAS auto-generated fields)."""

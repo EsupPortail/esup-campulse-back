@@ -33,7 +33,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
     """
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
         if "can_submit_projects" in request.data and not self.request.user.has_perm(

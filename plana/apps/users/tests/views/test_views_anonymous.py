@@ -109,7 +109,9 @@ class UserViewsAnonymousTests(TestCase):
         response_anonymous = self.anonymous_client.put(
             f"/users/{self.unvalidated_user_id}", {"username": "Aurevoirg"}
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_anonymous.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_anonymous_get_associations_user_list(self):
         """

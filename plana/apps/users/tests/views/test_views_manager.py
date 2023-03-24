@@ -360,7 +360,9 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.put(
             f"/users/{self.student_user_id}", {"username": "Aurevoirg"}
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_manager_get_associations_user_list(self):
         """
@@ -635,7 +637,9 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.put(
             "/users/auth/user/", {"username": "Alorsçavag"}
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     def test_manager_get_consents_user_list(self):
         """
