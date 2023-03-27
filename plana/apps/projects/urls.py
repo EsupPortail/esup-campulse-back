@@ -1,13 +1,15 @@
 """List of URLs directly linked to operations that can be done on projects."""
 from django.urls import path
 
-from .views.category import CategoryListCreate
+from .views.category_project_category import (
+    CategoryListProjectCategoryCreate,
+    ProjectCategoriesDestroy,
+)
 from .views.project import (
     ProjectListCreate,
     ProjectRestrictedUpdate,
     ProjectRetrieveUpdate,
 )
-from .views.project_category import ProjectCategoriesDestroy
 from .views.project_commission_date import (
     ProjectCommissionDateListCreate,
     ProjectCommissionDateRetrieve,
@@ -15,13 +17,11 @@ from .views.project_commission_date import (
 )
 
 urlpatterns = [
-    # Project categories urls
     path(
         "categories",
-        CategoryListCreate.as_view(),
-        name="project_categories_list_create",
+        CategoryListProjectCategoryCreate.as_view(),
+        name="category_list_project_categories_create",
     ),
-    # Project category links urls
     path(
         "<int:project_id>/categories/<int:category_id>",
         ProjectCategoriesDestroy.as_view(),

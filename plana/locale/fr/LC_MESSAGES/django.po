@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 10:22+0200\n"
+"POT-Creation-Date: 2023-03-27 10:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -615,16 +615,16 @@ msgstr "Date de commission liée au projet"
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/category.py:50
+#: plana/apps/projects/views/category_project_category.py:55
+#: plana/apps/projects/views/category_project_category.py:94
 #: plana/apps/projects/views/project.py:153
 #: plana/apps/projects/views/project.py:196
-#: plana/apps/projects/views/project_category.py:27
 #: plana/apps/projects/views/project_commission_date.py:72
 msgid "Project not found."
 msgstr "Projet non trouvé."
 
-#: plana/apps/projects/views/category.py:56
-#: plana/apps/projects/views/project_category.py:33
+#: plana/apps/projects/views/category_project_category.py:61
+#: plana/apps/projects/views/category_project_category.py:100
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
