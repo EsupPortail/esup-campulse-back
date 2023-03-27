@@ -1,11 +1,8 @@
 """List of tests done on projects categories links views."""
-import json
-
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 
 
@@ -13,22 +10,22 @@ class ProjectCategoryLinksViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "account_emailaddress.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "commissions_commissiondate.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "commissions_commission.json",
-        "commissions_commissiondate.json",
-        "associations_association.json",
-        "users_associationusers.json",
-        "associations_activityfield.json",
-        "institutions_institution.json",
-        "institutions_institutioncomponent.json",
         "users_user.json",
-        "account_emailaddress.json",
-        "auth_group.json",
-        "auth_group_permissions.json",
-        "auth_permission.json",
+        "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
     ]
 
@@ -147,16 +144,16 @@ class ProjectCategoryLinksViewsTests(TestCase):
 
     def test_delete_project_categories_anonymous(self):
         """
-        DELETE /projects/{project_id}/category/{category_id} .
+        DELETE /projects/{project_id}/categories/{category_id} .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.delete("/projects/1/category/1")
+        response = self.client.delete("/projects/1/categories/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_project_categories_not_found(self):
         """
-        DELETE /projects/{project_id}/category/{category_id} .
+        DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by any authenticated user.
         - The project must be existing.
@@ -164,13 +161,13 @@ class ProjectCategoryLinksViewsTests(TestCase):
         project = 999
         category = 1
         response = self.general_client.delete(
-            f"/projects/{project}/category/{category}"
+            f"/projects/{project}/categories/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_categories_forbidden_user(self):
         """
-        DELETE /projects/{project_id}/category/{category_id} .
+        DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by any authenticated user.
         - The owner of the project must be the authenticated user.
@@ -178,13 +175,13 @@ class ProjectCategoryLinksViewsTests(TestCase):
         project = 1
         category = 1
         response = self.student_offsite_client.delete(
-            f"/projects/{project}/category/{category}"
+            f"/projects/{project}/categories/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_categories_association_success(self):
         """
-        DELETE /projects/{project_id}/category/{category_id} .
+        DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be the president of the association owning the project.
@@ -194,7 +191,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         project = 2
         category = 1
         response = self.student_president_client.delete(
-            f"/projects/{project}/category/{category}"
+            f"/projects/{project}/categories/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
@@ -203,7 +200,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         )
 
         response = self.student_president_client.delete(
-            f"/projects/{project}/category/{category}"
+            f"/projects/{project}/categories/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(

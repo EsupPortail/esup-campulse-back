@@ -9,8 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
-
-# from plana.storages import DynamicStorageFileField
+from plana.storages import DynamicStorageFileField
 
 
 def get_template_path(instance, filename):
@@ -41,15 +40,12 @@ class Document(models.Model):
     days_before_expiration = models.DurationField(
         _("Days before document expiration"), default=datetime.timedelta(days=365)
     )
-    """
-    # TODO Debug path_template field with fixtures.
     path_template = DynamicStorageFileField(
         _("Example template file"),
         null=True,
         blank=True,
         upload_to=get_template_path,
     )
-    """
     mime_types = ArrayField(base_field=models.CharField(max_length=128), default=list)
     institution = models.ForeignKey(
         Institution,
@@ -64,7 +60,7 @@ class Document(models.Model):
         null=True,
     )
     process_type = models.CharField(
-        _("Status"),
+        _("Document Status"),
         max_length=32,
         choices=[
             ("CHARTER_ASSOCIATION", _("Charter for Association")),

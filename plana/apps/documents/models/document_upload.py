@@ -61,8 +61,8 @@ class DocumentUpload(models.Model):
         _("Uploaded file"),
         upload_to=get_file_path,
     )
-    status = models.CharField(
-        _("Status"),
+    document_upload_status = models.CharField(
+        _("Document Upload Status"),
         max_length=32,
         choices=[
             ("DOCUMENT_REJECTED", _("Document Rejected")),

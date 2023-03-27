@@ -5,7 +5,6 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
 
@@ -13,22 +12,22 @@ class ProjectCommissionDateViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "account_emailaddress.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "commissions_commissiondate.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "commissions_commission.json",
-        "commissions_commissiondate.json",
-        "associations_association.json",
-        "users_associationusers.json",
-        "associations_activityfield.json",
-        "institutions_institution.json",
-        "institutions_institutioncomponent.json",
         "users_user.json",
-        "account_emailaddress.json",
-        "auth_group.json",
-        "auth_group_permissions.json",
-        "auth_permission.json",
+        "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
     ]
 

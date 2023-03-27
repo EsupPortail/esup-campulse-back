@@ -1,3 +1,5 @@
+"""Views linked to project commission dates links."""
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -32,6 +34,7 @@ from plana.apps.projects.serializers.project_commission_date import (
     )
 )
 class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
+    """/projects/commission_date route"""
 
     permission_classes = [IsAuthenticated]
     serializer_class = ProjectCommissionDateSerializer
@@ -44,7 +47,12 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(project_id=project_id)
         return queryset
 
+    def get(self, request, *args, **kwargs):
+        """Lists all commission dates that can be linked to a project."""
+        return self.list(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        """Creates a link between a project and a commission date."""
         if 'amount_earned' in request.data and request.data["amount_earned"] != None:
             return response.Response(
                 {
@@ -88,9 +96,10 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """/projects/commission_date/{id} route"""
 
-    queryset = ProjectCommissionDate.objects.all()
     permission_classes = [IsAuthenticated]
+    queryset = ProjectCommissionDate.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -103,6 +112,7 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
+        """Updates details of a project linked to a commission date."""
         try:
             pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -130,6 +140,7 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
         return super().update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Destroys details of a project linked to a commission date."""
         try:
             pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:

@@ -58,7 +58,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
         """Retrieves a document type with all its details."""
         try:
             document_id = kwargs["pk"]
-            document = self.queryset.get(id=document_id)
+            self.queryset.get(id=document_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No document id given.")},

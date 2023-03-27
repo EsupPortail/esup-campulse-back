@@ -1,4 +1,5 @@
 """Views directly linked to document uploads."""
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
@@ -10,20 +11,20 @@ from plana.apps.projects.models.project import Project
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
-    """
-    GET : Lists all DocumentUploads.
-
-    POST : Creates a new DocumentUploads.
-    """
+    """/documents/uploads route"""
 
     serializer_class = DocumentUploadSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        """GET : Lists all document uploads."""
         return DocumentUpload.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        """Lists all documents uploads."""
+        return self.list(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        """Creates a new document upload."""
         if "project" in request.data:
             try:
                 project = Project.objects.get(pk=request.data["project"])

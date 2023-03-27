@@ -5,7 +5,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUsers, User
 
 
@@ -50,8 +49,8 @@ class Project(models.Model):
         _("Planned prevention and safety actions"), default=""
     )
     marketing_campaign = models.TextField(_("Marketing campaign"), default="")
-    status = models.CharField(
-        _("Status"),
+    project_status = models.CharField(
+        _("Project Status"),
         max_length=32,
         choices=[
             ("PROJECT_DRAFT", _("Project Draft")),

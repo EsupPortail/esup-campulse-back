@@ -12,22 +12,22 @@ class ProjectsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "account_emailaddress.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "commissions_commissiondate.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "commissions_commission.json",
-        "commissions_commissiondate.json",
-        "associations_association.json",
-        "users_associationusers.json",
-        "associations_activityfield.json",
-        "institutions_institution.json",
-        "institutions_institutioncomponent.json",
         "users_user.json",
-        "account_emailaddress.json",
-        "auth_group.json",
-        "auth_group_permissions.json",
-        "auth_permission.json",
+        "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
     ]
 
@@ -299,7 +299,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - Status must be in authorized status list.
         """
-        patch_data = {"status": "PROJECT_REJECTED"}
+        patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
@@ -337,7 +337,7 @@ class ProjectsViewsTests(TestCase):
 
         - Always returns a 405.
         """
-        patch_data = {"status": "PROJECT_REJECTED"}
+        patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.put(
             "/projects/1/restricted", patch_data, content_type="application/json"
         )
@@ -349,7 +349,7 @@ class ProjectsViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        patch_data = {"status": "PROJECT_REJECTED"}
+        patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.client.patch(
             "/projects/1/restricted", patch_data, content_type="application/json"
         )
@@ -362,7 +362,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - Project must be existing.
         """
-        patch_data = {"status": "PROJECT_REJECTED"}
+        patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
             "/projects/999/restricted", patch_data, content_type="application/json"
         )

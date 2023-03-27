@@ -12,16 +12,16 @@ class ProjectsModelsTests(TestCase):
     """Projects Models tests class."""
 
     fixtures = [
+        "associations_association.json",
+        "associations_activityfield.json",
+        "commissions_commission.json",
+        "commissions_commissiondate.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "commissions_commission.json",
-        "commissions_commissiondate.json",
-        "associations_association.json",
-        "associations_activityfield.json",
-        "institutions_institution.json",
-        "institutions_institutioncomponent.json",
         "users_associationusers.json",
         "users_user.json",
     ]

@@ -354,6 +354,51 @@ paths:
       responses:
         '204':
           description: No response body
+  /documents/uploads:
+    get:
+      operationId: documents_uploads_list
+      description: Lists all documents uploads.
+      tags:
+      - documents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentUpload'
+          description: ''
+    post:
+      operationId: documents_uploads_create
+      description: Creates a new document upload.
+      tags:
+      - documents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUpload'
+          description: ''
   /groups/:
     get:
       operationId: groups_list
@@ -411,6 +456,161 @@ paths:
                 items:
                   $ref: '#/components/schemas/InstitutionComponent'
           description: ''
+  /projects/:
+    get:
+      operationId: projects_list
+      description: Lists all projects with all their details.
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPartialData'
+          description: ''
+    post:
+      operationId: projects_create
+      description: Creates a new project.
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/{id}:
+    get:
+      operationId: projects_retrieve
+      description: Retrieves a project with all its details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    patch:
+      operationId: projects_partial_update
+      description: Update project details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/{id}/restricted:
+    patch:
+      operationId: projects_restricted_partial_update
+      description: Update project restricted details (manager only).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectRestricted'
+          description: ''
+  /projects/{project_id}/categories/{category_id}:
+    delete:
+      operationId: projects_categories_destroy
+      description: Destroys a link between project and category.
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /projects/categories:
     get:
       operationId: projects_categories_list
@@ -430,6 +630,155 @@ paths:
                 items:
                   $ref: '#/components/schemas/Category'
           description: ''
+    post:
+      operationId: projects_categories_create
+      description: Creates a link between a category and a project.
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectCategoryRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCategoryRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCategory'
+          description: ''
+  /projects/commission_dates:
+    get:
+      operationId: projects_commission_dates_list
+      description: Lists all commission dates that can be linked to a project.
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: number
+        description: Project id.
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectCommissionDate'
+          description: ''
+    post:
+      operationId: projects_commission_dates_create
+      description: Creates a link between a project and a commission date.
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDate'
+          description: ''
+  /projects/commission_dates/{id}:
+    get:
+      operationId: projects_commission_dates_retrieve
+      description: /projects/commission_date/{id} route
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDate'
+          description: ''
+    patch:
+      operationId: projects_commission_dates_partial_update
+      description: Updates details of a project linked to a commission date.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDateData'
+          description: ''
+    delete:
+      operationId: projects_commission_dates_destroy
+      description: Destroys details of a project linked to a commission date.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /users/:
     get:
       operationId: users_list
@@ -1827,6 +2176,11 @@ components:
         days_before_expiration:
           type: string
           title: Days before document expiration
+        path_template:
+          type: string
+          format: uri
+          nullable: true
+          title: Example template file
         mime_types:
           type: array
           items:
@@ -1835,7 +2189,7 @@ components:
         process_type:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: État
+          title: Document Status
         institution:
           type: integer
           nullable: true
@@ -1872,6 +2226,11 @@ components:
         days_before_expiration:
           type: string
           title: Days before document expiration
+        path_template:
+          type: string
+          format: binary
+          nullable: true
+          title: Example template file
         mime_types:
           type: array
           items:
@@ -1881,7 +2240,7 @@ components:
         process_type:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: État
+          title: Document Status
         institution:
           type: integer
           nullable: true
@@ -1892,6 +2251,71 @@ components:
       required:
       - contact
       - name
+    DocumentUpload:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        upload_date:
+          type: string
+          format: date-time
+          readOnly: true
+        path_file:
+          type: string
+          format: uri
+          title: Uploaded file
+        document_upload_status:
+          $ref: '#/components/schemas/DocumentUploadStatusEnum'
+        document:
+          type: integer
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        project:
+          type: integer
+          nullable: true
+      required:
+      - document
+      - id
+      - path_file
+      - upload_date
+    DocumentUploadRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        path_file:
+          type: string
+          format: binary
+          title: Uploaded file
+        document_upload_status:
+          $ref: '#/components/schemas/DocumentUploadStatusEnum'
+        document:
+          type: integer
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        project:
+          type: integer
+          nullable: true
+      required:
+      - document
+      - path_file
+    DocumentUploadStatusEnum:
+      enum:
+      - DOCUMENT_REJECTED
+      - DOCUMENT_PROCESSING
+      - DOCUMENT_VALIDATED
+      type: string
     ExternalUser:
       type: object
       description: External user serializer.
@@ -2173,6 +2597,118 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+    PatchedProjectCommissionDateDataRequest:
+      type: object
+      description: Only data serializer.
+      properties:
+        is_first_edition:
+          type: boolean
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount asked on previous edition
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount earned on previous edition
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+    PatchedProjectRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Start date
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: End date
+        location:
+          type: string
+          minLength: 1
+          title: Adresse
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        budget_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Budget on previous edition
+        target_audience:
+          type: string
+          minLength: 1
+        type_target_audience:
+          type: string
+          minLength: 1
+          title: Type of people in target audience (student, employees, ...)
+          maxLength: 64
+        amount_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of people in target audience
+        amount_students_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of students in target audience
+        ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money asked for each person
+        individual_cost:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money needed by person
+        goals:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+          title: Résumé
+        planned_activities:
+          type: string
+          minLength: 1
+          title: Planned activites
+        prevention_safety:
+          type: string
+          minLength: 1
+          title: Planned prevention and safety actions
+        marketing_campaign:
+          type: string
+          minLength: 1
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+    PatchedProjectRestrictedRequest:
+      type: object
+      properties:
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -2215,6 +2751,337 @@ components:
       - DOCUMENT_USER
       - DOCUMENT_PROJECT
       - DOCUMENT_PROJECT_REVIEW
+      type: string
+    Project:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Start date
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: End date
+        location:
+          type: string
+          title: Adresse
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        categories:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        first_edition:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        amounts_previous_edition:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        budget_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Budget on previous edition
+        target_audience:
+          type: string
+        type_target_audience:
+          type: string
+          title: Type of people in target audience (student, employees, ...)
+          maxLength: 64
+        amount_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of people in target audience
+        amount_students_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of students in target audience
+        ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money asked for each person
+        individual_cost:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money needed by person
+        goals:
+          type: string
+        summary:
+          type: string
+          title: Résumé
+        planned_activities:
+          type: string
+          title: Planned activites
+        prevention_safety:
+          type: string
+          title: Planned prevention and safety actions
+        marketing_campaign:
+          type: string
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+      required:
+      - amounts_previous_edition
+      - categories
+      - first_edition
+      - name
+    ProjectCategory:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          type: string
+        category:
+          type: string
+      required:
+      - category
+      - id
+      - project
+    ProjectCategoryRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        project:
+          type: string
+        category:
+          type: string
+      required:
+      - category
+      - project
+    ProjectCommissionDate:
+      type: object
+      description: Complete serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          type: string
+        commission_date:
+          type: string
+        is_first_edition:
+          type: boolean
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount asked on previous edition
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount earned on previous edition
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - commission_date
+      - id
+      - project
+    ProjectCommissionDateData:
+      type: object
+      description: Only data serializer.
+      properties:
+        is_first_edition:
+          type: boolean
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount asked on previous edition
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount earned on previous edition
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+    ProjectCommissionDateRequest:
+      type: object
+      description: Complete serializer.
+      properties:
+        project:
+          type: string
+        commission_date:
+          type: string
+        is_first_edition:
+          type: boolean
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount asked on previous edition
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount earned on previous edition
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - commission_date
+      - project
+    ProjectPartialData:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        association:
+          type: integer
+          nullable: true
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+      required:
+      - edition_date
+      - name
+    ProjectRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Start date
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: End date
+        location:
+          type: string
+          minLength: 1
+          title: Adresse
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        budget_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Budget on previous edition
+        target_audience:
+          type: string
+          minLength: 1
+        type_target_audience:
+          type: string
+          minLength: 1
+          title: Type of people in target audience (student, employees, ...)
+          maxLength: 64
+        amount_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of people in target audience
+        amount_students_target_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of students in target audience
+        ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money asked for each person
+        individual_cost:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of money needed by person
+        goals:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+          title: Résumé
+        planned_activities:
+          type: string
+          minLength: 1
+          title: Planned activites
+        prevention_safety:
+          type: string
+          minLength: 1
+          title: Planned prevention and safety actions
+        marketing_campaign:
+          type: string
+          minLength: 1
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+      required:
+      - name
+    ProjectRestricted:
+      type: object
+      properties:
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+    ProjectStatusEnum:
+      enum:
+      - PROJECT_DRAFT
+      - PROJECT_REJECTED
+      - PROJECT_PROCESSING
+      - PROJECT_VALIDATED
+      - PROJECT_REVIEW_DRAFT
+      - PROJECT_REVIEW_REJECTED
+      - PROJECT_REVIEW_PROCESSING
+      - PROJECT_REVIEW_VALIDATED
       type: string
     ResendEmailVerificationRequest:
       type: object

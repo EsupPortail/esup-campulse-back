@@ -16,6 +16,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     amounts_previous_edition = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.OBJECT)
+    def get_amounts_previous_edition(self, project):
+        return ProjectCommissionDate.objects.filter(project_id=project.pk).values(
+            "commission_date_id",
+            "amount_asked_previous_edition",
+            "amount_earned_previous_edition",
+        )
+
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_categories(self, project):
         """Return project-category links."""
         return ProjectCategory.objects.filter(project_id=project.pk).values()
@@ -25,14 +33,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         """Return is_first_edition for every commission the project applied."""
         return ProjectCommissionDate.objects.filter(project_id=project.pk).values(
             "commission_date_id", "is_first_edition"
-        )
-
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_amounts_previous_edition(self, project):
-        return ProjectCommissionDate.objects.filter(project_id=project.pk).values(
-            "commission_date_id",
-            "amount_asked_previous_edition",
-            "amount_earned_previous_edition",
         )
 
     class Meta:
@@ -59,17 +59,17 @@ class ProjectSerializer(serializers.ModelSerializer):
             "planned_activities",
             "prevention_safety",
             "marketing_campaign",
-            "status",
+            "project_status",
         ]
 
 
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ["name", "association", "user", "edition_date", "status"]
+        fields = ["name", "association", "user", "edition_date", "project_status"]
 
 
 class ProjectRestrictedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ["status"]
+        fields = ["project_status"]

@@ -22,7 +22,7 @@ urlpatterns = [
     ),
     # Project category links urls
     path(
-        "<int:project_id>/category/<int:category_id>",
+        "<int:project_id>/categories/<int:category_id>",
         ProjectCategoryDestroy.as_view(),
         name="project_category_destroy",
     ),

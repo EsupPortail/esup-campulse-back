@@ -1,4 +1,5 @@
 """Views directly linked to projects."""
+
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,14 +20,10 @@ from plana.apps.users.models.user import AssociationUsers
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
-    """
-    GET : Get all Project with all their details.
+    """/projects/ route"""
 
-    POST : Creates a new Project.
-    """
-
-    queryset = Project.objects.all()
     permission_classes = [IsAuthenticated]
+    queryset = Project.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -36,8 +33,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     # TODO: add filters to get projects
+    def get(self, request, *args, **kwargs):
+        """Lists all projects with all their details."""
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """Creates a new project."""
         if (
             "association" in request.data
             and request.data["association"] != None
@@ -122,23 +123,17 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
-    """
-    GET : Get a Project with all its details.
+    """/projects/{id} route"""
 
-    PATCH : Update Project details.
-    """
-
+    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
-
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def get(self, request, *args, **kwargs):
+        """Retrieves a project with all its details."""
         try:
             project_id = kwargs["pk"]
-            project = self.queryset.get(id=project_id)
+            self.queryset.get(id=project_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {"error": _("No project found for this ID.")},
@@ -146,7 +141,11 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
         return self.retrieve(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def patch(self, request, *args, **kwargs):
+        """Update project details."""
         try:
             project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -156,7 +155,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
-        if "status" in request.data and request.data["status"] not in authorized_status:
+        if (
+            "project_status" in request.data
+            and request.data["project_status"] not in authorized_status
+        ):
             return response.Response(
                 {"error": _("Wrong status.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -174,13 +176,11 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
 @extend_schema(methods=["PUT"], exclude=True)
 class ProjectRestrictedUpdate(generics.UpdateAPIView):
-    """
-    PATCH : Update Project restricted details.
-    """
+    """/projects/{id}/restricted route"""
 
+    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectRestrictedSerializer
-    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -188,6 +188,7 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
     # TODO : unittests
     # TODO : add institution notion to update restricted fields
     def patch(self, request, *args, **kwargs):
+        """Update project restricted details (manager only)."""
         try:
             project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
