@@ -178,4 +178,4 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             user.username = confirmation.email_address.email
             user.save()
 
-        return response.Response({'detail': _('ok')}, status=status.HTTP_200_OK)
+        return response.Response({}, status=status.HTTP_200_OK)

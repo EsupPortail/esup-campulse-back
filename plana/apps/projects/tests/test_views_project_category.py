@@ -3,6 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 
 
@@ -114,13 +115,20 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - The authenticated user must be the president of the association owning the project.
         - The ProjectCategory link is created in db.
+        - Project edition date is updated.
         - If the same ProjectCategory is attempted to be created, returns a HTTP 200 and is not created twice in db.
         """
         post_data = {
             "project": 2,
             "category": 3,
         }
+        old_project_edition_date = Project.objects.get(
+            pk=post_data["project"]
+        ).edition_date
         response = self.student_president_client.post("/projects/categories", post_data)
+        new_project_edition_date = Project.objects.get(
+            pk=post_data["project"]
+        ).edition_date
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             1,
@@ -130,6 +138,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
                 )
             ),
         )
+        self.assertNotEqual(old_project_edition_date, new_project_edition_date)
 
         response = self.student_president_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -190,14 +199,17 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         project = 2
         category = 1
+        old_project_edition_date = Project.objects.get(pk=project).edition_date
         response = self.student_president_client.delete(
             f"/projects/{project}/categories/{category}"
         )
+        new_project_edition_date = Project.objects.get(pk=project).edition_date
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,
             len(ProjectCategory.objects.filter(project=project, category=category)),
         )
+        self.assertNotEqual(old_project_edition_date, new_project_edition_date)
 
         response = self.student_president_client.delete(
             f"/projects/{project}/categories/{category}"

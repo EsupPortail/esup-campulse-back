@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 10:51+0200\n"
+"POT-Creation-Date: 2023-03-27 11:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -615,16 +615,16 @@ msgstr "Date de commission liée au projet"
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/category_project_category.py:55
-#: plana/apps/projects/views/category_project_category.py:94
+#: plana/apps/projects/views/category_project_category.py:56
+#: plana/apps/projects/views/category_project_category.py:95
 #: plana/apps/projects/views/project.py:153
 #: plana/apps/projects/views/project.py:196
-#: plana/apps/projects/views/project_commission_date.py:72
+#: plana/apps/projects/views/project_commission_date.py:74
 msgid "Project not found."
 msgstr "Projet non trouvé."
 
-#: plana/apps/projects/views/category_project_category.py:61
-#: plana/apps/projects/views/category_project_category.py:100
+#: plana/apps/projects/views/category_project_category.py:62
+#: plana/apps/projects/views/category_project_category.py:101
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
@@ -656,8 +656,8 @@ msgid "Wrong status."
 msgstr "Mauvais statut."
 
 #: plana/apps/projects/views/project.py:169
-#: plana/apps/projects/views/project_commission_date.py:78
-#: plana/apps/projects/views/project_commission_date.py:154
+#: plana/apps/projects/views/project_commission_date.py:80
+#: plana/apps/projects/views/project_commission_date.py:153
 #: plana/apps/projects/views/project_commission_date.py:188
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -666,20 +666,16 @@ msgstr "Non autorisé à mettre à jour ce projet."
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
-#: plana/apps/projects/views/project_commission_date.py:62
+#: plana/apps/projects/views/project_commission_date.py:64
 msgid "Not allowed to update amount earned for this project's commission."
 msgstr "Non autorisé à mettre à jour le montant obtenu à cette commission."
 
-#: plana/apps/projects/views/project_commission_date.py:90
-msgid "Link between this project and this commission date already exists."
-msgstr "Le lien entre ce projet et cette date de commission existe déjà."
-
-#: plana/apps/projects/views/project_commission_date.py:146
+#: plana/apps/projects/views/project_commission_date.py:145
 #: plana/apps/projects/views/project_commission_date.py:180
 msgid "Link between this project and commission does not exists."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:160
+#: plana/apps/projects/views/project_commission_date.py:159
 msgid "Not allowed to update amount earned for this project."
 msgstr "Non autorisé à mettre à jour le montant reçu pour ce projet."
 
@@ -902,10 +898,6 @@ msgstr "Seuls les gestionnaires peuvent changer ce champ."
 #: plana/apps/users/views/user_auth.py:49
 msgid "Cannot edit this field."
 msgstr "Ce champ ne peut être édité."
-
-#: plana/apps/users/views/user_auth.py:181
-msgid "ok"
-msgstr "ok"
 
 #: plana/apps/users/views/user_groups_institutions_commissions.py:79
 msgid "Wrong ids given."

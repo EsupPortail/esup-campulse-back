@@ -1,5 +1,7 @@
 """Views linked to project commission dates links."""
 
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -79,21 +81,18 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project.edition_date = datetime.now()
+        project.save()
+
         try:
             ProjectCommissionDate.objects.get(
                 project_id=request.data["project"],
                 commission_date_id=request.data["commission_date"],
             )
-            return response.Response(
-                {
-                    "error": _(
-                        "Link between this project and this commission date already exists."
-                    )
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         except ObjectDoesNotExist:
             return super().create(request, *args, **kwargs)
+
+        return response.Response({}, status=status.HTTP_200_OK)
 
 
 @extend_schema_view(
@@ -169,6 +168,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
         try:
+            project = Project.objects.get(pk=kwargs["project_id"])
             pcd = ProjectCommissionDate.objects.get(
                 project_id=kwargs["project_id"],
                 commission_date_id=kwargs["commission_date_id"],
@@ -188,6 +188,17 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
+
+        project.edition_date = datetime.now()
+        project.save()
+
+        try:
+            ProjectCommissionDate.objects.get(
+                project_id=kwargs["project_id"],
+                commission_date_id=kwargs["commission_date_id"],
+            )
+        except ObjectDoesNotExist:
+            return response.Response({}, status=status.HTTP_200_OK)
 
         pcd.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

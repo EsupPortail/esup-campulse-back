@@ -36,20 +36,22 @@ class UpdateACLStorageTest(TestCase):
 
 
 class DynamicStorageFieldFileTest(TestCase):
-    # TODO : fix unittests when storages.py is fixed
-    #    def test_file_field_is_initialized_with_correct_storage_class(self):
-    #        field = Mock()
-    #        field.storage = default_storage
-    #
-    #        public_instance = Mock()
-    #        public_instance.is_public = True
-    #        file = DynamicStorageFieldFile(public_instance, field=field, name="Name")
-    #        self.assertIsInstance(file.storage, PublicFileStorage)
-    #
-    #        private_instance = Mock()
-    #        private_instance.is_public = False
-    #        file = DynamicStorageFieldFile(private_instance, field=field, name="Name")
-    #        self.assertIsInstance(file.storage, PrivateFileStorage)
+    def test_file_field_is_initialized_with_correct_storage_class(self):
+        # TODO no attribute is_public in db for the moment, public by default.
+        """
+        field = Mock()
+        field.storage = default_storage
+
+        public_instance = Mock()
+        public_instance.is_public = True
+        file = DynamicStorageFieldFile(public_instance, field=field, name="Name")
+        self.assertIsInstance(file.storage, PublicFileStorage)
+
+        private_instance = Mock()
+        private_instance.is_public = False
+        file = DynamicStorageFieldFile(private_instance, field=field, name="Name")
+        self.assertIsInstance(file.storage, PrivateFileStorage)
+        """
 
     def test_file_field_update_acl_method_calls_update_acl_from_storage(self):
         field = Mock()

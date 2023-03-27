@@ -1,5 +1,7 @@
 """Views directly linked to projects categories."""
 
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
@@ -13,7 +15,7 @@ from plana.apps.projects.serializers.category import CategorySerializer
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
-# TODO Different entities, split this route into two others.
+# TODO Optimize this route to split in one route for each entity.
 @extend_schema_view(
     get=extend_schema(tags=["projects/categories"]),
     post=extend_schema(tags=["projects/categories"]),
@@ -45,7 +47,6 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
         """Lists all categories that can be linked to a project."""
         return self.list(request, *args, **kwargs)
 
-    # TODO : update project edition_date ?
     def post(self, request, *args, **kwargs):
         """Creates a link between a category and a project."""
         try:
@@ -62,6 +63,9 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project.edition_date = datetime.now()
+        project.save()
+
         try:
             ProjectCategory.objects.get(
                 project_id=request.data["project"], category_id=request.data["category"]
@@ -69,9 +73,7 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
         except ObjectDoesNotExist:
             return super().create(request, *args, **kwargs)
 
-        return response.Response(
-            status=status.HTTP_200_OK,
-        )
+        return response.Response({}, status=status.HTTP_200_OK)
 
 
 @extend_schema_view(
@@ -84,7 +86,6 @@ class ProjectCategoriesDestroy(generics.DestroyAPIView):
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
-    # TODO : update project edition_date ?
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
         try:
@@ -101,16 +102,15 @@ class ProjectCategoriesDestroy(generics.DestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project.edition_date = datetime.now()
+        project.save()
+
         try:
             project_category = ProjectCategory.objects.get(
                 project_id=kwargs["project_id"], category_id=kwargs["category_id"]
             )
         except ObjectDoesNotExist:
-            return response.Response(
-                status=status.HTTP_200_OK,
-            )
+            return response.Response({}, status=status.HTTP_200_OK)
 
         project_category.delete()
-        return response.Response(
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)

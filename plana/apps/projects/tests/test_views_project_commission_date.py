@@ -162,7 +162,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         POST /projects/commission_dates .
 
         - The route can be accessed by any authenticated user.
-        - Request returns a status 201 the first time and a status 400 next.
+        - Request returns a status 201 the first time and a status 200 next.
         """
         project_id = 1
         commission_id = 2
@@ -178,7 +178,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         response_second = self.student_misc_client.post(
             "/projects/commission_dates", post_data
         )
-        self.assertEqual(response_second.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_second.status_code, status.HTTP_200_OK)
 
     def test_put_project_cd_not_existing(self):
         """
