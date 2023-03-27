@@ -145,7 +145,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
-        """Update project details."""
+        """Updates project details."""
         try:
             project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -188,7 +188,7 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
     # TODO : unittests
     # TODO : add institution notion to update restricted fields
     def patch(self, request, *args, **kwargs):
-        """Update project restricted details (manager only)."""
+        """Updates project restricted details (manager only)."""
         try:
             project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:

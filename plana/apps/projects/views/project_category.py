@@ -10,7 +10,7 @@ from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
-class ProjectCategoryDestroy(generics.DestroyAPIView):
+class ProjectCategoriesDestroy(generics.DestroyAPIView):
     """/projects/{project_id}/categories/{category_id} route"""
 
     permission_classes = [IsAuthenticated]

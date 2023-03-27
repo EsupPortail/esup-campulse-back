@@ -30,11 +30,13 @@ from plana.apps.projects.serializers.project_commission_date import (
             #                OpenApiParameter.QUERY,
             #                description="Commission id.",
             #            )
-        ]
-    )
+        ],
+        tags=["projects/commission_dates"],
+    ),
+    post=extend_schema(tags=["projects/commission_dates"]),
 )
 class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
-    """/projects/commission_date route"""
+    """/projects/commission_dates route"""
 
     permission_classes = [IsAuthenticated]
     serializer_class = ProjectCommissionDateSerializer
@@ -94,19 +96,38 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             return super().create(request, *args, **kwargs)
 
 
-@extend_schema(methods=["PUT"], exclude=True)
-class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/commission_date/{id} route"""
+@extend_schema_view(
+    get=extend_schema(tags=["projects/commission_dates"]),
+)
+class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
+    """/projects/{project_id}/commission_dates route"""
 
     permission_classes = [IsAuthenticated]
     queryset = ProjectCommissionDate.objects.all()
+    serializer_class = ProjectCommissionDateSerializer
 
-    def get_serializer_class(self):
-        if self.request.method == "GET":
-            self.serializer_class = ProjectCommissionDateSerializer
-        else:
-            self.serializer_class = ProjectCommissionDateDataSerializer
-        return super().get_serializer_class()
+    def get(self, request, *args, **kwargs):
+        """Retrieves all commission dates linked to a project."""
+        serializer = self.serializer_class(
+            self.queryset.filter(user_id=kwargs["project_id"]), many=True
+        )
+        return response.Response(serializer.data)
+
+
+@extend_schema(methods=["GET", "PUT"], exclude=True)
+@extend_schema_view(
+    patch=extend_schema(tags=["projects/commission_dates"]),
+    delete=extend_schema(tags=["projects/commission_dates"]),
+)
+class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """/projects/{project_id}/commission_dates/{commission_date_id} route"""
+
+    permission_classes = [IsAuthenticated]
+    queryset = ProjectCommissionDate.objects.all()
+    serializer_class = ProjectCommissionDateDataSerializer
+
+    def get(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_404_NOT_FOUND)
@@ -114,7 +135,10 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
     def patch(self, request, *args, **kwargs):
         """Updates details of a project linked to a commission date."""
         try:
-            pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
+            pcd = ProjectCommissionDate.objects.get(
+                project_id=kwargs["project_id"],
+                commission_date_id=kwargs["commission_date_id"],
+            )
         except ObjectDoesNotExist:
             return response.Response(
                 {
@@ -137,12 +161,18 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        return super().update(request, *args, **kwargs)
+        for field in request.data:
+            setattr(pcd, field, request.data[field])
+        pcd.save()
+        return response.Response({}, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
         try:
-            pcd = ProjectCommissionDate.objects.get(pk=kwargs["pk"])
+            pcd = ProjectCommissionDate.objects.get(
+                project_id=kwargs["project_id"],
+                commission_date_id=kwargs["commission_date_id"],
+            )
         except ObjectDoesNotExist:
             return response.Response(
                 {
@@ -159,4 +189,5 @@ class ProjectCommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyA
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        return super().delete(request, *args, **kwargs)
+        pcd.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)

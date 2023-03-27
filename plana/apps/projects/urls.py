@@ -7,10 +7,11 @@ from .views.project import (
     ProjectRestrictedUpdate,
     ProjectRetrieveUpdate,
 )
-from .views.project_category import ProjectCategoryDestroy
+from .views.project_category import ProjectCategoriesDestroy
 from .views.project_commission_date import (
     ProjectCommissionDateListCreate,
-    ProjectCommissionDateRetrieveUpdateDestroy,
+    ProjectCommissionDateRetrieve,
+    ProjectCommissionDateUpdateDestroy,
 )
 
 urlpatterns = [
@@ -23,8 +24,8 @@ urlpatterns = [
     # Project category links urls
     path(
         "<int:project_id>/categories/<int:category_id>",
-        ProjectCategoryDestroy.as_view(),
-        name="project_category_destroy",
+        ProjectCategoriesDestroy.as_view(),
+        name="project_categories_destroy",
     ),
     # Project urls
     path("", ProjectListCreate.as_view(), name="project_list_create"),
@@ -40,8 +41,13 @@ urlpatterns = [
         name="project_commission_date_list_create",
     ),
     path(
-        "commission_dates/<int:pk>",
-        ProjectCommissionDateRetrieveUpdateDestroy.as_view(),
-        name="project_commission_date_retrieve_update_destroy",
+        "<int:project_id>/commission_dates",
+        ProjectCommissionDateRetrieve.as_view(),
+        name="project_commission_date_retrieve",
+    ),
+    path(
+        "<int:project_id>/commission_dates/<int:commission_date_id>",
+        ProjectCommissionDateUpdateDestroy.as_view(),
+        name="project_commission_date_update_destroy",
     ),
 ]

@@ -22,7 +22,7 @@ class DocumentList(generics.ListCreateAPIView):
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        """Lists all documents."""
+        """Lists all documents types."""
         return self.list(request, *args, **kwargs)
 
     # TODO: add permission add_document_any_institution + unittests

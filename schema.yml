@@ -271,7 +271,7 @@ paths:
   /documents/:
     get:
       operationId: documents_list
-      description: Lists all documents.
+      description: Lists all documents types.
       tags:
       - documents
       security:
@@ -525,7 +525,7 @@ paths:
           description: ''
     patch:
       operationId: projects_partial_update
-      description: Update project details.
+      description: Updates project details.
       parameters:
       - in: path
         name: id
@@ -558,7 +558,7 @@ paths:
   /projects/{id}/restricted:
     patch:
       operationId: projects_restricted_partial_update
-      description: Update project restricted details (manager only).
+      description: Updates project restricted details (manager only).
       parameters:
       - in: path
         name: id
@@ -605,6 +605,88 @@ paths:
         required: true
       tags:
       - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /projects/{project_id}/commission_dates:
+    get:
+      operationId: projects_commission_dates_retrieve
+      description: Retrieves all commission dates linked to a project.
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/commission_dates
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDate'
+          description: ''
+  /projects/{project_id}/commission_dates/{commission_date_id}:
+    patch:
+      operationId: projects_commission_dates_partial_update
+      description: Updates details of a project linked to a commission date.
+      parameters:
+      - in: path
+        name: commission_date_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/commission_dates
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDateData'
+          description: ''
+    delete:
+      operationId: projects_commission_dates_destroy
+      description: Destroys details of a project linked to a commission date.
+      parameters:
+      - in: path
+        name: commission_date_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/commission_dates
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -668,7 +750,7 @@ paths:
           type: number
         description: Project id.
       tags:
-      - projects
+      - projects/commission_dates
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -685,7 +767,7 @@ paths:
       operationId: projects_commission_dates_create
       description: Creates a link between a project and a commission date.
       tags:
-      - projects
+      - projects/commission_dates
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -708,77 +790,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
-  /projects/commission_dates/{id}:
-    get:
-      operationId: projects_commission_dates_retrieve
-      description: /projects/commission_date/{id} route
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
-          description: ''
-    patch:
-      operationId: projects_commission_dates_partial_update
-      description: Updates details of a project linked to a commission date.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectCommissionDateData'
-          description: ''
-    delete:
-      operationId: projects_commission_dates_destroy
-      description: Destroys details of a project linked to a commission date.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '204':
-          description: No response body
   /users/:
     get:
       operationId: users_list

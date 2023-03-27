@@ -1,4 +1,4 @@
-"""List of tests done on projects views."""
+"""List of tests done on links between projects and commission dates views."""
 import json
 
 from django.test import Client, TestCase
@@ -67,7 +67,7 @@ class ProjectCommissionDateViewsTests(TestCase):
 
     def test_get_project_cd_search(self):
         """
-        GET /projects/commission_dates? .
+        GET /projects/commission_dates .
 
         - The route can be accessed by any authenticated user.
         - Correct search results are returned
@@ -182,68 +182,70 @@ class ProjectCommissionDateViewsTests(TestCase):
 
     def test_put_project_cd_not_existing(self):
         """
-        PUT /projects/commission_dates/{id} .
+        PUT /projects/{project_id}/commission_dates .
 
-        - This route always returns a 404.
+        - This route always returns a 405.
         """
         response = self.general_client.put(
-            "/projects/commission_dates/1", {}, content_type="application/json"
+            "/projects/1/commission_dates", {}, content_type="application/json"
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_get_project_cd_by_id_anonymous(self):
         """
-        GET /projects/commission_dates/{id} .
+        GET /projects/{project_id}/commission_dates .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/projects/commission_dates/1")
+        response = self.client.get("/projects/1/commission_dates")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_cd_anonymous(self):
         """
-        PATCH /projects/commission_dates/{id} .
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - An anonymous user cannot execute this request.
         """
         response = self.client.patch(
-            "/projects/commission_dates/1", {}, content_type="application/json"
+            "/projects/1/commission_dates/3", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_cd_not_found(self):
         """
-        PATCH /projects/commission_dates/{id} .
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The ProjectCommissionDate object must be existing.
         """
         response = self.general_client.patch(
-            "/projects/commission_dates/99999", {}, content_type="application/json"
+            "/projects/99999/commission_dates/99999",
+            {},
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_cd_forbidden(self):
         """
-        PATCH /projects/commission_dates/{id} .
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
         """
         response = self.general_client.patch(
-            "/projects/commission_dates/1", {}, content_type="application/json"
+            "/projects/1/commission_dates/3", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_cd_bad_request(self):
         """
-        PATCH /projects/commission_dates/{id} .
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The attributes to patch must be authorized.
         """
         response = self.student_misc_client.patch(
-            "/projects/commission_dates/1",
+            "/projects/1/commission_dates/3",
             {"amount_earned": 1000},
             content_type="application/json",
         )
@@ -251,63 +253,63 @@ class ProjectCommissionDateViewsTests(TestCase):
 
     def test_patch_project_cd_bad_success(self):
         """
-        PATCH /projects/commission_dates/{id} .
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - ProjectCommissionDate object is correctly updated.
         """
-        pcd = 1
         patch_data = {"amount_asked": 1333}
         response = self.student_misc_client.patch(
-            f"/projects/commission_dates/{pcd}",
+            "/projects/1/commission_dates/3",
             patch_data,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        pcd_data = ProjectCommissionDate.objects.get(pk=pcd)
+        pcd_data = ProjectCommissionDate.objects.get(project_id=1, commission_date_id=3)
         self.assertEqual(pcd_data.amount_asked, patch_data["amount_asked"])
 
     def test_delete_project_cd_anonymous(self):
         """
-        DELETE /projects/commission_dates/{id} .
+        DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.delete("/projects/commission_dates/1")
+        response = self.client.delete("/projects/1/commission_dates/3")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_project_cd_not_found(self):
         """
-        DELETE /projects/commission_dates/{id} .
+        DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The ProjectCommissionDate object must be existing.
         """
-        response = self.general_client.delete("/projects/commission_dates/99999")
+        response = self.general_client.delete("/projects/99999/commission_dates/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_cd_forbidden(self):
         """
-        DELETE /projects/commission_dates/{id} .
+        DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
         """
-        response = self.general_client.delete("/projects/commission_dates/1")
+        response = self.general_client.delete("/projects/1/commission_dates/3")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_cd_success(self):
         """
-        DELETE /projects/commission_dates/{id} .
+        DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
         - ProjectCommissionDate object is correctly removed from db.
         """
-        pcd = 1
-        response = self.student_misc_client.delete(f"/projects/commission_dates/{pcd}")
+        response = self.student_misc_client.delete("/projects/1/commission_dates/3")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        pcd_not_found = len(ProjectCommissionDate.objects.filter(pk=pcd))
+        pcd_not_found = len(
+            ProjectCommissionDate.objects.filter(project_id=1, commission_date_id=3)
+        )
         self.assertEqual(pcd_not_found, 0)
