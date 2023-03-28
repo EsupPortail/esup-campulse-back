@@ -1,7 +1,6 @@
 """Views directly linked to documents."""
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -27,7 +26,6 @@ class DocumentList(generics.ListCreateAPIView):
         """Lists all documents types."""
         return self.list(request, *args, **kwargs)
 
-    # TODO: add permission add_document_any_institution + unittests
     def post(self, request, *args, **kwargs):
         """Creates a new document type (manager only)."""
         if not request.user.has_perm("documents.add_document"):
@@ -35,9 +33,25 @@ class DocumentList(generics.ListCreateAPIView):
                 {"error": _("Not allowed to add a new document type.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        elif request.user.get_user_institutions().count() == 1:
-            request.data["institution"] = (
-                request.user.get_user_institutions().first().id
+
+        if (
+            "institution" in request.data
+            and not request.user.has_perm("documents.add_document_any_institution")
+            and not request.user.is_staff_in_institution(request.data["institution"])
+        ):
+            return response.Response(
+                {"error": _("Not allowed to create a document for this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            "commission" in request.data
+            and not request.user.has_perm("documents.add_document_any_commission")
+            and not request.user.is_member_in_commission(request.data["commission"])
+        ):
+            return response.Response(
+                {"error": _("Not allowed to create a document for this commission.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         return super().create(request, *args, **kwargs)
@@ -59,9 +73,8 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves a document type with all its details."""
         try:
-            document_id = kwargs["pk"]
-            self.queryset.get(id=document_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No document id given.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -71,20 +84,26 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys an entire document type (manager only)."""
         try:
-            document_id = kwargs["pk"]
-            document = self.queryset.get(id=document_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            document = self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No document id given.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # TODO: permissions for documents linked to a commission
         if not request.user.has_perm(
             "documents.delete_document_any_institution"
         ) and not request.user.is_staff_in_institution(document.institution):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if not request.user.has_perm(
+            "documents.delete_document_any_commission"
+        ) and not request.user.is_member_in_commission(document.commission):
+            return response.Response(
+                {"error": _("Not allowed to delete a document for this commission.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

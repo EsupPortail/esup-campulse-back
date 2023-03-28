@@ -37,6 +37,14 @@ class ProjectCommissionDate(models.Model):
         verbose_name_plural = _("Projects commissions dates")
         permissions = [
             (
+                "change_projectcommissiondate_basic_fields",
+                "Can update basic fields between a project and a commission date.",
+            ),
+            (
+                "change_projectcommissiondate_restricted_fields",
+                "Can update restricted fields (amount earned, ...) between a project and a commission date.",
+            ),
+            (
                 "view_projectcommissiondate_all",
                 "Can view all commission dates linked to a project.",
             ),

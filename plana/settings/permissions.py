@@ -19,7 +19,10 @@ PERMISSIONS_GROUPS = {
         "delete_commissiondate",
         # documents
         "add_document",
+        "add_document_any_commission",
+        "add_document_any_institution",
         "delete_document",
+        "delete_document_any_commission",
         "delete_document_any_institution",
         "add_documentupload",
         "add_documentupload_all",
@@ -31,6 +34,8 @@ PERMISSIONS_GROUPS = {
         # projects
         "change_project",
         "change_project_restricted_fields",
+        "change_projectcommissiondate",
+        "change_projectcommissiondate_restricted_fields",
         "view_project",
         "view_project_all",
         "view_projectcategory",
@@ -84,6 +89,8 @@ PERMISSIONS_GROUPS = {
         # projects
         "change_project",
         "change_project_restricted_fields",
+        "change_projectcommissiondate",
+        "change_projectcommissiondate_restricted_fields",
         "view_project",
         "view_project_all",
         "view_projectcategory",
@@ -129,6 +136,8 @@ PERMISSIONS_GROUPS = {
         # projects
         "change_project",
         "change_project_restricted_fields",
+        "change_projectcommissiondate",
+        "change_projectcommissiondate_restricted_fields",
         "view_project",
         "view_project_all",
         "view_projectcategory",
@@ -183,12 +192,14 @@ PERMISSIONS_GROUPS = {
         # projects
         "add_project",
         "change_project",
+        "change_project_basic_fields",
         "view_project",
         "add_projectcategory",
         "delete_projectcategory",
         "view_projectcategory",
         "add_projectcommissiondate",
         "change_projectcommissiondate",
+        "change_projectcommissiondate_basic_fields",
         "delete_projectcommissiondate",
         "view_projectcommissiondate",
         # users
@@ -206,12 +217,14 @@ PERMISSIONS_GROUPS = {
         # projects
         "add_project",
         "change_project",
+        "change_project_basic_fields",
         "view_project",
         "add_projectcategory",
         "delete_projectcategory",
         "view_projectcategory",
         "add_projectcommissiondate",
         "change_projectcommissiondate",
+        "change_projectcommissiondate_basic_fields",
         "delete_projectcommissiondate",
         "view_projectcommissiondate",
         # users

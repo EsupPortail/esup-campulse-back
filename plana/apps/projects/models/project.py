@@ -87,10 +87,10 @@ class Project(models.Model):
         return f"{self.name}"
 
     def can_edit_project(self, user_obj):
-        if self.user != None and self.user != user_obj:
+        if self.user is not None and self.user != user_obj:
             return False
 
-        if self.association != None:
+        if self.association is not None:
             try:
                 member = AssociationUsers.objects.get(
                     user_id=user_obj.pk, association_id=self.association.pk
@@ -107,8 +107,12 @@ class Project(models.Model):
         verbose_name_plural = _("Projects")
         permissions = [
             (
+                "change_project_basic_fields",
+                "Can update projects basic fields.",
+            ),
+            (
                 "change_project_restricted_fields",
-                "Can update projects restricted fields.",
+                "Can update projects restricted fields (status, ...).",
             ),
             (
                 "view_project_all",

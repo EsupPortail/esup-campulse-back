@@ -6,7 +6,6 @@ import unicodedata
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -268,7 +267,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No association id given.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -315,7 +314,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -417,7 +416,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No association id given.")},
                 status=status.HTTP_400_BAD_REQUEST,

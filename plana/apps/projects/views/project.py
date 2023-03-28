@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -32,20 +32,32 @@ class ProjectListCreate(generics.ListCreateAPIView):
             self.serializer_class = ProjectPartialDataSerializer
         return super().get_serializer_class()
 
-    # TODO: add filters to get projects
     def get(self, request, *args, **kwargs):
-        """Lists all projects with all their details."""
-        return self.list(request, *args, **kwargs)
+        """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        if request.user.has_perm("projects.view_project_all"):
+            serializer = self.serializer_class(Project.objects.all(), many=True)
+            return response.Response(serializer.data)
+
+        user_associations_ids = AssociationUsers.objects.filter(
+            user_id=request.user.pk
+        ).values_list("association_id")
+        serializer = self.serializer_class(
+            Project.objects.filter(
+                Q(user_id=request.user.pk) | Q(association_id__in=user_associations_ids)
+            ),
+            many=True,
+        )
+        return response.Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         """Creates a new project."""
         if (
             "association" in request.data
-            and request.data["association"] != None
+            and request.data["association"] is not None
             and request.data["association"] != ""
         ) and (
             "user" in request.data
-            and request.data["user"] != None
+            and request.data["user"] is not None
             and request.data["user"] != ""
         ):
             return response.Response(
@@ -54,11 +66,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
         if (
             not "association" in request.data
-            or request.data["association"] == None
+            or request.data["association"] is None
             or request.data["association"] == ""
         ) and (
             not "user" in request.data
-            or request.data["user"] == None
+            or request.data["user"] is None
             or request.data["user"] == ""
         ):
             return response.Response(
@@ -68,7 +80,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if (
             "user" in request.data
-            and request.data["user"] != None
+            and request.data["user"] is not None
             and request.data["user"] != ""
             and (
                 not request.user.can_submit_projects
@@ -82,7 +94,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if (
             "association" in request.data
-            and request.data["association"] != None
+            and request.data["association"] is not None
             and request.data["association"] != ""
         ):
             try:
@@ -139,13 +151,25 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves a project with all its details."""
         try:
-            project_id = kwargs["pk"]
-            self.queryset.get(id=project_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
+            project = self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No project found for this ID.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        if not request.user.has_perm("projects.view_project_all") and (
+            (project.user is not None and request.user.pk != project.user)
+            or (
+                project.association is not None
+                and request.user.is_in_association(project.association)
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         return self.retrieve(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -159,6 +183,12 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             return response.Response(
                 {"error": _("Project not found.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.has_perm("projects.change_project_basic_fields"):
+            return response.Response(
+                {"error": _("Not allowed to update basic fields for this project.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
@@ -198,21 +228,17 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    # TODO : unittests
-    # TODO : add institution notion to update restricted fields
     def patch(self, request, *args, **kwargs):
         """Updates project restricted details (manager only)."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project not found.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        if request.user.has_perm("projects.change_project_restricted_fields"):
-            request.data["edition_date"] = datetime.now()
-            return super().update(request, *args, **kwargs)
-        else:
+
+        if not request.user.has_perm("projects.change_project_restricted_fields"):
             return response.Response(
                 {
                     "error": _(
@@ -221,3 +247,6 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
+
+        request.data["edition_date"] = datetime.now()
+        return super().update(request, *args, **kwargs)

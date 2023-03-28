@@ -57,7 +57,6 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Creates a new link between a non-validated user and a group."""
         try:
-            # groups_ids = request.data["groups"]
             group_id = request.data["group"]
             group = Group.objects.get(pk=group_id)
             user = User.objects.get(username=request.data["username"])

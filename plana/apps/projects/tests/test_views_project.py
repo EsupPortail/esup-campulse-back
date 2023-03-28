@@ -283,11 +283,11 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - Project must be existing.
         """
         patch_data = {"goals": "Testing patching"}
-        response = self.general_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/999", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -296,11 +296,11 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - Status must be in authorized status list.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.general_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -309,11 +309,11 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project owner must be the authenticated user.
         """
         patch_data = {"description": "new desc"}
-        response = self.general_client.patch(
+        response = self.student_site_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -322,7 +322,7 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
         patch_data = {"description": "new desc"}
@@ -345,7 +345,7 @@ class ProjectsViewsTests(TestCase):
 
     def test_patch_project_restricted_anonymous(self):
         """
-        PATCH /projects/{id} .
+        PATCH /projects/{id}/restricted .
 
         - An anonymous user cannot execute this request.
         """
@@ -357,9 +357,9 @@ class ProjectsViewsTests(TestCase):
 
     def test_patch_project_restricted_not_found(self):
         """
-        PATCH /projects/{id} .
+        PATCH /projects/{id}/restricted .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a manager user.
         - Project must be existing.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
