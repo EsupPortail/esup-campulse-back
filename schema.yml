@@ -589,6 +589,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectRestricted'
           description: ''
+  /projects/{project_id}/categories:
+    get:
+      operationId: projects_categories_retrieve
+      description: Retrieves all categories linked to a project.
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/commission_dates
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCategory'
+          description: ''
   /projects/{project_id}/categories/{category_id}:
     delete:
       operationId: projects_categories_destroy
@@ -697,13 +719,12 @@ paths:
   /projects/categories:
     get:
       operationId: projects_categories_list
-      description: Lists all categories that can be linked to a project.
+      description: Lists all links between categories and projects.
       tags:
       - projects/categories
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -711,7 +732,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Category'
+                  $ref: '#/components/schemas/ProjectCategory'
           description: ''
     post:
       operationId: projects_categories_create
@@ -739,6 +760,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectCategory'
+          description: ''
+  /projects/categories/names:
+    get:
+      operationId: projects_categories_names_list
+      description: Lists all categories that can be linked to a project.
+      tags:
+      - projects/categories
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
           description: ''
   /projects/commission_dates:
     get:

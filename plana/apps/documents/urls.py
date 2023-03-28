@@ -5,12 +5,10 @@ from .views.document import DocumentList, DocumentRetrieveDestroy
 from .views.document_upload import DocumentUploadListCreate
 
 urlpatterns = [
-    # Document types urls
     path("", DocumentList.as_view(), name="document_list"),
     path(
         "<int:pk>", DocumentRetrieveDestroy.as_view(), name="document_retrieve_destroy"
     ),
-    # Document uploads urls
     path(
         "uploads",
         DocumentUploadListCreate.as_view(),

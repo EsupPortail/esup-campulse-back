@@ -13,11 +13,9 @@ from plana.apps.projects.models.project import Project
 class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route"""
 
-    serializer_class = DocumentUploadSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-
-    def get_queryset(self):
-        return DocumentUpload.objects.all()
+    queryset = DocumentUpload.objects.all()
+    serializer_class = DocumentUploadSerializer
 
     def get(self, request, *args, **kwargs):
         """Lists all documents uploads."""

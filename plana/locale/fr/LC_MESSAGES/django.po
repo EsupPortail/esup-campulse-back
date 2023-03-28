@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-28 11:48+0200\n"
+"POT-Creation-Date: 2023-03-28 12:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -416,11 +416,11 @@ msgstr "Non autorisé à supprimer un document pour cet établissement."
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
-#: plana/apps/documents/views/document_upload.py:33
+#: plana/apps/documents/views/document_upload.py:31
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:38
+#: plana/apps/documents/views/document_upload.py:36
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
@@ -627,19 +627,6 @@ msgstr "Date de commission liée au projet"
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/category_project_category.py:56
-#: plana/apps/projects/views/category_project_category.py:95
-#: plana/apps/projects/views/project.py:184
-#: plana/apps/projects/views/project.py:237
-#: plana/apps/projects/views/project_commission_date.py:98
-msgid "Project not found."
-msgstr "Projet non trouvé."
-
-#: plana/apps/projects/views/category_project_category.py:62
-#: plana/apps/projects/views/category_project_category.py:101
-msgid "Not allowed to update categories for this project."
-msgstr "Non autorisé à mettre à jour les catégories de ce projet."
-
 #: plana/apps/projects/views/project.py:64
 msgid "A project can only have one affectation."
 msgstr "Un projet ne peut être affecté qu'à une personne ou association."
@@ -660,6 +647,7 @@ msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
 #: plana/apps/projects/views/project.py:157
+#: plana/apps/projects/views/project_category.py:96
 #: plana/apps/projects/views/project_commission_date.py:138
 msgid "No project found for this ID."
 msgstr "Aucun projet trouvé à cet identifiant."
@@ -667,6 +655,14 @@ msgstr "Aucun projet trouvé à cet identifiant."
 #: plana/apps/projects/views/project.py:169
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
+
+#: plana/apps/projects/views/project.py:184
+#: plana/apps/projects/views/project.py:237
+#: plana/apps/projects/views/project_category.py:57
+#: plana/apps/projects/views/project_category.py:134
+#: plana/apps/projects/views/project_commission_date.py:98
+msgid "Project not found."
+msgstr "Projet non trouvé."
 
 #: plana/apps/projects/views/project.py:190
 #: plana/apps/projects/views/project_commission_date.py:205
@@ -688,13 +684,24 @@ msgstr "Non autorisé à mettre à jour ce projet."
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
+#: plana/apps/projects/views/project_category.py:63
+#: plana/apps/projects/views/project_category.py:140
+msgid "Not allowed to update categories for this project."
+msgstr "Non autorisé à mettre à jour les catégories de ce projet."
+
+#: plana/apps/projects/views/project_category.py:108
+msgid "Not allowed to retrieve this project categories."
+msgstr "Non autorisé à récupérer les catégories de ce projet."
+
 #: plana/apps/projects/views/project_commission_date.py:88
 msgid "Not allowed to update amount earned for this project's commission."
 msgstr "Non autorisé à mettre à jour le montant obtenu à cette commission."
 
 #: plana/apps/projects/views/project_commission_date.py:150
 msgid "Not allowed to retrieve this project commission dates."
-msgstr "Non autorisé à récupérer les liens entre ce projet et ses dates de commission."
+msgstr ""
+"Non autorisé à récupérer les liens entre ce projet et ses dates de "
+"commission."
 
 #: plana/apps/projects/views/project_commission_date.py:195
 #: plana/apps/projects/views/project_commission_date.py:238

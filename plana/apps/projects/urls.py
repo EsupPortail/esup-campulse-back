@@ -1,14 +1,16 @@
 """List of URLs directly linked to operations that can be done on projects."""
 from django.urls import path
 
-from .views.category_project_category import (
-    CategoryListProjectCategoryCreate,
-    ProjectCategoriesDestroy,
-)
+from .views.category import CategoryList
 from .views.project import (
     ProjectListCreate,
     ProjectRestrictedUpdate,
     ProjectRetrieveUpdate,
+)
+from .views.project_category import (
+    ProjectCategoryDestroy,
+    ProjectCategoryListCreate,
+    ProjectCategoryRetrieve,
 )
 from .views.project_commission_date import (
     ProjectCommissionDateListCreate,
@@ -17,23 +19,32 @@ from .views.project_commission_date import (
 )
 
 urlpatterns = [
-    path(
-        "categories",
-        CategoryListProjectCategoryCreate.as_view(),
-        name="category_list_project_categories_create",
-    ),
-    path(
-        "<int:project_id>/categories/<int:category_id>",
-        ProjectCategoriesDestroy.as_view(),
-        name="project_categories_destroy",
-    ),
-    # Project urls
     path("", ProjectListCreate.as_view(), name="project_list_create"),
     path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
     path(
         "<int:pk>/restricted",
         ProjectRestrictedUpdate.as_view(),
         name="project_restricted_update",
+    ),
+    path(
+        "categories/names",
+        CategoryList.as_view(),
+        name="category_list",
+    ),
+    path(
+        "categories",
+        ProjectCategoryListCreate.as_view(),
+        name="project_category_list_create",
+    ),
+    path(
+        "<int:project_id>/categories",
+        ProjectCategoryRetrieve.as_view(),
+        name="project_category_retrieve",
+    ),
+    path(
+        "<int:project_id>/categories/<int:category_id>",
+        ProjectCategoryDestroy.as_view(),
+        name="project_category_destroy",
     ),
     path(
         "commission_dates",

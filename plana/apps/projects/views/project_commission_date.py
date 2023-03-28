@@ -58,22 +58,22 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                     commission_id=commission_id
                 ).values_list("id")
                 queryset = queryset.filter(commission_date_id__in=commission_dates_ids)
+
+            if not self.request.user.has_perm(
+                "projects.view_projectcommissiondate_all"
+            ):
+                user_associations_ids = AssociationUsers.objects.filter(
+                    user_id=self.request.user.pk
+                ).values_list("association_id")
+                queryset = queryset.filter(
+                    Q(user_id=self.request.user.pk)
+                    | Q(association_id__in=user_associations_ids)
+                )
+
         return queryset
 
     def get(self, request, *args, **kwargs):
         """Lists all commission dates that can be linked to a project."""
-        if not request.user.has_perm("projects.view_projectcommissiondate_all"):
-            user_associations_ids = AssociationUsers.objects.filter(
-                user_id=request.user.pk
-            ).values_list("association_id")
-            serializer = self.serializer_class(
-                self.queryset.filter(
-                    Q(user_id=request.user.pk)
-                    | Q(association_id__in=user_associations_ids)
-                ),
-                many=True,
-            )
-            return response.Response(serializer.data)
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

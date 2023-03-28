@@ -6,45 +6,46 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.serializers.category import CategorySerializer
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
+from plana.apps.users.models.user import AssociationUsers
 
 
-# TODO Optimize this route to split in one route for each entity.
 @extend_schema_view(
     get=extend_schema(tags=["projects/categories"]),
     post=extend_schema(tags=["projects/categories"]),
 )
-class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
-    """/projects/categories GET route"""
+class ProjectCategoryListCreate(generics.ListCreateAPIView):
+    """/projects/categories route"""
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    serializer_class = ProjectCategorySerializer
 
     def get_queryset(self):
-        if self.request.method == "POST":
-            return ProjectCategory.objects.all()
-        else:
-            return Category.objects.all().order_by("name")
+        queryset = ProjectCategory.objects.all()
+        if self.request.method == "GET":
+            project_id = self.request.query_params.get("project_id")
+            if project_id:
+                queryset = queryset.filter(project_id=project_id)
 
-    def get_serializer_class(self):
-        if self.request.method == "POST":
-            self.serializer_class = ProjectCategorySerializer
-        else:
-            self.serializer_class = CategorySerializer
-        return super().get_serializer_class()
+            if not self.request.user.has_perm(
+                "projects.view_projectcommissiondate_all"
+            ):
+                user_associations_ids = AssociationUsers.objects.filter(
+                    user_id=self.request.user.pk
+                ).values_list("association_id")
+                queryset = queryset.filter(
+                    Q(user_id=self.request.user.pk)
+                    | Q(association_id__in=user_associations_ids)
+                )
+
+        return queryset
 
     def get(self, request, *args, **kwargs):
-        """Lists all categories that can be linked to a project."""
+        """Lists all links between categories and projects."""
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -77,9 +78,47 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
 
 
 @extend_schema_view(
+    get=extend_schema(tags=["projects/commission_dates"]),
+)
+class ProjectCategoryRetrieve(generics.RetrieveAPIView):
+    """/projects/{project_id}/categories route"""
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = ProjectCategory.objects.all()
+    serializer_class = ProjectCategorySerializer
+
+    def get(self, request, *args, **kwargs):
+        """Retrieves all categories linked to a project."""
+        try:
+            project = self.queryset.get(id=kwargs["project_id"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("No project found for this ID.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.has_perm("projects.view_projectcategories_all") and (
+            (project.user is not None and request.user.pk != project.user)
+            or (
+                project.association is not None
+                and request.user.is_in_association(project.association)
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this project categories.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        serializer = self.serializer_class(
+            self.queryset.filter(project_id=kwargs["project_id"]), many=True
+        )
+        return response.Response(serializer.data)
+
+
+@extend_schema_view(
     delete=extend_schema(tags=["projects/categories"]),
 )
-class ProjectCategoriesDestroy(generics.DestroyAPIView):
+class ProjectCategoryDestroy(generics.DestroyAPIView):
     """/projects/{project_id}/categories/{category_id} route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]

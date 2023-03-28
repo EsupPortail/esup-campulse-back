@@ -20,7 +20,7 @@ class ProjectsCategoriesViewsTests(TestCase):
 
     def test_get_categories_list(self):
         """
-        GET /projects/categories .
+        GET /projects/categories/names .
 
         - There's at least one category in the categories list.
         - The route can be accessed by anyone.
@@ -30,7 +30,7 @@ class ProjectsCategoriesViewsTests(TestCase):
         categories_cnt = Category.objects.count()
         self.assertTrue(categories_cnt > 0)
 
-        response = self.client.get("/projects/categories")
+        response = self.client.get("/projects/categories/names")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
