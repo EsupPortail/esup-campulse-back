@@ -109,5 +109,9 @@ class Project(models.Model):
             (
                 "change_project_restricted_fields",
                 "Can update projects restricted fields.",
-            )
+            ),
+            (
+                "view_project_all",
+                "Can view all projects.",
+            ),
         ]

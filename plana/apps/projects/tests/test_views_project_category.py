@@ -25,9 +25,9 @@ class ProjectCategoryLinksViewsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "users_user.json",
         "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):
@@ -84,21 +84,21 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         POST /projects/categories .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project must be existing
         """
         post_data = {
             "project": 999,
             "category": 1,
         }
-        response = self.general_client.post("/projects/categories", post_data)
+        response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_project_categories_forbidden_user(self):
         """
         POST /projects/categories .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The owner of the project must be the authenticated user.
         """
         post_data = {
@@ -112,7 +112,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         POST /projects/categories .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be the president of the association owning the project.
         - The ProjectCategory link is created in db.
         - Project edition date is updated.
@@ -164,12 +164,12 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/categories/{category_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project must be existing.
         """
         project = 999
         category = 1
-        response = self.general_client.delete(
+        response = self.student_offsite_client.delete(
             f"/projects/{project}/categories/{category}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -178,7 +178,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/categories/{category_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The owner of the project must be the authenticated user.
         """
         project = 1
@@ -192,7 +192,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/categories/{category_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be the president of the association owning the project.
         - The ProjectCategory link is deleted from db.
         - If the same ProjectCategory is attempted to be deleted, returns a HTTP 200 and not throwing error.

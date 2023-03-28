@@ -19,6 +19,8 @@ class DocumentList(generics.ListCreateAPIView):
     def get_permissions(self):
         if self.request.method == "GET":
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
@@ -48,10 +50,10 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = DocumentSerializer
 
     def get_permissions(self):
-        if self.request.method in ("DELETE"):
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):

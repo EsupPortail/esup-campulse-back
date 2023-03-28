@@ -54,6 +54,13 @@ from plana.utils import send_mail, to_bool
 class AssociationUsersListCreate(generics.ListCreateAPIView):
     """/users/associations/ route"""
 
+    def get_permissions(self):
+        if self.request.method == "POST":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
+
     def get_queryset(self):
         association_id = self.request.query_params.get("association_id")
 
@@ -90,13 +97,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             )
 
         return queryset
-
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
-            self.permission_classes = [AllowAny]
-        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -272,6 +272,13 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUsers.objects.all()
+
+    def get_permissions(self):
+        if self.request.method in ("GET", "PUT"):
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

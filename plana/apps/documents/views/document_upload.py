@@ -3,7 +3,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, response, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.documents.serializers.document_upload import DocumentUploadSerializer
@@ -14,7 +14,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route"""
 
     serializer_class = DocumentUploadSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_queryset(self):
         return DocumentUpload.objects.all()

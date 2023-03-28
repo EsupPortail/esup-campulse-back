@@ -28,8 +28,8 @@ class UserViewsAnonymousTests(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "users_associationusers.json",
-        "users_user.json",
         "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):

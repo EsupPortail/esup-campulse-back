@@ -4,6 +4,7 @@
 
 PERMISSIONS_GROUPS = {
     "MANAGER_GENERAL": [
+        # associations
         "add_association",
         "add_association_any_institution",
         "change_association",
@@ -13,6 +14,30 @@ PERMISSIONS_GROUPS = {
         "delete_association_any_institution",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "add_commissiondate",
+        "delete_commissiondate",
+        # documents
+        "add_document",
+        "delete_document",
+        "delete_document_any_institution",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_restricted_fields",
+        "view_project",
+        "view_project_all",
+        "view_projectcategory",
+        "view_projectcategory_all",
+        "view_projectcommissiondate",
+        "view_projectcommissiondate_all",
+        # users
         "add_user",
         "add_user_misc",
         "change_user",
@@ -34,18 +59,38 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutioncommissionusers_any_group",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_any_group",
-        "add_document",
-        "delete_document",
-        "delete_document_any_institution",
-        "change_project_restricted_fields",
     ],
     "MANAGER_INSTITUTION": [
+        # associations
         "add_association",
         "change_association",
         "change_association_all_fields",
         "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "add_commissiondate",
+        "delete_commissiondate",
+        # documents
+        "add_document",
+        "delete_document",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_restricted_fields",
+        "view_project",
+        "view_project_all",
+        "view_projectcategory",
+        "view_projectcategory_all",
+        "view_projectcommissiondate",
+        "view_projectcommissiondate_all",
+        # users
         "add_user",
         "change_user",
         "change_user_all_fields",
@@ -59,17 +104,38 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_any_group",
-        "add_document",
-        "delete_document",
-        "change_project_restricted_fields",
     ],
     "MANAGER_MISC": [
+        # associations
         "add_association",
         "change_association",
         "change_association_all_fields",
         "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "add_commissiondate",
+        "delete_commissiondate",
+        # documents
+        "add_document",
+        "delete_document",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_restricted_fields",
+        "view_project",
+        "view_project_all",
+        "view_projectcategory",
+        "view_projectcategory_all",
+        "view_projectcommissiondate",
+        "view_projectcommissiondate_all",
+        # users
         "add_user",
         "add_user_misc",
         "change_user",
@@ -86,10 +152,21 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers",
         "view_groupinstitutioncommissionusers_any_group",
-        "change_project_restricted_fields",
     ],
     "COMMISSION": [
+        # associations
         "view_association_not_public",
+        # documents
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "view_project",
+        "view_project_all",
+        "view_projectcategory",
+        "view_projectcategory_all",
+        "view_projectcommissiondate",
+        "view_projectcommissiondate_all",
+        # users
         "view_user",
         "view_user_misc",
         "view_user_anyone",
@@ -97,7 +174,24 @@ PERMISSIONS_GROUPS = {
         "view_groupinstitutioncommissionusers",
     ],
     "STUDENT_INSTITUTION": [
+        # associations
         "change_association",
+        # documents
+        "add_documentupload",
+        "delete_documentupload",
+        "view_documentupload",
+        # projects
+        "add_project",
+        "change_project",
+        "view_project",
+        "add_projectcategory",
+        "delete_projectcategory",
+        "view_projectcategory",
+        "add_projectcommissiondate",
+        "change_projectcommissiondate",
+        "delete_projectcommissiondate",
+        "view_projectcommissiondate",
+        # users
         "view_user",
         "change_associationusers",
         "delete_associationusers",
@@ -105,6 +199,22 @@ PERMISSIONS_GROUPS = {
         "view_groupinstitutioncommissionusers",
     ],
     "STUDENT_MISC": [
+        # documents
+        "add_documentupload",
+        "delete_documentupload",
+        "view_documentupload",
+        # projects
+        "add_project",
+        "change_project",
+        "view_project",
+        "add_projectcategory",
+        "delete_projectcategory",
+        "view_projectcategory",
+        "add_projectcommissiondate",
+        "change_projectcommissiondate",
+        "delete_projectcommissiondate",
+        "view_projectcommissiondate",
+        # users
         "view_groupinstitutioncommissionusers",
     ],
 }

@@ -26,9 +26,9 @@ class ProjectsViewsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "users_user.json",
         "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):
@@ -103,7 +103,7 @@ class ProjectsViewsTests(TestCase):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - Project must have at least one affectation (user or association).
         - If linked to an association, the association must already exist.
         - Project cannot have multiple affectations.
@@ -113,22 +113,22 @@ class ProjectsViewsTests(TestCase):
             "goals": "Goals",
             "location": "address",
         }
-        response = self.general_client.post("/projects/", project_data)
+        response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         project_data["association"] = 9999
-        response = self.general_client.post("/projects/", project_data)
+        response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         project_data["user"] = 2
-        response = self.general_client.post("/projects/", project_data)
+        response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_forbidden_user(self):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - User must have 'can_submit_projects' attribute set to True to sumbit a project.
         - User in the request must be the authenticated user.
         """
@@ -149,7 +149,7 @@ class ProjectsViewsTests(TestCase):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - Association must have 'can_submit_associations' attribute set to True to submit projects.
         """
         project_data = {
@@ -165,7 +165,7 @@ class ProjectsViewsTests(TestCase):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be a member of the association to create projects related to it.
         - User must be president or delegated president of its association to submit projects.
         """
@@ -186,7 +186,7 @@ class ProjectsViewsTests(TestCase):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - To create a project for an association, the authenticated user must be president.
         - Project is created in database.
         """
@@ -206,7 +206,7 @@ class ProjectsViewsTests(TestCase):
         """
         POST /projects/ .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The user in the request must be the authenticated user.
         - Project is created in database.
         """

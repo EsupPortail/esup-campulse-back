@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
@@ -24,20 +24,20 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
     """/projects/categories GET route"""
 
     def get_permissions(self):
-        if self.request.method == 'POST':
-            self.permission_classes = [IsAuthenticated]
-        else:
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get_queryset(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return ProjectCategory.objects.all()
         else:
             return Category.objects.all().order_by("name")
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             self.serializer_class = ProjectCategorySerializer
         else:
             self.serializer_class = CategorySerializer
@@ -82,7 +82,7 @@ class CategoryListProjectCategoryCreate(generics.ListCreateAPIView):
 class ProjectCategoriesDestroy(generics.DestroyAPIView):
     """/projects/{project_id}/categories/{category_id} route"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 

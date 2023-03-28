@@ -1642,8 +1642,7 @@ paths:
   /users/groups/:
     get:
       operationId: users_groups_list
-      description: Lists all groups linked to a user (student), or all groups of all
-        users (manager).
+      description: Lists all groups linked to a user, or all groups of all users (manager).
       tags:
       - users/groups
       security:

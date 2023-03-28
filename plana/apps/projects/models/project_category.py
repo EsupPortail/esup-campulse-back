@@ -24,3 +24,9 @@ class ProjectCategory(models.Model):
     class Meta:
         verbose_name = _("Project category")
         verbose_name_plural = _("Projects categories")
+        permissions = [
+            (
+                "view_projectcategory_all",
+                "Can view all categories linked to a project.",
+            ),
+        ]

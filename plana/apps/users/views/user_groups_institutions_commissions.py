@@ -33,14 +33,14 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
     serializer_class = UserGroupsInstitutionsCommissionsCreateSerializer
 
     def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
+        if self.request.method == "POST":
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
-        """Lists all groups linked to a user (student), or all groups of all users (manager)."""
+        """Lists all groups linked to a user, or all groups of all users (manager)."""
         if request.user.has_perm(
             "users.view_groupinstitutioncommissionusers_any_group"
         ):

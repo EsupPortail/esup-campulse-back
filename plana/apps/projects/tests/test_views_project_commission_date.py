@@ -26,9 +26,9 @@ class ProjectCommissionDateViewsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "users_user.json",
         "users_associationusers.json",
         "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):
@@ -98,10 +98,10 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The attribute "amount_earned" is forbidden.
         """
-        response = self.general_client.post(
+        response = self.student_misc_client.post(
             "/projects/commission_dates",
             {"project": 1, "commission_date": 1, "amount_earned": 1000},
         )
@@ -111,10 +111,10 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project must be existing.
         """
-        response = self.general_client.post(
+        response = self.student_misc_client.post(
             "/projects/commission_dates", {"project": 9999, "commission_date": 1}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -123,7 +123,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be authorized to edit the requested project.
         """
         response = self.general_client.post(
@@ -135,7 +135,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The project must be existing.
         - The authenticated user must be authorized to edit the requested project.
         - Object is correctly created in db.
@@ -161,7 +161,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - Request returns a status 201 the first time and a status 200 next.
         """
         project_id = 1
@@ -186,7 +186,7 @@ class ProjectCommissionDateViewsTests(TestCase):
 
         - This route always returns a 405.
         """
-        response = self.general_client.put(
+        response = self.student_misc_client.put(
             "/projects/1/commission_dates", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -215,10 +215,10 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The ProjectCommissionDate object must be existing.
         """
-        response = self.general_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/99999/commission_dates/99999",
             {},
             content_type="application/json",
@@ -282,17 +282,19 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student client.
         - The ProjectCommissionDate object must be existing.
         """
-        response = self.general_client.delete("/projects/99999/commission_dates/99999")
+        response = self.student_misc_client.delete(
+            "/projects/99999/commission_dates/99999"
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_cd_forbidden(self):
         """
         DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be authorized to update the project.
         """
         response = self.general_client.delete("/projects/1/commission_dates/3")
@@ -302,7 +304,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/commission_dates/{commission_date_id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a student user.
         - The authenticated user must be authorized to update the project.
         - ProjectCommissionDate object is correctly removed from db.
         """

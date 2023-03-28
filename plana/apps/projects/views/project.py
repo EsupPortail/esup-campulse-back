@@ -7,7 +7,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.projects.models.project import Project
@@ -22,7 +22,7 @@ from plana.apps.users.models.user import AssociationUsers
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all()
 
     def get_serializer_class(self):
@@ -125,9 +125,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
         """Retrieves a project with all its details."""
@@ -178,9 +185,15 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectRestrictedUpdate(generics.UpdateAPIView):
     """/projects/{id}/restricted route"""
 
-    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectRestrictedSerializer
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -78,3 +78,17 @@ class DocumentUpload(models.Model):
     class Meta:
         verbose_name = _("Document from association or user")
         verbose_name_plural = _("Documents from associations or users")
+        permissions = [
+            (
+                "add_documentupload_all",
+                "Can add a link from any document to any project or anu association.",
+            ),
+            (
+                "delete_documentupload_all",
+                "Can remove a link from a document to any project or any association.",
+            ),
+            (
+                "view_documentupload_all",
+                "Can view all documents linked to any project or any association.",
+            ),
+        ]

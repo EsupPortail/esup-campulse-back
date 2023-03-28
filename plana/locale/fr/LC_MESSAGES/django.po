@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 11:39+0200\n"
+"POT-Creation-Date: 2023-03-28 08:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -391,16 +391,16 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:33
+#: plana/apps/documents/views/document.py:35
 msgid "Not allowed to add a new document type."
 msgstr "Non autorisé de créer un nouveau type de document."
 
-#: plana/apps/documents/views/document.py:64
-#: plana/apps/documents/views/document.py:76
+#: plana/apps/documents/views/document.py:66
+#: plana/apps/documents/views/document.py:78
 msgid "No document id given."
 msgstr "Pas d'identifiant de document donné."
 
-#: plana/apps/documents/views/document.py:85
+#: plana/apps/documents/views/document.py:87
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
@@ -617,8 +617,8 @@ msgstr "Dates de commissions liées aux projets"
 
 #: plana/apps/projects/views/category_project_category.py:56
 #: plana/apps/projects/views/category_project_category.py:95
-#: plana/apps/projects/views/project.py:153
-#: plana/apps/projects/views/project.py:196
+#: plana/apps/projects/views/project.py:160
+#: plana/apps/projects/views/project.py:209
 #: plana/apps/projects/views/project_commission_date.py:74
 msgid "Project not found."
 msgstr "Projet non trouvé."
@@ -647,22 +647,22 @@ msgstr "Non autorisé à créer un nouveau projet."
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/projects/views/project.py:139
+#: plana/apps/projects/views/project.py:146
 msgid "No project found for this ID."
 msgstr "Aucun projet trouvé à cet identifiant."
 
-#: plana/apps/projects/views/project.py:163
+#: plana/apps/projects/views/project.py:170
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:169
+#: plana/apps/projects/views/project.py:176
 #: plana/apps/projects/views/project_commission_date.py:80
-#: plana/apps/projects/views/project_commission_date.py:153
-#: plana/apps/projects/views/project_commission_date.py:188
+#: plana/apps/projects/views/project_commission_date.py:159
+#: plana/apps/projects/views/project_commission_date.py:194
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:206
+#: plana/apps/projects/views/project.py:219
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
@@ -670,12 +670,12 @@ msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 msgid "Not allowed to update amount earned for this project's commission."
 msgstr "Non autorisé à mettre à jour le montant obtenu à cette commission."
 
-#: plana/apps/projects/views/project_commission_date.py:145
-#: plana/apps/projects/views/project_commission_date.py:180
+#: plana/apps/projects/views/project_commission_date.py:151
+#: plana/apps/projects/views/project_commission_date.py:186
 msgid "Link between this project and commission does not exists."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:159
+#: plana/apps/projects/views/project_commission_date.py:165
 msgid "Not allowed to update amount earned for this project."
 msgstr "Non autorisé à mettre à jour le montant reçu pour ce projet."
 
@@ -811,7 +811,7 @@ msgid "The user hasn't any group that can have associations."
 msgstr "L'utilisateur n'a aucun groupe pouvant avoir des associations."
 
 #: plana/apps/users/views/association_users.py:169
-#: plana/apps/users/views/association_users.py:358
+#: plana/apps/users/views/association_users.py:365
 msgid "Only managers can validate associations for this account."
 msgstr ""
 "Seuls les gestionnaires peuvent valider les associations pour ce compte"
@@ -829,7 +829,7 @@ msgid "Cannot add an association from this institution."
 msgstr "Non autorisé à ajouter une association de cet établissement."
 
 #: plana/apps/users/views/association_users.py:259
-#: plana/apps/users/views/association_users.py:499
+#: plana/apps/users/views/association_users.py:506
 #: plana/apps/users/views/external.py:37
 #: plana/apps/users/views/gdpr_consent_users.py:68
 #: plana/apps/users/views/user.py:256 plana/apps/users/views/user.py:269
@@ -837,28 +837,28 @@ msgstr "Non autorisé à ajouter une association de cet établissement."
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/association_users.py:298
-#: plana/apps/users/views/association_users.py:489
+#: plana/apps/users/views/association_users.py:305
+#: plana/apps/users/views/association_users.py:496
 msgid "No user or association found."
 msgstr "Aucun utilisateur ou association."
 
-#: plana/apps/users/views/association_users.py:308
+#: plana/apps/users/views/association_users.py:315
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
-#: plana/apps/users/views/association_users.py:325
+#: plana/apps/users/views/association_users.py:332
 msgid "No edition rights on this link."
 msgstr "Aucun droit d'éditer ce lien entre association et utilisateur."
 
-#: plana/apps/users/views/association_users.py:335
+#: plana/apps/users/views/association_users.py:342
 msgid "President cannot self-edit."
 msgstr "Le président ne peut s'auto-modifier."
 
-#: plana/apps/users/views/association_users.py:379
+#: plana/apps/users/views/association_users.py:386
 msgid "Only managers can edit president."
 msgstr "Seuls les gestionnaires peuvent changer le président."
 
-#: plana/apps/users/views/association_users.py:398
+#: plana/apps/users/views/association_users.py:405
 msgid "Can't remove president delegation before giving it."
 msgstr "Impossible de retirer les droits de président avant de les donner."
 

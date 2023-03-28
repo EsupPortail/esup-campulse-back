@@ -39,8 +39,8 @@ class UserViewsManagerTests(TestCase):
         "mailtemplatevars",
         "users_associationusers.json",
         "users_gdprconsentusers.json",
-        "users_user.json",
         "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):

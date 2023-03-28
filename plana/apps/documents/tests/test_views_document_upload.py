@@ -1,12 +1,11 @@
 """List of tests done on documents views."""
-import json
 from unittest.mock import Mock
 
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.storages import DynamicStorageFieldFile
 
 
@@ -14,21 +13,20 @@ class DocumentsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "commissions_commission.json",
-        "documents_document.json",
-        "institutions_institution.json",
-        "users_user.json",
         "account_emailaddress.json",
+        "associations_activityfield.json",
+        "associations_association.json",
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "users_groupinstitutioncommissionusers.json",
-        "projects_project.json",
-        "associations_association.json",
-        "users_associationusers.json",
-        "associations_activityfield.json",
+        "commissions_commission.json",
+        "documents_document.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "projects_project.json",
+        "users_associationusers.json",
+        "users_groupinstitutioncommissionusers.json",
+        "users_user.json",
     ]
 
     def setUp(self):
@@ -106,25 +104,30 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_document_upload_project_success(self):
+        """
+        POST /documents/uploads .
 
-# TODO : find a way to upload documents in unittests
-#    def test_post_document_upload_project_success(self):
-#        """
-#        POST /documents/uploads .
-#
-#        - The route can be accessed by any authenticated user.
-#        - The authenticated user must be authorized to update the project.
-#        - Object is correctly created in db.
-#        """
-#        project_id = 1
-#        document_id = 14
-#        file = DynamicStorageFieldFile(Mock(), field=Mock(), name="Name")
-#        post_data = {
-#            "path_file": file,
-#            "project": project_id,
-#            "document": document_id,
-#        }
-#        response = self.student_misc_client.post("/documents/uploads", post_data)
-#        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-#        du_cnt = len(DocumentUpload.objects.filter(project_id=project_id, document_id=document_id))
-#        self.assertEqual(du_cnt, 1)
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be authorized to update the project.
+        - Object is correctly created in db.
+        """
+        # TODO : find a way to upload documents in unittests
+        """
+        project_id = 1
+        document_id = 14
+        file = DynamicStorageFieldFile(Mock(), field=Mock(), name="Name")
+        post_data = {
+            "path_file": file,
+            "project": project_id,
+            "document": document_id,
+        }
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        du_cnt = len(
+            DocumentUpload.objects.filter(
+                project_id=project_id, document_id=document_id
+            )
+        )
+        self.assertEqual(du_cnt, 1)
+        """

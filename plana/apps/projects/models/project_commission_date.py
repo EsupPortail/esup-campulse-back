@@ -35,3 +35,9 @@ class ProjectCommissionDate(models.Model):
     class Meta:
         verbose_name = _("Project commission date")
         verbose_name_plural = _("Projects commissions dates")
+        permissions = [
+            (
+                "view_projectcommissiondate_all",
+                "Can view all commission dates linked to a project.",
+            ),
+        ]

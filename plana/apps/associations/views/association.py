@@ -98,10 +98,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
     ]
 
     def get_permissions(self):
-        if self.request.method == "POST":
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get_queryset(self):
@@ -172,10 +172,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return queryset
 
     def get_serializer_class(self):
-        if self.request.method == "POST":
-            self.serializer_class = AssociationMandatoryDataSerializer
-        else:
+        if self.request.method == "GET":
             self.serializer_class = AssociationPartialDataSerializer
+        else:
+            self.serializer_class = AssociationMandatoryDataSerializer
         return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
@@ -257,10 +257,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AssociationAllDataSerializer
 
     def get_permissions(self):
-        if self.request.method in ("PATCH", "DELETE"):
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        else:
+        if self.request.method in ("GET", "PUT"):
             self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
     def get(self, request, *args, **kwargs):

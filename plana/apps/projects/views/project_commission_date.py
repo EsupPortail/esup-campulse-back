@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -40,7 +40,7 @@ from plana.apps.projects.serializers.project_commission_date import (
 class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     """/projects/commission_dates route"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     serializer_class = ProjectCommissionDateSerializer
 
     def get_queryset(self):
@@ -101,7 +101,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/commission_dates route"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionDate.objects.all()
     serializer_class = ProjectCommissionDateSerializer
 
@@ -121,15 +121,21 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
 class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_dates/{commission_date_id} route"""
 
-    permission_classes = [IsAuthenticated]
     queryset = ProjectCommissionDate.objects.all()
     serializer_class = ProjectCommissionDateDataSerializer
+
+    def get_permissions(self):
+        if self.request.method in ("GET", "PUT"):
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
 
     def get(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_404_NOT_FOUND)
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
         """Updates details of a project linked to a commission date."""
