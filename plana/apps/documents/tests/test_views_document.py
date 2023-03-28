@@ -39,7 +39,7 @@ class DocumentsViewsTests(TestCase):
         self.response = self.general_client.post(url_login, data_general)
 
         """ Start a manager institution client used on some permissions tests. """
-        self.manager_institution_user_id = 3
+        self.manager_institution_user_id = 4
         self.manager_institution_user_name = "gestionnaire-uha@mail.tld"
         self.institution_client = Client()
         data_institution = {
@@ -132,7 +132,17 @@ class DocumentsViewsTests(TestCase):
 
         - A document linked to an institution cannot be deleted by a user who's not linked to the same institution.
         """
-        document_id = 1
+        document_id = 23
+        response = self.institution_client.delete(f"/documents/{document_id}")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_document_by_id_forbidden_commission(self):
+        """
+        DELETE /documents/{id} .
+
+        - A document linked to a commission cannot be deleted by a user who's not linked to the same commission.
+        """
+        document_id = 7
         response = self.institution_client.delete(f"/documents/{document_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

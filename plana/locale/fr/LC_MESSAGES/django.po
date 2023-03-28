@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-28 12:59+0200\n"
+"POT-Creation-Date: 2023-03-28 14:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -348,7 +348,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:19
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:63
-#: plana/apps/users/models/user.py:275
+#: plana/apps/users/models/user.py:263
 msgid "User"
 msgstr "Utilisateur"
 
@@ -784,7 +784,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:276
+#: plana/apps/users/models/user.py:264
 msgid "Users"
 msgstr "Utilisateurs"
 

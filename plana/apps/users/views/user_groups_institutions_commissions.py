@@ -206,7 +206,7 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
             user_groups = GroupInstitutionCommissionUsers.objects.filter(
                 user_id=user.pk
             )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -257,7 +257,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
             user_groups = GroupInstitutionCommissionUsers.objects.filter(
                 user_id=user.pk
             )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -309,7 +309,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAP
             user_groups = GroupInstitutionCommissionUsers.objects.filter(
                 user_id=user.pk
             )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.filter(
+            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],

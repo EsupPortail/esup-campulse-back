@@ -346,5 +346,22 @@
         "image/png"
       ]
     }
+  },
+  {
+    "model": "documents.Document",
+    "pk": 23,
+    "fields": {
+      "name": "Document factice d'établissement",
+      "description": "Document factice d'établissement",
+      "contact": "???",
+      "is_multiple": true,
+      "institution_id": 2,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
   }
 ]

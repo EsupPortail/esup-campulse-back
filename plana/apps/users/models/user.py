@@ -237,39 +237,27 @@ class User(AbstractUser):
     def is_staff_for_association(self, association_id):
         """Check if a user is linked as manager for an association."""
         if self.is_staff:
-            try:
-                GroupInstitutionCommissionUsers.objects.get(
-                    user_id=self.pk,
-                    institution_id=Association.objects.get(
-                        id=association_id
-                    ).institution_id,
-                )
-                return True
-            except ObjectDoesNotExist:
-                return False
+            return GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk,
+                institution_id=Association.objects.get(
+                    id=association_id
+                ).institution_id,
+            )
         return False
 
     def is_staff_in_institution(self, institution_id):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            try:
-                GroupInstitutionCommissionUsers.objects.get(
-                    user_id=self.pk, institution_id=institution_id
-                )
-                return True
-            except ObjectDoesNotExist:
-                return False
+            return GroupInstitutionCommissionUsers.objects.filter(
+                user_id=self.pk, institution_id=institution_id
+            )
         return False
 
     def is_member_in_commission(self, commission_id):
         """Check if a user is linked as member to a commission."""
-        try:
-            GroupInstitutionCommissionUsers.objects.get(
-                user_id=self.pk, commission_id=commission_id
-            )
-            return True
-        except ObjectDoesNotExist:
-            return False
+        return GroupInstitutionCommissionUsers.objects.filter(
+            user_id=self.pk, commission_id=commission_id
+        )
 
     class Meta:
         verbose_name = _("User")

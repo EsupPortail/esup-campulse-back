@@ -824,6 +824,9 @@ class UserViewsManagerTests(TestCase):
         GroupInstitutionCommissionUsers.objects.create(
             user_id=user_id, group_id=2, institution_id=4
         )
+        GroupInstitutionCommissionUsers.objects.filter(
+            user_id=user_id, commission_id__isnull=False
+        ).delete()
         response = self.manager_client.get(f"/users/{user_id}/groups/")
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]

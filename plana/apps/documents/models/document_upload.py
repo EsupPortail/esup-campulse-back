@@ -73,7 +73,7 @@ class DocumentUpload(models.Model):
     )
 
     def __str__(self):
-        return f"{self.document} : {self.association} {self.user}"
+        return f"{self.document}"
 
     class Meta:
         verbose_name = _("Document from association or user")
