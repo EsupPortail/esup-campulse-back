@@ -216,7 +216,7 @@ class UserViewsStudentTests(TestCase):
             {"is_president": False},
             content_type="application/json",
         )
-        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_association_users_validation(self):
         """
@@ -236,7 +236,7 @@ class UserViewsStudentTests(TestCase):
         AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
-        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_patch_association_users_president(self):
         """
@@ -262,7 +262,7 @@ class UserViewsStudentTests(TestCase):
         asso_user = AssociationUsers.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
-        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(asso_user.is_president)
 
         response_president = self.president_student_client.patch(
@@ -356,7 +356,7 @@ class UserViewsStudentTests(TestCase):
             {"is_secretary": True},
             content_type="application/json",
         )
-        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_president.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_student_delete_user_association(self):
         """
@@ -586,7 +586,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.post(
             "/users/groups/", {"username": self.student_user_name, "group": 6}
         )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_student_get_user_groups_detail(self):
         """

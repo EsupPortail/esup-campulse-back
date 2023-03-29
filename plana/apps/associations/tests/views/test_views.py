@@ -205,6 +205,7 @@ class AssociationsViewsTests(TestCase):
         POST /associations/ .
 
         - Name and institution are mandatory.
+        - Institution must exist.
         - A General Manager can add an association.
         - A General Manager can add a site association.
         - An Institution Manager cannot add an association not from the same institution.
@@ -221,6 +222,12 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {"institution": 1000},
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
 
         response_general = self.general_client.post(
             "/associations/",
@@ -334,16 +341,16 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
 
         non_public_response = self.client.get("/associations/3")
-        self.assertEqual(non_public_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
 
         non_enabled_not_member_response = self.member_client.get("/associations/5")
         self.assertEqual(
-            non_enabled_not_member_response.status_code, status.HTTP_400_BAD_REQUEST
+            non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN
         )
 
         non_public_not_member_response = self.member_client.get("/associations/3")
         self.assertEqual(
-            non_public_not_member_response.status_code, status.HTTP_400_BAD_REQUEST
+            non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN
         )
 
         non_enabled_member_response = self.member_client.get("/associations/2")
@@ -465,7 +472,7 @@ class AssociationsViewsTests(TestCase):
             {"name": "La singularité de l'espace-temps."},
             content_type="application/json",
         )
-        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_association_social_networks(self):
         """
@@ -608,7 +615,7 @@ class AssociationsViewsTests(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
         response_general = self.general_client.delete("/associations/99")
-        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_put_association(self):
         """

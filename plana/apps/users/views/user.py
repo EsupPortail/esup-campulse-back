@@ -270,8 +270,8 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("This user does not exist.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         request.data.pop("username", False)
@@ -342,8 +342,8 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if user.is_superuser is True or user.is_staff is True:

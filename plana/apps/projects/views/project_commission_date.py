@@ -79,6 +79,20 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Creates a link between a project and a commission date."""
+        try:
+            project = Project.objects.get(pk=request.data["project"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Project does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not project.can_edit_project(request.user):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         if (
             "amount_earned" in request.data
             and request.data["amount_earned"] is not None
@@ -89,20 +103,6 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                         "Not allowed to update amount earned for this project's commission."
                     )
                 },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        try:
-            project = Project.objects.get(pk=request.data["project"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project not found.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if not project.can_edit_project(request.user):
-            return response.Response(
-                {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -136,7 +136,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
             project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No project found for this ID.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -212,7 +212,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if "amount_earned" in request.data:
             return response.Response(
                 {"error": _("Not allowed to update amount earned for this project.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         for field in request.data:

@@ -56,7 +56,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
             project = Project.objects.get(pk=request.data["project"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project not found.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -95,7 +95,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
             project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No project found for this ID.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -132,7 +132,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
             )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project not found.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 

@@ -159,10 +159,11 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 9999
         response = self.student_site_client.post("/projects/", project_data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        project_data["user"] = 2
-        response = self.student_site_client.post("/projects/", project_data)
+        project_data["association"] = 2
+        project_data["user"] = self.student_president_user_id
+        response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_forbidden_user(self):

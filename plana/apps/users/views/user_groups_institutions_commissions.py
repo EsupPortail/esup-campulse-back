@@ -73,14 +73,18 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                 commission_id = commission.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("Wrong ids given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {
+                    "error": _(
+                        "User or group or institution or commission does not exist."
+                    )
+                },
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if request.user.is_anonymous and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit groups for this account.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if (
@@ -90,7 +94,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         ):
             return response.Response(
                 {"error": _("Only managers can edit groups.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if (user.is_superuser or user.is_staff) and not request.user.has_perm(
@@ -210,8 +214,8 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
             )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user or link to group found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or link does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         group_name = Group.objects.get(id=kwargs["group_id"]).name
@@ -261,8 +265,8 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
             )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user or link to group found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or link does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if not request.user.has_perm(
@@ -273,7 +277,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
         ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if user_groups.count() <= 1:
@@ -313,8 +317,8 @@ class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAP
             )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user or link to group found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or link does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if not request.user.has_perm(
@@ -322,7 +326,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAP
         ) and (not kwargs["institution_id"] in request.user.get_user_institutions()):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if user_groups.count() <= 1:

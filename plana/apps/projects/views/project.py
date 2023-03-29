@@ -55,54 +55,13 @@ class ProjectListCreate(generics.ListCreateAPIView):
             "association" in request.data
             and request.data["association"] is not None
             and request.data["association"] != ""
-        ) and (
-            "user" in request.data
-            and request.data["user"] is not None
-            and request.data["user"] != ""
-        ):
-            return response.Response(
-                {"error": _("A project can only have one affectation.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if (
-            not "association" in request.data
-            or request.data["association"] is None
-            or request.data["association"] == ""
-        ) and (
-            not "user" in request.data
-            or request.data["user"] is None
-            or request.data["user"] == ""
-        ):
-            return response.Response(
-                {"error": _("Missing affectation of the new project.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            "user" in request.data
-            and request.data["user"] is not None
-            and request.data["user"] != ""
-            and (
-                not request.user.can_submit_projects
-                or int(request.data["user"]) != request.user.pk
-            )
-        ):
-            return response.Response(
-                {"error": _("Not allowed to create a new project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "association" in request.data
-            and request.data["association"] is not None
-            and request.data["association"] != ""
         ):
             try:
                 association = Association.objects.get(pk=request.data["association"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
-                    status=status.HTTP_400_BAD_REQUEST,
+                    status=status.HTTP_404_NOT_FOUND,
                 )
 
             if association.can_submit_projects:
@@ -126,6 +85,48 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     {"error": _("Not allowed to create a new project.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
+
+        if (
+            "user" in request.data
+            and request.data["user"] is not None
+            and request.data["user"] != ""
+            and (
+                not request.user.can_submit_projects
+                or int(request.data["user"]) != request.user.pk
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to create a new project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            "association" in request.data
+            and request.data["association"] is not None
+            and request.data["association"] != ""
+        ) and (
+            "user" in request.data
+            and request.data["user"] is not None
+            and request.data["user"] != ""
+        ):
+            return response.Response(
+                {"error": _("A project can only have one affectation.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            not "association" in request.data
+            or request.data["association"] is None
+            or request.data["association"] == ""
+        ) and (
+            not "user" in request.data
+            or request.data["user"] is None
+            or request.data["user"] == ""
+        ):
+            return response.Response(
+                {"error": _("Missing affectation of the new project.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         request.data["creation_date"] = datetime.now()
         request.data["edition_date"] = datetime.now()
@@ -154,7 +155,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No project found for this ID.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -181,13 +182,19 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project not found.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         if not request.user.has_perm("projects.change_project_basic_fields"):
             return response.Response(
                 {"error": _("Not allowed to update basic fields for this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if not project.can_edit_project(request.user):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -199,12 +206,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             return response.Response(
                 {"error": _("Wrong status.")},
                 status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not project.can_edit_project(request.user):
-            return response.Response(
-                {"error": _("Not allowed to update this project.")},
-                status=status.HTTP_403_FORBIDDEN,
             )
 
         request.data["edition_date"] = datetime.now()
@@ -234,7 +235,7 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
             self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project not found.")},
+                {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 

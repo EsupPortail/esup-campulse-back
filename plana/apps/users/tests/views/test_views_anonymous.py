@@ -146,7 +146,7 @@ class UserViewsAnonymousTests(TestCase):
                 "can_be_president": False,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
@@ -166,7 +166,7 @@ class UserViewsAnonymousTests(TestCase):
                 "is_validated_by_admin": True,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
         GroupInstitutionCommissionUsers.objects.filter(
             user_id=self.unvalidated_user_id, group_id=5
@@ -223,7 +223,7 @@ class UserViewsAnonymousTests(TestCase):
                 "association": 2,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
@@ -232,7 +232,7 @@ class UserViewsAnonymousTests(TestCase):
                 "association": 99,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
@@ -240,7 +240,7 @@ class UserViewsAnonymousTests(TestCase):
                 "association": 3,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.anonymous_client.post(
             "/users/associations/",
@@ -248,7 +248,7 @@ class UserViewsAnonymousTests(TestCase):
                 "user": self.unvalidated_user_name,
             },
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_anonymous_get_associations_user_detail(self):
         """
@@ -529,7 +529,7 @@ class UserViewsAnonymousTests(TestCase):
             "/users/groups/",
             {"username": self.student_user_name, "group": 4},
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
@@ -559,20 +559,20 @@ class UserViewsAnonymousTests(TestCase):
             "/users/groups/",
             {"username": 99, "group": 6},
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.client.post(
             "/users/groups/", {"username": self.unvalidated_user_name, "group": 66}
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.client.post("/users/groups/", {"group": 6})
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
         response_anonymous = self.client.post(
             "/users/groups/", {"username": self.student_user_name}
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_anonymous_get_user_groups_detail(self):
         """

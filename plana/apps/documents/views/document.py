@@ -76,7 +76,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No document id given.")},
+                {"error": _("Document does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
         return self.retrieve(request, *args, **kwargs)
@@ -87,7 +87,7 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
             document = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No document id given.")},
+                {"error": _("Document does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 

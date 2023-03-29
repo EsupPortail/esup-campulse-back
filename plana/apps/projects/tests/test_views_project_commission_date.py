@@ -130,7 +130,7 @@ class ProjectCommissionDateViewsTests(TestCase):
             "/projects/commission_dates",
             {"project": 1, "commission_date": 1, "amount_earned": 1000},
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_cd_not_found(self):
         """
@@ -341,7 +341,7 @@ class ProjectCommissionDateViewsTests(TestCase):
             {"amount_earned": 1000},
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_cd_bad_success(self):
         """

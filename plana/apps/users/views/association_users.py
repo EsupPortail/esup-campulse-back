@@ -121,29 +121,26 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             association = Association.objects.get(id=association_id)
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {"error": _("No user name or association id given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if request.user.is_anonymous and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit associations for this account.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
-        association_user = AssociationUsers.objects.filter(
-            user_id=user.pk, association_id=association_id
-        )
-        if association_user.count() > 0:
-            return response.Response(
-                {"error": _("User already in association.")},
-                status=status.HTTP_400_BAD_REQUEST,
+        if (
+            request.user.is_staff
+            and not request.user.has_perm(
+                "users.change_associationusers_any_institution"
             )
-
-        if user.is_superuser or user.is_staff:
+            and not request.user.is_staff_for_association(association_id)
+        ):
             return response.Response(
-                {"error": _("A manager cannot have an association.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("Cannot add an association from this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         has_associations_possible_group = False
@@ -172,6 +169,27 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                         "Only managers can validate associations for this account."
                     )
                 },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        association_users = AssociationUsers.objects.filter(
+            association_id=association_id
+        )
+        if (
+            not association.amount_members_allowed is None
+            and association_users.count() >= association.amount_members_allowed
+        ):
+            return response.Response(
+                {"error": _("Too many users in association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        association_user = AssociationUsers.objects.filter(
+            user_id=user.pk, association_id=association_id
+        )
+        if association_user.count() > 0:
+            return response.Response(
+                {"error": _("User already in association.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -187,30 +205,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
                     {"error": _("President already in association.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-
-        association_users = AssociationUsers.objects.filter(
-            association_id=association_id
-        )
-        if (
-            not association.amount_members_allowed is None
-            and association_users.count() >= association.amount_members_allowed
-        ):
-            return response.Response(
-                {"error": _("Too many users in association.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            request.user.is_staff
-            and not request.user.has_perm(
-                "users.change_associationusers_any_institution"
-            )
-            and not request.user.is_staff_for_association(association_id)
-        ):
-            return response.Response(
-                {"error": _("Cannot add an association from this institution.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
         if not request.user.is_anonymous and user.is_validated_by_admin:
             if request.user.is_staff:
@@ -309,8 +303,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user or association found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         try:
@@ -320,7 +314,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Link between this user and association does not exist.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         try:
@@ -336,7 +330,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and not request.user.is_president_in_association(kwargs["association_id"])
         ):
             return response.Response(
-                {"error": _("No edition rights on this link.")},
+                {"error": _("Not allowed to edit this link.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -347,7 +341,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             return response.Response(
                 {"error": _("President cannot self-edit.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if (
@@ -372,7 +366,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         "Only managers can validate associations for this account."
                     )
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if "is_president" in request.data and to_bool(request.data["is_president"]):
@@ -391,7 +385,7 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             else:
                 return response.Response(
                     {"error": _("Only managers can edit president.")},
-                    status=status.HTTP_400_BAD_REQUEST,
+                    status=status.HTTP_403_FORBIDDEN,
                 )
 
         if (not "can_be_president" in request.data) and (
@@ -500,8 +494,8 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No user or association found.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("User or association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if (

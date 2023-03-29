@@ -19,6 +19,7 @@ from plana.apps.associations.serializers.association import (
     AssociationNameSerializer,
     AssociationPartialDataSerializer,
 )
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUsers
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
@@ -183,13 +184,14 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Creates a new association with mandatory informations (manager only)."""
-        if "name" in request.data:
-            association_name = request.data["name"]
-        else:
-            return response.Response(
-                {"error": _("No association name given.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if "institution" in request.data and request.data["institution"] != "":
+            try:
+                Institution.objects.get(id=request.data["institution"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("Institution does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
 
         if (
             not "institution" in request.data
@@ -214,6 +216,14 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if "name" in request.data:
+            association_name = request.data["name"]
+        else:
+            return response.Response(
+                {"error": _("No association name given.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Removes spaces, uppercase and accented characters to avoid similar association names.
@@ -269,7 +279,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             association = Association.objects.get(id=association_id)
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No association id given.")},
+                {"error": _("Association does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -278,7 +288,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             return response.Response(
                 {"error": _("Association not visible.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if (
@@ -289,7 +299,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             return response.Response(
                 {"error": _("Association not enabled.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         if (
@@ -300,7 +310,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             return response.Response(
                 {"error": _("Association not public.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         return self.retrieve(request, *args, **kwargs)
@@ -316,8 +326,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             association = Association.objects.get(id=association_id)
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No association id given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("Association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if (
@@ -328,7 +338,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
-                {"error": _("No rights to edit this association.")},
+                {"error": _("Not allowed to edit this association.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -419,8 +429,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             association = Association.objects.get(id=association_id)
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("No association id given.")},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": _("Association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if association.is_enabled is True:

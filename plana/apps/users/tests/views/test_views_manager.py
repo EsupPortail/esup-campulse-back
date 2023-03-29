@@ -273,7 +273,7 @@ class UserViewsManagerTests(TestCase):
             data={"username": "Joséphine Ange Gardien"},
             content_type="application/json",
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
 
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
@@ -339,7 +339,7 @@ class UserViewsManagerTests(TestCase):
         self.assertTrue(len(mail.outbox))
 
         response = self.manager_client.delete(f"/users/{self.student_user_id}")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         managers_ids = [1, 3, 4, 5]
         for manager_id in managers_ids:
@@ -423,7 +423,7 @@ class UserViewsManagerTests(TestCase):
                 "can_be_president": False,
             },
         )
-        self.assertEqual(response_manager_misc.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_manager_misc.status_code, status.HTTP_403_FORBIDDEN)
 
         response_manager = self.manager_client.post(
             "/users/associations/",
@@ -567,7 +567,7 @@ class UserViewsManagerTests(TestCase):
             {"is_secretary": True},
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_patch_association_users_unexisting_link(self):
         """
@@ -580,7 +580,7 @@ class UserViewsManagerTests(TestCase):
             {"is_treasurer": True},
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_delete_association_users(self):
         """
@@ -599,12 +599,12 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete(
             f"/users/99/associations/{str(first_user_association_id)}"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         response_delete = self.manager_client.delete(
             f"/users/{self.student_user_id}/associations/99"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         response_delete = self.manager_client.delete(
             f"/users/{self.student_user_id}/associations/{str(first_user_association_id)}"
@@ -745,7 +745,7 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete(
             f"/users/99/groups/{str(first_user_group_id)}"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         response_delete = self.manager_client.delete("/users/10/groups/5")
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
@@ -759,7 +759,7 @@ class UserViewsManagerTests(TestCase):
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}"
         )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         second_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(second_user_group_id)}"
@@ -786,12 +786,12 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete(
             f"/users/99/groups/{str(first_user_group_id)}/commissions/1"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         response_delete = self.manager_misc_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
 
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
@@ -801,7 +801,7 @@ class UserViewsManagerTests(TestCase):
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
         )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         second_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(second_user_group_id)}/commissions/2"
@@ -834,12 +834,12 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete(
             f"/users/99/groups/{str(first_user_group_id)}/institutions/3"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         response_delete = self.manager_misc_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
 
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
@@ -849,7 +849,7 @@ class UserViewsManagerTests(TestCase):
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
         )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
         second_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(second_user_group_id)}/institutions/4"
