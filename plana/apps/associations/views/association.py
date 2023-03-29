@@ -495,7 +495,13 @@ class AssociationNameList(generics.ListAPIView):
         is_public = self.request.query_params.get("is_public")
         allow_new_users = self.request.query_params.get("allow_new_users")
         if institutions is not None and institutions != "":
-            queryset = queryset.filter(institution_id__in=institutions.split(","))
+            institutions_ids = institutions.split(",")
+            institutions_ids = [
+                institution_id
+                for institution_id in institutions_ids
+                if institution_id != ""
+            ]
+            queryset = queryset.filter(institution_id__in=institutions_ids)
         if is_public is not None and is_public != "":
             queryset = queryset.filter(is_public=to_bool(is_public))
         if allow_new_users is not None and allow_new_users != "":

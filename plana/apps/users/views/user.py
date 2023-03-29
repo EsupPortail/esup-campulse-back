@@ -131,7 +131,11 @@ class UserListCreate(generics.ListCreateAPIView):
                     check_other_users = False
                     if "" in institutions_ids:
                         check_other_users = True
-                        del institutions_ids[institutions_ids.index("")]
+                        institutions_ids = [
+                            institution_id
+                            for institution_id in institutions_ids
+                            if institution_id != ""
+                        ]
 
                     associations_ids = Association.objects.filter(
                         institution_id__in=institutions_ids

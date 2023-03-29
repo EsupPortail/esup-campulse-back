@@ -88,8 +88,11 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
 
         if institutions is not None and institutions != "":
             institutions_ids = institutions.split(",")
-            if "" in institutions_ids:
-                del institutions_ids[institutions_ids.index("")]
+            institutions_ids = [
+                institution_id
+                for institution_id in institutions_ids
+                if institution_id != ""
+            ]
             queryset = queryset.filter(
                 association_id__in=Association.objects.filter(
                     institution_id__in=institutions_ids
