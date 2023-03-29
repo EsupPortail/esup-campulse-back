@@ -91,7 +91,7 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             institutions_ids = [
                 institution_id
                 for institution_id in institutions_ids
-                if institution_id != ""
+                if institution_id != "" and institution_id.isdigit()
             ]
             queryset = queryset.filter(
                 association_id__in=Association.objects.filter(

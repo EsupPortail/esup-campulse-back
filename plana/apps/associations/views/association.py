@@ -499,7 +499,7 @@ class AssociationNameList(generics.ListAPIView):
             institutions_ids = [
                 institution_id
                 for institution_id in institutions_ids
-                if institution_id != ""
+                if institution_id != "" and institution_id.isdigit()
             ]
             queryset = queryset.filter(institution_id__in=institutions_ids)
         if is_public is not None and is_public != "":
