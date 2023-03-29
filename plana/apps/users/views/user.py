@@ -257,7 +257,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if request.user.has_perm("users.view_user_anyone"):
             return self.retrieve(request, *args, **kwargs)
         return response.Response(
-            {"error": _("Bad request.")},
+            {"error": _("Not allowed to retrieve this user.")},
             status=status.HTTP_403_FORBIDDEN,
         )
 
@@ -270,7 +270,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Bad request.")},
+                {"error": _("This user does not exist.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

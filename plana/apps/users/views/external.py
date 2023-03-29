@@ -34,7 +34,7 @@ class ExternalUserRetrieve(generics.ListAPIView):
             "users.add_user_misc"
         ):
             return Response(
-                {"error": _("Bad request.")},
+                {"error": _("Not allowed to retrieve external users.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

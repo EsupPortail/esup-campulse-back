@@ -259,7 +259,11 @@ class AssociationUsersRetrieve(generics.RetrieveAPIView):
             )
         else:
             return response.Response(
-                {"error": _("Bad request.")},
+                {
+                    "error": _(
+                        "Not allowed to get this link between association and user."
+                    )
+                },
                 status=status.HTTP_403_FORBIDDEN,
             )
         return response.Response(serializer.data)
@@ -506,7 +510,11 @@ class AssociationUsersUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.user.pk != kwargs["user_id"]
         ):
             return response.Response(
-                {"error": _("Bad request.")},
+                {
+                    "error": _(
+                        "Not allowed to delete this link between association and user."
+                    )
+                },
                 status=status.HTTP_403_FORBIDDEN,
             )
 

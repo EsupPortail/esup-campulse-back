@@ -179,7 +179,7 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
             )
             return response.Response(serializer.data)
         return response.Response(
-            {"error": _("Bad request.")},
+            {"error": _("Not allowed to get this link between group and user.")},
             status=status.HTTP_403_FORBIDDEN,
         )
 
