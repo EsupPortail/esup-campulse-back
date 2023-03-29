@@ -35,14 +35,14 @@ class ProjectListCreate(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
         if request.user.has_perm("projects.view_project_all"):
-            serializer = self.serializer_class(Project.objects.all(), many=True)
+            serializer = self.get_serializer(self.queryset.all(), many=True)
             return response.Response(serializer.data)
 
         user_associations_ids = AssociationUsers.objects.filter(
             user_id=request.user.pk
         ).values_list("association_id")
-        serializer = self.serializer_class(
-            Project.objects.filter(
+        serializer = self.get_serializer(
+            self.queryset.filter(
                 Q(user_id=request.user.pk) | Q(association_id__in=user_associations_ids)
             ),
             many=True,
@@ -208,7 +208,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         request.data["edition_date"] = datetime.now()
-        return super().partial_update(request, *args, **kwargs)
+        return self.partial_update(request, *args, **kwargs)
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -249,4 +249,4 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
             )
 
         request.data["edition_date"] = datetime.now()
-        return super().update(request, *args, **kwargs)
+        return self.update(request, *args, **kwargs)

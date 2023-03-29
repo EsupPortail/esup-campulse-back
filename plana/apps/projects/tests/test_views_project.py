@@ -1,11 +1,13 @@
 """List of tests done on projects views."""
 import json
 
+from django.db.models import Q
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.projects.models.project import Project
+from plana.apps.users.models.user import AssociationUsers
 
 
 class ProjectsViewsTests(TestCase):
@@ -89,6 +91,45 @@ class ProjectsViewsTests(TestCase):
         self.response = self.student_president_client.post(
             url_login, data_student_president
         )
+
+    def test_get_project_anonymous(self):
+        """
+        GET /projects/ .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/projects/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_project_student(self):
+        """
+        GET /projects/ .
+
+        - A student user gets projects where rights are OK.
+        """
+        response = self.student_misc_client.get("/projects/")
+        user_associations_ids = AssociationUsers.objects.filter(
+            user_id=self.student_misc_user_id
+        ).values_list("association_id")
+        user_projects_cnt = Project.objects.filter(
+            Q(user_id=self.student_misc_user_id)
+            | Q(association_id__in=user_associations_ids)
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), user_projects_cnt)
+
+    def test_get_project_manager(self):
+        """
+        GET /projects/ .
+
+        - A general manager user gets all projects.
+        """
+        response = self.general_client.get("/projects/")
+        projects_cnt = Project.objects.all().count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), projects_cnt)
 
     def test_post_project_anonymous(self):
         """
@@ -231,11 +272,20 @@ class ProjectsViewsTests(TestCase):
         response = self.client.get("/projects/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_project_by_id_forbidden_student(self):
+        """
+        GET /projects/{id} .
+
+        - An student user not owning the project cannot execute this request.
+        """
+        response = self.student_offsite_client.get("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_get_project_by_id(self):
         """
         GET /projects/{id} .
 
-        - The route can be accessed by any authenticated user.
+        - The route can be accessed by a manager user.
         - Correct projects details are returned (test the "name" attribute).
         """
         project_id = 1
@@ -278,6 +328,18 @@ class ProjectsViewsTests(TestCase):
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_project_forbidden_student(self):
+        """
+        PATCH /projects/{id} .
+
+        - An student user not owning the project cannot execute this request.
+        """
+        patch_data = {"name": "Test anonymous"}
+        response = self.student_offsite_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_not_found(self):
         """
@@ -325,11 +387,25 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
-        patch_data = {"description": "new desc"}
+        patch_data = {"summary": "new summary"}
         response = self.student_misc_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.summary, "new summary")
+
+    def test_patch_project_manager_error(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route cannot be accessed by a manager user.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.general_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_put_project_restricted(self):
         """
@@ -355,6 +431,18 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_project_restricted_forbidden_student(self):
+        """
+        PATCH /projects/{id}/restricted .
+
+        - An student user cannot execute this request.
+        """
+        patch_data = {"project_status": "PROJECT_REJECTED"}
+        response = self.student_offsite_client.patch(
+            "/projects/1/restricted", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_patch_project_restricted_not_found(self):
         """
         PATCH /projects/{id}/restricted .
@@ -367,3 +455,18 @@ class ProjectsViewsTests(TestCase):
             "/projects/999/restricted", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_restricted_manager(self):
+        """
+        PATCH /projects/{id}/restricted .
+
+        - The route can be accessed by a manager user.
+        - Project must exist.
+        """
+        patch_data = {"project_status": "PROJECT_REJECTED"}
+        response = self.general_client.patch(
+            "/projects/1/restricted", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.project_status, "PROJECT_REJECTED")

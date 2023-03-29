@@ -65,10 +65,11 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 user_associations_ids = AssociationUsers.objects.filter(
                     user_id=self.request.user.pk
                 ).values_list("association_id")
-                queryset = queryset.filter(
+                user_projects_ids = Project.objects.filter(
                     Q(user_id=self.request.user.pk)
                     | Q(association_id__in=user_associations_ids)
-                )
+                ).values_list("id")
+                queryset = queryset.filter(project_id__in=user_projects_ids)
 
         return queryset
 
@@ -132,20 +133,16 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves all commission dates linked to a project."""
         try:
-            project = self.queryset.get(id=kwargs["project_id"])
+            project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No project found for this ID.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.view_projectcommissiondate_all") and (
-            (project.user is not None and request.user.pk != project.user)
-            or (
-                project.association is not None
-                and request.user.is_in_association(project.association)
-            )
-        ):
+        if not request.user.has_perm(
+            "projects.view_projectcommissiondate_all"
+        ) and not project.can_edit_project(request.user):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project commission dates.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -249,14 +246,5 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         project.edition_date = datetime.now()
         project.save()
-
-        try:
-            ProjectCommissionDate.objects.get(
-                project_id=kwargs["project_id"],
-                commission_date_id=kwargs["commission_date_id"],
-            )
-        except ObjectDoesNotExist:
-            return response.Response({}, status=status.HTTP_200_OK)
-
         pcd.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

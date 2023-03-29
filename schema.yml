@@ -600,7 +600,7 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/categories
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []

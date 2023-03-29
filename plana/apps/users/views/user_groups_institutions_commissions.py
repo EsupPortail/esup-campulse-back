@@ -44,12 +44,10 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         if request.user.has_perm(
             "users.view_groupinstitutioncommissionusers_any_group"
         ):
-            serializer = self.serializer_class(
-                GroupInstitutionCommissionUsers.objects.all(), many=True
-            )
+            serializer = self.serializer_class(self.queryset.all(), many=True)
             return response.Response(serializer.data)
         serializer = self.serializer_class(
-            GroupInstitutionCommissionUsers.objects.filter(user_id=request.user.pk),
+            self.queryset.filter(user_id=request.user.pk),
             many=True,
         )
         return response.Response(serializer.data)
@@ -176,9 +174,7 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
             "users.view_groupinstitutioncommissionusers_any_group"
         ):
             serializer = self.serializer_class(
-                GroupInstitutionCommissionUsers.objects.filter(
-                    user_id=kwargs["user_id"]
-                ),
+                self.queryset.filter(user_id=kwargs["user_id"]),
                 many=True,
             )
             return response.Response(serializer.data)

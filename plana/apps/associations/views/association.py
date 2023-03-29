@@ -390,6 +390,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ):
                 request.data["is_public"] = False
 
+        # TODO path_logo doesn't work anymore.
         if "path_logo" in request.data:
             print(request.data["path_logo"])
 

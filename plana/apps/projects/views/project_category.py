@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
@@ -37,10 +38,11 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 user_associations_ids = AssociationUsers.objects.filter(
                     user_id=self.request.user.pk
                 ).values_list("association_id")
-                queryset = queryset.filter(
+                user_projects_ids = Project.objects.filter(
                     Q(user_id=self.request.user.pk)
                     | Q(association_id__in=user_associations_ids)
-                )
+                ).values_list("id")
+                queryset = queryset.filter(project_id__in=user_projects_ids)
 
         return queryset
 
@@ -78,7 +80,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["projects/commission_dates"]),
+    get=extend_schema(tags=["projects/categories"]),
 )
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/categories route"""
@@ -90,20 +92,16 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves all categories linked to a project."""
         try:
-            project = self.queryset.get(id=kwargs["project_id"])
+            project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("No project found for this ID.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.view_projectcategories_all") and (
-            (project.user is not None and request.user.pk != project.user)
-            or (
-                project.association is not None
-                and request.user.is_in_association(project.association)
-            )
-        ):
+        if not request.user.has_perm(
+            "projects.view_projectcategory_all"
+        ) and not project.can_edit_project(request.user):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project categories.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -129,6 +127,9 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
         """Destroys a link between project and category."""
         try:
             project = Project.objects.get(pk=kwargs["project_id"])
+            project_category = ProjectCategory.objects.get(
+                project_id=kwargs["project_id"], category_id=kwargs["category_id"]
+            )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project not found.")},
@@ -143,13 +144,5 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
 
         project.edition_date = datetime.now()
         project.save()
-
-        try:
-            project_category = ProjectCategory.objects.get(
-                project_id=kwargs["project_id"], category_id=kwargs["category_id"]
-            )
-        except ObjectDoesNotExist:
-            return response.Response({}, status=status.HTTP_200_OK)
-
         project_category.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
