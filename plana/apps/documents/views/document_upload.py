@@ -30,7 +30,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     {"error": _("Project does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
-            if not project.can_edit_project(request.user):
+            if not request.user.can_edit_project(project):
                 return response.Response(
                     {"error": _("Not allowed to upload documents for this project.")},
                     status=status.HTTP_403_FORBIDDEN,

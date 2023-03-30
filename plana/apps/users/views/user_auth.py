@@ -62,6 +62,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
+                assos_user = AssociationUsers.objects.filter(user_id=request.user.id)
                 user_id = request.user.id
                 context[
                     "account_url"
@@ -69,9 +70,16 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 template = MailTemplate.objects.get(
                     code="MANAGER_LDAP_ACCOUNT_CONFIRMATION"
                 )
-                managers_emails = list(
-                    request.user.get_user_institutions().values_list("email", flat=True)
-                )
+
+                managers_emails = []
+                if assos_user.count() > 0:
+                    for institution in request.user.get_user_institutions():
+                        managers_emails += institution.default_institution_managers()
+                    managers_emails = list(set(managers_emails))
+                else:
+                    for user_to_check in User.objects.all():
+                        if user_to_check.has_perm("view_user_misc"):
+                            managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=managers_emails,
@@ -144,18 +152,18 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 "site_name": current_site.name,
                 "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
+            managers_emails = []
             if assos_user.count() > 0:
                 template = MailTemplate.objects.get(
                     code="INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                managers_emails = list(
-                    user.get_user_institutions().values_list("email", flat=True)
-                )
+                for institution in user.get_user_institutions():
+                    managers_emails += institution.default_institution_managers()
+                managers_emails = list(set(managers_emails))
             else:
                 template = MailTemplate.objects.get(
                     code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                managers_emails = []
                 for user_to_check in User.objects.all():
                     if user_to_check.has_perm("view_user_misc"):
                         managers_emails.append(user_to_check.email)

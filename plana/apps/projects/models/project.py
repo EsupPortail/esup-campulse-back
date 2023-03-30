@@ -1,10 +1,9 @@
 """Models describing projects."""
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import User
 
 
 class Project(models.Model):
@@ -84,22 +83,6 @@ class Project(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
-    def can_edit_project(self, user_obj):
-        if self.user is not None and self.user != user_obj:
-            return False
-
-        if self.association is not None:
-            try:
-                member = AssociationUsers.objects.get(
-                    user_id=user_obj.pk, association_id=self.association.pk
-                )
-                if not member.is_president or not member.can_be_president:
-                    return False
-            except ObjectDoesNotExist:
-                return False
-
-        return True
 
     class Meta:
         verbose_name = _("Project")

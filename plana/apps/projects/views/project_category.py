@@ -59,7 +59,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not project.can_edit_project(request.user):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update categories for this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -100,7 +100,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
 
         if not request.user.has_perm(
             "projects.view_projectcategory_all"
-        ) and not project.can_edit_project(request.user):
+        ) and not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project categories.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -135,7 +135,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not project.can_edit_project(request.user):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update categories for this project.")},
                 status=status.HTTP_403_FORBIDDEN,

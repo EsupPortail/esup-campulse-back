@@ -4,8 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "Centre régional des œuvres universitaires et scolaires",
-      "acronym": "Crous",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "Crous"
     }
   },
   {
@@ -13,8 +12,7 @@
     "pk": 2,
     "fields": {
       "name": "Université de Strasbourg",
-      "acronym": "Unistra",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "Unistra"
     }
   },
   {
@@ -22,8 +20,7 @@
     "pk": 3,
     "fields": {
       "name": "Université de Haute-Alsace",
-      "acronym": "UHA",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "UHA"
     }
   },
   {
@@ -31,8 +28,7 @@
     "pk": 4,
     "fields": {
       "name": "Institut National des Sciences Appliquées Strasbourg",
-      "acronym": "INSA",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "INSA"
     }
   },
   {
@@ -40,8 +36,7 @@
     "pk": 5,
     "fields": {
       "name": "Haute École des Arts du Rhin",
-      "acronym": "HEAR",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "HEAR"
     }
   },
   {
@@ -49,8 +44,7 @@
     "pk": 6,
     "fields": {
       "name": "École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
-      "acronym": "ENGEES",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "ENGEES"
     }
   },
   {
@@ -58,8 +52,7 @@
     "pk": 7,
     "fields": {
       "name": "École Nationale Supérieure d'Architecture de Strasbourg",
-      "acronym": "ENSAS",
-      "email": "plan-a.noreply@unistra.fr"
+      "acronym": "ENSAS"
     }
   }
 ]

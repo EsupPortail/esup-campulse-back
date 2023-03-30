@@ -61,7 +61,7 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.objects.get(pk=1)
         user = User.objects.get(username="etudiant-porteur@mail.tld")
-        self.assertTrue(project.can_edit_project(user))
+        self.assertTrue(user.can_edit_project(project))
 
     def test_can_edit_project_forbidden_user(self):
         """
@@ -70,7 +70,7 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.objects.get(pk=1)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
-        self.assertFalse(project.can_edit_project(user))
+        self.assertFalse(user.can_edit_project(project))
 
     def test_can_edit_project_success_association(self):
         """
@@ -79,7 +79,7 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.objects.get(pk=2)
         user = User.objects.get(username="president-asso-site@mail.tld")
-        self.assertTrue(project.can_edit_project(user))
+        self.assertTrue(user.can_edit_project(project))
 
     def test_can_edit_project_forbidden_association(self):
         """
@@ -88,7 +88,7 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.objects.get(pk=2)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
-        self.assertFalse(project.can_edit_project(user))
+        self.assertFalse(user.can_edit_project(project))
 
     def test_can_edit_project_forbidden_president(self):
         """
@@ -97,4 +97,4 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.objects.get(pk=2)
         user = User.objects.get(username="etudiant-asso-site@mail.tld")
-        self.assertFalse(project.can_edit_project(user))
+        self.assertFalse(user.can_edit_project(project))

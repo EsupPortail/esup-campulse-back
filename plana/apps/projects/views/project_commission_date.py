@@ -89,7 +89,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not project.can_edit_project(request.user):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -150,7 +150,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
 
         if not request.user.has_perm(
             "projects.view_projectcommissiondate_all"
-        ) and not project.can_edit_project(request.user):
+        ) and not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project commission dates.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -211,7 +211,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if not pcd.project.can_edit_project(request.user):
+        if not request.user.can_edit_project(pcd.project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -253,7 +253,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not pcd.project.can_edit_project(request.user):
+        if not request.user.can_edit_project(pcd.project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,

@@ -211,23 +211,6 @@ class AssociationUsersListCreate(generics.ListCreateAPIView):
             else:
                 request.data["is_validated_by_admin"] = False
 
-        if not user.is_validated_by_admin:
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}{user.pk}",
-            }
-            template = MailTemplate.objects.get(code="USER_ASSOCIATION_MANAGER_MESSAGE")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=Institution.objects.get(id=association.institution_id).email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
-                message=template.parse_vars(request.user, request, context),
-            )
-
         return super().create(request, *args, **kwargs)
 
 

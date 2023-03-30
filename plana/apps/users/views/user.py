@@ -16,6 +16,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import (
     AssociationUsers,
     GroupInstitutionCommissionUsers,
@@ -333,6 +334,31 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ),
                 message=template.parse_vars(user, request, context),
             )
+
+            unvalidated_assos_user = AssociationUsers.objects.filter(
+                user_id=user.pk, is_validated_by_admin=False
+            )
+            if unvalidated_assos_user.count() > 0:
+                for unvalidated_asso_user in unvalidated_assos_user:
+                    context[
+                        "user_association_url"
+                    ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}{user.pk}"
+                    template = MailTemplate.objects.get(
+                        code="USER_ASSOCIATION_MANAGER_MESSAGE"
+                    )
+                    send_mail(
+                        from_=settings.DEFAULT_FROM_EMAIL,
+                        to_=Institution.objects.get(
+                            id=unvalidated_asso_user.association.institution_id
+                        )
+                        .default_institution_managers()
+                        .values_list("email"),
+                        subject=template.subject.replace(
+                            "{{ site_name }}", context["site_name"]
+                        ),
+                        message=template.parse_vars(request.user, request, context),
+                    )
+
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
