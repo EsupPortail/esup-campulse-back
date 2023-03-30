@@ -16,7 +16,7 @@ from plana.apps.projects.serializers.project_commission_date import (
     ProjectCommissionDateDataSerializer,
     ProjectCommissionDateSerializer,
 )
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 @extend_schema_view(
@@ -61,7 +61,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             if not self.request.user.has_perm(
                 "projects.view_projectcommissiondate_all"
             ):
-                user_associations_ids = AssociationUsers.objects.filter(
+                user_associations_ids = AssociationUser.objects.filter(
                     user_id=self.request.user.pk
                 ).values_list("association_id")
                 user_projects_ids = Project.objects.filter(

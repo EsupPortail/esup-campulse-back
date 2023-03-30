@@ -2,21 +2,21 @@
 from rest_framework import serializers
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUser, User
 
 
-class AssociationUsersSerializer(serializers.ModelSerializer):
+class AssociationUserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
 
     class Meta:
-        model = AssociationUsers
+        model = AssociationUser
         fields = "__all__"
 
 
-class AssociationUsersCreateSerializer(serializers.ModelSerializer):
+class AssociationUserCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-associations creation."""
 
     user = serializers.SlugRelatedField(
@@ -25,7 +25,7 @@ class AssociationUsersCreateSerializer(serializers.ModelSerializer):
     association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
 
     class Meta:
-        model = AssociationUsers
+        model = AssociationUser
         fields = [
             "user",
             "association",
@@ -37,11 +37,11 @@ class AssociationUsersCreateSerializer(serializers.ModelSerializer):
         ]
 
 
-class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
+class AssociationUserUpdateSerializer(serializers.ModelSerializer):
     """Serializer for user-associations change."""
 
     class Meta:
-        model = AssociationUsers
+        model = AssociationUser
         fields = [
             "is_president",
             "can_be_president",
@@ -54,14 +54,14 @@ class AssociationUsersUpdateSerializer(serializers.ModelSerializer):
         ]
 
 
-class AssociationUsersDeleteSerializer(serializers.ModelSerializer):
+class AssociationUserDeleteSerializer(serializers.ModelSerializer):
     """Serializer for user-associations deletion."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
 
     class Meta:
-        model = AssociationUsers
+        model = AssociationUser
         fields = [
             "user",
             "association",

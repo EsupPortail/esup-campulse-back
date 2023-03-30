@@ -22,7 +22,7 @@ class ProjectsModelsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "users_associationusers.json",
+        "users_associationuser.json",
         "users_user.json",
     ]
 

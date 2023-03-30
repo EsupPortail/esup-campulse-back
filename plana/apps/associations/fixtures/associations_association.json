@@ -1,6 +1,6 @@
 [
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 1,
     "fields": {
       "name": "Plateforme de Liaison et ANnuaire Associatif",
@@ -38,7 +38,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 2,
     "fields": {
       "name": "Association du Site Alsace",
@@ -53,7 +53,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 3,
     "fields": {
       "name": "Association Hors Site",
@@ -67,7 +67,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 4,
     "fields": {
       "name": "Association du Site Alsace 2",
@@ -82,7 +82,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 5,
     "fields": {
       "name": "Association Hors Site 2",

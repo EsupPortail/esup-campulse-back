@@ -1,6 +1,6 @@
 [
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 1,
     "fields": {
       "user_id": 2,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 2,
     "fields": {
       "user_id": 10,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 3,
     "fields": {
       "user_id": 11,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 4,
     "fields": {
       "user_id": 12,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 5,
     "fields": {
       "user_id": 13,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 6,
     "fields": {
       "user_id": 14,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "model": "users.AssociationUsers",
+    "model": "users.associationuser",
     "pk": 7,
     "fields": {
       "user_id": 14,

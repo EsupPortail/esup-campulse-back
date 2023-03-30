@@ -20,7 +20,7 @@ from plana.apps.associations.serializers.association import (
     AssociationPartialDataSerializer,
 )
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -164,7 +164,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 and self.request.user.has_perm("users.view_user_anyone")
             ):
                 assos_users_query = (
-                    AssociationUsers.objects.filter(user_id=user_id)
+                    AssociationUser.objects.filter(user_id=user_id)
                     .values_list("association_id", flat=True)
                     .all()
                 )
@@ -529,7 +529,7 @@ class AssociationNameList(generics.ListAPIView):
         if allow_new_users is not None and allow_new_users != "":
             assos_ids_with_all_members = []
             for association in queryset:
-                association_users = AssociationUsers.objects.filter(
+                association_users = AssociationUser.objects.filter(
                     association_id=association.id
                 )
                 if (

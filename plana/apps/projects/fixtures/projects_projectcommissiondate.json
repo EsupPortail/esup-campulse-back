@@ -1,6 +1,6 @@
 [
   {
-    "model": "projects.ProjectCommissionDate",
+    "model": "projects.projectcommissiondate",
     "pk": 1,
     "fields": {
       "project": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "model": "projects.ProjectCommissionDate",
+    "model": "projects.projectcommissiondate",
     "pk": 2,
     "fields": {
       "project": 2,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "model": "projects.ProjectCommissionDate",
+    "model": "projects.projectcommissiondate",
     "pk": 3,
     "fields": {
       "project": 2,

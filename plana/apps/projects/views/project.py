@@ -15,7 +15,7 @@ from plana.apps.projects.serializers.project import (
     ProjectRestrictedSerializer,
     ProjectSerializer,
 )
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -37,7 +37,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             serializer = self.get_serializer(self.queryset.all(), many=True)
             return response.Response(serializer.data)
 
-        user_associations_ids = AssociationUsers.objects.filter(
+        user_associations_ids = AssociationUser.objects.filter(
             user_id=request.user.pk
         ).values_list("association_id")
         serializer = self.get_serializer(
@@ -65,7 +65,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
             if association.can_submit_projects:
                 try:
-                    member = AssociationUsers.objects.get(
+                    member = AssociationUser.objects.get(
                         association_id=request.data["association"],
                         user_id=request.user.pk,
                     )

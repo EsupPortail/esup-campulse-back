@@ -1,6 +1,6 @@
 [
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 1,
     "fields": {
       "name": "Centre régional des œuvres universitaires et scolaires",
@@ -8,7 +8,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 2,
     "fields": {
       "name": "Université de Strasbourg",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 3,
     "fields": {
       "name": "Université de Haute-Alsace",
@@ -24,7 +24,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 4,
     "fields": {
       "name": "Institut National des Sciences Appliquées Strasbourg",
@@ -32,7 +32,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 5,
     "fields": {
       "name": "Haute École des Arts du Rhin",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 6,
     "fields": {
       "name": "École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
@@ -48,7 +48,7 @@
     }
   },
   {
-    "model": "institutions.Institution",
+    "model": "institutions.institution",
     "pk": 7,
     "fields": {
       "name": "École Nationale Supérieure d'Architecture de Strasbourg",

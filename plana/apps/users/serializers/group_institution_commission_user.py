@@ -4,10 +4,10 @@ from rest_framework import serializers
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUsers, User
+from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
 
 
-class UserGroupsInstitutionsCommissionsSerializer(serializers.ModelSerializer):
+class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -20,11 +20,11 @@ class UserGroupsInstitutionsCommissionsSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUsers
+        model = GroupInstitutionCommissionUser
         fields = "__all__"
 
 
-class UserGroupsInstitutionsCommissionsCreateSerializer(serializers.ModelSerializer):
+class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-groups creation (with username instead of id)."""
 
     user = serializers.SlugRelatedField(
@@ -39,5 +39,5 @@ class UserGroupsInstitutionsCommissionsCreateSerializer(serializers.ModelSeriali
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUsers
+        model = GroupInstitutionCommissionUser
         fields = ["user", "group", "institution", "commission"]

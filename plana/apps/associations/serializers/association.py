@@ -6,7 +6,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 class AssociationAllDataReadSerializer(serializers.ModelSerializer):
@@ -94,7 +94,7 @@ class AssociationNameSerializer(serializers.ModelSerializer):
 
     def is_president_in_association(self, association) -> bool:
         """Check if a president has been linked to an association."""
-        return AssociationUsers.objects.filter(
+        return AssociationUser.objects.filter(
             association_id=association.id, is_president=True
         ).exists()
 

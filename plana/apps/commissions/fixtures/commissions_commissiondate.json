@@ -1,6 +1,6 @@
 [
   {
-    "model": "commissions.CommissionDate",
+    "model": "commissions.commissiondate",
     "pk": 1,
     "fields": {
       "submission_date": "2023-10-06",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "commissions.CommissionDate",
+    "model": "commissions.commissiondate",
     "pk": 2,
     "fields": {
       "submission_date": "2023-10-06",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "commissions.CommissionDate",
+    "model": "commissions.commissiondate",
     "pk": 3,
     "fields": {
       "submission_date": "2023-10-06",
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "commissions.CommissionDate",
+    "model": "commissions.commissiondate",
     "pk": 4,
     "fields": {
       "submission_date": "2023-05-18",

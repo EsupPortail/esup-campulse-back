@@ -18,8 +18,8 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
+    AssociationUser,
+    GroupInstitutionCommissionUser,
     User,
 )
 from plana.apps.users.provider import CASProvider
@@ -74,7 +74,7 @@ class UserListCreate(generics.ListCreateAPIView):
             "users.view_user_anyone"
         ) and not self.request.user.has_perm("users.view_user_misc"):
             queryset = queryset.filter(
-                id__in=AssociationUsers.objects.filter(
+                id__in=AssociationUser.objects.filter(
                     association_id__in=self.request.user.get_user_associations().values_list(
                         "id"
                     )
@@ -103,7 +103,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 )
 
             if association_id is not None and association_id != "":
-                assos_users_query = AssociationUsers.objects.filter(
+                assos_users_query = AssociationUser.objects.filter(
                     association_id=association_id
                 ).values_list("user_id", flat=True)
                 queryset = queryset.filter(id__in=assos_users_query)
@@ -111,13 +111,13 @@ class UserListCreate(generics.ListCreateAPIView):
             if institutions is not None:
                 multiple_groups_users_query = (
                     User.objects.annotate(
-                        num_groups=models.Count("groupinstitutioncommissionusers")
+                        num_groups=models.Count("groupinstitutioncommissionuser")
                     )
                     .filter(num_groups__gt=1)
                     .values_list("id", flat=True)
                 )
                 commission_users_query = User.objects.filter(
-                    id__in=GroupInstitutionCommissionUsers.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
                         commission_id__isnull=False
                     ).values_list("user_id", flat=True)
                 ).values_list("id", flat=True)
@@ -140,7 +140,7 @@ class UserListCreate(generics.ListCreateAPIView):
                     associations_ids = Association.objects.filter(
                         institution_id__in=institutions_ids
                     ).values_list("id", flat=True)
-                    assos_users_query = AssociationUsers.objects.filter(
+                    assos_users_query = AssociationUser.objects.filter(
                         association_id__in=associations_ids
                     ).values_list("user_id", flat=True)
 
@@ -335,7 +335,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(user, request, context),
             )
 
-            unvalidated_assos_user = AssociationUsers.objects.filter(
+            unvalidated_assos_user = AssociationUser.objects.filter(
                 user_id=user.pk, is_validated_by_admin=False
             )
             if unvalidated_assos_user.count() > 0:

@@ -9,8 +9,8 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
+    AssociationUser,
+    GroupInstitutionCommissionUser,
     User,
 )
 
@@ -27,8 +27,8 @@ class UserViewsAnonymousTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationusers.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_associationuser.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 
@@ -168,7 +168,7 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
-        GroupInstitutionCommissionUsers.objects.filter(
+        GroupInstitutionCommissionUser.objects.filter(
             user_id=self.unvalidated_user_id, group_id=5
         ).delete()
         response_anonymous = self.anonymous_client.post(
@@ -179,7 +179,7 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-        GroupInstitutionCommissionUsers.objects.create(
+        GroupInstitutionCommissionUser.objects.create(
             user_id=self.unvalidated_user_id, group_id=5
         )
 
@@ -261,7 +261,7 @@ class UserViewsAnonymousTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_anonymous_patch_association_users(self):
+    def test_anonymous_patch_association_user(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -278,7 +278,7 @@ class UserViewsAnonymousTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
+        asso_user = AssociationUser.objects.get(user_id=self.unvalidated_user_id)
         response_anonymous = self.anonymous_client.delete(
             f"/users/{self.unvalidated_user_id}/associations/{asso_user.id}"
         )
@@ -394,7 +394,7 @@ class UserViewsAnonymousTests(TestCase):
             },
         )
         user = User.objects.get(email=email)
-        AssociationUsers.objects.create(user_id=user.id, association_id=3)
+        AssociationUser.objects.create(user_id=user.id, association_id=3)
         email_address = EmailAddress.objects.get(email=email)
         key = EmailConfirmationHMAC(email_address=email_address).key
         response_anonymous = self.anonymous_client.post(
@@ -404,7 +404,7 @@ class UserViewsAnonymousTests(TestCase):
 
         email_address.verified = False
         email_address.save()
-        AssociationUsers.objects.create(user_id=user.id, association_id=2)
+        AssociationUser.objects.create(user_id=user.id, association_id=2)
         key = EmailConfirmationHMAC(email_address=email_address).key
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/verify-email/", {"key": key}

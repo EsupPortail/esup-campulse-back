@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 
 # from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUser, User
 
 
 class UserViewsStudentTests(TestCase):
@@ -27,9 +27,9 @@ class UserViewsStudentTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationusers.json",
+        "users_associationuser.json",
         "users_gdprconsentusers.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 
@@ -143,7 +143,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.get("/users/associations/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
-        associations_user_cnt = AssociationUsers.objects.filter(
+        associations_user_cnt = AssociationUser.objects.filter(
             user_id=self.student_user_id
         ).count()
         content = json.loads(response_student.content.decode("utf-8"))
@@ -152,9 +152,7 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.get(
             "/users/associations/?association_id=2"
         )
-        associations_user_cnt = AssociationUsers.objects.filter(
-            association_id=2
-        ).count()
+        associations_user_cnt = AssociationUser.objects.filter(association_id=2).count()
         content = json.loads(response_president.content.decode("utf-8"))
         self.assertEqual(len(content), associations_user_cnt)
 
@@ -174,7 +172,7 @@ class UserViewsStudentTests(TestCase):
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
-        user_asso = AssociationUsers.objects.get(
+        user_asso = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=5
         )
         self.assertFalse(user_asso.is_validated_by_admin)
@@ -190,25 +188,25 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_patch_association_users(self):
+    def test_student_patch_association_user(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
         - A simple student user cannot execute this request.
         """
-        asso_user = AssociationUsers.objects.get(user_id=self.student_user_id)
+        asso_user = AssociationUser.objects.get(user_id=self.student_user_id)
         response_student = self.student_client.patch(
             f"/users/{self.student_user_id}/associations/{asso_user.association_id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_patch_association_users_president_remove_president(self):
+    def test_student_patch_association_user_president_remove_president(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president cannot remove his own privileges.
         """
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.president_user_id, is_president=True
         )
         response_president = self.president_student_client.patch(
@@ -218,14 +216,14 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_patch_association_users_validation(self):
+    def test_student_patch_association_user_validation(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
         - A student president of an association cannot change the validation status.
         """
         association_id = 2
-        AssociationUsers.objects.get(
+        AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         response_president = self.president_student_client.patch(
@@ -233,12 +231,12 @@ class UserViewsStudentTests(TestCase):
             {"is_validated_by_admin": False},
             content_type="application/json",
         )
-        AssociationUsers.objects.get(
+        AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_patch_association_users_president(self):
+    def test_student_patch_association_user_president(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -259,7 +257,7 @@ class UserViewsStudentTests(TestCase):
             },
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
@@ -276,7 +274,7 @@ class UserViewsStudentTests(TestCase):
             },
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
@@ -294,7 +292,7 @@ class UserViewsStudentTests(TestCase):
             },
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.unvalidated_user_id, association_id=association_id
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
@@ -308,7 +306,7 @@ class UserViewsStudentTests(TestCase):
             },
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
@@ -326,7 +324,7 @@ class UserViewsStudentTests(TestCase):
             },
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
@@ -345,7 +343,7 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_patch_association_users_other_president(self):
+    def test_student_patch_association_user_other_president(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -364,13 +362,13 @@ class UserViewsStudentTests(TestCase):
 
         - A student user cannot execute this request.
         """
-        asso_user = AssociationUsers.objects.get(user_id=self.unvalidated_user_id)
+        asso_user = AssociationUser.objects.get(user_id=self.unvalidated_user_id)
         response_student = self.student_client.delete(
             f"/users/{self.unvalidated_user_id}/associations/{asso_user.id}"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_student_get_association_users(self):
+    def test_student_get_association_user(self):
         """
         GET /users/{user_id}/associations/{association_id} .
 
@@ -381,7 +379,7 @@ class UserViewsStudentTests(TestCase):
             response_student.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
         )
 
-    def test_student_put_association_users(self):
+    def test_student_put_association_user(self):
         """
         PUT /users/{user_id}/associations/{association_id} .
 
@@ -622,7 +620,7 @@ class UserAuthTests(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "users_user.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_groupinstitutioncommissionuser.json",
     ]
 
     def test_user_auth_registration(self):

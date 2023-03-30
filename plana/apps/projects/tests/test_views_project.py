@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -28,8 +28,8 @@ class ProjectsViewsTests(TestCase):
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
-        "users_associationusers.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_associationuser.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 
@@ -108,7 +108,7 @@ class ProjectsViewsTests(TestCase):
         - A student user gets projects where rights are OK.
         """
         response = self.student_misc_client.get("/projects/")
-        user_associations_ids = AssociationUsers.objects.filter(
+        user_associations_ids = AssociationUser.objects.filter(
             user_id=self.student_misc_user_id
         ).values_list("association_id")
         user_projects_cnt = Project.objects.filter(

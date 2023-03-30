@@ -1,6 +1,6 @@
 [
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 1,
     "fields": {
       "upload_date": "2023-03-14T15:30:00.000Z",
@@ -10,7 +10,7 @@
     }
   },
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 2,
     "fields": {
       "upload_date": "2023-03-14T15:30:00.000Z",
@@ -20,7 +20,7 @@
     }
   },
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 3,
     "fields": {
       "upload_date": "2023-03-15T10:18:47.000Z",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 4,
     "fields": {
       "upload_date": "2023-03-14T15:30:00.000Z",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 5,
     "fields": {
       "upload_date": "2023-03-15T10:18:47.000Z",
@@ -50,7 +50,7 @@
     }
   },
   {
-    "model": "documents.DocumentUpload",
+    "model": "documents.documentupload",
     "pk": 6,
     "fields": {
       "upload_date": "2023-03-12T15:30:00.000Z",

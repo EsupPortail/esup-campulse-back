@@ -1,6 +1,6 @@
 [
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 1,
     "fields": {
       "first_name": "admin",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 2,
     "fields": {
       "first_name": "Prénom",
@@ -28,7 +28,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 3,
     "fields": {
       "first_name": "SVU",
@@ -43,7 +43,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 4,
     "fields": {
       "first_name": "UHA",
@@ -58,7 +58,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 5,
     "fields": {
       "first_name": "Crous",
@@ -73,7 +73,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 6,
     "fields": {
       "first_name": "FSDIE/IdEx",
@@ -87,7 +87,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 7,
     "fields": {
       "first_name": "Culture-ActionS",
@@ -101,7 +101,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 8,
     "fields": {
       "first_name": "Culture-ActionS + FSDIE/IdEx",
@@ -115,7 +115,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 9,
     "fields": {
       "first_name": "Porteur",
@@ -129,7 +129,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 10,
     "fields": {
       "first_name": "Association Hors Site",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 11,
     "fields": {
       "first_name": "Association Site",
@@ -158,7 +158,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 12,
     "fields": {
       "first_name": "Président Hors Site",
@@ -172,7 +172,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 13,
     "fields": {
       "first_name": "Président Site",
@@ -186,7 +186,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 14,
     "fields": {
       "first_name": "Président Site + Étudiant Hors Site + Porteur + Commissions",
@@ -200,7 +200,7 @@
     }
   },
   {
-    "model": "users.User",
+    "model": "users.user",
     "pk": 15,
     "fields": {
       "first_name": "Prénom",

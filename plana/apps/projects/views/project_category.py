@@ -11,7 +11,7 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 @extend_schema_view(
@@ -34,7 +34,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
             if not self.request.user.has_perm(
                 "projects.view_projectcommissiondate_all"
             ):
-                user_associations_ids = AssociationUsers.objects.filter(
+                user_associations_ids = AssociationUser.objects.filter(
                     user_id=self.request.user.pk
                 ).values_list("association_id")
                 user_projects_ids = Project.objects.filter(

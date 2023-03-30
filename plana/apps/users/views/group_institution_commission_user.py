@@ -11,13 +11,13 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
+    AssociationUser,
+    GroupInstitutionCommissionUser,
     User,
 )
-from plana.apps.users.serializers.user_groups_institutions_commissions import (
-    UserGroupsInstitutionsCommissionsCreateSerializer,
-    UserGroupsInstitutionsCommissionsSerializer,
+from plana.apps.users.serializers.group_institution_commission_user import (
+    GroupInstitutionCommissionUserCreateSerializer,
+    GroupInstitutionCommissionUserSerializer,
 )
 
 
@@ -25,11 +25,11 @@ from plana.apps.users.serializers.user_groups_institutions_commissions import (
     get=extend_schema(tags=["users/groups"]),
     post=extend_schema(tags=["users/groups"]),
 )
-class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
+class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
-    queryset = GroupInstitutionCommissionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCommissionsCreateSerializer
+    queryset = GroupInstitutionCommissionUser.objects.all()
+    serializer_class = GroupInstitutionCommissionUserCreateSerializer
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -40,9 +40,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user, or all groups of all users (manager)."""
-        if request.user.has_perm(
-            "users.view_groupinstitutioncommissionusers_any_group"
-        ):
+        if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
             serializer = self.serializer_class(self.queryset.all(), many=True)
             return response.Response(serializer.data)
         serializer = self.serializer_class(
@@ -97,7 +95,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
             )
 
         if (user.is_superuser or user.is_staff) and not request.user.has_perm(
-            "users.add_groupinstitutioncommissionusers_any_group"
+            "users.add_groupinstitutioncommissionuser_any_group"
         ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
@@ -108,7 +106,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         if (
             group_structure["REGISTRATION_ALLOWED"] is False
             and not request.user.has_perm(
-                "users.add_groupinstitutioncommissionusers_any_group"
+                "users.add_groupinstitutioncommissionuser_any_group"
             )
             and (
                 not request.user.is_staff
@@ -123,7 +121,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         if institution_id is not None:
             if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionusers_any_group"
+                    "users.add_groupinstitutioncommissionuser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
@@ -138,7 +136,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
         if commission_id is not None:
             if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionusers_any_group"
+                    "users.add_groupinstitutioncommissionuser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
@@ -151,7 +149,7 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        GroupInstitutionCommissionUsers.objects.create(
+        GroupInstitutionCommissionUser.objects.create(
             user_id=user.pk,
             group_id=group_id,
             institution_id=institution_id,
@@ -164,18 +162,16 @@ class UserGroupsInstitutionsCommissionsListCreate(generics.ListCreateAPIView):
 @extend_schema_view(
     get=extend_schema(tags=["users/groups"]),
 )
-class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
+class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/groups/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+    queryset = GroupInstitutionCommissionUser.objects.all()
+    serializer_class = GroupInstitutionCommissionUserSerializer
 
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user (manager)."""
-        if request.user.has_perm(
-            "users.view_groupinstitutioncommissionusers_any_group"
-        ):
+        if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
             serializer = self.serializer_class(
                 self.queryset.filter(user_id=kwargs["user_id"]),
                 many=True,
@@ -191,21 +187,19 @@ class UserGroupsInstitutionsCommissionsRetrieve(generics.RetrieveAPIView):
 @extend_schema_view(
     delete=extend_schema(operation_id="users_groups_destroy", tags=["users/groups"])
 )
-class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
+class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+    queryset = GroupInstitutionCommissionUser.objects.all()
+    serializer_class = GroupInstitutionCommissionUserSerializer
 
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk
-            )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -220,7 +214,7 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
         group_name = Group.objects.get(id=kwargs["group_id"]).name
         if (
             settings.GROUPS_STRUCTURE[group_name]["ASSOCIATIONS_POSSIBLE"] is True
-            and AssociationUsers.objects.filter(user_id=user).count() > 0
+            and AssociationUser.objects.filter(user_id=user).count() > 0
         ):
             return response.Response(
                 {"error": _("User is still linked to an association.")},
@@ -242,21 +236,19 @@ class UserGroupsInstitutionsCommissionsDestroy(generics.DestroyAPIView):
         operation_id="users_groups_destroy_with_commission", tags=["users/groups"]
     )
 )
-class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPIView):
+class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+    queryset = GroupInstitutionCommissionUser.objects.all()
+    serializer_class = GroupInstitutionCommissionUserSerializer
 
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user with commission argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk
-            )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -269,7 +261,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionusers_any_group"
+            "users.delete_groupinstitutioncommissionuser_any_group"
         ) and (
             not Commission.objects.get(id=kwargs["commission_id"]).institution_id
             in request.user.get_user_institutions()
@@ -294,21 +286,19 @@ class UserGroupsInstitutionsCommissionsDestroyWithCommission(generics.DestroyAPI
         operation_id="users_groups_destroy_with_institution", tags=["users/groups"]
     )
 )
-class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAPIView):
+class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUsers.objects.all()
-    serializer_class = UserGroupsInstitutionsCommissionsSerializer
+    queryset = GroupInstitutionCommissionUser.objects.all()
+    serializer_class = GroupInstitutionCommissionUserSerializer
 
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user with institution argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUsers.objects.filter(
-                user_id=user.pk
-            )
-            user_group_to_delete = GroupInstitutionCommissionUsers.objects.get(
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
                 user_id=user.pk,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],
@@ -321,7 +311,7 @@ class UserGroupsInstitutionsCommissionsDestroyWithInstitution(generics.DestroyAP
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionusers_any_group"
+            "users.delete_groupinstitutioncommissionuser_any_group"
         ) and (not kwargs["institution_id"] in request.user.get_user_institutions()):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},

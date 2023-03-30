@@ -14,8 +14,8 @@ from plana.apps.associations.models.association import Association
 
 # from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import (
-    AssociationUsers,
-    GroupInstitutionCommissionUsers,
+    AssociationUser,
+    GroupInstitutionCommissionUser,
     User,
 )
 from plana.apps.users.provider import CASProvider
@@ -37,9 +37,9 @@ class UserViewsManagerTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationusers.json",
+        "users_associationuser.json",
         "users_gdprconsentusers.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 
@@ -107,7 +107,7 @@ class UserViewsManagerTests(TestCase):
             f"/users/?association_id={association_id}"
         )
         content = json.loads(response_manager.content.decode("utf-8"))
-        links_cnt = AssociationUsers.objects.filter(
+        links_cnt = AssociationUser.objects.filter(
             association_id=association_id
         ).count()
         self.assertEqual(len(content), links_cnt)
@@ -119,18 +119,18 @@ class UserViewsManagerTests(TestCase):
         associations_ids = Association.objects.filter(
             institution_id__in=institution_ids
         ).values_list("id", flat=True)
-        links_cnt = AssociationUsers.objects.filter(
+        links_cnt = AssociationUser.objects.filter(
             association_id__in=associations_ids
         ).count()
         self.assertEqual(len(content), links_cnt)
 
         multiple_groups_users_query = (
-            User.objects.annotate(num_groups=Count("groupinstitutioncommissionusers"))
+            User.objects.annotate(num_groups=Count("groupinstitutioncommissionuser"))
             .filter(num_groups__gt=1)
             .values_list("id", flat=True)
         )
         commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionCommissionUsers.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
                 commission_id__isnull=False
             ).values_list("user_id", flat=True)
         ).values_list("id", flat=True)
@@ -145,7 +145,7 @@ class UserViewsManagerTests(TestCase):
         associations_ids = Association.objects.filter(
             institution_id__in=[2, 3]
         ).values_list("id", flat=True)
-        assos_users_query = AssociationUsers.objects.filter(
+        assos_users_query = AssociationUser.objects.filter(
             association_id__in=associations_ids
         ).values_list("user_id", flat=True)
 
@@ -373,13 +373,13 @@ class UserViewsManagerTests(TestCase):
         - Filter by is_validated_by_admin is possible.
         - Filter by institutions is possible.
         """
-        associations_user_all_cnt = AssociationUsers.objects.count()
+        associations_user_all_cnt = AssociationUser.objects.count()
         response_all_asso = self.manager_client.get("/users/associations/")
         content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
         self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
 
-        associations_user_validated_cnt = AssociationUsers.objects.filter(
+        associations_user_validated_cnt = AssociationUser.objects.filter(
             is_validated_by_admin=False
         ).count()
         response_validated_asso = self.manager_client.get(
@@ -391,7 +391,7 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(len(content_validated_asso), associations_user_validated_cnt)
 
         institutions_ids = [2, 3]
-        associations_user_institutions_cnt = AssociationUsers.objects.filter(
+        associations_user_institutions_cnt = AssociationUser.objects.filter(
             association_id__in=Association.objects.filter(
                 institution_id__in=institutions_ids
             ).values_list("id", flat=True)
@@ -466,15 +466,13 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user_associations = AssociationUsers.objects.filter(
-            user_id=self.student_user_id
-        )
+        user_associations = AssociationUser.objects.filter(user_id=self.student_user_id)
         user_associations_requested = json.loads(
             response_manager.content.decode("utf-8")
         )
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
-    def test_manager_patch_association_users_update_president(self):
+    def test_manager_patch_association_user_update_president(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -486,7 +484,7 @@ class UserViewsManagerTests(TestCase):
         - A manager can add a president to an association without one.
         """
         association_id = 2
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         response = self.manager_client.patch(
@@ -494,13 +492,13 @@ class UserViewsManagerTests(TestCase):
             {"is_president": True},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.is_president)
 
-        old_president = AssociationUsers.objects.get(
+        old_president = AssociationUser.objects.get(
             user_id=self.president_user_id, association_id=association_id
         )
         self.assertFalse(old_president.is_president)
@@ -511,7 +509,7 @@ class UserViewsManagerTests(TestCase):
             {"is_validated_by_admin": True},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.unvalidated_user_id, association_id=association_id
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -531,20 +529,20 @@ class UserViewsManagerTests(TestCase):
             {"is_president": True},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(asso_user.is_president)
 
-    def test_manager_patch_association_users(self):
+    def test_manager_patch_association_user(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
         - A manager can execute this request.
         - Link between member and association is correctly updated.
         """
-        asso_user = AssociationUsers.objects.get(
+        asso_user = AssociationUser.objects.get(
             user_id=self.president_user_id, is_president=True
         )
         response = self.manager_client.patch(
@@ -552,11 +550,11 @@ class UserViewsManagerTests(TestCase):
             {"is_president": False},
             content_type="application/json",
         )
-        asso_user = AssociationUsers.objects.get(user_id=self.president_user_id)
+        asso_user = AssociationUser.objects.get(user_id=self.president_user_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(asso_user.is_president)
 
-    def test_manager_patch_association_users_unexisting_params(self):
+    def test_manager_patch_association_user_unexisting_params(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -569,7 +567,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_manager_patch_association_users_unexisting_link(self):
+    def test_manager_patch_association_user_unexisting_link(self):
         """
         PATCH /users/{user_id}/associations/{association_id} .
 
@@ -582,7 +580,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_manager_delete_association_users(self):
+    def test_manager_delete_association_user(self):
         """
         DELETE /users/{user_id}/associations/{association_id} .
 
@@ -611,7 +609,7 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            AssociationUsers.objects.get(
+            AssociationUser.objects.get(
                 user_id=self.student_user_id, association_id=first_user_association_id
             )
 
@@ -750,7 +748,7 @@ class UserViewsManagerTests(TestCase):
         response_delete = self.manager_client.delete("/users/10/groups/5")
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
-        AssociationUsers.objects.filter(user_id=user_id).delete()
+        AssociationUser.objects.filter(user_id=user_id).delete()
         first_response_delete = self.manager_client.delete(
             f"/users/{user_id}/groups/{str(first_user_group_id)}"
         )
@@ -821,10 +819,10 @@ class UserViewsManagerTests(TestCase):
         - A user should have at least one group.
         """
         user_id = 4
-        GroupInstitutionCommissionUsers.objects.create(
+        GroupInstitutionCommissionUser.objects.create(
             user_id=user_id, group_id=2, institution_id=4
         )
-        GroupInstitutionCommissionUsers.objects.filter(
+        GroupInstitutionCommissionUser.objects.filter(
             user_id=user_id, commission_id__isnull=False
         ).delete()
         response = self.manager_client.get(f"/users/{user_id}/groups/")

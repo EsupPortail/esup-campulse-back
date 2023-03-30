@@ -10,7 +10,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
-from plana.apps.users.models.user import AssociationUsers, User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -62,7 +62,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
-                assos_user = AssociationUsers.objects.filter(user_id=request.user.id)
+                assos_user = AssociationUser.objects.filter(user_id=request.user.id)
                 user_id = request.user.id
                 context[
                     "account_url"
@@ -144,7 +144,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         email_addresses = EmailAddress.objects.filter(user_id=user.pk)
 
         if email_addresses.count() == 1:
-            assos_user = AssociationUsers.objects.filter(user_id=user.id)
+            assos_user = AssociationUser.objects.filter(user_id=user.id)
 
             current_site = get_current_site(request)
             context = {

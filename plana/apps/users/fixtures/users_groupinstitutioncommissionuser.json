@@ -1,6 +1,6 @@
 [
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 1,
     "fields": {
       "user_id": 1,
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 2,
     "fields": {
       "user_id": 1,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 3,
     "fields": {
       "user_id": 1,
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 4,
     "fields": {
       "user_id": 1,
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 5,
     "fields": {
       "user_id": 1,
@@ -45,7 +45,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 6,
     "fields": {
       "user_id": 1,
@@ -54,7 +54,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 7,
     "fields": {
       "user_id": 1,
@@ -63,7 +63,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 8,
     "fields": {
       "user_id": 1,
@@ -72,7 +72,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 9,
     "fields": {
       "user_id": 1,
@@ -81,7 +81,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 10,
     "fields": {
       "user_id": 1,
@@ -90,7 +90,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 11,
     "fields": {
       "user_id": 2,
@@ -98,7 +98,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 12,
     "fields": {
       "user_id": 2,
@@ -106,7 +106,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 13,
     "fields": {
       "user_id": 3,
@@ -115,7 +115,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 14,
     "fields": {
       "user_id": 3,
@@ -124,7 +124,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 15,
     "fields": {
       "user_id": 3,
@@ -133,7 +133,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 16,
     "fields": {
       "user_id": 3,
@@ -142,7 +142,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 17,
     "fields": {
       "user_id": 3,
@@ -151,7 +151,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 18,
     "fields": {
       "user_id": 3,
@@ -160,7 +160,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 19,
     "fields": {
       "user_id": 3,
@@ -169,7 +169,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 20,
     "fields": {
       "user_id": 3,
@@ -178,7 +178,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 21,
     "fields": {
       "user_id": 3,
@@ -187,7 +187,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 22,
     "fields": {
       "user_id": 3,
@@ -196,7 +196,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 23,
     "fields": {
       "user_id": 4,
@@ -205,7 +205,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 24,
     "fields": {
       "user_id": 4,
@@ -214,7 +214,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 25,
     "fields": {
       "user_id": 4,
@@ -223,7 +223,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 26,
     "fields": {
       "user_id": 5,
@@ -232,7 +232,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 27,
     "fields": {
       "user_id": 5,
@@ -241,7 +241,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 28,
     "fields": {
       "user_id": 6,
@@ -250,7 +250,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 29,
     "fields": {
       "user_id": 6,
@@ -259,7 +259,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 30,
     "fields": {
       "user_id": 7,
@@ -268,7 +268,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 31,
     "fields": {
       "user_id": 8,
@@ -277,7 +277,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 32,
     "fields": {
       "user_id": 8,
@@ -286,7 +286,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 33,
     "fields": {
       "user_id": 8,
@@ -295,7 +295,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 34,
     "fields": {
       "user_id": 8,
@@ -303,7 +303,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 35,
     "fields": {
       "user_id": 9,
@@ -311,7 +311,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 36,
     "fields": {
       "user_id": 10,
@@ -319,7 +319,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 37,
     "fields": {
       "user_id": 11,
@@ -327,7 +327,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 38,
     "fields": {
       "user_id": 12,
@@ -335,7 +335,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 39,
     "fields": {
       "user_id": 13,
@@ -343,7 +343,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 40,
     "fields": {
       "user_id": 14,
@@ -352,7 +352,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 41,
     "fields": {
       "user_id": 14,
@@ -361,7 +361,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 42,
     "fields": {
       "user_id": 14,
@@ -370,7 +370,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 43,
     "fields": {
       "user_id": 14,
@@ -378,7 +378,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 44,
     "fields": {
       "user_id": 14,
@@ -386,7 +386,7 @@
     }
   },
   {
-    "model": "users.groupinstitutioncommissionusers",
+    "model": "users.groupinstitutioncommissionuser",
     "pk": 45,
     "fields": {
       "user_id": 15,

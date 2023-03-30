@@ -1,6 +1,6 @@
 [
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 6,
     "fields": {
       "name": "Association of International Researchers of Strasbourg",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 7,
     "fields": {
       "name": "Association des Etudiants en Géographie de Strasbourg",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 8,
     "fields": {
       "name": "La Cigogne Enragée",
@@ -54,7 +54,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 9,
     "fields": {
       "name": "Théâtre universitaire de Strasbourg",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 10,
     "fields": {
       "name": "Association des Docteurs et Doctorants en Droit, Histoire et Sciences Politiques de l'Université de Strasbourg",
@@ -90,7 +90,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 11,
     "fields": {
       "name": "Association de Liaison entre les Chimistes Avertis et Néophytes et les Entreprises de Strasbourg",
@@ -108,7 +108,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 12,
     "fields": {
       "name": "Amicale des Etudiants et Anciens Etudiants de la Faculté de Médecine de Strasbourg",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 13,
     "fields": {
       "name": "Association des Diplômés et Etudiants Nigérians à Strasbourg",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 14,
     "fields": {
       "name": "L'Arrach'Chœur",
@@ -162,7 +162,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 15,
     "fields": {
       "name": "Association Amicale des Etudiants en Pharmacie de Strasbourg",
@@ -180,7 +180,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 16,
     "fields": {
       "name": "Cercle des Gabonais de Strasbourg",
@@ -198,7 +198,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 17,
     "fields": {
       "name": "Le Choeur de l'Université de Strasbourg",
@@ -216,7 +216,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 18,
     "fields": {
       "name": "L'Amicale d'Anglais de Strasbourg",
@@ -234,7 +234,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 19,
     "fields": {
       "name": "FRACAS",
@@ -252,7 +252,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 20,
     "fields": {
       "name": "Association des Etudiants de la République Démocratique du Congo de Strasbourg",
@@ -270,7 +270,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 21,
     "fields": {
       "name": "SPECQUE - Délégation de Strasbourg",
@@ -288,7 +288,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 22,
     "fields": {
       "name": "Mouvement des ETudiants Alsaciens Futurs Orthophonistes",
@@ -306,7 +306,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 23,
     "fields": {
       "name": "Ensemble Vocal de l'Université de Strasbourg",
@@ -324,7 +324,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 24,
     "fields": {
       "name": "Doctoneuro",
@@ -342,7 +342,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 25,
     "fields": {
       "name": "Bureau des Arts de l'Ecole de Management de Strasbourg",
@@ -360,7 +360,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 26,
     "fields": {
       "name": "Club AES Strasbourg",
@@ -378,7 +378,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 27,
     "fields": {
       "name": "Amicale de Sciences Physiques",
@@ -396,7 +396,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 28,
     "fields": {
       "name": "Amicale Des Sciences",
@@ -414,7 +414,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 29,
     "fields": {
       "name": "CYCLOPE",
@@ -432,7 +432,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 30,
     "fields": {
       "name": "Association Strasbourgeoise des CMI",
@@ -450,7 +450,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 31,
     "fields": {
       "name": "Association des Masters d'Affaires Publiques de l'IEP de Strasbourg",
@@ -468,7 +468,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 32,
     "fields": {
       "name": "Comité des Etudiants en Pharmacie Industrielle de Strasbourg",
@@ -486,7 +486,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 33,
     "fields": {
       "name": "Association des Juristes Internationalistes de Strasbourg",
@@ -504,7 +504,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 34,
     "fields": {
       "name": "Association Culturelle des Juristes",
@@ -522,7 +522,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 35,
     "fields": {
       "name": "Association des Etudiants et Stagiaires Sénégalais de Strasbourg",
@@ -540,7 +540,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 36,
     "fields": {
       "name": "Association des Etudiants Camerounais de Strasbourg",
@@ -558,7 +558,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 37,
     "fields": {
       "name": "Association des Docteurs et Doctorants d'Alsace",
@@ -576,7 +576,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 38,
     "fields": {
       "name": "Génépi Strasbourg / Genepi",
@@ -594,7 +594,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 39,
     "fields": {
       "name": "La Cie UnHomme UnFemme",
@@ -612,7 +612,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 40,
     "fields": {
       "name": "Association du Master Juriste Conformité/Compliance Officer",
@@ -630,7 +630,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 41,
     "fields": {
       "name": "Altern' & Go",
@@ -648,7 +648,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 42,
     "fields": {
       "name": "Amicale des Etudiants en Philosophie de Strasbourg",
@@ -666,7 +666,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 43,
     "fields": {
       "name": "Étudiants Musulmans de France - Strasbourg",
@@ -684,7 +684,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 44,
     "fields": {
       "name": "Campus Vert Strasbourg",
@@ -702,7 +702,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 45,
     "fields": {
       "name": "Groupes Bibliques Universitaires d'Alsace",
@@ -720,7 +720,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 46,
     "fields": {
       "name": "Les Jeunes Européens - Strasbourg",
@@ -738,7 +738,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 47,
     "fields": {
       "name": "Association des Eleves du Master Politiques Européennes",
@@ -756,7 +756,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 48,
     "fields": {
       "name": "Nouvelle Génération des Biotechnologistes",
@@ -774,7 +774,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 49,
     "fields": {
       "name": "Ecole des Jeunes Orateurs",
@@ -792,7 +792,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 50,
     "fields": {
       "name": "Association des Amis du Musée Adolf Michaelis",
@@ -810,7 +810,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 51,
     "fields": {
       "name": "AFGES, les étudiant-e-s d'Alsace",
@@ -828,7 +828,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 52,
     "fields": {
       "name": "Amicale des Etudiants en Mathématiques",
@@ -846,7 +846,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 53,
     "fields": {
       "name": "Association des Etudiants Vietnamiens à Strasbourg",
@@ -864,7 +864,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 54,
     "fields": {
       "name": "Association d'Ethnologie",
@@ -882,7 +882,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 55,
     "fields": {
       "name": "Association des Etudiants en Droit",
@@ -900,7 +900,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 56,
     "fields": {
       "name": "Amicale des Informaticiens de l'Université de Strasbourg",
@@ -918,7 +918,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 57,
     "fields": {
       "name": "Bureau des Arts de Télécom Physique Strasbourg",
@@ -936,7 +936,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 58,
     "fields": {
       "name": "aPoGée Culture",
@@ -954,7 +954,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 59,
     "fields": {
       "name": "L'Amicale de Psychologie de l'Université de Strasbourg",
@@ -972,7 +972,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 60,
     "fields": {
       "name": "Stras'Diplomacy",
@@ -990,7 +990,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 61,
     "fields": {
       "name": "La Théâtropée",
@@ -1008,7 +1008,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 62,
     "fields": {
       "name": "Bureau des Arts de Sciences Po Strasbourg",
@@ -1026,7 +1026,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 63,
     "fields": {
       "name": "Orchestre Universitaire de Strasbourg",
@@ -1044,7 +1044,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 64,
     "fields": {
       "name": "Association des Etudiants en Sciences Economiques de Strasbourg",
@@ -1062,7 +1062,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 65,
     "fields": {
       "name": "MediaDroit",
@@ -1080,7 +1080,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 66,
     "fields": {
       "name": "UNEF Strasbourg",
@@ -1098,7 +1098,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 67,
     "fields": {
       "name": "Amicale des Lettres",
@@ -1116,7 +1116,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 68,
     "fields": {
       "name": "Association des Etudiants en Sciences Historiques de Strasbourg",
@@ -1134,7 +1134,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 69,
     "fields": {
       "name": "Amicale des Etudiants en Arts de Strasbourg",
@@ -1152,7 +1152,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 70,
     "fields": {
       "name": "ArtScene",
@@ -1170,7 +1170,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 71,
     "fields": {
       "name": "Asso test",
@@ -1188,7 +1188,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 72,
     "fields": {
       "name": "Model United Nation Society Strasbourg",
@@ -1206,7 +1206,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 73,
     "fields": {
       "name": "Eco Gestion Conseil / Junior Entreprise",
@@ -1224,7 +1224,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 74,
     "fields": {
       "name": "Le Comprimé",
@@ -1242,7 +1242,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 75,
     "fields": {
       "name": "DoXtra",
@@ -1260,7 +1260,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 76,
     "fields": {
       "name": "Association Strasbourgeoise des Etudiants en Aménagement et Urbanisme",
@@ -1278,7 +1278,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 77,
     "fields": {
       "name": "AIESEC Strasbourg",
@@ -1296,7 +1296,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 78,
     "fields": {
       "name": "Association des Musiciens et Artistes des Etudiants de l'Université de Strasbourg",
@@ -1314,7 +1314,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 79,
     "fields": {
       "name": "European Geography Association Strasbourg",
@@ -1332,7 +1332,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 80,
     "fields": {
       "name": "Fédération des Associations Sportives des Instituts d'Etudes Politiques de France",
@@ -1350,7 +1350,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 81,
     "fields": {
       "name": "Amicale Langues Etrangères Appliquées Strasbourg",
@@ -1368,7 +1368,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 82,
     "fields": {
       "name": "Association des Etudiants du Foyer de l'Etudiant Catholique",
@@ -1386,7 +1386,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 83,
     "fields": {
       "name": "Association Strasbourgeoise pour le Proche Orient Ancien",
@@ -1404,7 +1404,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 84,
     "fields": {
       "name": "AMicale des Etudiants Sages-Femmes d'Alsace",
@@ -1422,7 +1422,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 85,
     "fields": {
       "name": "Treffpunkt",
@@ -1440,7 +1440,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 86,
     "fields": {
       "name": "Action Humanitaire Etudiante UNISTRA",
@@ -1458,7 +1458,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 87,
     "fields": {
       "name": "The European Law Student's Association",
@@ -1476,7 +1476,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 88,
     "fields": {
       "name": "Amicale des étudiants en STAPS Strasbourg",
@@ -1494,7 +1494,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 89,
     "fields": {
       "name": "Bureau des Etudiants de l'INSA Strasbourg",
@@ -1512,7 +1512,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 90,
     "fields": {
       "name": "RideINSA",
@@ -1530,7 +1530,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 91,
     "fields": {
       "name": "Club Vidéo de l'INSA Strasbourg",
@@ -1548,7 +1548,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 92,
     "fields": {
       "name": "Amicale des Elèves Ingénieurs de l'Ecole Supérieure de Biotechnologie de Strasbourg",
@@ -1566,7 +1566,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 93,
     "fields": {
       "name": "Association Amicale des Etudiants en Chirurgie Dentaire de Strasbourg",
@@ -1584,7 +1584,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 94,
     "fields": {
       "name": "LIMITE CHARTE ASSO UNISTRA CHARTE ASSO ALSACE",
@@ -1602,7 +1602,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 95,
     "fields": {
       "name": "Amicale des Etudiants et Anciens de l'IUT de Haguenau",
@@ -1620,7 +1620,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 96,
     "fields": {
       "name": "Amicale des Eleves et Etudiants Ivoiriens de Strasbourg",
@@ -1638,7 +1638,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 97,
     "fields": {
       "name": "TestDD",
@@ -1656,7 +1656,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 98,
     "fields": {
       "name": "Association des Bio Informaticiens et Structuralistes de Strasbourg",
@@ -1674,7 +1674,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 99,
     "fields": {
       "name": "Association des Juristes du double diplôme UAM/UNISTRA",
@@ -1692,7 +1692,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 100,
     "fields": {
       "name": "Amicale des étudiants de Master de micro biologie et virologie",
@@ -1710,7 +1710,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 101,
     "fields": {
       "name": "FEMFEST",
@@ -1728,7 +1728,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 102,
     "fields": {
       "name": "AMICALE ENGEES",
@@ -1746,7 +1746,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 103,
     "fields": {
       "name": "ASSOCIATION SPORTIVE ENGEES",
@@ -1764,7 +1764,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 104,
     "fields": {
       "name": "ASSOCIATION PROMOTION ENGEES",
@@ -1782,7 +1782,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 105,
     "fields": {
       "name": "AQUAEME ENGEES",
@@ -1800,7 +1800,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 106,
     "fields": {
       "name": "EAU MISSIONS ALSACE ENGEES",
@@ -1818,7 +1818,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 107,
     "fields": {
       "name": "NATUR’ASTRAS ENGEES",
@@ -1836,7 +1836,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 108,
     "fields": {
       "name": "TR MONDE ENGEES",
@@ -1854,7 +1854,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 109,
     "fields": {
       "name": "INGENIEUR SANS FRONTIERES ENGEES",
@@ -1872,7 +1872,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 110,
     "fields": {
       "name": "Bureau  des Arts ENGEES",
@@ -1890,7 +1890,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 112,
     "fields": {
       "name": "Esperanza de Manana",
@@ -1908,7 +1908,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 113,
     "fields": {
       "name": "SinBios",
@@ -1926,7 +1926,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 114,
     "fields": {
       "name": "Choeur de Chambre de l'Université de Strasbourg",
@@ -1944,7 +1944,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 115,
     "fields": {
       "name": "Association des Etudiants en Coproduction",
@@ -1962,7 +1962,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 116,
     "fields": {
       "name": "Système Nerveux",
@@ -1980,7 +1980,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 117,
     "fields": {
       "name": "Association Sportive de l'ECPM",
@@ -1998,7 +1998,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 118,
     "fields": {
       "name": "Association Santé Strasbourg",
@@ -2016,7 +2016,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 119,
     "fields": {
       "name": "iGEM Strasbourg",
@@ -2034,7 +2034,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 120,
     "fields": {
       "name": "Association des Masters Professionnels du CEIPI",
@@ -2052,7 +2052,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 121,
     "fields": {
       "name": "Tutorat Santé Strasbourg",
@@ -2070,7 +2070,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 122,
     "fields": {
       "name": "Organisation des Jeunes pour l'Union Européenne et Africaine",
@@ -2088,7 +2088,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 123,
     "fields": {
       "name": "Association des Elèves Ingénieurs de l'ECPM",
@@ -2106,7 +2106,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 124,
     "fields": {
       "name": "MED'Advice",
@@ -2124,7 +2124,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 125,
     "fields": {
       "name": "Le Groupe des Amicalistes de la Formation et de l'Éducation",
@@ -2142,7 +2142,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 126,
     "fields": {
       "name": "Demostratif",
@@ -2160,7 +2160,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 127,
     "fields": {
       "name": "Association Dionysos à Galien",
@@ -2178,7 +2178,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 128,
     "fields": {
       "name": "Le Parlement des Etudiants de Strasbourg",
@@ -2196,7 +2196,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 130,
     "fields": {
       "name": "Association des Etudiants Juristes d'Affaire de Strasbourg - DJCE",
@@ -2214,7 +2214,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 131,
     "fields": {
       "name": "Réseau des Etudiant.es en Santé des Hôpitaux Universitaires de Strasbourg",
@@ -2232,7 +2232,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 132,
     "fields": {
       "name": "Association des Jeunes Chercheurs d'ICube",
@@ -2250,7 +2250,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 133,
     "fields": {
       "name": "PLANTAGO",
@@ -2268,7 +2268,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 134,
     "fields": {
       "name": "Association Sapiens",
@@ -2286,7 +2286,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 135,
     "fields": {
       "name": "Orchestre Harmonie des Jeunes de Strasbourg",
@@ -2304,7 +2304,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 136,
     "fields": {
       "name": "Les Pygmalions",
@@ -2322,7 +2322,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 137,
     "fields": {
       "name": "Collectif de Solidarité Mondiale des étudiants Orthophonistes Strasbourgeois",
@@ -2340,7 +2340,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 138,
     "fields": {
       "name": "Association des étudiants et ex-etudiants en journalisme",
@@ -2358,7 +2358,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 139,
     "fields": {
       "name": "Chipo'Zik",
@@ -2376,7 +2376,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 140,
     "fields": {
       "name": "Bureau des Etudiants et post-doctorants de l'IGBMC",
@@ -2394,7 +2394,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 141,
     "fields": {
       "name": "Association StraMUN",
@@ -2412,7 +2412,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 142,
     "fields": {
       "name": "Le Labo",
@@ -2430,7 +2430,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 143,
     "fields": {
       "name": "All in Cosmetics and Perfumes",
@@ -2448,7 +2448,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 144,
     "fields": {
       "name": "Association Junior Études Traductions Techniques et Scientifiques",
@@ -2466,7 +2466,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 145,
     "fields": {
       "name": "Le Bateau Livre",
@@ -2484,7 +2484,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 146,
     "fields": {
       "name": "Hérodote Histoire et Culture",
@@ -2502,7 +2502,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 147,
     "fields": {
       "name": "RadioActive",
@@ -2520,7 +2520,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 148,
     "fields": {
       "name": "Association Des Etudiants de la Fonderie",
@@ -2538,7 +2538,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 149,
     "fields": {
       "name": "Enscmulticolore",
@@ -2556,7 +2556,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 150,
     "fields": {
       "name": "L'Agora",
@@ -2574,7 +2574,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 151,
     "fields": {
       "name": "Get'In",
@@ -2592,7 +2592,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 152,
     "fields": {
       "name": "Association des élèves de l'école nationale superieure de chimie de Mulhouse - ENSCMu",
@@ -2610,7 +2610,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 153,
     "fields": {
       "name": "Connexion Entreprise",
@@ -2628,7 +2628,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 154,
     "fields": {
       "name": "TerrESStre",
@@ -2646,7 +2646,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 155,
     "fields": {
       "name": "BDE ENSISA",
@@ -2664,7 +2664,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 156,
     "fields": {
       "name": "Jeune Ballet Universitaire de Strasbourg",
@@ -2682,7 +2682,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 157,
     "fields": {
       "name": "Le Phare du rhin",
@@ -2700,7 +2700,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 158,
     "fields": {
       "name": "Laboratoire Audiovisuel Strasbourgeois",
@@ -2718,7 +2718,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 159,
     "fields": {
       "name": "Humani'Care Strasbourg",
@@ -2736,7 +2736,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 160,
     "fields": {
       "name": "Mouvement associatif des étudiants en recherche et intervention sociale",
@@ -2754,7 +2754,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 161,
     "fields": {
       "name": "Association des étudiants Caweb",
@@ -2772,7 +2772,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 162,
     "fields": {
       "name": "BUREAU DES ETUDIANTS DE TELECOM PHYSIQUE STRASBOURG",
@@ -2790,7 +2790,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 163,
     "fields": {
       "name": "ASSOCIATION STRASBOURGEOISE DES ETUDIANTS EN ORTHOPTIE",
@@ -2808,7 +2808,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 164,
     "fields": {
       "name": "Club OEnologie TPS",
@@ -2826,7 +2826,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 166,
     "fields": {
       "name": "ADEMOS",
@@ -2844,7 +2844,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 167,
     "fields": {
       "name": "Association Amicale des Étudiants et Anciens Étudiants du Département Informatique",
@@ -2862,7 +2862,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 168,
     "fields": {
       "name": "STRAS BOUM BOUM",
@@ -2880,7 +2880,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 169,
     "fields": {
       "name": "Collectif Arc En Ci.Elles",
@@ -2898,7 +2898,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 170,
     "fields": {
       "name": "Prenons la Une - antenne du CUEJ",
@@ -2916,7 +2916,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 171,
     "fields": {
       "name": "Association des étudiants en ingénierie du patrimoine",
@@ -2934,7 +2934,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 172,
     "fields": {
       "name": "Association du M2 Contrats publics-Commande publique",
@@ -2952,7 +2952,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 173,
     "fields": {
       "name": "Association du M2 Droit bancaire et financier",
@@ -2970,7 +2970,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 174,
     "fields": {
       "name": "Association du M2 Droit pénal et sciences criminelles",
@@ -2988,7 +2988,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 175,
     "fields": {
       "name": "NUMISTRA",
@@ -3006,7 +3006,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 176,
     "fields": {
       "name": "Association des étudiants en droit public de Strasbourg",
@@ -3024,7 +3024,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 177,
     "fields": {
       "name": "Association des Masters de Droit européen de Strasbourg : les Copains Européens",
@@ -3042,7 +3042,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 178,
     "fields": {
       "name": "Strasbourg Chimie Service ECPM",
@@ -3060,7 +3060,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 179,
     "fields": {
       "name": "EM Spirit",
@@ -3078,7 +3078,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 180,
     "fields": {
       "name": "Bureau des Elèves EM Strasbourg",
@@ -3096,7 +3096,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 181,
     "fields": {
       "name": "Europe Etudes (JE)",
@@ -3114,7 +3114,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 182,
     "fields": {
       "name": "Bureau de l'Humanitaire EM Strasbourg",
@@ -3132,7 +3132,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 183,
     "fields": {
       "name": "Bureau des Sports (Team Challenge) EM Strasbourg",
@@ -3150,7 +3150,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 184,
     "fields": {
       "name": "Bureau de la Presse EM Strasbourg",
@@ -3168,7 +3168,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 185,
     "fields": {
       "name": "Bureau de l'International EM Strasbourg",
@@ -3186,7 +3186,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 186,
     "fields": {
       "name": "Polemics",
@@ -3204,7 +3204,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 187,
     "fields": {
       "name": "Bureau du Multimédia EM Strasbourg",
@@ -3222,7 +3222,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 188,
     "fields": {
       "name": "Bureau des 3 Valeurs",
@@ -3240,7 +3240,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 189,
     "fields": {
       "name": "Job Services",
@@ -3258,7 +3258,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 190,
     "fields": {
       "name": "Start'EM",
@@ -3276,7 +3276,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 191,
     "fields": {
       "name": "Master Comptabilité Contrôle Audit",
@@ -3294,7 +3294,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 192,
     "fields": {
       "name": "Bureau des Elèves Bachelor Affaires Internationales EM Strasbourg",
@@ -3312,7 +3312,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 193,
     "fields": {
       "name": "TERRA NOSTRA",
@@ -3330,7 +3330,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 194,
     "fields": {
       "name": "STUDENT CHAPTER",
@@ -3348,7 +3348,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 195,
     "fields": {
       "name": "Bureau des Etudiants EOST",
@@ -3366,7 +3366,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 196,
     "fields": {
       "name": "Association Géosciences Pour Tous",
@@ -3384,7 +3384,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 197,
     "fields": {
       "name": "Ingénieurs Sans Frontières",
@@ -3402,7 +3402,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 198,
     "fields": {
       "name": "Association Unique des Masters en Economie et Gestion",
@@ -3420,7 +3420,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 199,
     "fields": {
       "name": "Alter'Bureau",
@@ -3438,7 +3438,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 200,
     "fields": {
       "name": "Association des étudiants du Master droit de l'économie et de la régulation en Europe",
@@ -3456,7 +3456,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 201,
     "fields": {
       "name": "Association pour l'étude de la promotion de l'administration locale en Europe",
@@ -3474,7 +3474,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 202,
     "fields": {
       "name": "Association du Master Europe de Sciences Po Strasbourg",
@@ -3492,7 +3492,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 203,
     "fields": {
       "name": "Association universitaire de l'Institut d'Etudes Politiques de l'Université de Strasbourg",
@@ -3510,7 +3510,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 204,
     "fields": {
       "name": "Bureau des Elèves de Sciences Po Strasbourg",
@@ -3528,7 +3528,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 205,
     "fields": {
       "name": "Bureau des Sports de Sciences Po Strasbourg",
@@ -3546,7 +3546,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 206,
     "fields": {
       "name": "Bureau Inter-Associatif de Sciences Po Strasbourg",
@@ -3564,7 +3564,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 207,
     "fields": {
       "name": "Génération UE",
@@ -3582,7 +3582,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 208,
     "fields": {
       "name": "Hémicycle Etudiant",
@@ -3600,7 +3600,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 209,
     "fields": {
       "name": "Master CPI",
@@ -3618,7 +3618,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 210,
     "fields": {
       "name": "Master of International Relations' Association",
@@ -3636,7 +3636,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 211,
     "fields": {
       "name": "Oenopo",
@@ -3654,7 +3654,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 212,
     "fields": {
       "name": "Propos",
@@ -3672,7 +3672,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 213,
     "fields": {
       "name": "Sciences Po Forum",
@@ -3690,7 +3690,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 214,
     "fields": {
       "name": "Sciences Po Strasbourg Conseil",
@@ -3708,7 +3708,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 215,
     "fields": {
       "name": "OCCE 68 (Le Fenec)",
@@ -3726,7 +3726,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 216,
     "fields": {
       "name": "Amicale des Etudiants de l'IUT Louis Pasteur",
@@ -3744,7 +3744,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 217,
     "fields": {
       "name": "BDE Chimie",
@@ -3762,7 +3762,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 218,
     "fields": {
       "name": "BDE Information Communication",
@@ -3780,7 +3780,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 219,
     "fields": {
       "name": "BDE Technique de Communication",
@@ -3798,7 +3798,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 220,
     "fields": {
       "name": "Association des étudiants du département de relations internationales et management de clusters",
@@ -3816,7 +3816,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 221,
     "fields": {
       "name": "Amicale Strasbourgeoise des Etudiants en Actuariat",
@@ -3834,7 +3834,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 222,
     "fields": {
       "name": "Amicale des Biostatisticiens de Strasbourg",
@@ -3852,7 +3852,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 223,
     "fields": {
       "name": "Association du Master Immunologie et Inflammation de Strasbourg",
@@ -3870,7 +3870,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 224,
     "fields": {
       "name": "Mouvement Associatif des Sciences Sociales de Strasbourg",
@@ -3888,7 +3888,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 225,
     "fields": {
       "name": "Amicale des étudiants en théologie catholique",
@@ -3906,7 +3906,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 226,
     "fields": {
       "name": "Amicale des étudiants en théologie protestante de Strasbourg",
@@ -3924,7 +3924,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 227,
     "fields": {
       "name": "Physique Strasbourg Ingénierie - Junior Entreprise TPS",
@@ -3942,7 +3942,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 228,
     "fields": {
       "name": "Bureau des Fêtes de Télécom Physique Strasbourg",
@@ -3960,7 +3960,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 229,
     "fields": {
       "name": "Bureau de l'Humani'Terre TPS",
@@ -3978,7 +3978,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 230,
     "fields": {
       "name": "Bureau des Sports de Télécom Physique Strasbourg",
@@ -3996,7 +3996,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 231,
     "fields": {
       "name": "Gala Association TPS",
@@ -4014,7 +4014,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 232,
     "fields": {
       "name": "Info Télécom Strasbourg TPS",
@@ -4032,7 +4032,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 233,
     "fields": {
       "name": "Media Physique Strasbourg TPS",
@@ -4050,7 +4050,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 234,
     "fields": {
       "name": "Robot Télécom Strasbourg TPS",
@@ -4068,7 +4068,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 235,
     "fields": {
       "name": "Association des Anciens Elèves TPS",
@@ -4086,7 +4086,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 236,
     "fields": {
       "name": "Hasard Gris",
@@ -4104,7 +4104,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 237,
     "fields": {
       "name": "L'Association étudiante Robert Schuman (Robert Schuman Argentorata)",
@@ -4122,7 +4122,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 238,
     "fields": {
       "name": "Association guinéenne des étudiants de Strasbourg",
@@ -4140,7 +4140,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 239,
     "fields": {
       "name": "Etudiants Béninois de Strasbourg",
@@ -4158,7 +4158,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 240,
     "fields": {
       "name": "Erasmus Student Network",
@@ -4176,7 +4176,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 242,
     "fields": {
       "name": "BDE Genie Civil",
@@ -4194,7 +4194,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 243,
     "fields": {
       "name": "KRUJOK",
@@ -4212,7 +4212,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 244,
     "fields": {
       "name": "Lien entre les Étudiants du Magistère de Mathématiques",
@@ -4230,7 +4230,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 245,
     "fields": {
       "name": "BUREAU DES ETUDIANTS CPES",
@@ -4248,7 +4248,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 246,
     "fields": {
       "name": "Regroupement des Etudiants Infirmiers de Sélestat Obernai",
@@ -4266,7 +4266,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 247,
     "fields": {
       "name": "PARAMEDICS MULHOUSE",
@@ -4284,7 +4284,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 248,
     "fields": {
       "name": "Association des étudiants en soins infirmiers de Strasbourg IFSI St Vincent",
@@ -4302,7 +4302,7 @@
     }
   },
   {
-    "model": "associations.Association",
+    "model": "associations.association",
     "pk": 249,
     "fields": {
       "name": "Amicale Des Etudiant·e·s en Soins Infirmiers d'Erstein",

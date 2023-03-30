@@ -2,40 +2,40 @@
 from django.conf import settings
 from django.urls import include, path, re_path
 
-from .views.association_users import (
-    AssociationUsersListCreate,
-    AssociationUsersRetrieve,
-    AssociationUsersUpdateDestroy,
+from .views.association_user import (
+    AssociationUserListCreate,
+    AssociationUserRetrieve,
+    AssociationUserUpdateDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserRetrieve
+from .views.group_institution_commission_user import (
+    GroupInstitutionCommissionUserDestroy,
+    GroupInstitutionCommissionUserDestroyWithCommission,
+    GroupInstitutionCommissionUserDestroyWithInstitution,
+    GroupInstitutionCommissionUserListCreate,
+    GroupInstitutionCommissionUserRetrieve,
+)
 
 # from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
 from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
-from .views.user_groups_institutions_commissions import (
-    UserGroupsInstitutionsCommissionsDestroy,
-    UserGroupsInstitutionsCommissionsDestroyWithCommission,
-    UserGroupsInstitutionsCommissionsDestroyWithInstitution,
-    UserGroupsInstitutionsCommissionsListCreate,
-    UserGroupsInstitutionsCommissionsRetrieve,
-)
 
 urlpatterns = [
     path(
         "associations/",
-        AssociationUsersListCreate.as_view(),
-        name="user_associations_list_create",
+        AssociationUserListCreate.as_view(),
+        name="association_user_list_create",
     ),
     path(
         "<int:user_id>/associations/",
-        AssociationUsersRetrieve.as_view(),
-        name="user_associations_retrieve",
+        AssociationUserRetrieve.as_view(),
+        name="association_user_retrieve",
     ),
     path(
         "<int:user_id>/associations/<int:association_id>",
-        AssociationUsersUpdateDestroy.as_view(),
-        name="user_associations_update_destroy",
+        AssociationUserUpdateDestroy.as_view(),
+        name="association_user_update_destroy",
     ),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
@@ -58,28 +58,28 @@ urlpatterns = [
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(
         "groups/",
-        UserGroupsInstitutionsCommissionsListCreate.as_view(),
-        name="user_groups_institutions_commissions_list_create",
+        GroupInstitutionCommissionUserListCreate.as_view(),
+        name="group_institution_commission_user_list_create",
     ),
     path(
         "<int:user_id>/groups/",
-        UserGroupsInstitutionsCommissionsRetrieve.as_view(),
-        name="user_groups_institutions_commissions_retrieve",
+        GroupInstitutionCommissionUserRetrieve.as_view(),
+        name="group_institution_commission_user_retrieve",
     ),
     path(
         "<int:user_id>/groups/<int:group_id>",
-        UserGroupsInstitutionsCommissionsDestroy.as_view(),
-        name="user_groups_institutions_commissions_destroy",
+        GroupInstitutionCommissionUserDestroy.as_view(),
+        name="group_institution_commission_user_destroy",
     ),
     path(
         "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
-        UserGroupsInstitutionsCommissionsDestroyWithCommission.as_view(),
-        name="user_groups_institutions_commissions_destroy_with_commission",
+        GroupInstitutionCommissionUserDestroyWithCommission.as_view(),
+        name="group_institution_commission_user_destroy_with_commission",
     ),
     path(
         "<int:user_id>/groups/<int:group_id>/institutions/<int:institution_id>",
-        UserGroupsInstitutionsCommissionsDestroyWithInstitution.as_view(),
-        name="user_groups_institutions_commissions_destroy_with_institution",
+        GroupInstitutionCommissionUserDestroyWithInstitution.as_view(),
+        name="group_institution_commission_user_destroy_with_institution",
     ),
     path(
         "external/",

@@ -1,6 +1,6 @@
 [
   {
-    "model": "projects.ProjectCategory",
+    "model": "projects.projectcategory",
     "pk": 1,
     "fields": {
       "category": 5,
@@ -8,7 +8,7 @@
     }
   },
   {
-    "model": "projects.ProjectCategory",
+    "model": "projects.projectcategory",
     "pk": 2,
     "fields": {
       "category": 1,
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "projects.ProjectCategory",
+    "model": "projects.projectcategory",
     "pk": 3,
     "fields": {
       "category": 11,

@@ -995,7 +995,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationUsers'
+                $ref: '#/components/schemas/AssociationUser'
           description: ''
   /users/{user_id}/associations/{association_id}:
     patch:
@@ -1018,13 +1018,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+              $ref: '#/components/schemas/PatchedAssociationUserUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+              $ref: '#/components/schemas/PatchedAssociationUserUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationUsersUpdateRequest'
+              $ref: '#/components/schemas/PatchedAssociationUserUpdateRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -1033,7 +1033,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationUsersUpdate'
+                $ref: '#/components/schemas/AssociationUserUpdate'
           description: ''
     delete:
       operationId: users_associations_destroy
@@ -1077,7 +1077,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroupsInstitutionsCommissions'
+                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
           description: ''
   /users/{user_id}/groups/{group_id}:
     delete:
@@ -1191,7 +1191,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AssociationUsers'
+                  $ref: '#/components/schemas/AssociationUser'
           description: ''
     post:
       operationId: users_associations_create
@@ -1202,13 +1202,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+              $ref: '#/components/schemas/AssociationUserCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+              $ref: '#/components/schemas/AssociationUserCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/AssociationUsersCreateRequest'
+              $ref: '#/components/schemas/AssociationUserCreateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -1219,7 +1219,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationUsersCreate'
+                $ref: '#/components/schemas/AssociationUserCreate'
           description: ''
   /users/auth/cas/login/:
     post:
@@ -1701,7 +1701,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreate'
+                  $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
           description: ''
     post:
       operationId: users_groups_create
@@ -1712,13 +1712,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -1729,7 +1729,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroupsInstitutionsCommissionsCreate'
+                $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
           description: ''
 components:
   schemas:
@@ -2086,7 +2086,7 @@ components:
       - institution_component
       - name
       - path_logo
-    AssociationUsers:
+    AssociationUser:
       type: object
       description: Main serializer.
       properties:
@@ -2121,7 +2121,7 @@ components:
       - association
       - id
       - user
-    AssociationUsersCreate:
+    AssociationUserCreate:
       type: object
       description: Serializer for user-associations creation.
       properties:
@@ -2142,7 +2142,7 @@ components:
       required:
       - association
       - user
-    AssociationUsersCreateRequest:
+    AssociationUserCreateRequest:
       type: object
       description: Serializer for user-associations creation.
       properties:
@@ -2163,7 +2163,7 @@ components:
       required:
       - association
       - user
-    AssociationUsersUpdate:
+    AssociationUserUpdate:
       type: object
       description: Serializer for user-associations change.
       properties:
@@ -2517,6 +2517,61 @@ components:
       - is_public
       - name
       - permissions
+    GroupInstitutionCommissionUser:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        group:
+          type: integer
+        institution:
+          type: integer
+          nullable: true
+        commission:
+          type: integer
+          nullable: true
+      required:
+      - group
+      - id
+      - user
+    GroupInstitutionCommissionUserCreate:
+      type: object
+      description: Serializer for user-groups creation (with username instead of id).
+      properties:
+        user:
+          type: string
+        group:
+          type: integer
+        institution:
+          type: integer
+          nullable: true
+        commission:
+          type: integer
+          nullable: true
+      required:
+      - group
+      - user
+    GroupInstitutionCommissionUserCreateRequest:
+      type: object
+      description: Serializer for user-groups creation (with username instead of id).
+      properties:
+        user:
+          type: string
+        group:
+          type: integer
+        institution:
+          type: integer
+          nullable: true
+        commission:
+          type: integer
+          nullable: true
+      required:
+      - group
+      - user
     Institution:
       type: object
       description: Main serializer.
@@ -2532,14 +2587,8 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
-        email:
-          type: string
-          format: email
-          title: Courriel
-          maxLength: 254
       required:
       - acronym
-      - email
       - id
       - name
     InstitutionComponent:
@@ -2744,7 +2793,7 @@ components:
         social_networks:
           type: object
           additionalProperties: {}
-    PatchedAssociationUsersUpdateRequest:
+    PatchedAssociationUserUpdateRequest:
       type: object
       description: Serializer for user-associations change.
       properties:
@@ -3359,61 +3408,6 @@ components:
       - last_name
       - permissions
       - username
-    UserGroupsInstitutionsCommissions:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          type: integer
-        group:
-          type: integer
-        institution:
-          type: integer
-          nullable: true
-        commission:
-          type: integer
-          nullable: true
-      required:
-      - group
-      - id
-      - user
-    UserGroupsInstitutionsCommissionsCreate:
-      type: object
-      description: Serializer for user-groups creation (with username instead of id).
-      properties:
-        user:
-          type: string
-        group:
-          type: integer
-        institution:
-          type: integer
-          nullable: true
-        commission:
-          type: integer
-          nullable: true
-      required:
-      - group
-      - user
-    UserGroupsInstitutionsCommissionsCreateRequest:
-      type: object
-      description: Serializer for user-groups creation (with username instead of id).
-      properties:
-        user:
-          type: string
-        group:
-          type: integer
-        institution:
-          type: integer
-          nullable: true
-        commission:
-          type: integer
-          nullable: true
-      required:
-      - group
-      - user
     UserPartialData:
       type: object
       description: Used to get data from another student in the same associations.

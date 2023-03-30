@@ -1229,7 +1229,7 @@
     "fields": {
       "name": "Can add Association",
       "content_type": 30,
-      "codename": "add_associationusers"
+      "codename": "add_associationuser"
     }
   },
   {
@@ -1238,7 +1238,7 @@
     "fields": {
       "name": "Can change Association",
       "content_type": 30,
-      "codename": "change_associationusers"
+      "codename": "change_associationuser"
     }
   },
   {
@@ -1247,7 +1247,7 @@
     "fields": {
       "name": "Can delete Association",
       "content_type": 30,
-      "codename": "delete_associationusers"
+      "codename": "delete_associationuser"
     }
   },
   {
@@ -1256,7 +1256,7 @@
     "fields": {
       "name": "Can view Association",
       "content_type": 30,
-      "codename": "view_associationusers"
+      "codename": "view_associationuser"
     }
   },
   {
@@ -1265,7 +1265,7 @@
     "fields": {
       "name": "Can change associations for all users.",
       "content_type": 30,
-      "codename": "change_associationusers_any_institution"
+      "codename": "change_associationuser_any_institution"
     }
   },
   {
@@ -1274,7 +1274,7 @@
     "fields": {
       "name": "Can delete associations for all users.",
       "content_type": 30,
-      "codename": "delete_associationusers_any_institution"
+      "codename": "delete_associationuser_any_institution"
     }
   },
   {
@@ -1283,7 +1283,7 @@
     "fields": {
       "name": "Can view all associations for a user.",
       "content_type": 30,
-      "codename": "view_associationusers_anyone"
+      "codename": "view_associationuser_anyone"
     }
   },
   {
@@ -1292,7 +1292,7 @@
     "fields": {
       "name": "Can add User Institution Commission Groups",
       "content_type": 31,
-      "codename": "add_groupinstitutioncommissionusers"
+      "codename": "add_groupinstitutioncommissionuser"
     }
   },
   {
@@ -1301,7 +1301,7 @@
     "fields": {
       "name": "Can change User Institution Commission Groups",
       "content_type": 31,
-      "codename": "change_groupinstitutioncommissionusers"
+      "codename": "change_groupinstitutioncommissionuser"
     }
   },
   {
@@ -1310,7 +1310,7 @@
     "fields": {
       "name": "Can delete User Institution Commission Groups",
       "content_type": 31,
-      "codename": "delete_groupinstitutioncommissionusers"
+      "codename": "delete_groupinstitutioncommissionuser"
     }
   },
   {
@@ -1319,7 +1319,7 @@
     "fields": {
       "name": "Can view User Institution Commission Groups",
       "content_type": 31,
-      "codename": "view_groupinstitutioncommissionusers"
+      "codename": "view_groupinstitutioncommissionuser"
     }
   },
   {
@@ -1328,7 +1328,7 @@
     "fields": {
       "name": "Can add restricted groups to a user.",
       "content_type": 31,
-      "codename": "add_groupinstitutioncommissionusers_any_group"
+      "codename": "add_groupinstitutioncommissionuser_any_group"
     }
   },
   {
@@ -1337,7 +1337,7 @@
     "fields": {
       "name": "Can delete restricted groups to a user.",
       "content_type": 31,
-      "codename": "delete_groupinstitutioncommissionusers_any_group"
+      "codename": "delete_groupinstitutioncommissionuser_any_group"
     }
   },
   {
@@ -1346,7 +1346,7 @@
     "fields": {
       "name": "Can view all groups for a user.",
       "content_type": 31,
-      "codename": "view_groupinstitutioncommissionusers_any_group"
+      "codename": "view_groupinstitutioncommissionuser_any_group"
     }
   },
   {

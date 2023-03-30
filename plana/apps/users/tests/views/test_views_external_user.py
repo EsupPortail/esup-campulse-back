@@ -34,7 +34,7 @@ class ExternalUserViewsTests(TestCase):
         "auth_permission.json",
         "commissions_commission.json",
         "institutions_institution.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 

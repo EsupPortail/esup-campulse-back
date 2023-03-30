@@ -1,6 +1,6 @@
 [
   {
-    "model": "institutions.InstitutionComponent",
+    "model": "institutions.institutioncomponent",
     "pk": 1,
     "fields": {
       "name": "Faculté de médecine",

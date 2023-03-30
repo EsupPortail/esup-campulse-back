@@ -1,6 +1,6 @@
 [
   {
-    "model": "projects.Project",
+    "model": "projects.project",
     "pk": 1,
     "fields": {
       "name": "Projet associatif porteur de projet individuel",
@@ -38,7 +38,7 @@
     }
   },
   {
-    "model": "projects.Project",
+    "model": "projects.project",
     "pk": 2,
     "fields": {
       "name": "Projet associatif porté par une association",

@@ -9,7 +9,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUsers
+from plana.apps.users.models.user import AssociationUser
 
 
 class AssociationsViewsTests(TestCase):
@@ -27,9 +27,9 @@ class AssociationsViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationusers.json",
+        "users_associationuser.json",
         "users_user.json",
-        "users_groupinstitutioncommissionusers.json",
+        "users_groupinstitutioncommissionuser.json",
     ]
 
     def setUp(self):
@@ -168,18 +168,14 @@ class AssociationsViewsTests(TestCase):
 
         response = self.client.get(f"/associations/?user_id={self.student_user_id}")
         content = json.loads(response.content.decode("utf-8"))
-        links_cnt = AssociationUsers.objects.filter(
-            user_id=self.student_user_id
-        ).count()
+        links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
         self.assertNotEqual(len(content), links_cnt)
 
         response = self.general_client.get(
             f"/associations/?user_id={self.student_user_id}"
         )
         content = json.loads(response.content.decode("utf-8"))
-        links_cnt = AssociationUsers.objects.filter(
-            user_id=self.student_user_id
-        ).count()
+        links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
         self.assertEqual(len(content), links_cnt)
 
         response = self.general_client.get("/associations/?is_enabled=false")
@@ -686,7 +682,7 @@ class AssociationsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_public)
 
-        AssociationUsers.objects.create(user_id=12, association_id=2)
+        AssociationUser.objects.create(user_id=12, association_id=2)
 
         response_assos_users_allowed = self.client.get(
             "/associations/names?allow_new_users=true"

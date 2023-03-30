@@ -15,7 +15,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
 
-class AssociationUsers(models.Model):
+class AssociationUser(models.Model):
     """Model that defines the link between a user and an association."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
@@ -41,18 +41,18 @@ class AssociationUsers(models.Model):
         verbose_name_plural = _("Associations")
         permissions = [
             (
-                "change_associationusers_any_institution",
+                "change_associationuser_any_institution",
                 "Can change associations for all users.",
             ),
             (
-                "delete_associationusers_any_institution",
+                "delete_associationuser_any_institution",
                 "Can delete associations for all users.",
             ),
-            ("view_associationusers_anyone", "Can view all associations for a user."),
+            ("view_associationuser_anyone", "Can view all associations for a user."),
         ]
 
 
-class GroupInstitutionCommissionUsers(models.Model):
+class GroupInstitutionCommissionUser(models.Model):
     """
     Define the link between a user and a group.
 
@@ -73,15 +73,15 @@ class GroupInstitutionCommissionUsers(models.Model):
         verbose_name_plural = _("Users Institution Commission Groups")
         permissions = [
             (
-                "add_groupinstitutioncommissionusers_any_group",
+                "add_groupinstitutioncommissionuser_any_group",
                 "Can add restricted groups to a user.",
             ),
             (
-                "delete_groupinstitutioncommissionusers_any_group",
+                "delete_groupinstitutioncommissionuser_any_group",
                 "Can delete restricted groups to a user.",
             ),
             (
-                "view_groupinstitutioncommissionusers_any_group",
+                "view_groupinstitutioncommissionuser_any_group",
                 "Can view all groups for a user.",
             ),
         ]
@@ -112,16 +112,16 @@ class User(AbstractUser):
         _("Is validated by administrator"), default=False
     )
     associations = models.ManyToManyField(
-        Association, verbose_name=_("Associations"), through="AssociationUsers"
+        Association, verbose_name=_("Associations"), through="AssociationUser"
     )
     consents_given = models.ManyToManyField(
         GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
-    groups_institutions = models.ManyToManyField(
+    groups_institutions_commissions = models.ManyToManyField(
         Group,
         verbose_name=_("Groups"),
-        through="GroupInstitutionCommissionUsers",
-        related_name="group_institution_set",
+        through="GroupInstitutionCommissionUser",
+        related_name="group_institution_commission_set",
     )
 
     def __str__(self):
@@ -131,11 +131,13 @@ class User(AbstractUser):
         """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
-        groups_institutions_user = GroupInstitutionCommissionUsers.objects.filter(
-            user_id=self.pk
+        groups_institutions_commissions_user = (
+            GroupInstitutionCommissionUser.objects.filter(user_id=self.pk)
         )
-        for group_institution_user in groups_institutions_user:
-            group_user = Group.objects.get(id=group_institution_user.group_id)
+        for group_institution_commission_user in groups_institutions_commissions_user:
+            group_user = Group.objects.get(
+                id=group_institution_commission_user.group_id
+            )
             for permission in group_user.permissions.all():
                 if perm == f"{permission.content_type.app_label}.{permission.codename}":
                     return True
@@ -147,7 +149,7 @@ class User(AbstractUser):
 
         if project_obj.association is not None:
             try:
-                member = AssociationUsers.objects.get(
+                member = AssociationUser.objects.get(
                     user_id=self.pk, association_id=project_obj.association
                 )
                 if not member.is_president or not member.can_be_president:
@@ -160,7 +162,7 @@ class User(AbstractUser):
     def get_user_associations(self):
         """Return a list of Association IDs linked to a user."""
         return Association.objects.filter(
-            id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+            id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
                 "association_id"
             )
         )
@@ -168,7 +170,7 @@ class User(AbstractUser):
     def get_user_commissions(self):
         """Return a list of Commission objects linked to a user."""
         return Commission.objects.filter(
-            id__in=GroupInstitutionCommissionUsers.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk
             ).values_list("commission_id")
         )
@@ -176,7 +178,7 @@ class User(AbstractUser):
     def get_user_groups(self):
         """Return a list of Group objects linked to a user."""
         return Group.objects.filter(
-            id__in=GroupInstitutionCommissionUsers.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk
             ).values_list("group_id")
         )
@@ -185,13 +187,13 @@ class User(AbstractUser):
         """Return a list of Institution objects linked to a user."""
         if self.is_staff:
             return Institution.objects.filter(
-                id__in=GroupInstitutionCommissionUsers.objects.filter(
+                id__in=GroupInstitutionCommissionUser.objects.filter(
                     user_id=self.pk
                 ).values_list("institution_id")
             )
         return Institution.objects.filter(
             id__in=Association.objects.filter(
-                id__in=AssociationUsers.objects.filter(user_id=self.pk).values_list(
+                id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
                     "association_id"
                 )
             ).values_list("institution_id")
@@ -216,7 +218,7 @@ class User(AbstractUser):
     def is_in_association(self, association_id):
         """Check if a user can read an association."""
         try:
-            AssociationUsers.objects.get(
+            AssociationUser.objects.get(
                 user_id=self.pk,
                 association_id=association_id,
                 is_validated_by_admin=True,
@@ -229,7 +231,7 @@ class User(AbstractUser):
         """Check if a user can write in an association."""
         try:
             now = datetime.datetime.now()
-            AssociationUsers.objects.filter(
+            AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
                     can_be_president=True,
@@ -253,7 +255,7 @@ class User(AbstractUser):
     def is_staff_for_association(self, association_id):
         """Check if a user is linked as manager for an association."""
         if self.is_staff:
-            return GroupInstitutionCommissionUsers.objects.filter(
+            return GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk,
                 institution_id=Association.objects.get(
                     id=association_id
@@ -264,14 +266,14 @@ class User(AbstractUser):
     def is_staff_in_institution(self, institution_id):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            return GroupInstitutionCommissionUsers.objects.filter(
+            return GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk, institution_id=institution_id
             )
         return False
 
     def is_member_in_commission(self, commission_id):
         """Check if a user is linked as member to a commission."""
-        return GroupInstitutionCommissionUsers.objects.filter(
+        return GroupInstitutionCommissionUser.objects.filter(
             user_id=self.pk, commission_id=commission_id
         )
 
