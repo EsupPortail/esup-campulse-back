@@ -124,7 +124,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationAllData'
+                $ref: '#/components/schemas/AssociationAllDataRead'
           description: ''
     patch:
       operationId: associations_partial_update
@@ -142,13 +142,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedAssociationAllDataRequest'
+              $ref: '#/components/schemas/PatchedAssociationAllDataUpdateRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -157,7 +157,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationAllData'
+                $ref: '#/components/schemas/AssociationAllDataUpdate'
           description: ''
     delete:
       operationId: associations_destroy
@@ -1747,7 +1747,7 @@ components:
       required:
       - id
       - name
-    AssociationAllData:
+    AssociationAllDataRead:
       type: object
       description: Main serializer.
       properties:
@@ -1858,6 +1858,116 @@ components:
       - institution_component
       - name
       - path_logo
+    AssociationAllDataUpdate:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        institution:
+          type: integer
+        institution_component:
+          type: integer
+        activity_field:
+          type: integer
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        path_logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Dynamic thumbnails for the logo
+        alt_logo:
+          type: string
+          nullable: true
+          title: Logo description
+        social_object:
+          type: string
+        current_projects:
+          type: string
+        address:
+          type: string
+          title: Adresse
+        phone:
+          type: string
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          title: Courriel
+          maxLength: 256
+        siret:
+          type: string
+          maxLength: 14
+        website:
+          type: string
+          format: uri
+          title: Site
+          maxLength: 200
+        student_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Nombre d'étudiants
+        president_names:
+          type: string
+          maxLength: 256
+        president_phone:
+          type: string
+          maxLength: 32
+        is_enabled:
+          type: boolean
+        is_public:
+          type: boolean
+        is_site:
+          type: boolean
+          title: Site ?
+        amount_members_allowed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of members allowed
+        can_submit_projects:
+          type: boolean
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        approval_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'agrément
+        last_goa_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de la dernière AGO
+        cga_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de dernière AG constitutive
+        social_networks:
+          type: object
+          additionalProperties: {}
+      required:
+      - activity_field
+      - creation_date
+      - id
+      - institution
+      - institution_component
+      - name
     AssociationMandatoryData:
       type: object
       description: Smaller serializer to return only the main informations of an association.
@@ -2528,7 +2638,7 @@ components:
           minLength: 1
       required:
       - email
-    PatchedAssociationAllDataRequest:
+    PatchedAssociationAllDataUpdateRequest:
       type: object
       description: Main serializer.
       properties:
@@ -2548,6 +2658,11 @@ components:
           minLength: 1
           title: Acronyme
           maxLength: 30
+        path_logo:
+          type: string
+          format: binary
+          nullable: true
+          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
           nullable: true

@@ -589,9 +589,12 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
-# External APIs
-ACCOUNTS_API_CLIENT = 'plana.libs.api.accounts.SporeAccountsAPI'
+# External APIs.
+ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
 ACCOUNTS_API_CONF = {}
+
+# MIME types allowed for image uploads.
+ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
 
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {

@@ -377,6 +377,16 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+        if (
+            "path_logo" in request.data
+            and request.data["path_logo"].content_type
+            not in settings.ALLOWED_IMAGE_MIME_TYPES
+        ):
+            return response.Response(
+                {"error": _("Wrong media type for images.")},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            )
+
         if request.user.has_perm("associations.change_association_all_fields"):
             if "is_site" in request.data:
                 is_site = to_bool(request.data["is_site"])
@@ -406,9 +416,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 association.is_site is False or association.is_enabled is False
             ):
                 request.data["is_public"] = False
-
-        if "path_logo" in request.data:
-            print(request.data["path_logo"].__dict__)
 
         current_site = get_current_site(request)
         context = {

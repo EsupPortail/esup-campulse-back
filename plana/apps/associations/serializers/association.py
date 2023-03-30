@@ -19,7 +19,7 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     activity_field = serializers.PrimaryKeyRelatedField(
         queryset=ActivityField.objects.all()
     )
-    path_logo = ThumbnailField(sizes=["list"])
+    path_logo = ThumbnailField(sizes=["detail"])
 
     class Meta:
         model = Association
