@@ -9,7 +9,7 @@ from plana.apps.institutions.models.institution_component import InstitutionComp
 from plana.apps.users.models.user import AssociationUsers
 
 
-class AssociationAllDataSerializer(serializers.ModelSerializer):
+class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
@@ -19,7 +19,23 @@ class AssociationAllDataSerializer(serializers.ModelSerializer):
     activity_field = serializers.PrimaryKeyRelatedField(
         queryset=ActivityField.objects.all()
     )
-    path_logo = ThumbnailField(sizes=["detail"])
+    path_logo = ThumbnailField(sizes=["list"])
+
+    class Meta:
+        model = Association
+        fields = "__all__"
+
+
+class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
+    """Main serializer."""
+
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
+    institution_component = serializers.PrimaryKeyRelatedField(
+        queryset=InstitutionComponent.objects.all()
+    )
+    activity_field = serializers.PrimaryKeyRelatedField(
+        queryset=ActivityField.objects.all()
+    )
 
     class Meta:
         model = Association

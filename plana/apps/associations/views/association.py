@@ -14,7 +14,8 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
-    AssociationAllDataSerializer,
+    AssociationAllDataReadSerializer,
+    AssociationAllDataUpdateSerializer,
     AssociationMandatoryDataSerializer,
     AssociationNameSerializer,
     AssociationPartialDataSerializer,
@@ -263,7 +264,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/associations/{id} route"""
 
     queryset = Association.objects.all()
-    serializer_class = AssociationAllDataSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -271,6 +271,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            self.serializer_class = AssociationAllDataReadSerializer
+        else:
+            self.serializer_class = AssociationAllDataUpdateSerializer
+        return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
         """Retrieves an association with all its details."""
@@ -400,9 +407,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ):
                 request.data["is_public"] = False
 
-        # TODO path_logo doesn't work anymore.
         if "path_logo" in request.data:
-            print(request.data["path_logo"])
+            print(request.data["path_logo"].__dict__)
 
         current_site = get_current_site(request)
         context = {
