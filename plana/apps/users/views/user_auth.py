@@ -1,5 +1,4 @@
 """dj-rest-auth overrided views."""
-
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView

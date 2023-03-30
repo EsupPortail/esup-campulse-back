@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 10:34+0200\n"
+"POT-Creation-Date: 2023-03-30 10:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:32
 #: plana/apps/commissions/models/commission.py:11
-#: plana/apps/documents/models/document.py:35
+#: plana/apps/documents/models/document.py:34
 #: plana/apps/institutions/models/institution.py:9
 #: plana/apps/institutions/models/institution_component.py:9
-#: plana/apps/projects/models/category.py:10
-#: plana/apps/projects/models/project.py:14
+#: plana/apps/projects/models/category.py:9
+#: plana/apps/projects/models/project.py:13
 msgid "Name"
 msgstr "Nom"
 
@@ -40,7 +40,7 @@ msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:34
 #: plana/apps/commissions/models/commission.py:12
-#: plana/apps/documents/models/document.py:36
+#: plana/apps/documents/models/document.py:35
 #: plana/apps/institutions/models/institution.py:10
 msgid "Acronym"
 msgstr "Acronyme"
@@ -142,7 +142,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:76
-#: plana/apps/projects/models/project.py:67
+#: plana/apps/projects/models/project.py:66
 msgid "Creation date"
 msgstr "Date de création"
 
@@ -160,7 +160,7 @@ msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:87
 #: plana/apps/commissions/models/commission.py:15
-#: plana/apps/documents/models/document.py:52
+#: plana/apps/documents/models/document.py:51
 #: plana/apps/institutions/models/institution.py:17
 #: plana/apps/institutions/models/institution_component.py:12
 msgid "Institution"
@@ -172,8 +172,8 @@ msgid "Institution component"
 msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:110
-#: plana/apps/documents/models/document_upload.py:49
-#: plana/apps/projects/models/project.py:22 plana/apps/users/models/user.py:23
+#: plana/apps/documents/models/document_upload.py:48
+#: plana/apps/projects/models/project.py:21 plana/apps/users/models/user.py:23
 #: plana/apps/users/models/user.py:40
 msgid "Association"
 msgstr "Association"
@@ -187,72 +187,72 @@ msgstr "Associations"
 msgid "URL for each thumbnail size"
 msgstr "Lien pour chaque taille de miniature"
 
-#: plana/apps/associations/views/association.py:193
+#: plana/apps/associations/views/association.py:192
 msgid "Institution does not exist."
 msgstr "L'établissement n'existe pas."
 
-#: plana/apps/associations/views/association.py:206
+#: plana/apps/associations/views/association.py:205
 msgid "No institution given."
 msgstr "Pas d'établissement donné."
 
-#: plana/apps/associations/views/association.py:216
+#: plana/apps/associations/views/association.py:215
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:226
+#: plana/apps/associations/views/association.py:225
 msgid "No association name given."
 msgstr "Pas de nom d'association donné."
 
-#: plana/apps/associations/views/association.py:249
+#: plana/apps/associations/views/association.py:248
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:289
-#: plana/apps/associations/views/association.py:336
-#: plana/apps/associations/views/association.py:445
-#: plana/apps/projects/views/project.py:63
+#: plana/apps/associations/views/association.py:288
+#: plana/apps/associations/views/association.py:335
+#: plana/apps/associations/views/association.py:444
+#: plana/apps/projects/views/project.py:62
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/associations/views/association.py:297
+#: plana/apps/associations/views/association.py:296
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:308
+#: plana/apps/associations/views/association.py:307
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:319
+#: plana/apps/associations/views/association.py:318
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:348
+#: plana/apps/associations/views/association.py:347
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:366
+#: plana/apps/associations/views/association.py:365
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:371
+#: plana/apps/associations/views/association.py:370
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:386
+#: plana/apps/associations/views/association.py:385
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:451
+#: plana/apps/associations/views/association.py:450
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:461
+#: plana/apps/associations/views/association.py:460
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #: plana/apps/commissions/models/commission.py:23
 #: plana/apps/commissions/models/commission_date.py:13
-#: plana/apps/documents/models/document.py:58
+#: plana/apps/documents/models/document.py:57
 msgid "Commission"
 msgstr "Commission"
 
@@ -269,7 +269,7 @@ msgid "Commission date"
 msgstr "Date de commission"
 
 #: plana/apps/commissions/models/commission_date.py:21
-#: plana/apps/projects/models/project_commission_date.py:19
+#: plana/apps/projects/models/project_commission_date.py:18
 msgid "Commission Date"
 msgstr "Date de Commission"
 
@@ -290,153 +290,153 @@ msgstr "Consentement RGPD"
 msgid "GDPR Consents"
 msgstr "Consentements RGPD"
 
-#: plana/apps/documents/models/document.py:37
+#: plana/apps/documents/models/document.py:36
 #: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/documents/models/document.py:38
+#: plana/apps/documents/models/document.py:37
 msgid "Contact address"
 msgstr "Adresse de contact"
 
-#: plana/apps/documents/models/document.py:39
+#: plana/apps/documents/models/document.py:38
 msgid "Is multiple"
 msgstr "Est multiple"
 
-#: plana/apps/documents/models/document.py:41
+#: plana/apps/documents/models/document.py:40
 msgid "Days before document expiration"
 msgstr "Nombre de jours avant expiration du document"
 
-#: plana/apps/documents/models/document.py:44
+#: plana/apps/documents/models/document.py:43
 msgid "Example template file"
 msgstr "Template de fichier d'exemple"
 
-#: plana/apps/documents/models/document.py:63
+#: plana/apps/documents/models/document.py:62
 msgid "Document Status"
 msgstr "Statut du Document"
 
-#: plana/apps/documents/models/document.py:66
+#: plana/apps/documents/models/document.py:65
 msgid "Charter for Association"
 msgstr "Charte pour Association"
 
-#: plana/apps/documents/models/document.py:69
+#: plana/apps/documents/models/document.py:68
 msgid "Charter for Association Institution"
 msgstr "Charte pour Établissement"
 
-#: plana/apps/documents/models/document.py:71
+#: plana/apps/documents/models/document.py:70
 msgid "Charter for Project Commission"
 msgstr "Charte pour Demande de Subvention"
 
-#: plana/apps/documents/models/document.py:72
+#: plana/apps/documents/models/document.py:71
 msgid "Document for Association"
 msgstr "Document pour Association"
 
-#: plana/apps/documents/models/document.py:73
+#: plana/apps/documents/models/document.py:72
 msgid "Document for User"
 msgstr "Document pour Utilisateur"
 
-#: plana/apps/documents/models/document.py:74
+#: plana/apps/documents/models/document.py:73
 msgid "Document for Project"
 msgstr "Document pour Demande de Subvention"
 
-#: plana/apps/documents/models/document.py:75
+#: plana/apps/documents/models/document.py:74
 msgid "Document for Project Review"
 msgstr "Document pour Bilan de Subvention"
 
-#: plana/apps/documents/models/document.py:84
-#: plana/apps/documents/models/document_upload.py:38
+#: plana/apps/documents/models/document.py:83
+#: plana/apps/documents/models/document_upload.py:37
 msgid "Document"
 msgstr "Document"
 
-#: plana/apps/documents/models/document.py:85
+#: plana/apps/documents/models/document.py:84
 msgid "Documents"
 msgstr "Documents"
 
-#: plana/apps/documents/models/document_upload.py:43
-#: plana/apps/projects/models/project.py:19
+#: plana/apps/documents/models/document_upload.py:42
+#: plana/apps/projects/models/project.py:18
 #: plana/apps/users/models/gdpr_consent_users.py:12
 #: plana/apps/users/models/user.py:21 plana/apps/users/models/user.py:63
 #: plana/apps/users/models/user.py:263
 msgid "User"
 msgstr "Utilisateur"
 
-#: plana/apps/documents/models/document_upload.py:55
-#: plana/apps/projects/models/project.py:106
-#: plana/apps/projects/models/project_category.py:12
-#: plana/apps/projects/models/project_commission_date.py:14
+#: plana/apps/documents/models/document_upload.py:54
+#: plana/apps/projects/models/project.py:105
+#: plana/apps/projects/models/project_category.py:11
+#: plana/apps/projects/models/project_commission_date.py:13
 msgid "Project"
 msgstr "Projet"
 
-#: plana/apps/documents/models/document_upload.py:59
+#: plana/apps/documents/models/document_upload.py:58
 msgid "Upload date"
 msgstr "Date d'envoi"
 
-#: plana/apps/documents/models/document_upload.py:61
+#: plana/apps/documents/models/document_upload.py:60
 msgid "Uploaded file"
 msgstr "Fichier envoyé"
 
-#: plana/apps/documents/models/document_upload.py:65
+#: plana/apps/documents/models/document_upload.py:64
 msgid "Document Upload Status"
 msgstr "Statut du Document Envoyé"
 
-#: plana/apps/documents/models/document_upload.py:68
+#: plana/apps/documents/models/document_upload.py:67
 msgid "Document Rejected"
 msgstr "Document Rejeté"
 
-#: plana/apps/documents/models/document_upload.py:69
+#: plana/apps/documents/models/document_upload.py:68
 msgid "Document Processing"
 msgstr "Document en Traitement"
 
-#: plana/apps/documents/models/document_upload.py:70
+#: plana/apps/documents/models/document_upload.py:69
 msgid "Document Validated"
 msgstr "Document Validé"
 
-#: plana/apps/documents/models/document_upload.py:79
+#: plana/apps/documents/models/document_upload.py:78
 msgid "Document from association or user"
 msgstr "Document d'une association ou d'un utilisateur"
 
-#: plana/apps/documents/models/document_upload.py:80
+#: plana/apps/documents/models/document_upload.py:79
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:33
+#: plana/apps/documents/views/document.py:32
 msgid "Not allowed to add a new document type."
 msgstr "Non autorisé de créer un nouveau type de document."
 
-#: plana/apps/documents/views/document.py:43
+#: plana/apps/documents/views/document.py:42
 msgid "Not allowed to create a document for this institution."
 msgstr "Non autorisé à créer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:53
+#: plana/apps/documents/views/document.py:52
 msgid "Not allowed to create a document for this commission."
 msgstr "Non autorisé à créer un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:79
-#: plana/apps/documents/views/document.py:90
+#: plana/apps/documents/views/document.py:78
+#: plana/apps/documents/views/document.py:89
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:98
+#: plana/apps/documents/views/document.py:97
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:106
+#: plana/apps/documents/views/document.py:105
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
-#: plana/apps/documents/views/document_upload.py:31
-#: plana/apps/projects/views/project.py:158
-#: plana/apps/projects/views/project.py:185
-#: plana/apps/projects/views/project.py:238
-#: plana/apps/projects/views/project_category.py:59
-#: plana/apps/projects/views/project_category.py:98
-#: plana/apps/projects/views/project_category.py:135
-#: plana/apps/projects/views/project_commission_date.py:148
+#: plana/apps/documents/views/document_upload.py:30
+#: plana/apps/projects/views/project.py:157
+#: plana/apps/projects/views/project.py:184
+#: plana/apps/projects/views/project.py:237
+#: plana/apps/projects/views/project_category.py:58
+#: plana/apps/projects/views/project_category.py:97
+#: plana/apps/projects/views/project_category.py:134
+#: plana/apps/projects/views/project_commission_date.py:147
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:36
+#: plana/apps/documents/views/document_upload.py:35
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
@@ -448,274 +448,274 @@ msgstr "Établissements"
 msgid "Institution components"
 msgstr "Composantes"
 
-#: plana/apps/projects/models/category.py:16
+#: plana/apps/projects/models/category.py:15
 msgid "Category"
 msgstr "Catégorie"
 
-#: plana/apps/projects/models/category.py:17
+#: plana/apps/projects/models/category.py:16
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/projects/models/project.py:15
-#: plana/apps/projects/models/project.py:71
+#: plana/apps/projects/models/project.py:14
+#: plana/apps/projects/models/project.py:70
 msgid "Start date"
 msgstr "Date de début"
 
-#: plana/apps/projects/models/project.py:16
-#: plana/apps/projects/models/project.py:72
+#: plana/apps/projects/models/project.py:15
+#: plana/apps/projects/models/project.py:71
 msgid "End date"
 msgstr "Date de fin"
 
-#: plana/apps/projects/models/project.py:17
+#: plana/apps/projects/models/project.py:16
 msgid "Location"
 msgstr "Lieu"
 
-#: plana/apps/projects/models/project.py:25
+#: plana/apps/projects/models/project.py:24
 msgid "Budget on previous edition"
 msgstr "Budget de l'édition précédente"
 
-#: plana/apps/projects/models/project.py:27
+#: plana/apps/projects/models/project.py:26
 msgid "Target audience"
 msgstr "Public visé"
 
-#: plana/apps/projects/models/project.py:29
+#: plana/apps/projects/models/project.py:28
 msgid "Type of people in target audience (student, employees, ...)"
 msgstr "Type de public visé (étudiants, employés, ...)"
 
-#: plana/apps/projects/models/project.py:34
+#: plana/apps/projects/models/project.py:33
 msgid "Amount of people in target audience"
 msgstr "Nombre de personnes dans le public visé"
 
-#: plana/apps/projects/models/project.py:37
+#: plana/apps/projects/models/project.py:36
 msgid "Amount of students in target audience"
 msgstr "Nombre d'étudiants dans le public visé"
 
-#: plana/apps/projects/models/project.py:40
+#: plana/apps/projects/models/project.py:39
 msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
-#: plana/apps/projects/models/project.py:43
+#: plana/apps/projects/models/project.py:42
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:45
+#: plana/apps/projects/models/project.py:44
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:46
+#: plana/apps/projects/models/project.py:45
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:47
+#: plana/apps/projects/models/project.py:46
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:49
+#: plana/apps/projects/models/project.py:48
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:51
+#: plana/apps/projects/models/project.py:50
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:53
+#: plana/apps/projects/models/project.py:52
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:56
+#: plana/apps/projects/models/project.py:55
 msgid "Project Draft"
 msgstr "Projet en Brouillon"
 
-#: plana/apps/projects/models/project.py:57
+#: plana/apps/projects/models/project.py:56
 msgid "Project Rejected"
 msgstr "Projet Rejeté"
 
-#: plana/apps/projects/models/project.py:58
+#: plana/apps/projects/models/project.py:57
 msgid "Project Processing"
 msgstr "Projet en Traitement"
 
-#: plana/apps/projects/models/project.py:59
+#: plana/apps/projects/models/project.py:58
 msgid "Project Validated"
 msgstr "Projet Validé"
 
-#: plana/apps/projects/models/project.py:60
+#: plana/apps/projects/models/project.py:59
 msgid "Project Review Draft"
 msgstr "Bilan de Projet en Brouillon"
 
-#: plana/apps/projects/models/project.py:61
+#: plana/apps/projects/models/project.py:60
 msgid "Project Review Rejected"
 msgstr "Bilan de Projet Rejeté"
 
-#: plana/apps/projects/models/project.py:62
+#: plana/apps/projects/models/project.py:61
 msgid "Project Review Processing"
 msgstr "Bilan de Projet en Traitement"
 
-#: plana/apps/projects/models/project.py:63
+#: plana/apps/projects/models/project.py:62
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:68
+#: plana/apps/projects/models/project.py:67
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:69
+#: plana/apps/projects/models/project.py:68
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:70
+#: plana/apps/projects/models/project.py:69
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:73
+#: plana/apps/projects/models/project.py:72
 msgid "Organizer name"
 msgstr "Nom de l'organisateur"
 
-#: plana/apps/projects/models/project.py:74
+#: plana/apps/projects/models/project.py:73
 msgid "Organizer phone"
 msgstr "Téléphone de l'organisateur"
 
-#: plana/apps/projects/models/project.py:75
+#: plana/apps/projects/models/project.py:74
 msgid "Organizer email"
 msgstr "Adresse mail de l'organisateur"
 
-#: plana/apps/projects/models/project.py:77
+#: plana/apps/projects/models/project.py:76
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:79
+#: plana/apps/projects/models/project.py:78
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:81
+#: plana/apps/projects/models/project.py:80
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:83
+#: plana/apps/projects/models/project.py:82
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:84
+#: plana/apps/projects/models/project.py:83
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:107
+#: plana/apps/projects/models/project.py:106
 msgid "Projects"
 msgstr "Projets"
 
-#: plana/apps/projects/models/project_category.py:17
+#: plana/apps/projects/models/project_category.py:16
 msgid "Project Category"
 msgstr "Catégorie de Projet"
 
-#: plana/apps/projects/models/project_category.py:25
+#: plana/apps/projects/models/project_category.py:24
 msgid "Project category"
 msgstr "Catégorie de projet"
 
-#: plana/apps/projects/models/project_category.py:26
+#: plana/apps/projects/models/project_category.py:25
 msgid "Projects categories"
 msgstr "Catégories de projets"
 
-#: plana/apps/projects/models/project_commission_date.py:22
+#: plana/apps/projects/models/project_commission_date.py:21
 msgid "Is first edition"
 msgstr "Est la première édition"
 
-#: plana/apps/projects/models/project_commission_date.py:24
+#: plana/apps/projects/models/project_commission_date.py:23
 msgid "Amount asked on previous edition"
 msgstr "Montant demandé à l'édition précédente"
 
-#: plana/apps/projects/models/project_commission_date.py:27
+#: plana/apps/projects/models/project_commission_date.py:26
 msgid "Amount earned on previous edition"
 msgstr "Montant obtenu à l'édition précédente"
 
-#: plana/apps/projects/models/project_commission_date.py:29
+#: plana/apps/projects/models/project_commission_date.py:28
 msgid "Amount asked"
 msgstr "Montant demandé"
 
-#: plana/apps/projects/models/project_commission_date.py:30
+#: plana/apps/projects/models/project_commission_date.py:29
 msgid "Amount earned"
 msgstr "Montant obtenu"
 
-#: plana/apps/projects/models/project_commission_date.py:36
+#: plana/apps/projects/models/project_commission_date.py:35
 msgid "Project commission date"
 msgstr "Date de commission liée au projet"
 
-#: plana/apps/projects/models/project_commission_date.py:37
+#: plana/apps/projects/models/project_commission_date.py:36
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/project.py:75
-#: plana/apps/projects/views/project.py:80
-#: plana/apps/projects/views/project.py:85
-#: plana/apps/projects/views/project.py:99
+#: plana/apps/projects/views/project.py:74
+#: plana/apps/projects/views/project.py:79
+#: plana/apps/projects/views/project.py:84
+#: plana/apps/projects/views/project.py:98
 msgid "Not allowed to create a new project."
 msgstr "Non autorisé à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:113
+#: plana/apps/projects/views/project.py:112
 msgid "A project can only have one affectation."
 msgstr "Un projet ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/projects/views/project.py:127
+#: plana/apps/projects/views/project.py:126
 msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou affectation."
 
-#: plana/apps/projects/views/project.py:170
+#: plana/apps/projects/views/project.py:169
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:191
-#: plana/apps/projects/views/project_commission_date.py:211
+#: plana/apps/projects/views/project.py:190
+#: plana/apps/projects/views/project_commission_date.py:210
 msgid "Not allowed to update basic fields for this project."
 msgstr "Non autorisé à mettre à jour les champs de ce projet."
 
-#: plana/apps/projects/views/project.py:197
-#: plana/apps/projects/views/project_commission_date.py:95
-#: plana/apps/projects/views/project_commission_date.py:217
-#: plana/apps/projects/views/project_commission_date.py:259
+#: plana/apps/projects/views/project.py:196
+#: plana/apps/projects/views/project_commission_date.py:94
+#: plana/apps/projects/views/project_commission_date.py:216
+#: plana/apps/projects/views/project_commission_date.py:258
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:207
+#: plana/apps/projects/views/project.py:206
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:246
+#: plana/apps/projects/views/project.py:245
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
-#: plana/apps/projects/views/project_category.py:65
-#: plana/apps/projects/views/project_category.py:141
+#: plana/apps/projects/views/project_category.py:64
+#: plana/apps/projects/views/project_category.py:140
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
-#: plana/apps/projects/views/project_category.py:106
+#: plana/apps/projects/views/project_category.py:105
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
-#: plana/apps/projects/views/project_commission_date.py:89
+#: plana/apps/projects/views/project_commission_date.py:88
 msgid "Project or commission date does not exist."
 msgstr "Le projet ou la date de commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:106
+#: plana/apps/projects/views/project_commission_date.py:105
 msgid "Not allowed to update amount earned for this project's commission."
 msgstr "Non autorisé à mettre à jour le montant obtenu à cette commission."
 
-#: plana/apps/projects/views/project_commission_date.py:114
-#: plana/apps/projects/views/project_commission_date.py:230
+#: plana/apps/projects/views/project_commission_date.py:113
+#: plana/apps/projects/views/project_commission_date.py:229
 msgid "Submission date for this commission is gone."
 msgstr "La date de soumission de projet pour cette commission est passée."
 
-#: plana/apps/projects/views/project_commission_date.py:156
+#: plana/apps/projects/views/project_commission_date.py:155
 msgid "Not allowed to retrieve this project commission dates."
 msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses dates de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_date.py:201
-#: plana/apps/projects/views/project_commission_date.py:251
+#: plana/apps/projects/views/project_commission_date.py:200
+#: plana/apps/projects/views/project_commission_date.py:250
 msgid "Link between this project and commission does not exists."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:223
+#: plana/apps/projects/views/project_commission_date.py:222
 msgid "Not allowed to update amount earned for this project."
 msgstr "Non autorisé à mettre à jour le montant reçu pour ce projet."
 
@@ -818,7 +818,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:120
+#: plana/apps/users/serializers/user.py:119
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -830,75 +830,75 @@ msgstr "Impossible de changer le mot de passe d'un compte CAS."
 msgid "Unable to reset the password of a CAS account."
 msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
-#: plana/apps/users/views/association_users.py:124
-#: plana/apps/users/views/association_users.py:306
-#: plana/apps/users/views/association_users.py:497
+#: plana/apps/users/views/association_users.py:123
+#: plana/apps/users/views/association_users.py:305
+#: plana/apps/users/views/association_users.py:496
 msgid "User or association does not exist."
 msgstr "L'association ou l'utilisateur n'existe pas."
 
-#: plana/apps/users/views/association_users.py:130
+#: plana/apps/users/views/association_users.py:129
 msgid "Only managers can edit associations for this account."
 msgstr "Seuls les gestionnaires peuvent éditer les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:142
+#: plana/apps/users/views/association_users.py:141
 msgid "Cannot add an association from this institution."
 msgstr "Non autorisé à ajouter une association de cet établissement."
 
-#: plana/apps/users/views/association_users.py:152
+#: plana/apps/users/views/association_users.py:151
 msgid "The user hasn't any group that can have associations."
 msgstr "L'utilisateur n'a aucun groupe pouvant avoir des associations."
 
-#: plana/apps/users/views/association_users.py:169
-#: plana/apps/users/views/association_users.py:366
+#: plana/apps/users/views/association_users.py:168
+#: plana/apps/users/views/association_users.py:365
 msgid "Only managers can validate associations for this account."
 msgstr ""
 "Seuls les gestionnaires peuvent valider les associations pour ce compte"
 
-#: plana/apps/users/views/association_users.py:183
+#: plana/apps/users/views/association_users.py:182
 msgid "Too many users in association."
 msgstr "Trop d'utilisateurs dans l'association."
 
-#: plana/apps/users/views/association_users.py:192
+#: plana/apps/users/views/association_users.py:191
 msgid "User already in association."
 msgstr "L'utilisateur est déjà membre de l'association."
 
-#: plana/apps/users/views/association_users.py:205
+#: plana/apps/users/views/association_users.py:204
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
-#: plana/apps/users/views/association_users.py:258
+#: plana/apps/users/views/association_users.py:257
 msgid "Not allowed to get this link between association and user."
 msgstr "Non autorisé à récupérer ce lien entre utilisateur et association."
 
-#: plana/apps/users/views/association_users.py:316
+#: plana/apps/users/views/association_users.py:315
 msgid "Link between this user and association does not exist."
 msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
 
-#: plana/apps/users/views/association_users.py:333
+#: plana/apps/users/views/association_users.py:332
 msgid "Not allowed to edit this link."
 msgstr "Non autorisé à modifier ce lien."
 
-#: plana/apps/users/views/association_users.py:343
+#: plana/apps/users/views/association_users.py:342
 msgid "President cannot self-edit."
 msgstr "Le président ne peut s'auto-modifier."
 
-#: plana/apps/users/views/association_users.py:387
+#: plana/apps/users/views/association_users.py:386
 msgid "Only managers can edit president."
 msgstr "Seuls les gestionnaires peuvent changer le président."
 
-#: plana/apps/users/views/association_users.py:406
+#: plana/apps/users/views/association_users.py:405
 msgid "Can't remove president delegation before giving it."
 msgstr "Impossible de retirer les droits de président avant de les donner."
 
-#: plana/apps/users/views/association_users.py:509
+#: plana/apps/users/views/association_users.py:508
 msgid "Not allowed to delete this link between association and user."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et association."
 
-#: plana/apps/users/views/external.py:37
+#: plana/apps/users/views/external.py:36
 msgid "Not allowed to retrieve external users."
 msgstr "Non autorisé à récupérer les utilisateurs externes."
 
-#: plana/apps/users/views/external.py:48
+#: plana/apps/users/views/external.py:47
 msgid "No last name given."
 msgstr "Aucun nom de famille donné."
 
@@ -914,86 +914,86 @@ msgstr "L'utilisateur a déjà consenti à ce règlement."
 msgid "Bad request."
 msgstr "Erreur de requête."
 
-#: plana/apps/users/views/user.py:182 plana/apps/users/views/user.py:297
-#: plana/apps/users/views/user_auth.py:89
+#: plana/apps/users/views/user.py:181 plana/apps/users/views/user.py:296
+#: plana/apps/users/views/user_auth.py:88
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:260
+#: plana/apps/users/views/user.py:259
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:273 plana/apps/users/views/user.py:345
+#: plana/apps/users/views/user.py:272 plana/apps/users/views/user.py:344
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
-#: plana/apps/users/views/user.py:281
+#: plana/apps/users/views/user.py:280
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:351
+#: plana/apps/users/views/user.py:350
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user_auth.py:43
+#: plana/apps/users/views/user_auth.py:42
 msgid "Only managers can edit this field."
 msgstr "Seuls les gestionnaires peuvent changer ce champ."
 
-#: plana/apps/users/views/user_auth.py:49
+#: plana/apps/users/views/user_auth.py:48
 msgid "Cannot edit this field."
 msgstr "Ce champ ne peut être édité."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:78
+#: plana/apps/users/views/user_groups_institutions_commissions.py:77
 msgid "User or group or institution or commission does not exist."
 msgstr ""
 "L'utilisateur ou le groupe ou l'institution ou la commission n'existe pas."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:86
+#: plana/apps/users/views/user_groups_institutions_commissions.py:85
 msgid "Only managers can edit groups for this account."
 msgstr "Seuls les gestionnaires peuvent changer les groupes de ce compte."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:96
+#: plana/apps/users/views/user_groups_institutions_commissions.py:95
 msgid "Only managers can edit groups."
 msgstr "Seuls les gestionnaires peuvent changer les groupes."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:104
+#: plana/apps/users/views/user_groups_institutions_commissions.py:103
 msgid "Groups for a manager cannot be changed."
 msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:120
+#: plana/apps/users/views/user_groups_institutions_commissions.py:119
 msgid "Registering in this group is not allowed."
 msgstr "S'inscrire dans ce groupe n'est pas autorisé."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:135
+#: plana/apps/users/views/user_groups_institutions_commissions.py:134
 msgid "Adding institution in this group is not possible."
 msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:151
+#: plana/apps/users/views/user_groups_institutions_commissions.py:150
 msgid "Adding commission in this group is not possible."
 msgstr "Ajouter une commission dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:186
+#: plana/apps/users/views/user_groups_institutions_commissions.py:185
 msgid "Not allowed to get this link between group and user."
 msgstr "Non autorisé à récupérer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:217
-#: plana/apps/users/views/user_groups_institutions_commissions.py:268
-#: plana/apps/users/views/user_groups_institutions_commissions.py:320
+#: plana/apps/users/views/user_groups_institutions_commissions.py:216
+#: plana/apps/users/views/user_groups_institutions_commissions.py:267
+#: plana/apps/users/views/user_groups_institutions_commissions.py:319
 msgid "User or link does not exist."
 msgstr "L'association ou le lien n'existe pas."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:227
+#: plana/apps/users/views/user_groups_institutions_commissions.py:226
 msgid "User is still linked to an association."
 msgstr "L'utilisateur est encore membre d'une association."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:233
-#: plana/apps/users/views/user_groups_institutions_commissions.py:285
-#: plana/apps/users/views/user_groups_institutions_commissions.py:334
+#: plana/apps/users/views/user_groups_institutions_commissions.py:232
+#: plana/apps/users/views/user_groups_institutions_commissions.py:284
+#: plana/apps/users/views/user_groups_institutions_commissions.py:333
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/apps/users/views/user_groups_institutions_commissions.py:279
-#: plana/apps/users/views/user_groups_institutions_commissions.py:328
+#: plana/apps/users/views/user_groups_institutions_commissions.py:278
+#: plana/apps/users/views/user_groups_institutions_commissions.py:327
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 

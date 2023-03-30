@@ -1,5 +1,4 @@
 """Serializers describing fields used on users and related forms."""
-
 from allauth.account.adapter import get_adapter
 from django.conf import settings
 from django.contrib.auth.models import Group

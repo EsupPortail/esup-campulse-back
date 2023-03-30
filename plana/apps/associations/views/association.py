@@ -1,5 +1,4 @@
 """Views directly linked to associations."""
-
 import json
 import unicodedata
 

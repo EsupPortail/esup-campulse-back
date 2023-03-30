@@ -1,5 +1,4 @@
 """Models describing documents (charters PDF, review spreadsheets, ...)."""
-
 import datetime
 
 from django.conf import settings

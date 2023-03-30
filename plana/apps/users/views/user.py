@@ -1,5 +1,4 @@
 """Views directly linked to users and their links with other models."""
-
 import datetime
 
 from allauth.account.forms import default_token_generator
