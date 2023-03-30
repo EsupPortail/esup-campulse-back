@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 09:19+0200\n"
+"POT-Creation-Date: 2023-03-30 10:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -432,8 +432,7 @@ msgstr "Non autorisé à supprimer un document pour cette commission."
 #: plana/apps/projects/views/project_category.py:59
 #: plana/apps/projects/views/project_category.py:98
 #: plana/apps/projects/views/project_category.py:135
-#: plana/apps/projects/views/project_commission_date.py:86
-#: plana/apps/projects/views/project_commission_date.py:139
+#: plana/apps/projects/views/project_commission_date.py:148
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -664,14 +663,14 @@ msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
 #: plana/apps/projects/views/project.py:191
-#: plana/apps/projects/views/project_commission_date.py:202
+#: plana/apps/projects/views/project_commission_date.py:211
 msgid "Not allowed to update basic fields for this project."
 msgstr "Non autorisé à mettre à jour les champs de ce projet."
 
 #: plana/apps/projects/views/project.py:197
-#: plana/apps/projects/views/project_commission_date.py:92
-#: plana/apps/projects/views/project_commission_date.py:208
-#: plana/apps/projects/views/project_commission_date.py:243
+#: plana/apps/projects/views/project_commission_date.py:95
+#: plana/apps/projects/views/project_commission_date.py:217
+#: plana/apps/projects/views/project_commission_date.py:259
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
@@ -692,22 +691,31 @@ msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
-#: plana/apps/projects/views/project_commission_date.py:103
+#: plana/apps/projects/views/project_commission_date.py:89
+msgid "Project or commission date does not exist."
+msgstr "Le projet ou la date de commission n'existe pas."
+
+#: plana/apps/projects/views/project_commission_date.py:106
 msgid "Not allowed to update amount earned for this project's commission."
 msgstr "Non autorisé à mettre à jour le montant obtenu à cette commission."
 
-#: plana/apps/projects/views/project_commission_date.py:147
+#: plana/apps/projects/views/project_commission_date.py:114
+#: plana/apps/projects/views/project_commission_date.py:230
+msgid "Submission date for this commission is gone."
+msgstr "La date de soumission de projet pour cette commission est passée."
+
+#: plana/apps/projects/views/project_commission_date.py:156
 msgid "Not allowed to retrieve this project commission dates."
 msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses dates de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_date.py:192
-#: plana/apps/projects/views/project_commission_date.py:235
+#: plana/apps/projects/views/project_commission_date.py:201
+#: plana/apps/projects/views/project_commission_date.py:251
 msgid "Link between this project and commission does not exists."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:214
+#: plana/apps/projects/views/project_commission_date.py:223
 msgid "Not allowed to update amount earned for this project."
 msgstr "Non autorisé à mettre à jour le montant reçu pour ce projet."
 

@@ -156,6 +156,23 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_project_cd_wrong_submission_date(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route can be accessed by a student user.
+        - The commission submission date must not be over.
+        """
+        commission_date_id = 1
+        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date.submission_date = "1968-05-03"
+        commission_date.save()
+        response = self.student_misc_client.post(
+            "/projects/commission_dates",
+            {"project": 1, "commission_date": commission_date_id},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_cd_user_success(self):
         """
         POST /projects/commission_dates .
@@ -343,7 +360,25 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_cd_bad_success(self):
+    def test_patch_project_cd_wrong_submission_date(self):
+        """
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The commission submission date must not be over.
+        """
+        commission_date_id = 3
+        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date.submission_date = "1968-05-03"
+        commission_date.save()
+        response = self.student_misc_client.patch(
+            f"/projects/1/commission_dates/{commission_date_id}",
+            {"amount_asked": 1333},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_cd_success(self):
         """
         PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 

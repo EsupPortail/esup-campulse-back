@@ -1,6 +1,6 @@
 """Views directly linked to projects categories."""
 
-from datetime import datetime
+import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -66,7 +66,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project.edition_date = datetime.now()
+        project.edition_date = datetime.date.today()
         project.save()
 
         try:
@@ -142,7 +142,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project.edition_date = datetime.now()
+        project.edition_date = datetime.date.today()
         project.save()
         project_category.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

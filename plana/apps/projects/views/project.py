@@ -1,6 +1,6 @@
 """Views directly linked to projects."""
 
-from datetime import datetime
+import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -128,8 +128,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data["creation_date"] = datetime.now()
-        request.data["edition_date"] = datetime.now()
+        request.data["creation_date"] = datetime.date.today()
+        request.data["edition_date"] = datetime.date.today()
 
         return super().create(request, *args, **kwargs)
 
@@ -208,7 +208,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data["edition_date"] = datetime.now()
+        request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)
 
 
@@ -249,5 +249,5 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        request.data["edition_date"] = datetime.now()
+        request.data["edition_date"] = datetime.date.today()
         return self.update(request, *args, **kwargs)

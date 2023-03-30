@@ -1,6 +1,6 @@
 """Views linked to project commission dates links."""
 
-from datetime import datetime
+import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -81,9 +81,12 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         """Creates a link between a project and a commission date."""
         try:
             project = Project.objects.get(pk=request.data["project"])
+            commission_date = CommissionDate.objects.get(
+                pk=request.data["commission_date"]
+            )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project does not exist.")},
+                {"error": _("Project or commission date does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -106,7 +109,13 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project.edition_date = datetime.now()
+        if commission_date.submission_date < datetime.date.today():
+            return response.Response(
+                {"error": _("Submission date for this commission is gone.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        project.edition_date = datetime.date.today()
         project.save()
 
         try:
@@ -215,6 +224,13 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        commission_date = CommissionDate.objects.get(pk=kwargs["commission_date_id"])
+        if commission_date.submission_date < datetime.date.today():
+            return response.Response(
+                {"error": _("Submission date for this commission is gone.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         for field in request.data:
             setattr(pcd, field, request.data[field])
         pcd.save()
@@ -244,7 +260,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project.edition_date = datetime.now()
+        project.edition_date = datetime.date.today()
         project.save()
         pcd.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
