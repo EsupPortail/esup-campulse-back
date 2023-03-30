@@ -74,7 +74,11 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 managers_emails = []
                 if assos_user.count() > 0:
                     for institution in request.user.get_user_institutions():
-                        managers_emails += institution.default_institution_managers()
+                        managers_emails += (
+                            institution.default_institution_managers().values_list(
+                                "email"
+                            )
+                        )
                     managers_emails = list(set(managers_emails))
                 else:
                     for user_to_check in User.objects.all():
@@ -158,7 +162,9 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                     code="INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
                 for institution in user.get_user_institutions():
-                    managers_emails += institution.default_institution_managers()
+                    managers_emails += (
+                        institution.default_institution_managers().values_list("email")
+                    )
                 managers_emails = list(set(managers_emails))
             else:
                 template = MailTemplate.objects.get(

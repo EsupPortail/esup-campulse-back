@@ -3,11 +3,12 @@ from unittest.mock import patch
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
+from django.core import mail
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -15,8 +16,21 @@ class UserViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "consents_gdprconsent.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
+        "users_associationuser.json",
+        "users_gdprconsentusers.json",
+        "users_groupinstitutioncommissionuser.json",
+        "users_user.json",
     ]
 
     @patch('plana.apps.users.serializers.cas.CASSerializer.validate')
@@ -58,10 +72,19 @@ class UserViewsTests(TestCase):
     def test_cas_patch_auth_user_detail(self):
         """A CAS user can execute this request but cannot update CAS fields from his account."""
         user_cas = User.objects.get(username="PatriciaCAS")
+        self.assertFalse(len(mail.outbox))
         response_not_modified = self.cas_client.patch(
             "/users/auth/user/",
             data={"email": "george-lucas@unistra.fr"},
             content_type="application/json",
         )
+        self.assertTrue(len(mail.outbox))
         self.assertEqual(user_cas.email, "patriciacas@unistra.fr")
         self.assertEqual(response_not_modified.status_code, status.HTTP_200_OK)
+
+        AssociationUser.objects.create(user_id=user_cas.pk, association_id=1)
+        response_not_modified = self.cas_client.patch(
+            "/users/auth/user/",
+            data={"email": "george-lucas@unistra.fr"},
+            content_type="application/json",
+        )

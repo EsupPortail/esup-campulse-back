@@ -254,7 +254,7 @@ class UserViewsManagerTests(TestCase):
         """
         self.assertFalse(len(mail.outbox))
         response_manager = self.manager_client.patch(
-            f"/users/{self.student_user_id}",
+            f"/users/{self.unvalidated_user_id}",
             data={
                 "email": "aymar-venceslas@oui.org",
                 "phone": "0 118 999 881 999 119 725 3",
@@ -262,7 +262,7 @@ class UserViewsManagerTests(TestCase):
             },
             content_type="application/json",
         )
-        user = User.objects.get(pk=self.student_user_id)
+        user = User.objects.get(pk=self.unvalidated_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
