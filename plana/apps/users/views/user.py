@@ -342,17 +342,19 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 for unvalidated_asso_user in unvalidated_assos_user:
                     context[
                         "user_association_url"
-                    ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}{user.pk}"
+                    ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
                     template = MailTemplate.objects.get(
                         code="USER_ASSOCIATION_MANAGER_MESSAGE"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=Institution.objects.get(
-                            id=unvalidated_asso_user.association.institution_id
-                        )
-                        .default_institution_managers()
-                        .values_list("email"),
+                        to_=list(
+                            Institution.objects.get(
+                                id=unvalidated_asso_user.association.institution_id
+                            )
+                            .default_institution_managers()
+                            .values_list("email", flat=True)
+                        ),
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),

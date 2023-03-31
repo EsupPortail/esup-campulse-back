@@ -12,6 +12,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models import Institution
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
@@ -209,6 +210,30 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 request.data["is_validated_by_admin"] = True
             else:
                 request.data["is_validated_by_admin"] = False
+
+        if "is_validated_by_admin" not in request.data or (
+            "is_validated_by_admin" in request.data
+            and (to_bool(request.data["is_validated_by_admin"]) is False)
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+                "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
+            }
+            template = MailTemplate.objects.get(code="USER_ASSOCIATION_MANAGER_MESSAGE")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=list(
+                    Institution.objects.get(id=association.institution_id)
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                ),
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
 
         return super().create(request, *args, **kwargs)
 

@@ -3,6 +3,7 @@ import datetime
 import json
 
 from django.conf import settings
+from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -163,6 +164,7 @@ class UserViewsStudentTests(TestCase):
         - An admin-validated student user can execute this request.
         - An admin-validated student cannot validate its own link.
         """
+        self.assertFalse(len(mail.outbox))
         response_student = self.student_client.post(
             "/users/associations/",
             {
@@ -171,6 +173,7 @@ class UserViewsStudentTests(TestCase):
                 "can_be_president": False,
             },
         )
+        self.assertTrue(len(mail.outbox))
         self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
         user_asso = AssociationUser.objects.get(
             user_id=self.student_user_id, association_id=5

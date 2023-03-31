@@ -76,7 +76,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     for institution in request.user.get_user_institutions():
                         managers_emails += (
                             institution.default_institution_managers().values_list(
-                                "email"
+                                "email", flat=True
                             )
                         )
                     managers_emails = list(set(managers_emails))
@@ -163,7 +163,9 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 )
                 for institution in user.get_user_institutions():
                     managers_emails += (
-                        institution.default_institution_managers().values_list("email")
+                        institution.default_institution_managers().values_list(
+                            "email", flat=True
+                        )
                     )
                 managers_emails = list(set(managers_emails))
             else:
