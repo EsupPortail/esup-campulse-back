@@ -170,7 +170,7 @@ class UserViewsStudentTests(TestCase):
             {
                 "user": self.student_user_name,
                 "association": 5,
-                "can_be_president": False,
+                "can_be_president_permanent": False,
             },
         )
         self.assertTrue(len(mail.outbox))
@@ -245,7 +245,7 @@ class UserViewsStudentTests(TestCase):
 
         - A student president of an association cannot update president status.
         - A student president of an association can execute this request.
-        - A can_be_president of an association cannot PATCH can_be_president.
+        - A can_be_president of an association cannot PATCH can_be_president_permanent.
         - A student president of an association can update vice-president, secretary and treasurer.
         - can_be_president_from cannot comes after can_be_president_to
         """
@@ -253,7 +253,7 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
-                "can_be_president": True,
+                "can_be_president_permanent": True,
                 "is_president": True,
                 "is_secretary": False,
                 "is_treasurer": False,
@@ -269,7 +269,6 @@ class UserViewsStudentTests(TestCase):
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
-                "can_be_president": True,
                 "can_be_president_from": "2023-03-22",
                 "can_be_president_to": "2023-03-29",
                 "is_secretary": True,
@@ -282,7 +281,7 @@ class UserViewsStudentTests(TestCase):
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
         self.assertEqual(asso_user.can_be_president_from, datetime.date(2023, 3, 22))
-        self.assertTrue(asso_user.can_be_president)
+        self.assertFalse(asso_user.can_be_president_permanent)
         self.assertFalse(asso_user.is_president)
         self.assertTrue(asso_user.is_secretary)
         self.assertFalse(asso_user.is_treasurer)
@@ -291,7 +290,7 @@ class UserViewsStudentTests(TestCase):
         response_student = self.student_client.patch(
             f"/users/{self.unvalidated_user_id}/associations/{association_id}",
             {
-                "can_be_president": True,
+                "can_be_president_permanent": True,
             },
             content_type="application/json",
         )
@@ -299,7 +298,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.unvalidated_user_id, association_id=association_id
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertFalse(asso_user.can_be_president)
+        self.assertFalse(asso_user.can_be_president_permanent)
 
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",

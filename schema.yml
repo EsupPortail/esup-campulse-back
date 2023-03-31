@@ -2099,8 +2099,9 @@ components:
           type: integer
         is_president:
           type: boolean
-        can_be_president:
+        can_be_president_permanent:
           type: boolean
+          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date
@@ -2169,8 +2170,9 @@ components:
       properties:
         is_president:
           type: boolean
-        can_be_president:
+        can_be_president_permanent:
           type: boolean
+          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date
@@ -2799,8 +2801,9 @@ components:
       properties:
         is_president:
           type: boolean
-        can_be_president:
+        can_be_president_permanent:
           type: boolean
+          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date

@@ -40,7 +40,7 @@ class UsersModelsTests(TestCase):
         asso_user = AssociationUser.objects.filter(is_validated_by_admin=True).first()
         self.assertEqual(
             str(asso_user),
-            f"{asso_user.user}, {asso_user.association}, office : {asso_user.can_be_president}",
+            f"{asso_user.user}, {asso_user.association}, office : {asso_user.can_be_president_permanent}",
         )
         self.assertEqual(asso_user.user.is_in_association(asso_user.association), True)
         self.assertEqual(asso_user.user.is_in_association(7), False)

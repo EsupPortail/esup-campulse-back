@@ -69,7 +69,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         association_id=request.data["association"],
                         user_id=request.user.pk,
                     )
-                    if not member.is_president and not member.can_be_president:
+                    if (
+                        not member.is_president
+                        and not request.user.is_president_in_association(
+                            request.data["association"]
+                        )
+                    ):
                         return response.Response(
                             {"error": _("Not allowed to create a new project.")},
                             status=status.HTTP_403_FORBIDDEN,

@@ -340,28 +340,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "is_president" in request.data
-            and president
-            and asso_user.user_id == request.user.pk
-        ):
-            return response.Response(
-                {"error": _("President cannot self-edit.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "can_be_president_from" in request.data
-            and not "can_be_president_to" in request.data
-        ):
-            request.data["can_be_president_to"] = None
-
-        if (
-            "can_be_president_to" in request.data
-            and not "can_be_president_from" in request.data
-        ):
-            request.data["can_be_president_from"] = datetime.date.today()
-
         if "is_validated_by_admin" in request.data and (
             not request.user.has_perm("users.change_associationuser_any_institution")
             and not request.user.is_staff_for_association(kwargs["association_id"])
@@ -372,6 +350,16 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         "Only managers can validate associations for this account."
                     )
                 },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            "is_president" in request.data
+            and president
+            and asso_user.user_id == request.user.pk
+        ):
+            return response.Response(
+                {"error": _("President cannot self-edit.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -394,12 +382,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        if (not "can_be_president" in request.data) and (
-            "can_be_president_from" in request.data
-            or "can_be_president_to" in request.data
-        ):
-            request.data["can_be_president"] = True
-
         if (
             "can_be_president_from" in request.data
             and request.data["can_be_president_from"] is not None
@@ -412,6 +394,34 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 {"error": _("Can't remove president delegation before giving it.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if (
+            "can_be_president_from" in request.data
+            and not "can_be_president_to" in request.data
+        ):
+            request.data["can_be_president_to"] = None
+
+        if (
+            "can_be_president_to" in request.data
+            and not "can_be_president_from" in request.data
+        ):
+            request.data["can_be_president_from"] = datetime.date.today()
+
+        if (
+            "can_be_president_from" in request.data
+            and request.data["can_be_president_from"] is not None
+        ) or (
+            "can_be_president_to" in request.data
+            and request.data["can_be_president_to"] is not None
+        ):
+            request.data["can_be_president_permanent"] = False
+
+        if (
+            "can_be_president_permanent" in request.data
+            and request.data["can_be_president_permanent"] == True
+        ):
+            request.data["can_be_president_from"] = None
+            request.data["can_be_president_to"] = None
 
         if (
             "is_vice_president" in request.data
@@ -439,7 +449,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         fields = [
             "is_president",
-            "can_be_president",
+            "can_be_president_permanent",
             "can_be_president_from",
             "can_be_president_to",
             "is_validated_by_admin",

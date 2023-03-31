@@ -420,7 +420,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": self.student_user_name,
                 "association": 1,
-                "can_be_president": False,
+                "can_be_president_permanent": False,
             },
         )
         self.assertEqual(response_manager_misc.status_code, status.HTTP_403_FORBIDDEN)
@@ -430,7 +430,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": self.student_user_name,
                 "association": 1,
-                "can_be_president": False,
+                "can_be_president_permanent": False,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
@@ -440,7 +440,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": self.unvalidated_user_name,
                 "association": 1,
-                "can_be_president": False,
+                "can_be_president_permanent": False,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
@@ -450,7 +450,7 @@ class UserViewsManagerTests(TestCase):
             {
                 "user": self.manager_general_user_name,
                 "association": 1,
-                "can_be_president": True,
+                "can_be_president_permanent": True,
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)

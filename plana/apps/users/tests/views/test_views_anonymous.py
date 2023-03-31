@@ -143,7 +143,7 @@ class UserViewsAnonymousTests(TestCase):
             {
                 "user": self.student_user_name,
                 "association": 2,
-                "can_be_president": False,
+                "can_be_president_permanent": False,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
