@@ -2,7 +2,7 @@
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
@@ -38,8 +38,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                     user_id=self.request.user.pk
                 ).values_list("association_id")
                 user_projects_ids = Project.objects.filter(
-                    Q(user_id=self.request.user.pk)
-                    | Q(association_id__in=user_associations_ids)
+                    models.Q(user_id=self.request.user.pk)
+                    | models.Q(association_id__in=user_associations_ids)
                 ).values_list("id")
                 queryset = queryset.filter(project_id__in=user_projects_ids)
 

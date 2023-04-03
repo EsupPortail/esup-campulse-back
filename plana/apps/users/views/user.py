@@ -8,7 +8,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -109,12 +109,17 @@ class UserListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(id__in=assos_users_query)
 
             if institutions is not None:
-                multiple_groups_users_query = (
-                    User.objects.annotate(
-                        num_groups=models.Count("groupinstitutioncommissionuser")
+                misc_users_query = User.objects.filter(
+                    Q(
+                        id__in=GroupInstitutionCommissionUser.objects.filter(
+                            institution_id__isnull=True, commission_id__isnull=True
+                        ).values_list("user_id", flat=True)
                     )
-                    .filter(num_groups__gt=1)
-                    .values_list("id", flat=True)
+                    & ~Q(
+                        id__in=AssociationUser.objects.all().values_list(
+                            "user_id", flat=True
+                        )
+                    )
                 )
                 commission_users_query = User.objects.filter(
                     id__in=GroupInstitutionCommissionUser.objects.filter(
@@ -123,8 +128,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 ).values_list("id", flat=True)
                 if institutions == "":
                     queryset = queryset.filter(
-                        models.Q(id__in=multiple_groups_users_query)
-                        | models.Q(id__in=commission_users_query)
+                        Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
                     )
                 else:
                     institutions_ids = institutions.split(",")
@@ -146,9 +150,9 @@ class UserListCreate(generics.ListCreateAPIView):
 
                     if check_other_users is True:
                         queryset = queryset.filter(
-                            models.Q(id__in=assos_users_query)
-                            | models.Q(id__in=multiple_groups_users_query)
-                            | models.Q(id__in=commission_users_query)
+                            Q(id__in=assos_users_query)
+                            | Q(id__in=misc_users_query)
+                            | Q(id__in=commission_users_query)
                         )
                     else:
                         queryset = queryset.filter(id__in=assos_users_query)

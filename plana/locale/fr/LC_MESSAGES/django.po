@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-31 16:07+0200\n"
+"POT-Creation-Date: 2023-04-03 10:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:288
 #: plana/apps/associations/views/association.py:335
 #: plana/apps/associations/views/association.py:444
-#: plana/apps/projects/views/project.py:62
+#: plana/apps/projects/views/project.py:63
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
@@ -425,9 +425,9 @@ msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
 #: plana/apps/documents/views/document_upload.py:30
-#: plana/apps/projects/views/project.py:162
-#: plana/apps/projects/views/project.py:189
-#: plana/apps/projects/views/project.py:242
+#: plana/apps/projects/views/project.py:163
+#: plana/apps/projects/views/project.py:190
+#: plana/apps/projects/views/project.py:243
 #: plana/apps/projects/views/project_category.py:58
 #: plana/apps/projects/views/project_category.py:97
 #: plana/apps/projects/views/project_category.py:134
@@ -642,42 +642,42 @@ msgstr "Date de commission liée au projet"
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/project.py:79
-#: plana/apps/projects/views/project.py:84
-#: plana/apps/projects/views/project.py:89
-#: plana/apps/projects/views/project.py:103
+#: plana/apps/projects/views/project.py:80
+#: plana/apps/projects/views/project.py:85
+#: plana/apps/projects/views/project.py:90
+#: plana/apps/projects/views/project.py:104
 msgid "Not allowed to create a new project."
 msgstr "Non autorisé à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:117
+#: plana/apps/projects/views/project.py:118
 msgid "A project can only have one affectation."
 msgstr "Un projet ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/projects/views/project.py:131
+#: plana/apps/projects/views/project.py:132
 msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou affectation."
 
-#: plana/apps/projects/views/project.py:174
+#: plana/apps/projects/views/project.py:175
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:195
+#: plana/apps/projects/views/project.py:196
 #: plana/apps/projects/views/project_commission_date.py:210
 msgid "Not allowed to update basic fields for this project."
 msgstr "Non autorisé à mettre à jour les champs de ce projet."
 
-#: plana/apps/projects/views/project.py:201
+#: plana/apps/projects/views/project.py:202
 #: plana/apps/projects/views/project_commission_date.py:94
 #: plana/apps/projects/views/project_commission_date.py:216
 #: plana/apps/projects/views/project_commission_date.py:258
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:211
+#: plana/apps/projects/views/project.py:212
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:250
+#: plana/apps/projects/views/project.py:251
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
@@ -967,24 +967,24 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:182 plana/apps/users/views/user.py:297
+#: plana/apps/users/views/user.py:186 plana/apps/users/views/user.py:301
 #: plana/apps/users/views/user_auth.py:100
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:260
+#: plana/apps/users/views/user.py:264
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:273 plana/apps/users/views/user.py:372
+#: plana/apps/users/views/user.py:277 plana/apps/users/views/user.py:376
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
-#: plana/apps/users/views/user.py:281
+#: plana/apps/users/views/user.py:285
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:378
+#: plana/apps/users/views/user.py:382
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 

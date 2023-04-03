@@ -2,7 +2,7 @@
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -42,7 +42,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
         ).values_list("association_id")
         serializer = self.get_serializer(
             self.queryset.filter(
-                Q(user_id=request.user.pk) | Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
             ),
             many=True,
         )

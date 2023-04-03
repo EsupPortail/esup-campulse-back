@@ -19,8 +19,8 @@
     "model": "users.user",
     "pk": 2,
     "fields": {
-      "first_name": "Prénom",
-      "last_name": "Nom",
+      "first_name": "Mail",
+      "last_name": "Non Validé",
       "username": "compte-non-valide@mail.tld",
       "email": "compte-non-valide@mail.tld",
       "is_validated_by_admin": false,
@@ -203,8 +203,8 @@
     "model": "users.user",
     "pk": 15,
     "fields": {
-      "first_name": "Prénom",
-      "last_name": "Nom",
+      "first_name": "Mail",
+      "last_name": "Validé",
       "username": "compte-presque-valide@mail.tld",
       "email": "compte-presque-valide@mail.tld",
       "is_validated_by_admin": false,

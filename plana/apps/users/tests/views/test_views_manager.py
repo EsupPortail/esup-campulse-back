@@ -124,10 +124,13 @@ class UserViewsManagerTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
-        multiple_groups_users_query = (
-            User.objects.annotate(num_groups=Count("groupinstitutioncommissionuser"))
-            .filter(num_groups__gt=1)
-            .values_list("id", flat=True)
+        misc_users_query = User.objects.filter(
+            Q(
+                id__in=GroupInstitutionCommissionUser.objects.filter(
+                    institution_id__isnull=True, commission_id__isnull=True
+                ).values_list("user_id", flat=True)
+            )
+            & ~Q(id__in=AssociationUser.objects.all().values_list("user_id", flat=True))
         )
         commission_users_query = User.objects.filter(
             id__in=GroupInstitutionCommissionUser.objects.filter(
@@ -138,7 +141,7 @@ class UserViewsManagerTests(TestCase):
         response_manager = self.manager_client.get("/users/?institutions=")
         content = json.loads(response_manager.content.decode("utf-8"))
         users_query_cnt = User.objects.filter(
-            Q(id__in=multiple_groups_users_query) | Q(id__in=commission_users_query)
+            Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
         ).count()
         self.assertEqual(len(content), users_query_cnt)
 
@@ -153,7 +156,7 @@ class UserViewsManagerTests(TestCase):
         content = json.loads(response_manager.content.decode("utf-8"))
         users_query_cnt = User.objects.filter(
             Q(id__in=assos_users_query)
-            | Q(id__in=multiple_groups_users_query)
+            | Q(id__in=misc_users_query)
             | Q(id__in=commission_users_query)
         ).count()
         self.assertEqual(len(content), users_query_cnt)

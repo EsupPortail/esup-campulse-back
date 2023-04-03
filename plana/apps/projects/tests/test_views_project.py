@@ -1,7 +1,7 @@
 """List of tests done on projects views."""
 import json
 
-from django.db.models import Q
+from django.db import models
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -112,8 +112,8 @@ class ProjectsViewsTests(TestCase):
             user_id=self.student_misc_user_id
         ).values_list("association_id")
         user_projects_cnt = Project.objects.filter(
-            Q(user_id=self.student_misc_user_id)
-            | Q(association_id__in=user_associations_ids)
+            models.Q(user_id=self.student_misc_user_id)
+            | models.Q(association_id__in=user_associations_ids)
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
