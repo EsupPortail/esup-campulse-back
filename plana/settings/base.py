@@ -279,7 +279,6 @@ LOCAL_APPS = [
     "plana.apps.associations",
     "plana.apps.commissions",
     "plana.apps.consents",
-    "plana.apps.contents",
     "plana.apps.documents",
     "plana.apps.groups",
     "plana.apps.institutions",
