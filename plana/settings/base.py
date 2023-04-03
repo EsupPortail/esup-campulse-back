@@ -279,12 +279,12 @@ LOCAL_APPS = [
     "plana.apps.associations",
     "plana.apps.commissions",
     "plana.apps.consents",
-    "plana.apps.contents",
     "plana.apps.documents",
     "plana.apps.groups",
     "plana.apps.institutions",
     "plana.apps.projects",
     "plana.apps.users",
+    "plana.apps.contents",
     "plana.libs.mail_template",
 ]
 
