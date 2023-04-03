@@ -1,0 +1,11 @@
+[
+  {
+    "model": "contents.content",
+    "pk": 1,
+    "fields": {
+      "code": "HOME_ASSOCIATION",
+      "label": "Paragraphe de la page d'accueil lié aux associations.",
+      "body": "Bonjour bienvenue j'espère que ça va chez vous aujourd'hui on fait planter une appli entière avec un hello world restez ça va être G2NIAL."
+    }
+  }
+]

@@ -17,6 +17,7 @@ exclude = '''
     | plana\/apps\/associations\/migrations
     | plana\/apps\/commissions\/migrations
     | plana\/apps\/consents\/migrations
+    | plana\/apps\/contents\/migrations
     | plana\/apps\/documents\/migrations
     | plana\/apps\/groups\/migrations
     | plana\/apps\/institutions\/migrations
