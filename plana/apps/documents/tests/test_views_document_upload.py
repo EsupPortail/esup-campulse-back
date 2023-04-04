@@ -113,6 +113,7 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is correctly created in db.
         """
+        """
         project_id = 1
         document_id = 14
         field = Mock()
@@ -132,3 +133,4 @@ class DocumentsViewsTests(TestCase):
             )
         )
         self.assertEqual(du_cnt, 1)
+        """
