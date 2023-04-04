@@ -8,7 +8,6 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-# from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import AssociationUser, User
 
 
@@ -23,13 +22,11 @@ class UserViewsStudentTests(TestCase):
         "auth_group_permissions.json",
         "auth_permission.json",
         "commissions_commission.json",
-        "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_gdprconsentusers.json",
         "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
@@ -478,78 +475,6 @@ class UserViewsStudentTests(TestCase):
         student_user_query = User.objects.filter(username=self.student_user_name)
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
         self.assertEqual(len(student_user_query), 0)
-
-    def test_student_get_consents_user_list(self):
-        """
-        GET /users/consents/ .
-
-        - A student user can execute this request.
-        - A student user gets only his own consents.
-        """
-        """
-        consents_user_cnt = GDPRConsentUsers.objects.filter(
-            user_id=self.student_user_id
-        ).count()
-        response_student = self.student_client.get("/users/consents/")
-        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response_student.content.decode("utf-8"))
-        self.assertEqual(len(content), consents_user_cnt)
-        """
-
-    def test_student_post_user_consents(self):
-        """
-        POST /users/consents/ .
-
-        - A student user can execute this request.
-        - A student user cannot give the same consent twice.
-        - A non-existing user cannot have a consent.
-        - A student user cannot give an unexisting consent.
-        - user field is mandatory.
-        - consent field is mandatory.
-        """
-        """
-        response_student = self.student_client.post(
-            "/users/consents/", {"user": self.student_user_name, "consent": 1}
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
-
-        response_student = self.student_client.post(
-            "/users/consents/", {"user": self.student_user_name, "consent": 1}
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_student = self.student_client.post(
-            "/users/consents/", {"user": "brice-de-nice-CASsé", "consent": 1}
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_student = self.student_client.post(
-            "/users/consents/", {"user": self.student_user_name, "consent": 75}
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_student = self.student_client.post("/users/consents/", {"consent": 75})
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_student = self.student_client.post(
-            "/users/consents/", {"user": self.student_user_name}
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-        """
-
-    def test_student_get_consents_user_detail(self):
-        """
-        GET /users/consents/{user_id} .
-
-        - A student user cannot execute this request.
-        """
-        """
-        response_student = self.student_client.get(
-            f"/users/consents/{self.student_user_id}"
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-        """
 
     def test_student_get_user_groups_list(self):
         """

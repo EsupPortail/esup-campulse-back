@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
-from plana.apps.consents.models.consent import GDPRConsent
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
@@ -112,9 +111,6 @@ class User(AbstractUser):
     )
     associations = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUser"
-    )
-    consents_given = models.ManyToManyField(
-        GDPRConsent, verbose_name=_("GDPR Consents"), through="GDPRConsentUsers"
     )
     groups_institutions_commissions = models.ManyToManyField(
         Group,

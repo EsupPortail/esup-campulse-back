@@ -16,8 +16,6 @@ from .views.group_institution_commission_user import (
     GroupInstitutionCommissionUserListCreate,
     GroupInstitutionCommissionUserRetrieve,
 )
-
-# from .views.gdpr_consent_users import UserConsentsListCreate, UserConsentsRetrieve
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
 from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
 
@@ -52,8 +50,6 @@ urlpatterns = [
         name="rest_verify_email",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    # path("consents/", UserConsentsListCreate.as_view(), name="user_consents_list_create"),
-    # path("consents/<int:user_id>", UserConsentsRetrieve.as_view(), name="user_consents_retrieve",),
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(

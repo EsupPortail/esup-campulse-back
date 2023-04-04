@@ -5,14 +5,12 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-
-# from plana.apps.users.models.gdpr_consent_users import GDPRConsentUsers
 from plana.apps.users.models.user import (
     AssociationUser,
     GroupInstitutionCommissionUser,
@@ -32,13 +30,11 @@ class UserViewsManagerTests(TestCase):
         "auth_group_permissions.json",
         "auth_permission.json",
         "commissions_commission.json",
-        "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_gdprconsentusers.json",
         "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
@@ -637,38 +633,6 @@ class UserViewsManagerTests(TestCase):
         self.assertEqual(
             response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
         )
-
-    def test_manager_get_consents_user_list(self):
-        """
-        GET /users/consents/ .
-
-        - A manager user can execute this request.
-        """
-        """
-        consents_user_all_cnt = GDPRConsentUsers.objects.count()
-        response_all_consents = self.manager_client.get("/users/consents/")
-        content_all_consents = json.loads(response_all_consents.content.decode("utf-8"))
-        self.assertEqual(response_all_consents.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content_all_consents), consents_user_all_cnt)
-        """
-
-    def test_manager_get_consents_user_detail(self):
-        """
-        GET /users/consents/{user_id} .
-
-        - A manager user can execute this request.
-        - We get the same amount of consents through the model and through the view.
-        """
-        """
-        response_manager = self.manager_client.get(
-            f"/users/consents/{self.student_user_id}"
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        user_consents = GDPRConsentUsers.objects.filter(user_id=self.student_user_id)
-        user_consents_requested = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(len(user_consents_requested), len(user_consents))
-        """
 
     def test_manager_get_user_groups_list(self):
         """
