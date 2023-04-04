@@ -44,7 +44,6 @@ class AssociationUserUpdateSerializer(serializers.ModelSerializer):
         model = AssociationUser
         fields = [
             "is_president",
-            "can_be_president_permanent",
             "can_be_president_from",
             "can_be_president_to",
             "is_validated_by_admin",

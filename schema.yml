@@ -268,6 +268,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/CommissionDate'
           description: ''
+  /contents/:
+    get:
+      operationId: contents_list
+      description: Lists all contents.
+      tags:
+      - contents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Content'
+          description: ''
   /documents/:
     get:
       operationId: documents_list
@@ -2099,9 +2118,6 @@ components:
           type: integer
         is_president:
           type: boolean
-        can_be_president_permanent:
-          type: boolean
-          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date
@@ -2170,9 +2186,6 @@ components:
       properties:
         is_president:
           type: boolean
-        can_be_president_permanent:
-          type: boolean
-          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date
@@ -2296,6 +2309,26 @@ components:
       - commission_date
       - id
       - submission_date
+    Content:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 128
+        label:
+          type: string
+          maxLength: 128
+        body:
+          type: string
+      required:
+      - body
+      - code
+      - id
+      - label
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -2801,9 +2834,6 @@ components:
       properties:
         is_president:
           type: boolean
-        can_be_president_permanent:
-          type: boolean
-          title: Can be president without a timeframe
         can_be_president_from:
           type: string
           format: date

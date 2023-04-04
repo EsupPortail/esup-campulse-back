@@ -408,22 +408,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             request.data["can_be_president_from"] = datetime.date.today()
 
         if (
-            "can_be_president_from" in request.data
-            and request.data["can_be_president_from"] is not None
-        ) or (
-            "can_be_president_to" in request.data
-            and request.data["can_be_president_to"] is not None
-        ):
-            request.data["can_be_president_permanent"] = False
-
-        if (
-            "can_be_president_permanent" in request.data
-            and request.data["can_be_president_permanent"] == True
-        ):
-            request.data["can_be_president_from"] = None
-            request.data["can_be_president_to"] = None
-
-        if (
             "is_vice_president" in request.data
             and to_bool(request.data["is_vice_president"]) is True
         ):
@@ -449,7 +433,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         fields = [
             "is_president",
-            "can_be_president_permanent",
             "can_be_president_from",
             "can_be_president_to",
             "is_validated_by_admin",

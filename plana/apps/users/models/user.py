@@ -23,9 +23,6 @@ class AssociationUser(models.Model):
         Association, verbose_name=_("Association"), on_delete=models.CASCADE
     )
     is_president = models.BooleanField(_("Is president"), default=False)
-    can_be_president_permanent = models.BooleanField(
-        _("Can be president without a timeframe"), default=False
-    )
     can_be_president_from = models.DateField(_("Can be president from"), null=True)
     can_be_president_to = models.DateField(_("Can be president to"), null=True)
     is_validated_by_admin = models.BooleanField(
@@ -36,7 +33,7 @@ class AssociationUser(models.Model):
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
 
     def __str__(self):
-        return f"{self.user}, {self.association}, office : {self.can_be_president_permanent}"
+        return f"{self.user}, {self.association}"
 
     class Meta:
         verbose_name = _("Association")
@@ -238,12 +235,14 @@ class User(AbstractUser):
             AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
-                    can_be_president_permanent=True,
-                    can_be_president_from__isnull=True,
+                    can_be_president_from__gte=now,
                     can_be_president_to__isnull=True,
                 )
                 | models.Q(
-                    can_be_president_permanent=False,
+                    can_be_president_from__isnull=True,
+                    can_be_president_to__lte=now,
+                )
+                | models.Q(
                     can_be_president_from__gte=now,
                     can_be_president_to__lte=now,
                 )
