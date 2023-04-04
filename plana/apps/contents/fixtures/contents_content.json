@@ -5,7 +5,79 @@
     "fields": {
       "code": "HOME_ASSOCIATION",
       "label": "Paragraphe de la page d'accueil lié aux associations.",
-      "body": "Lorem Ipsum"
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 2,
+    "fields": {
+      "code": "HOME_CHARTER",
+      "label": "Paragraphe de la page d'accueil lié aux chartes du Site Alsace.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 3,
+    "fields": {
+      "code": "HOME_PROJECT",
+      "label": "Paragraphe de la page d'accueil lié aux demandes de subventions.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 4,
+    "fields": {
+      "code": "HOME_INFO",
+      "label": "Paragraphe de la page d'accueil lié aux informations générales / bandeau d'informations.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 5,
+    "fields": {
+      "code": "ABOUT_INFO",
+      "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 6,
+    "fields": {
+      "code": "ABOUT_SERVICES",
+      "label": "Paragraphe de la page à propos présentant les différents services proposés par la plateforme.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 7,
+    "fields": {
+      "code": "ABOUT_CONTACT",
+      "label": "Paragraphe de la page à propos donnant les contacts pour proposer des pistes d'amélioration de la plateforme.",
+      "body": "Lorem ipsum."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 8,
+    "fields": {
+      "code": "CONTACT_INFO",
+      "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 9,
+    "fields": {
+      "code": "CONTACT_LIST",
+      "label": "Paragraphe de la page contact listant les contacts des gestionnaires établissements.",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     }
   }
 ]
