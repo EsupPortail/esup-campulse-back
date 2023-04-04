@@ -1443,36 +1443,36 @@
     "model": "auth.permission",
     "pk": 161,
     "fields": {
-      "name": "Can add GDPR Consent User",
+      "name": "Can add Content",
       "content_type": 33,
-      "codename": "add_gdprconsentusers"
+      "codename": "add_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 162,
     "fields": {
-      "name": "Can change GDPR Consent User",
+      "name": "Can change Content",
       "content_type": 33,
-      "codename": "change_gdprconsentusers"
+      "codename": "change_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 163,
     "fields": {
-      "name": "Can delete GDPR Consent User",
+      "name": "Can delete Content",
       "content_type": 33,
-      "codename": "delete_gdprconsentusers"
+      "codename": "delete_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 164,
     "fields": {
-      "name": "Can view GDPR Consent User",
+      "name": "Can view Content",
       "content_type": 33,
-      "codename": "view_gdprconsentusers"
+      "codename": "view_content"
     }
   },
   {
