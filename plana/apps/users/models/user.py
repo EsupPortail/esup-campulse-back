@@ -3,7 +3,7 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -130,17 +130,17 @@ class User(AbstractUser):
         """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
-        groups_institutions_commissions_user = (
-            GroupInstitutionCommissionUser.objects.filter(user_id=self.pk)
+        return (
+            Permission.objects.filter(
+                group__id__in=Group.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        user_id=self.pk
+                    ).values_list("group_id", flat=True)
+                ).values_list("id", flat=True),
+                codename=perm.split(".")[1],
+            ).count()
+            > 0
         )
-        for group_institution_commission_user in groups_institutions_commissions_user:
-            group_user = Group.objects.get(
-                id=group_institution_commission_user.group_id
-            )
-            for permission in group_user.permissions.all():
-                if perm == f"{permission.content_type.app_label}.{permission.codename}":
-                    return True
-        return False
 
     def can_edit_project(self, project_obj):
         if project_obj.user is not None and project_obj.user != self:
