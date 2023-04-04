@@ -9,12 +9,8 @@ from plana.apps.projects.models.project_category import ProjectCategory
 class ProjectCategorySerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    project = serializers.SlugRelatedField(
-        slug_field="id", queryset=Project.objects.all()
-    )
-    category = serializers.SlugRelatedField(
-        slug_field="id", queryset=Category.objects.all()
-    )
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
         model = ProjectCategory

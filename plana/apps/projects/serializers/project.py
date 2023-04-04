@@ -1,43 +1,21 @@
 """Serializers describing fields used on projects."""
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from plana.apps.commissions.serializers.commission_date import CommissionDateSerializer
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.serializers.category import CategorySerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    categories = serializers.SerializerMethodField()
-    first_edition = serializers.SerializerMethodField()
-    amounts_previous_edition = serializers.SerializerMethodField()
-
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_amounts_previous_edition(self, project):
-        return ProjectCommissionDate.objects.filter(project_id=project.pk).values(
-            "commission_date_id",
-            "amount_asked_previous_edition",
-            "amount_earned_previous_edition",
-        )
-
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_categories(self, project):
-        """Return project-category links."""
-        return ProjectCategory.objects.filter(project_id=project.pk).values()
-
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_first_edition(self, project):
-        """Return is_first_edition for every commission the project applied."""
-        return ProjectCommissionDate.objects.filter(project_id=project.pk).values(
-            "commission_date_id", "is_first_edition"
-        )
+    categories = CategorySerializer(many=True, read_only=True)
+    commission_dates = CommissionDateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = [
+            "id",
             "name",
             "planned_start_date",
             "planned_end_date",
@@ -45,8 +23,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "user",
             "association",
             "categories",
-            "first_edition",
-            "amounts_previous_edition",
+            "commission_dates",
             "budget_previous_edition",
             "target_audience",
             "type_target_audience",
@@ -66,7 +43,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ["name", "association", "user", "edition_date", "project_status"]
+        fields = ["id", "name", "association", "user", "edition_date", "project_status"]
 
 
 class ProjectRestrictedSerializer(serializers.ModelSerializer):

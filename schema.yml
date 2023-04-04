@@ -2257,6 +2257,17 @@ components:
       required:
       - id
       - name
+    CategoryRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+      required:
+      - name
     CharterStatusEnum:
       enum:
       - CHARTER_DRAFT
@@ -2308,6 +2319,23 @@ components:
       - commission
       - commission_date
       - id
+      - submission_date
+    CommissionDateRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        submission_date:
+          type: string
+          format: date
+          title: Project submission limit date
+        commission_date:
+          type: string
+          format: date
+        commission:
+          type: integer
+      required:
+      - commission
+      - commission_date
       - submission_date
     Content:
       type: object
@@ -3009,6 +3037,9 @@ components:
       type: object
       description: Main serializer.
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -3034,16 +3065,14 @@ components:
           type: integer
           nullable: true
         categories:
-          type: object
-          additionalProperties: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
           readOnly: true
-        first_edition:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        amounts_previous_edition:
-          type: object
-          additionalProperties: {}
+        commission_dates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommissionDate'
           readOnly: true
         budget_previous_edition:
           type: integer
@@ -3092,9 +3121,9 @@ components:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
       required:
-      - amounts_previous_edition
       - categories
-      - first_edition
+      - commission_dates
+      - id
       - name
     ProjectCategory:
       type: object
@@ -3104,9 +3133,9 @@ components:
           type: integer
           readOnly: true
         project:
-          type: string
+          type: integer
         category:
-          type: string
+          type: integer
       required:
       - category
       - id
@@ -3116,9 +3145,9 @@ components:
       description: Main serializer.
       properties:
         project:
-          type: string
+          type: integer
         category:
-          type: string
+          type: integer
       required:
       - category
       - project
@@ -3130,9 +3159,9 @@ components:
           type: integer
           readOnly: true
         project:
-          type: string
+          type: integer
         commission_date:
-          type: string
+          type: integer
         is_first_edition:
           type: boolean
         amount_asked_previous_edition:
@@ -3186,9 +3215,9 @@ components:
       description: Complete serializer.
       properties:
         project:
-          type: string
+          type: integer
         commission_date:
-          type: string
+          type: integer
         is_first_edition:
           type: boolean
         amount_asked_previous_edition:
@@ -3215,6 +3244,9 @@ components:
     ProjectPartialData:
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -3234,6 +3266,7 @@ components:
           $ref: '#/components/schemas/ProjectStatusEnum'
       required:
       - edition_date
+      - id
       - name
     ProjectRequest:
       type: object

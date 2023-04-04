@@ -9,11 +9,9 @@ from plana.apps.projects.models.project_commission_date import ProjectCommission
 class ProjectCommissionDateSerializer(serializers.ModelSerializer):
     """Complete serializer."""
 
-    project = serializers.SlugRelatedField(
-        slug_field="id", queryset=Project.objects.all()
-    )
-    commission_date = serializers.SlugRelatedField(
-        slug_field="id", queryset=CommissionDate.objects.all()
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    commission_date = serializers.PrimaryKeyRelatedField(
+        queryset=CommissionDate.objects.all()
     )
 
     class Meta:
