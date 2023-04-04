@@ -1,6 +1,7 @@
 """List of tests done on documents views."""
 from unittest.mock import Mock
 
+from django.core.files.storage import default_storage
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -112,11 +113,12 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is correctly created in db.
         """
-        # TODO : find a way to upload documents in unittests
-        """
         project_id = 1
         document_id = 14
-        file = DynamicStorageFieldFile(Mock(), field=Mock(), name="Name")
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
         post_data = {
             "path_file": file,
             "project": project_id,
@@ -130,4 +132,3 @@ class DocumentsViewsTests(TestCase):
             )
         )
         self.assertEqual(du_cnt, 1)
-        """
