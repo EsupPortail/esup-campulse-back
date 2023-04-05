@@ -1,6 +1,7 @@
 """Views directly linked to documents."""
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -50,7 +51,8 @@ class DocumentList(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
+@extend_schema(methods=["PUT"], exclude=True)
+class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route"""
 
     queryset = Document.objects.all()
@@ -73,6 +75,9 @@ class DocumentRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def delete(self, request, *args, **kwargs):
         """Destroys an entire document type (manager only)."""

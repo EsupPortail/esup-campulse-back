@@ -159,6 +159,16 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.get("/documents/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_put_document_by_id_405(self):
+        """
+        PUT /documents/{id} .
+
+        - The route returns a 405 everytime.
+        """
+        data = {"name": "name", "contact": "test"}
+        response = self.general_client.put("/documents/1", data)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_delete_document_by_id_anonymous(self):
         """
         DELETE /documents/{id} .
