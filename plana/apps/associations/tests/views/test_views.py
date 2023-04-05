@@ -32,55 +32,56 @@ class AssociationsViewsTests(TestCase):
         "users_groupinstitutioncommissionuser.json",
     ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Start a default client used on all tests."""
-        self.client = Client()
+        cls.client = Client()
         url_login = reverse("rest_login")
 
-        self.student_user_id = 11
-        self.student_user_name = "etudiant-asso-site@mail.tld"
-        self.member_client = Client()
+        cls.student_user_id = 11
+        cls.student_user_name = "etudiant-asso-site@mail.tld"
+        cls.member_client = Client()
         data_member = {
-            "username": self.student_user_name,
+            "username": cls.student_user_name,
             "password": "motdepasse",
         }
-        self.response = self.member_client.post(url_login, data_member)
+        cls.response = cls.member_client.post(url_login, data_member)
 
-        self.president_user_id = 13
-        self.president_user_name = "president-asso-site@mail.tld"
-        self.president_client = Client()
+        cls.president_user_id = 13
+        cls.president_user_name = "president-asso-site@mail.tld"
+        cls.president_client = Client()
         data_president = {
-            "username": self.president_user_name,
+            "username": cls.president_user_name,
             "password": "motdepasse",
         }
-        self.response = self.president_client.post(url_login, data_president)
+        cls.response = cls.president_client.post(url_login, data_president)
 
-        self.manager_misc_user_id = 5
-        self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
-        self.misc_client = Client()
+        cls.manager_misc_user_id = 5
+        cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+        cls.misc_client = Client()
         data_misc = {
-            "username": self.manager_misc_user_name,
+            "username": cls.manager_misc_user_name,
             "password": "motdepasse",
         }
-        self.response = self.misc_client.post(url_login, data_misc)
+        cls.response = cls.misc_client.post(url_login, data_misc)
 
-        self.manager_institution_user_id = 4
-        self.manager_institution_user_name = "gestionnaire-uha@mail.tld"
-        self.institution_client = Client()
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
         data_institution = {
-            "username": self.manager_institution_user_name,
+            "username": cls.manager_institution_user_name,
             "password": "motdepasse",
         }
-        self.response = self.institution_client.post(url_login, data_institution)
+        cls.response = cls.institution_client.post(url_login, data_institution)
 
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.general_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.general_client = Client()
         data_general = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.general_client.post(url_login, data_general)
+        cls.response = cls.general_client.post(url_login, data_general)
 
     def test_get_associations_list(self):
         """
