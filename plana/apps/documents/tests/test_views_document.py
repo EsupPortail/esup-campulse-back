@@ -23,40 +23,41 @@ class DocumentsViewsTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Start a default anonymous client."""
-        self.client = Client()
+        cls.client = Client()
         url_login = reverse("rest_login")
 
         """ Start a manager general client used on a majority of tests. """
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.general_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.general_client = Client()
         data_general = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.general_client.post(url_login, data_general)
+        cls.response = cls.general_client.post(url_login, data_general)
 
         """ Start a manager institution client used on some permissions tests. """
-        self.manager_institution_user_id = 4
-        self.manager_institution_user_name = "gestionnaire-uha@mail.tld"
-        self.institution_client = Client()
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
         data_institution = {
-            "username": self.manager_institution_user_name,
+            "username": cls.manager_institution_user_name,
             "password": "motdepasse",
         }
-        self.response = self.institution_client.post(url_login, data_institution)
+        cls.response = cls.institution_client.post(url_login, data_institution)
 
         """ Start a student client used on some permissions tests. """
-        self.student_user_id = 9
-        self.student_user_name = "etudiant-porteur@mail.tld"
-        self.student_client = Client()
+        cls.student_user_id = 9
+        cls.student_user_name = "etudiant-porteur@mail.tld"
+        cls.student_client = Client()
         data_student = {
-            "username": self.student_user_name,
+            "username": cls.student_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_client.post(url_login, data_student)
+        cls.response = cls.student_client.post(url_login, data_student)
 
     def test_get_documents_list(self):
         """
