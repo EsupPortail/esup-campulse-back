@@ -387,6 +387,23 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if request.user.has_perm("associations.change_association_all_fields"):
+            if "amount_members_allowed" in request.data:
+                amount_members_allowed = int(request.data["amount_members_allowed"])
+                if (
+                    amount_members_allowed
+                    < AssociationUser.objects.filter(
+                        association_id=association.pk
+                    ).count()
+                ):
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Cannot set lower amount of members in this association."
+                            )
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
             if "is_site" in request.data:
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:

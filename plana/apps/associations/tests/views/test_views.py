@@ -470,6 +470,20 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_patch_association_lower_amount_members(self):
+        """
+        PATCH /associations/{id} .
+
+        - Cannot lower max number of student allowed in an association if all of them are registered.
+        """
+        association_id = 2
+        response_general = self.general_client.patch(
+            f"/associations/{association_id}",
+            {"amount_members_allowed": 1},
+            content_type="application/json",
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_association_social_networks(self):
         """
         PATCH /associations/{id} .
