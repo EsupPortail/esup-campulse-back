@@ -48,6 +48,16 @@ class DocumentsViewsTests(TestCase):
         }
         self.response = self.institution_client.post(url_login, data_institution)
 
+        """ Start a student client used on some permissions tests. """
+        self.student_user_id = 9
+        self.student_user_name = "etudiant-porteur@mail.tld"
+        self.student_client = Client()
+        data_student = {
+            "username": self.student_user_name,
+            "password": "motdepasse",
+        }
+        self.response = self.student_client.post(url_login, data_student)
+
     def test_get_documents_list(self):
         """
         GET /documents/ .
@@ -68,6 +78,51 @@ class DocumentsViewsTests(TestCase):
 
         document_1 = content[0]
         self.assertTrue(document_1.get("name"))
+
+    def test_post_documents_anonymous(self):
+        """
+        POST /documents/ .
+        - An anonymous user can't execute this request.
+        """
+        post_data = {"name": "test anonymous"}
+        response = self.client.post("/documents/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_post_documents_forbidden(self):
+        """
+        POST /documents/ .
+        - A user without proper permissions can't execute this request.
+        """
+        post_data = {"name": "Test anonymous"}
+        response = self.student_client.post("/documents/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_documents_forbidden_institution(self):
+        """
+        POST /documents/ .
+        - A user without access to requested institution can't execute this request.
+        """
+        institution = 1
+        post_data = {"name": "Test forbidden", "institution": institution}
+        response = self.institution_client.post("/documents/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_documents_success(self):
+        # TODO : test document upload
+        """
+        POST /documents/ .
+        - A user with proper permissions can execute this request.
+        - Document object is successfully created in db.
+        """
+        contact = "gestionnaire-svu@mail.tld"
+        name = "Test success"
+        post_data = {"name": name, "contact": contact}
+        response = self.general_client.post("/documents/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        results = Document.objects.filter(name=name)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].contact, contact)
 
     def test_get_document_by_id_anonymous(self):
         """
