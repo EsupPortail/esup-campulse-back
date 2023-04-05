@@ -27,12 +27,6 @@ class DocumentList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Creates a new document type (manager only)."""
-        if not request.user.has_perm("documents.add_document"):
-            return response.Response(
-                {"error": _("Not allowed to add a new document type.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
         if (
             "institution" in request.data
             and not request.user.has_perm("documents.add_document_any_institution")
@@ -43,16 +37,16 @@ class DocumentList(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "commission" in request.data
-            and not request.user.has_perm("documents.add_document_any_commission")
-            and not request.user.is_member_in_commission(request.data["commission"])
-        ):
-            return response.Response(
-                {"error": _("Not allowed to create a document for this commission.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
+        #        if (
+        #            "commission" in request.data
+        #            and not request.user.has_perm("documents.add_document_any_commission")
+        #            and not request.user.is_member_in_commission(request.data["commission"])
+        #        ):
+        #            return response.Response(
+        #                {"error": _("Not allowed to create a document for this commission.")},
+        #                status=status.HTTP_403_FORBIDDEN,
+        #            )
+        #
         return super().create(request, *args, **kwargs)
 
 

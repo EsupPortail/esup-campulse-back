@@ -30,30 +30,31 @@ class DocumentsViewsTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Start a default anonymous client."""
-        self.client = Client()
+        cls.client = Client()
         url_login = reverse("rest_login")
 
         """ Start a manager general client used on a majority of tests. """
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.general_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.general_client = Client()
         data_general = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.general_client.post(url_login, data_general)
+        cls.response = cls.general_client.post(url_login, data_general)
 
         """ Start a user misc that can update documents for projects. """
-        self.student_misc_user_id = 9
-        self.student_misc_user_name = "etudiant-porteur@mail.tld"
-        self.student_misc_client = Client()
+        cls.student_misc_user_id = 9
+        cls.student_misc_user_name = "etudiant-porteur@mail.tld"
+        cls.student_misc_client = Client()
         data_student_misc = {
-            "username": self.student_misc_user_name,
+            "username": cls.student_misc_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_misc_client.post(url_login, data_student_misc)
+        cls.response = cls.student_misc_client.post(url_login, data_student_misc)
 
     def test_get_document_upload_list_anonymous(self):
         """
