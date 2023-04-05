@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 11:52+0200\n"
+"POT-Creation-Date: 2023-04-05 09:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,7 +208,7 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:288
 #: plana/apps/associations/views/association.py:335
-#: plana/apps/associations/views/association.py:444
+#: plana/apps/associations/views/association.py:461
 #: plana/apps/projects/views/project.py:63
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -241,11 +241,15 @@ msgstr "Erreur de valeurs de réseaux sociaux"
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:450
+#: plana/apps/associations/views/association.py:401
+msgid "Cannot set lower amount of members in this association."
+msgstr "Impossible d'abaisser le nombre de membres de cette association."
+
+#: plana/apps/associations/views/association.py:467
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:460
+#: plana/apps/associations/views/association.py:477
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -836,7 +840,7 @@ msgstr "Impossible de réinitialiser le mot de passe d'un compte CAS."
 
 #: plana/apps/users/views/association_user.py:123
 #: plana/apps/users/views/association_user.py:312
-#: plana/apps/users/views/association_user.py:496
+#: plana/apps/users/views/association_user.py:517
 msgid "User or association does not exist."
 msgstr "L'association ou l'utilisateur n'existe pas."
 
@@ -894,7 +898,7 @@ msgstr "Seuls les gestionnaires peuvent changer le président."
 msgid "Can't remove president delegation before giving it."
 msgstr "Impossible de retirer les droits de président avant de les donner."
 
-#: plana/apps/users/views/association_user.py:508
+#: plana/apps/users/views/association_user.py:529
 msgid "Not allowed to delete this link between association and user."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et association."
 
@@ -927,36 +931,40 @@ msgstr "Les groupes d'un gestionnaire ne peuvent être édités."
 msgid "Registering in this group is not allowed."
 msgstr "S'inscrire dans ce groupe n'est pas autorisé."
 
-#: plana/apps/users/views/group_institution_commission_user.py:132
+#: plana/apps/users/views/group_institution_commission_user.py:130
+msgid "Cannot register in a public and a private group at the same time."
+msgstr "Impossible d'ajouter un membre à des groupes public et privé simultanément."
+
+#: plana/apps/users/views/group_institution_commission_user.py:147
 msgid "Adding institution in this group is not possible."
 msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/group_institution_commission_user.py:148
+#: plana/apps/users/views/group_institution_commission_user.py:163
 msgid "Adding commission in this group is not possible."
 msgstr "Ajouter une commission dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/group_institution_commission_user.py:181
+#: plana/apps/users/views/group_institution_commission_user.py:196
 msgid "Not allowed to get this link between group and user."
 msgstr "Non autorisé à récupérer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/group_institution_commission_user.py:210
-#: plana/apps/users/views/group_institution_commission_user.py:259
-#: plana/apps/users/views/group_institution_commission_user.py:309
+#: plana/apps/users/views/group_institution_commission_user.py:225
+#: plana/apps/users/views/group_institution_commission_user.py:274
+#: plana/apps/users/views/group_institution_commission_user.py:324
 msgid "User or link does not exist."
 msgstr "L'association ou le lien n'existe pas."
 
-#: plana/apps/users/views/group_institution_commission_user.py:220
+#: plana/apps/users/views/group_institution_commission_user.py:235
 msgid "User is still linked to an association."
 msgstr "L'utilisateur est encore membre d'une association."
 
-#: plana/apps/users/views/group_institution_commission_user.py:226
-#: plana/apps/users/views/group_institution_commission_user.py:276
-#: plana/apps/users/views/group_institution_commission_user.py:323
+#: plana/apps/users/views/group_institution_commission_user.py:241
+#: plana/apps/users/views/group_institution_commission_user.py:291
+#: plana/apps/users/views/group_institution_commission_user.py:338
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/apps/users/views/group_institution_commission_user.py:270
-#: plana/apps/users/views/group_institution_commission_user.py:317
+#: plana/apps/users/views/group_institution_commission_user.py:285
+#: plana/apps/users/views/group_institution_commission_user.py:332
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
