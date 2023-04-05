@@ -1,5 +1,5 @@
 """List of tests done on documents views."""
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from django.core.files.storage import default_storage
 from django.test import Client, TestCase
@@ -105,7 +105,8 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_document_upload_project_success(self):
+    @patch('plana.storages.UpdateACLStorage.update_acl')
+    def test_post_document_upload_project_success(self, update_acl):
         """
         POST /documents/uploads .
 
@@ -115,6 +116,7 @@ class DocumentsViewsTests(TestCase):
         """
         project_id = 1
         document_id = 14
+        update_acl.return_value = Mock()
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
