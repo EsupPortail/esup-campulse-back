@@ -650,8 +650,9 @@ class UserViewsManagerTests(TestCase):
 
         - A manager user can add a group to a validated student.
         - A manager user can add a group to a non-validated student.
-        - Groups for a manager can be changed.
         - Groups for a general manager can't be changed by another manager.
+        - A manager group cannot be given to a student.
+        - A student group cannot be given to a manager.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
@@ -665,15 +666,21 @@ class UserViewsManagerTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        response_manager = self.manager_client.post(
-            "/users/groups/",
-            {"username": self.manager_general_user_name, "group": 6},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
         response_manager = self.manager_misc_client.post(
             "/users/groups/",
             {"username": self.manager_general_user_name, "group": 4},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": self.student_user_name, "group": 2, "institution": 1},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": self.manager_misc_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 

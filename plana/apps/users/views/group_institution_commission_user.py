@@ -118,6 +118,21 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            group_structure["REGISTRATION_ALLOWED"] is False
+            and user.get_user_groups().count() > 0
+        ) or (
+            group_structure["REGISTRATION_ALLOWED"] is True and user.is_staff is True
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot register in a public and a private group at the same time."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if institution_id is not None:
             if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
