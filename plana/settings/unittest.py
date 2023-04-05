@@ -55,3 +55,6 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 EMAIL_TEMPLATE_FRONTEND_URL = "http://localhost:3000/"
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+THUMBNAILS["METADATA"]["BACKEND"] = "thumbnails.backends.metadata.DatabaseBackend"
+THUMBNAILS["STORAGE"]["BACKEND"] = "thumbnails.tests.storage.TemporaryStorage"
+
