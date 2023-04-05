@@ -119,7 +119,6 @@ class DocumentsViewsTests(TestCase):
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
-        file.update_acl()
         post_data = {
             "path_file": file,
             "project": project_id,
