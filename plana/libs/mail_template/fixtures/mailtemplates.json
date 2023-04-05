@@ -376,5 +376,23 @@
         13
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 22,
+    "fields": {
+      "code": "USER_ASSOCIATION_CAN_BE_PRESIDENT_CONFIRMATION",
+      "label": "User Association Can Be President Confirmation",
+      "description": "Message reçu par un étudiant auquel on délègue les droits de présidence pour une association.",
+      "subject": "{{ site_name }} – Votre compte peut accéder à une nouvelle association",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Vous pouvez désormais gérer les informations de l'association \"{{ association_name }}\" depuis votre compte sur {{ site_name }}.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        13
+      ]
+    }
   }
 ]

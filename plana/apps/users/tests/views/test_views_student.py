@@ -260,6 +260,7 @@ class UserViewsStudentTests(TestCase):
         self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(asso_user.is_president)
 
+        self.assertFalse(len(mail.outbox))
         response_president = self.president_student_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {
@@ -274,6 +275,7 @@ class UserViewsStudentTests(TestCase):
             user_id=self.student_user_id, association_id=association_id
         )
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
         self.assertEqual(asso_user.can_be_president_from, datetime.date(2023, 3, 22))
         self.assertFalse(asso_user.is_president)
         self.assertTrue(asso_user.is_secretary)

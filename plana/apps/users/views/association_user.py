@@ -452,6 +452,15 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         asso_user.save()
 
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "association_name": association.name,
+        }
+
         if (
             "is_validated_by_admin" in request.data
             and request.data["is_validated_by_admin"] is True
@@ -460,16 +469,28 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 or request.user.is_staff_for_association(kwargs["association_id"])
             )
         ):
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "association_name": association.name,
-            }
             template = MailTemplate.objects.get(
                 code="USER_ASSOCIATION_STUDENT_MESSAGE_CONFIRMATION"
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+        if (
+            "can_be_president_from" in request.data
+            and "can_be_president_to" in request.data
+            and (
+                request.data["can_be_president_from"] is not None
+                or request.data["can_be_president_to"] is not None
+            )
+        ):
+            template = MailTemplate.objects.get(
+                code="USER_ASSOCIATION_CAN_BE_PRESIDENT_CONFIRMATION"
             )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
