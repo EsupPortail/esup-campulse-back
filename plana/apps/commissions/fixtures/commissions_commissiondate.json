@@ -34,5 +34,14 @@
       "commission_date": "2023-06-01",
       "commission_id": 1
     }
+  },
+  {
+    "model": "commissions.commissiondate",
+    "pk": 5,
+    "fields": {
+      "submission_date": "2023-10-07",
+      "commission_date": "2023-10-21",
+      "commission_id": 3
+    }
   }
 ]

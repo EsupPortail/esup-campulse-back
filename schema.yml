@@ -2291,6 +2291,9 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
+        is_site:
+          type: boolean
+          title: Site ?
         institution:
           type: integer
           title: Etablissement

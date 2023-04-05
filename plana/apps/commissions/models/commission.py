@@ -1,4 +1,5 @@
 """Models describing commissions (FSDIE, IdEx, Culture-ActionS, ...)."""
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -10,6 +11,9 @@ class Commission(models.Model):
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
     acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
+    is_site = models.BooleanField(
+        _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
+    )
     institution = models.ForeignKey(
         Institution,
         verbose_name=_("Institution"),

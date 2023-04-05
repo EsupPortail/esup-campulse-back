@@ -5,6 +5,7 @@
     "fields": {
       "name": "Fonds de Solidarité et de Développement des Initiatives Étudiantes",
       "acronym": "FSDIE",
+      "is_site": true,
       "institution_id": 2
     }
   },
@@ -14,6 +15,7 @@
     "fields": {
       "name": "Initiative d'Excellence « Creative Thinkers »",
       "acronym": "IdEx",
+      "is_site": true,
       "institution_id": 2
     }
   },
@@ -23,6 +25,7 @@
     "fields": {
       "name": "Culture-ActionS",
       "acronym": "Culture-ActionS",
+      "is_site": false,
       "institution_id": 1
     }
   }

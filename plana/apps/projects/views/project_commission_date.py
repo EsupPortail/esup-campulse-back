@@ -9,6 +9,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
+from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -83,6 +85,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             commission_date = CommissionDate.objects.get(
                 pk=request.data["commission_date"]
             )
+            commission = Commission.objects.get(pk=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
@@ -105,6 +108,18 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                         "Not allowed to update amount earned for this project's commission."
                     )
                 },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if commission.is_site is True and (
+            project.user_id is not None
+            or (
+                project.association_id is not None
+                and Association.objects.get(project.association_id).is_site is False
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to submit a project to this commission.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

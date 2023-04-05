@@ -163,7 +163,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The commission submission date must not be over.
         """
-        commission_date_id = 1
+        commission_date_id = 5
         commission_date = CommissionDate.objects.get(pk=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
@@ -172,6 +172,24 @@ class ProjectCommissionDateViewsTests(TestCase):
             {"project": 1, "commission_date": commission_date_id},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_cd_user_not_site(self):
+        """
+        POST /projects/commission_dates .
+
+        - A misc student cannot submit a project to a is_site commission.
+        """
+        project_id = 1
+        commission_date_id = 2
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_date_id,
+            "amount_asked": 500,
+        }
+        response = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_cd_user_success(self):
         """
@@ -183,10 +201,10 @@ class ProjectCommissionDateViewsTests(TestCase):
         - Object is correctly created in db.
         """
         project_id = 1
-        commission_id = 1
+        commission_date_id = 5
         post_data = {
             "project": project_id,
-            "commission_date": commission_id,
+            "commission_date": commission_date_id,
             "amount_asked": 500,
         }
         response = self.student_misc_client.post(
@@ -195,7 +213,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         results = ProjectCommissionDate.objects.filter(
-            project_id=project_id, commission_date_id=commission_id
+            project_id=project_id, commission_date_id=commission_date_id
         )
         self.assertEqual(len(results), 1)
 
@@ -204,13 +222,12 @@ class ProjectCommissionDateViewsTests(TestCase):
         POST /projects/commission_dates .
 
         - The route can be accessed by a student user.
-        - Request returns a status 201 the first time and a status 200 next.
         """
         project_id = 1
-        commission_id = 2
+        commission_date_id = 5
         post_data = {
             "project": project_id,
-            "commission_date": commission_id,
+            "commission_date": commission_date_id,
             "amount_asked": 500,
         }
         response = self.student_misc_client.post(
@@ -221,6 +238,11 @@ class ProjectCommissionDateViewsTests(TestCase):
             "/projects/commission_dates", post_data
         )
         self.assertEqual(response_second.status_code, status.HTTP_200_OK)
+
+        results = ProjectCommissionDate.objects.filter(
+            project_id=project_id, commission_date_id=commission_date_id
+        )
+        self.assertEqual(len(results), 1)
 
     def test_put_project_cd_not_existing(self):
         """
