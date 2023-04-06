@@ -247,8 +247,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                         )
                     )
                     if commissions_misc_used.count() > 0:
-                        for user_to_check in User.objects.all():
-                            if user_to_check.has_perm("users.view_user_misc"):
+                        for user_to_check in User.objects.filter(
+                            is_superuser=False, is_staff=True
+                        ):
+                            if user_to_check.has_perm("users.change_user_misc"):
                                 managers_emails.append(user_to_check.email)
                 elif project.user_id is not None:
                     context["first_name"] = request.user.first_name
@@ -256,8 +258,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     template = MailTemplate.objects.get(
                         code="NEW_USER_PROJECT_TO_PROCESS"
                     )
-                    for user_to_check in User.objects.all():
-                        if user_to_check.has_perm("users.view_user_misc"):
+                    for user_to_check in User.objects.filter(
+                        is_superuser=False, is_staff=True
+                    ):
+                        if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,

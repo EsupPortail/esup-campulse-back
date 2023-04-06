@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-06 15:21+0200\n"
+"POT-Creation-Date: 2023-04-06 15:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -445,7 +445,7 @@ msgstr "Non autorisé à supprimer un document pour cette commission."
 #: plana/apps/documents/views/document_upload.py:30
 #: plana/apps/projects/views/project.py:171
 #: plana/apps/projects/views/project.py:198
-#: plana/apps/projects/views/project.py:298
+#: plana/apps/projects/views/project.py:302
 #: plana/apps/projects/views/project_category.py:58
 #: plana/apps/projects/views/project_category.py:97
 #: plana/apps/projects/views/project_category.py:134
@@ -695,7 +695,7 @@ msgstr "Non autorisé à mettre à jour ce projet."
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:306
+#: plana/apps/projects/views/project.py:310
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 
@@ -971,7 +971,7 @@ msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
 #: plana/apps/users/views/user.py:186 plana/apps/users/views/user.py:301
-#: plana/apps/users/views/user_auth.py:100
+#: plana/apps/users/views/user_auth.py:102
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 

@@ -81,8 +81,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                         )
                     managers_emails = list(set(managers_emails))
                 else:
-                    for user_to_check in User.objects.all():
-                        if user_to_check.has_perm("users.view_user_misc"):
+                    for user_to_check in User.objects.filter(
+                        is_superuser=False, is_staff=True
+                    ):
+                        if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
@@ -172,8 +174,10 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 template = MailTemplate.objects.get(
                     code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                for user_to_check in User.objects.all():
-                    if user_to_check.has_perm("users.view_user_misc"):
+                for user_to_check in User.objects.filter(
+                    is_superuser=False, is_staff=True
+                ):
+                    if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
