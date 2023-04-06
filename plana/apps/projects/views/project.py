@@ -1,6 +1,8 @@
 """Views directly linked to projects."""
 import datetime
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,13 +11,16 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectRestrictedSerializer,
     ProjectSerializer,
 )
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.users.models.user import AssociationUser, User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -204,14 +209,49 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
-        if (
-            "project_status" in request.data
-            and request.data["project_status"] not in authorized_status
-        ):
-            return response.Response(
-                {"error": _("Wrong status.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if "project_status" in request.data:
+            if request.data["project_status"] not in authorized_status:
+                return response.Response(
+                    {"error": _("Wrong status.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if request.data["project_status"] == "PROJECT_PROCESSING":
+                template = None
+                managers_emails = []
+                current_site = get_current_site(request)
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                }
+                if project.association_id is not None:
+                    association = Association.objects.get(id=project.association_id)
+                    institution = Institution.objects.get(id=association.institution_id)
+                    context["association_name"] = association.name
+                    template = MailTemplate.objects.get(
+                        code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                    )
+                    managers_emails = (
+                        institution.default_institution_managers().values_list(
+                            "email", flat=True
+                        )
+                    )
+                elif project.user_id is not None:
+                    context["first_name"] = request.user.first_name
+                    context["last_name"] = request.user.last_name
+                    template = MailTemplate.objects.get(
+                        code="NEW_USER_PROJECT_TO_PROCESS"
+                    )
+                    for user_to_check in User.objects.all():
+                        if user_to_check.has_perm("users.view_user_misc"):
+                            managers_emails.append(user_to_check.email)
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=managers_emails,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
 
         request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)

@@ -1,6 +1,7 @@
 """List of tests done on projects views."""
 import json
 
+from django.core import mail
 from django.db import models
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -24,6 +25,8 @@ class ProjectsViewsTests(TestCase):
         "commissions_commissiondate.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
@@ -394,6 +397,40 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.objects.get(pk=1)
         self.assertEqual(project.summary, "new summary")
+
+    def test_patch_project_user_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student misc.
+        - The project is correctly updated in db.
+        """
+        self.assertFalse(len(mail.outbox))
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_misc_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_association_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student president.
+        - The project is correctly updated in db.
+        """
+        self.assertFalse(len(mail.outbox))
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
 
     def test_patch_project_manager_error(self):
         """
