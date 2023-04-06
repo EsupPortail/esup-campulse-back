@@ -115,7 +115,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             project.user_id is not None
             or (
                 project.association_id is not None
-                and Association.objects.get(project.association_id).is_site is False
+                and Association.objects.get(id=project.association_id).is_site is False
             )
         ):
             return response.Response(
@@ -126,6 +126,19 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         if commission_date.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        commissions_with_project = Commission.objects.filter(
+            id__in=CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project=request.data["project"]
+                ).values_list("commission_date_id", flat=True)
+            ).values_list("commission_id", flat=True)
+        ).values_list("id", flat=True)
+        if commission_date.commission_id in commissions_with_project:
+            return response.Response(
+                {"error": _("This project is already submitted for this commission.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

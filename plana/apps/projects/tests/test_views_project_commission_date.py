@@ -58,6 +58,17 @@ class ProjectCommissionDateViewsTests(TestCase):
         }
         cls.response = cls.student_misc_client.post(url_login, data_student_misc)
 
+        """ Start a president user that can submit association projects. """
+        cls.president_user_id = 13
+        cls.president_user_name = "president-asso-site@mail.tld"
+        cls.president_student_client = Client()
+        url = reverse("rest_login")
+        data = {
+            "username": cls.president_user_name,
+            "password": "motdepasse",
+        }
+        cls.response_president = cls.president_student_client.post(url, data)
+
     def test_get_project_cd_anonymous(self):
         """
         GET /projects/commission_dates .
@@ -192,6 +203,23 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_project_cd_commission_already_used(self):
+        """
+        POST /projects/commission_dates .
+
+        - A student cannot submit a same project twice in the same commission.
+        """
+        project_id = 1
+        commission_date_id = 5
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_date_id,
+        }
+        response = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_cd_user_success(self):
         """
         POST /projects/commission_dates .
@@ -201,44 +229,20 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The authenticated user must be authorized to edit the requested project.
         - Object is correctly created in db.
         """
-        project_id = 1
-        commission_date_id = 5
+        project_id = 2
+        commission_date_id = 4
+        ProjectCommissionDate.objects.get(
+            project_id=project_id, commission_date_id=1
+        ).delete()
         post_data = {
             "project": project_id,
             "commission_date": commission_date_id,
             "amount_asked": 500,
         }
-        response = self.student_misc_client.post(
+        response = self.president_student_client.post(
             "/projects/commission_dates", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        results = ProjectCommissionDate.objects.filter(
-            project_id=project_id, commission_date_id=commission_date_id
-        )
-        self.assertEqual(len(results), 1)
-
-    def test_post_project_cd_already_exists(self):
-        """
-        POST /projects/commission_dates .
-
-        - The route can be accessed by a student user.
-        """
-        project_id = 1
-        commission_date_id = 5
-        post_data = {
-            "project": project_id,
-            "commission_date": commission_date_id,
-            "amount_asked": 500,
-        }
-        response = self.student_misc_client.post(
-            "/projects/commission_dates", post_data
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response_second = self.student_misc_client.post(
-            "/projects/commission_dates", post_data
-        )
-        self.assertEqual(response_second.status_code, status.HTTP_200_OK)
 
         results = ProjectCommissionDate.objects.filter(
             project_id=project_id, commission_date_id=commission_date_id
