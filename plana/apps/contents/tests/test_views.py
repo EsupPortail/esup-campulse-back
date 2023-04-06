@@ -26,6 +26,7 @@ class ContentsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of contents through the model and through the view.
         - Contents details are returned (test the "code" attribute).
+        - Filter by code is available.
         """
         contents_cnt = Content.objects.count()
         self.assertTrue(contents_cnt > 0)
@@ -38,3 +39,7 @@ class ContentsViewsTests(TestCase):
 
         content_1 = content[0]
         self.assertTrue(content_1.get("code"))
+
+        code = "HOME_INFO"
+        response = self.client.get(f"/contents/?code={code}")
+        self.assertEqual(response.data[0]["code"], code)

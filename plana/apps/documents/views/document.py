@@ -1,7 +1,8 @@
 """Views directly linked to documents."""
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -9,6 +10,18 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.serializers.document import DocumentSerializer
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "acronym",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Document acronym.",
+            )
+        ]
+    )
+)
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route"""
 
@@ -21,6 +34,14 @@ class DocumentList(generics.ListCreateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        queryset = Document.objects.all()
+        if self.request.method == "GET":
+            acronym = self.request.query_params.get("acronym")
+            if acronym is not None and acronym != "":
+                queryset = queryset.filter(acronym=acronym)
+        return queryset
 
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""

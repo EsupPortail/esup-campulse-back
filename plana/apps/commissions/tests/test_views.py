@@ -29,6 +29,7 @@ class CommissionsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of commissions through the model and through the view.
         - Commissions details are returned (test the "name" attribute).
+        - Filter by acronym is available.
         """
         commissions_cnt = Commission.objects.count()
         self.assertTrue(commissions_cnt > 0)
@@ -41,6 +42,10 @@ class CommissionsViewsTests(TestCase):
 
         commission_1 = content[0]
         self.assertTrue(commission_1.get("name"))
+
+        acronym = "FSDIE"
+        response = self.client.get(f"/commissions/?acronym={acronym}")
+        self.assertEqual(response.data[0]["acronym"], acronym)
 
     def test_get_institution_components_list(self):
         """

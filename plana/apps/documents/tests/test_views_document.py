@@ -67,6 +67,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of documents through the model and through the view.
         - Documents details are returned (test the "name" attribute).
+        - Filter by acronym is available.
         """
         documents_cnt = Document.objects.count()
         self.assertTrue(documents_cnt > 0)
@@ -79,6 +80,10 @@ class DocumentsViewsTests(TestCase):
 
         document_1 = content[0]
         self.assertTrue(document_1.get("name"))
+
+        acronym = "CHARTE_SITE_ALSACE"
+        response = self.client.get(f"/documents/?acronym={acronym}")
+        self.assertEqual(response.data[0]["acronym"], acronym)
 
     def test_post_documents_anonymous(self):
         """

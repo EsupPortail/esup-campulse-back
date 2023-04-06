@@ -28,6 +28,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of institutions through the model and through the view.
         - Institutions details are returned (test the "name" attribute).
+        - Filter by acronym is available.
         """
         institutions_cnt = Institution.objects.count()
         self.assertTrue(institutions_cnt > 0)
@@ -40,6 +41,10 @@ class AssociationsViewsTests(TestCase):
 
         institution_1 = content[0]
         self.assertTrue(institution_1.get("name"))
+
+        acronym = "Unistra"
+        response = self.client.get(f"/institutions/?acronym={acronym}")
+        self.assertEqual(response.data[0]["acronym"], acronym)
 
     def test_get_institution_components_list(self):
         """

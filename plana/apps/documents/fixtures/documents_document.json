@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "Charte Site Alsace",
+      "acronym": "CHARTE_SITE_ALSACE",
       "description": "Charte signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -18,6 +19,7 @@
     "pk": 2,
     "fields": {
       "name": "RGPD Site Alsace",
+      "acronym": "RGPD_SITE_ALSACE",
       "description": "Charte RGPD signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -34,6 +36,7 @@
     "pk": 3,
     "fields": {
       "name": "Charte FSDIE",
+      "acronym": "CHARTE_FSDIE",
       "description": "Charte Fonds de Solidarité et de Développement des Initiatives Étudiantes",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -49,6 +52,7 @@
     "pk": 4,
     "fields": {
       "name": "Charte IdEx",
+      "acronym": "CHARTE_IDEX",
       "description": "Charte Initiative d'Excellence « Creative Thinkers »",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -64,6 +68,7 @@
     "pk": 5,
     "fields": {
       "name": "RGPD FSDIE",
+      "acronym": "RGPD_FSDIE",
       "description": "Charte RGPD Fonds de Solidarité et de Développement des Initiatives Étudiantes",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -81,6 +86,7 @@
     "pk": 6,
     "fields": {
       "name": "RGPD IdEx",
+      "acronym": "RGPD_IDEX",
       "description": "Charte RGPD Initiative d'Excellence « Creative Thinkers »",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
@@ -98,6 +104,7 @@
     "pk": 7,
     "fields": {
       "name": "Charte Culture-ActionS",
+      "acronym": "CHARTE_CULTURE_ACTIONS",
       "description": "Charte Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
@@ -113,6 +120,7 @@
     "pk": 8,
     "fields": {
       "name": "RGPD Culture-ActionS",
+      "acronym": "RGPD_CULTURE_ACTIONS",
       "description": "Charte RGPD Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
@@ -130,6 +138,7 @@
     "pk": 9,
     "fields": {
       "name": "PV de l'AG Constitutive",
+      "acronym": "PV_AG_CONSTITUTIVE",
       "description": "Procès-verbal de l'assemblée générale constitutive",
       "contact": "???",
       "is_multiple": false,
@@ -146,6 +155,7 @@
     "pk": 10,
     "fields": {
       "name": "Certificat de scolarité",
+      "acronym": "CERTIFICAT_SCOLARITE",
       "description": "Certificats de scolarité des membres élus pour une association (ou du porteur individuel)",
       "contact": "???",
       "is_multiple": true,
@@ -162,6 +172,7 @@
     "pk": 11,
     "fields": {
       "name": "Certificat envoyé par le Tribunal Judiciaire",
+      "acronym": "CERTIFICAT_TRIBUNAL_JUDICIAIRE",
       "description": "Certificat envoyé par le Tribunal Judiciaire",
       "contact": "???",
       "is_multiple": false,
@@ -178,6 +189,7 @@
     "pk": 12,
     "fields": {
       "name": "Extrait du Registre des Associations",
+      "acronym": "EXTRAIT_REGISTRE_ASSOCIATIONS",
       "description": "Extrait du Registre des Associations",
       "contact": "???",
       "is_multiple": false,
@@ -194,6 +206,7 @@
     "pk": 13,
     "fields": {
       "name": "Carte Étudiante",
+      "acronym": "CARTE_ETUDIANTE",
       "description": "Carte Étudiante",
       "contact": "???",
       "is_multiple": false,
@@ -210,6 +223,7 @@
     "pk": 14,
     "fields": {
       "name": "Budget Prévisionnel",
+      "acronym": "BUDGET_PREVISIONNEL",
       "description": "Budget Prévisionnel",
       "contact": "???",
       "is_multiple": false,
@@ -226,6 +240,7 @@
     "pk": 15,
     "fields": {
       "name": "Dossier de Projet",
+      "acronym": "DOSSIER_PROJET",
       "description": "Dossier détaillé présentant le projet",
       "contact": "???",
       "is_multiple": false,
@@ -240,6 +255,7 @@
     "pk": 16,
     "fields": {
       "name": "RIB",
+      "acronym": "RIB",
       "description": "Relevé d'Identité Bancaire",
       "contact": "???",
       "is_multiple": false,
@@ -256,6 +272,7 @@
     "pk": 17,
     "fields": {
       "name": "Document Édité",
+      "acronym": "DOCUMENT_EDITE",
       "description": "Exemplaire de chaque document édité pour le projet (affiches, tracts, guide, livrets, journaux, ...)",
       "contact": "???",
       "is_multiple": true,
@@ -272,6 +289,7 @@
     "pk": 18,
     "fields": {
       "name": "Document Complémentaire de Projet",
+      "acronym": "DOCUMENT_COMPLEMENTAIRE_PROJET",
       "description": "Document Complémentaire de Projet",
       "contact": "???",
       "is_multiple": true,
@@ -288,6 +306,7 @@
     "pk": 19,
     "fields": {
       "name": "Bilan",
+      "acronym": "BILAN",
       "description": "Bilan",
       "contact": "???",
       "is_multiple": false,
@@ -304,6 +323,7 @@
     "pk": 20,
     "fields": {
       "name": "Supports de Communication",
+      "acronym": "SUPPORTS_COMMUNICATION",
       "description": "Supports de communication édités pour le projet",
       "contact": "???",
       "is_multiple": false,
@@ -320,6 +340,7 @@
     "pk": 21,
     "fields": {
       "name": "Articles de Presse, Photos, Autres Documents",
+      "acronym": "PRESSE_PHOTOS_DOCUMENTS",
       "description": "Articles de Presse, Photos, Autres Documents",
       "contact": "???",
       "is_multiple": false,
@@ -336,6 +357,7 @@
     "pk": 22,
     "fields": {
       "name": "Document Complémentaire de Bilan",
+      "acronym": "DOCUMENT_COMPLEMENTAIRE_BILAN",
       "description": "Document Complémentaire de Bilan",
       "contact": "???",
       "is_multiple": true,
@@ -352,6 +374,7 @@
     "pk": 23,
     "fields": {
       "name": "Document factice d'établissement",
+      "acronym": "DOCUMENT_FACTICE_ETABLISSEMENT",
       "description": "Document factice d'établissement",
       "contact": "???",
       "is_multiple": true,

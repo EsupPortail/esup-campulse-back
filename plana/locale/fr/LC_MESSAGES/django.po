@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-05 11:37+0200\n"
+"POT-Creation-Date: 2023-04-06 11:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -425,28 +425,20 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:32
-msgid "Not allowed to add a new document type."
-msgstr "Non autorisé de créer un nouveau type de document."
-
-#: plana/apps/documents/views/document.py:42
+#: plana/apps/documents/views/document.py:58
 msgid "Not allowed to create a document for this institution."
 msgstr "Non autorisé à créer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:52
-msgid "Not allowed to create a document for this commission."
-msgstr "Non autorisé à créer un document pour cette commission."
-
-#: plana/apps/documents/views/document.py:78
-#: plana/apps/documents/views/document.py:89
+#: plana/apps/documents/views/document.py:95
+#: plana/apps/documents/views/document.py:109
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:97
+#: plana/apps/documents/views/document.py:117
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:105
+#: plana/apps/documents/views/document.py:125
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 

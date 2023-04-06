@@ -234,6 +234,12 @@ paths:
     get:
       operationId: commissions_list
       description: Lists all commission types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Commission acronym.
       tags:
       - commissions
       security:
@@ -272,6 +278,12 @@ paths:
     get:
       operationId: contents_list
       description: Lists all contents.
+      parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: Content code.
       tags:
       - contents
       security:
@@ -291,6 +303,12 @@ paths:
     get:
       operationId: documents_list
       description: Lists all documents types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Document acronym.
       tags:
       - documents
       security:
@@ -349,6 +367,38 @@ paths:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
       - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+    patch:
+      operationId: documents_partial_update
+      description: /documents/{id} route
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
       responses:
         '200':
           content:
@@ -422,6 +472,12 @@ paths:
     get:
       operationId: groups_list
       description: Lists all groups.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Group name.
       tags:
       - groups
       security:
@@ -441,6 +497,12 @@ paths:
     get:
       operationId: institutions_list
       description: Lists all institutions.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Institution acronym.
       tags:
       - institutions
       security:
@@ -2881,6 +2943,53 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+    PatchedDocumentRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+        description:
+          type: string
+          minLength: 1
+        contact:
+          type: string
+          minLength: 1
+          title: Contact address
+        is_multiple:
+          type: boolean
+        days_before_expiration:
+          type: string
+          title: Days before document expiration
+        path_template:
+          type: string
+          format: binary
+          nullable: true
+          title: Example template file
+        mime_types:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+        process_type:
+          allOf:
+          - $ref: '#/components/schemas/ProcessTypeEnum'
+          title: Document Status
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
+        commission:
+          type: integer
+          nullable: true
     PatchedProjectCommissionDateDataRequest:
       type: object
       description: Only data serializer.
