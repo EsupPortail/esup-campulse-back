@@ -21,6 +21,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "add_document_any_commission",
         "add_document_any_institution",
+        "change_document",
         "delete_document",
         "delete_document_any_commission",
         "delete_document_any_institution",
@@ -78,6 +79,7 @@ PERMISSIONS_GROUPS = {
         "delete_commissiondate",
         # documents
         "add_document",
+        "change_document",
         "delete_document",
         "add_documentupload",
         "add_documentupload_all",
@@ -125,6 +127,7 @@ PERMISSIONS_GROUPS = {
         "delete_commissiondate",
         # documents
         "add_document",
+        "change_document",
         "delete_document",
         "add_documentupload",
         "add_documentupload_all",

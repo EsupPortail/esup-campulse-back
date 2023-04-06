@@ -168,7 +168,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             (project.user is not None and request.user.pk != project.user)
             or (
                 project.association is not None
-                and request.user.is_in_association(project.association)
+                and not request.user.is_in_association(project.association)
             )
         ):
             return response.Response(
