@@ -8,6 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser
 
 
@@ -423,6 +424,7 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2", patch_data, content_type="application/json"

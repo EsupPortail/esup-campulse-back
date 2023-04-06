@@ -11,8 +11,11 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectRestrictedSerializer,
@@ -226,15 +229,27 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 if project.association_id is not None:
                     association = Association.objects.get(id=project.association_id)
                     institution = Institution.objects.get(id=association.institution_id)
+                    commissions_misc_used = Commission.objects.filter(
+                        id__in=CommissionDate.objects.filter(
+                            id__in=ProjectCommissionDate.objects.filter(
+                                project_id=project.pk
+                            ).values_list("commission_date_id", flat=True)
+                        ).values_list("commission_id", flat=True),
+                        is_site=False,
+                    )
                     context["association_name"] = association.name
                     template = MailTemplate.objects.get(
                         code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
                     )
-                    managers_emails = (
+                    managers_emails += (
                         institution.default_institution_managers().values_list(
                             "email", flat=True
                         )
                     )
+                    if commissions_misc_used.count() > 0:
+                        for user_to_check in User.objects.all():
+                            if user_to_check.has_perm("users.view_user_misc"):
+                                managers_emails.append(user_to_check.email)
                 elif project.user_id is not None:
                     context["first_name"] = request.user.first_name
                     context["last_name"] = request.user.last_name
