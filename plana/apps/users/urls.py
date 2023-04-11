@@ -8,7 +8,7 @@ from .views.association_user import (
     AssociationUserUpdateDestroy,
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
-from .views.external import ExternalUserRetrieve
+from .views.external import ExternalUserList
 from .views.group_institution_commission_user import (
     GroupInstitutionCommissionUserDestroy,
     GroupInstitutionCommissionUserDestroyWithCommission,
@@ -79,8 +79,8 @@ urlpatterns = [
     ),
     path(
         "external/",
-        ExternalUserRetrieve.as_view(),
-        name="external_user_retrieve",
+        ExternalUserList.as_view(),
+        name="external_user_list",
     ),
 ]
 
