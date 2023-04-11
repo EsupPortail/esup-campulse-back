@@ -58,6 +58,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 {"error": _("Document does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
+        existing_document = DocumentUpload.objects.filter(document_id=document.id)
 
         if "project" in request.data:
             try:
@@ -67,6 +68,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     {"error": _("Project does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+            existing_document = existing_document.filter(project_id=project.id)
             if not request.user.can_edit_project(project):
                 return response.Response(
                     {"error": _("Not allowed to upload documents for this project.")},
@@ -79,12 +81,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["association"] != ""
         ):
             try:
-                Association.objects.get(pk=request.data["association"])
+                association = Association.objects.get(pk=request.data["association"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+            existing_document = existing_document.filter(association_id=association.id)
             if not request.user.is_president_in_association(
                 request.data["association"]
             ):
@@ -97,12 +100,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             "user" in request.data
             and request.data["user"] is not None
             and request.data["user"] != ""
-            and (int(request.data["user"]) != request.user.pk)
         ):
-            return response.Response(
-                {"error": _("Not allowed to upload documents with this user.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+            existing_document = existing_document.filter(user_id=request.user.pk)
+            if int(request.data["user"]) != request.user.pk:
+                return response.Response(
+                    {"error": _("Not allowed to upload documents with this user.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
         if (
             "association" in request.data
@@ -129,6 +133,12 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         ):
             return response.Response(
                 {"error": _("Missing affectation of the new document upload.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not document.is_multiple and existing_document.count() > 0:
+            return response.Response(
+                {"error": _("Document cannot be submitted multiple times.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

@@ -6,7 +6,8 @@
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
       "document": 14,
-      "project": 1
+      "project": 1,
+      "user": 9
     }
   },
   {
@@ -16,7 +17,8 @@
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
       "document": 15,
-      "project": 1
+      "project": 1,
+      "user": 9
     }
   },
   {
@@ -26,7 +28,8 @@
       "upload_date": "2023-03-15T10:18:47.000Z",
       "path_file": "",
       "document": 16,
-      "project": 1
+      "project": 1,
+      "user": 9
     }
   },
   {
@@ -36,7 +39,8 @@
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
       "document": 17,
-      "project": 1
+      "project": 1,
+      "user": 9
     }
   },
   {
@@ -46,7 +50,8 @@
       "upload_date": "2023-03-15T10:18:47.000Z",
       "path_file": "",
       "document": 18,
-      "project": 1
+      "project": 1,
+      "user": 9
     }
   },
   {
@@ -56,7 +61,8 @@
       "upload_date": "2023-03-12T15:30:00.000Z",
       "path_file": "",
       "document": 14,
-      "project": 2
+      "project": 2,
+      "association": 2
     }
   }
 ]

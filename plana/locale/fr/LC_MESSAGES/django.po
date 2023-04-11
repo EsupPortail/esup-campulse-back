@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-11 15:19+0200\n"
+"POT-Creation-Date: 2023-04-11 16:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,7 +211,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:288
 #: plana/apps/associations/views/association.py:335
 #: plana/apps/associations/views/association.py:461
-#: plana/apps/documents/views/document_upload.py:85
+#: plana/apps/documents/views/document_upload.py:87
 #: plana/apps/projects/views/project.py:71
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -449,7 +449,7 @@ msgstr "Non autorisé à supprimer un document pour cet établissement."
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
-#: plana/apps/documents/views/document_upload.py:67
+#: plana/apps/documents/views/document_upload.py:68
 #: plana/apps/projects/views/project.py:171
 #: plana/apps/projects/views/project.py:198
 #: plana/apps/projects/views/project.py:314
@@ -460,37 +460,41 @@ msgstr "Non autorisé à supprimer un document pour cette commission."
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:72
+#: plana/apps/documents/views/document_upload.py:74
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
-#: plana/apps/documents/views/document_upload.py:92
+#: plana/apps/documents/views/document_upload.py:95
 msgid "Not allowed to post documents if not president."
 msgstr "Non autorisé à ajouter un document si non président."
 
-#: plana/apps/documents/views/document_upload.py:103
+#: plana/apps/documents/views/document_upload.py:107
 msgid "Not allowed to upload documents with this user."
 msgstr "Non autorisé à ajouter un document avec cet utilisateur."
 
-#: plana/apps/documents/views/document_upload.py:117
+#: plana/apps/documents/views/document_upload.py:121
 msgid "A document upload can only have one affectation."
 msgstr "Un document ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:131
+#: plana/apps/documents/views/document_upload.py:135
 msgid "Missing affectation of the new document upload."
 msgstr "Le document n'est affecté à aucune personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:137
+#: plana/apps/documents/views/document_upload.py:141
+msgid "Document cannot be submitted multiple times."
+msgstr "Ce document ne peut être proposé plusieurs fois."
+
+#: plana/apps/documents/views/document_upload.py:147
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
-#: plana/apps/documents/views/document_upload.py:161
-#: plana/apps/documents/views/document_upload.py:195
+#: plana/apps/documents/views/document_upload.py:171
+#: plana/apps/documents/views/document_upload.py:205
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:182
-#: plana/apps/documents/views/document_upload.py:216
+#: plana/apps/documents/views/document_upload.py:192
+#: plana/apps/documents/views/document_upload.py:226
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 

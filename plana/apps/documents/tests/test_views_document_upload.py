@@ -236,6 +236,25 @@ class DocumentsViewsTests(TestCase):
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_post_document_upload_multiple(self):
+        """
+        POST /documents/uploads .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be authorized to update the project.
+        - Object is correctly created in db.
+        """
+        project_id = 1
+        document_id = 14
+        post_data = {
+            "path_file": "",
+            "project": project_id,
+            "document": document_id,
+            "user": self.student_misc_user_id,
+        }
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_document_upload_project_success(self):
         """
         POST /documents/uploads .
@@ -247,7 +266,7 @@ class DocumentsViewsTests(TestCase):
         # TODO Find how to mock document.
         """
         project_id = 1
-        document_id = 14
+        document_id = 18
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
