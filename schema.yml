@@ -3376,6 +3376,8 @@ components:
           readOnly: true
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
+        rejection_comment:
+          type: string
       required:
       - edition_date
       - id

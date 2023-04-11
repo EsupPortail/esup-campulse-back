@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-06 15:33+0200\n"
+"POT-Creation-Date: 2023-04-11 08:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,7 +142,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:78
-#: plana/apps/projects/models/project.py:65
+#: plana/apps/projects/models/project.py:66
 msgid "Creation date"
 msgstr "Date de création"
 
@@ -387,7 +387,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:54
-#: plana/apps/projects/models/project.py:88
+#: plana/apps/projects/models/project.py:89
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_commission_date.py:13
 msgid "Project"
@@ -445,7 +445,7 @@ msgstr "Non autorisé à supprimer un document pour cette commission."
 #: plana/apps/documents/views/document_upload.py:30
 #: plana/apps/projects/views/project.py:171
 #: plana/apps/projects/views/project.py:198
-#: plana/apps/projects/views/project.py:302
+#: plana/apps/projects/views/project.py:314
 #: plana/apps/projects/views/project_category.py:58
 #: plana/apps/projects/views/project_category.py:97
 #: plana/apps/projects/views/project_category.py:134
@@ -474,12 +474,12 @@ msgid "Categories"
 msgstr "Catégories"
 
 #: plana/apps/projects/models/project.py:13
-#: plana/apps/projects/models/project.py:69
+#: plana/apps/projects/models/project.py:70
 msgid "Start date"
 msgstr "Date de début"
 
 #: plana/apps/projects/models/project.py:14
-#: plana/apps/projects/models/project.py:70
+#: plana/apps/projects/models/project.py:71
 msgid "End date"
 msgstr "Date de fin"
 
@@ -571,52 +571,56 @@ msgstr "Bilan de Projet en Traitement"
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:66
+#: plana/apps/projects/models/project.py:65
+msgid "Rejection comment"
+msgstr "Commentaire de rejet"
+
+#: plana/apps/projects/models/project.py:67
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:67
+#: plana/apps/projects/models/project.py:68
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:68
+#: plana/apps/projects/models/project.py:69
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:71
+#: plana/apps/projects/models/project.py:72
 msgid "Organizer name"
 msgstr "Nom de l'organisateur"
 
-#: plana/apps/projects/models/project.py:72
+#: plana/apps/projects/models/project.py:73
 msgid "Organizer phone"
 msgstr "Téléphone de l'organisateur"
 
-#: plana/apps/projects/models/project.py:73
+#: plana/apps/projects/models/project.py:74
 msgid "Organizer email"
 msgstr "Adresse mail de l'organisateur"
 
-#: plana/apps/projects/models/project.py:75
+#: plana/apps/projects/models/project.py:76
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:77
+#: plana/apps/projects/models/project.py:78
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:79
+#: plana/apps/projects/models/project.py:80
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:81
+#: plana/apps/projects/models/project.py:82
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:82
+#: plana/apps/projects/models/project.py:83
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:89
+#: plana/apps/projects/models/project.py:90
 msgid "Projects"
 msgstr "Projets"
 
@@ -691,11 +695,15 @@ msgstr "Non autorisé à mettre à jour les champs de ce projet."
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:218
+#: plana/apps/projects/views/project.py:222
+msgid "Project is linked to expired commissions."
+msgstr "Ce projet est lié à des commissions passées."
+
+#: plana/apps/projects/views/project.py:230
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:310
+#: plana/apps/projects/views/project.py:322
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 

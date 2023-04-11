@@ -7,6 +7,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser
@@ -383,6 +384,22 @@ class ProjectsViewsTests(TestCase):
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_expired_commission(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The project must be linked to non expired commission dates.
+        """
+        expired_commission_date = CommissionDate.objects.get(pk=3)
+        expired_commission_date.submission_date = "1968-05-03"
+        expired_commission_date.save()
+        patch_data = {"summary": "new summary"}
+        response = self.student_misc_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_user_success(self):
         """
