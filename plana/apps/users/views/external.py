@@ -11,7 +11,7 @@ from plana.libs.api.accounts import Client
 from ..serializers.external import ExternalUserSerializer
 
 
-class ExternalUserRetrieve(generics.ListAPIView):
+class ExternalUserList(generics.ListAPIView):
     """/users/external/ route"""
 
     permission_classes = [IsAuthenticated]

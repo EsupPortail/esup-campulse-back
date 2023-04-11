@@ -60,7 +60,7 @@ class ExternalUserViewsTests(TestCase):
         ]
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'last_name': 'doe'}
+            reverse('external_user_list'), {'last_name': 'doe'}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['mail'], 'john.doe@mail.tld')
@@ -75,13 +75,13 @@ class ExternalUserViewsTests(TestCase):
             },
         )
         response = student_client.get(
-            reverse('external_user_retrieve'), {'last_name': 'jean-doux'}
+            reverse('external_user_list'), {'last_name': 'jean-doux'}
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_external_user_detail_missing_last_name(self):
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'wrong': 'wrong'}
+            reverse('external_user_list'), {'wrong': 'wrong'}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -91,7 +91,7 @@ class ExternalUserViewsTests(TestCase):
         mock_instance.list_users.return_value = []
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'last_name': 'toto'}
+            reverse('external_user_list'), {'last_name': 'toto'}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data)
@@ -102,6 +102,6 @@ class ExternalUserViewsTests(TestCase):
         mock_instance.list_users.side_effect = Exception('error')
 
         response = self.manager_client.get(
-            reverse('external_user_retrieve'), {'last_name': 'toto'}
+            reverse('external_user_list'), {'last_name': 'toto'}
         )
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
