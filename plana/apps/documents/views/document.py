@@ -18,7 +18,13 @@ from plana.apps.documents.serializers.document import DocumentSerializer
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Document acronym.",
-            )
+            ),
+            OpenApiParameter(
+                "process_type",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Document process type.",
+            ),
         ]
     )
 )
@@ -41,6 +47,9 @@ class DocumentList(generics.ListCreateAPIView):
             acronym = self.request.query_params.get("acronym")
             if acronym is not None and acronym != "":
                 queryset = queryset.filter(acronym=acronym)
+            process_type = self.request.query_params.get("process_type")
+            if process_type is not None and process_type != "":
+                queryset = queryset.filter(process_type=process_type)
         return queryset
 
     def get(self, request, *args, **kwargs):

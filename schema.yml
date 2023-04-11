@@ -309,6 +309,11 @@ paths:
         schema:
           type: string
         description: Document acronym.
+      - in: query
+        name: process_type
+        schema:
+          type: string
+        description: Document process type.
       tags:
       - documents
       security:
