@@ -145,15 +145,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         project.edition_date = datetime.date.today()
         project.save()
 
-        try:
-            ProjectCommissionDate.objects.get(
-                project_id=request.data["project"],
-                commission_date_id=request.data["commission_date"],
-            )
-        except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().create(request, *args, **kwargs)
 
 
 @extend_schema_view(

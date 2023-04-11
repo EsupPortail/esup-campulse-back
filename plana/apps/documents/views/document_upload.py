@@ -45,6 +45,12 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Creates a new document upload."""
+        if "document" not in request.data:
+            return response.Response(
+                {"error": _("Document does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         try:
             document = Document.objects.get(pk=request.data["document"])
         except ObjectDoesNotExist:
@@ -68,17 +74,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 )
 
         if (
-            "user" in request.data
-            and request.data["user"] is not None
-            and request.data["user"] != ""
-            and (int(request.data["user"]) != request.user.pk)
-        ):
-            return response.Response(
-                {"error": _("Not allowed to upload documents with this user.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
             "association" in request.data
             and request.data["association"] is not None
             and request.data["association"] != ""
@@ -90,6 +85,24 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     {"error": _("Association does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
+            if not request.user.is_president_in_association(
+                request.data["association"]
+            ):
+                return response.Response(
+                    {"error": _("Not allowed to post documents if not president.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+        if (
+            "user" in request.data
+            and request.data["user"] is not None
+            and request.data["user"] != ""
+            and (int(request.data["user"]) != request.user.pk)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to upload documents with this user.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         if (
             "association" in request.data
@@ -119,10 +132,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            "path_file" in request.data
-            and request.data["path_file"].content_type not in document.mime_types
-        ):
+        if request.data["path_file"].content_type not in document.mime_types:
             return response.Response(
                 {"error": _("Wrong media type for this document.")},
                 status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
@@ -145,7 +155,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves a document uploaded by a user."""
         try:
-            document_upload = DocumentUpload.objects.get(id=kwargs["id"])
+            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},
@@ -173,13 +183,13 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(self.queryset.filter(id=kwargs["id"]))
+        serializer = self.serializer_class(self.queryset.filter(id=kwargs["pk"]))
         return response.Response(serializer.data)
 
     def delete(self, request, *args, **kwargs):
         """Destroys an uploaded document."""
         try:
-            document_upload = DocumentUpload.objects.get(id=kwargs["id"])
+            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},
@@ -207,4 +217,4 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+        return self.destroy(request, *args, **kwargs)

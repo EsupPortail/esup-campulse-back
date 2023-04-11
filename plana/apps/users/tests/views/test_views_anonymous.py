@@ -22,6 +22,8 @@ class UserViewsAnonymousTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
         "commissions_commission.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -411,7 +413,7 @@ class UserViewsAnonymousTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
         new_email = (
-            "damien.mayonnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
+            "philippe.bearnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
         )
         user.email = new_email
         user.save()
