@@ -101,11 +101,14 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         if (
             "amount_earned" in request.data
             and request.data["amount_earned"] is not None
+        ) or (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is not None
         ):
             return response.Response(
                 {
                     "error": _(
-                        "Not allowed to update amount earned for this project's commission."
+                        "Not allowed to update amount earned or validation for this project's commission."
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN,
@@ -237,7 +240,13 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "amount_earned" in request.data:
+        if (
+            "amount_earned" in request.data
+            and request.data["amount_earned"] is not None
+        ) or (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is not None
+        ):
             return response.Response(
                 {"error": _("Not allowed to update amount earned for this project.")},
                 status=status.HTTP_403_FORBIDDEN,

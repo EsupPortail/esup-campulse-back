@@ -55,6 +55,7 @@ class Project(models.Model):
             ("PROJECT_REJECTED", _("Project Rejected")),
             ("PROJECT_PROCESSING", _("Project Processing")),
             ("PROJECT_VALIDATED", _("Project Validated")),
+            ("PROJECT_REVIEW_CANCELLED", _("Project Review Cancelled")),
             ("PROJECT_REVIEW_DRAFT", _("Project Review Draft")),
             ("PROJECT_REVIEW_REJECTED", _("Project Review Rejected")),
             ("PROJECT_REVIEW_PROCESSING", _("Project Review Processing")),
@@ -62,7 +63,6 @@ class Project(models.Model):
         ],
         default="PROJECT_DRAFT",
     )
-    rejection_comment = models.TextField(_("Rejection comment"), default="")
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
     outcome = models.IntegerField(_("Outcome"), default=0)

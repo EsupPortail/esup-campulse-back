@@ -50,7 +50,6 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "user",
             "edition_date",
             "project_status",
-            "rejection_comment",
         ]
 
 

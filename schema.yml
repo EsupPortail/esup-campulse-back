@@ -3053,6 +3053,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
     PatchedProjectRequest:
       type: object
       description: Main serializer.
@@ -3333,6 +3335,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
       required:
       - commission_date
       - id
@@ -3361,6 +3365,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
     ProjectCommissionDateRequest:
       type: object
       description: Complete serializer.
@@ -3389,6 +3395,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
       required:
       - commission_date
       - project
@@ -3415,8 +3423,6 @@ components:
           readOnly: true
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
-        rejection_comment:
-          type: string
       required:
       - edition_date
       - id
@@ -3517,6 +3523,7 @@ components:
       - PROJECT_REJECTED
       - PROJECT_PROCESSING
       - PROJECT_VALIDATED
+      - PROJECT_REVIEW_CANCELLED
       - PROJECT_REVIEW_DRAFT
       - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_PROCESSING

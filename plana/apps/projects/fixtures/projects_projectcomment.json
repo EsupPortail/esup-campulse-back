@@ -1,0 +1,12 @@
+[
+  {
+    "model": "projects.projectcomment",
+    "pk": 1,
+    "fields": {
+      "text": "Bravo c'est très bien.",
+      "creation_date": "2023-03-14T15:30:00.000Z",
+      "project": 2,
+      "user": 3
+    }
+  }
+]

@@ -4,6 +4,7 @@ from django.test import Client, TestCase
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
+from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import User
 
@@ -21,6 +22,7 @@ class ProjectsModelsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
+        "projects_projectcomment.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
         "users_user.json",
@@ -45,6 +47,14 @@ class ProjectsModelsTests(TestCase):
         project_cat = ProjectCategory.objects.first()
         self.assertEqual(
             str(project_cat), f"{project_cat.project} {project_cat.category}"
+        )
+
+    def test_project_comment_model(self):
+        """There's at least one project comment in the database."""
+        project_comm = ProjectComment.objects.first()
+        self.assertEqual(
+            str(project_comm),
+            f"{project_comm.user} {project_comm.project} : {project_comm.text}",
         )
 
     def test_project_commission_date_model(self):
