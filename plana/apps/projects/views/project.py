@@ -211,6 +211,18 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+            project_id=project.pk,
+            commission_date_id__in=CommissionDate.objects.filter(
+                submission_date__lte=datetime.datetime.today()
+            ).values_list("id", flat=True),
+        ).count()
+        if expired_project_commission_dates_count > 0:
+            return response.Response(
+                {"error": _("Project is linked to expired commissions.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
         if "project_status" in request.data:
             if request.data["project_status"] not in authorized_status:
