@@ -8,6 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser
@@ -25,6 +26,8 @@ class ProjectsViewsTests(TestCase):
         "auth_permission.json",
         "commissions_commission.json",
         "commissions_commissiondate.json",
+        "documents_document.json",
+        "documents_documentupload.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
@@ -432,6 +435,23 @@ class ProjectsViewsTests(TestCase):
         project = Project.objects.get(pk=1)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
         self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_association_status_missing_documents(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student president.
+        - Project cannot be updated if documents are missing.
+        """
+        DocumentUpload.objects.get(document=18, project_id=2).delete()
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_DRAFT")
 
     def test_patch_project_association_status(self):
         """

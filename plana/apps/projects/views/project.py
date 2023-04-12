@@ -13,6 +13,8 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -231,6 +233,30 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             if request.data["project_status"] == "PROJECT_PROCESSING":
+                missing_documents_names = (
+                    Document.objects.filter(
+                        process_type="DOCUMENT_PROJECT", is_required_in_process=True
+                    )
+                    .exclude(
+                        id__in=DocumentUpload.objects.filter(
+                            project_id=project.pk,
+                        ).values_list("document_id", flat=True)
+                    )
+                    .values_list("name", flat=True)
+                )
+                if missing_documents_names.count() > 0:
+                    missing_documents_names_string = ', '.join(
+                        str(item) for item in missing_documents_names
+                    )
+                    return response.Response(
+                        {
+                            "error": _(
+                                f"Missing documents : {missing_documents_names_string}."
+                            )
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
                 template = None
                 managers_emails = []
                 current_site = get_current_site(request)

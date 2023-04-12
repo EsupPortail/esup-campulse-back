@@ -64,5 +64,16 @@
       "project": 2,
       "association": 2
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 7,
+    "fields": {
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 18,
+      "project": 2,
+      "association": 2
+    }
   }
 ]
