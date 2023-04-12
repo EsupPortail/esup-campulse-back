@@ -117,6 +117,16 @@ class DocumentsViewsTests(TestCase):
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_documents_forbidden_commission(self):
+        """
+        POST /documents/ .
+        - A user without access to requested commission can't execute this request.
+        """
+        commission = 3
+        post_data = {"name": "Test forbidden", "commission": commission}
+        response = self.institution_client.post("/documents/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_post_documents_success(self):
         # TODO : test document upload
         """
@@ -168,15 +178,84 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.get("/documents/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_put_document_by_id_405(self):
+    def test_patch_documents_anonymous(self):
         """
-        PUT /documents/{id} .
+        PATCH /documents/{id} .
+        - An anonymous user can't execute this request.
+        """
+        patch_data = {"name": "test anonymous"}
+        response = self.client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        - The route returns a 405 everytime.
+    def test_patch_documents_forbidden(self):
         """
-        data = {"name": "name", "contact": "test"}
-        response = self.general_client.put("/documents/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        PATCH /documents/{id} .
+        - A user without proper permissions can't execute this request.
+        """
+        patch_data = {"name": "Test anonymous"}
+        response = self.student_client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_documents_forbidden_institution(self):
+        """
+        PATCH /documents/{id} .
+        - A user without access to requested institution can't execute this request.
+        """
+        institution = 1
+        patch_data = {"name": "Test forbidden", "institution": institution}
+        response = self.institution_client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_documents_forbidden_commission(self):
+        """
+        PATCH /documents/{id} .
+        - A user without access to requested commission can't execute this request.
+        """
+        commission = 3
+        patch_data = {"name": "Test forbidden", "commission": commission}
+        response = self.institution_client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_documents_404(self):
+        """
+        PATCH /documents/{id} .
+        - A user with proper permissions can execute this request.
+        - Document must exist.
+        """
+        contact = "gestionnaire-svu@mail.tld"
+        name = "Test fail"
+        patch_data = {"name": name, "contact": contact}
+        response = self.general_client.patch(
+            "/documents/999", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_documents_success(self):
+        # TODO : test document upload
+        """
+        PATCH /documents/{id} .
+        - A user with proper permissions can execute this request.
+        - Document object is successfully changed in db.
+        """
+        contact = "gestionnaire-svu@mail.tld"
+        name = "Test success"
+        patch_data = {"name": name, "contact": contact}
+        response = self.general_client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        results = Document.objects.filter(name=name)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].contact, contact)
 
     def test_delete_document_by_id_anonymous(self):
         """
@@ -229,3 +308,13 @@ class DocumentsViewsTests(TestCase):
         """
         response = self.general_client.delete("/documents/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_put_document_by_id_405(self):
+        """
+        PUT /documents/{id} .
+
+        - The route returns a 405 everytime.
+        """
+        data = {"name": "name", "contact": "test"}
+        response = self.general_client.put("/documents/1", data)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

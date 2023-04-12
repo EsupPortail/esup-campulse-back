@@ -22,6 +22,8 @@ PERMISSIONS_GROUPS = {
         "add_document_any_commission",
         "add_document_any_institution",
         "change_document",
+        "change_document_any_commission",
+        "change_document_any_institution",
         "delete_document",
         "delete_document_any_commission",
         "delete_document_any_institution",

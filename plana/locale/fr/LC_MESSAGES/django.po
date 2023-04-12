@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 10:34+0200\n"
+"POT-Creation-Date: 2023-04-12 15:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -438,18 +438,31 @@ msgstr "Documents d'associations ou d'utilisateurs"
 msgid "Not allowed to create a document for this institution."
 msgstr "Non autorisé à créer un document pour cet établissement."
 
+#: plana/apps/documents/views/document.py:77
+msgid "Not allowed to create a document for this commission."
+msgstr "Non autorisé à créer un document pour cette commission."
+
 #: plana/apps/documents/views/document.py:104
-#: plana/apps/documents/views/document.py:118
+#: plana/apps/documents/views/document.py:117
+#: plana/apps/documents/views/document.py:149
 #: plana/apps/documents/views/document_upload.py:50
 #: plana/apps/documents/views/document_upload.py:58
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:126
+#: plana/apps/documents/views/document.py:127
+msgid "Not allowed to update a document for this institution."
+msgstr "Non autorisé à mettre à jour un document pour cet établissement."
+
+#: plana/apps/documents/views/document.py:137
+msgid "Not allowed to update a document for this commission."
+msgstr "Non autorisé à mettre à jour un document pour cette commission."
+
+#: plana/apps/documents/views/document.py:157
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:134
+#: plana/apps/documents/views/document.py:165
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
@@ -766,6 +779,7 @@ msgid "Wrong status."
 msgstr "Mauvais statut."
 
 #: plana/apps/projects/views/project.py:254
+#, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 

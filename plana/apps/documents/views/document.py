@@ -68,16 +68,16 @@ class DocumentList(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        #        if (
-        #            "commission" in request.data
-        #            and not request.user.has_perm("documents.add_document_any_commission")
-        #            and not request.user.is_member_in_commission(request.data["commission"])
-        #        ):
-        #            return response.Response(
-        #                {"error": _("Not allowed to create a document for this commission.")},
-        #                status=status.HTTP_403_FORBIDDEN,
-        #            )
-        #
+        if (
+            "commission" in request.data
+            and not request.user.has_perm("documents.add_document_any_commission")
+            and not request.user.is_member_in_commission(request.data["commission"])
+        ):
+            return response.Response(
+                {"error": _("Not allowed to create a document for this commission.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         return super().create(request, *args, **kwargs)
 
 
@@ -108,6 +108,37 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def patch(self, request, *args, **kwargs):
+        try:
+            self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Document does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if (
+            "institution" in request.data
+            and not request.user.has_perm("documents.change_document_any_institution")
+            and not request.user.is_staff_in_institution(request.data["institution"])
+        ):
+            return response.Response(
+                {"error": _("Not allowed to update a document for this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            "commission" in request.data
+            and not request.user.has_perm("documents.change_document_any_commission")
+            and not request.user.is_member_in_commission(request.data["commission"])
+        ):
+            return response.Response(
+                {"error": _("Not allowed to update a document for this commission.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         """Destroys an entire document type (manager only)."""

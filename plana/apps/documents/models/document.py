@@ -95,6 +95,14 @@ class Document(models.Model):
                 "Can add documents linked to any institution.",
             ),
             (
+                "change_document_any_commission",
+                "Can change documents linked to any commission.",
+            ),
+            (
+                "change_document_any_institution",
+                "Can change documents linked to any institution.",
+            ),
+            (
                 "delete_document_any_commission",
                 "Can delete documents linked to any commission.",
             ),
