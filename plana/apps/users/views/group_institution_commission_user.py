@@ -165,7 +165,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                 )
 
         GroupInstitutionCommissionUser.objects.create(
-            user_id=user.pk,
+            user_id=user.id,
             group_id=group_id,
             institution_id=institution_id,
             commission_id=commission_id,
@@ -213,9 +213,9 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         """Destroys a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
             user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
-                user_id=user.pk,
+                user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
                 commission_id=None,
@@ -262,9 +262,9 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         """Destroys a group linked to a user with commission argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
             user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
-                user_id=user.pk,
+                user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
                 commission_id=kwargs["commission_id"],
@@ -312,9 +312,9 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
         """Destroys a group linked to a user with institution argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.pk)
+            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
             user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
-                user_id=user.pk,
+                user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],
                 commission_id=None,

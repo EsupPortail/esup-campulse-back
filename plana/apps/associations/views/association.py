@@ -392,7 +392,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 if (
                     amount_members_allowed
                     < AssociationUser.objects.filter(
-                        association_id=association.pk
+                        association_id=association.id
                     ).count()
                 ):
                     return response.Response(

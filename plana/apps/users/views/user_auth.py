@@ -62,8 +62,8 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
-                assos_user = AssociationUser.objects.filter(user_id=request.user.id)
-                user_id = request.user.id
+                assos_user = AssociationUser.objects.filter(user_id=request.user.pk)
+                user_id = request.user.pk
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
@@ -147,7 +147,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
-        email_addresses = EmailAddress.objects.filter(user_id=user.pk)
+        email_addresses = EmailAddress.objects.filter(user_id=user.id)
 
         if email_addresses.count() == 1:
             assos_user = AssociationUser.objects.filter(user_id=user.id)

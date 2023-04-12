@@ -184,7 +184,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             )
 
         association_user = AssociationUser.objects.filter(
-            user_id=user.pk, association_id=association_id
+            user_id=user.id, association_id=association_id
         )
         if association_user.count() > 0:
             return response.Response(

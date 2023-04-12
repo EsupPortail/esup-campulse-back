@@ -214,7 +214,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
-            project_id=project.pk,
+            project_id=project.id,
             commission_date_id__in=CommissionDate.objects.filter(
                 submission_date__lte=datetime.datetime.today()
             ).values_list("id", flat=True),
@@ -239,7 +239,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     )
                     .exclude(
                         id__in=DocumentUpload.objects.filter(
-                            project_id=project.pk,
+                            project_id=project.id,
                         ).values_list("document_id", flat=True)
                     )
                     .values_list("name", flat=True)
@@ -270,7 +270,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     commissions_misc_used = Commission.objects.filter(
                         id__in=CommissionDate.objects.filter(
                             id__in=ProjectCommissionDate.objects.filter(
-                                project_id=project.pk
+                                project_id=project.id
                             ).values_list("commission_date_id", flat=True)
                         ).values_list("commission_id", flat=True),
                         is_site=False,
