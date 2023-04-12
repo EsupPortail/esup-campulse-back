@@ -41,6 +41,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
+    """Serializer for project list."""
+
     class Meta:
         model = Project
         fields = [
@@ -54,6 +56,8 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
 
 
 class ProjectRestrictedSerializer(serializers.ModelSerializer):
+    """Serializer for restricted fields."""
+
     class Meta:
         model = Project
         fields = ["project_status"]

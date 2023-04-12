@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 15:14+0200\n"
+"POT-Creation-Date: 2023-04-12 16:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -390,7 +390,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:17
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:20 plana/apps/users/models/user.py:61
-#: plana/apps/users/models/user.py:280
+#: plana/apps/users/models/user.py:281
 msgid "User"
 msgstr "Utilisateur"
 
@@ -888,7 +888,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:281
+#: plana/apps/users/models/user.py:282
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1059,7 +1059,7 @@ msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
 #: plana/apps/users/views/user.py:186 plana/apps/users/views/user.py:301
-#: plana/apps/users/views/user_auth.py:102
+#: plana/apps/users/views/user_auth.py:103
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
@@ -1079,11 +1079,11 @@ msgstr "Modification de superutilisateur impossible."
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
-#: plana/apps/users/views/user_auth.py:42
+#: plana/apps/users/views/user_auth.py:43
 msgid "Only managers can edit this field."
 msgstr "Seuls les gestionnaires peuvent changer ce champ."
 
-#: plana/apps/users/views/user_auth.py:48
+#: plana/apps/users/views/user_auth.py:49
 msgid "Cannot edit this field."
 msgstr "Ce champ ne peut être édité."
 

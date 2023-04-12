@@ -34,11 +34,10 @@ class ProjectCategoryLinksViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """Start a default anonymous client."""
+        """Start clients used on tests."""
         cls.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general client used on a majority of tests. """
         cls.manager_general_user_id = 3
         cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
         cls.general_client = Client()
@@ -48,7 +47,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
-        """ Start a user member of an association that cannot submit personal or association projects. """
         cls.student_offsite_user_id = 10
         cls.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
         cls.student_offsite_client = Client()
@@ -58,7 +56,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
         }
         cls.response = cls.student_offsite_client.post(url_login, data_student_offsite)
 
-        """ Start a user president of an association that can submit projects. """
         cls.student_president_user_id = 13
         cls.student_president_user_name = "president-asso-site@mail.tld"
         cls.student_president_client = Client()

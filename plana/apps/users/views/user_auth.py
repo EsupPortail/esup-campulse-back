@@ -35,6 +35,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
+        """Auto-updates user's own account."""
         if "can_submit_projects" in request.data and not self.request.user.has_perm(
             "users.change_user_all_fields"
         ):
@@ -123,6 +124,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return user_response
 
     def delete(self, request, *args, **kwargs):
+        """Auto-deletes user's own account."""
         self.permission_classes = [IsAuthenticated]
         try:
             user = self.request.user
@@ -140,6 +142,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
 
     def post(self, request, *args, **kwargs):
+        """Send an email to a manager on email validation."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.kwargs['key'] = serializer.validated_data['key']

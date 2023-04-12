@@ -34,11 +34,10 @@ class ProjectCommissionDateViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """Start a default anonymous client."""
+        """Start clients used on tests."""
         cls.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general client used on a majority of tests. """
         cls.manager_general_user_id = 3
         cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
         cls.general_client = Client()
@@ -48,7 +47,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
-        """ Start a user misc that can submit personal projects. """
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
         cls.student_misc_client = Client()
@@ -58,7 +56,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         }
         cls.response = cls.student_misc_client.post(url_login, data_student_misc)
 
-        """ Start a president user that can submit association projects. """
         cls.president_user_id = 13
         cls.president_user_name = "president-asso-site@mail.tld"
         cls.president_student_client = Client()

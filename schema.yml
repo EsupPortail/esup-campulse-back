@@ -1649,10 +1649,7 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: |-
-        /users/auth/registration/verify-email/ route
-
-        OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
+      description: Send an email to a manager on email validation.
       tags:
       - users
       requestBody:
@@ -1745,10 +1742,7 @@ paths:
           description: ''
     patch:
       operationId: users_auth_user_partial_update
-      description: |-
-        /users/auth/user/ route
-
-        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+      description: Auto-updates user's own account.
       tags:
       - users
       requestBody:
@@ -1774,10 +1768,7 @@ paths:
           description: ''
     delete:
       operationId: users_auth_user_destroy
-      description: |-
-        /users/auth/user/ route
-
-        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+      description: Auto-deletes user's own account.
       tags:
       - users
       security:
@@ -3151,6 +3142,7 @@ components:
           $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedProjectRestrictedRequest:
       type: object
+      description: Serializer for restricted fields.
       properties:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
@@ -3413,6 +3405,7 @@ components:
       - project
     ProjectPartialData:
       type: object
+      description: Serializer for project list.
       properties:
         id:
           type: integer
@@ -3525,6 +3518,7 @@ components:
       - name
     ProjectRestricted:
       type: object
+      description: Serializer for restricted fields.
       properties:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'

@@ -25,11 +25,10 @@ class DocumentsViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """Start a default anonymous client."""
+        """Start clients used on tests."""
         cls.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general client used on a majority of tests. """
         cls.manager_general_user_id = 3
         cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
         cls.general_client = Client()
@@ -39,7 +38,6 @@ class DocumentsViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
-        """ Start a manager institution client used on some permissions tests. """
         cls.manager_institution_user_id = 4
         cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
         cls.institution_client = Client()
@@ -49,7 +47,6 @@ class DocumentsViewsTests(TestCase):
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
 
-        """ Start a student client used on some permissions tests. """
         cls.student_user_id = 9
         cls.student_user_name = "etudiant-porteur@mail.tld"
         cls.student_client = Client()
