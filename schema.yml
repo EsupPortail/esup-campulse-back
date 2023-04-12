@@ -20,15 +20,15 @@ paths:
           type: integer
         description: Filter by Activity Field ID.
       - in: query
-        name: institution
-        schema:
-          type: integer
-        description: Filter by Institution ID.
-      - in: query
         name: institution_component
         schema:
           type: integer
         description: Filter by Institution Component ID.
+      - in: query
+        name: institutions
+        schema:
+          type: integer
+        description: Filter by Institution ID.
       - in: query
         name: is_enabled
         schema:

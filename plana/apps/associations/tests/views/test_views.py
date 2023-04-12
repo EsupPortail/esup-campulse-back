@@ -151,7 +151,7 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_site"], True)
 
-        response = self.client.get("/associations/?institution=1")
+        response = self.client.get("/associations/?institutions=1")
         for association in response.data:
             self.assertEqual(association["institution"]["id"], 1)
 
