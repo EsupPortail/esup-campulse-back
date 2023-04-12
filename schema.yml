@@ -2511,6 +2511,8 @@ components:
           title: Contact address
         is_multiple:
           type: boolean
+        is_required_in_process:
+          type: boolean
         days_before_expiration:
           type: string
           title: Days before document expiration
@@ -2560,6 +2562,8 @@ components:
           minLength: 1
           title: Contact address
         is_multiple:
+          type: boolean
+        is_required_in_process:
           type: boolean
         days_before_expiration:
           type: string
@@ -3008,6 +3012,8 @@ components:
           minLength: 1
           title: Contact address
         is_multiple:
+          type: boolean
+        is_required_in_process:
           type: boolean
         days_before_expiration:
           type: string

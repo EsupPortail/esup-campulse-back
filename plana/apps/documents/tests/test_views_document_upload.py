@@ -128,7 +128,7 @@ class DocumentsViewsTests(TestCase):
         post_data = {
             "path_file": "",
             "project": 9999,
-            "document": 14,
+            "document": 16,
         }
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -142,7 +142,7 @@ class DocumentsViewsTests(TestCase):
         post_data = {
             "path_file": "",
             "project": 9999,
-            "document": 14,
+            "document": 16,
         }
         response = self.general_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -170,7 +170,7 @@ class DocumentsViewsTests(TestCase):
         post_data = {
             "path_file": "",
             "project": 1,
-            "document": 14,
+            "document": 16,
         }
         response = self.general_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -186,7 +186,7 @@ class DocumentsViewsTests(TestCase):
         """
         document_data = {
             "path_file": "",
-            "document": 14,
+            "document": 16,
         }
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -209,7 +209,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - User in the request must be the authenticated user.
         """
-        document_data = {"path_file": "", "document": 14, "user": 2}
+        document_data = {"path_file": "", "document": 16, "user": 2}
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -221,7 +221,7 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be a member of the association to post documents related to it.
         - User must be president or delegated president of its association to post documents.
         """
-        document_data = {"path_file": "", "document": 14, "association": 2}
+        document_data = {"path_file": "", "document": 16, "association": 2}
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -245,7 +245,7 @@ class DocumentsViewsTests(TestCase):
         - Object is correctly created in db.
         """
         project_id = 1
-        document_id = 14
+        document_id = 16
         post_data = {
             "path_file": "",
             "project": project_id,
@@ -266,7 +266,7 @@ class DocumentsViewsTests(TestCase):
         # TODO Find how to mock document.
         """
         project_id = 1
-        document_id = 18
+        document_id = 20
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")

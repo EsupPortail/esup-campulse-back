@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-11 16:34+0200\n"
+"POT-Creation-Date: 2023-04-12 09:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:89
 #: plana/apps/commissions/models/commission.py:19
-#: plana/apps/documents/models/document.py:51
+#: plana/apps/documents/models/document.py:54
 #: plana/apps/institutions/models/institution.py:38
 #: plana/apps/institutions/models/institution_component.py:12
 msgid "Institution"
@@ -258,7 +258,7 @@ msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #: plana/apps/commissions/models/commission.py:27
 #: plana/apps/commissions/models/commission_date.py:13
-#: plana/apps/documents/models/document.py:57
+#: plana/apps/documents/models/document.py:60
 msgid "Commission"
 msgstr "Commission"
 
@@ -334,51 +334,55 @@ msgid "Is multiple"
 msgstr "Est multiple"
 
 #: plana/apps/documents/models/document.py:40
+msgid "Is required in process"
+msgstr "Est requis dans son processus"
+
+#: plana/apps/documents/models/document.py:43
 msgid "Days before document expiration"
 msgstr "Nombre de jours avant expiration du document"
 
-#: plana/apps/documents/models/document.py:43
+#: plana/apps/documents/models/document.py:46
 msgid "Example template file"
 msgstr "Template de fichier d'exemple"
 
-#: plana/apps/documents/models/document.py:62
+#: plana/apps/documents/models/document.py:65
 msgid "Document Status"
 msgstr "Statut du Document"
 
-#: plana/apps/documents/models/document.py:65
+#: plana/apps/documents/models/document.py:68
 msgid "Charter for Association"
 msgstr "Charte pour Association"
 
-#: plana/apps/documents/models/document.py:68
+#: plana/apps/documents/models/document.py:71
 msgid "Charter for Association Institution"
 msgstr "Charte pour Établissement"
 
-#: plana/apps/documents/models/document.py:70
+#: plana/apps/documents/models/document.py:73
 msgid "Charter for Project Commission"
 msgstr "Charte pour Demande de Subvention"
 
-#: plana/apps/documents/models/document.py:71
+#: plana/apps/documents/models/document.py:74
 msgid "Document for Association"
 msgstr "Document pour Association"
 
-#: plana/apps/documents/models/document.py:72
+#: plana/apps/documents/models/document.py:75
 msgid "Document for User"
 msgstr "Document pour Utilisateur"
 
-#: plana/apps/documents/models/document.py:73
+#: plana/apps/documents/models/document.py:76
 msgid "Document for Project"
 msgstr "Document pour Demande de Subvention"
 
-#: plana/apps/documents/models/document.py:74
+#: plana/apps/documents/models/document.py:77
 msgid "Document for Project Review"
 msgstr "Document pour Bilan de Subvention"
 
-#: plana/apps/documents/models/document.py:83
+#: plana/apps/documents/models/document.py:86
 #: plana/apps/documents/models/document_upload.py:37
 msgid "Document"
 msgstr "Document"
 
-#: plana/apps/documents/models/document.py:84
+#: plana/apps/documents/models/document.py:87
 msgid "Documents"
 msgstr "Documents"
 
