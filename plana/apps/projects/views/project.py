@@ -175,10 +175,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if not request.user.has_perm("projects.view_project_all") and (
-            (project.user is not None and request.user.pk != project.user)
+            (project.user_id is not None and request.user.pk != project.user_id)
             or (
-                project.association is not None
-                and not request.user.is_in_association(project.association)
+                project.association_id is not None
+                and not request.user.is_in_association(project.association_id)
             )
         ):
             return response.Response(
