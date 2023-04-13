@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 16:26+0200\n"
+"POT-Creation-Date: 2023-04-13 11:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgstr ""
 #: plana/apps/associations/models/association.py:32
 #: plana/apps/commissions/models/commission.py:12
 #: plana/apps/documents/models/document.py:34
+#: plana/apps/documents/models/document_upload.py:35
 #: plana/apps/institutions/models/institution.py:10
 #: plana/apps/institutions/models/institution_component.py:9
 #: plana/apps/projects/models/category.py:9
@@ -173,7 +174,7 @@ msgid "Institution component"
 msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/documents/models/document_upload.py:48
+#: plana/apps/documents/models/document_upload.py:49
 #: plana/apps/projects/models/project.py:20 plana/apps/users/models/user.py:22
 #: plana/apps/users/models/user.py:38
 msgid "Association"
@@ -378,7 +379,7 @@ msgid "Document for Project Review"
 msgstr "Document pour Bilan de Subvention"
 
 #: plana/apps/documents/models/document.py:86
-#: plana/apps/documents/models/document_upload.py:37
+#: plana/apps/documents/models/document_upload.py:38
 msgid "Document"
 msgstr "Document"
 
@@ -386,7 +387,7 @@ msgstr "Document"
 msgid "Documents"
 msgstr "Documents"
 
-#: plana/apps/documents/models/document_upload.py:42
+#: plana/apps/documents/models/document_upload.py:43
 #: plana/apps/projects/models/project.py:17
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:20 plana/apps/users/models/user.py:61
@@ -394,7 +395,7 @@ msgstr "Documents"
 msgid "User"
 msgstr "Utilisateur"
 
-#: plana/apps/documents/models/document_upload.py:54
+#: plana/apps/documents/models/document_upload.py:55
 #: plana/apps/projects/models/project.py:89
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:15
@@ -402,35 +403,35 @@ msgstr "Utilisateur"
 msgid "Project"
 msgstr "Projet"
 
-#: plana/apps/documents/models/document_upload.py:58
+#: plana/apps/documents/models/document_upload.py:59
 msgid "Upload date"
 msgstr "Date d'envoi"
 
-#: plana/apps/documents/models/document_upload.py:60
+#: plana/apps/documents/models/document_upload.py:61
 msgid "Uploaded file"
 msgstr "Fichier envoyé"
 
-#: plana/apps/documents/models/document_upload.py:64
+#: plana/apps/documents/models/document_upload.py:65
 msgid "Document Upload Status"
 msgstr "Statut du Document Envoyé"
 
-#: plana/apps/documents/models/document_upload.py:67
+#: plana/apps/documents/models/document_upload.py:68
 msgid "Document Rejected"
 msgstr "Document Rejeté"
 
-#: plana/apps/documents/models/document_upload.py:68
+#: plana/apps/documents/models/document_upload.py:69
 msgid "Document Processing"
 msgstr "Document en Traitement"
 
-#: plana/apps/documents/models/document_upload.py:69
+#: plana/apps/documents/models/document_upload.py:70
 msgid "Document Validated"
 msgstr "Document Validé"
 
-#: plana/apps/documents/models/document_upload.py:78
+#: plana/apps/documents/models/document_upload.py:79
 msgid "Document from association or user"
 msgstr "Document d'une association ou d'un utilisateur"
 
-#: plana/apps/documents/models/document_upload.py:79
+#: plana/apps/documents/models/document_upload.py:80
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
@@ -505,13 +506,13 @@ msgstr "Ce document ne peut être proposé plusieurs fois."
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
-#: plana/apps/documents/views/document_upload.py:171
-#: plana/apps/documents/views/document_upload.py:205
+#: plana/apps/documents/views/document_upload.py:173
+#: plana/apps/documents/views/document_upload.py:207
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:192
-#: plana/apps/documents/views/document_upload.py:226
+#: plana/apps/documents/views/document_upload.py:194
+#: plana/apps/documents/views/document_upload.py:228
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 

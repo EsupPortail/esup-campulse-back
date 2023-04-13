@@ -148,6 +148,8 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
+        request.data["name"] = request.data["path_file"]._name
+
         return super().create(request, *args, **kwargs)
 
 
