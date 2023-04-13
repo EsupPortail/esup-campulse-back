@@ -39,36 +39,35 @@ class UserViewsManagerTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Start a default client used on all tests, retrieves a manager user."""
-        self.unvalidated_user_id = 2
-        self.unvalidated_user_name = "compte-non-valide@mail.tld"
-        self.student_user_id = 11
-        self.student_user_name = "etudiant-asso-site@mail.tld"
-        self.president_user_id = 13
-        self.president_user_name = "president-asso-site@mail.tld"
+        cls.unvalidated_user_id = 2
+        cls.unvalidated_user_name = "compte-non-valide@mail.tld"
+        cls.student_user_id = 11
+        cls.student_user_name = "etudiant-asso-site@mail.tld"
+        cls.president_user_id = 13
+        cls.president_user_name = "president-asso-site@mail.tld"
 
-        self.manager_misc_user_id = 5
-        self.manager_misc_user_name = "gestionnaire-crous@mail.tld"
-        self.manager_misc_client = Client()
+        cls.manager_misc_user_id = 5
+        cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+        cls.manager_misc_client = Client()
         url_manager_misc = reverse("rest_login")
         data_manager_misc = {
-            "username": self.manager_misc_user_name,
+            "username": cls.manager_misc_user_name,
             "password": "motdepasse",
         }
-        self.response = self.manager_misc_client.post(
-            url_manager_misc, data_manager_misc
-        )
+        cls.response = cls.manager_misc_client.post(url_manager_misc, data_manager_misc)
 
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.manager_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.manager_client = Client()
         url_manager = reverse("rest_login")
         data_manager = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.manager_client.post(url_manager, data_manager)
+        cls.response = cls.manager_client.post(url_manager, data_manager)
 
     def test_manager_get_users_list(self):
         """

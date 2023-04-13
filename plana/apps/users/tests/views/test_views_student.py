@@ -31,30 +31,31 @@ class UserViewsStudentTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Clients used on all tests (simple student user, president of an association)."""
-        self.unvalidated_user_id = 2
-        self.unvalidated_user_name = "compte-non-valide@mail.tld"
+        cls.unvalidated_user_id = 2
+        cls.unvalidated_user_name = "compte-non-valide@mail.tld"
 
-        self.student_user_id = 11
-        self.student_user_name = "etudiant-asso-site@mail.tld"
-        self.student_client = Client()
+        cls.student_user_id = 11
+        cls.student_user_name = "etudiant-asso-site@mail.tld"
+        cls.student_client = Client()
         url = reverse("rest_login")
         data = {
-            "username": self.student_user_name,
+            "username": cls.student_user_name,
             "password": "motdepasse",
         }
-        self.response_student = self.student_client.post(url, data)
+        cls.response_student = cls.student_client.post(url, data)
 
-        self.president_user_id = 13
-        self.president_user_name = "president-asso-site@mail.tld"
-        self.president_student_client = Client()
+        cls.president_user_id = 13
+        cls.president_user_name = "president-asso-site@mail.tld"
+        cls.president_student_client = Client()
         url = reverse("rest_login")
         data = {
-            "username": self.president_user_name,
+            "username": cls.president_user_name,
             "password": "motdepasse",
         }
-        self.response_president = self.president_student_client.post(url, data)
+        cls.response_president = cls.president_student_client.post(url, data)
 
     def test_student_get_users_list(self):
         """
