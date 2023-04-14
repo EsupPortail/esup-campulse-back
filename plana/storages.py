@@ -9,7 +9,6 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
 from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
-from thumbnails.models import Source
 
 PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
