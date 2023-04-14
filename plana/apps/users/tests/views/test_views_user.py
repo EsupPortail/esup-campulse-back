@@ -49,8 +49,8 @@ class UserViewsTests(TestCase):
         cls.student_user_id = 11
         cls.student_user_name = "etudiant-asso-site@mail.tld"
         cls.student_client = Client()
-        student_data = {"username": cls.student_user_name, "password": "motdepasse"}
-        cls.response_student = cls.student_client.post(url_login, student_data)
+        data_student = {"username": cls.student_user_name, "password": "motdepasse"}
+        cls.response_student = cls.student_client.post(url_login, data_student)
 
         # Start a manager client used in some tests
         cls.manager_general_user_id = 3
