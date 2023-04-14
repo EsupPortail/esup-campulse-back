@@ -30,6 +30,9 @@ class AuthUserViewsTests(TestCase):
         cls.unvalidated_user_id = 2
         cls.unvalidated_user_name = "compte-non-valide@mail.tld"
         cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
+        cls.user_id_del_group = 2
+        cls.user_id_del_group_user_commission = 6
+        cls.user_id_del_group_user_insitution = 4
         # Start an anonymous client used in some tests
         cls.anonymous_client = Client()
 
@@ -70,14 +73,18 @@ class AuthUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_get_user_groups_list(self):
-        # TODO : check return of the request ?
         """
         GET /users/groups/ .
 
         - A student user can execute this request.
+        - Only auth user infos are returned.
         """
         response_student = self.student_client.get("/users/groups/")
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        results = GroupInstitutionCommissionUser.objects.filter(
+            user_id=self.student_user_id
+        )
+        self.assertEqual(len(results), len(response_student.data))
 
     def test_manager_get_user_groups_list(self):
         """
@@ -88,6 +95,8 @@ class AuthUserViewsTests(TestCase):
         """
         response_manager = self.manager_client.get("/users/groups/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        results = GroupInstitutionCommissionUser.objects.all()
+        self.assertEqual(len(results), len(response_manager.data))
 
     def test_anonymous_get_user_groups_details(self):
         """
@@ -122,20 +131,45 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-    def test_anonymous_post_user_groups(self):
-        # TODO : split test
+    def test_anonymous_post_user_groups_404_user(self):
+        """
+        POST /users/groups/ .
+
+        - A non-existing user cannot be added in a group.
+        - username is a mandatory param
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": 9999, "group": 6},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_anonymous = self.client.post("/users/groups/", {"group": 6})
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_anonymous_post_user_groups_404_group(self):
+        """
+        POST /users/groups/ .
+
+        - A user cannot be added in a non-existing group.
+        - group is a mandatory param
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": self.student_user_name, "group": 9999},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_anonymous = self.client.post(
+            "/users/groups/", {"username": self.student_user_name}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_anonymous_post_user_groups_forbidden(self):
         """
         POST /users/groups/ .
 
         - An anonymous user cannot add a link between a validated user and a group.
-        - An anonymous user can't add a link with a restricted group to a user.
-        - institution field must be valid for the given group.
-        - commission field must be valid for the given group.
-        - An anonymous user can add a link between a non-validated user and a group.
-        - A non-existing user cannot be added in a group.
-        - A user cannot be added in a non-existing group.
-        - username field is mandatory.
-        - group field is mandatory.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
@@ -143,48 +177,53 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_anonymous_post_user_groups_restricted_group(self):
+        """
+        POST /users/groups/ .
+
+        - An anonymous user can't add a link with a restricted group to a user.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_anonymous_post_user_groups_bad_institution(self):
+        """
+        POST /users/groups/ .
+
+        - institution field must be valid for the given group.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 6, "institution": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_anonymous_post_user_groups_bad_commission(self):
+        """
+        POST /users/groups/ .
+
+        - commission field must be valid for the given group.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 6, "commission": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_anonymous_post_user_groups_success(self):
+        """
+        POST /users/groups/ .
+
+        - An anonymous user can add a link between a non-validated user and a group.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 6},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
-
-        response_anonymous = self.anonymous_client.post(
-            "/users/groups/",
-            {"username": 99, "group": 6},
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.client.post(
-            "/users/groups/", {"username": self.unvalidated_user_name, "group": 66}
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.client.post("/users/groups/", {"group": 6})
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.client.post(
-            "/users/groups/", {"username": self.student_user_name}
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_student_post_user_groups(self):
         """
@@ -197,16 +236,43 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_post_user_groups(self):
-        # TODO : split test
+    def test_manager_post_user_groups_other_manager(self):
+        """
+        POST /users/groups/ .
+
+        - Groups for a general manager can't be changed by another manager.
+        """
+        response_manager = self.manager_misc_client.post(
+            "/users/groups/",
+            {"username": self.manager_general_user_name, "group": 4},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_manager_post_user_groups_bad_request(self):
+        """
+        POST /users/groups/ .
+
+        - A manager group cannot be given to a student.
+        - A student group cannot be given to a manager.
+        """
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": self.student_user_name, "group": 2, "institution": 1},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_manager = self.manager_client.post(
+            "/users/groups/",
+            {"username": self.manager_misc_user_name, "group": 6},
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_manager_post_user_groups_success(self):
         """
         POST /users/groups/ .
 
         - A manager user can add a group to a validated student.
         - A manager user can add a group to a non-validated student.
-        - Groups for a general manager can't be changed by another manager.
-        - A manager group cannot be given to a student.
-        - A student group cannot be given to a manager.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
@@ -220,24 +286,6 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        response_manager = self.manager_misc_client.post(
-            "/users/groups/",
-            {"username": self.manager_general_user_name, "group": 4},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_manager = self.manager_client.post(
-            "/users/groups/",
-            {"username": self.student_user_name, "group": 2, "institution": 1},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_manager = self.manager_client.post(
-            "/users/groups/",
-            {"username": self.manager_misc_user_name, "group": 6},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_anonymous_delete_user_group(self):
         """
         DELETE /users/{user_id}/groups/{group_id} .
@@ -245,7 +293,7 @@ class AuthUserViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.client.delete(
-            f"/users/{self.unvalidated_user_id}/groups/6"
+            f"/users/{self.user_id_del_group}/groups/6"
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -256,139 +304,252 @@ class AuthUserViewsTests(TestCase):
         - A student user cannot execute this request.
         """
         response_student = self.student_client.delete(
-            f"/users/{self.student_user_id}/groups/6"
+            f"/users/{self.user_id_del_group}/groups/6"
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_delete_user_group(self):
-        # TODO : split test
+    def test_manager_delete_user_group_404(self):
         """
         DELETE /users/{user_id}/groups/{group_id} .
 
-        - The user must exist.
-        - Deleting a group still linked to an association is not possible.
-        - A manager user can execute this request.
-        - The link between a group and a user is deleted.
-        - A user should have at least one group.
+        - Cannot delete group from a non-existing user
         """
-        user_id = 2
-        response = self.manager_client.get(f"/users/{user_id}/groups/")
+        response = self.manager_client.get(f"/users/{self.user_id_del_group}/groups/")
         first_user_group_id = response.data[0]["group"]
-        second_user_group_id = response.data[1]["group"]
 
         response_delete = self.manager_client.delete(
-            f"/users/99/groups/{str(first_user_group_id)}"
+            f"/users/999/groups/{str(first_user_group_id)}"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_manager_delete_user_group_bad_request(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - Deleting a group to a user still linked to an association is not possible.
+        """
         response_delete = self.manager_client.delete("/users/10/groups/5")
         self.assertEqual(response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
-        AssociationUser.objects.filter(user_id=user_id).delete()
+    def test_manager_delete_user_group_double_delete(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - A manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A link between a group and a use cannot be deleted twice.
+        """
+        response = self.manager_client.get(f"/users/{self.user_id_del_group}/groups/")
+        first_user_group_id = response.data[0]["group"]
+
+        AssociationUser.objects.filter(user_id=self.user_id_del_group).delete()
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+            f"/users/{self.user_id_del_group}/groups/{str(first_user_group_id)}"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}"
+            f"/users/{self.user_id_del_group}/groups/{str(first_user_group_id)}"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
-        second_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(second_user_group_id)}"
-        )
-        self.assertEqual(
-            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
-        )
-
-    def test_manager_delete_user_group_commission(self):
-        # TODO : split test
+    def test_manager_delete_user_group_success(self):
         """
-        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+        DELETE /users/{user_id}/groups/{group_id} .
 
-        - The user must exist.
-        - A misc manager user cannot execute this request.
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
         """
-        user_id = 6
-        response = self.manager_client.get(f"/users/{user_id}/groups/")
+        response = self.manager_client.get(f"/users/{self.user_id_del_group}/groups/")
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]
 
-        response_delete = self.manager_client.delete(
-            f"/users/99/groups/{str(first_user_group_id)}/commissions/1"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_delete = self.manager_misc_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
-
+        AssociationUser.objects.filter(user_id=self.user_id_del_group).delete()
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
+            f"/users/{self.user_id_del_group}/groups/{str(first_user_group_id)}"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
-        first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/commissions/1"
-        )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
-
         second_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(second_user_group_id)}/commissions/2"
+            f"/users/{self.user_id_del_group}/groups/{str(second_user_group_id)}"
         )
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
         )
 
-    def test_manager_delete_user_group_institution(self):
-        # TODO : split test
+    def test_manager_delete_user_group_commission_404(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - Cannot delete a group from a non-existing user
+        """
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_commission}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/9999/groups/{str(first_user_group_id)}/commissions/1"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_misc_delete_user_group_commission_forbidden(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+
+        - A misc manager user cannot execute this request.
+        """
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_commission}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        response_delete = self.manager_misc_client.delete(
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_manager_delete_user_group_commission_double_delete(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - A manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A link between a group and a use cannot be deleted twice.
+        """
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_commission}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_delete_user_group_commission_success(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+
+        - A manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A user should have at least one group.
+        """
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_commission}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+        second_user_group_id = response.data[1]["group"]
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        second_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(second_user_group_id)}/commissions/2"
+        )
+        self.assertEqual(
+            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
+        )
+
+    def test_manager_delete_user_group_institution_404(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - Cannot delete a group from a non-existing user
+        """
+        GroupInstitutionCommissionUser.objects.create(
+            user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
+        )
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        response_delete = self.manager_client.delete(
+            f"/users/9999/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_misc_delete_user_group_institution_forbidden(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+
+        - A misc manager user cannot execute this request.
+        """
+        GroupInstitutionCommissionUser.objects.create(
+            user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
+        )
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        response_delete = self.manager_misc_client.delete(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_manager_delete_user_group_institution_double_delete(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - A manager user can execute this request.
+        - The link between a group and a user is deleted.
+        - A link between a group and a use cannot be deleted twice.
+        """
+        GroupInstitutionCommissionUser.objects.create(
+            user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
+        )
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/"
+        )
+        first_user_group_id = response.data[0]["group"]
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
+
+        first_response_delete = self.manager_client.delete(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/{str(first_user_group_id)}/institutions/3"
+        )
+        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_delete_user_group_institution_success(self):
         """
         DELETE /users/{user_id}/groups/{group_id}/institutions/{institution_id} .
 
-        - The user must exist.
-        - A misc manager user cannot execute this request.
         - A genral manager user can execute this request.
         - The link between a group and a user is deleted.
         - A user should have at least one group.
         """
-        user_id = 4
         GroupInstitutionCommissionUser.objects.create(
-            user_id=user_id, group_id=2, institution_id=4
+            user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
         )
         GroupInstitutionCommissionUser.objects.filter(
-            user_id=user_id, commission_id__isnull=False
+            user_id=self.user_id_del_group_user_insitution, commission_id__isnull=False
         ).delete()
-        response = self.manager_client.get(f"/users/{user_id}/groups/")
+        response = self.manager_client.get(
+            f"/users/{self.user_id_del_group_user_insitution}/groups/"
+        )
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]
 
-        response_delete = self.manager_client.delete(
-            f"/users/99/groups/{str(first_user_group_id)}/institutions/3"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_delete = self.manager_misc_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
-        )
-        self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
-
         first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
+            f"/users/{self.user_id_del_group_user_insitution}/groups/{str(first_user_group_id)}/institutions/3"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
-        first_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(first_user_group_id)}/institutions/3"
-        )
-        self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
-
         second_response_delete = self.manager_client.delete(
-            f"/users/{user_id}/groups/{str(second_user_group_id)}/institutions/4"
+            f"/users/{self.user_id_del_group_user_insitution}/groups/{str(second_user_group_id)}/institutions/4"
         )
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
