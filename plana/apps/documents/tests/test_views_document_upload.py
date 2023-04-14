@@ -109,11 +109,39 @@ class DocumentsViewsTests(TestCase):
         GET /documents/uploads .
 
         - A general manager user gets all documents uploads.
+        - user, association and project filters work.
         """
         response = self.general_client.get("/documents/uploads")
         documents_cnt = DocumentUpload.objects.all().count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), documents_cnt)
+
+        response = self.general_client.get(
+            f"/documents/uploads?user_id={self.student_misc_user_id}"
+        )
+        documents_cnt = DocumentUpload.objects.filter(
+            user_id=self.student_misc_user_id
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
+
+        association_id = 2
+        response = self.general_client.get(
+            f"/documents/uploads?association_id={association_id}"
+        )
+        documents_cnt = DocumentUpload.objects.filter(
+            association_id=association_id
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
+
+        project_id = 1
+        response = self.general_client.get(
+            f"/documents/uploads?project_id={project_id}"
+        )
+        documents_cnt = DocumentUpload.objects.filter(project_id=project_id).count()
+        content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
     def test_post_document_upload_project_anonymous(self):

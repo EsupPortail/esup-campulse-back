@@ -2,7 +2,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
@@ -15,7 +16,29 @@ from plana.apps.users.models.user import AssociationUser
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["documents/uploads"]),
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+            OpenApiParameter(
+                "project_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Project ID.",
+            ),
+        ],
+        tags=["documents/uploads"],
+    ),
     post=extend_schema(tags=["documents/uploads"]),
 )
 class DocumentUploadListCreate(generics.ListCreateAPIView):
@@ -27,6 +50,16 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = DocumentUpload.objects.all()
         if self.request.method == "GET":
+            user = self.request.query_params.get("user_id")
+            association = self.request.query_params.get("association_id")
+            project = self.request.query_params.get("project_id")
+            if user is not None and user != "":
+                queryset = queryset.filter(user_id=user)
+            if association is not None and association != "":
+                queryset = queryset.filter(association_id=association)
+            if project is not None and project != "":
+                queryset = queryset.filter(project_id=project)
+
             if not self.request.user.has_perm("documents.view_documentupload_all"):
                 user_associations_ids = AssociationUser.objects.filter(
                     user_id=self.request.user.pk
