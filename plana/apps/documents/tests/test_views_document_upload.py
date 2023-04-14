@@ -286,13 +286,11 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
+        - Returns 415 if MIME type is wrong.
         - Object is correctly created in db.
         """
         project_id = 1
         document_id = 20
-        document = Document.objects.get(id=document_id)
-        document.mime_types = ["application/vnd.novadigm.ext"]
-        document.save()
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -303,6 +301,12 @@ class DocumentsViewsTests(TestCase):
             "document": document_id,
             "user": self.student_misc_user_id,
         }
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+        document = Document.objects.get(id=document_id)
+        document.mime_types = ["application/vnd.novadigm.ext"]
+        document.save()
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         du_cnt = len(

@@ -9,6 +9,10 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.institutions.models import Institution, InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
+# Remove S3 dependency in test environment.
+if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+    DynamicStorageFileField = models.FileField
+
 
 def get_logo_path(instance, filename):
     """Is used by association path_logo field."""

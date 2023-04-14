@@ -1,8 +1,10 @@
 """List of tests done on associations views."""
 import json
+from unittest.mock import Mock
 
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -10,6 +12,7 @@ from rest_framework import status
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.users.models.user import AssociationUser
+from plana.storages import DynamicStorageFieldFile
 
 
 class AssociationsViewsTests(TestCase):
@@ -590,6 +593,30 @@ class AssociationsViewsTests(TestCase):
         )
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.is_public, False)
+
+    def test_patch_association_logo(self):
+        """
+        PATCH /associations/{id} .
+
+        - Association's logo can be updated.
+        - Returns 415 if MIME type is wrong.
+        """
+        # TODO Find how to test multipart/form-data with mocks.
+        """
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+
+        association_id = 1
+        response = self.general_client.patch(
+            f"/associations/{association_id}",
+            {"path_logo": file},
+            content_type="multipart/form-data",
+        )
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        """
 
     def test_delete_association(self):
         """

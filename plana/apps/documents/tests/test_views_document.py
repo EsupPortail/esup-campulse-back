@@ -1,11 +1,14 @@
 """List of tests done on documents views."""
 import json
+from unittest.mock import Mock
 
+from django.core.files.storage import default_storage
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.documents.models.document import Document
+from plana.storages import DynamicStorageFieldFile
 
 
 class DocumentsViewsTests(TestCase):
@@ -125,15 +128,19 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_documents_success(self):
-        # TODO : test document upload
         """
         POST /documents/ .
         - A user with proper permissions can execute this request.
         - Document object is successfully created in db.
         """
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+
         contact = "gestionnaire-svu@mail.tld"
         name = "Test success"
-        post_data = {"name": name, "contact": contact}
+        post_data = {"name": name, "contact": contact, "template_file": file}
         response = self.general_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -236,7 +243,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_documents_success(self):
-        # TODO : test document upload
+        # TODO Find how to test multipart/form-data with mocks.
         """
         PATCH /documents/{id} .
         - A user with proper permissions can execute this request.

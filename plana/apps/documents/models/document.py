@@ -1,5 +1,6 @@
 """Models describing documents (charters PDF, review spreadsheets, ...)."""
 import datetime
+import os
 
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
@@ -9,6 +10,10 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
+
+# Remove S3 dependency in test environment.
+if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+    DynamicStorageFileField = models.FileField
 
 
 def get_template_path(instance, filename):
