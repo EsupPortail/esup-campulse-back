@@ -11,8 +11,8 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import User
 from plana.storages import DynamicStorageFileField
 
-# remove s3 dependence in test environment
-if os.environ["DJANGO_SETTINGS_MODULE"] == "octant.settings.unittest":
+# Remove S3 dependency in test environment.
+if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
     DynamicStorageFileField = models.FileField
 
 
