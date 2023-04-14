@@ -11,6 +11,10 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import User
 from plana.storages import DynamicStorageFileField
 
+# remove s3 dependence in test environment
+if os.environ["DJANGO_SETTINGS_MODULE"] == "octant.settings.unittest":
+    DynamicStorageFileField = models.FileField
+
 
 def get_file_path(instance, filename):
     """Is used by document path_file field."""

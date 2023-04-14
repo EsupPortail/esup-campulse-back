@@ -1,6 +1,6 @@
 """List of tests done on documents views."""
 import json
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -280,8 +280,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @patch('plana.storages.UpdateACLStorage.update_acl')
-    def test_post_document_upload_project_success(self, update_acl):
+    def test_post_document_upload_project_success(self):
         """
         POST /documents/uploads .
 
@@ -291,7 +290,6 @@ class DocumentsViewsTests(TestCase):
         """
         project_id = 1
         document_id = 20
-        update_acl.return_value = Mock()
         document = Document.objects.get(id=document_id)
         document.mime_types = ["application/vnd.novadigm.ext"]
         document.save()
