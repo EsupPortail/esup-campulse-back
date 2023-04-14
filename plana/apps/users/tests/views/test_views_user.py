@@ -91,11 +91,6 @@ class UserViewsTests(TestCase):
         - A manager user can execute this request.
         - There's at least one user in the users list.
         - We get the same amount of users through the model and through the view.
-        - is_validated_by_admin query parameter only returns a non-validated user.
-        - association_id query parameter only returns users linked to this association.
-        - institutions query parameter only returns users linked to these institutions.
-        - Empty institutions query parameter only returns users linked to no institutions.
-        - Test a mix of the two last conditions.
         """
         response_manager = self.manager_client.get("/users/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
@@ -106,6 +101,14 @@ class UserViewsTests(TestCase):
         content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
 
+    def test_manager_get_users_list_simple_queries(self):
+        """
+        GET /users/ .
+
+        - is_validated_by_admin query parameter only returns a non-validated user.
+        - association_id query parameter only returns users linked to this association.
+        - institutions query parameter only returns users linked to these institutions.
+        """
         response_manager = self.manager_client.get(
             "/users/?is_validated_by_admin=false"
         )
@@ -134,6 +137,13 @@ class UserViewsTests(TestCase):
         ).count()
         self.assertEqual(len(content), links_cnt)
 
+    def test_manager_get_users_list_advanced_queries(self):
+        """
+        GET /users/ .
+
+        - Empty institutions query parameter only returns users linked to no institutions.
+        - Test a mix query of users linked to institutions and users linked to no institutions.
+        """
         misc_users_query = User.objects.filter(
             Q(
                 id__in=GroupInstitutionCommissionUser.objects.filter(
@@ -171,17 +181,22 @@ class UserViewsTests(TestCase):
         ).count()
         self.assertEqual(len(content), users_query_cnt)
 
-    def test_manager_get_users_list_is_cas(self):
+    def test_manager_get_users_list_is_cas_false(self):
         """
         GET /users/ .
 
         - Getting only non-cas users in the filter, only returns non-cas users.
-        - Getting only cas users in the filter, only returns cas users.
         """
         response_manager_cas_false = self.manager_client.get("/users/?is_cas=false")
         for user in response_manager_cas_false.data:
             self.assertEqual(user["is_cas"], False)
 
+    def test_manager_get_users_list_is_cas_true(self):
+        """
+        GET /users/ .
+
+        - Getting only cas users in the filter, only returns cas users.
+        """
         response_manager_cas_true = self.manager_client.get("/users/?is_cas=true")
         for user in response_manager_cas_true.data:
             self.assertEqual(user["is_cas"], True)
@@ -252,18 +267,12 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_post_user(self):
+    def test_manager_post_user_restricted_mail(self):
         """
         POST /users/ .
 
         - An account with a restricted mail cannot be created.
-        - A manager user can execute this request.
-        - The user has been created.
-        - An email is received if creation is successful.
-        - A CAS user can be created.
         """
-        self.assertFalse(len(mail.outbox))
-
         response_manager = self.manager_client.post(
             "/users/",
             {
@@ -275,6 +284,14 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertFalse(len(mail.outbox))
 
+    def test_manager_post_user(self):
+        """
+        POST /users/ .
+
+        - A manager user can execute this request.
+        - The user has been created.
+        - An email is received if creation is successful.
+        """
         username = "bourvil@splatoon.com"
         response_manager = self.manager_client.post(
             "/users/",
@@ -286,6 +303,14 @@ class UserViewsTests(TestCase):
         user = User.objects.get(username=username)
         self.assertEqual(user.username, username)
 
+    def test_manager_post_user_cas(self):
+        """
+        POST /users/ .
+
+        - A manager user can execute this request.
+        - The CAS user has been created.
+        - An email is received if creation is successful.
+        """
         username = "opaline"
         email = "opaline@unistra.fr"
         response_manager = self.manager_client.post(
@@ -341,42 +366,25 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_patch_user_detail(self):
+    def test_manager_patch_user_detail_404(self):
         """
         PATCH /users/{id} .
 
-        - A manager user can execute this request.
-        - A manager user can update user details.
-        - An email is received if validation is successful.
         - A non-existing user cannot be updated.
-        - Some email addresses should not be used for update.
-        - A manager user cannot update restricted CAS user details.
-        - A manager user can validate a CAS user.
-        - A manager user cannot edit another manager.
         """
-        self.assertFalse(len(mail.outbox))
         response_manager = self.manager_client.patch(
-            f"/users/{self.unvalidated_user_id}",
-            data={
-                "email": "aymar-venceslas@oui.org",
-                "phone": "0 118 999 881 999 119 725 3",
-                "is_validated_by_admin": True,
-            },
-            content_type="application/json",
-        )
-        user = User.objects.get(pk=self.unvalidated_user_id)
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
-        self.assertEqual(user.username, "aymar-venceslas@oui.org")
-        self.assertTrue(len(mail.outbox))
-
-        response_manager = self.manager_client.patch(
-            "/users/1000",
+            "/users/9999",
             data={"username": "Joséphine Ange Gardien"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_manager_patch_user_detail_restricted_mail(self):
+        """
+        PATCH /users/{id} .
+
+        - A user cannot be patched with a restricted-domain email address.
+        """
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
             data={
@@ -386,6 +394,29 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_manager_patch_user_detail_forbidden(self):
+        """
+        PATCH /users/{id} .
+
+        - A manager user cannot edit another manager.
+        """
+        user_manager = User.objects.get(email=self.manager_misc_user_name)
+        response_manager = self.manager_client.patch(
+            f"/users/{user_manager.pk}",
+            data={"email": "gestionnaire-saucisse@mail.tld"},
+            content_type="application/json",
+        )
+        user_manager = User.objects.get(email=self.manager_misc_user_name)
+        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(user_manager.email, self.manager_misc_user_name)
+
+    def test_manager_patch_user_detail_cas(self):
+        """
+        PATCH /users/{id} .
+
+        - A manager user cannot update restricted CAS user details (ex: username, mail).
+        - A manager user can validate a CAS user.
+        """
         user = User.objects.create_user(
             username="PatriciaCAS",
             password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
@@ -412,15 +443,29 @@ class UserViewsTests(TestCase):
         self.assertEqual(user_cas.is_validated_by_admin, True)
         self.assertEqual(user_cas.email, "test@unistra.fr")
 
-        user_manager = User.objects.get(email=self.manager_misc_user_name)
+    def test_manager_patch_user_detail_success(self):
+        """
+        PATCH /users/{id} .
+
+        - A manager user can execute this request.
+        - A manager user can update user details.
+        - An email is received if validation is successful.
+        """
+        self.assertFalse(len(mail.outbox))
         response_manager = self.manager_client.patch(
-            f"/users/{user_manager.pk}",
-            data={"email": "gestionnaire-saucisse@mail.tld"},
+            f"/users/{self.unvalidated_user_id}",
+            data={
+                "email": "aymar-venceslas@oui.org",
+                "phone": "0 118 999 881 999 119 725 3",
+                "is_validated_by_admin": True,
+            },
             content_type="application/json",
         )
-        user_manager = User.objects.get(email=self.manager_misc_user_name)
-        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(user_manager.email, self.manager_misc_user_name)
+        user = User.objects.get(pk=self.unvalidated_user_id)
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
+        self.assertEqual(user.username, "aymar-venceslas@oui.org")
+        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_delete_user(self):
         """
@@ -444,16 +489,33 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_delete_user(self):
+    def test_manager_delete_user_404(self):
+        """
+        DELETE /users/{id} .
+
+        - A non-existing user cannot be deleted.
+        """
+        response = self.manager_client.delete(f"/users/9999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_delete_user_forbidden(self):
+        """
+        DELETE /users/{id} .
+
+        - A manager account cannot be deleted.
+        """
+        managers_ids = [1, 3, 4, 5]
+        for manager_id in managers_ids:
+            response = self.manager_client.delete(f"/users/{manager_id}")
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_manager_delete_user_success(self):
         """
         DELETE /users/{id} .
 
         - A manager user can execute this request.
-        - A user can be deleted.
+        - The user has been deleted.
         - An email is received if deletion is successful.
-        - A non-existing user cannot be deleted.
-        - A manager account cannot be deleted.
-        - A non-validated account can be deleted.
         """
         self.assertFalse(len(mail.outbox))
         response = self.manager_client.delete(f"/users/{self.student_user_id}")
@@ -462,15 +524,22 @@ class UserViewsTests(TestCase):
             User.objects.get(pk=self.student_user_id)
         self.assertTrue(len(mail.outbox))
 
-        response = self.manager_client.delete(f"/users/{self.student_user_id}")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-        managers_ids = [1, 3, 4, 5]
-        for manager_id in managers_ids:
-            response = self.manager_client.delete(f"/users/{manager_id}")
-            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
         response = self.manager_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
             User.objects.get(pk=self.unvalidated_user_id)
+
+    def test_manager_delete_user_non_validated(self):
+        """
+        DELETE /users/{id} .
+
+        - A manager user can execute this request.
+        - An email is received if deletion is successful.
+        - The non-validated account has been deleted.
+        """
+        self.assertFalse(len(mail.outbox))
+        response = self.manager_client.delete(f"/users/{self.unvalidated_user_id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(ObjectDoesNotExist):
+            User.objects.get(pk=self.unvalidated_user_id)
+        self.assertTrue(len(mail.outbox))
