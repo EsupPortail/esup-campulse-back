@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-14 10:00+0200\n"
+"POT-Creation-Date: 2023-04-14 10:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,7 +211,7 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:288
 #: plana/apps/associations/views/association.py:335
-#: plana/apps/associations/views/association.py:461
+#: plana/apps/associations/views/association.py:462
 #: plana/apps/documents/views/document_upload.py:87
 #: plana/apps/projects/views/project.py:73
 msgid "Association does not exist."
@@ -241,19 +241,19 @@ msgstr "Erreur de paramètres de réseaux sociaux"
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:385
+#: plana/apps/associations/views/association.py:386
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:401
+#: plana/apps/associations/views/association.py:402
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:467
+#: plana/apps/associations/views/association.py:468
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:477
+#: plana/apps/associations/views/association.py:478
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
