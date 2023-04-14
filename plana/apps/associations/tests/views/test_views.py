@@ -2,10 +2,12 @@
 import json
 from unittest.mock import Mock
 
+from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.storage import default_storage
 from django.test import Client, TestCase
+from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.urls import reverse
 from rest_framework import status
 
@@ -601,21 +603,26 @@ class AssociationsViewsTests(TestCase):
         - Association's logo can be updated.
         - Returns 415 if MIME type is wrong.
         """
-        # TODO Find how to test multipart/form-data with mocks.
-        """
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
 
         association_id = 1
+        data = encode_multipart(data={"path_logo": file}, boundary=BOUNDARY)
         response = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"path_logo": file},
-            content_type="multipart/form-data",
+            f"/associations/{association_id}", data=data, content_type=MULTIPART_CONTENT
+        )
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+        # TODO Find how to mock image files.
+        """
+        settings.ALLOWED_IMAGE_MIME_TYPES = ["application/vnd.novadigm.ext"]
+        response = self.general_client.patch(
+            f"/associations/{association_id}", data, content_type=MULTIPART_CONTENT
         )
         print(response.data)
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         """
 
     def test_delete_association(self):

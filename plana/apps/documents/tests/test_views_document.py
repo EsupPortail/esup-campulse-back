@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 from django.core.files.storage import default_storage
 from django.test import Client, TestCase
+from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.urls import reverse
 from rest_framework import status
 
@@ -140,7 +141,7 @@ class DocumentsViewsTests(TestCase):
 
         contact = "gestionnaire-svu@mail.tld"
         name = "Test success"
-        post_data = {"name": name, "contact": contact, "template_file": file}
+        post_data = {"name": name, "contact": contact, "path_template": file}
         response = self.general_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -243,17 +244,24 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_documents_success(self):
-        # TODO Find how to test multipart/form-data with mocks.
         """
         PATCH /documents/{id} .
         - A user with proper permissions can execute this request.
         - Document object is successfully changed in db.
         """
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+
         contact = "gestionnaire-svu@mail.tld"
         name = "Test success"
-        patch_data = {"name": name, "contact": contact}
+        patch_data = encode_multipart(
+            data={"name": name, "contact": contact, "path_template": file},
+            boundary=BOUNDARY,
+        )
         response = self.general_client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
+            "/documents/1", data=patch_data, content_type=MULTIPART_CONTENT
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
