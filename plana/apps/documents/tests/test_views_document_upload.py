@@ -8,6 +8,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicStorageFieldFile
@@ -291,6 +292,9 @@ class DocumentsViewsTests(TestCase):
         """
         project_id = 1
         document_id = 20
+        document = Document.objects.get(id=document_id)
+        document.mime_types = ["application/vnd.novadigm.ext"]
+        document.save()
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -299,7 +303,7 @@ class DocumentsViewsTests(TestCase):
             "path_file": file,
             "project": project_id,
             "document": document_id,
-            "user": self.student_misc_user_id
+            "user": self.student_misc_user_id,
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -308,7 +312,7 @@ class DocumentsViewsTests(TestCase):
                 project_id=project_id, document_id=document_id
             )
         )
-        self.assertEqual(du_cnt, 1)
+        self.assertEqual(du_cnt, 2)
         """
 
     def test_get_document_upload_by_id_anonymous(self):
