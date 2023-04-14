@@ -32,6 +32,7 @@ def get_file_path(instance, filename):
 class DocumentUpload(models.Model):
     """Main model."""
 
+    name = models.CharField(_("Name"), max_length=250, default="")
     document = models.ForeignKey(
         "Document",
         verbose_name=_("Document"),

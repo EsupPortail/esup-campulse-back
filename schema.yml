@@ -20,15 +20,15 @@ paths:
           type: integer
         description: Filter by Activity Field ID.
       - in: query
-        name: institution
-        schema:
-          type: integer
-        description: Filter by Institution ID.
-      - in: query
         name: institution_component
         schema:
           type: integer
         description: Filter by Institution Component ID.
+      - in: query
+        name: institutions
+        schema:
+          type: integer
+        description: Filter by Institution ID.
       - in: query
         name: is_enabled
         schema:
@@ -234,6 +234,12 @@ paths:
     get:
       operationId: commissions_list
       description: Lists all commission types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Commission acronym.
       tags:
       - commissions
       security:
@@ -272,6 +278,12 @@ paths:
     get:
       operationId: contents_list
       description: Lists all contents.
+      parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: Content code.
       tags:
       - contents
       security:
@@ -291,6 +303,17 @@ paths:
     get:
       operationId: documents_list
       description: Lists all documents types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Document acronym.
+      - in: query
+        name: process_type
+        schema:
+          type: string
+        description: Document process type.
       tags:
       - documents
       security:
@@ -356,6 +379,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+    patch:
+      operationId: documents_partial_update
+      description: /documents/{id} route
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
     delete:
       operationId: documents_destroy
       description: Destroys an entire document type (manager only).
@@ -377,8 +432,24 @@ paths:
     get:
       operationId: documents_uploads_list
       description: Lists all documents uploads.
+      parameters:
+      - in: query
+        name: association_id
+        schema:
+          type: integer
+        description: Filter by Association ID.
+      - in: query
+        name: project_id
+        schema:
+          type: integer
+        description: Filter by Project ID.
+      - in: query
+        name: user_id
+        schema:
+          type: integer
+        description: Filter by User ID.
       tags:
-      - documents
+      - documents/uploads
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -395,7 +466,7 @@ paths:
       operationId: documents_uploads_create
       description: Creates a new document upload.
       tags:
-      - documents
+      - documents/uploads
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -418,10 +489,55 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUpload'
           description: ''
+  /documents/uploads/{id}:
+    get:
+      operationId: documents_uploads_retrieve
+      description: Retrieves a document uploaded by a user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents/uploads
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUpload'
+          description: ''
+    delete:
+      operationId: documents_uploads_destroy
+      description: Destroys an uploaded document.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents/uploads
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /groups/:
     get:
       operationId: groups_list
       description: Lists all groups.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Group name.
       tags:
       - groups
       security:
@@ -441,6 +557,12 @@ paths:
     get:
       operationId: institutions_list
       description: Lists all institutions.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Institution acronym.
       tags:
       - institutions
       security:
@@ -1543,10 +1665,7 @@ paths:
   /users/auth/registration/verify-email/:
     post:
       operationId: users_auth_registration_verify_email_create
-      description: |-
-        /users/auth/registration/verify-email/ route
-
-        OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
+      description: Send an email to a manager on email validation.
       tags:
       - users
       requestBody:
@@ -1639,10 +1758,7 @@ paths:
           description: ''
     patch:
       operationId: users_auth_user_partial_update
-      description: |-
-        /users/auth/user/ route
-
-        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+      description: Auto-updates user's own account.
       tags:
       - users
       requestBody:
@@ -1668,10 +1784,7 @@ paths:
           description: ''
     delete:
       operationId: users_auth_user_destroy
-      description: |-
-        /users/auth/user/ route
-
-        Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
+      description: Auto-deletes user's own account.
       tags:
       - users
       security:
@@ -2291,6 +2404,9 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
+        is_site:
+          type: boolean
+          title: Site ?
         institution:
           type: integer
           title: Etablissement
@@ -2402,6 +2518,8 @@ components:
           title: Contact address
         is_multiple:
           type: boolean
+        is_required_in_process:
+          type: boolean
         days_before_expiration:
           type: string
           title: Days before document expiration
@@ -2452,6 +2570,8 @@ components:
           title: Contact address
         is_multiple:
           type: boolean
+        is_required_in_process:
+          type: boolean
         days_before_expiration:
           type: string
           title: Days before document expiration
@@ -2487,6 +2607,10 @@ components:
         id:
           type: integer
           readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
         upload_date:
           type: string
           format: date-time
@@ -2518,6 +2642,11 @@ components:
       type: object
       description: Main serializer.
       properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
         path_file:
           type: string
           format: binary
@@ -2878,6 +3007,55 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+    PatchedDocumentRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+        description:
+          type: string
+          minLength: 1
+        contact:
+          type: string
+          minLength: 1
+          title: Contact address
+        is_multiple:
+          type: boolean
+        is_required_in_process:
+          type: boolean
+        days_before_expiration:
+          type: string
+          title: Days before document expiration
+        path_template:
+          type: string
+          format: binary
+          nullable: true
+          title: Example template file
+        mime_types:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+        process_type:
+          allOf:
+          - $ref: '#/components/schemas/ProcessTypeEnum'
+          title: Document Status
+        institution:
+          type: integer
+          nullable: true
+          title: Etablissement
+        commission:
+          type: integer
+          nullable: true
     PatchedProjectCommissionDateDataRequest:
       type: object
       description: Only data serializer.
@@ -2902,6 +3080,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
     PatchedProjectRequest:
       type: object
       description: Main serializer.
@@ -2987,6 +3167,7 @@ components:
           $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedProjectRestrictedRequest:
       type: object
+      description: Serializer for restricted fields.
       properties:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
@@ -3182,6 +3363,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
       required:
       - commission_date
       - id
@@ -3210,6 +3393,8 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
     ProjectCommissionDateRequest:
       type: object
       description: Complete serializer.
@@ -3238,11 +3423,14 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        is_validated_by_admin:
+          type: boolean
       required:
       - commission_date
       - project
     ProjectPartialData:
       type: object
+      description: Serializer for project list.
       properties:
         id:
           type: integer
@@ -3355,6 +3543,7 @@ components:
       - name
     ProjectRestricted:
       type: object
+      description: Serializer for restricted fields.
       properties:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
@@ -3364,6 +3553,7 @@ components:
       - PROJECT_REJECTED
       - PROJECT_PROCESSING
       - PROJECT_VALIDATED
+      - PROJECT_REVIEW_CANCELLED
       - PROJECT_REVIEW_DRAFT
       - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_PROCESSING

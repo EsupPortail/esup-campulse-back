@@ -25,6 +25,7 @@ class GroupViewsTests(TestCase):
         - The route can be accessed by anyone.
         - We get the same amount of groups through the model and through the view.
         - Groups details are returned (test the "name" attribute).
+        - Filter by name is available.
         """
         groups_cnt = Group.objects.count()
         self.assertTrue(groups_cnt > 0)
@@ -37,3 +38,7 @@ class GroupViewsTests(TestCase):
 
         group_1 = content[0]
         self.assertTrue(group_1.get("name"))
+
+        name = "MANAGER_GENERAL"
+        response = self.client.get(f"/groups/?name={name}")
+        self.assertEqual(response.data[0]["name"], name)

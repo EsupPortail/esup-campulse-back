@@ -1,6 +1,8 @@
 """Views directly linked to projects."""
 import datetime
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,13 +11,21 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectRestrictedSerializer,
     ProjectSerializer,
 )
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.users.models.user import AssociationUser, User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -75,19 +85,23 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         and not request.user.is_president_in_association(
                             request.data["association"]
                         )
-                    ):
+                    ) or not request.user.has_perm("projects.add_project_association"):
                         return response.Response(
-                            {"error": _("Not allowed to create a new project.")},
+                            {
+                                "error": _(
+                                    "User not allowed to create a new project for this association."
+                                )
+                            },
                             status=status.HTTP_403_FORBIDDEN,
                         )
                 except ObjectDoesNotExist:
                     return response.Response(
-                        {"error": _("Not allowed to create a new project.")},
+                        {"error": _("User not allowed in this association.")},
                         status=status.HTTP_403_FORBIDDEN,
                     )
             else:
                 return response.Response(
-                    {"error": _("Not allowed to create a new project.")},
+                    {"error": _("Association not allowed to create a new project.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
@@ -98,10 +112,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and (
                 not request.user.can_submit_projects
                 or int(request.data["user"]) != request.user.pk
+                or not request.user.has_perm("projects.add_project_user")
             )
         ):
             return response.Response(
-                {"error": _("Not allowed to create a new project.")},
+                {"error": _("User not allowed to create a new project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -165,10 +180,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if not request.user.has_perm("projects.view_project_all") and (
-            (project.user is not None and request.user.pk != project.user)
+            (project.user_id is not None and request.user.pk != project.user_id)
             or (
-                project.association is not None
-                and request.user.is_in_association(project.association)
+                project.association_id is not None
+                and not request.user.is_in_association(project.association_id)
             )
         ):
             return response.Response(
@@ -203,15 +218,102 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
-        if (
-            "project_status" in request.data
-            and request.data["project_status"] not in authorized_status
-        ):
+        expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+            project_id=project.id,
+            commission_date_id__in=CommissionDate.objects.filter(
+                submission_date__lte=datetime.datetime.today()
+            ).values_list("id", flat=True),
+        ).count()
+        if expired_project_commission_dates_count > 0:
             return response.Response(
-                {"error": _("Wrong status.")},
+                {"error": _("Project is linked to expired commissions.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
+        if "project_status" in request.data:
+            if request.data["project_status"] not in authorized_status:
+                return response.Response(
+                    {"error": _("Wrong status.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if request.data["project_status"] == "PROJECT_PROCESSING":
+                missing_documents_names = (
+                    Document.objects.filter(
+                        process_type="DOCUMENT_PROJECT", is_required_in_process=True
+                    )
+                    .exclude(
+                        id__in=DocumentUpload.objects.filter(
+                            project_id=project.id,
+                        ).values_list("document_id", flat=True)
+                    )
+                    .values_list("name", flat=True)
+                )
+                if missing_documents_names.count() > 0:
+                    missing_documents_names_string = ', '.join(
+                        str(item) for item in missing_documents_names
+                    )
+                    return response.Response(
+                        {
+                            "error": _(
+                                f"Missing documents : {missing_documents_names_string}."
+                            )
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                template = None
+                managers_emails = []
+                current_site = get_current_site(request)
+                context = {
+                    "site_domain": current_site.domain,
+                    "site_name": current_site.name,
+                }
+                if project.association_id is not None:
+                    association = Association.objects.get(id=project.association_id)
+                    institution = Institution.objects.get(id=association.institution_id)
+                    commissions_misc_used = Commission.objects.filter(
+                        id__in=CommissionDate.objects.filter(
+                            id__in=ProjectCommissionDate.objects.filter(
+                                project_id=project.id
+                            ).values_list("commission_date_id", flat=True)
+                        ).values_list("commission_id", flat=True),
+                        is_site=False,
+                    )
+                    context["association_name"] = association.name
+                    template = MailTemplate.objects.get(
+                        code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                    )
+                    managers_emails += (
+                        institution.default_institution_managers().values_list(
+                            "email", flat=True
+                        )
+                    )
+                    if commissions_misc_used.count() > 0:
+                        for user_to_check in User.objects.filter(
+                            is_superuser=False, is_staff=True
+                        ):
+                            if user_to_check.has_perm("users.change_user_misc"):
+                                managers_emails.append(user_to_check.email)
+                elif project.user_id is not None:
+                    context["first_name"] = request.user.first_name
+                    context["last_name"] = request.user.last_name
+                    template = MailTemplate.objects.get(
+                        code="NEW_USER_PROJECT_TO_PROCESS"
+                    )
+                    for user_to_check in User.objects.filter(
+                        is_superuser=False, is_staff=True
+                    ):
+                        if user_to_check.has_perm("users.change_user_misc"):
+                            managers_emails.append(user_to_check.email)
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=managers_emails,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
 
         request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)

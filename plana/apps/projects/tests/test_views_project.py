@@ -1,13 +1,17 @@
 """List of tests done on projects views."""
 import json
 
+from django.core import mail
 from django.db import models
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -22,8 +26,12 @@ class ProjectsViewsTests(TestCase):
         "auth_permission.json",
         "commissions_commission.json",
         "commissions_commissiondate.json",
+        "documents_document.json",
+        "documents_documentupload.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
@@ -33,62 +41,56 @@ class ProjectsViewsTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
-        """Start a default anonymous client."""
-        self.client = Client()
+    @classmethod
+    def setUpTestData(cls):
+        """Start clients used on tests."""
+        cls.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general client used on a majority of tests. """
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.general_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.general_client = Client()
         data_general = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.general_client.post(url_login, data_general)
+        cls.response = cls.general_client.post(url_login, data_general)
 
-        """ Start a user misc that can submit personal projects. """
-        self.student_misc_user_id = 9
-        self.student_misc_user_name = "etudiant-porteur@mail.tld"
-        self.student_misc_client = Client()
+        cls.student_misc_user_id = 9
+        cls.student_misc_user_name = "etudiant-porteur@mail.tld"
+        cls.student_misc_client = Client()
         data_student_misc = {
-            "username": self.student_misc_user_name,
+            "username": cls.student_misc_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_misc_client.post(url_login, data_student_misc)
+        cls.response = cls.student_misc_client.post(url_login, data_student_misc)
 
-        """ Start a user member of an association that cannot submit personal or association projects. """
-        self.student_offsite_user_id = 10
-        self.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
-        self.student_offsite_client = Client()
+        cls.student_offsite_user_id = 10
+        cls.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
+        cls.student_offsite_client = Client()
         data_student_offsite = {
-            "username": self.student_offsite_user_name,
+            "username": cls.student_offsite_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_offsite_client.post(
-            url_login, data_student_offsite
-        )
+        cls.response = cls.student_offsite_client.post(url_login, data_student_offsite)
 
-        """ Start a user member of an association that can submit projects. """
-        self.student_site_user_id = 11
-        self.student_site_user_name = "etudiant-asso-site@mail.tld"
-        self.student_site_client = Client()
+        cls.student_site_user_id = 11
+        cls.student_site_user_name = "etudiant-asso-site@mail.tld"
+        cls.student_site_client = Client()
         data_student_site = {
-            "username": self.student_site_user_name,
+            "username": cls.student_site_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_site_client.post(url_login, data_student_site)
+        cls.response = cls.student_site_client.post(url_login, data_student_site)
 
-        """ Start a user president of an association that can submit projects. """
-        self.student_president_user_id = 13
-        self.student_president_user_name = "president-asso-site@mail.tld"
-        self.student_president_client = Client()
+        cls.student_president_user_id = 13
+        cls.student_president_user_name = "president-asso-site@mail.tld"
+        cls.student_president_client = Client()
         data_student_president = {
-            "username": self.student_president_user_name,
+            "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_president_client.post(
+        cls.response = cls.student_president_client.post(
             url_login, data_student_president
         )
 
@@ -163,6 +165,9 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
+        GroupInstitutionCommissionUser.objects.create(
+            user_id=self.student_president_user_id, group_id=6
+        )
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -381,6 +386,22 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_project_expired_commission(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The project must be linked to non expired commission dates.
+        """
+        expired_commission_date = CommissionDate.objects.get(pk=3)
+        expired_commission_date.submission_date = "1968-05-03"
+        expired_commission_date.save()
+        patch_data = {"summary": "new summary"}
+        response = self.student_misc_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_user_success(self):
         """
         PATCH /projects/{id} .
@@ -395,6 +416,58 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.objects.get(pk=1)
         self.assertEqual(project.summary, "new summary")
+
+    def test_patch_project_user_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student misc.
+        - The project is correctly updated in db.
+        """
+        self.assertFalse(len(mail.outbox))
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_misc_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_association_status_missing_documents(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student president.
+        - Project cannot be updated if documents are missing.
+        """
+        DocumentUpload.objects.get(document=18, project_id=2).delete()
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_DRAFT")
+
+    def test_patch_project_association_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student president.
+        - The project is correctly updated in db.
+        """
+        self.assertFalse(len(mail.outbox))
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
 
     def test_patch_project_manager_error(self):
         """

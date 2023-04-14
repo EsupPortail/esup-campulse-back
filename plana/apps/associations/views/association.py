@@ -59,7 +59,7 @@ from plana.utils import send_mail, to_bool
                 description="Filter for associations from site.",
             ),
             OpenApiParameter(
-                "institution",
+                "institutions",
                 OpenApiTypes.INT,
                 OpenApiParameter.QUERY,
                 description="Filter by Institution ID.",
@@ -112,7 +112,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             is_enabled = self.request.query_params.get("is_enabled")
             is_public = self.request.query_params.get("is_public")
             is_site = self.request.query_params.get("is_site")
-            institution = self.request.query_params.get("institution")
+            institutions = self.request.query_params.get("institutions")
             institution_component = self.request.query_params.get(
                 "institution_component"
             )
@@ -147,8 +147,8 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(is_public=to_bool(is_public))
             if is_site is not None and is_site != "":
                 queryset = queryset.filter(is_site=to_bool(is_site))
-            if institution is not None and institution != "":
-                queryset = queryset.filter(institution_id=institution)
+            if institutions is not None and institutions != "":
+                queryset = queryset.filter(institution_id__in=institutions.split(","))
             if institution_component is not None:
                 if institution_component == "":
                     queryset = queryset.filter(institution_component_id__isnull=True)
@@ -378,6 +378,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             "path_logo" in request.data
+            and request.data["path_logo"] != None
             and request.data["path_logo"].content_type
             not in settings.ALLOWED_IMAGE_MIME_TYPES
         ):
@@ -387,6 +388,23 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if request.user.has_perm("associations.change_association_all_fields"):
+            if "amount_members_allowed" in request.data:
+                amount_members_allowed = int(request.data["amount_members_allowed"])
+                if (
+                    amount_members_allowed
+                    < AssociationUser.objects.filter(
+                        association_id=association.id
+                    ).count()
+                ):
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Cannot set lower amount of members in this association."
+                            )
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
             if "is_site" in request.data:
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:

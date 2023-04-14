@@ -55,6 +55,7 @@ class Project(models.Model):
             ("PROJECT_REJECTED", _("Project Rejected")),
             ("PROJECT_PROCESSING", _("Project Processing")),
             ("PROJECT_VALIDATED", _("Project Validated")),
+            ("PROJECT_REVIEW_CANCELLED", _("Project Review Cancelled")),
             ("PROJECT_REVIEW_DRAFT", _("Project Review Draft")),
             ("PROJECT_REVIEW_REJECTED", _("Project Review Rejected")),
             ("PROJECT_REVIEW_PROCESSING", _("Project Review Processing")),
@@ -88,6 +89,14 @@ class Project(models.Model):
         verbose_name = _("Project")
         verbose_name_plural = _("Projects")
         permissions = [
+            (
+                "add_project_association",
+                "Can add a project as an association.",
+            ),
+            (
+                "add_project_user",
+                "Can add a project as a user.",
+            ),
             (
                 "change_project_basic_fields",
                 "Can update projects basic fields.",

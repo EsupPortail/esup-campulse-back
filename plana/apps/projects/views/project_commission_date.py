@@ -9,6 +9,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
+from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -83,6 +85,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             commission_date = CommissionDate.objects.get(
                 pk=request.data["commission_date"]
             )
+            commission = Commission.objects.get(pk=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
@@ -98,13 +101,28 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         if (
             "amount_earned" in request.data
             and request.data["amount_earned"] is not None
+        ) or (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is not None
         ):
             return response.Response(
                 {
                     "error": _(
-                        "Not allowed to update amount earned for this project's commission."
+                        "Not allowed to update amount earned or validation for this project's commission."
                     )
                 },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if commission.is_site is True and (
+            project.user_id is not None
+            or (
+                project.association_id is not None
+                and Association.objects.get(id=project.association_id).is_site is False
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to submit a project to this commission.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -114,18 +132,23 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        commissions_with_project = Commission.objects.filter(
+            id__in=CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project=request.data["project"]
+                ).values_list("commission_date_id", flat=True)
+            ).values_list("commission_id", flat=True)
+        ).values_list("id", flat=True)
+        if commission_date.commission_id in commissions_with_project:
+            return response.Response(
+                {"error": _("This project is already submitted for this commission.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         project.edition_date = datetime.date.today()
         project.save()
 
-        try:
-            ProjectCommissionDate.objects.get(
-                project_id=request.data["project"],
-                commission_date_id=request.data["commission_date"],
-            )
-        except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().create(request, *args, **kwargs)
 
 
 @extend_schema_view(
@@ -217,7 +240,13 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "amount_earned" in request.data:
+        if (
+            "amount_earned" in request.data
+            and request.data["amount_earned"] is not None
+        ) or (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is not None
+        ):
             return response.Response(
                 {"error": _("Not allowed to update amount earned for this project.")},
                 status=status.HTTP_403_FORBIDDEN,

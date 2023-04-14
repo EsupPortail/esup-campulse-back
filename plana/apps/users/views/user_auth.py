@@ -35,6 +35,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def patch(self, request, *args, **kwargs):
+        """Auto-updates user's own account."""
         if "can_submit_projects" in request.data and not self.request.user.has_perm(
             "users.change_user_all_fields"
         ):
@@ -62,8 +63,8 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
-                assos_user = AssociationUser.objects.filter(user_id=request.user.id)
-                user_id = request.user.id
+                assos_user = AssociationUser.objects.filter(user_id=request.user.pk)
+                user_id = request.user.pk
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
@@ -81,8 +82,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                         )
                     managers_emails = list(set(managers_emails))
                 else:
-                    for user_to_check in User.objects.all():
-                        if user_to_check.has_perm("users.view_user_misc"):
+                    for user_to_check in User.objects.filter(
+                        is_superuser=False, is_staff=True
+                    ):
+                        if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
@@ -121,6 +124,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
         return user_response
 
     def delete(self, request, *args, **kwargs):
+        """Auto-deletes user's own account."""
         self.permission_classes = [IsAuthenticated]
         try:
             user = self.request.user
@@ -138,6 +142,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
 
     def post(self, request, *args, **kwargs):
+        """Send an email to a manager on email validation."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.kwargs['key'] = serializer.validated_data['key']
@@ -145,7 +150,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
-        email_addresses = EmailAddress.objects.filter(user_id=user.pk)
+        email_addresses = EmailAddress.objects.filter(user_id=user.id)
 
         if email_addresses.count() == 1:
             assos_user = AssociationUser.objects.filter(user_id=user.id)
@@ -172,8 +177,10 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 template = MailTemplate.objects.get(
                     code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )
-                for user_to_check in User.objects.all():
-                    if user_to_check.has_perm("users.view_user_misc"):
+                for user_to_check in User.objects.filter(
+                    is_superuser=False, is_staff=True
+                ):
+                    if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,

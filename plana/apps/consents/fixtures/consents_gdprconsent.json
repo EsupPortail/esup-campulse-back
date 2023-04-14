@@ -1,9 +1,0 @@
-[
-  {
-    "model": "consents.GDPRConsent",
-    "pk": 1,
-    "fields": {
-      "title": "Terms of service"
-    }
-  }
-]

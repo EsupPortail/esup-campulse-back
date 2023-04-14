@@ -42,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionCommissionUser.objects.filter(user_id=user.pk).values()
+        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""

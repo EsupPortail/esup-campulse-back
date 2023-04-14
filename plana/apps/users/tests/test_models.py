@@ -16,11 +16,9 @@ class UsersModelsTests(TestCase):
         "associations_association.json",
         "auth_group.json",
         "commissions_commission.json",
-        "consents_gdprconsent.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "users_associationuser.json",
-        "users_gdprconsentusers.json",
         "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
@@ -44,16 +42,6 @@ class UsersModelsTests(TestCase):
         )
         self.assertEqual(asso_user.user.is_in_association(asso_user.association), True)
         self.assertEqual(asso_user.user.is_in_association(7), False)
-
-    def test_gdpr_consent_users_model(self):
-        """There's at least one user linked to a GDPR consent in the database."""
-        """
-        consent_user = GDPRConsentUsers.objects.first()
-        self.assertEqual(
-            str(consent_user),
-            f"{consent_user.user}, {consent_user.consent}, date : {consent_user.date_consented}",
-        )
-        """
 
     def test_group_institution_commission_user_model(self):
         """There's at least one user linked to a group in the database."""

@@ -32,30 +32,39 @@ class ProjectCommissionDateViewsTests(TestCase):
         "users_user.json",
     ]
 
-    def setUp(self):
-        """Start a default anonymous client."""
-        self.client = Client()
+    @classmethod
+    def setUpTestData(cls):
+        """Start clients used on tests."""
+        cls.client = Client()
         url_login = reverse("rest_login")
 
-        """ Start a manager general client used on a majority of tests. """
-        self.manager_general_user_id = 3
-        self.manager_general_user_name = "gestionnaire-svu@mail.tld"
-        self.general_client = Client()
+        cls.manager_general_user_id = 3
+        cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
+        cls.general_client = Client()
         data_general = {
-            "username": self.manager_general_user_name,
+            "username": cls.manager_general_user_name,
             "password": "motdepasse",
         }
-        self.response = self.general_client.post(url_login, data_general)
+        cls.response = cls.general_client.post(url_login, data_general)
 
-        """ Start a user misc that can submit personal projects. """
-        self.student_misc_user_id = 9
-        self.student_misc_user_name = "etudiant-porteur@mail.tld"
-        self.student_misc_client = Client()
+        cls.student_misc_user_id = 9
+        cls.student_misc_user_name = "etudiant-porteur@mail.tld"
+        cls.student_misc_client = Client()
         data_student_misc = {
-            "username": self.student_misc_user_name,
+            "username": cls.student_misc_user_name,
             "password": "motdepasse",
         }
-        self.response = self.student_misc_client.post(url_login, data_student_misc)
+        cls.response = cls.student_misc_client.post(url_login, data_student_misc)
+
+        cls.president_user_id = 13
+        cls.president_user_name = "president-asso-site@mail.tld"
+        cls.president_student_client = Client()
+        url = reverse("rest_login")
+        data = {
+            "username": cls.president_user_name,
+            "password": "motdepasse",
+        }
+        cls.response_president = cls.president_student_client.post(url, data)
 
     def test_get_project_cd_anonymous(self):
         """
@@ -163,13 +172,48 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The commission submission date must not be over.
         """
-        commission_date_id = 1
+        commission_date_id = 5
         commission_date = CommissionDate.objects.get(pk=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.post(
             "/projects/commission_dates",
             {"project": 1, "commission_date": commission_date_id},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_cd_user_not_site(self):
+        """
+        POST /projects/commission_dates .
+
+        - A misc student cannot submit a project to a is_site commission.
+        """
+        project_id = 1
+        commission_date_id = 2
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_date_id,
+            "amount_asked": 500,
+        }
+        response = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_cd_commission_already_used(self):
+        """
+        POST /projects/commission_dates .
+
+        - A student cannot submit a same project twice in the same commission.
+        """
+        project_id = 1
+        commission_date_id = 5
+        post_data = {
+            "project": project_id,
+            "commission_date": commission_date_id,
+        }
+        response = self.student_misc_client.post(
+            "/projects/commission_dates", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -182,45 +226,25 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The authenticated user must be authorized to edit the requested project.
         - Object is correctly created in db.
         """
-        project_id = 1
-        commission_id = 1
+        project_id = 2
+        commission_date_id = 4
+        ProjectCommissionDate.objects.get(
+            project_id=project_id, commission_date_id=1
+        ).delete()
         post_data = {
             "project": project_id,
-            "commission_date": commission_id,
+            "commission_date": commission_date_id,
             "amount_asked": 500,
         }
-        response = self.student_misc_client.post(
+        response = self.president_student_client.post(
             "/projects/commission_dates", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         results = ProjectCommissionDate.objects.filter(
-            project_id=project_id, commission_date_id=commission_id
+            project_id=project_id, commission_date_id=commission_date_id
         )
         self.assertEqual(len(results), 1)
-
-    def test_post_project_cd_already_exists(self):
-        """
-        POST /projects/commission_dates .
-
-        - The route can be accessed by a student user.
-        - Request returns a status 201 the first time and a status 200 next.
-        """
-        project_id = 1
-        commission_id = 2
-        post_data = {
-            "project": project_id,
-            "commission_date": commission_id,
-            "amount_asked": 500,
-        }
-        response = self.student_misc_client.post(
-            "/projects/commission_dates", post_data
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response_second = self.student_misc_client.post(
-            "/projects/commission_dates", post_data
-        )
-        self.assertEqual(response_second.status_code, status.HTTP_200_OK)
 
     def test_put_project_cd_not_existing(self):
         """

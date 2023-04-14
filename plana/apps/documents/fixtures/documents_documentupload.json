@@ -3,60 +3,84 @@
     "model": "documents.documentupload",
     "pk": 1,
     "fields": {
+      "name": "budget-projet-individuel.xlsx",
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
-      "document": 14,
-      "project": 1
+      "document": 16,
+      "project": 1,
+      "user": 9
     }
   },
   {
     "model": "documents.documentupload",
     "pk": 2,
     "fields": {
+      "name": "dossier-projet-individuel.pdf",
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
-      "document": 15,
-      "project": 1
+      "document": 17,
+      "project": 1,
+      "user": 9
     }
   },
   {
     "model": "documents.documentupload",
     "pk": 3,
     "fields": {
+      "name": "rib-projet-individuel.jpg",
       "upload_date": "2023-03-15T10:18:47.000Z",
       "path_file": "",
-      "document": 16,
-      "project": 1
+      "document": 18,
+      "project": 1,
+      "user": 9
     }
   },
   {
     "model": "documents.documentupload",
     "pk": 4,
     "fields": {
+      "name": "affiche-projet-individuel.png",
       "upload_date": "2023-03-14T15:30:00.000Z",
       "path_file": "",
-      "document": 17,
-      "project": 1
+      "document": 19,
+      "project": 1,
+      "user": 9
     }
   },
   {
     "model": "documents.documentupload",
     "pk": 5,
     "fields": {
+      "name": "document-projet-individuel.pdf",
       "upload_date": "2023-03-15T10:18:47.000Z",
       "path_file": "",
-      "document": 18,
-      "project": 1
+      "document": 20,
+      "project": 1,
+      "user": 9
     }
   },
   {
     "model": "documents.documentupload",
     "pk": 6,
     "fields": {
+      "name": "budget-projet-association.ods",
       "upload_date": "2023-03-12T15:30:00.000Z",
       "path_file": "",
-      "document": 14,
-      "project": 2
+      "document": 16,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 7,
+    "fields": {
+      "name": "rib-projet-association.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 18,
+      "project": 2,
+      "association": 2
     }
   }
 ]

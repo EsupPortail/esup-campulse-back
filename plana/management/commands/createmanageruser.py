@@ -58,18 +58,18 @@ class Command(BaseCommand):
             user.is_validated_by_admin = True
             user.save()
             EmailAddress.objects.create(
-                email=user.email, verified=True, primary=True, user_id=user.pk
+                email=user.email, verified=True, primary=True, user_id=user.id
             )
             group = Group.objects.get(name=options["group"])
             if options["institution"] is not None:
                 institution = Institution.objects.get(acronym=options["institution"])
                 GroupInstitutionCommissionUser.objects.create(
-                    user_id=user.pk, group_id=group.id, institution_id=institution.id
+                    user_id=user.id, group_id=group.id, institution_id=institution.id
                 )
             else:
                 for institution_id in Institution.objects.values_list("id", flat=True):
                     GroupInstitutionCommissionUser.objects.create(
-                        user_id=user.pk,
+                        user_id=user.id,
                         group_id=group.id,
                         institution_id=institution_id,
                     )

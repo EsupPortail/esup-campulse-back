@@ -376,5 +376,56 @@
         13
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 22,
+    "fields": {
+      "code": "USER_ASSOCIATION_CAN_BE_PRESIDENT_CONFIRMATION",
+      "label": "User Association Can Be President Confirmation",
+      "description": "Message reçu par un étudiant auquel on délègue les droits de présidence pour une association.",
+      "subject": "{{ site_name }} – Votre compte peut accéder à une nouvelle association",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Vous pouvez désormais gérer les informations de l'association \"{{ association_name }}\" depuis votre compte sur {{ site_name }}.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5,
+        13
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 23,
+    "fields": {
+      "code": "NEW_ASSOCIATION_PROJECT_TO_PROCESS",
+      "label": "New Association Project To Process",
+      "description": "Message reçu par un gestionnaire pour l'informer du dépôt d'une nouvelle demande de subventions par une association.",
+      "subject": "{{ site_name }} – Nouvelle demande de subventions déposé par une association",
+      "body": "Bonjour,<br/><br/>Un nouveau dossier CAPE pour l'association \"{{ association_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        13
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 24,
+    "fields": {
+      "code": "NEW_USER_PROJECT_TO_PROCESS",
+      "label": "New User Project To Process",
+      "description": "Message reçu par un gestionnaire pour l'informer du dépôt d'une nouvelle demande de subventions par un porteur individuel.",
+      "subject": "{{ site_name }} – Nouvelle demande de subventions déposé par un porteur individuel",
+      "body": "Bonjour,<br/><br/>Un nouveau dossier CAPE par {{ first_name }} {{ last_name }} est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5
+      ]
+    }
   }
 ]

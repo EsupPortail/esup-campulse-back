@@ -30,4 +30,5 @@ class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
             "amount_earned_previous_edition",
             "amount_asked",
             "amount_earned",
+            "is_validated_by_admin",
         ]

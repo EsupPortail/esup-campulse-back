@@ -4,9 +4,11 @@
     "pk": 1,
     "fields": {
       "name": "Charte Site Alsace",
+      "acronym": "CHARTE_SITE_ALSACE",
       "description": "Charte signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
         "application/pdf"
@@ -18,9 +20,11 @@
     "pk": 2,
     "fields": {
       "name": "RGPD Site Alsace",
+      "acronym": "RGPD_SITE_ALSACE",
       "description": "Charte RGPD signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -34,9 +38,11 @@
     "pk": 3,
     "fields": {
       "name": "Charte FSDIE",
+      "acronym": "CHARTE_FSDIE",
       "description": "Charte Fonds de Solidarité et de Développement des Initiatives Étudiantes",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 1,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -49,9 +55,11 @@
     "pk": 4,
     "fields": {
       "name": "Charte IdEx",
+      "acronym": "CHARTE_IDEX",
       "description": "Charte Initiative d'Excellence « Creative Thinkers »",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 2,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -64,9 +72,11 @@
     "pk": 5,
     "fields": {
       "name": "RGPD FSDIE",
+      "acronym": "RGPD_FSDIE",
       "description": "Charte RGPD Fonds de Solidarité et de Développement des Initiatives Étudiantes",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 1,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -81,9 +91,11 @@
     "pk": 6,
     "fields": {
       "name": "RGPD IdEx",
+      "acronym": "RGPD_IDEX",
       "description": "Charte RGPD Initiative d'Excellence « Creative Thinkers »",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 2,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -98,9 +110,11 @@
     "pk": 7,
     "fields": {
       "name": "Charte Culture-ActionS",
+      "acronym": "CHARTE_CULTURE_ACTIONS",
       "description": "Charte Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 3,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -113,9 +127,11 @@
     "pk": 8,
     "fields": {
       "name": "RGPD Culture-ActionS",
+      "acronym": "RGPD_CULTURE_ACTIONS",
       "description": "Charte RGPD Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": false,
       "commission_id": 3,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
@@ -129,10 +145,12 @@
     "model": "documents.document",
     "pk": 9,
     "fields": {
-      "name": "PV de l'AG Constitutive",
-      "description": "Procès-verbal de l'assemblée générale constitutive",
+      "name": "Copie des Statuts de l'Association",
+      "acronym": "COPIE_STATUTS_ASSOCIATION",
+      "description": "Copie des statuts de l'association",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -145,10 +163,12 @@
     "model": "documents.document",
     "pk": 10,
     "fields": {
-      "name": "Certificat de scolarité",
-      "description": "Certificats de scolarité des membres élus pour une association (ou du porteur individuel)",
+      "name": "PV de l'AG Constitutive",
+      "acronym": "PV_AG_CONSTITUTIVE",
+      "description": "Procès-verbal de l'assemblée générale constitutive",
       "contact": "???",
-      "is_multiple": true,
+      "is_multiple": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -161,10 +181,12 @@
     "model": "documents.document",
     "pk": 11,
     "fields": {
-      "name": "Certificat envoyé par le Tribunal Judiciaire",
-      "description": "Certificat envoyé par le Tribunal Judiciaire",
+      "name": "Certificat de scolarité du membre élu",
+      "acronym": "CERTIFICAT_SCOLARITE_ASSOCIATION",
+      "description": "Certificats de scolarité des membres élus pour une association",
       "contact": "???",
-      "is_multiple": false,
+      "is_multiple": true,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -177,10 +199,12 @@
     "model": "documents.document",
     "pk": 12,
     "fields": {
-      "name": "Extrait du Registre des Associations",
-      "description": "Extrait du Registre des Associations",
+      "name": "Certificat envoyé par le Tribunal Judiciaire",
+      "acronym": "CERTIFICAT_TRIBUNAL_JUDICIAIRE",
+      "description": "Certificat envoyé par le Tribunal Judiciaire",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -193,11 +217,13 @@
     "model": "documents.document",
     "pk": 13,
     "fields": {
-      "name": "Carte Étudiante",
-      "description": "Carte Étudiante",
+      "name": "Extrait du Registre des Associations",
+      "acronym": "EXTRAIT_REGISTRE_ASSOCIATIONS",
+      "description": "Extrait du Registre des Associations",
       "contact": "???",
       "is_multiple": false,
-      "process_type": "DOCUMENT_USER",
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -209,10 +235,48 @@
     "model": "documents.document",
     "pk": 14,
     "fields": {
+      "name": "Certificat de scolarité du porteur individuel",
+      "acronym": "CERTIFICAT_SCOLARITE_USER",
+      "description": "Certificats de scolarité du porteur individuel",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_USER",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 15,
+    "fields": {
+      "name": "Carte Étudiante",
+      "acronym": "CARTE_ETUDIANTE",
+      "description": "Carte Étudiante",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_USER",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 16,
+    "fields": {
       "name": "Budget Prévisionnel",
+      "acronym": "BUDGET_PREVISIONNEL",
       "description": "Budget Prévisionnel",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/vnd.oasis.opendocument.spreadsheet",
@@ -223,12 +287,14 @@
   },
   {
     "model": "documents.document",
-    "pk": 15,
+    "pk": 17,
     "fields": {
       "name": "Dossier de Projet",
+      "acronym": "DOSSIER_PROJET",
       "description": "Dossier détaillé présentant le projet",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf"
@@ -237,44 +303,14 @@
   },
   {
     "model": "documents.document",
-    "pk": 16,
+    "pk": 18,
     "fields": {
       "name": "RIB",
+      "acronym": "RIB",
       "description": "Relevé d'Identité Bancaire",
       "contact": "???",
       "is_multiple": false,
-      "process_type": "DOCUMENT_PROJECT",
-      "mime_types": [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 17,
-    "fields": {
-      "name": "Document Édité",
-      "description": "Exemplaire de chaque document édité pour le projet (affiches, tracts, guide, livrets, journaux, ...)",
-      "contact": "???",
-      "is_multiple": true,
-      "process_type": "DOCUMENT_PROJECT",
-      "mime_types": [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 18,
-    "fields": {
-      "name": "Document Complémentaire de Projet",
-      "description": "Document Complémentaire de Projet",
-      "contact": "???",
-      "is_multiple": true,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
@@ -287,15 +323,17 @@
     "model": "documents.document",
     "pk": 19,
     "fields": {
-      "name": "Bilan",
-      "description": "Bilan",
+      "name": "Document Édité",
+      "acronym": "DOCUMENT_EDITE",
+      "description": "Exemplaire de chaque document édité pour le projet (affiches, tracts, guide, livrets, journaux, ...)",
       "contact": "???",
-      "is_multiple": false,
-      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
-        "application/vnd.oasis.opendocument.spreadsheet",
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
       ]
     }
   },
@@ -303,11 +341,13 @@
     "model": "documents.document",
     "pk": 20,
     "fields": {
-      "name": "Supports de Communication",
-      "description": "Supports de communication édités pour le projet",
+      "name": "Document Complémentaire de Projet",
+      "acronym": "DOCUMENT_COMPLEMENTAIRE_PROJET",
+      "description": "Document Complémentaire de Projet",
       "contact": "???",
-      "is_multiple": false,
-      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -319,15 +359,17 @@
     "model": "documents.document",
     "pk": 21,
     "fields": {
-      "name": "Articles de Presse, Photos, Autres Documents",
-      "description": "Articles de Presse, Photos, Autres Documents",
+      "name": "Bilan",
+      "acronym": "BILAN",
+      "description": "Bilan",
       "contact": "???",
       "is_multiple": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
       "mime_types": [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       ]
     }
   },
@@ -335,10 +377,12 @@
     "model": "documents.document",
     "pk": 22,
     "fields": {
-      "name": "Document Complémentaire de Bilan",
-      "description": "Document Complémentaire de Bilan",
+      "name": "Supports de Communication",
+      "acronym": "SUPPORTS_COMMUNICATION",
+      "description": "Supports de communication édités pour le projet",
       "contact": "???",
-      "is_multiple": true,
+      "is_multiple": false,
+      "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
       "mime_types": [
         "application/pdf",
@@ -351,10 +395,48 @@
     "model": "documents.document",
     "pk": 23,
     "fields": {
+      "name": "Articles de Presse, Photos, Autres Documents",
+      "acronym": "PRESSE_PHOTOS_DOCUMENTS",
+      "description": "Articles de Presse, Photos, Autres Documents",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 24,
+    "fields": {
+      "name": "Document Complémentaire de Bilan",
+      "acronym": "DOCUMENT_COMPLEMENTAIRE_BILAN",
+      "description": "Document Complémentaire de Bilan",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 25,
+    "fields": {
       "name": "Document factice d'établissement",
+      "acronym": "DOCUMENT_FACTICE_ETABLISSEMENT",
       "description": "Document factice d'établissement",
       "contact": "???",
       "is_multiple": true,
+      "is_required_in_process": false,
       "institution_id": 2,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
       "mime_types": [

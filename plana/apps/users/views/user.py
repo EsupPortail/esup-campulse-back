@@ -340,7 +340,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
             unvalidated_assos_user = AssociationUser.objects.filter(
-                user_id=user.pk, is_validated_by_admin=False
+                user_id=user.id, is_validated_by_admin=False
             )
             if unvalidated_assos_user.count() > 0:
                 for unvalidated_asso_user in unvalidated_assos_user:

@@ -55,7 +55,9 @@ class Association(models.Model):
     president_phone = models.CharField(_("President phone"), default="", max_length=32)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
-    is_site = models.BooleanField(_("Is site"), default=False)
+    is_site = models.BooleanField(
+        _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
+    )
     amount_members_allowed = models.IntegerField(
         _("Amount of members allowed"),
         default=settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED,

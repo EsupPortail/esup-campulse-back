@@ -9,10 +9,12 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
 from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
-from thumbnails.models import Source
 
 PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
+
+PUBLIC_CLASSES_NAMES = ["Association", "Document"]
+PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 
 class MediaStorage(S3Boto3Storage):
@@ -48,13 +50,10 @@ class DynamicStorageFieldFile(FieldFile):
     def __init__(self, instance, field, name):
         super().__init__(instance, field, name)
         self.storage = PublicFileStorage()
-        # TODO no attribute is_public in db for the moment, public by default.
-        """
-        if instance.is_public:
-            self.storage = PublicFileStorage()
-        else:
+        if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
             self.storage = PrivateFileStorage()
-        """
+        else:
+            self.storage = PublicFileStorage()
 
     def update_acl(self):
         if not self:
@@ -71,13 +70,10 @@ class DynamicStorageFileField(models.FileField):
 
     def pre_save(self, model_instance, add):
         storage = PublicFileStorage()
-        # TODO no attribute is_public in db for the moment, public by default.
-        """
-        if model_instance.is_public:
-            storage = PublicFileStorage()
-        else:
+        if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
             storage = PrivateFileStorage()
-        """
+        else:
+            storage = PublicFileStorage()
 
         file = super().pre_save(model_instance, add)
         file.storage = storage
@@ -96,12 +92,13 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
 
     def __init__(self, instance, field, name, **kwargs):
         FieldFile.__init__(self, instance, field, name)
-        if instance.is_public:
-            self.storage = PublicFileStorage()
-        else:
+        if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
             self.storage = PrivateFileStorage(
                 querystring_expire=self.querystring_expire
             )
+        else:
+            self.storage = PublicFileStorage()
+
         self.metadata_backend = field.metadata_backend
         self.thumbnails = ThumbnailManager(
             metadata_backend=self.metadata_backend,
@@ -122,7 +119,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
             return
 
         self.thumbnails.delete_all()
-        Source.objects.get(name=self.thumbnails.source_image.name).delete()
+        super().delete(save=save)
 
 
 class DynamicThumbnailImageField(ThumbnailImageField):
@@ -131,10 +128,10 @@ class DynamicThumbnailImageField(ThumbnailImageField):
     attr_class = DynamicStorageThumbnailedFieldFile
 
     def pre_save(self, model_instance, add):
-        if model_instance.is_public:
-            storage = PublicFileStorage()
-        else:
+        if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
             storage = PrivateFileStorage()
+        else:
+            storage = PublicFileStorage()
 
         file = super().pre_save(model_instance, add)
         file.storage = storage

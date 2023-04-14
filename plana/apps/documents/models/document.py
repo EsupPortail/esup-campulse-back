@@ -36,6 +36,9 @@ class Document(models.Model):
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), blank=False)
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
+    is_required_in_process = models.BooleanField(
+        _("Is required in process"), default=False
+    )
     days_before_expiration = models.DurationField(
         _("Days before document expiration"), default=datetime.timedelta(days=365)
     )
@@ -73,7 +76,7 @@ class Document(models.Model):
             ("DOCUMENT_PROJECT", _("Document for Project")),
             ("DOCUMENT_PROJECT_REVIEW", _("Document for Project Review")),
         ],
-        default="DOCUMENT_PROCESSING",
+        default="DOCUMENT_PROJECT",
     )
 
     def __str__(self):
@@ -90,6 +93,14 @@ class Document(models.Model):
             (
                 "add_document_any_institution",
                 "Can add documents linked to any institution.",
+            ),
+            (
+                "change_document_any_commission",
+                "Can change documents linked to any commission.",
+            ),
+            (
+                "change_document_any_institution",
+                "Can change documents linked to any institution.",
             ),
             (
                 "delete_document_any_commission",

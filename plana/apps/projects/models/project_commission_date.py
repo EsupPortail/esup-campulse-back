@@ -27,6 +27,9 @@ class ProjectCommissionDate(models.Model):
     )
     amount_asked = models.IntegerField(_("Amount asked"), default=0)
     amount_earned = models.IntegerField(_("Amount earned"), default=0)
+    is_validated_by_admin = models.BooleanField(
+        _("Is validated by admin"), default=False
+    )
 
     def __str__(self):
         return f"{self.project} {self.commission_date}"

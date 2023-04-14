@@ -51,5 +51,8 @@ htmlcov/
 # pylint
 pylint.json
 
+# IDE
+.idea/
+
 # Media local storage for now
 plana/media/
