@@ -378,6 +378,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             "path_logo" in request.data
+            and request.data["path_logo"] != None
             and request.data["path_logo"].content_type
             not in settings.ALLOWED_IMAGE_MIME_TYPES
         ):

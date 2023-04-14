@@ -120,7 +120,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
             return
 
         self.thumbnails.delete_all()
-        Source.objects.get(name=self.thumbnails.source_image.name).delete()
+        super().delete(save=save)
 
 
 class DynamicThumbnailImageField(ThumbnailImageField):
