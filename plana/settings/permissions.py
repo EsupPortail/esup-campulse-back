@@ -213,6 +213,7 @@ PERMISSIONS_GROUPS = {
         "view_documentupload",
         # projects
         "add_project",
+        "add_project_association",
         "change_project",
         "change_project_basic_fields",
         "view_project",
@@ -239,6 +240,7 @@ PERMISSIONS_GROUPS = {
         "view_documentupload",
         # projects
         "add_project",
+        "add_project_user",
         "change_project",
         "change_project_basic_fields",
         "view_project",

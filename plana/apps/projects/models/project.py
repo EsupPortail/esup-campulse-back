@@ -90,6 +90,14 @@ class Project(models.Model):
         verbose_name_plural = _("Projects")
         permissions = [
             (
+                "add_project_association",
+                "Can add a project as an association.",
+            ),
+            (
+                "add_project_user",
+                "Can add a project as a user.",
+            ),
+            (
                 "change_project_basic_fields",
                 "Can update projects basic fields.",
             ),

@@ -85,19 +85,23 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         and not request.user.is_president_in_association(
                             request.data["association"]
                         )
-                    ):
+                    ) or not request.user.has_perm("projects.add_project_association"):
                         return response.Response(
-                            {"error": _("Not allowed to create a new project.")},
+                            {
+                                "error": _(
+                                    "User not allowed to create a new project for this association."
+                                )
+                            },
                             status=status.HTTP_403_FORBIDDEN,
                         )
                 except ObjectDoesNotExist:
                     return response.Response(
-                        {"error": _("Not allowed to create a new project.")},
+                        {"error": _("User not allowed in this association.")},
                         status=status.HTTP_403_FORBIDDEN,
                     )
             else:
                 return response.Response(
-                    {"error": _("Not allowed to create a new project.")},
+                    {"error": _("Association not allowed to create a new project.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
@@ -108,10 +112,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and (
                 not request.user.can_submit_projects
                 or int(request.data["user"]) != request.user.pk
+                or not request.user.has_perm("projects.add_project_user")
             )
         ):
             return response.Response(
-                {"error": _("Not allowed to create a new project.")},
+                {"error": _("User not allowed to create a new project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

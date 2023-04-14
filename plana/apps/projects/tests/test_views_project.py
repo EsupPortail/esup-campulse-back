@@ -11,7 +11,7 @@ from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -165,6 +165,9 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
+        GroupInstitutionCommissionUser.objects.create(
+            user_id=self.student_president_user_id, group_id=6
+        )
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

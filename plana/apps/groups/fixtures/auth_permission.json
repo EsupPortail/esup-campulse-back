@@ -1110,6 +1110,24 @@
     "model": "auth.permission",
     "pk": 124,
     "fields": {
+      "name": "Can add a project as an association.",
+      "content_type": 27,
+      "codename": "add_project_association"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 125,
+    "fields": {
+      "name": "Can add a project as a user.",
+      "content_type": 27,
+      "codename": "add_project_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 126,
+    "fields": {
       "name": "Can update projects basic fields.",
       "content_type": 27,
       "codename": "change_project_basic_fields"
@@ -1117,7 +1135,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 125,
+    "pk": 127,
     "fields": {
       "name": "Can update projects restricted fields (status, ...).",
       "content_type": 27,
@@ -1126,7 +1144,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 126,
+    "pk": 128,
     "fields": {
       "name": "Can view all projects.",
       "content_type": 27,
@@ -1135,7 +1153,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 127,
+    "pk": 129,
     "fields": {
       "name": "Can add Project category",
       "content_type": 28,
@@ -1144,7 +1162,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 128,
+    "pk": 130,
     "fields": {
       "name": "Can change Project category",
       "content_type": 28,
@@ -1153,7 +1171,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 129,
+    "pk": 131,
     "fields": {
       "name": "Can delete Project category",
       "content_type": 28,
@@ -1162,7 +1180,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 130,
+    "pk": 132,
     "fields": {
       "name": "Can view Project category",
       "content_type": 28,
@@ -1171,7 +1189,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 131,
+    "pk": 133,
     "fields": {
       "name": "Can view all categories linked to a project.",
       "content_type": 28,
@@ -1180,7 +1198,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 132,
+    "pk": 134,
     "fields": {
       "name": "Can add Project comment",
       "content_type": 29,
@@ -1189,7 +1207,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 133,
+    "pk": 135,
     "fields": {
       "name": "Can change Project comment",
       "content_type": 29,
@@ -1198,7 +1216,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 134,
+    "pk": 136,
     "fields": {
       "name": "Can delete Project comment",
       "content_type": 29,
@@ -1207,7 +1225,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 135,
+    "pk": 137,
     "fields": {
       "name": "Can view Project comment",
       "content_type": 29,
@@ -1216,7 +1234,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 136,
+    "pk": 138,
     "fields": {
       "name": "Can view all comments linked to all projects.",
       "content_type": 29,
@@ -1225,7 +1243,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 137,
+    "pk": 139,
     "fields": {
       "name": "Can add Project commission date",
       "content_type": 30,
@@ -1234,7 +1252,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 138,
+    "pk": 140,
     "fields": {
       "name": "Can change Project commission date",
       "content_type": 30,
@@ -1243,7 +1261,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 139,
+    "pk": 141,
     "fields": {
       "name": "Can delete Project commission date",
       "content_type": 30,
@@ -1252,7 +1270,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 140,
+    "pk": 142,
     "fields": {
       "name": "Can view Project commission date",
       "content_type": 30,
@@ -1261,7 +1279,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 141,
+    "pk": 143,
     "fields": {
       "name": "Can update basic fields between a project and a commission date.",
       "content_type": 30,
@@ -1270,7 +1288,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 142,
+    "pk": 144,
     "fields": {
       "name": "Can update restricted fields (amount earned, ...) between a project and a commission date.",
       "content_type": 30,
@@ -1279,7 +1297,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 143,
+    "pk": 145,
     "fields": {
       "name": "Can view all commission dates linked to a project.",
       "content_type": 30,
@@ -1288,7 +1306,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 144,
+    "pk": 146,
     "fields": {
       "name": "Can add Association",
       "content_type": 31,
@@ -1297,7 +1315,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 145,
+    "pk": 147,
     "fields": {
       "name": "Can change Association",
       "content_type": 31,
@@ -1306,7 +1324,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 146,
+    "pk": 148,
     "fields": {
       "name": "Can delete Association",
       "content_type": 31,
@@ -1315,7 +1333,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 147,
+    "pk": 149,
     "fields": {
       "name": "Can view Association",
       "content_type": 31,
@@ -1324,7 +1342,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 148,
+    "pk": 150,
     "fields": {
       "name": "Can change associations for all users.",
       "content_type": 31,
@@ -1333,7 +1351,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 149,
+    "pk": 151,
     "fields": {
       "name": "Can delete associations for all users.",
       "content_type": 31,
@@ -1342,7 +1360,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 150,
+    "pk": 152,
     "fields": {
       "name": "Can view all associations for a user.",
       "content_type": 31,
@@ -1351,7 +1369,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 151,
+    "pk": 153,
     "fields": {
       "name": "Can add User Institution Commission Groups",
       "content_type": 32,
@@ -1360,7 +1378,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 152,
+    "pk": 154,
     "fields": {
       "name": "Can change User Institution Commission Groups",
       "content_type": 32,
@@ -1369,7 +1387,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 153,
+    "pk": 155,
     "fields": {
       "name": "Can delete User Institution Commission Groups",
       "content_type": 32,
@@ -1378,7 +1396,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 154,
+    "pk": 156,
     "fields": {
       "name": "Can view User Institution Commission Groups",
       "content_type": 32,
@@ -1387,7 +1405,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 155,
+    "pk": 157,
     "fields": {
       "name": "Can add restricted groups to a user.",
       "content_type": 32,
@@ -1396,7 +1414,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 156,
+    "pk": 158,
     "fields": {
       "name": "Can delete restricted groups to a user.",
       "content_type": 32,
@@ -1405,7 +1423,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 157,
+    "pk": 159,
     "fields": {
       "name": "Can view all groups for a user.",
       "content_type": 32,
@@ -1414,7 +1432,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 158,
+    "pk": 160,
     "fields": {
       "name": "Can add User",
       "content_type": 33,
@@ -1423,7 +1441,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 159,
+    "pk": 161,
     "fields": {
       "name": "Can change User",
       "content_type": 33,
@@ -1432,7 +1450,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 160,
+    "pk": 162,
     "fields": {
       "name": "Can delete User",
       "content_type": 33,
@@ -1441,7 +1459,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 161,
+    "pk": 163,
     "fields": {
       "name": "Can view User",
       "content_type": 33,
@@ -1450,7 +1468,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 162,
+    "pk": 164,
     "fields": {
       "name": "Can add a user with no association linked.",
       "content_type": 33,
@@ -1459,7 +1477,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 163,
+    "pk": 165,
     "fields": {
       "name": "Can change a user with no association linked.",
       "content_type": 33,
@@ -1468,7 +1486,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 164,
+    "pk": 166,
     "fields": {
       "name": "Can change can_submit_projects on a user.",
       "content_type": 33,
@@ -1477,7 +1495,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 165,
+    "pk": 167,
     "fields": {
       "name": "Can delete a user with no association linked.",
       "content_type": 33,
@@ -1486,7 +1504,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 166,
+    "pk": 168,
     "fields": {
       "name": "Can view a user with no association linked.",
       "content_type": 33,
@@ -1495,7 +1513,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 167,
+    "pk": 169,
     "fields": {
       "name": "Can view all users.",
       "content_type": 33,
@@ -1504,7 +1522,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 168,
+    "pk": 170,
     "fields": {
       "name": "Can add Content",
       "content_type": 34,
@@ -1513,7 +1531,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 169,
+    "pk": 171,
     "fields": {
       "name": "Can change Content",
       "content_type": 34,
@@ -1522,7 +1540,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 170,
+    "pk": 172,
     "fields": {
       "name": "Can delete Content",
       "content_type": 34,
@@ -1531,7 +1549,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 171,
+    "pk": 173,
     "fields": {
       "name": "Can view Content",
       "content_type": 34,
@@ -1540,7 +1558,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 172,
+    "pk": 174,
     "fields": {
       "name": "Can add Template variable",
       "content_type": 35,
@@ -1549,7 +1567,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 173,
+    "pk": 175,
     "fields": {
       "name": "Can change Template variable",
       "content_type": 35,
@@ -1558,7 +1576,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 174,
+    "pk": 176,
     "fields": {
       "name": "Can delete Template variable",
       "content_type": 35,
@@ -1567,7 +1585,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 175,
+    "pk": 177,
     "fields": {
       "name": "Can view Template variable",
       "content_type": 35,
@@ -1576,7 +1594,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 176,
+    "pk": 178,
     "fields": {
       "name": "Can add Mail template",
       "content_type": 36,
@@ -1585,7 +1603,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 177,
+    "pk": 179,
     "fields": {
       "name": "Can change Mail template",
       "content_type": 36,
@@ -1594,7 +1612,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 178,
+    "pk": 180,
     "fields": {
       "name": "Can delete Mail template",
       "content_type": 36,
@@ -1603,7 +1621,7 @@
   },
   {
     "model": "auth.permission",
-    "pk": 179,
+    "pk": 181,
     "fields": {
       "name": "Can view Mail template",
       "content_type": 36,
