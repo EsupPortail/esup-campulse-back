@@ -93,13 +93,11 @@ class AuthUserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user_data["username"], user.username)
 
-    def test_anonymous_post_registration(self):
+    def test_anonymous_post_registration_bad_request(self):
         """
         POST /users/auth/registration/ .
 
         - An account with a restricted email can't be created.
-        - An account can be created by an anonymous user.
-        - An email is received if registration is successful.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
@@ -112,6 +110,13 @@ class AuthUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertFalse(len(mail.outbox))
 
+    def test_anonymous_post_registration_success(self):
+        """
+        POST /users/auth/registration/ .
+
+        - An account can be created by an anonymous user.
+        - An email is received if registration is successful.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
@@ -143,13 +148,12 @@ class AuthUserViewsTests(TestCase):
         response = self.anonymous_client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_anonymous_post_password_reset(self):
+    def test_anonymous_post_password_reset_wrong_mail(self):
         """
         POST /users/auth/password/reset/ .
 
         - An anonymous user can execute this request.
         - Nothing happens if email is wrong.
-        - An email is received if reset is successful.
         """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/", {"email": "auguste-cornouailles@melun.fr"}
@@ -157,6 +161,13 @@ class AuthUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
         self.assertFalse(len(mail.outbox))
 
+    def test_anonymous_post_password_reset_success(self):
+        """
+        POST /users/auth/password/reset/ .
+
+        - An anonymous user can execute this request.
+        - An email is received if reset is successful.
+        """
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/", {"email": self.student_user_name}
         )
@@ -277,43 +288,43 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_student_patch_auth_user_detail(self):
+    def test_student_patch_auth_user_detail_restricted_fields(self):
         """
         PATCH /users/auth/user/ .
 
-        - A student user can execute this request.
         - A student user cannot update his validation status.
         - A student user cannot update his username.
         - A student user cannot update his permission to submit projects.
-        - A student user cannot update his email address with an address from another account.
-        - A student user can update his email address.
-        - Updating the email address doesn't change the username without validation.
         """
-        student_user = User.objects.get(username=self.student_user_name)
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"is_validated_by_admin": False},
             content_type="application/json",
         )
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        student_user = User.objects.get(username=self.student_user_name)
         self.assertTrue(student_user.is_validated_by_admin)
 
         response_student = self.student_client.patch(
             "/users/auth/user/",
-            data={"username": "Mafoipastropmalpourlasaisong"},
+            data={"username": "jesuisunusurpateur"},
             content_type="application/json",
         )
-        student_user = User.objects.get(username=self.student_user_name)
-        self.assertEqual(student_user.username, self.student_user_name)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"can_submit_projects": False},
             content_type="application/json",
         )
-        student_user = User.objects.get(username=self.student_user_name)
-        self.assertTrue(student_user.can_submit_projects)
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_student_patch_auth_user_detail_mail_already_used(self):
+        """
+        PATCH /users/auth/user/ .
+
+        - A student user cannot update his email address with an address from another account.
+        """
         new_email = self.president_user_name
         response_student = self.student_client.patch(
             "/users/auth/user/",
@@ -322,6 +333,12 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_student_patch_auth_user_detail_restricted_mail(self):
+        """
+        PATCH /users/auth/user/ .
+
+        - A student user cannot update his email address with domain-restricted email address.
+        """
         new_email = f"mon-esprit-est-mortadelle@{settings.RESTRICTED_DOMAINS[0]}"
         response_student = self.student_client.patch(
             "/users/auth/user/",
@@ -330,6 +347,14 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_student_patch_auth_user_detail_success(self):
+        """
+        PATCH /users/auth/user/ .
+
+        - A student user can execute this request.
+        - A student user can update his email address.
+        - Updating the email address doesn't change the username without validation.
+        """
         new_email = "cle-a-molette@ok-motors.com"
         response_student = self.student_client.patch(
             "/users/auth/user/",
