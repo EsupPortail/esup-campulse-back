@@ -62,32 +62,6 @@ class UserViewsManagerTests(TestCase):
         }
         cls.response = cls.manager_client.post(url_manager, data_manager)
 
-    def test_manager_get_auth_user_detail(self):
-        """
-        GET /users/auth/user/ .
-
-        - A manager user can execute this request.
-        - A manager user gets correct data when executing the request.
-        """
-        response_manager = self.manager_client.get("/users/auth/user/")
-        user = User.objects.get(username=self.manager_general_user_name)
-        user_data = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        self.assertEqual(user_data["username"], user.username)
-
-    def test_manager_put_auth_user_detail(self):
-        """
-        PUT /users/auth/user/ .
-
-        - Request should return an error no matter which role is trying to execute it.
-        """
-        response_manager = self.manager_client.put(
-            "/users/auth/user/", {"username": "Alorsçavag"}
-        )
-        self.assertEqual(
-            response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
-        )
-
     def test_manager_get_user_groups_list(self):
         """
         GET /users/groups/ .

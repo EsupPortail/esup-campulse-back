@@ -35,7 +35,6 @@ class AssociationUserViewsTests(TestCase):
         # Vars used in unittests
         cls.unvalidated_user_id = 2
         cls.unvalidated_user_name = "compte-non-valide@mail.tld"
-        #        cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
 
         # Start an anonymous client used in some tests
         cls.anonymous_client = Client()
