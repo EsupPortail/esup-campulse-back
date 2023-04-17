@@ -305,7 +305,10 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
         document = Document.objects.get(id=document_id)
-        document.mime_types = ["application/vnd.novadigm.ext"]
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
         document.save()
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
