@@ -6,7 +6,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -28,11 +29,50 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
 
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+        ],
+    ),
+)
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        if self.request.method == "GET":
+            user = self.request.query_params.get("user_id")
+            association = self.request.query_params.get("association_id")
+            if user is not None and user != "":
+                queryset = queryset.filter(user_id=user)
+            if association is not None and association != "":
+                queryset = queryset.filter(association_id=association)
+
+            if not self.request.user.has_perm("projects.view_project_all"):
+                user_associations_ids = AssociationUser.objects.filter(
+                    user_id=self.request.user.pk
+                ).values_list("association_id")
+                user_projects_ids = Project.objects.filter(
+                    models.Q(user_id=self.request.user.pk)
+                    | models.Q(association_id__in=user_associations_ids)
+                ).values_list("id")
+                queryset = queryset.filter(id__in=user_projects_ids)
+
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -43,21 +83,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
-        if request.user.has_perm("projects.view_project_all"):
-            serializer = self.get_serializer(self.queryset.all(), many=True)
-            return response.Response(serializer.data)
-
-        user_associations_ids = AssociationUser.objects.filter(
-            user_id=request.user.pk
-        ).values_list("association_id")
-        serializer = self.get_serializer(
-            self.queryset.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
-            ),
-            many=True,
-        )
-        return response.Response(serializer.data)
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Creates a new project."""

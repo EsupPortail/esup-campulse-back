@@ -602,6 +602,17 @@ paths:
       operationId: projects_list
       description: Lists all projects linked to a user, or all projects with all their
         details (manager).
+      parameters:
+      - in: query
+        name: association_id
+        schema:
+          type: integer
+        description: Filter by Association ID.
+      - in: query
+        name: user_id
+        schema:
+          type: integer
+        description: Filter by User ID.
       tags:
       - projects
       security:

@@ -133,6 +133,21 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), projects_cnt)
 
+        response = self.general_client.get(
+            f"/projects/?user_id={self.student_misc_user_id}"
+        )
+        projects_cnt = Project.objects.filter(user_id=self.student_misc_user_id).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), projects_cnt)
+
+        association_id = 2
+        response = self.general_client.get(
+            f"/projects/?association_id={association_id}"
+        )
+        projects_cnt = Project.objects.filter(association_id=association_id).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), projects_cnt)
+
     def test_post_project_anonymous(self):
         """
         POST /projects/ .
