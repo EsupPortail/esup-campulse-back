@@ -182,6 +182,13 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_project_cd_not_next_commission(self):
+        response = self.student_misc_client.post(
+            "/projects/commission_dates",
+            {"project": 1, "commission_date": 5},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_cd_user_not_site(self):
         """
         POST /projects/commission_dates .
@@ -227,7 +234,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - Object is correctly created in db.
         """
         project_id = 2
-        commission_date_id = 1
+        commission_date_id = 3
         ProjectCommissionDate.objects.get(
             project_id=project_id, commission_date_id=4
         ).delete()
