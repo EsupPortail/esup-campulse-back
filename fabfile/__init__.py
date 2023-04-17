@@ -63,7 +63,7 @@ env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You ne
 
 
 env.nginx_location_extra_directives = [
-    'client_max_body_size 5242880'
+    'client_max_body_size 8M'
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
