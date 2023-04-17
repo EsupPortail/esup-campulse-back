@@ -227,9 +227,9 @@ class ProjectCommissionDateViewsTests(TestCase):
         - Object is correctly created in db.
         """
         project_id = 2
-        commission_date_id = 4
+        commission_date_id = 1
         ProjectCommissionDate.objects.get(
-            project_id=project_id, commission_date_id=1
+            project_id=project_id, commission_date_id=4
         ).delete()
         post_data = {
             "project": project_id,
@@ -354,7 +354,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The student must be authorized to update the project commission dates.
         """
         response = self.student_misc_client.patch(
-            "/projects/2/commission_dates/1", {}, content_type="application/json"
+            "/projects/2/commission_dates/4", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -366,7 +366,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The manager must be authorized to update project commission dates basic fields.
         """
         response = self.general_client.patch(
-            "/projects/2/commission_dates/1", {}, content_type="application/json"
+            "/projects/2/commission_dates/4", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -448,7 +448,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The authenticated user must be authorized to update the project commission dates.
         """
-        response = self.student_misc_client.delete("/projects/2/commission_dates/1")
+        response = self.student_misc_client.delete("/projects/2/commission_dates/4")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_cd_success(self):
