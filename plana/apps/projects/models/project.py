@@ -23,16 +23,11 @@ class Project(models.Model):
         _("Budget on previous edition"), default=0
     )
     target_audience = models.TextField(_("Target audience"), default="")
-    type_target_audience = models.CharField(
-        _("Type of people in target audience (student, employees, ...)"),
-        default="",
-        max_length=64,
-    )
-    amount_target_audience = models.IntegerField(
-        _("Amount of people in target audience"), default=0
-    )
-    amount_students_target_audience = models.IntegerField(
+    amount_students_audience = models.IntegerField(
         _("Amount of students in target audience"), default=0
+    )
+    amount_all_audience = models.IntegerField(
+        _("Amount of all people in target audience"), default=0
     )
     ticket_price = models.IntegerField(
         _("Amount of money asked for each person"), default=0

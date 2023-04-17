@@ -279,8 +279,8 @@
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
-        "application/vnd.oasis.opendocument.spreadsheet",
         "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       ]
     }
@@ -297,7 +297,10 @@
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
-        "application/pdf"
+        "application/pdf",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       ]
     }
   },
@@ -332,6 +335,9 @@
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg",
         "image/png"
       ]
@@ -367,8 +373,8 @@
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
       "mime_types": [
-        "application/vnd.oasis.opendocument.spreadsheet",
         "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       ]
     }

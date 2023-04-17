@@ -3131,21 +3131,16 @@ components:
         target_audience:
           type: string
           minLength: 1
-        type_target_audience:
-          type: string
-          minLength: 1
-          title: Type of people in target audience (student, employees, ...)
-          maxLength: 64
-        amount_target_audience:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Amount of people in target audience
-        amount_students_target_audience:
+        amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
           title: Amount of students in target audience
+        amount_all_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
@@ -3273,20 +3268,16 @@ components:
           title: Budget on previous edition
         target_audience:
           type: string
-        type_target_audience:
-          type: string
-          title: Type of people in target audience (student, employees, ...)
-          maxLength: 64
-        amount_target_audience:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Amount of people in target audience
-        amount_students_target_audience:
+        amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
           title: Amount of students in target audience
+        amount_all_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
@@ -3505,21 +3496,16 @@ components:
         target_audience:
           type: string
           minLength: 1
-        type_target_audience:
-          type: string
-          minLength: 1
-          title: Type of people in target audience (student, employees, ...)
-          maxLength: 64
-        amount_target_audience:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Amount of people in target audience
-        amount_students_target_audience:
+        amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
           title: Amount of students in target audience
+        amount_all_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
