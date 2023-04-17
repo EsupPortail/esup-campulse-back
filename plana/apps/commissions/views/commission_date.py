@@ -32,7 +32,7 @@ class CommissionDateList(generics.ListAPIView):
         queryset = CommissionDate.objects.all().order_by("submission_date")
         if self.request.method == "GET":
             only_next = self.request.query_params.get("only_next")
-            if only_next is not None and only_next != "" and to_bool(only_next) == True:
+            if only_next is not None and only_next != "" and to_bool(only_next) is True:
                 first_commissions_ids = []
                 commissions = Commission.objects.all().values_list("id")
                 for commission_id in commissions:

@@ -495,7 +495,7 @@ class UserViewsTests(TestCase):
 
         - A non-existing user cannot be deleted.
         """
-        response = self.manager_client.delete(f"/users/9999")
+        response = self.manager_client.delete("/users/9999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_delete_user_forbidden(self):

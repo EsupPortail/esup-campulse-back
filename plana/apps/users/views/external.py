@@ -42,11 +42,11 @@ class ExternalUserList(generics.ListAPIView):
                 data = Client().list_users(last_name=last_name)
                 serializer = self.get_serializer(data, many=True)
                 return Response(serializer.data)
-            else:
-                return Response(
-                    {"error": _("No last name given.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+
+            return Response(
+                {"error": _("No last name given.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         except Exception as e:
             return Response(
                 {"error": str(e)},

@@ -337,7 +337,6 @@ class AssociationUserViewsTests(TestCase):
         - An anonymous user cannot add a link if association is full.
         """
         association = Association.objects.get(id=5)
-        old_amount_members_allowed = association.amount_members_allowed
         association.amount_members_allowed = 1
         association.save()
         response_anonymous = self.anonymous_client.post(

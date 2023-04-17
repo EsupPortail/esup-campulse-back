@@ -47,7 +47,7 @@ class CommissionsViewsTests(TestCase):
         response = self.client.get(f"/commissions/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
 
-        response = self.client.get(f"/commissions/?only_next=true")
+        response = self.client.get("/commissions/?only_next=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 

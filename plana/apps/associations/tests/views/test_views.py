@@ -256,7 +256,6 @@ class AssociationsViewsTests(TestCase):
         - Non-enabled associations cannot be filtered by student.
         """
         response = self.member_client.get("/associations/?is_enabled=false")
-        content = json.loads(response.content.decode("utf-8"))
         for association in response.data:
             self.assertEqual(association["is_enabled"], True)
 
@@ -279,7 +278,6 @@ class AssociationsViewsTests(TestCase):
         - Non-public associations cannot be filtered by student.
         """
         response = self.member_client.get("/associations/?is_public=false")
-        content = json.loads(response.content.decode("utf-8"))
         for association in response.data:
             self.assertEqual(association["is_public"], True)
 
@@ -606,7 +604,7 @@ class AssociationsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.client.patch(
-            f"/associations/1",
+            "/associations/1",
             {"name": "La Grande Confrérie du Cassoulet de Castelnaudary"},
             content_type="application/json",
         )
@@ -619,7 +617,7 @@ class AssociationsViewsTests(TestCase):
         - A Misc Manager cannot edit an association.
         """
         response_misc = self.misc_client.patch(
-            f"/associations/1",
+            "/associations/1",
             {"name": "L'assaucissiation"},
             content_type="application/json",
         )
@@ -881,7 +879,7 @@ class AssociationsViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.client.delete(f"/associations/1")
+        response_anonymous = self.client.delete("/associations/1")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_association_forbidden(self):
