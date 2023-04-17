@@ -259,6 +259,12 @@ paths:
     get:
       operationId: commissions_commission_dates_list
       description: Lists all commission dates.
+      parameters:
+      - in: query
+        name: only_next
+        schema:
+          type: boolean
+        description: Filter to get only chronologically first commission of each type
       tags:
       - commissions
       security:
