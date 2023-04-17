@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from thumbnails.fields import ImageField
 
 from plana.apps.institutions.models import Institution, InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
@@ -12,7 +13,7 @@ from plana.storages import DynamicThumbnailImageField
 # TODO : Remove S3 dependency in test environment.
 """
 if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
-    DynamicThumbnailImageField = models.ImageField
+    DynamicThumbnailImageField = ImageField
 """
 
 
