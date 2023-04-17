@@ -3,25 +3,27 @@
 """
 """
 
-from fabric.api import (env, roles, execute, task)
 from os.path import join
-from . import sentry
 
 import pydiploy
+from fabric.api import env, execute, roles, task
+
+from . import sentry
 
 # edit config here !
 
 env.remote_owner = 'django'  # remote server user
 env.remote_group = 'di'  # remote server group
 
-env.application_name = 'plana'   # name of webapp
+env.application_name = 'plana'  # name of webapp
 env.root_package_name = 'plana'  # name of app in webapp
 
 env.remote_home = '/home/django'  # remote home root
 env.remote_python_version = '3.9'  # python version
 env.remote_virtualenv_root = join(env.remote_home, '.virtualenvs')  # venv root
-env.remote_virtualenv_dir = join(env.remote_virtualenv_root,
-                                 env.application_name)  # venv for webapp dir
+env.remote_virtualenv_dir = join(
+    env.remote_virtualenv_root, env.application_name
+)  # venv for webapp dir
 # git repository url
 env.remote_repo_url = 'git@git.unistra.fr:di/plan_a/plana.git'
 env.local_tmp_dir = '/tmp'  # tmp dir
@@ -60,7 +62,9 @@ env.no_circus_web = True  # Avoid using circusweb dashboard (buggy in last relea
 env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
 
 
-# env.nginx_location_extra_directives = ['proxy_read_timeout 120'] # add directive(s) to nginx config file in location part
+env.nginx_location_extra_directives = [
+    'client_max_body_size 5242880'
+]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
 env.sentry_project_name = 'plan-a-back'
@@ -158,10 +162,7 @@ def preprod():
 @task
 def prod():
     """Define prod stage"""
-    env.roledefs = {
-        'web': ['plana.net'],
-        'lb': ['lb.plana.net']
-    }
+    env.roledefs = {'web': ['plana.net'], 'lb': ['lb.plana.net']}
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
     env.server_name = 'plana.net'
@@ -186,12 +187,13 @@ def prod():
     }
     execute(build_env)
 
+
 # dont touch after that point if you don't know what you are doing !
 
 
 @task
 def tag(version_number):
-    """ Set the version to deploy to `version_number`. """
+    """Set the version to deploy to `version_number`."""
     execute(pydiploy.prepare.tag, version=version_number)
 
 
@@ -275,8 +277,12 @@ def post_install_frontend():
 @task
 def install_postgres(user=None, dbname=None, password=None):
     """Install Postgres on remote"""
-    execute(pydiploy.django.install_postgres_server,
-            user=user, dbname=dbname, password=password)
+    execute(
+        pydiploy.django.install_postgres_server,
+        user=user,
+        dbname=dbname,
+        password=password,
+    )
 
 
 @task
@@ -306,19 +312,19 @@ def reload_backend():
 @roles('lb')
 @task
 def set_down():
-    """ Set app to maintenance mode """
+    """Set app to maintenance mode"""
     execute(pydiploy.django.set_app_down)
 
 
 @roles('lb')
 @task
 def set_up():
-    """ Set app to up mode """
+    """Set app to up mode"""
     execute(pydiploy.django.set_app_up)
 
 
 @roles('web')
 @task
 def custom_manage_cmd(cmd):
-    """ Execute custom command in manage.py """
+    """Execute custom command in manage.py"""
     execute(pydiploy.django.custom_manage_command, cmd)
