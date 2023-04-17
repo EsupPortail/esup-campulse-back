@@ -87,6 +87,7 @@
     "fields": {
       "name": "Association Hors Site 2",
       "acronym": "AssoHorsSite2",
+      "email": "asso-hors-site@mail.tld",
       "creation_date": "2022-10-27T14:12:11.000Z",
       "institution_id": 5,
       "is_site": false,

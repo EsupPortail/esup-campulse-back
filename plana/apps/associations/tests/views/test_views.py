@@ -931,12 +931,6 @@ class AssociationsViewsTests(TestCase):
         """
         association_id = 5
 
-        # TODO : send mail without patch ?
-        response_patch = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": False},
-            content_type="application/json",
-        )
         response_general = self.general_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_general.status_code, status.HTTP_204_NO_CONTENT)
         self.assertTrue(len(mail.outbox))
