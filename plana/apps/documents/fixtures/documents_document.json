@@ -338,6 +338,14 @@
         "application/msword",
         "application/vnd.oasis.opendocument.text",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/x-7z-compressed",
+        "application/x-bzip2",
+        "application/x-rar-compressed",
+        "application/x-tar",
+        "application/zip",
         "image/jpeg",
         "image/png"
       ]
