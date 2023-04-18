@@ -1952,7 +1952,7 @@ components:
         student_count:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Nombre d'étudiants
         president_names:
           type: string
@@ -1970,7 +1970,7 @@ components:
         amount_members_allowed:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of members allowed
         can_submit_projects:
           type: boolean
@@ -2063,7 +2063,7 @@ components:
         student_count:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Nombre d'étudiants
         president_names:
           type: string
@@ -2081,7 +2081,7 @@ components:
         amount_members_allowed:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of members allowed
         can_submit_projects:
           type: boolean
@@ -2958,7 +2958,7 @@ components:
         student_count:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Nombre d'étudiants
         president_names:
           type: string
@@ -2978,7 +2978,7 @@ components:
         amount_members_allowed:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of members allowed
         can_submit_projects:
           type: boolean
@@ -3082,21 +3082,21 @@ components:
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount asked on previous edition
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount earned on previous edition
         amount_asked:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         amount_earned:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         is_validated_by_admin:
           type: boolean
     PatchedProjectRequest:
@@ -3132,7 +3132,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Budget on previous edition
         target_audience:
           type: string
@@ -3140,22 +3140,22 @@ components:
         amount_students_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of students in target audience
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money asked for each person
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money needed by person
         goals:
           type: string
@@ -3270,29 +3270,29 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Budget on previous edition
         target_audience:
           type: string
         amount_students_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of students in target audience
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money asked for each person
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money needed by person
         goals:
           type: string
@@ -3356,21 +3356,21 @@ components:
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount asked on previous edition
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount earned on previous edition
         amount_asked:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         amount_earned:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         is_validated_by_admin:
           type: boolean
       required:
@@ -3386,21 +3386,21 @@ components:
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount asked on previous edition
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount earned on previous edition
         amount_asked:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         amount_earned:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         is_validated_by_admin:
           type: boolean
     ProjectCommissionDateRequest:
@@ -3416,21 +3416,21 @@ components:
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount asked on previous edition
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount earned on previous edition
         amount_asked:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         amount_earned:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
         is_validated_by_admin:
           type: boolean
       required:
@@ -3497,7 +3497,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Budget on previous edition
         target_audience:
           type: string
@@ -3505,22 +3505,22 @@ components:
         amount_students_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of students in target audience
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of all people in target audience
         ticket_price:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money asked for each person
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: -2147483648
+          minimum: 0
           title: Amount of money needed by person
         goals:
           type: string

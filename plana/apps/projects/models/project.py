@@ -19,20 +19,20 @@ class Project(models.Model):
     association = models.ForeignKey(
         Association, verbose_name=_("Association"), on_delete=models.CASCADE, null=True
     )
-    budget_previous_edition = models.IntegerField(
+    budget_previous_edition = models.PositiveIntegerField(
         _("Budget on previous edition"), default=0
     )
     target_audience = models.TextField(_("Target audience"), default="")
-    amount_students_audience = models.IntegerField(
+    amount_students_audience = models.PositiveIntegerField(
         _("Amount of students in target audience"), default=0
     )
-    amount_all_audience = models.IntegerField(
+    amount_all_audience = models.PositiveIntegerField(
         _("Amount of all people in target audience"), default=0
     )
-    ticket_price = models.IntegerField(
+    ticket_price = models.PositiveIntegerField(
         _("Amount of money asked for each person"), default=0
     )
-    individual_cost = models.IntegerField(
+    individual_cost = models.PositiveIntegerField(
         _("Amount of money needed by person"), default=0
     )
     goals = models.TextField(_("Goals"), default="")
@@ -60,8 +60,8 @@ class Project(models.Model):
     )
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
-    outcome = models.IntegerField(_("Outcome"), default=0)
-    income = models.IntegerField(_("Income"), default=0)
+    outcome = models.PositiveIntegerField(_("Outcome"), default=0)
+    income = models.PositiveIntegerField(_("Income"), default=0)
     real_start_date = models.DateTimeField(_("Start date"), null=True)
     real_end_date = models.DateTimeField(_("End date"), null=True)
     organizer_name = models.CharField(_("Organizer name"), max_length=256, default="")

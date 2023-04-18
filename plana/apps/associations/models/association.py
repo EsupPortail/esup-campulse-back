@@ -57,7 +57,7 @@ class Association(models.Model):
     email = models.CharField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
-    student_count = models.IntegerField(_("Student count"), default=0)
+    student_count = models.PositiveIntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
     president_phone = models.CharField(_("President phone"), default="", max_length=32)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
@@ -65,7 +65,7 @@ class Association(models.Model):
     is_site = models.BooleanField(
         _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
     )
-    amount_members_allowed = models.IntegerField(
+    amount_members_allowed = models.PositiveIntegerField(
         _("Amount of members allowed"),
         default=settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED,
     )

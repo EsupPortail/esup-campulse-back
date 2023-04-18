@@ -19,14 +19,14 @@ class ProjectCommissionDate(models.Model):
         on_delete=models.CASCADE,
     )
     is_first_edition = models.BooleanField(_("Is first edition"), default=True)
-    amount_asked_previous_edition = models.IntegerField(
+    amount_asked_previous_edition = models.PositiveIntegerField(
         _("Amount asked on previous edition"), default=0
     )
-    amount_earned_previous_edition = models.IntegerField(
+    amount_earned_previous_edition = models.PositiveIntegerField(
         _("Amount earned on previous edition"), default=0
     )
-    amount_asked = models.IntegerField(_("Amount asked"), default=0)
-    amount_earned = models.IntegerField(_("Amount earned"), default=0)
+    amount_asked = models.PositiveIntegerField(_("Amount asked"), default=0)
+    amount_earned = models.PositiveIntegerField(_("Amount earned"), default=0)
     is_validated_by_admin = models.BooleanField(
         _("Is validated by admin"), default=False
     )
