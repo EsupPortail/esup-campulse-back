@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-18 12:52+0200\n"
+"POT-Creation-Date: 2023-04-18 15:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,58 +202,62 @@ msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
 #: plana/apps/associations/views/association.py:225
+msgid "No rights to set is_site on this association."
+msgstr "Aucun droit d'éditer le champ is_site de cette association."
+
+#: plana/apps/associations/views/association.py:233
 msgid "No association name given."
 msgstr "Pas de nom d'association donné."
 
-#: plana/apps/associations/views/association.py:248
+#: plana/apps/associations/views/association.py:256
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:288
-#: plana/apps/associations/views/association.py:335
-#: plana/apps/associations/views/association.py:462
+#: plana/apps/associations/views/association.py:296
+#: plana/apps/associations/views/association.py:343
+#: plana/apps/associations/views/association.py:471
 #: plana/apps/documents/views/document_upload.py:120
 #: plana/apps/projects/views/project.py:99
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/associations/views/association.py:296
+#: plana/apps/associations/views/association.py:304
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:307
+#: plana/apps/associations/views/association.py:315
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:318
+#: plana/apps/associations/views/association.py:326
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:347
+#: plana/apps/associations/views/association.py:355
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:365
+#: plana/apps/associations/views/association.py:373
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:370
+#: plana/apps/associations/views/association.py:378
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:386
+#: plana/apps/associations/views/association.py:394
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:402
+#: plana/apps/associations/views/association.py:410
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:468
+#: plana/apps/associations/views/association.py:477
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:478
+#: plana/apps/associations/views/association.py:487
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -378,12 +382,16 @@ msgstr "Document pour Demande de Subvention"
 msgid "Document for Project Review"
 msgstr "Document pour Bilan de Subvention"
 
-#: plana/apps/documents/models/document.py:91
+#: plana/apps/documents/models/document.py:83
+msgid "Document not linked to a process"
+msgstr "Document non lié à un processus"
+
+#: plana/apps/documents/models/document.py:92
 #: plana/apps/documents/models/document_upload.py:42
 msgid "Document"
 msgstr "Document"
 
-#: plana/apps/documents/models/document.py:92
+#: plana/apps/documents/models/document.py:93
 msgid "Documents"
 msgstr "Documents"
 
@@ -764,7 +772,9 @@ msgstr "Le projet n'est affecté à aucune personne ou association."
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
-msgstr "Le nombre d'étudiants dans le public attendu ne peut être supérieur au nombre total de personnes attendues."
+msgstr ""
+"Le nombre d'étudiants dans le public attendu ne peut être supérieur au "
+"nombre total de personnes attendues."
 
 #: plana/apps/projects/views/project.py:231
 msgid "Not allowed to retrieve this project."

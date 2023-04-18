@@ -494,6 +494,7 @@ class AssociationsViewsTests(TestCase):
 
         - An Institution Manager cannot add an association not from the same institution.
         - A Misc manager cannot add an association linked to another institution than its own.
+        - A Misc manager cannot set is_site on a new association.
         """
         response_institution = self.institution_client.post(
             "/associations/",
@@ -510,6 +511,12 @@ class AssociationsViewsTests(TestCase):
                 "name": "Quand Brice de Nice se connecte via CAS, c'est CASsé.",
                 "institution": 2,
             },
+        )
+        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_misc = self.misc_client.post(
+            "/associations/",
+            {"name": "Dans mes gâteaux je mets de la CASsonnade.", "is_site": True},
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 

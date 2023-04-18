@@ -351,7 +351,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DocumentRequest'
-        required: true
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -2562,9 +2561,7 @@ components:
           type: integer
           nullable: true
       required:
-      - contact
       - id
-      - name
     DocumentRequest:
       type: object
       description: Main serializer.
@@ -2614,9 +2611,6 @@ components:
         commission:
           type: integer
           nullable: true
-      required:
-      - contact
-      - name
     DocumentUpload:
       type: object
       description: Main serializer.
@@ -3225,6 +3219,7 @@ components:
       - DOCUMENT_USER
       - DOCUMENT_PROJECT
       - DOCUMENT_PROJECT_REVIEW
+      - NO_PROCESS
       type: string
     Project:
       type: object

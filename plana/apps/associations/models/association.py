@@ -124,6 +124,10 @@ class Association(models.Model):
                 "Can create an association from any institution.",
             ),
             (
+                "add_association_all_fields",
+                "Can create an association with is_public setting.",
+            ),
+            (
                 "change_association_any_institution",
                 "Can change fields for an association from any institution.",
             ),

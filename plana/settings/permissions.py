@@ -7,6 +7,7 @@ PERMISSIONS_GROUPS = {
         # associations
         "add_association",
         "add_association_any_institution",
+        "add_association_all_fields",
         "change_association",
         "change_association_any_institution",
         "change_association_all_fields",
@@ -76,6 +77,7 @@ PERMISSIONS_GROUPS = {
     "MANAGER_INSTITUTION": [
         # associations
         "add_association",
+        "add_association_all_fields",
         "change_association",
         "change_association_all_fields",
         "delete_association",
