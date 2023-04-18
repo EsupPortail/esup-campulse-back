@@ -10,3 +10,11 @@ class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         fields = "__all__"
+
+
+class ContentBodySerializer(serializers.ModelSerializer):
+    """Main serializer."""
+
+    class Meta:
+        model = Content
+        fields = ["body"]
