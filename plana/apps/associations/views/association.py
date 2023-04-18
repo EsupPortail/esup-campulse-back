@@ -405,6 +405,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
+            if "is_public" in request.data:
+                is_public = to_bool(request.data["is_public"])
+                if is_public is True and (
+                    association.is_site is False or association.is_enabled is False
+                ):
+                    request.data["is_public"] = False
+
             if "is_site" in request.data:
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:
@@ -423,16 +430,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "creation_date",
                 "institution_id",
                 "is_enabled",
+                "is_public",
                 "is_site",
             ]:
                 request.data.pop(restricted_field, False)
-
-        if "is_public" in request.data:
-            is_public = to_bool(request.data["is_public"])
-            if is_public is True and (
-                association.is_site is False or association.is_enabled is False
-            ):
-                request.data["is_public"] = False
 
         current_site = get_current_site(request)
         context = {
