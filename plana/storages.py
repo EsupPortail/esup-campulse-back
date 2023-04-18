@@ -47,6 +47,8 @@ class PrivateFileStorage(UpdateACLStorage):
 
 
 class DynamicStorageFieldFile(FieldFile):
+    """Override default Django FieldFile."""
+
     def __init__(self, instance, field, name):
         super().__init__(instance, field, name)
         self.storage = PublicFileStorage()
@@ -63,26 +65,6 @@ class DynamicStorageFieldFile(FieldFile):
         if hasattr(self, "_file"):
             self.close()  # This update_acl method we have already defined in UpdateACLStorage
         self.storage.update_acl(self.name)
-
-
-class DynamicStorageFileField(models.FileField):
-    attr_class = DynamicStorageFieldFile
-
-    def pre_save(self, model_instance, add):
-        storage = PublicFileStorage()
-        if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            storage = PrivateFileStorage()
-        else:
-            storage = PublicFileStorage()
-
-        file = super().pre_save(model_instance, add)
-        file.storage = storage
-
-        if file and file._committed:
-            # This update_acl method we have already defined
-            # in DynamicStorageFieldFile class above.
-            file.update_acl()
-        return file
 
 
 class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
@@ -114,12 +96,35 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
         self.storage.update_acl(self.name)
 
     def delete(self, with_thumbnails=True, save=True, *args, **kwargs):
+        """Delete thumbnails and original file."""
         if not with_thumbnails:
             super().delete(save=save)
             return
 
         self.thumbnails.delete_all()
         super().delete(save=save)
+
+
+class DynamicStorageFileField(models.FileField):
+    """Override default Django FileField."""
+
+    attr_class = DynamicStorageFieldFile
+
+    def pre_save(self, model_instance, add):
+        if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
+            storage = PrivateFileStorage()
+        else:
+            storage = PublicFileStorage()
+
+        file = super().pre_save(model_instance, add)
+        file.storage = storage
+
+        if file and file._committed:
+            # This update_acl method we have already defined
+            # in DynamicStorageFieldFile class above.
+            file.update_acl()
+
+        return file
 
 
 class DynamicThumbnailImageField(ThumbnailImageField):
