@@ -174,6 +174,21 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            "amount_students_audience" in request.data
+            and "amount_all_audience" in request.data
+            and int(request.data["amount_students_audience"])
+            > int(request.data["amount_all_audience"])
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Number of students in audience cannot exceed number of all people in audience."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         request.data["creation_date"] = datetime.date.today()
         request.data["edition_date"] = datetime.date.today()
 
