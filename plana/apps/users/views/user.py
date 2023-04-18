@@ -32,6 +32,12 @@ from plana.utils import send_mail, to_bool
     get=extend_schema(
         parameters=[
             OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by first name and last name.",
+            ),
+            OpenApiParameter(
                 "is_validated_by_admin",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -65,6 +71,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all().order_by("id")
+        name = self.request.query_params.get("name")
         is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
         is_cas = self.request.query_params.get("is_cas")
         association_id = self.request.query_params.get("association_id")
@@ -81,6 +88,13 @@ class UserListCreate(generics.ListCreateAPIView):
                 ).values_list("user_id")
             )
         else:
+            if name is not None and name != "":
+                name = str(name).strip()
+                queryset = queryset.filter(
+                    Q(first_name__nospaces__unaccent__icontains=name.replace(" ", ""))
+                    | Q(last_name__nospaces__unaccent__icontains=name.replace(" ", ""))
+                )
+
             if is_validated_by_admin is not None and is_validated_by_admin != "":
                 is_validated_by_admin = to_bool(is_validated_by_admin)
                 email_validated_user_ids = EmailAddress.objects.filter(

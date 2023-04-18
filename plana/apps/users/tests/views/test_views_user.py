@@ -201,6 +201,26 @@ class UserViewsTests(TestCase):
         for user in response_manager_cas_true.data:
             self.assertEqual(user["is_cas"], True)
 
+    def test_manager_get_users_list_filter_name(self):
+        """
+        GET /users/ .
+
+        - The route can be accessed by anyone.
+        - An association can be found with its name.
+        """
+        similar_names = [
+            "Association Hors Site",
+            "association hors site",
+            "AssociationHorsSite",
+            "associationhorssite",
+            " Association Hors Site ",
+            "Assôcïàtîön Hors Sité",
+            "hors",
+        ]
+        for similar_name in similar_names:
+            response = self.manager_client.get(f"/users/?name={similar_name}")
+            self.assertEqual(response.data[0]["first_name"], similar_names[0])
+
     def test_anonymous_get_user_detail(self):
         """
         GET /users/{id} .

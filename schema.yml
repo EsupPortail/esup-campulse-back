@@ -1018,6 +1018,11 @@ paths:
         schema:
           type: boolean
         description: Filter for members not validated by an admin
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by first name and last name.
       tags:
       - users
       security:

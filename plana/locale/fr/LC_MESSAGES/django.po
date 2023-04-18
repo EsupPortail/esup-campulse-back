@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-18 15:00+0200\n"
+"POT-Creation-Date: 2023-04-18 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1086,24 +1086,24 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:186 plana/apps/users/views/user.py:301
+#: plana/apps/users/views/user.py:200 plana/apps/users/views/user.py:315
 #: plana/apps/users/views/user_auth.py:103
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:264
+#: plana/apps/users/views/user.py:278
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:277 plana/apps/users/views/user.py:376
+#: plana/apps/users/views/user.py:291 plana/apps/users/views/user.py:390
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
-#: plana/apps/users/views/user.py:285
+#: plana/apps/users/views/user.py:299
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:382
+#: plana/apps/users/views/user.py:396
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
