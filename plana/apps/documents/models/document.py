@@ -36,10 +36,10 @@ def get_template_path(instance, filename):
 class Document(models.Model):
     """Main model."""
 
-    name = models.CharField(_("Name"), max_length=250, blank=False, unique=True)
+    name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")
-    contact = models.TextField(_("Contact address"), blank=False)
+    contact = models.TextField(_("Contact address"), default="")
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
     is_required_in_process = models.BooleanField(
         _("Is required in process"), default=False
@@ -80,8 +80,9 @@ class Document(models.Model):
             ("DOCUMENT_USER", _("Document for User")),
             ("DOCUMENT_PROJECT", _("Document for Project")),
             ("DOCUMENT_PROJECT_REVIEW", _("Document for Project Review")),
+            ("NO_PROCESS", _("Document not linked to a process")),
         ],
-        default="DOCUMENT_PROJECT",
+        default="NO_PROCESS",
     )
 
     def __str__(self):
