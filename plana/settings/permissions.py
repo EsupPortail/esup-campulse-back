@@ -18,6 +18,9 @@ PERMISSIONS_GROUPS = {
         # commissions
         "add_commissiondate",
         "delete_commissiondate",
+        # contents
+        "change_content",
+        "view_content",
         # documents
         "add_document",
         "add_document_any_commission",
