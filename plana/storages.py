@@ -3,8 +3,13 @@ Storage management from octant.
 
 https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/storages.py
 """
+from io import BytesIO
+
+from django.core.exceptions import ImproperlyConfigured
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.fields.files import FieldFile
+from pyrage import decrypt, encrypt, ssh
 from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
@@ -46,6 +51,61 @@ class PrivateFileStorage(UpdateACLStorage):
     querystring_auth = True
 
 
+class EncryptedPrivateFileStorage(PrivateFileStorage):
+    def __init__(self):
+        super().__init__()
+
+        try:
+            id_rsa_pub_file = open("~/.ssh/id_ed25519.pub")
+            public_content = id_rsa_pub_file.read()
+            self.recipient = ssh.Recipient.from_str(public_content)
+            id_rsa_pub_file.close()
+        except Exception as e:
+            raise ImproperlyConfigured(f"Public key not found : {e}")
+
+        try:
+            id_rsa_file = open("~/.ssh/id_ed25519")
+            private_content = id_rsa_file.read()
+            self.identity = ssh.Identity.from_buffer(bytes(private_content, "utf-8"))
+            print("IDENTITY")
+            print(self.identity)
+            id_rsa_file.close()
+        except Exception as e:
+            raise ImproperlyConfigured(f"Private key not found : {e}")
+
+    def _open(self, name, mode='rb'):
+        file = super()._open(name, mode)
+        decrypted_file = self._decrypt(file)
+        return decrypted_file
+
+    def _save(self, path, file):
+        encrypted_file = self._encrypt(file)
+        return super()._save(path, encrypted_file)
+
+    def _encrypt(self, original_file):
+        encryption_result = encrypt(BytesIO(original_file), [self.recipient])
+        print("ENCRYPTION RESULT")
+        print(encryption_result)
+        encrypted_file = InMemoryUploadedFile(
+            BytesIO(encryption_result.data),
+            original_file.field_name,
+            original_file.name,
+            original_file.content_type,
+            len(encryption_result.data),
+            original_file.charset,
+            original_file.content_type_extra,
+        )
+        print("ENCRYPTED FILE")
+        print(encrypted_file)
+        return encrypted_file
+
+    def _decrypt(self, original_file):
+        decryption_result = decrypt(original_file, [self.identity])
+        print("DECRYPTION RESULT")
+        print(decryption_result)
+        return decryption_result
+
+
 class DynamicStorageFieldFile(FieldFile):
     """Override default Django FieldFile."""
 
@@ -53,7 +113,7 @@ class DynamicStorageFieldFile(FieldFile):
         super().__init__(instance, field, name)
         self.storage = PublicFileStorage()
         if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            self.storage = PrivateFileStorage()
+            self.storage = EncryptedPrivateFileStorage()
         else:
             self.storage = PublicFileStorage()
 
@@ -75,7 +135,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
     def __init__(self, instance, field, name, **kwargs):
         FieldFile.__init__(self, instance, field, name)
         if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            self.storage = PrivateFileStorage(
+            self.storage = EncryptedPrivateFileStorage(
                 querystring_expire=self.querystring_expire
             )
         else:
@@ -112,7 +172,7 @@ class DynamicStorageFileField(models.FileField):
 
     def pre_save(self, model_instance, add):
         if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            storage = PrivateFileStorage()
+            storage = EncryptedPrivateFileStorage()
         else:
             storage = PublicFileStorage()
 
@@ -134,7 +194,7 @@ class DynamicThumbnailImageField(ThumbnailImageField):
 
     def pre_save(self, model_instance, add):
         if model_instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            storage = PrivateFileStorage()
+            storage = EncryptedPrivateFileStorage()
         else:
             storage = PublicFileStorage()
 

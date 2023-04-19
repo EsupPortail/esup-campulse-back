@@ -448,6 +448,10 @@ pyjwt==2.6.0 ; python_version >= "3.8" and python_version < "3.11" \
 pyjwt[crypto]==2.6.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:69285c7e31fc44f68a1feb309e948e0df53259d579295e6cfe2b1792329f05fd \
     --hash=sha256:d83c3d892a77bbb74d3e1a2cfa90afaadb60945205d1095d9221f04466f64c14
+pyrage==1.0.3 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:32b63a06f138a1c231285c61f61a1800b7b894851b06cb763b7b35b18ccd2b11 \
+    --hash=sha256:37a8c1555f51b419a73759ce925f643e789802bba7bed5bbfbe11e99be610d49 \
+    --hash=sha256:9c554d7669539c0a7a870464faf55f0121c117339b1b0f57d6ca5eb85079c107
 pyrsistent==0.19.3 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:016ad1afadf318eb7911baa24b049909f7f3bb2c5b1ed7b6a8f21db21ea3faa8 \
     --hash=sha256:1a2994773706bbb4995c31a97bc94f1418314923bd1048c6d964837040376440 \
@@ -540,9 +544,9 @@ requests==2.28.2 ; python_version >= "3.8" and python_version < "3.11" \
 s3transfer==0.6.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:06176b74f3a15f61f1b4f25a1fc29a4429040b7647133a463da8fa5bd28d5ecd \
     --hash=sha256:2ed07d3866f523cc561bf4a00fc5535827981b117dd7876f036b0c1aca42c947
-sentry-sdk==1.19.1 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:7ae78bd921981a5010ab540d6bdf3b793659a4db8cccf7f16180702d48a80d84 \
-    --hash=sha256:885a11c69df23e53eb281d003b9ff15a5bdfa43d8a2a53589be52104a1b4582f
+sentry-sdk==1.20.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:0ad6bbbe78057b8031a07de7aca6d2a83234e51adc4d436eaf8d8c697184db71 \
+    --hash=sha256:a3410381ae769a436c0852cce140a5e5e49f566a07fb7c2ab445af1302f6ad89
 shortuuid==1.0.11 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:27ea8f28b1bd0bf8f15057a3ece57275d2059d2b0bb02854f02189962c13b6aa \
     --hash=sha256:fc75f2615914815a8e4cb1501b3a513745cb66ef0fd5fc6fb9f8c3fa3481f789

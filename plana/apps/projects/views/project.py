@@ -199,7 +199,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
