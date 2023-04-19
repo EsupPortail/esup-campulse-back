@@ -12,6 +12,7 @@ class Command(BaseCommand):
                 [
                     "associations_activityfield",
                     "commissions_commission",
+                    "contents_content",
                     "documents_document",
                     "auth_group",
                     "auth_group_permissions",

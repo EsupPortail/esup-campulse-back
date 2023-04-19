@@ -305,6 +305,58 @@ paths:
                 items:
                   $ref: '#/components/schemas/Content'
           description: ''
+  /contents/{id}:
+    get:
+      operationId: contents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - contents
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+          description: ''
+    patch:
+      operationId: contents_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - contents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContentBodyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContentBodyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContentBodyRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentBody'
+          description: ''
   /documents/:
     get:
       operationId: documents_list
@@ -2494,6 +2546,14 @@ components:
       - code
       - id
       - label
+    ContentBody:
+      type: object
+      description: Main serializer.
+      properties:
+        body:
+          type: string
+      required:
+      - body
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -3023,6 +3083,13 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+    PatchedContentBodyRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        body:
+          type: string
+          minLength: 1
     PatchedDocumentRequest:
       type: object
       description: Main serializer.
