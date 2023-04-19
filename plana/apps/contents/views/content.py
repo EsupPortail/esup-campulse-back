@@ -43,7 +43,6 @@ class ContentList(generics.ListAPIView):
 
 
 @extend_schema(methods=["PUT"], exclude=True)
-# TODO : unittests
 class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
     queryset = Content.objects.all()
 
