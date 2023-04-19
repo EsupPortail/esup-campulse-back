@@ -45,8 +45,14 @@ class ContentList(generics.ListAPIView):
 @extend_schema(methods=["PUT"], exclude=True)
 # TODO : unittests
 class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Content.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "PATCH":
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        else:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -57,13 +63,3 @@ class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def get(self, request, *args, **kwargs):
-        if not request.user.has_perm("content.view_content"):
-            # DjangoModelPermissions not working here ?
-            return response.Response(
-                {"error": _("Cannot access details of this content.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return self.retrieve(request, *args, **kwargs)
