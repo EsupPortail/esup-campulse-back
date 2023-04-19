@@ -1,7 +1,7 @@
 [
   {
     "model": "associations.association",
-    "pk": 6,
+    "pk": 11,
     "fields": {
       "name": "Association of International Researchers of Strasbourg",
       "address": "Collège Doctoral Européen\r\n46 Boulevard de la victoire\r\n67000 Strasbourg",
@@ -19,7 +19,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 7,
+    "pk": 12,
     "fields": {
       "name": "Association des Etudiants en Géographie de Strasbourg",
       "address": "Faculté de Géographie\r\n3 Rue de l'Argonne\r\n67000 Strasbourg",
@@ -37,7 +37,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 8,
+    "pk": 13,
     "fields": {
       "name": "La Cigogne Enragée",
       "address": "La Maison des Associations \r\n1 Place des Orphelins\r\n67000 Strasbourg",
@@ -55,7 +55,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 9,
+    "pk": 14,
     "fields": {
       "name": "Théâtre universitaire de Strasbourg",
       "address": "Université de Strasbourg\r\n22 rue René Descartes\r\n67084 Strasbourg",
@@ -73,7 +73,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 10,
+    "pk": 15,
     "fields": {
       "name": "Association des Docteurs et Doctorants en Droit, Histoire et Sciences Politiques de l'Université de Strasbourg",
       "address": "Faculté de Droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -91,7 +91,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 11,
+    "pk": 16,
     "fields": {
       "name": "Association de Liaison entre les Chimistes Avertis et Néophytes et les Entreprises de Strasbourg",
       "address": "Faculté de Chimie\r\n1 rue Blaise Pascal\r\n67000 Strasbourg",
@@ -109,7 +109,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 12,
+    "pk": 17,
     "fields": {
       "name": "Amicale des Etudiants et Anciens Etudiants de la Faculté de Médecine de Strasbourg",
       "address": "Faculté de Médecine\r\n4 rue Kirschleger\r\n67000 Strasbourg",
@@ -127,7 +127,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 13,
+    "pk": 18,
     "fields": {
       "name": "Association des Diplômés et Etudiants Nigérians à Strasbourg",
       "address": "",
@@ -145,7 +145,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 14,
+    "pk": 19,
     "fields": {
       "name": "L'Arrach'Chœur",
       "address": "5 rue des Échasses\r\nchez M. David Bouchard\r\nF-67000 Strasbourg",
@@ -163,7 +163,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 15,
+    "pk": 20,
     "fields": {
       "name": "Association Amicale des Etudiants en Pharmacie de Strasbourg",
       "address": "Faculté de Pharmacie\r\n74 Route du Rhin\r\n67400 Illkirch",
@@ -181,7 +181,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 16,
+    "pk": 21,
     "fields": {
       "name": "Cercle des Gabonais de Strasbourg",
       "address": "Maison des Associations de Strasbourg\r\n1 Place des Orphelins\r\n67000 Strasbourg",
@@ -199,7 +199,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 17,
+    "pk": 22,
     "fields": {
       "name": "Le Choeur de l'Université de Strasbourg",
       "address": "4 rue Blaise Pascal\r\nCS 90032\r\n67081 STRASBOURG CEDEX",
@@ -217,7 +217,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 18,
+    "pk": 23,
     "fields": {
       "name": "L'Amicale d'Anglais de Strasbourg",
       "address": "Département d'Etudes Anglaises et Nord Américaines\r\nBâtiment Le Patio\r\n22 Rue René Descartes\r\n67000 Strasbourg",
@@ -235,7 +235,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 19,
+    "pk": 24,
     "fields": {
       "name": "FRACAS",
       "address": "",
@@ -253,7 +253,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 20,
+    "pk": 25,
     "fields": {
       "name": "Association des Etudiants de la République Démocratique du Congo de Strasbourg",
       "address": "Cité Universitaire de la Robertsau\r\n14 Route de la Wantzenau \r\n67000 Strasbourg",
@@ -271,7 +271,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 21,
+    "pk": 26,
     "fields": {
       "name": "SPECQUE - Délégation de Strasbourg",
       "address": "",
@@ -289,7 +289,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 22,
+    "pk": 27,
     "fields": {
       "name": "Mouvement des ETudiants Alsaciens Futurs Orthophonistes",
       "address": "Ecole d'Orthophonie\r\n4 Rue Kirschleger\r\n67000 Strasbourg",
@@ -307,7 +307,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 23,
+    "pk": 28,
     "fields": {
       "name": "Ensemble Vocal de l'Université de Strasbourg",
       "address": "Service de la vie universitaire, 22 rue René Descartes, 67084 Strasbourg\r\nhttp://evus.unistra.fr/",
@@ -325,7 +325,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 24,
+    "pk": 29,
     "fields": {
       "name": "Doctoneuro",
       "address": "Faculté de Psychologie\r\n12 Rue Goethe\r\n67000 Strasbourg",
@@ -343,7 +343,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 25,
+    "pk": 30,
     "fields": {
       "name": "Bureau des Arts de l'Ecole de Management de Strasbourg",
       "address": "EM Strasbourg\r\n61 Avenue de la Forêt Noire\r\n67000 Strasbourg",
@@ -361,7 +361,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 26,
+    "pk": 31,
     "fields": {
       "name": "Club AES Strasbourg",
       "address": "Faculté de Droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -379,7 +379,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 27,
+    "pk": 32,
     "fields": {
       "name": "Amicale de Sciences Physiques",
       "address": "UFR de Physique et Ingénierie\r\n3-5 Rue de l'Université\r\n67000 Strasbourg",
@@ -397,7 +397,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 28,
+    "pk": 33,
     "fields": {
       "name": "Amicale Des Sciences",
       "address": "Institut Le Bel\r\n4 Rue Blaise Pascal\r\n67000 Strasbourg",
@@ -415,7 +415,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 29,
+    "pk": 34,
     "fields": {
       "name": "CYCLOPE",
       "address": "Faculté des Sciences de l'Education\r\n7 Rue de l'Université\r\n67000 Strasbourg",
@@ -433,7 +433,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 30,
+    "pk": 35,
     "fields": {
       "name": "Association Strasbourgeoise des CMI",
       "address": "UFR de Mathématiques & d'Informatique\r\n7 Rue René Descartes\r\n67000 Strasbourg",
@@ -451,7 +451,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 31,
+    "pk": 36,
     "fields": {
       "name": "Association des Masters d'Affaires Publiques de l'IEP de Strasbourg",
       "address": "IEP Strasbourg\r\n47 Avenue de la Forêt Noire",
@@ -469,7 +469,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 32,
+    "pk": 37,
     "fields": {
       "name": "Comité des Etudiants en Pharmacie Industrielle de Strasbourg",
       "address": "Faculté de Pharmacie\r\n74 Route du Rhin\r\n67400 Illkirch",
@@ -487,7 +487,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 33,
+    "pk": 38,
     "fields": {
       "name": "Association des Juristes Internationalistes de Strasbourg",
       "address": "Faculté de Droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -505,7 +505,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 34,
+    "pk": 39,
     "fields": {
       "name": "Association Culturelle des Juristes",
       "address": "Faculté de droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -523,7 +523,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 35,
+    "pk": 40,
     "fields": {
       "name": "Association des Etudiants et Stagiaires Sénégalais de Strasbourg",
       "address": "Maison des Associations\r\n1 Place des Orphelins\r\n67000 Strasbourg",
@@ -541,7 +541,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 36,
+    "pk": 41,
     "fields": {
       "name": "Association des Etudiants Camerounais de Strasbourg",
       "address": "",
@@ -559,7 +559,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 37,
+    "pk": 42,
     "fields": {
       "name": "Association des Docteurs et Doctorants d'Alsace",
       "address": "Institut Le Bel\r\n4 Rue Blaise Pascal\r\n67000 Strasbourg",
@@ -577,7 +577,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 38,
+    "pk": 43,
     "fields": {
       "name": "Génépi Strasbourg / Genepi",
       "address": "Centre Bernanos\r\n30 rue du Maréchal Juin\r\n67000 Strasbourg",
@@ -595,7 +595,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 39,
+    "pk": 44,
     "fields": {
       "name": "La Cie UnHomme UnFemme",
       "address": "",
@@ -613,7 +613,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 40,
+    "pk": 45,
     "fields": {
       "name": "Association du Master Juriste Conformité/Compliance Officer",
       "address": "Faculté de Droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -631,7 +631,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 41,
+    "pk": 46,
     "fields": {
       "name": "Altern' & Go",
       "address": "",
@@ -649,7 +649,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 42,
+    "pk": 47,
     "fields": {
       "name": "Amicale des Etudiants en Philosophie de Strasbourg",
       "address": "Faculté de Philosophie\r\n7 Rue de l'Université\r\n67000 Strasbourg",
@@ -667,7 +667,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 43,
+    "pk": 48,
     "fields": {
       "name": "Étudiants Musulmans de France - Strasbourg",
       "address": "56 rue Gioberti 67200 Strasbourg",
@@ -685,7 +685,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 44,
+    "pk": 49,
     "fields": {
       "name": "Campus Vert Strasbourg",
       "address": "12 Rue de l'Université\r\n67000 Strasbourg",
@@ -703,7 +703,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 45,
+    "pk": 50,
     "fields": {
       "name": "Groupes Bibliques Universitaires d'Alsace",
       "address": "Un peu partout sur le campus :)",
@@ -721,7 +721,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 46,
+    "pk": 51,
     "fields": {
       "name": "Les Jeunes Européens - Strasbourg",
       "address": "25, Avenue du Général de Gaulle\r\n67000 STRASBOURG",
@@ -739,7 +739,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 47,
+    "pk": 52,
     "fields": {
       "name": "Association des Eleves du Master Politiques Européennes",
       "address": "",
@@ -757,7 +757,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 48,
+    "pk": 53,
     "fields": {
       "name": "Nouvelle Génération des Biotechnologistes",
       "address": "300 Boulevard Sébastien Brand\r\n67400 ILLKIRCH-GRAFFENSTADEN",
@@ -775,7 +775,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 49,
+    "pk": 54,
     "fields": {
       "name": "Ecole des Jeunes Orateurs",
       "address": "IEP Strasbourg\r\n47 Avenue de la Forêt Noire\r\n67000 Strasbourg",
@@ -793,7 +793,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 50,
+    "pk": 55,
     "fields": {
       "name": "Association des Amis du Musée Adolf Michaelis",
       "address": "Palais Universitaire\r\n9 Place de l'Université\r\n67000 Strasbourg",
@@ -811,7 +811,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 51,
+    "pk": 56,
     "fields": {
       "name": "AFGES, les étudiant-e-s d'Alsace",
       "address": "1 Place de l'Université\r\n67000 Strasbourg",
@@ -829,7 +829,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 52,
+    "pk": 57,
     "fields": {
       "name": "Amicale des Etudiants en Mathématiques",
       "address": "UFR de Mathématiques & Informatique\r\n7 Rue René Descartes\r\n67000 Strasbourg",
@@ -847,7 +847,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 53,
+    "pk": 58,
     "fields": {
       "name": "Association des Etudiants Vietnamiens à Strasbourg",
       "address": "Service de la vie universitaire\r\n22 Rue René Descartes\r\n67000 Strasbourg",
@@ -865,7 +865,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 54,
+    "pk": 59,
     "fields": {
       "name": "Association d'Ethnologie",
       "address": "Institut d'Ethonologie\r\n22 Rue René Descartes\r\n67000 Strasbourg",
@@ -883,7 +883,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 55,
+    "pk": 60,
     "fields": {
       "name": "Association des Etudiants en Droit",
       "address": "Faculté de Droit \r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -901,7 +901,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 56,
+    "pk": 61,
     "fields": {
       "name": "Amicale des Informaticiens de l'Université de Strasbourg",
       "address": "UFR de Mathématiques & d'Informatique\r\n7 Rue René Descartes\r\n67000 Strasbourg",
@@ -919,7 +919,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 57,
+    "pk": 62,
     "fields": {
       "name": "Bureau des Arts de Télécom Physique Strasbourg",
       "address": "Télécom Physique Strasbourg\r\n4 Boulevard Sébastien Brandt\r\n67400 Illkirch",
@@ -937,7 +937,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 58,
+    "pk": 63,
     "fields": {
       "name": "aPoGée Culture",
       "address": "IEP - Espace Schoepflin \r\n2A, rue de la Fonderie \r\n67000 Strasbourg",
@@ -955,7 +955,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 59,
+    "pk": 64,
     "fields": {
       "name": "L'Amicale de Psychologie de l'Université de Strasbourg",
       "address": "Faculté de Psychologie\r\n12 Rue Goethe\r\n67000 Strasbourg",
@@ -973,7 +973,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 60,
+    "pk": 65,
     "fields": {
       "name": "Stras'Diplomacy",
       "address": "Sciences Po Strasbourg\r\n47 Avenue de la Forêt Noire\r\n67000 Strasbourg",
@@ -991,7 +991,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 61,
+    "pk": 66,
     "fields": {
       "name": "La Théâtropée",
       "address": "",
@@ -1009,7 +1009,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 62,
+    "pk": 67,
     "fields": {
       "name": "Bureau des Arts de Sciences Po Strasbourg",
       "address": "IEP Strasbourg\r\n47 Avenue de la Forêt Noire\r\n67000 Strasbourg",
@@ -1027,7 +1027,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 63,
+    "pk": 68,
     "fields": {
       "name": "Orchestre Universitaire de Strasbourg",
       "address": "s/c AFGES\r\n1 place de l'Université\r\n67000 Strasbourg",
@@ -1045,7 +1045,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 64,
+    "pk": 69,
     "fields": {
       "name": "Association des Etudiants en Sciences Economiques de Strasbourg",
       "address": "Faculté de Sciences Economiques et de Gestion\r\n61 Avenue de la Foret Noire",
@@ -1063,7 +1063,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 65,
+    "pk": 70,
     "fields": {
       "name": "MediaDroit",
       "address": "Faculté de Droit\r\n1 Place d'Athènes\r\n67000 Strasbourg",
@@ -1081,7 +1081,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 66,
+    "pk": 71,
     "fields": {
       "name": "UNEF Strasbourg",
       "address": "Batiment Le Platane\r\nAllée René Capitant\r\n67000 Strasbourg",
@@ -1099,7 +1099,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 67,
+    "pk": 72,
     "fields": {
       "name": "Amicale des Lettres",
       "address": "Le Portique\r\n14 Rue René Descartes\r\n67000 Strasbourg",
@@ -1117,7 +1117,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 68,
+    "pk": 73,
     "fields": {
       "name": "Association des Etudiants en Sciences Historiques de Strasbourg",
       "address": "Palais Universitaire\r\n9 Place de l'Université\r\n67000 Strasbourg",
@@ -1135,7 +1135,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 69,
+    "pk": 74,
     "fields": {
       "name": "Amicale des Etudiants en Arts de Strasbourg",
       "address": "Le Portique\r\n14 Rue René Descartes\r\n67000 Strasbourg",
@@ -1153,7 +1153,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 70,
+    "pk": 75,
     "fields": {
       "name": "ArtScene",
       "address": "Le Portique\r\n14 Rue René Descartes\r\n67000 Strasbourg",
@@ -1171,7 +1171,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 71,
+    "pk": 76,
     "fields": {
       "name": "Asso test",
       "address": "Test",
@@ -1189,7 +1189,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 72,
+    "pk": 77,
     "fields": {
       "name": "Model United Nation Society Strasbourg",
       "address": "",
@@ -1207,7 +1207,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 73,
+    "pk": 78,
     "fields": {
       "name": "Eco Gestion Conseil / Junior Entreprise",
       "address": "61,avenue de la Forêt Noire 67 000 STRASBOURG",
@@ -1225,7 +1225,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 74,
+    "pk": 79,
     "fields": {
       "name": "Le Comprimé",
       "address": "74, route du Rhin\r\n67400 Illkirch-Graffenstaden",
@@ -1243,7 +1243,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 75,
+    "pk": 80,
     "fields": {
       "name": "DoXtra",
       "address": "46 boulevard de la victoire\r\n67000 Strasbourg",
@@ -1261,7 +1261,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 76,
+    "pk": 81,
     "fields": {
       "name": "Association Strasbourgeoise des Etudiants en Aménagement et Urbanisme",
       "address": "3 rue de l'Argonne - 67000 STRASBOURG",
@@ -1279,7 +1279,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 77,
+    "pk": 82,
     "fields": {
       "name": "AIESEC Strasbourg",
       "address": "",
@@ -1297,7 +1297,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 78,
+    "pk": 83,
     "fields": {
       "name": "Association des Musiciens et Artistes des Etudiants de l'Université de Strasbourg",
       "address": "",
@@ -1315,7 +1315,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 79,
+    "pk": 84,
     "fields": {
       "name": "European Geography Association Strasbourg",
       "address": "Faculté de Géographie et Aménagement\r\n3, rue de l'Argonne\r\n67000 Strasbourg",
@@ -1333,7 +1333,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 80,
+    "pk": 85,
     "fields": {
       "name": "Fédération des Associations Sportives des Instituts d'Etudes Politiques de France",
       "address": "",
@@ -1351,7 +1351,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 81,
+    "pk": 86,
     "fields": {
       "name": "Amicale Langues Etrangères Appliquées Strasbourg",
       "address": "22 rue René Descartes, 67000 Strasbourg",
@@ -1369,7 +1369,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 82,
+    "pk": 87,
     "fields": {
       "name": "Association des Etudiants du Foyer de l'Etudiant Catholique",
       "address": "",
@@ -1387,7 +1387,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 83,
+    "pk": 88,
     "fields": {
       "name": "Association Strasbourgeoise pour le Proche Orient Ancien",
       "address": "",
@@ -1405,7 +1405,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 84,
+    "pk": 89,
     "fields": {
       "name": "AMicale des Etudiants Sages-Femmes d'Alsace",
       "address": "",
@@ -1423,7 +1423,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 85,
+    "pk": 90,
     "fields": {
       "name": "Treffpunkt",
       "address": "22 rue René Descartes\r\n67000 STRASBOURG",
@@ -1441,7 +1441,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 86,
+    "pk": 91,
     "fields": {
       "name": "Action Humanitaire Etudiante UNISTRA",
       "address": "",
@@ -1459,7 +1459,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 87,
+    "pk": 92,
     "fields": {
       "name": "The European Law Student's Association",
       "address": "",
@@ -1477,7 +1477,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 88,
+    "pk": 93,
     "fields": {
       "name": "Amicale des étudiants en STAPS Strasbourg",
       "address": "",
@@ -1495,7 +1495,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 89,
+    "pk": 94,
     "fields": {
       "name": "Bureau des Etudiants de l'INSA Strasbourg",
       "address": "24 Boulevard de la Victoire\r\n67000 Strasbourg",
@@ -1513,7 +1513,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 90,
+    "pk": 95,
     "fields": {
       "name": "RideINSA",
       "address": "",
@@ -1531,7 +1531,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 91,
+    "pk": 96,
     "fields": {
       "name": "Club Vidéo de l'INSA Strasbourg",
       "address": "",
@@ -1549,7 +1549,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 92,
+    "pk": 97,
     "fields": {
       "name": "Amicale des Elèves Ingénieurs de l'Ecole Supérieure de Biotechnologie de Strasbourg",
       "address": "300 Boulevard Sébastien Brant\r\n67400 Illkirch Graffenstaden\r\nFrance",
@@ -1567,7 +1567,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 93,
+    "pk": 98,
     "fields": {
       "name": "Association Amicale des Etudiants en Chirurgie Dentaire de Strasbourg",
       "address": "8 Rue Sainte Elisabeth\r\n67000 Strasbourg",
@@ -1585,7 +1585,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 94,
+    "pk": 99,
     "fields": {
       "name": "LIMITE CHARTE ASSO UNISTRA CHARTE ASSO ALSACE",
       "address": "",
@@ -1603,7 +1603,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 95,
+    "pk": 100,
     "fields": {
       "name": "Amicale des Etudiants et Anciens de l'IUT de Haguenau",
       "address": "IUT de Haguenau \r\n30 Rue du Maire André Traband \r\n67500 Haguenau",
@@ -1621,7 +1621,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 96,
+    "pk": 101,
     "fields": {
       "name": "Amicale des Eleves et Etudiants Ivoiriens de Strasbourg",
       "address": "",
@@ -1639,7 +1639,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 97,
+    "pk": 102,
     "fields": {
       "name": "TestDD",
       "address": "22 Rue René Descartes",
@@ -1657,7 +1657,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 98,
+    "pk": 103,
     "fields": {
       "name": "Association des Bio Informaticiens et Structuralistes de Strasbourg",
       "address": "Chez Célia ENDERLIN\r\n4 quai du Bruckhof\r\n67100 STRASBOURG",
@@ -1675,7 +1675,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 99,
+    "pk": 104,
     "fields": {
       "name": "Association des Juristes du double diplôme UAM/UNISTRA",
       "address": "Faculté de Droit de l'Université de Strasbourg\r\n1, Place d'Athènes, Strasbourg, Grand Est 67045, France",
@@ -1693,7 +1693,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 100,
+    "pk": 105,
     "fields": {
       "name": "Amicale des étudiants de Master de micro biologie et virologie",
       "address": "Institut de Botanique \r\n28 rue Goethe\r\n67000 STRASBOURG",
@@ -1711,7 +1711,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 101,
+    "pk": 106,
     "fields": {
       "name": "FEMFEST",
       "address": "",
@@ -1729,7 +1729,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 102,
+    "pk": 107,
     "fields": {
       "name": "AMICALE ENGEES",
       "address": "",
@@ -1747,7 +1747,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 103,
+    "pk": 108,
     "fields": {
       "name": "ASSOCIATION SPORTIVE ENGEES",
       "address": "",
@@ -1765,7 +1765,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 104,
+    "pk": 109,
     "fields": {
       "name": "ASSOCIATION PROMOTION ENGEES",
       "address": "",
@@ -1783,7 +1783,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 105,
+    "pk": 110,
     "fields": {
       "name": "AQUAEME ENGEES",
       "address": "",
@@ -1801,7 +1801,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 106,
+    "pk": 111,
     "fields": {
       "name": "EAU MISSIONS ALSACE ENGEES",
       "address": "",
@@ -1819,7 +1819,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 107,
+    "pk": 112,
     "fields": {
       "name": "NATUR’ASTRAS ENGEES",
       "address": "",
@@ -1837,7 +1837,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 108,
+    "pk": 113,
     "fields": {
       "name": "TR MONDE ENGEES",
       "address": "",
@@ -1855,7 +1855,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 109,
+    "pk": 114,
     "fields": {
       "name": "INGENIEUR SANS FRONTIERES ENGEES",
       "address": "",
@@ -1873,7 +1873,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 110,
+    "pk": 115,
     "fields": {
       "name": "Bureau  des Arts ENGEES",
       "address": "",
@@ -1891,7 +1891,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 112,
+    "pk": 117,
     "fields": {
       "name": "Esperanza de Manana",
       "address": "",
@@ -1909,7 +1909,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 113,
+    "pk": 118,
     "fields": {
       "name": "SinBios",
       "address": "",
@@ -1927,7 +1927,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 114,
+    "pk": 119,
     "fields": {
       "name": "Choeur de Chambre de l'Université de Strasbourg",
       "address": "Portique - 14 rue Descartes - 67 000 STRASBOURG",
@@ -1945,7 +1945,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 115,
+    "pk": 120,
     "fields": {
       "name": "Association des Etudiants en Coproduction",
       "address": "",
@@ -1963,7 +1963,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 116,
+    "pk": 121,
     "fields": {
       "name": "Système Nerveux",
       "address": "",
@@ -1981,7 +1981,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 117,
+    "pk": 122,
     "fields": {
       "name": "Association Sportive de l'ECPM",
       "address": "",
@@ -1999,7 +1999,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 118,
+    "pk": 123,
     "fields": {
       "name": "Association Santé Strasbourg",
       "address": "",
@@ -2017,7 +2017,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 119,
+    "pk": 124,
     "fields": {
       "name": "iGEM Strasbourg",
       "address": "",
@@ -2035,7 +2035,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 120,
+    "pk": 125,
     "fields": {
       "name": "Association des Masters Professionnels du CEIPI",
       "address": "",
@@ -2053,7 +2053,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 121,
+    "pk": 126,
     "fields": {
       "name": "Tutorat Santé Strasbourg",
       "address": "Faculté de Médecine de Strasbourg\r\n4 rue Kirschleger\r\n67000 STRASBOURG",
@@ -2071,7 +2071,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 122,
+    "pk": 127,
     "fields": {
       "name": "Organisation des Jeunes pour l'Union Européenne et Africaine",
       "address": "1 Place des Orphelins 67000 - Strasbourg",
@@ -2089,7 +2089,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 123,
+    "pk": 128,
     "fields": {
       "name": "Association des Elèves Ingénieurs de l'ECPM",
       "address": "25 Rue Becquerel, 67087 Strasbourg",
@@ -2107,7 +2107,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 124,
+    "pk": 129,
     "fields": {
       "name": "MED'Advice",
       "address": "",
@@ -2125,7 +2125,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 125,
+    "pk": 130,
     "fields": {
       "name": "Le Groupe des Amicalistes de la Formation et de l'Éducation",
       "address": "141, avenue de colmar, 67000 Strasbourg",
@@ -2143,7 +2143,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 126,
+    "pk": 131,
     "fields": {
       "name": "Demostratif",
       "address": "",
@@ -2161,7 +2161,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 127,
+    "pk": 132,
     "fields": {
       "name": "Association Dionysos à Galien",
       "address": "",
@@ -2179,7 +2179,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 128,
+    "pk": 133,
     "fields": {
       "name": "Le Parlement des Etudiants de Strasbourg",
       "address": "",
@@ -2197,7 +2197,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 130,
+    "pk": 135,
     "fields": {
       "name": "Association des Etudiants Juristes d'Affaire de Strasbourg - DJCE",
       "address": "Faculté de Droit, de Sciences Politiques et de Gestion – 1 place d’Athènes, BP66 – 67045 Strasbourg Cedex",
@@ -2215,7 +2215,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 131,
+    "pk": 136,
     "fields": {
       "name": "Réseau des Etudiant.es en Santé des Hôpitaux Universitaires de Strasbourg",
       "address": "",
@@ -2233,7 +2233,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 132,
+    "pk": 137,
     "fields": {
       "name": "Association des Jeunes Chercheurs d'ICube",
       "address": "Association des Jeunes Chercheurs d'ICube\r\nLaboratoire ICube\r\n300 boulevard Sebastien Brant\r\nIllkirch-Graffenstaden 67412",
@@ -2251,7 +2251,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 133,
+    "pk": 138,
     "fields": {
       "name": "PLANTAGO",
       "address": "28 rue Goethe \r\n67000 STRASBOURG",
@@ -2269,7 +2269,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 134,
+    "pk": 139,
     "fields": {
       "name": "Association Sapiens",
       "address": "",
@@ -2287,7 +2287,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 135,
+    "pk": 140,
     "fields": {
       "name": "Orchestre Harmonie des Jeunes de Strasbourg",
       "address": "",
@@ -2305,7 +2305,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 136,
+    "pk": 141,
     "fields": {
       "name": "Les Pygmalions",
       "address": "14, allée Spach",
@@ -2323,7 +2323,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 137,
+    "pk": 142,
     "fields": {
       "name": "Collectif de Solidarité Mondiale des étudiants Orthophonistes Strasbourgeois",
       "address": "",
@@ -2341,7 +2341,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 138,
+    "pk": 143,
     "fields": {
       "name": "Association des étudiants et ex-etudiants en journalisme",
       "address": "",
@@ -2359,7 +2359,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 139,
+    "pk": 144,
     "fields": {
       "name": "Chipo'Zik",
       "address": "1, rue Alfred Werner - 68093 MULHOUSE cedex",
@@ -2377,7 +2377,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 140,
+    "pk": 145,
     "fields": {
       "name": "Bureau des Etudiants et post-doctorants de l'IGBMC",
       "address": "1 Rue Laurent Fries, 67400 Illkirch-Graffenstaden",
@@ -2395,7 +2395,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 141,
+    "pk": 146,
     "fields": {
       "name": "Association StraMUN",
       "address": "",
@@ -2413,7 +2413,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 142,
+    "pk": 147,
     "fields": {
       "name": "Le Labo",
       "address": "18, rue des frères Lumière - Mulhouse",
@@ -2431,7 +2431,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 143,
+    "pk": 148,
     "fields": {
       "name": "All in Cosmetics and Perfumes",
       "address": "3, rue Alfred Werner - Mulhouse",
@@ -2449,7 +2449,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 144,
+    "pk": 149,
     "fields": {
       "name": "Association Junior Études Traductions Techniques et Scientifiques",
       "address": "10, rue des Frères Lumière 68093 MULHOUSE CEDEX",
@@ -2467,7 +2467,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 145,
+    "pk": 150,
     "fields": {
       "name": "Le Bateau Livre",
       "address": "10, rue des frères Lumière - Mulhouse",
@@ -2485,7 +2485,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 146,
+    "pk": 151,
     "fields": {
       "name": "Hérodote Histoire et Culture",
       "address": "16 rue de la Fonderie 68 093 MULHOUSE Cedex",
@@ -2503,7 +2503,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 147,
+    "pk": 152,
     "fields": {
       "name": "RadioActive",
       "address": "",
@@ -2521,7 +2521,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 148,
+    "pk": 153,
     "fields": {
       "name": "Association Des Etudiants de la Fonderie",
       "address": "16 rue de la Fonderie - Mulhouse",
@@ -2539,7 +2539,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 149,
+    "pk": 154,
     "fields": {
       "name": "Enscmulticolore",
       "address": "3 rue Alfred Wermer 68200 Mulhouse",
@@ -2557,7 +2557,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 150,
+    "pk": 155,
     "fields": {
       "name": "L'Agora",
       "address": "16 rue de la Fonderie 68100 Mulhouse",
@@ -2575,7 +2575,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 151,
+    "pk": 156,
     "fields": {
       "name": "Get'In",
       "address": "10 Rue des Frères Lumière, 68100 Mulhouse",
@@ -2593,7 +2593,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 152,
+    "pk": 157,
     "fields": {
       "name": "Association des élèves de l'école nationale superieure de chimie de Mulhouse - ENSCMu",
       "address": "3 rue Alfred Werner - 68093 MULHOUSE",
@@ -2611,7 +2611,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 153,
+    "pk": 158,
     "fields": {
       "name": "Connexion Entreprise",
       "address": "",
@@ -2629,7 +2629,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 154,
+    "pk": 159,
     "fields": {
       "name": "TerrESStre",
       "address": "16, rue de la Fonderie - MULHOUSE",
@@ -2647,7 +2647,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 155,
+    "pk": 160,
     "fields": {
       "name": "BDE ENSISA",
       "address": "11, rue des frères lumières 68200 Mulhouse",
@@ -2665,7 +2665,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 156,
+    "pk": 161,
     "fields": {
       "name": "Jeune Ballet Universitaire de Strasbourg",
       "address": "14 Rue rené Descartes,\r\n67084 Strasbourg CEDEX",
@@ -2683,7 +2683,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 157,
+    "pk": 162,
     "fields": {
       "name": "Le Phare du rhin",
       "address": "",
@@ -2701,7 +2701,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 158,
+    "pk": 163,
     "fields": {
       "name": "Laboratoire Audiovisuel Strasbourgeois",
       "address": "14 rue René Descartes - Faculté des Arts - Bâtiment Le Portique, 67000, Strasbourg",
@@ -2719,7 +2719,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 159,
+    "pk": 164,
     "fields": {
       "name": "Humani'Care Strasbourg",
       "address": "",
@@ -2737,7 +2737,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 160,
+    "pk": 165,
     "fields": {
       "name": "Mouvement associatif des étudiants en recherche et intervention sociale",
       "address": "",
@@ -2755,7 +2755,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 161,
+    "pk": 166,
     "fields": {
       "name": "Association des étudiants Caweb",
       "address": "",
@@ -2773,7 +2773,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 162,
+    "pk": 167,
     "fields": {
       "name": "BUREAU DES ETUDIANTS DE TELECOM PHYSIQUE STRASBOURG",
       "address": "",
@@ -2791,7 +2791,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 163,
+    "pk": 168,
     "fields": {
       "name": "ASSOCIATION STRASBOURGEOISE DES ETUDIANTS EN ORTHOPTIE",
       "address": "",
@@ -2809,7 +2809,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 164,
+    "pk": 169,
     "fields": {
       "name": "Club OEnologie TPS",
       "address": "",
@@ -2827,7 +2827,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 166,
+    "pk": 171,
     "fields": {
       "name": "ADEMOS",
       "address": "",
@@ -2845,7 +2845,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 167,
+    "pk": 172,
     "fields": {
       "name": "Association Amicale des Étudiants et Anciens Étudiants du Département Informatique",
       "address": "",
@@ -2863,7 +2863,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 168,
+    "pk": 173,
     "fields": {
       "name": "STRAS BOUM BOUM",
       "address": "",
@@ -2881,7 +2881,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 169,
+    "pk": 174,
     "fields": {
       "name": "Collectif Arc En Ci.Elles",
       "address": "",
@@ -2899,7 +2899,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 170,
+    "pk": 175,
     "fields": {
       "name": "Prenons la Une - antenne du CUEJ",
       "address": "",
@@ -2917,7 +2917,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 171,
+    "pk": 176,
     "fields": {
       "name": "Association des étudiants en ingénierie du patrimoine",
       "address": "",
@@ -2935,7 +2935,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 172,
+    "pk": 177,
     "fields": {
       "name": "Association du M2 Contrats publics-Commande publique",
       "address": "",
@@ -2953,7 +2953,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 173,
+    "pk": 178,
     "fields": {
       "name": "Association du M2 Droit bancaire et financier",
       "address": "",
@@ -2971,7 +2971,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 174,
+    "pk": 179,
     "fields": {
       "name": "Association du M2 Droit pénal et sciences criminelles",
       "address": "",
@@ -2989,7 +2989,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 175,
+    "pk": 180,
     "fields": {
       "name": "NUMISTRA",
       "address": "",
@@ -3007,7 +3007,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 176,
+    "pk": 181,
     "fields": {
       "name": "Association des étudiants en droit public de Strasbourg",
       "address": "",
@@ -3025,7 +3025,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 177,
+    "pk": 182,
     "fields": {
       "name": "Association des Masters de Droit européen de Strasbourg : les Copains Européens",
       "address": "",
@@ -3043,7 +3043,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 178,
+    "pk": 183,
     "fields": {
       "name": "Strasbourg Chimie Service ECPM",
       "address": "",
@@ -3061,7 +3061,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 179,
+    "pk": 184,
     "fields": {
       "name": "EM Spirit",
       "address": "",
@@ -3079,7 +3079,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 180,
+    "pk": 185,
     "fields": {
       "name": "Bureau des Elèves EM Strasbourg",
       "address": "",
@@ -3097,7 +3097,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 181,
+    "pk": 186,
     "fields": {
       "name": "Europe Etudes (JE)",
       "address": "",
@@ -3115,7 +3115,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 182,
+    "pk": 187,
     "fields": {
       "name": "Bureau de l'Humanitaire EM Strasbourg",
       "address": "",
@@ -3133,7 +3133,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 183,
+    "pk": 188,
     "fields": {
       "name": "Bureau des Sports (Team Challenge) EM Strasbourg",
       "address": "",
@@ -3151,7 +3151,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 184,
+    "pk": 189,
     "fields": {
       "name": "Bureau de la Presse EM Strasbourg",
       "address": "",
@@ -3169,7 +3169,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 185,
+    "pk": 190,
     "fields": {
       "name": "Bureau de l'International EM Strasbourg",
       "address": "",
@@ -3187,7 +3187,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 186,
+    "pk": 191,
     "fields": {
       "name": "Polemics",
       "address": "",
@@ -3205,7 +3205,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 187,
+    "pk": 192,
     "fields": {
       "name": "Bureau du Multimédia EM Strasbourg",
       "address": "",
@@ -3223,7 +3223,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 188,
+    "pk": 193,
     "fields": {
       "name": "Bureau des 3 Valeurs",
       "address": "",
@@ -3241,7 +3241,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 189,
+    "pk": 194,
     "fields": {
       "name": "Job Services",
       "address": "",
@@ -3259,7 +3259,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 190,
+    "pk": 195,
     "fields": {
       "name": "Start'EM",
       "address": "",
@@ -3277,7 +3277,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 191,
+    "pk": 196,
     "fields": {
       "name": "Master Comptabilité Contrôle Audit",
       "address": "",
@@ -3295,7 +3295,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 192,
+    "pk": 197,
     "fields": {
       "name": "Bureau des Elèves Bachelor Affaires Internationales EM Strasbourg",
       "address": "",
@@ -3313,7 +3313,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 193,
+    "pk": 198,
     "fields": {
       "name": "TERRA NOSTRA",
       "address": "",
@@ -3331,7 +3331,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 194,
+    "pk": 199,
     "fields": {
       "name": "STUDENT CHAPTER",
       "address": "",
@@ -3349,7 +3349,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 195,
+    "pk": 200,
     "fields": {
       "name": "Bureau des Etudiants EOST",
       "address": "",
@@ -3367,7 +3367,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 196,
+    "pk": 201,
     "fields": {
       "name": "Association Géosciences Pour Tous",
       "address": "",
@@ -3385,7 +3385,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 197,
+    "pk": 202,
     "fields": {
       "name": "Ingénieurs Sans Frontières",
       "address": "",
@@ -3403,7 +3403,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 198,
+    "pk": 203,
     "fields": {
       "name": "Association Unique des Masters en Economie et Gestion",
       "address": "",
@@ -3421,7 +3421,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 199,
+    "pk": 204,
     "fields": {
       "name": "Alter'Bureau",
       "address": "",
@@ -3439,7 +3439,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 200,
+    "pk": 205,
     "fields": {
       "name": "Association des étudiants du Master droit de l'économie et de la régulation en Europe",
       "address": "",
@@ -3457,7 +3457,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 201,
+    "pk": 206,
     "fields": {
       "name": "Association pour l'étude de la promotion de l'administration locale en Europe",
       "address": "",
@@ -3475,7 +3475,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 202,
+    "pk": 207,
     "fields": {
       "name": "Association du Master Europe de Sciences Po Strasbourg",
       "address": "",
@@ -3493,7 +3493,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 203,
+    "pk": 208,
     "fields": {
       "name": "Association universitaire de l'Institut d'Etudes Politiques de l'Université de Strasbourg",
       "address": "",
@@ -3511,7 +3511,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 204,
+    "pk": 209,
     "fields": {
       "name": "Bureau des Elèves de Sciences Po Strasbourg",
       "address": "",
@@ -3529,7 +3529,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 205,
+    "pk": 210,
     "fields": {
       "name": "Bureau des Sports de Sciences Po Strasbourg",
       "address": "",
@@ -3547,7 +3547,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 206,
+    "pk": 211,
     "fields": {
       "name": "Bureau Inter-Associatif de Sciences Po Strasbourg",
       "address": "",
@@ -3565,7 +3565,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 207,
+    "pk": 212,
     "fields": {
       "name": "Génération UE",
       "address": "",
@@ -3583,7 +3583,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 208,
+    "pk": 213,
     "fields": {
       "name": "Hémicycle Etudiant",
       "address": "",
@@ -3601,7 +3601,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 209,
+    "pk": 214,
     "fields": {
       "name": "Master CPI",
       "address": "",
@@ -3619,7 +3619,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 210,
+    "pk": 215,
     "fields": {
       "name": "Master of International Relations' Association",
       "address": "",
@@ -3637,7 +3637,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 211,
+    "pk": 216,
     "fields": {
       "name": "Oenopo",
       "address": "",
@@ -3655,7 +3655,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 212,
+    "pk": 217,
     "fields": {
       "name": "Propos",
       "address": "",
@@ -3673,7 +3673,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 213,
+    "pk": 218,
     "fields": {
       "name": "Sciences Po Forum",
       "address": "",
@@ -3691,7 +3691,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 214,
+    "pk": 219,
     "fields": {
       "name": "Sciences Po Strasbourg Conseil",
       "address": "",
@@ -3709,7 +3709,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 215,
+    "pk": 220,
     "fields": {
       "name": "OCCE 68 (Le Fenec)",
       "address": "",
@@ -3727,7 +3727,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 216,
+    "pk": 221,
     "fields": {
       "name": "Amicale des Etudiants de l'IUT Louis Pasteur",
       "address": "",
@@ -3745,7 +3745,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 217,
+    "pk": 222,
     "fields": {
       "name": "BDE Chimie",
       "address": "",
@@ -3763,7 +3763,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 218,
+    "pk": 223,
     "fields": {
       "name": "BDE Information Communication",
       "address": "",
@@ -3781,7 +3781,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 219,
+    "pk": 224,
     "fields": {
       "name": "BDE Technique de Communication",
       "address": "",
@@ -3799,7 +3799,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 220,
+    "pk": 225,
     "fields": {
       "name": "Association des étudiants du département de relations internationales et management de clusters",
       "address": "",
@@ -3817,7 +3817,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 221,
+    "pk": 226,
     "fields": {
       "name": "Amicale Strasbourgeoise des Etudiants en Actuariat",
       "address": "",
@@ -3835,7 +3835,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 222,
+    "pk": 227,
     "fields": {
       "name": "Amicale des Biostatisticiens de Strasbourg",
       "address": "",
@@ -3853,7 +3853,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 223,
+    "pk": 228,
     "fields": {
       "name": "Association du Master Immunologie et Inflammation de Strasbourg",
       "address": "",
@@ -3871,7 +3871,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 224,
+    "pk": 229,
     "fields": {
       "name": "Mouvement Associatif des Sciences Sociales de Strasbourg",
       "address": "",
@@ -3889,7 +3889,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 225,
+    "pk": 230,
     "fields": {
       "name": "Amicale des étudiants en théologie catholique",
       "address": "",
@@ -3907,7 +3907,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 226,
+    "pk": 231,
     "fields": {
       "name": "Amicale des étudiants en théologie protestante de Strasbourg",
       "address": "",
@@ -3925,7 +3925,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 227,
+    "pk": 232,
     "fields": {
       "name": "Physique Strasbourg Ingénierie - Junior Entreprise TPS",
       "address": "",
@@ -3943,7 +3943,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 228,
+    "pk": 233,
     "fields": {
       "name": "Bureau des Fêtes de Télécom Physique Strasbourg",
       "address": "",
@@ -3961,7 +3961,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 229,
+    "pk": 234,
     "fields": {
       "name": "Bureau de l'Humani'Terre TPS",
       "address": "",
@@ -3979,7 +3979,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 230,
+    "pk": 235,
     "fields": {
       "name": "Bureau des Sports de Télécom Physique Strasbourg",
       "address": "",
@@ -3997,7 +3997,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 231,
+    "pk": 236,
     "fields": {
       "name": "Gala Association TPS",
       "address": "",
@@ -4015,7 +4015,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 232,
+    "pk": 237,
     "fields": {
       "name": "Info Télécom Strasbourg TPS",
       "address": "",
@@ -4033,7 +4033,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 233,
+    "pk": 238,
     "fields": {
       "name": "Media Physique Strasbourg TPS",
       "address": "",
@@ -4051,7 +4051,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 234,
+    "pk": 239,
     "fields": {
       "name": "Robot Télécom Strasbourg TPS",
       "address": "",
@@ -4069,7 +4069,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 235,
+    "pk": 240,
     "fields": {
       "name": "Association des Anciens Elèves TPS",
       "address": "",
@@ -4087,7 +4087,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 236,
+    "pk": 241,
     "fields": {
       "name": "Hasard Gris",
       "address": "",
@@ -4105,7 +4105,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 237,
+    "pk": 242,
     "fields": {
       "name": "L'Association étudiante Robert Schuman (Robert Schuman Argentorata)",
       "address": "",
@@ -4123,7 +4123,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 238,
+    "pk": 243,
     "fields": {
       "name": "Association guinéenne des étudiants de Strasbourg",
       "address": "",
@@ -4141,7 +4141,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 239,
+    "pk": 244,
     "fields": {
       "name": "Etudiants Béninois de Strasbourg",
       "address": "",
@@ -4159,7 +4159,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 240,
+    "pk": 245,
     "fields": {
       "name": "Erasmus Student Network",
       "address": "",
@@ -4177,7 +4177,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 242,
+    "pk": 247,
     "fields": {
       "name": "BDE Genie Civil",
       "address": "",
@@ -4195,7 +4195,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 243,
+    "pk": 248,
     "fields": {
       "name": "KRUJOK",
       "address": "",
@@ -4213,7 +4213,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 244,
+    "pk": 249,
     "fields": {
       "name": "Lien entre les Étudiants du Magistère de Mathématiques",
       "address": "17 Rue de Metzeral 67100 STRASBOURG.",
@@ -4231,7 +4231,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 245,
+    "pk": 250,
     "fields": {
       "name": "BUREAU DES ETUDIANTS CPES",
       "address": "",
@@ -4249,7 +4249,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 246,
+    "pk": 251,
     "fields": {
       "name": "Regroupement des Etudiants Infirmiers de Sélestat Obernai",
       "address": "",
@@ -4267,7 +4267,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 247,
+    "pk": 252,
     "fields": {
       "name": "PARAMEDICS MULHOUSE",
       "address": "",
@@ -4285,7 +4285,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 248,
+    "pk": 253,
     "fields": {
       "name": "Association des étudiants en soins infirmiers de Strasbourg IFSI St Vincent",
       "address": "",
@@ -4303,7 +4303,7 @@
   },
   {
     "model": "associations.association",
-    "pk": 249,
+    "pk": 254,
     "fields": {
       "name": "Amicale Des Etudiant·e·s en Soins Infirmiers d'Erstein",
       "address": "",

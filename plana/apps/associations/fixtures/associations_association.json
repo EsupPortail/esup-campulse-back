@@ -94,5 +94,75 @@
       "is_public": false,
       "is_enabled": false
     }
+  },
+  {
+    "model": "associations.association",
+    "pk": 6,
+    "fields": {
+      "name": "Association Hors Site UHA",
+      "acronym": "AssoHorsSiteUHA",
+      "email": "asso-hors-site-uha@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 3,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 7,
+    "fields": {
+      "name": "Association Hors Site INSA",
+      "acronym": "AssoHorsSiteINSA",
+      "email": "asso-hors-site-insa@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 4,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 8,
+    "fields": {
+      "name": "Association Hors Site HEAR",
+      "acronym": "AssoHorsSiteHEAR",
+      "email": "asso-hors-site-hear@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 5,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 9,
+    "fields": {
+      "name": "Association Hors Site ENGEES",
+      "acronym": "AssoHorsSiteENGEES",
+      "email": "asso-hors-site-engees@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 6,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 10,
+    "fields": {
+      "name": "Association Hors Site ENSAS",
+      "acronym": "AssoHorsSiteENSAS",
+      "email": "asso-hors-site-ensas@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 7,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
   }
 ]
