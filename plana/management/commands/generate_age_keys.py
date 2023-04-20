@@ -28,8 +28,8 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        private_key = self._key_path("age-private-key.key")
-        public_key = self._key_path("age-public-key.key")
+        private_key = self._key_path("age-private-key.pem")
+        public_key = self._key_path("age-public-key.pem")
         if private_key.exists() and private_key.is_file():
             if options.get("keep_keys", False):
                 self.stdout.write(self.style.NOTICE(_("Keys not replaced")))
