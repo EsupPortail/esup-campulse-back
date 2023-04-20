@@ -4,6 +4,16 @@ from pathlib import Path
 
 from .permissions import *
 
+
+def load_key(keyfile):
+    try:
+        keyfile = SITE_ROOT / "keys" / keyfile
+        with open(keyfile, "rb") as f:
+            return f.read()
+    except FileNotFoundError:
+        return b""
+
+
 ######################
 # Path configuration #
 ######################
@@ -460,7 +470,8 @@ AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
 S3_LOGO_FILEPATH = 'associations_logos'
 S3_TEMPLATES_FILEPATH = 'associations_documents_templates'
 S3_DOCUMENTS_FILEPATH = 'associations_documents'
-
+AGE_PUBLIC_KEY = load_key("age-public-key.key")
+AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 ##################
 # AUTHENTICATION #
@@ -503,16 +514,6 @@ SOCIALACCOUNT_PROVIDERS = {
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "plana-auth"
 JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
-
-
-def load_key(keyfile):
-    try:
-        keyfile = SITE_ROOT / "keys" / keyfile
-        with open(keyfile, "rb") as f:
-            return f.read()
-    except FileNotFoundError:
-        return b""
-
 
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",

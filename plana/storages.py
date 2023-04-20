@@ -5,11 +5,12 @@ https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/stora
 """
 from io import BytesIO
 
+from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.fields.files import FieldFile
-from pyrage import decrypt, encrypt, ssh
+from pyrage import decrypt, encrypt, x25519
 from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
@@ -54,24 +55,22 @@ class PrivateFileStorage(UpdateACLStorage):
 class EncryptedPrivateFileStorage(PrivateFileStorage):
     def __init__(self):
         super().__init__()
+        self.age_public_key = settings.AGE_PUBLIC_KEY
+        self.age_private_key = settings.AGE_PRIVATE_KEY
 
         try:
-            id_rsa_pub_file = open("~/.ssh/id_ed25519.pub")
-            public_content = id_rsa_pub_file.read()
-            self.recipient = ssh.Recipient.from_str(public_content)
-            id_rsa_pub_file.close()
+            self.identity = x25519.Identity.from_str(
+                self.age_private_key.decode('utf-8').strip()
+            )
         except Exception as e:
-            raise ImproperlyConfigured(f"Public key not found : {e}")
+            raise ImproperlyConfigured(f"AGE private key not found : {e}")
 
         try:
-            id_rsa_file = open("~/.ssh/id_ed25519")
-            private_content = id_rsa_file.read()
-            self.identity = ssh.Identity.from_buffer(bytes(private_content, "utf-8"))
-            print("IDENTITY")
-            print(self.identity)
-            id_rsa_file.close()
+            self.recipient = x25519.Recipient.from_str(
+                self.age_public_key.decode('utf-8').strip()
+            )
         except Exception as e:
-            raise ImproperlyConfigured(f"Private key not found : {e}")
+            raise ImproperlyConfigured(f"AGE public key not found : {e}")
 
     def _open(self, name, mode='rb'):
         file = super()._open(name, mode)
@@ -83,26 +82,21 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         return super()._save(path, encrypted_file)
 
     def _encrypt(self, original_file):
-        encryption_result = encrypt(BytesIO(original_file), [self.recipient])
-        print("ENCRYPTION RESULT")
-        print(encryption_result)
+        file_content = original_file.file.read()
+        encryption_result = encrypt(file_content, [self.recipient])
         encrypted_file = InMemoryUploadedFile(
-            BytesIO(encryption_result.data),
+            BytesIO(encryption_result),
             original_file.field_name,
             original_file.name,
             original_file.content_type,
-            len(encryption_result.data),
+            len(encryption_result),
             original_file.charset,
             original_file.content_type_extra,
         )
-        print("ENCRYPTED FILE")
-        print(encrypted_file)
         return encrypted_file
 
     def _decrypt(self, original_file):
         decryption_result = decrypt(original_file, [self.identity])
-        print("DECRYPTION RESULT")
-        print(decryption_result)
         return decryption_result
 
 
