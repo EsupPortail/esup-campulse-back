@@ -14,6 +14,10 @@ unittest:
   tags:
     - python3.9
   script:
+    - mkdir keys
+    - python manage.py generate_jwt_keys
+    - touch keys/jwt-public-key.pem
+    - touch keys/jwt-private-key.pem
     - pip3 install tox
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
