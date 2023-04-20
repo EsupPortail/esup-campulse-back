@@ -25,8 +25,8 @@ unittest:
     - touch keys/jwt-public-key.pem
     - touch keys/jwt-private-key.pem
     - python manage.py generate_age_keys
-    - touch keys/age-public-key.pem
-    - touch keys/age-private-key.pem
+    - touch keys/age-public-key.key
+    - touch keys/age-private-key.key
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 

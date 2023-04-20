@@ -28,8 +28,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        private_key = self._key_path("age-private-key.pem")
-        public_key = self._key_path("age-public-key.pem")
+        global_keys = self._key_path("age-globals-keys.key")
+        private_key = self._key_path("age-private-key.key")
+        public_key = self._key_path("age-public-key.key")
         if private_key.exists() and private_key.is_file():
             if options.get("keep_keys", False):
                 self.stdout.write(self.style.NOTICE(_("Keys not replaced")))
@@ -40,7 +41,7 @@ class Command(BaseCommand):
             else:
                 raise CommandError(_("Key already exists"), returncode=1)
 
-        cmd = f"age-keygen > {str(private_key)}"
+        cmd = f"age-keygen > {str(global_keys)} && tail -n +3 {str(global_keys)} > {str(private_key)} && rm {str(global_keys)}"
         output = os.popen(cmd)
         self.stdout.write(output.read())
         self.stdout.write(self.style.SUCCESS(_(f"Key {str(private_key)} created")))
