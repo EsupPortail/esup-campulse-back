@@ -10,6 +10,10 @@ variables:
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
 
+before_script:
+  - apt-get update && apt-get install -y age
+
+
 unittest:
   stage: test
   tags:
