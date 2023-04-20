@@ -542,8 +542,8 @@ def sentry_init(environment):
 ###############
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "PlanA API",
-    "DESCRIPTION": "API for PlanA",
+    "TITLE": "PlanA / Opaline API",
+    "DESCRIPTION": "API for PlanA / Opaline",
     "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
@@ -577,6 +577,10 @@ AUTH_USER_MODEL = "users.User"
 
 # Avoid errors while testing the API with cURL.
 APPEND_SLASH = False
+
+# Site name as set in migration in contents module.
+MIGRATION_SITE_DOMAIN = "localhost:3000"
+MIGRATION_SITE_NAME = "Opaline"
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"

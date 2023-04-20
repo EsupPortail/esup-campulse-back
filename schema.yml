@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: PlanA API
+  title: PlanA / Opaline API
   version: 0.1.0
-  description: API for PlanA
+  description: API for PlanA / Opaline
 paths:
   /associations/:
     get:
@@ -319,6 +319,7 @@ paths:
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
+      - {}
       responses:
         '200':
           content:

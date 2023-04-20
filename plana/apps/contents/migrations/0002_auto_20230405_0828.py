@@ -7,8 +7,8 @@ from django.db import migrations
 def change_site_name(apps, schema_editor):
     Site = apps.get_model('sites', 'Site')
     site, _ = Site.objects.get_or_create(pk=settings.SITE_ID)
-    site.name = 'Opaline'
-    site.domain = 'plana-pprd.app.unistra.fr'
+    site.name = settings.MIGRATION_SITE_NAME
+    site.domain = settings.MIGRATION_SITE_DOMAIN
     site.save()
 
 

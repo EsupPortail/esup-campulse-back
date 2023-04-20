@@ -84,6 +84,7 @@ AWS_S3_ENDPOINT_URL = '{{ s3_endpoint }}'
 # Misc #
 ########
 
+MIGRATION_SITE_DOMAIN = "plana-test.app.unistra.fr"
 DEFAULT_FROM_EMAIL = "appli-plana-test@unistra.fr"
 
 # External APIs
