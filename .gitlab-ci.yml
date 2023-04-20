@@ -8,6 +8,7 @@ variables:
   POSTGRES_DB: plana_test
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
+  DJANGO_SETTINGS_MODULE: plana.settings.unittest
 
 unittest:
   stage: test
