@@ -126,6 +126,7 @@ class ProjectsViewsTests(TestCase):
         GET /projects/ .
 
         - A general manager user gets all projects.
+        - Search filters are available.
         """
         response = self.general_client.get("/projects/")
         projects_cnt = Project.objects.all().count()
@@ -145,6 +146,14 @@ class ProjectsViewsTests(TestCase):
             f"/projects/?association_id={association_id}"
         )
         projects_cnt = Project.objects.filter(association_id=association_id).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), projects_cnt)
+
+        project_status = "PROJECT_DRAFT"
+        response = self.general_client.get(
+            f"/projects/?project_status={project_status}"
+        )
+        projects_cnt = Project.objects.filter(project_status=project_status).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 

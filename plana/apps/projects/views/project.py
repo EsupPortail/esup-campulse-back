@@ -44,6 +44,12 @@ from plana.utils import send_mail
                 OpenApiParameter.QUERY,
                 description="Filter by Association ID.",
             ),
+            OpenApiParameter(
+                "project_status",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Project Status code.",
+            ),
         ],
     ),
 )
@@ -57,10 +63,13 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if self.request.method == "GET":
             user = self.request.query_params.get("user_id")
             association = self.request.query_params.get("association_id")
+            project_status = self.request.query_params.get("project_status")
             if user is not None and user != "":
                 queryset = queryset.filter(user_id=user)
             if association is not None and association != "":
                 queryset = queryset.filter(association_id=association)
+            if project_status is not None and project_status != "":
+                queryset = queryset.filter(project_status=project_status)
 
             if not self.request.user.has_perm("projects.view_project_all"):
                 user_associations_ids = AssociationUser.objects.filter(
