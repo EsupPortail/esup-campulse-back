@@ -56,3 +56,6 @@ pylint.json
 
 # Media local storage for now
 plana/media/
+
+# Keys
+keys/*
