@@ -109,9 +109,8 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         return encrypted_file
 
     def _decrypt(self, original_file):
-        file = open(original_file.file._file)
-        print(file)
-        decryption_result = decrypt(original_file, [self.identity])
+        file = original_file.file._file.read1()
+        decryption_result = decrypt(file, [self.identity])
         return decryption_result
 
 
