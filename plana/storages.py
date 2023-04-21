@@ -24,18 +24,6 @@ PUBLIC_CLASSES_NAMES = ["Association", "Document"]
 PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 
-class BinaryFileRenderer(BaseRenderer):
-    """Custom DRF renderer to serve file directly as a view Response. https://stackoverflow.com/a/49652011"""
-
-    media_type = 'application/octet-stream'
-    format = None
-    charset = None
-    render_style = 'binary'
-
-    def render(self, data, media_type=None, renderer_context=None):
-        return data
-
-
 class MediaStorage(S3Boto3Storage):
     location = "media"
 
@@ -109,8 +97,8 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         return encrypted_file
 
     def _decrypt(self, original_file):
-        file = original_file.file._file.read()
-        decryption_result = decrypt(file, [self.identity])  # ou file.read()
+        file = original_file.read()
+        decryption_result = decrypt(file, [self.identity])
         original_file.file._file = BytesIO(decryption_result)
         return original_file
 

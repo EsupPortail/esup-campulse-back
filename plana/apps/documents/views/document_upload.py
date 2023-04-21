@@ -18,7 +18,6 @@ from plana.apps.documents.serializers.document_upload import (
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser
-from plana.storages import BinaryFileRenderer
 
 
 @extend_schema_view(
@@ -285,7 +284,6 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
-    renderer_classes = [BinaryFileRenderer]
     serializer_class = DocumentUploadFileSerializer
 
     def get(self, request, *args, **kwargs):
@@ -320,18 +318,8 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
             )
 
         file = document_upload.path_file.open(mode="r+b")
-        # TODO Use Django FileResponse instead (but file is returned in a number format).
-        """
         return FileResponse(
-            file.read(),
+            file.open(),
             as_attachment=True,
             filename=document_upload.name,
-        )
-        """
-        return response.Response(
-            file.read(),
-            headers={
-                "Content-Disposition": f"attachment; filename='{document_upload.name}'"
-            },
-            content_type="application/pdf",
         )
