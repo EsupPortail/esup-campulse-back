@@ -11,6 +11,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.fields.files import FieldFile
 from pyrage import decrypt, encrypt, x25519
+from rest_framework.renderers import BaseRenderer
 from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField
@@ -23,6 +24,18 @@ PUBLIC_CLASSES_NAMES = ["Association", "Document"]
 PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 
+class BinaryFileRenderer(BaseRenderer):
+    """Custom DRF renderer to serve file directly as a view Response. https://stackoverflow.com/a/49652011"""
+
+    media_type = 'application/octet-stream'
+    format = None
+    charset = None
+    render_style = 'binary'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        return data
+
+
 class MediaStorage(S3Boto3Storage):
     location = "media"
 
@@ -31,7 +44,7 @@ class MediaStorage(S3Boto3Storage):
 
 
 class UpdateACLStorage(S3Boto3Storage):
-    # Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd
+    """Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
 
     def update_acl(self, name, acl=None):
         acl = acl or self.default_acl
@@ -96,6 +109,8 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         return encrypted_file
 
     def _decrypt(self, original_file):
+        file = open(original_file.file._file)
+        print(file)
         decryption_result = decrypt(original_file, [self.identity])
         return decryption_result
 

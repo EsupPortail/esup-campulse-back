@@ -10,9 +10,14 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from plana.apps.associations.models.association import Association
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.documents.serializers.document_upload import DocumentUploadSerializer
+from plana.apps.documents.serializers.document_upload import (
+    DocumentUploadCreateSerializer,
+    DocumentUploadFileSerializer,
+    DocumentUploadSerializer,
+)
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser
+from plana.storages import BinaryFileRenderer
 
 
 @extend_schema_view(
@@ -45,7 +50,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    serializer_class = DocumentUploadSerializer
 
     def get_queryset(self):
         queryset = DocumentUpload.objects.all()
@@ -71,6 +75,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(id__in=user_documents_ids)
 
         return queryset
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = DocumentUploadCreateSerializer
+        else:
+            self.serializer_class = DocumentUploadSerializer
+        return super().get_serializer_class()
 
     def get(self, request, *args, **kwargs):
         """Lists all documents uploads."""
@@ -263,3 +274,55 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
             )
 
         return self.destroy(request, *args, **kwargs)
+
+
+@extend_schema_view(
+    get=extend_schema(tags=["documents/uploads"]),
+)
+class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
+    """/documents/uploads/{id}/file route"""
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = DocumentUpload.objects.all()
+    renderer_classes = [BinaryFileRenderer]
+    serializer_class = DocumentUploadFileSerializer
+
+    def get(self, request, *args, **kwargs):
+        """Retrieves a document uploaded by a user."""
+        try:
+            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Document upload does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.has_perm("documents.view_documentupload_all") and (
+            (
+                document_upload.project_id is not None
+                and not request.user.can_edit_project(
+                    Project.objects.get(id=document_upload.project_id)
+                )
+            )
+            or (
+                document_upload.user_id is not None
+                and request.user.pk != document_upload.user_id
+            )
+            or (
+                document_upload.association_id is not None
+                and not request.user.is_in_association(document_upload.association_id)
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this uploaded document.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        with open(document_upload.path_file.file, "rb") as file:
+            return response.Response(
+                file.read(),
+                headers={
+                    "Content-Disposition": f"attachment; filename='{document_upload.name}'"
+                },
+                content_type="application/pdf",
+            )

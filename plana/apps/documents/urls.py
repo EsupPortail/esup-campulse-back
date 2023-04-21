@@ -3,6 +3,7 @@ from django.urls import path
 
 from .views.document import DocumentList, DocumentRetrieveUpdateDestroy
 from .views.document_upload import (
+    DocumentUploadFileRetrieve,
     DocumentUploadListCreate,
     DocumentUploadRetrieveDestroy,
 )
@@ -23,5 +24,10 @@ urlpatterns = [
         "uploads/<int:pk>",
         DocumentUploadRetrieveDestroy.as_view(),
         name="document_upload_retrieve_destroy",
+    ),
+    path(
+        "uploads/<int:pk>/file",
+        DocumentUploadFileRetrieve.as_view(),
+        name="document_upload_file_retrieve",
     ),
 ]
