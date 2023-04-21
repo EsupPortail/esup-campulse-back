@@ -448,6 +448,10 @@ pyjwt==2.6.0 ; python_version >= "3.8" and python_version < "3.11" \
 pyjwt[crypto]==2.6.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:69285c7e31fc44f68a1feb309e948e0df53259d579295e6cfe2b1792329f05fd \
     --hash=sha256:d83c3d892a77bbb74d3e1a2cfa90afaadb60945205d1095d9221f04466f64c14
+pyrage==1.0.3 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:32b63a06f138a1c231285c61f61a1800b7b894851b06cb763b7b35b18ccd2b11 \
+    --hash=sha256:37a8c1555f51b419a73759ce925f643e789802bba7bed5bbfbe11e99be610d49 \
+    --hash=sha256:9c554d7669539c0a7a870464faf55f0121c117339b1b0f57d6ca5eb85079c107
 pyrsistent==0.19.3 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:016ad1afadf318eb7911baa24b049909f7f3bb2c5b1ed7b6a8f21db21ea3faa8 \
     --hash=sha256:1a2994773706bbb4995c31a97bc94f1418314923bd1048c6d964837040376440 \

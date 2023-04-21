@@ -1696,6 +1696,19 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
+name = "pyrage"
+version = "1.0.3"
+description = "Python bindings for rage (age in Rust)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyrage-1.0.3-cp37-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:37a8c1555f51b419a73759ce925f643e789802bba7bed5bbfbe11e99be610d49"},
+    {file = "pyrage-1.0.3-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9c554d7669539c0a7a870464faf55f0121c117339b1b0f57d6ca5eb85079c107"},
+    {file = "pyrage-1.0.3-cp37-abi3-win_amd64.whl", hash = "sha256:32b63a06f138a1c231285c61f61a1800b7b894851b06cb763b7b35b18ccd2b11"},
+]
+
+[[package]]
 name = "pyrsistent"
 version = "0.19.3"
 description = "Persistent/Functional/Immutable data structures"
@@ -2052,14 +2065,14 @@ tornado = ["tornado (>=5)"]
 
 [[package]]
 name = "setuptools"
-version = "67.7.0"
+version = "67.7.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "setuptools-67.7.0-py3-none-any.whl", hash = "sha256:888be97fde8cc3afd60f7784e678fa29ee13c4e5362daa7104a93bba33646c50"},
-    {file = "setuptools-67.7.0.tar.gz", hash = "sha256:b7e53a01c6c654d26d2999ee033d8c6125e5fa55f03b7b193f937ae7ac999f22"},
+    {file = "setuptools-67.7.1-py3-none-any.whl", hash = "sha256:6f0839fbdb7e3cfef1fc38d7954f5c1c26bf4eebb155a55c9bf8faf997b9fb67"},
+    {file = "setuptools-67.7.1.tar.gz", hash = "sha256:bb16732e8eb928922eabaa022f881ae2b7cdcfaf9993ef1f5e841a96d32b8e0c"},
 ]
 
 [package.extras]
@@ -2507,4 +2520,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "eaf4d4d01c111611c4d6cf7180a55d683d3213611aaa6053e5236aaaa607011b"
+content-hash = "578682b9dcaafb16e662f6eddb0be070c32ab0fa1a762e9d0f0c30dc9757de42"

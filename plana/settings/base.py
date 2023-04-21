@@ -1,15 +1,26 @@
 from os import environ
-from os.path import abspath, basename, dirname, join, normpath
+from os.path import join, normpath
+from pathlib import Path
 
 from .permissions import *
+
+
+def load_key(keyfile):
+    try:
+        keyfile = SITE_ROOT / "keys" / keyfile
+        with open(keyfile, "rb") as f:
+            return f.read()
+    except FileNotFoundError:
+        return b""
+
 
 ######################
 # Path configuration #
 ######################
 
-DJANGO_ROOT = dirname(dirname(abspath(__file__)))
-SITE_ROOT = dirname(DJANGO_ROOT)
-SITE_NAME = basename(DJANGO_ROOT)
+DJANGO_ROOT = Path(__file__).resolve(strict=True).parent.parent
+SITE_ROOT = DJANGO_ROOT.parent
+SITE_NAME = DJANGO_ROOT.name
 
 
 #######################
@@ -459,7 +470,8 @@ AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
 S3_LOGO_FILEPATH = 'associations_logos'
 S3_TEMPLATES_FILEPATH = 'associations_documents_templates'
 S3_DOCUMENTS_FILEPATH = 'associations_documents'
-
+AGE_PUBLIC_KEY = load_key("age-public-key.key")
+AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 ##################
 # AUTHENTICATION #
@@ -502,6 +514,14 @@ SOCIALACCOUNT_PROVIDERS = {
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "plana-auth"
 JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
+
+SIMPLE_JWT = {
+    "ALGORITHM": "RS256",
+    "USER_ID_CLAIM": "user_id",
+    "USER_ID_FIELD": "id",
+    "SIGNING_KEY": load_key("jwt-private-key.pem"),
+    "VERIFYING_KEY": load_key("jwt-public-key.pem"),
+}
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
