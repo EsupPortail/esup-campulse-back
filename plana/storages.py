@@ -73,19 +73,19 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
 
         try:
             self.identity = x25519.Identity.from_str(
-                self.age_private_key.decode('utf-8').strip()
+                self.age_private_key.decode("utf-8").strip()
             )
         except Exception as e:
             raise ImproperlyConfigured(f"AGE private key not found : {e}")
 
         try:
             self.recipient = x25519.Recipient.from_str(
-                self.age_public_key.decode('utf-8').strip()
+                self.age_public_key.decode("utf-8").strip()
             )
         except Exception as e:
             raise ImproperlyConfigured(f"AGE public key not found : {e}")
 
-    def _open(self, name, mode='rb'):
+    def _open(self, name, mode="rb"):
         file = super()._open(name, mode)
         decrypted_file = self._decrypt(file)
         return decrypted_file
@@ -109,9 +109,10 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         return encrypted_file
 
     def _decrypt(self, original_file):
-        file = original_file.file._file.read1()
-        decryption_result = decrypt(file, [self.identity])
-        return decryption_result
+        file = original_file.file._file.read()
+        decryption_result = decrypt(file, [self.identity])  # ou file.read()
+        original_file.file._file = BytesIO(decryption_result)
+        return original_file
 
 
 class DynamicStorageFieldFile(FieldFile):

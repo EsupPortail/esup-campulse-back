@@ -1,6 +1,7 @@
 """Views directly linked to document uploads."""
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.http import FileResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -318,11 +319,19 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        with open(document_upload.path_file.file, "rb") as file:
-            return response.Response(
-                file.read(),
-                headers={
-                    "Content-Disposition": f"attachment; filename='{document_upload.name}'"
-                },
-                content_type="application/pdf",
-            )
+        file = document_upload.path_file.open(mode="r+b")
+        # TODO Use Django FileResponse instead (but file is returned in a number format).
+        """
+        return FileResponse(
+            file.read(),
+            as_attachment=True,
+            filename=document_upload.name,
+        )
+        """
+        return response.Response(
+            file.read(),
+            headers={
+                "Content-Disposition": f"attachment; filename='{document_upload.name}'"
+            },
+            content_type="application/pdf",
+        )
