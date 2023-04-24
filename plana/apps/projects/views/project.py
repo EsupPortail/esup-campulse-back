@@ -50,6 +50,12 @@ from plana.utils import send_mail
                 OpenApiParameter.QUERY,
                 description="Filter by Project Status code.",
             ),
+            OpenApiParameter(
+                "commission_dates",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Commission Dates linked to a project.",
+            ),
         ],
     ),
 )
@@ -64,12 +70,25 @@ class ProjectListCreate(generics.ListCreateAPIView):
             user = self.request.query_params.get("user_id")
             association = self.request.query_params.get("association_id")
             project_status = self.request.query_params.get("project_status")
+            commission_dates = self.request.query_params.get("commission_dates")
             if user is not None and user != "":
                 queryset = queryset.filter(user_id=user)
             if association is not None and association != "":
                 queryset = queryset.filter(association_id=association)
             if project_status is not None and project_status != "":
                 queryset = queryset.filter(project_status=project_status)
+            if commission_dates is not None and commission_dates != "":
+                commission_dates_ids = commission_dates.split(",")
+                commission_dates_ids = [
+                    commission_date_id
+                    for commission_date_id in commission_dates
+                    if commission_date_id != "" and commission_date_id.isdigit()
+                ]
+                queryset = queryset.filter(
+                    id__in=ProjectCommissionDate.objects.filter(
+                        project_id__in=commission_dates_ids
+                    ).values_list("project_id")
+                )
 
             if not self.request.user.has_perm("projects.view_project_all"):
                 user_associations_ids = AssociationUser.objects.filter(

@@ -157,6 +157,18 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
+        commission_dates = [2, 4]
+        response = self.general_client.get(
+            f"/projects/?commission_dates={','.join(str(x) for x in commission_dates)}"
+        )
+        projects_cnt = Project.objects.filter(
+            id__in=ProjectCommissionDate.objects.filter(
+                project_id__in=commission_dates
+            ).values_list("project_id")
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), projects_cnt)
+
     def test_post_project_anonymous(self):
         """
         POST /projects/ .
