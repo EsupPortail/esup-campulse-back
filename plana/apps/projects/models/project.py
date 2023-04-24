@@ -13,6 +13,18 @@ class Project(models.Model):
     planned_start_date = models.DateTimeField(_("Start date"), null=True)
     planned_end_date = models.DateTimeField(_("End date"), null=True)
     location = models.TextField(_("Location"), default="")
+    other_first_name = models.CharField(
+        _("Other first name"), max_length=150, default="", null=True
+    )
+    other_last_name = models.CharField(
+        _("Other last name"), max_length=150, default="", null=True
+    )
+    other_email = models.EmailField(
+        _("Other email"), max_length=150, default="", null=True
+    )
+    other_phone = models.CharField(
+        _("Other phone"), max_length=32, default="", null=True
+    )
     user = models.ForeignKey(
         User, verbose_name=_("User"), on_delete=models.CASCADE, null=True
     )

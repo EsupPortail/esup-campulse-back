@@ -3284,6 +3284,27 @@ components:
           type: string
           minLength: 1
           title: Adresse
+        other_first_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_last_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_email:
+          type: string
+          format: email
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_phone:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3413,6 +3434,23 @@ components:
         location:
           type: string
           title: Adresse
+        other_first_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        other_last_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        other_email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 150
+        other_phone:
+          type: string
+          nullable: true
+          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3650,6 +3688,27 @@ components:
           type: string
           minLength: 1
           title: Adresse
+        other_first_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_last_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_email:
+          type: string
+          format: email
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_phone:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 32
         user:
           type: integer
           nullable: true
