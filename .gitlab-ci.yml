@@ -20,7 +20,6 @@ unittest:
     - python3.9
   script:
     - pip3 install -r requirements/dev.txt
-    - mkdir keys
     - python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
     - touch keys/jwt-private-key.pem

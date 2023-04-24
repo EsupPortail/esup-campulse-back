@@ -151,8 +151,8 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             id__in=CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project=request.data["project"]
-                ).values_list("commission_date_id", flat=True)
-            ).values_list("commission_id", flat=True)
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
         ).values_list("id", flat=True)
         if commission_date.commission_id in commissions_with_project:
             return response.Response(

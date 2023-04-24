@@ -154,7 +154,7 @@ class AssociationUserViewsTests(TestCase):
         associations_user_institutions_cnt = AssociationUser.objects.filter(
             association_id__in=Association.objects.filter(
                 institution_id__in=institutions_ids
-            ).values_list("id", flat=True)
+            ).values_list("id")
         ).count()
         response_institutions_asso = self.manager_client.get(
             "/users/associations/?institutions=2,3,"

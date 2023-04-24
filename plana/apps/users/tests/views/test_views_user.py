@@ -131,7 +131,7 @@ class UserViewsTests(TestCase):
 
         associations_ids = Association.objects.filter(
             institution_id__in=institution_ids
-        ).values_list("id", flat=True)
+        ).values_list("id")
         links_cnt = AssociationUser.objects.filter(
             association_id__in=associations_ids
         ).count()
@@ -148,15 +148,15 @@ class UserViewsTests(TestCase):
             Q(
                 id__in=GroupInstitutionCommissionUser.objects.filter(
                     institution_id__isnull=True, commission_id__isnull=True
-                ).values_list("user_id", flat=True)
+                ).values_list("user_id")
             )
-            & ~Q(id__in=AssociationUser.objects.all().values_list("user_id", flat=True))
+            & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
         )
         commission_users_query = User.objects.filter(
             id__in=GroupInstitutionCommissionUser.objects.filter(
                 commission_id__isnull=False
-            ).values_list("user_id", flat=True)
-        ).values_list("id", flat=True)
+            ).values_list("user_id")
+        ).values_list("id")
 
         response_manager = self.manager_client.get("/users/?institutions=")
         content = json.loads(response_manager.content.decode("utf-8"))
@@ -167,10 +167,10 @@ class UserViewsTests(TestCase):
 
         associations_ids = Association.objects.filter(
             institution_id__in=[2, 3]
-        ).values_list("id", flat=True)
+        ).values_list("id")
         assos_users_query = AssociationUser.objects.filter(
             association_id__in=associations_ids
-        ).values_list("user_id", flat=True)
+        ).values_list("user_id")
 
         response_manager = self.manager_client.get("/users/?institutions=2,3,")
         content = json.loads(response_manager.content.decode("utf-8"))

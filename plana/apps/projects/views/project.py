@@ -313,7 +313,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             project_id=project.id,
             commission_date_id__in=CommissionDate.objects.filter(
                 submission_date__lte=datetime.datetime.today()
-            ).values_list("id", flat=True),
+            ).values_list("id"),
         ).count()
         if expired_project_commission_dates_count > 0:
             return response.Response(
@@ -336,7 +336,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     .exclude(
                         id__in=DocumentUpload.objects.filter(
                             project_id=project.id,
-                        ).values_list("document_id", flat=True)
+                        ).values_list("document_id")
                     )
                     .values_list("name", flat=True)
                 )
@@ -367,8 +367,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                         id__in=CommissionDate.objects.filter(
                             id__in=ProjectCommissionDate.objects.filter(
                                 project_id=project.id
-                            ).values_list("commission_date_id", flat=True)
-                        ).values_list("commission_id", flat=True),
+                            ).values_list("commission_date_id")
+                        ).values_list("commission_id"),
                         is_site=False,
                     )
                     context["association_name"] = association.name

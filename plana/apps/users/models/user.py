@@ -131,8 +131,8 @@ class User(AbstractUser):
                 group__id__in=Group.objects.filter(
                     id__in=GroupInstitutionCommissionUser.objects.filter(
                         user_id=self.pk
-                    ).values_list("group_id", flat=True)
-                ).values_list("id", flat=True),
+                    ).values_list("group_id")
+                ).values_list("id"),
                 codename=perm.split(".")[1],
             ).count()
             > 0

@@ -95,7 +95,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             queryset = queryset.filter(
                 association_id__in=Association.objects.filter(
                     institution_id__in=institutions_ids
-                ).values_list("id", flat=True)
+                ).values_list("id")
             )
 
         return queryset

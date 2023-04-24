@@ -27,10 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
     def get_permissions(self, user):
         """Return permissions linked to the user."""
         permissions = []
-        user_groups_ids = GroupInstitutionCommissionUser.objects.filter(
-            user_id=user.id
-        ).values("group_id")
-        groups = Group.objects.filter(id__in=user_groups_ids)
+        groups = Group.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
+                user_id=user.id
+            ).values_list("group_id")
+        )
         for group in groups:
             permissions = [
                 *permissions,

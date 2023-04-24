@@ -107,7 +107,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 is_validated_by_admin = to_bool(is_validated_by_admin)
                 email_validated_user_ids = EmailAddress.objects.filter(
                     verified=True
-                ).values_list("user_id", flat=True)
+                ).values_list("user_id")
                 queryset = queryset.filter(
                     is_validated_by_admin=is_validated_by_admin,
                     id__in=email_validated_user_ids,
@@ -116,7 +116,7 @@ class UserListCreate(generics.ListCreateAPIView):
             if is_cas is not None and is_cas != "":
                 is_cas = to_bool(is_cas)
                 cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
-                    "user_id", flat=True
+                    "user_id"
                 )
                 queryset = (
                     queryset.filter(id__in=cas_ids_list)
@@ -127,7 +127,7 @@ class UserListCreate(generics.ListCreateAPIView):
             if association_id is not None and association_id != "":
                 assos_users_query = AssociationUser.objects.filter(
                     association_id=association_id
-                ).values_list("user_id", flat=True)
+                ).values_list("user_id")
                 queryset = queryset.filter(id__in=assos_users_query)
 
             if institutions is not None:
@@ -135,19 +135,15 @@ class UserListCreate(generics.ListCreateAPIView):
                     Q(
                         id__in=GroupInstitutionCommissionUser.objects.filter(
                             institution_id__isnull=True, commission_id__isnull=True
-                        ).values_list("user_id", flat=True)
+                        ).values_list("user_id")
                     )
-                    & ~Q(
-                        id__in=AssociationUser.objects.all().values_list(
-                            "user_id", flat=True
-                        )
-                    )
+                    & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
                 )
                 commission_users_query = User.objects.filter(
                     id__in=GroupInstitutionCommissionUser.objects.filter(
                         commission_id__isnull=False
-                    ).values_list("user_id", flat=True)
-                ).values_list("id", flat=True)
+                    ).values_list("user_id")
+                ).values_list("id")
                 if institutions == "":
                     queryset = queryset.filter(
                         Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
@@ -165,10 +161,10 @@ class UserListCreate(generics.ListCreateAPIView):
 
                     associations_ids = Association.objects.filter(
                         institution_id__in=institutions_ids
-                    ).values_list("id", flat=True)
+                    ).values_list("id")
                     assos_users_query = AssociationUser.objects.filter(
                         association_id__in=associations_ids
-                    ).values_list("user_id", flat=True)
+                    ).values_list("user_id")
 
                     if check_other_users is True:
                         queryset = queryset.filter(

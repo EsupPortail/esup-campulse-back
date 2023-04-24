@@ -27,7 +27,7 @@ class Institution(models.Model):
             pk__in=apps.get_model("users.user")
             .objects.annotate(num_groups=models.Count("groupinstitutioncommissionuser"))
             .filter(num_groups__lt=2)
-            .values_list("id", flat=True)
+            .values_list("id")
         )
         query_to_return = default_institution_managers_query
         if better_institution_managers_query.count() > 0:

@@ -163,12 +163,11 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 and user_id != ""
                 and self.request.user.has_perm("users.view_user_anyone")
             ):
-                assos_users_query = (
-                    AssociationUser.objects.filter(user_id=user_id)
-                    .values_list("association_id", flat=True)
-                    .all()
+                queryset = queryset.filter(
+                    id__in=AssociationUser.objects.filter(user_id=user_id).values_list(
+                        "association_id"
+                    )
                 )
-                queryset = queryset.filter(id__in=assos_users_query)
         return queryset
 
     def get_serializer_class(self):
