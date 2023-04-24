@@ -47,7 +47,7 @@ class ProjectCommissionDate(models.Model):
                 "Can update restricted fields (amount earned, ...) between a project and a commission date.",
             ),
             (
-                "view_projectcommissiondate_all",
+                "view_projectcommissiondate_any_commission",
                 "Can view all commission dates linked to a project.",
             ),
         ]

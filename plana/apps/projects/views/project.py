@@ -90,15 +90,25 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     ).values_list("project_id")
                 )
 
-            if not self.request.user.has_perm("projects.view_project_all"):
-                user_associations_ids = AssociationUser.objects.filter(
-                    user_id=self.request.user.pk
-                ).values_list("association_id")
+            if not self.request.user.has_perm("projects.view_project_any_commission"):
+                user_associations_ids = self.request.user.get_user_associations()
+                user_commissions_ids = self.request.user.get_user_commissions()
                 user_projects_ids = Project.objects.filter(
                     models.Q(user_id=self.request.user.pk)
                     | models.Q(association_id__in=user_associations_ids)
                 ).values_list("id")
-                queryset = queryset.filter(id__in=user_projects_ids)
+                queryset = queryset.filter(
+                    models.Q(id__in=user_projects_ids)
+                    | models.Q(
+                        id__in=(
+                            ProjectCommissionDate.objects.filter(
+                                commission_date_id__in=CommissionDate.objects.filter(
+                                    commission_id__in=user_commissions_ids
+                                ).values_list("id")
+                            ).values_list("project_id")
+                        )
+                    )
+                )
 
         return queryset
 
@@ -241,17 +251,30 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """Retrieves a project with all its details."""
         try:
             project = self.queryset.get(id=kwargs["pk"])
+            commissions_ids = CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project_id=project.id
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.view_project_all") and (
+        if not request.user.has_perm("projects.view_project_any_commission") and (
             (project.user_id is not None and request.user.pk != project.user_id)
             or (
                 project.association_id is not None
                 and not request.user.is_in_association(project.association_id)
+            )
+            and (
+                len(
+                    list(
+                        set(commissions_ids) & set(request.user.get_user_commissions())
+                    )
+                )
+                == 0
             )
         ):
             return response.Response(

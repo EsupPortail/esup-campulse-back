@@ -166,7 +166,7 @@ class User(AbstractUser):
         )
 
     def get_user_commissions(self):
-        """Return a list of Commission objects linked to a user."""
+        """Return a list of Commission IDs linked to a user."""
         return Commission.objects.filter(
             id__in=GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk
@@ -174,7 +174,7 @@ class User(AbstractUser):
         )
 
     def get_user_groups(self):
-        """Return a list of Group objects linked to a user."""
+        """Return a list of Group IDs linked to a user."""
         return Group.objects.filter(
             id__in=GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk
@@ -182,7 +182,7 @@ class User(AbstractUser):
         )
 
     def get_user_institutions(self):
-        """Return a list of Institution objects linked to a user."""
+        """Return a list of Institution IDs linked to a user."""
         if self.is_staff:
             return Institution.objects.filter(
                 id__in=GroupInstitutionCommissionUser.objects.filter(

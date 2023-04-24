@@ -101,7 +101,7 @@ class Project(models.Model):
                 "Can update projects restricted fields (status, ...).",
             ),
             (
-                "view_project_all",
+                "view_project_any_commission",
                 "Can view all projects.",
             ),
         ]

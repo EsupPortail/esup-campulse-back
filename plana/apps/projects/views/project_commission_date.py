@@ -61,16 +61,22 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(commission_date_id__in=commission_dates_ids)
 
             if not self.request.user.has_perm(
-                "projects.view_projectcommissiondate_all"
+                "projects.view_projectcommissiondate_any_commission"
             ):
-                user_associations_ids = AssociationUser.objects.filter(
-                    user_id=self.request.user.pk
-                ).values_list("association_id")
+                user_associations_ids = self.request.user.get_user_associations()
+                user_commissions_ids = self.request.user.get_user_commissions()
                 user_projects_ids = Project.objects.filter(
                     models.Q(user_id=self.request.user.pk)
                     | models.Q(association_id__in=user_associations_ids)
                 ).values_list("id")
-                queryset = queryset.filter(project_id__in=user_projects_ids)
+                queryset = queryset.filter(
+                    models.Q(project_id__in=user_projects_ids)
+                    | models.Q(
+                        commission_date_id__in=CommissionDate.objects.filter(
+                            commission_id__in=user_commissions_ids
+                        ).values_list("id")
+                    )
+                )
 
         return queryset
 
@@ -174,15 +180,31 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
         """Retrieves all commission dates linked to a project."""
         try:
             project = Project.objects.get(id=kwargs["project_id"])
+            commissions_ids = CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project_id=project.id
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "projects.view_projectcommissiondate_all"
-        ) and not request.user.can_edit_project(project):
+        if (
+            not request.user.has_perm(
+                "projects.view_projectcommissiondate_any_commission"
+            )
+            and not request.user.can_edit_project(project)
+            and (
+                len(
+                    list(
+                        set(commissions_ids) & set(request.user.get_user_commissions())
+                    )
+                )
+                == 0
+            )
+        ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project commission dates.")},
                 status=status.HTTP_403_FORBIDDEN,
