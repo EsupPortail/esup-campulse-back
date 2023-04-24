@@ -6,6 +6,8 @@ from rest_framework import status
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.views.commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project import Project
 
 
 class CommissionsViewsTests(TestCase):
@@ -58,6 +60,8 @@ class CommissionsViewsTests(TestCase):
         - There's at least one commission date in the commission dates list.
         - The route can be accessed by anyone.
         - We get the same amount of commission dates through the model and through the view.
+        - only_next returns only one date by commission.
+        - active_projects returns commissions dates depending on their projects statuses.
         """
         commission_dates_cnt = CommissionDate.objects.count()
         self.assertTrue(commission_dates_cnt > 0)
@@ -67,3 +71,34 @@ class CommissionsViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_cnt)
+
+        response = self.client.get("/commissions/commission_dates?only_next=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), Commission.objects.count())
+
+        inactive_projects = Project.objects.filter(
+            project_status__in=[
+                "PROJECT_DRAFT",
+                "PROJECT_REJECTED",
+                "PROJECT_REVIEW_CANCELLED",
+                "PROJECT_REVIEW_VALIDATED",
+            ]
+        )
+        commission_dates_with_inactive_projects = CommissionDate.objects.filter(
+            id__in=ProjectCommissionDate.objects.filter(
+                project_id__in=inactive_projects
+            ).values_list("commission_date_id")
+        )
+        response = self.client.get(
+            "/commissions/commission_dates?active_projects=false"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commission_dates_with_inactive_projects.count())
+        commission_dates_with_active_projects = CommissionDate.objects.exclude(
+            id__in=ProjectCommissionDate.objects.filter(
+                project_id__in=inactive_projects
+            ).values_list("commission_date_id")
+        )
+        response = self.client.get("/commissions/commission_dates?active_projects=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commission_dates_with_active_projects.count())
