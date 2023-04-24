@@ -182,13 +182,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_project_cd_not_next_commission(self):
-        response = self.student_misc_client.post(
-            "/projects/commission_dates",
-            {"project": 1, "commission_date": 5},
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_post_project_cd_user_not_site(self):
         """
         POST /projects/commission_dates .
@@ -207,6 +200,19 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_project_cd_not_next_commission(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route can be accessed by a student user.
+        - A project can only be submitted to the first date for a commission.
+        """
+        response = self.student_misc_client.post(
+            "/projects/commission_dates",
+            {"project": 1, "commission_date": 5},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_cd_commission_already_used(self):
         """
         POST /projects/commission_dates .
@@ -214,7 +220,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - A student cannot submit a same project twice in the same commission.
         """
         project_id = 1
-        commission_date_id = 5
+        commission_date_id = 3
         post_data = {
             "project": project_id,
             "commission_date": commission_date_id,
