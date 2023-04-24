@@ -261,6 +261,12 @@ paths:
       description: Lists all commission dates.
       parameters:
       - in: query
+        name: active_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates where projects reviews are still
+          pending.
+      - in: query
         name: only_next
         schema:
           type: boolean
@@ -689,6 +695,16 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
+        name: commission_dates
+        schema:
+          type: integer
+        description: Filter by Commission Dates linked to a project.
+      - in: query
+        name: project_status
+        schema:
+          type: string
+        description: Filter by Project Status code.
+      - in: query
         name: user_id
         schema:
           type: integer
@@ -1098,6 +1114,12 @@ paths:
         schema:
           type: string
         description: Filter by first name and last name.
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       tags:
       - users
       security:

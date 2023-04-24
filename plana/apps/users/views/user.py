@@ -12,7 +12,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import generics, response, status
+from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -67,7 +67,15 @@ from plana.utils import send_mail, to_bool
 class UserListCreate(generics.ListCreateAPIView):
     """/users/ route"""
 
+    filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    search_fields = [
+        "username__nospaces__unaccent",
+        "first_name__nospaces__unaccent",
+        "last_name__nospaces__unaccent",
+        "email__nospaces__unaccent",
+        "associations__name__nospaces__unaccent",
+    ]
 
     def get_queryset(self):
         queryset = User.objects.all().order_by("id")
