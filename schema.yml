@@ -2115,63 +2115,49 @@ components:
         id:
           type: integer
           readOnly: true
-        institution:
-          type: integer
-        institution_component:
-          type: integer
-        activity_field:
-          type: integer
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
         acronym:
           type: string
-          title: Acronyme
-          maxLength: 30
-        path_logo:
-          type: string
-          format: uri
-          nullable: true
-          title: Dynamic thumbnails for the logo
         alt_logo:
           type: string
-          nullable: true
-          title: Logo description
         social_object:
           type: string
         current_projects:
           type: string
         address:
           type: string
-          title: Adresse
         phone:
           type: string
-          title: Téléphone
-          maxLength: 32
         email:
           type: string
-          title: Courriel
-          maxLength: 256
         siret:
           type: string
-          maxLength: 14
         website:
           type: string
+        president_names:
+          type: string
+        president_phone:
+          type: string
+        institution:
+          type: integer
+        institution_component:
+          type: integer
+          nullable: true
+        activity_field:
+          type: integer
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        path_logo:
+          type: string
           format: uri
-          title: Site
-          maxLength: 200
+          nullable: true
+          title: Dynamic thumbnails for the logo
         student_count:
           type: integer
           maximum: 2147483647
           minimum: 0
           title: Nombre d'étudiants
-        president_names:
-          type: string
-          maxLength: 256
-        president_phone:
-          type: string
-          maxLength: 32
         is_enabled:
           type: boolean
         is_public:
@@ -3055,10 +3041,33 @@ components:
       type: object
       description: Main serializer.
       properties:
+        acronym:
+          type: string
+        alt_logo:
+          type: string
+        social_object:
+          type: string
+        current_projects:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        siret:
+          type: string
+        website:
+          type: string
+        president_names:
+          type: string
+        president_phone:
+          type: string
         institution:
           type: integer
         institution_component:
           type: integer
+          nullable: true
         activity_field:
           type: integer
         name:
@@ -3066,63 +3075,16 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
-          maxLength: 30
         path_logo:
           type: string
           format: binary
           nullable: true
           title: Dynamic thumbnails for the logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
-        social_object:
-          type: string
-          minLength: 1
-        current_projects:
-          type: string
-          minLength: 1
-        address:
-          type: string
-          minLength: 1
-          title: Adresse
-        phone:
-          type: string
-          minLength: 1
-          title: Téléphone
-          maxLength: 32
-        email:
-          type: string
-          minLength: 1
-          title: Courriel
-          maxLength: 256
-        siret:
-          type: string
-          minLength: 1
-          maxLength: 14
-        website:
-          type: string
-          format: uri
-          minLength: 1
-          title: Site
-          maxLength: 200
         student_count:
           type: integer
           maximum: 2147483647
           minimum: 0
           title: Nombre d'étudiants
-        president_names:
-          type: string
-          minLength: 1
-          maxLength: 256
-        president_phone:
-          type: string
-          minLength: 1
-          maxLength: 32
         is_enabled:
           type: boolean
         is_public:
@@ -3286,25 +3248,12 @@ components:
           title: Adresse
         other_first_name:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_last_name:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_email:
           type: string
-          format: email
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_phone:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3436,21 +3385,12 @@ components:
           title: Adresse
         other_first_name:
           type: string
-          nullable: true
-          maxLength: 150
         other_last_name:
           type: string
-          nullable: true
-          maxLength: 150
         other_email:
           type: string
-          format: email
-          nullable: true
-          maxLength: 150
         other_phone:
           type: string
-          nullable: true
-          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3690,25 +3630,12 @@ components:
           title: Adresse
         other_first_name:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_last_name:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_email:
           type: string
-          format: email
-          nullable: true
-          minLength: 1
-          maxLength: 150
         other_phone:
           type: string
-          nullable: true
-          minLength: 1
-          maxLength: 32
         user:
           type: integer
           nullable: true

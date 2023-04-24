@@ -29,9 +29,20 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
 class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
+    acronym = serializers.CharField(required=False, allow_blank=True)
+    alt_logo = serializers.CharField(required=False, allow_blank=True)
+    social_object = serializers.CharField(required=False, allow_blank=True)
+    current_projects = serializers.CharField(required=False, allow_blank=True)
+    address = serializers.CharField(required=False, allow_blank=True)
+    phone = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.CharField(required=False, allow_blank=True)
+    siret = serializers.CharField(required=False, allow_blank=True)
+    website = serializers.CharField(required=False, allow_blank=True)
+    president_names = serializers.CharField(required=False, allow_blank=True)
+    president_phone = serializers.CharField(required=False, allow_blank=True)
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
     institution_component = serializers.PrimaryKeyRelatedField(
-        queryset=InstitutionComponent.objects.all()
+        queryset=InstitutionComponent.objects.all(), allow_null=True
     )
     activity_field = serializers.PrimaryKeyRelatedField(
         queryset=ActivityField.objects.all()

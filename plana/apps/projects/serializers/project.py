@@ -9,6 +9,10 @@ from plana.apps.projects.serializers.category import CategorySerializer
 class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
+    other_first_name = serializers.CharField(required=False, allow_blank=True)
+    other_last_name = serializers.CharField(required=False, allow_blank=True)
+    other_email = serializers.CharField(required=False, allow_blank=True)
+    other_phone = serializers.CharField(required=False, allow_blank=True)
     categories = CategorySerializer(many=True, read_only=True)
     commission_dates = CommissionDateSerializer(many=True, read_only=True)
 
