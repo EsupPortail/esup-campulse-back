@@ -2875,7 +2875,11 @@ components:
         label:
           type: string
           maxLength: 128
+        header:
+          type: string
         body:
+          type: string
+        footer:
           type: string
       required:
       - body
@@ -2886,7 +2890,11 @@ components:
       type: object
       description: Main serializer.
       properties:
+        header:
+          type: string
         body:
+          type: string
+        footer:
           type: string
       required:
       - body
@@ -3450,7 +3458,13 @@ components:
       type: object
       description: Main serializer.
       properties:
+        header:
+          type: string
+          minLength: 1
         body:
+          type: string
+          minLength: 1
+        footer:
           type: string
           minLength: 1
     PatchedDocumentRequest:

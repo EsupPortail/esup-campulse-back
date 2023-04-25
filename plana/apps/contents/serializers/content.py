@@ -17,4 +17,4 @@ class ContentBodySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ["body"]
+        fields = ["header", "body", "footer"]

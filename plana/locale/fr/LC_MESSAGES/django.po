@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 14:05+0200\n"
+"POT-Creation-Date: 2023-04-25 14:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -312,15 +312,23 @@ msgid "Label"
 msgstr "Label"
 
 #: plana/apps/contents/models/content.py:15
+msgid "Header"
+msgstr "En-tête"
+
+#: plana/apps/contents/models/content.py:16
 #: plana/libs/mail_template/models.py:49
 msgid "Body"
 msgstr "Corps du message"
 
-#: plana/apps/contents/models/content.py:21
+#: plana/apps/contents/models/content.py:17
+msgid "Footer"
+msgstr "Pied de page"
+
+#: plana/apps/contents/models/content.py:23
 msgid "Content"
 msgstr "Contenu"
 
-#: plana/apps/contents/models/content.py:22
+#: plana/apps/contents/models/content.py:24
 msgid "Contents"
 msgstr "Contenus"
 
