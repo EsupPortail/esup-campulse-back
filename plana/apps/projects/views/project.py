@@ -39,15 +39,25 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if self.request.method == "GET":
             user = self.request.query_params.get("user_id")
             association = self.request.query_params.get("association_id")
-            project_status = self.request.query_params.get("project_status")
+            project_statuses = self.request.query_params.get("project_statuses")
             commission_dates = self.request.query_params.get("commission_dates")
             active_projects = self.request.query_params.get("active_projects")
             if user is not None and user != "":
                 queryset = queryset.filter(user_id=user)
             if association is not None and association != "":
                 queryset = queryset.filter(association_id=association)
-            if project_status is not None and project_status != "":
-                queryset = queryset.filter(project_status=project_status)
+            if project_statuses is not None and project_statuses != "":
+                all_project_statuses = [
+                    c[0] for c in Project.project_status.field.choices
+                ]
+                project_statuses_codes = project_statuses.split(",")
+                project_statuses_codes = [
+                    project_status_code
+                    for project_status_code in project_statuses_codes
+                    if project_status_code != ""
+                    and project_status_code in all_project_statuses
+                ]
+                queryset = queryset.filter(project_status__in=project_statuses_codes)
             if commission_dates is not None and commission_dates != "":
                 commission_dates_ids = commission_dates.split(",")
                 commission_dates_ids = [
@@ -116,10 +126,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 description="Filter by Association ID.",
             ),
             OpenApiParameter(
-                "project_status",
+                "project_statuses",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
-                description="Filter by Project Status code.",
+                description="Filter by Project Statuses codes.",
             ),
             OpenApiParameter(
                 "commission_dates",

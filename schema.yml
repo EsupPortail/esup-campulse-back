@@ -805,10 +805,10 @@ paths:
           type: string
         description: Filter by Commission Dates linked to a project.
       - in: query
-        name: project_status
+        name: project_statuses
         schema:
           type: string
-        description: Filter by Project Status code.
+        description: Filter by Project Statuses codes.
       - in: query
         name: user_id
         schema:

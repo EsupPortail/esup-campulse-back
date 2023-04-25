@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 14:21+0200\n"
+"POT-Creation-Date: 2023-04-25 15:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -217,7 +217,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:375
 #: plana/apps/associations/views/association.py:511
 #: plana/apps/documents/views/document_upload.py:143
-#: plana/apps/projects/views/project.py:167
+#: plana/apps/projects/views/project.py:177
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
@@ -489,9 +489,9 @@ msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
 #: plana/apps/documents/views/document_upload.py:124
-#: plana/apps/projects/views/project.py:298
-#: plana/apps/projects/views/project.py:348
-#: plana/apps/projects/views/project.py:501
+#: plana/apps/projects/views/project.py:308
+#: plana/apps/projects/views/project.py:358
+#: plana/apps/projects/views/project.py:511
 #: plana/apps/projects/views/project_category.py:82
 #: plana/apps/projects/views/project_category.py:132
 #: plana/apps/projects/views/project_category.py:184
@@ -775,31 +775,31 @@ msgstr "Date de commission liée au projet"
 msgid "Projects commissions dates"
 msgstr "Dates de commissions liées aux projets"
 
-#: plana/apps/projects/views/project.py:186
+#: plana/apps/projects/views/project.py:196
 msgid "User not allowed to create a new project for this association."
 msgstr "Utilisateur non autorisé à créer un projet pour cette association."
 
-#: plana/apps/projects/views/project.py:193
+#: plana/apps/projects/views/project.py:203
 msgid "User not allowed in this association."
 msgstr "Utilisateur non autorisé dans cette association."
 
-#: plana/apps/projects/views/project.py:198
+#: plana/apps/projects/views/project.py:208
 msgid "Association not allowed to create a new project."
 msgstr "Association non autorisée à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:213
+#: plana/apps/projects/views/project.py:223
 msgid "User not allowed to create a new project."
 msgstr "Utilisateur non autorisé à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:227
+#: plana/apps/projects/views/project.py:237
 msgid "A project can only have one affectation."
 msgstr "Un projet ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/projects/views/project.py:241
+#: plana/apps/projects/views/project.py:251
 msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou association."
 
-#: plana/apps/projects/views/project.py:254
+#: plana/apps/projects/views/project.py:264
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
@@ -807,36 +807,36 @@ msgstr ""
 "Le nombre d'étudiants dans le public attendu ne peut être supérieur au "
 "nombre total de personnes attendues."
 
-#: plana/apps/projects/views/project.py:318
+#: plana/apps/projects/views/project.py:328
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:354
+#: plana/apps/projects/views/project.py:364
 #: plana/apps/projects/views/project_commission_date.py:298
 msgid "Not allowed to update basic fields for this project."
 msgstr "Non autorisé à mettre à jour les champs de ce projet."
 
-#: plana/apps/projects/views/project.py:360
+#: plana/apps/projects/views/project.py:370
 #: plana/apps/projects/views/project_commission_date.py:114
 #: plana/apps/projects/views/project_commission_date.py:304
 #: plana/apps/projects/views/project_commission_date.py:361
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:372
+#: plana/apps/projects/views/project.py:382
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:380
+#: plana/apps/projects/views/project.py:390
 msgid "Wrong status."
 msgstr "Mauvais statut."
 
-#: plana/apps/projects/views/project.py:402
+#: plana/apps/projects/views/project.py:412
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
-#: plana/apps/projects/views/project.py:509
+#: plana/apps/projects/views/project.py:519
 msgid "Not allowed to update restricted fields for this project."
 msgstr "Non autorisé à mettre à jour les champs restreints de ce projet."
 

@@ -149,11 +149,13 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        project_status = "PROJECT_DRAFT"
+        project_statuses = ["PROJECT_DRAFT", "PROJECT_VALIDATED"]
         response = self.general_client.get(
-            f"/projects/?project_status={project_status}"
+            f"/projects/?project_statuses={','.join(str(x) for x in project_statuses)}"
         )
-        projects_cnt = Project.objects.filter(project_status=project_status).count()
+        projects_cnt = Project.objects.filter(
+            project_status__in=project_statuses
+        ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
