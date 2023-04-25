@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )
+        commission_choices = Commission.objects.all().values_list("acronym", flat=True)
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
@@ -36,8 +38,13 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--institution",
-            help="Institution codename.",
+            help="Institution codename (all by default).",
             choices=institution_choices,
+        )
+        parser.add_argument(
+            "--commission",
+            help="Commission codename (all by default).",
+            choices=commission_choices,
         )
 
     def handle(self, *args, **options):
@@ -72,6 +79,18 @@ class Command(BaseCommand):
                         user_id=user.id,
                         group_id=group.id,
                         institution_id=institution_id,
+                    )
+            if options["commission"] is not None:
+                commission = Commission.objects.get(acronym=options["commission"])
+                GroupInstitutionCommissionUser.objects.create(
+                    user_id=user.id, group_id=group.id, commission_id=commission.id
+                )
+            else:
+                for commission_id in Commission.objects.values_list("id", flat=True):
+                    GroupInstitutionCommissionUser.objects.create(
+                        user_id=user.id,
+                        group_id=group.id,
+                        commission_id=commission_id,
                     )
             self.stdout.write(
                 self.style.SUCCESS(f"User created. Password : {password}")
