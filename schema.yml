@@ -802,7 +802,7 @@ paths:
       - in: query
         name: commission_dates
         schema:
-          type: integer
+          type: string
         description: Filter by Commission Dates linked to a project.
       - in: query
         name: project_status

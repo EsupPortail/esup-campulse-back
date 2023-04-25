@@ -163,7 +163,7 @@ class ProjectsViewsTests(TestCase):
         )
         projects_cnt = Project.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(
-                project_id__in=commission_dates
+                commission_date_id__in=commission_dates
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))

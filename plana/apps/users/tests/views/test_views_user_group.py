@@ -109,6 +109,15 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_manager_get_unexisting_association_user(self):
+        """
+        GET /users/{user_id}/groups/ .
+
+        - 404 error if user not found.
+        """
+        response_manager = self.manager_client.get("/users/404/groups/")
+        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_student_get_user_groups_details(self):
         """
         GET /users/{user_id}/groups/ .

@@ -75,6 +75,16 @@ class ContentsViewsTests(TestCase):
         response = self.client.get(f"/contents/?code={code}")
         self.assertEqual(response.data[0]["code"], code)
 
+    def test_get_unexisting_content(self):
+        """
+        GET /contents/{id} .
+
+        - 404 error if content not found.
+        """
+        cid = 999
+        response = self.client.get(f"/contents/{cid}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_content_details(self):
         """
         GET /contents/{id} .

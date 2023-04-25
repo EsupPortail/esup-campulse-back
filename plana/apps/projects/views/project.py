@@ -57,7 +57,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 ]
                 queryset = queryset.filter(
                     id__in=ProjectCommissionDate.objects.filter(
-                        project_id__in=commission_dates_ids
+                        commission_date_id__in=commission_dates_ids
                     ).values_list("project_id")
                 )
             if active_projects is not None and active_projects != "":
@@ -123,7 +123,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             ),
             OpenApiParameter(
                 "commission_dates",
-                OpenApiTypes.INT,
+                OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Filter by Commission Dates linked to a project.",
             ),
