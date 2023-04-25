@@ -690,6 +690,11 @@ paths:
         details (manager).
       parameters:
       - in: query
+        name: active_projects
+        schema:
+          type: boolean
+        description: Filter to get projects where reviews are still pending.
+      - in: query
         name: association_id
         schema:
           type: integer

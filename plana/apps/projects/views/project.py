@@ -26,7 +26,7 @@ from plana.apps.projects.serializers.project import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
@@ -56,6 +56,12 @@ from plana.utils import send_mail
                 OpenApiParameter.QUERY,
                 description="Filter by Commission Dates linked to a project.",
             ),
+            OpenApiParameter(
+                "active_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get projects where reviews are still pending.",
+            ),
         ],
     ),
 )
@@ -71,6 +77,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             association = self.request.query_params.get("association_id")
             project_status = self.request.query_params.get("project_status")
             commission_dates = self.request.query_params.get("commission_dates")
+            active_projects = self.request.query_params.get("active_projects")
             if user is not None and user != "":
                 queryset = queryset.filter(user_id=user)
             if association is not None and association != "":
@@ -89,6 +96,17 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         project_id__in=commission_dates_ids
                     ).values_list("project_id")
                 )
+            if active_projects is not None and active_projects != "":
+                inactive_statuses = [
+                    "PROJECT_DRAFT",
+                    "PROJECT_REJECTED",
+                    "PROJECT_REVIEW_CANCELLED",
+                    "PROJECT_REVIEW_VALIDATED",
+                ]
+                if to_bool(active_projects) is False:
+                    queryset = queryset.filter(project_status__in=inactive_statuses)
+                else:
+                    queryset = queryset.exclude(project_status__in=inactive_statuses)
 
             if not self.request.user.has_perm("projects.view_project_any_commission"):
                 user_associations_ids = self.request.user.get_user_associations()

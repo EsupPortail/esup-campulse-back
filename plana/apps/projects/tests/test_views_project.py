@@ -169,6 +169,21 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
+        inactive_statuses = [
+            "PROJECT_DRAFT",
+            "PROJECT_REJECTED",
+            "PROJECT_REVIEW_CANCELLED",
+            "PROJECT_REVIEW_VALIDATED",
+        ]
+        inactive_projects = Project.objects.filter(project_status__in=inactive_statuses)
+        response = self.general_client.get("/projects/?active_projects=false")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), inactive_projects.count())
+        active_projects = Project.objects.exclude(project_status__in=inactive_statuses)
+        response = self.general_client.get("/projects/?active_projects=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), active_projects.count())
+
     def test_post_project_anonymous(self):
         """
         POST /projects/ .
