@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -24,32 +24,6 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "is_validated_by_admin",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members not validated by an admin",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-        ],
-        tags=["users/associations"],
-    ),
-    post=extend_schema(tags=["users/associations"]),
-)
 class AssociationUserListCreate(generics.ListCreateAPIView):
     """/users/associations/ route"""
 
@@ -107,10 +81,47 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationUserSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_validated_by_admin",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members not validated by an admin",
+            ),
+            OpenApiParameter(
+                "institutions",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Institutions IDs.",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: AssociationUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+        tags=["users/associations"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all associations linked to a user, or all associations of all users (manager)."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: AssociationUserCreateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/associations"],
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new link between a user and an association."""
         try:
@@ -142,16 +153,6 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        has_associations_possible_group = False
-        for group in user.get_user_groups():
-            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"] is True:
-                has_associations_possible_group = True
-        if not has_associations_possible_group:
-            return response.Response(
-                {"error": _("The user hasn't any group that can have associations.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if "is_validated_by_admin" in request.data and (
             to_bool(request.data["is_validated_by_admin"]) is True
             and request.user.is_anonymous
@@ -169,6 +170,16 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        has_associations_possible_group = False
+        for group in user.get_user_groups():
+            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"] is True:
+                has_associations_possible_group = True
+        if not has_associations_possible_group:
+            return response.Response(
+                {"error": _("The user hasn't any group that can have associations.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         association_users = AssociationUser.objects.filter(
@@ -238,9 +249,6 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["users/associations"]),
-)
 class AssociationUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/associations/ route"""
 
@@ -248,8 +256,25 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
     queryset = AssociationUser.objects.all()
     serializer_class = AssociationUserSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/associations"],
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves all associations linked to a user (manager)."""
+        try:
+            User.objects.get(id=kwargs["user_id"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("User does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         if (
             request.user.has_perm("users.view_associationuser_anyone")
             or kwargs["user_id"] == request.user.pk
@@ -269,11 +294,6 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-@extend_schema(methods=["GET", "PUT"], exclude=True)
-@extend_schema_view(
-    patch=extend_schema(tags=["users/associations"]),
-    delete=extend_schema(tags=["users/associations"]),
-)
 class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{user_id}/associations/{association_id} route"""
 
@@ -294,12 +314,34 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.serializer_class = AssociationUserDeleteSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationUserUpdateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/associations"],
+    )
     def patch(self, request, *args, **kwargs):
         """Updates user role in an association (manager and president)."""
         try:
@@ -503,6 +545,15 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return response.Response({}, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: AssociationUserDeleteSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/associations"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys an association linked to a user."""
         try:

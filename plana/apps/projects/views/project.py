@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -29,42 +29,6 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "project_status",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Project Status code.",
-            ),
-            OpenApiParameter(
-                "commission_dates",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Commission Dates linked to a project.",
-            ),
-            OpenApiParameter(
-                "active_projects",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get projects where reviews are still pending.",
-            ),
-        ],
-    ),
-)
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
@@ -137,10 +101,58 @@ class ProjectListCreate(generics.ListCreateAPIView):
             self.serializer_class = ProjectPartialDataSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+            OpenApiParameter(
+                "project_status",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Project Status code.",
+            ),
+            OpenApiParameter(
+                "commission_dates",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Commission Dates linked to a project.",
+            ),
+            OpenApiParameter(
+                "active_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get projects where reviews are still pending.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: ProjectPartialDataSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: ProjectSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new project."""
         if (
@@ -251,7 +263,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema(methods=["PUT"], exclude=True)
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
@@ -265,6 +276,14 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves a project with all its details."""
         try:
@@ -302,9 +321,24 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         return self.retrieve(request, *args, **kwargs)
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
@@ -428,7 +462,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         return self.partial_update(request, *args, **kwargs)
 
 
-@extend_schema(methods=["PUT"], exclude=True)
 class ProjectRestrictedUpdate(generics.UpdateAPIView):
     """/projects/{id}/restricted route"""
 
@@ -442,9 +475,23 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectRestrictedSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
     def patch(self, request, *args, **kwargs):
         """Updates project restricted details (manager only)."""
         try:

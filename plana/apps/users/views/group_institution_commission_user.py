@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -21,10 +21,6 @@ from plana.apps.users.serializers.group_institution_commission_user import (
 )
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["users/groups"]),
-    post=extend_schema(tags=["users/groups"]),
-)
 class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
@@ -38,6 +34,14 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+        tags=["users/groups"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user, or all groups of all users (manager)."""
         if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
@@ -49,6 +53,15 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         )
         return response.Response(serializer.data)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/groups"],
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new link between a non-validated user and a group."""
         try:
@@ -171,12 +184,9 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             commission_id=commission_id,
         )
 
-        return response.Response({}, status=status.HTTP_200_OK)
+        return response.Response({}, status=status.HTTP_201_CREATED)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["users/groups"]),
-)
 class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/groups/ route"""
 
@@ -184,24 +194,40 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
     queryset = GroupInstitutionCommissionUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/groups"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user (manager)."""
-        if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["user_id"]),
-                many=True,
+        try:
+            User.objects.get(id=kwargs["user_id"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("User does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
-            return response.Response(serializer.data)
-        return response.Response(
-            {"error": _("Not allowed to get this link between group and user.")},
-            status=status.HTTP_403_FORBIDDEN,
+
+        if not request.user.has_perm(
+            "users.view_groupinstitutioncommissionuser_any_group"
+        ):
+            return response.Response(
+                {"error": _("Not allowed to get this link between group and user.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        serializer = self.serializer_class(
+            self.queryset.filter(user_id=kwargs["user_id"]),
+            many=True,
         )
+        return response.Response(serializer.data)
 
 
 # TODO Optimize this route to avoid code duplication with other delete routes.
-@extend_schema_view(
-    delete=extend_schema(operation_id="users_groups_destroy", tags=["users/groups"])
-)
 class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
@@ -209,6 +235,16 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
     queryset = GroupInstitutionCommissionUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
+    @extend_schema(
+        operation_id="users_groups_destroy",
+        responses={
+            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/groups"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user (manager)."""
         try:
@@ -246,11 +282,6 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-@extend_schema_view(
-    delete=extend_schema(
-        operation_id="users_groups_destroy_with_commission", tags=["users/groups"]
-    )
-)
 class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
 
@@ -258,6 +289,16 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
     queryset = GroupInstitutionCommissionUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
+    @extend_schema(
+        operation_id="users_groups_destroy_with_commission",
+        responses={
+            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/groups"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user with commission argument (manager)."""
         try:
@@ -296,11 +337,6 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-@extend_schema_view(
-    delete=extend_schema(
-        operation_id="users_groups_destroy_with_institution", tags=["users/groups"]
-    )
-)
 class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
@@ -308,6 +344,16 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
     queryset = GroupInstitutionCommissionUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
+    @extend_schema(
+        operation_id="users_groups_destroy_with_institution",
+        responses={
+            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["users/groups"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys a group linked to a user with institution argument (manager)."""
         try:

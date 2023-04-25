@@ -2,7 +2,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -10,24 +10,6 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.serializers.document import DocumentSerializer
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document acronym.",
-            ),
-            OpenApiParameter(
-                "process_type",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document process type.",
-            ),
-        ]
-    )
-)
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route"""
 
@@ -52,10 +34,36 @@ class DocumentList(generics.ListCreateAPIView):
                 queryset = queryset.filter(process_type=process_type)
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "acronym",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Document acronym.",
+            ),
+            OpenApiParameter(
+                "process_type",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Document process type.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: DocumentSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: DocumentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        }
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new document type (manager only)."""
         if (
@@ -81,7 +89,6 @@ class DocumentList(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema(methods=["PUT"], exclude=True)
 class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route"""
 
@@ -95,6 +102,12 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: DocumentSerializer,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves a document type with all its details."""
         try:
@@ -106,9 +119,23 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
         return self.retrieve(request, *args, **kwargs)
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: DocumentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
     def patch(self, request, *args, **kwargs):
         try:
             self.queryset.get(id=kwargs["pk"])
@@ -140,6 +167,14 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return self.partial_update(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: DocumentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire document type (manager only)."""
         try:

@@ -223,7 +223,7 @@ class AuthUserViewsTests(TestCase):
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 6},
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
 
     def test_student_post_user_groups(self):
         """
@@ -278,13 +278,13 @@ class AuthUserViewsTests(TestCase):
             "/users/groups/",
             {"username": self.student_user_name, "group": 6},
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
             {"username": self.unvalidated_user_name, "group": 6},
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
 
     def test_anonymous_delete_user_group(self):
         """

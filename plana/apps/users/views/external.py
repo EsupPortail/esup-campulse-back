@@ -25,7 +25,14 @@ class ExternalUserList(generics.ListAPIView):
                 OpenApiParameter.QUERY,
                 required=True,
             ),
-        ]
+        ],
+        responses={
+            status.HTTP_200_OK: ExternalUserSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_500_INTERNAL_SERVER_ERROR: None,
+        },
     )
     def get(self, request, *args, **kwargs):
         """Retrieves an external user from LDAP."""

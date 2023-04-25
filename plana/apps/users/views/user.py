@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -28,42 +28,6 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by first name and last name.",
-            ),
-            OpenApiParameter(
-                "is_validated_by_admin",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members not validated by an admin",
-            ),
-            OpenApiParameter(
-                "is_cas",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members logged through CAS",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-        ]
-    )
-)
 class UserListCreate(generics.ListCreateAPIView):
     """/users/ route"""
 
@@ -186,10 +150,57 @@ class UserListCreate(generics.ListCreateAPIView):
             self.serializer_class = UserSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by first name and last name.",
+            ),
+            OpenApiParameter(
+                "is_validated_by_admin",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members not validated by an admin",
+            ),
+            OpenApiParameter(
+                "is_cas",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for members logged through CAS",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+            OpenApiParameter(
+                "institutions",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Institutions IDs.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: UserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists users sharing the same association, or all users (manager)."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: UserSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        }
+    )
     def post(self, request, *args, **kwargs):
         """Create an account for another person (manager only)."""
         is_cas = True
@@ -260,7 +271,6 @@ class UserListCreate(generics.ListCreateAPIView):
         return user_response
 
 
-@extend_schema(methods=["PUT"], exclude=True)
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{id} route"""
 
@@ -274,18 +284,51 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_200_OK: UserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves a user with all details."""
-        if request.user.has_perm("users.view_user_anyone"):
-            return self.retrieve(request, *args, **kwargs)
-        return response.Response(
-            {"error": _("Not allowed to retrieve this user.")},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        try:
+            self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("User does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
+        if not request.user.has_perm("users.view_user_anyone"):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this user.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return self.retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: UserSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def patch(self, request, *args, **kwargs):
         """Updates a user field (with a restriction on CAS auto-generated fields)."""
         try:
@@ -385,6 +428,14 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return self.partial_update(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: UserSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys a user from the database (with a restriction on manager users)."""
         try:

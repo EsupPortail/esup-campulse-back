@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -18,29 +18,8 @@ from plana.apps.projects.serializers.project_commission_date import (
     ProjectCommissionDateDataSerializer,
     ProjectCommissionDateSerializer,
 )
-from plana.apps.users.models.user import AssociationUser
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Project id.",
-            ),
-            OpenApiParameter(
-                "commission_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Commission id.",
-            ),
-        ],
-        tags=["projects/commission_dates"],
-    ),
-    post=extend_schema(tags=["projects/commission_dates"]),
-)
 class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     """/projects/commission_dates route"""
 
@@ -80,10 +59,42 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "project_id",
+                OpenApiTypes.NUMBER,
+                OpenApiParameter.QUERY,
+                description="Project id.",
+            ),
+            OpenApiParameter(
+                "commission_id",
+                OpenApiTypes.NUMBER,
+                OpenApiParameter.QUERY,
+                description="Commission id.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: ProjectCommissionDateSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+        tags=["projects/commission_dates"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates that can be linked to a project."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: ProjectCommissionDateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/commission_dates"],
+    )
     def post(self, request, *args, **kwargs):
         """Creates a link between a project and a commission date."""
         try:
@@ -166,9 +177,6 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["projects/commission_dates"]),
-)
 class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/commission_dates route"""
 
@@ -176,6 +184,15 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     queryset = ProjectCommissionDate.objects.all()
     serializer_class = ProjectCommissionDateSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCommissionDateSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/commission_dates"],
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves all commission dates linked to a project."""
         try:
@@ -216,11 +233,6 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-@extend_schema(methods=["GET", "PUT"], exclude=True)
-@extend_schema_view(
-    patch=extend_schema(tags=["projects/commission_dates"]),
-    delete=extend_schema(tags=["projects/commission_dates"]),
-)
 class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_dates/{commission_date_id} route"""
 
@@ -234,12 +246,34 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCommissionDateDataSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/commission_dates"],
+    )
     def patch(self, request, *args, **kwargs):
         """Updates details of a project linked to a commission date."""
         try:
@@ -295,6 +329,15 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         pcd.save()
         return response.Response({}, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: ProjectCommissionDateDataSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/commission_dates"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
         try:

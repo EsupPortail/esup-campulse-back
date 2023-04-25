@@ -1,7 +1,7 @@
 """Views linked to commissions dates."""
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import generics
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 
 from plana.apps.commissions.models.commission import Commission
@@ -12,24 +12,6 @@ from plana.apps.projects.models.project_commission_date import ProjectCommission
 from plana.utils import to_bool
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "only_next",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get only chronologically first commission of each type",
-            ),
-            OpenApiParameter(
-                "active_projects",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get commission_dates where projects reviews are still pending.",
-            ),
-        ]
-    )
-)
 class CommissionDateList(generics.ListAPIView):
     """/commissions/commission_dates route"""
 
@@ -76,6 +58,25 @@ class CommissionDateList(generics.ListAPIView):
 
         return queryset
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "only_next",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get only chronologically first commission of each type",
+            ),
+            OpenApiParameter(
+                "active_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get commission_dates where projects reviews are still pending.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: CommissionDateSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates."""
         return self.list(request, *args, **kwargs)

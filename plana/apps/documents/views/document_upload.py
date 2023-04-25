@@ -4,7 +4,7 @@ from django.db import models
 from django.http import FileResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
@@ -20,32 +20,6 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Project ID.",
-            ),
-        ],
-        tags=["documents/uploads"],
-    ),
-    post=extend_schema(tags=["documents/uploads"]),
-)
 class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route"""
 
@@ -83,10 +57,48 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             self.serializer_class = DocumentUploadSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
+            OpenApiParameter(
+                "project_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Project ID.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: DocumentUploadSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+        },
+        tags=["documents/uploads"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all documents uploads."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: DocumentUploadCreateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
+        },
+        tags=["documents/uploads"],
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new document upload."""
         if "document" not in request.data:
@@ -197,10 +209,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["documents/uploads"]),
-    delete=extend_schema(tags=["documents/uploads"]),
-)
 class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
     """/documents/uploads/{id} route"""
 
@@ -208,6 +216,15 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
     queryset = DocumentUpload.objects.all()
     serializer_class = DocumentUploadSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: DocumentUploadSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["documents/uploads"],
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves a document uploaded by a user."""
         try:
@@ -242,6 +259,15 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
         serializer = self.serializer_class(self.queryset.filter(id=kwargs["pk"]))
         return response.Response(serializer.data)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: DocumentUploadSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["documents/uploads"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys an uploaded document."""
         try:
@@ -276,9 +302,6 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["documents/uploads"]),
-)
 class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     """/documents/uploads/{id}/file route"""
 
@@ -286,6 +309,15 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     queryset = DocumentUpload.objects.all()
     serializer_class = DocumentUploadFileSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: DocumentUploadFileSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["documents/uploads"],
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves a document uploaded by a user."""
         try:

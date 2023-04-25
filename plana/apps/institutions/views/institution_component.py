@@ -1,5 +1,6 @@
 """Views linked to institution components."""
-from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 
 from plana.apps.institutions.models.institution_component import InstitutionComponent
@@ -15,6 +16,11 @@ class InstitutionComponentList(generics.ListAPIView):
     queryset = InstitutionComponent.objects.all().order_by("name")
     serializer_class = InstitutionComponentSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: InstitutionComponentSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists all institution components."""
         return self.list(request, *args, **kwargs)

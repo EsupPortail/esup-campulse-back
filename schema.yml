@@ -103,6 +103,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationMandatoryData'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /associations/{id}:
     get:
       operationId: associations_retrieve
@@ -126,6 +134,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationAllDataRead'
           description: ''
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     patch:
       operationId: associations_partial_update
       description: Updates association details (president and manager only, restricted
@@ -159,6 +171,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationAllDataUpdate'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+        '415':
+          description: No response body
+        '500':
+          description: No response body
     delete:
       operationId: associations_destroy
       description: Destroys an entire association (manager only).
@@ -175,6 +199,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataUpdate'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /associations/activity_fields:
     get:
@@ -314,6 +348,7 @@ paths:
   /contents/{id}:
     get:
       operationId: contents_retrieve
+      description: Retrieves a content.
       parameters:
       - in: path
         name: id
@@ -333,8 +368,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Content'
           description: ''
+        '404':
+          description: No response body
     patch:
       operationId: contents_partial_update
+      description: Updates content details (manager only).
       parameters:
       - in: path
         name: id
@@ -364,6 +402,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ContentBody'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /documents/:
     get:
       operationId: documents_list
@@ -420,6 +464,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
   /documents/{id}:
     get:
       operationId: documents_retrieve
@@ -443,6 +491,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+        '404':
+          description: No response body
     patch:
       operationId: documents_partial_update
       description: /documents/{id} route
@@ -475,6 +525,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     delete:
       operationId: documents_destroy
       description: Destroys an entire document type (manager only).
@@ -491,6 +547,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /documents/uploads:
     get:
@@ -526,6 +592,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/DocumentUpload'
           description: ''
+        '401':
+          description: No response body
     post:
       operationId: documents_uploads_create
       description: Creates a new document upload.
@@ -553,6 +621,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUploadCreate'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+        '415':
+          description: No response body
   /documents/uploads/{id}:
     get:
       operationId: documents_uploads_retrieve
@@ -575,6 +653,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUpload'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     delete:
       operationId: documents_uploads_destroy
       description: Destroys an uploaded document.
@@ -591,6 +675,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUpload'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /documents/uploads/{id}/file:
     get:
@@ -614,6 +708,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUploadFile'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /groups/:
     get:
       operationId: groups_list
@@ -728,6 +828,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProjectPartialData'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: projects_create
       description: Creates a new project.
@@ -755,6 +859,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -777,6 +889,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     patch:
       operationId: projects_partial_update
       description: Updates project details.
@@ -809,6 +927,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}/restricted:
     patch:
       operationId: projects_restricted_partial_update
@@ -842,6 +968,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectRestricted'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{project_id}/categories:
     get:
       operationId: projects_categories_retrieve
@@ -864,6 +996,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCategory'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{project_id}/categories/{category_id}:
     delete:
       operationId: projects_categories_destroy
@@ -886,6 +1024,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCategory'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /projects/{project_id}/commission_dates:
     get:
@@ -909,6 +1057,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{project_id}/commission_dates/{commission_date_id}:
     patch:
       operationId: projects_commission_dates_partial_update
@@ -947,6 +1101,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCommissionDateData'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     delete:
       operationId: projects_commission_dates_destroy
       description: Destroys details of a project linked to a commission date.
@@ -968,6 +1130,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCommissionDateData'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /projects/categories:
     get:
@@ -987,6 +1159,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProjectCategory'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: projects_categories_create
       description: Creates a link between a category and a project.
@@ -1014,6 +1190,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCategory'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/categories/names:
     get:
       operationId: projects_categories_names_list
@@ -1062,6 +1244,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: projects_commission_dates_create
       description: Creates a link between a project and a commission date.
@@ -1089,6 +1275,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /users/:
     get:
       operationId: users_list
@@ -1137,8 +1331,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserPartialData'
+                  $ref: '#/components/schemas/User'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: users_create
       description: Create an account for another person (manager only).
@@ -1164,30 +1362,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserPartialData'
-          description: ''
-  /users/{id}:
-    get:
-      operationId: users_retrieve
-      description: Retrieves a user with all details.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - users
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+  /users/{id}:
     patch:
       operationId: users_partial_update
       description: Updates a user field (with a restriction on CAS auto-generated
@@ -1221,6 +1404,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     delete:
       operationId: users_destroy
       description: Destroys a user from the database (with a restriction on manager
@@ -1238,6 +1429,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /users/{user_id}/associations/:
     get:
@@ -1261,6 +1462,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationUser'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /users/{user_id}/associations/{association_id}:
     patch:
       operationId: users_associations_partial_update
@@ -1299,6 +1506,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationUserUpdate'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     delete:
       operationId: users_associations_destroy
       description: Destroys an association linked to a user.
@@ -1320,6 +1535,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationUserDelete'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /users/{user_id}/groups/:
     get:
@@ -1343,6 +1568,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupInstitutionCommissionUser'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /users/{user_id}/groups/{group_id}:
     delete:
       operationId: users_groups_destroy
@@ -1365,6 +1596,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /users/{user_id}/groups/{group_id}/commissions/{commission_id}:
     delete:
@@ -1393,6 +1634,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /users/{user_id}/groups/{group_id}/institutions/{institution_id}:
     delete:
@@ -1421,6 +1672,16 @@ paths:
       - jwtCookieAuth: []
       responses:
         '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
           description: No response body
   /users/associations/:
     get:
@@ -1457,6 +1718,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/AssociationUser'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: users_associations_create
       description: Creates a new link between a user and an association.
@@ -1485,6 +1750,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationUserCreate'
           description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /users/auth/cas/login/:
     post:
       operationId: users_auth_cas_login_create
@@ -1940,6 +2211,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/ExternalUser'
           description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '500':
+          description: No response body
   /users/groups/:
     get:
       operationId: users_groups_list
@@ -1958,6 +2237,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
     post:
       operationId: users_groups_create
       description: Creates a new link between a non-validated user and a group.
@@ -1986,6 +2269,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
           description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
 components:
   schemas:
     ActivityField:
@@ -2399,6 +2688,17 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+      required:
+      - association
+      - user
+    AssociationUserDelete:
+      type: object
+      description: Serializer for user-associations deletion.
+      properties:
+        user:
+          type: integer
+        association:
+          type: integer
       required:
       - association
       - user
@@ -3820,37 +4120,6 @@ components:
       - is_cas
       - last_name
       - permissions
-      - username
-    UserPartialData:
-      type: object
-      description: Used to get data from another student in the same associations.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        first_name:
-          type: string
-          maxLength: 150
-        last_name:
-          type: string
-          maxLength: 150
-        is_cas:
-          type: boolean
-          default: false
-        is_validated_by_admin:
-          type: boolean
-          title: Is validated by administrator
-      required:
-      - first_name
-      - id
-      - last_name
       - username
     UserPartialDataRequest:
       type: object

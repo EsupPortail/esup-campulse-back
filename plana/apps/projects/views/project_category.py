@@ -4,7 +4,7 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
@@ -13,13 +13,8 @@ from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
-from plana.apps.users.models.user import AssociationUser
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["projects/categories"]),
-    post=extend_schema(tags=["projects/categories"]),
-)
 class ProjectCategoryListCreate(generics.ListCreateAPIView):
     """/projects/categories route"""
 
@@ -57,10 +52,27 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
         return queryset
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCategorySerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
+        tags=["projects/categories"],
+    )
     def get(self, request, *args, **kwargs):
         """Lists all links between categories and projects."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: ProjectCategorySerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/categories"],
+    )
     def post(self, request, *args, **kwargs):
         """Creates a link between a category and a project."""
         try:
@@ -90,9 +102,6 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
-@extend_schema_view(
-    get=extend_schema(tags=["projects/categories"]),
-)
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/categories route"""
 
@@ -100,6 +109,15 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCategorySerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/categories"],
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves all categories linked to a project."""
         try:
@@ -138,9 +156,6 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-@extend_schema_view(
-    delete=extend_schema(tags=["projects/categories"]),
-)
 class ProjectCategoryDestroy(generics.DestroyAPIView):
     """/projects/{project_id}/categories/{category_id} route"""
 
@@ -148,6 +163,15 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: ProjectCategorySerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/categories"],
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
         try:

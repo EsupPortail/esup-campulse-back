@@ -7,7 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
@@ -25,66 +25,6 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association name.",
-            ),
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association acronym.",
-            ),
-            OpenApiParameter(
-                "is_enabled",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for non-validated associations.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "is_site",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations from site.",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution ID.",
-            ),
-            OpenApiParameter(
-                "institution_component",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution Component ID.",
-            ),
-            OpenApiParameter(
-                "activity_field",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Activity Field ID.",
-            ),
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-        ]
-    )
-)
 class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route"""
 
@@ -177,10 +117,80 @@ class AssociationListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationMandatoryDataSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association name.",
+            ),
+            OpenApiParameter(
+                "acronym",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Association acronym.",
+            ),
+            OpenApiParameter(
+                "is_enabled",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for non-validated associations.",
+            ),
+            OpenApiParameter(
+                "is_public",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations shown in the public list.",
+            ),
+            OpenApiParameter(
+                "is_site",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations from site.",
+            ),
+            OpenApiParameter(
+                "institutions",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution ID.",
+            ),
+            OpenApiParameter(
+                "institution_component",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Institution Component ID.",
+            ),
+            OpenApiParameter(
+                "activity_field",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Activity Field ID.",
+            ),
+            OpenApiParameter(
+                "user_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by User ID.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: AssociationPartialDataSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists all associations with many filters."""
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: AssociationMandatoryDataSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
     def post(self, request, *args, **kwargs):
         """Creates a new association with mandatory informations (manager only)."""
         if "institution" in request.data and request.data["institution"] != "":
@@ -265,7 +275,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema(methods=["PUT"], exclude=True)
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/associations/{id} route"""
 
@@ -285,6 +294,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationAllDataReadSerializer,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Retrieves an association with all its details."""
         try:
@@ -328,10 +344,27 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return self.retrieve(request, *args, **kwargs)
 
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
     def put(self, request, *args, **kwargs):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationAllDataUpdateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
+            status.HTTP_500_INTERNAL_SERVER_ERROR: None,
+        }
+    )
     def patch(self, request, *args, **kwargs):
         """Updates association details (president and manager only, restricted fields for president)."""
         try:
@@ -460,6 +493,14 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return self.partial_update(request, *args, **kwargs)
 
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: AssociationAllDataUpdateSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire association (manager only)."""
         try:
@@ -507,30 +548,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-@extend_schema_view(
-    get=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "allow_new_users",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations where registration is possible.",
-            ),
-        ]
-    )
-)
 class AssociationNameList(generics.ListAPIView):
     """/associations/names route"""
 
@@ -570,6 +587,31 @@ class AssociationNameList(generics.ListAPIView):
 
         return queryset.order_by("name")
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "institutions",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Institutions IDs.",
+            ),
+            OpenApiParameter(
+                "is_public",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations shown in the public list.",
+            ),
+            OpenApiParameter(
+                "allow_new_users",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for associations where registration is possible.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: AssociationNameSerializer,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Lists minimal details for all associations with many filters."""
         return self.list(request, *args, **kwargs)
