@@ -1,9 +1,10 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from django.utils.translation import gettext as _
 
 
 class Command(BaseCommand):
-    help = "Import application initial datas."
+    help = _("Import application initial datas.")
 
     def handle(self, *args, **options):
         try:
@@ -25,7 +26,7 @@ class Command(BaseCommand):
                 ],
             )
 
-            self.stdout.write(self.style.SUCCESS("Initial datas import - done"))
+            self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 
         except Exception as e:
             self.stdout.write(self.style.ERROR("Error : %s" % e))

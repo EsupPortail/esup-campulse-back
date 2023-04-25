@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
 from django.db.models import Q
+from django.utils.translation import gettext as _
 
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
@@ -13,7 +14,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Expired accounts policy'
+    help = _('Expired accounts policy')
 
     def handle(self, *args, **options):
         try:

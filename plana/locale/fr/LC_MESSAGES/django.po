@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 15:07+0200\n"
+"POT-Creation-Date: 2023-04-25 15:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1235,6 +1235,39 @@ msgstr "Le template #%s n'a pas été trouvé"
 msgid "A syntax error occured in template #%s"
 msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 
+#: plana/management/commands/account_expiration.py:17
+msgid "Expired accounts policy"
+msgstr "Politique d'expiration des comptes"
+
+#: plana/management/commands/clean_database.py:9
+msgid "Resets database structure and content."
+msgstr "Régénère la structure et le contenu de la base de données."
+
+#: plana/management/commands/clean_database.py:19
+msgid "Database regenerated."
+msgstr "Base de données régénérée."
+
+#: plana/management/commands/createmanageruser.py:16
+msgid "Creates a new manager user."
+msgstr "Crée un utilisateur gestionnaire."
+
+#: plana/management/commands/createmanageruser.py:36
+msgid "Group codename."
+msgstr "Nom de code de groupe."
+
+#: plana/management/commands/createmanageruser.py:42
+msgid "Institution codename (all by default)."
+msgstr "Nom de code d'établissement (tous par défaut)."
+
+#: plana/management/commands/createmanageruser.py:47
+msgid "Commission codename (all by default)."
+msgstr "Nom de code de commission (tous par défaut)."
+
+#: plana/management/commands/createmanageruser.py:97
+#, python-brace-format
+msgid "User created. Password : {password}"
+msgstr "Utilisateur crée. Mot de passe : {password}"
+
 #: plana/management/commands/generate_age_keys.py:10
 msgid "Generate pair of AGE private and public keys to encrypt file uploads."
 msgstr ""
@@ -1278,6 +1311,31 @@ msgid ""
 msgstr ""
 "Génère une paire de clés RSA 256 publique et privée pour signer et vérifier "
 "les jetons JWT"
+
+#: plana/management/commands/initial_import.py:7
+msgid "Import application initial datas."
+msgstr "Importe les données initiales de l'application."
+
+#: plana/management/commands/initial_import.py:29
+msgid "Initial datas import - done"
+msgstr "Import des données initiales - fait"
+
+#: plana/management/commands/password_expiration.py:18
+msgid "Expired password policy"
+msgstr "Politique d'expiration des mots de passe"
+
+#: plana/management/commands/reset_permissions.py:14
+msgid ""
+"Applies permissions to groups according to the settings/permissions.py file."
+msgstr "Applique les permissions aux groupes indiquées dans le fichier settings/permissions.py ."
+
+#: plana/management/commands/reset_permissions.py:20
+msgid "Set without value if database should be flushed before."
+msgstr "Spécifier sans valeur si la base de données doit être vidée avant."
+
+#: plana/management/commands/reset_permissions.py:61
+msgid "Updated all group permissions."
+msgstr "Permissions de groupes mises à jour."
 
 #: plana/templates/404.html:6
 msgid "Page not found"

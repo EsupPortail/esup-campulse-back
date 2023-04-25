@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
+from django.utils.translation import gettext as _
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
@@ -12,7 +13,7 @@ from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
 
 class Command(BaseCommand):
-    help = "Creates a new manager user."
+    help = _("Creates a new manager user.")
 
     def add_arguments(self, parser):
         allowed_groups_names = []
@@ -32,18 +33,18 @@ class Command(BaseCommand):
         parser.add_argument("--password", help="Password.")
         parser.add_argument(
             "--group",
-            help="Group codename.",
+            help=_("Group codename."),
             choices=group_choices,
             required=True,
         )
         parser.add_argument(
             "--institution",
-            help="Institution codename (all by default).",
+            help=_("Institution codename (all by default)."),
             choices=institution_choices,
         )
         parser.add_argument(
             "--commission",
-            help="Commission codename (all by default).",
+            help=_("Commission codename (all by default)."),
             choices=commission_choices,
         )
 
@@ -93,7 +94,7 @@ class Command(BaseCommand):
                         commission_id=commission_id,
                     )
             self.stdout.write(
-                self.style.SUCCESS(f"User created. Password : {password}")
+                self.style.SUCCESS(_(f"User created. Password : {password}"))
             )
 
         except Exception as e:

@@ -4,19 +4,20 @@ import pathlib
 from django.contrib.auth.models import Group, Permission
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from django.utils.translation import gettext as _
 
 from plana.settings.permissions import PERMISSIONS_GROUPS
 
 
 class Command(BaseCommand):
-    help = (
+    help = _(
         "Applies permissions to groups according to the settings/permissions.py file."
     )
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--flush",
-            help="Set without value if database should be flushed before.",
+            help=_("Set without value if database should be flushed before."),
             action="store_true",
         )
 
@@ -57,7 +58,7 @@ class Command(BaseCommand):
                 indent=2,
                 output="plana/apps/groups/fixtures/auth_group_permissions.json",
             )
-            self.stdout.write(self.style.SUCCESS("Updated all group permissions."))
+            self.stdout.write(self.style.SUCCESS(_("Updated all group permissions.")))
 
         except Exception as e:
             self.stdout.write(self.style.ERROR("Error : %s" % e))
