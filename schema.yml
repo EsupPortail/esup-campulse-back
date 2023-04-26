@@ -2411,8 +2411,6 @@ components:
           readOnly: true
         acronym:
           type: string
-        alt_logo:
-          type: string
         social_object:
           type: string
         current_projects:
@@ -2447,6 +2445,10 @@ components:
           format: uri
           nullable: true
           title: Dynamic thumbnails for the logo
+        alt_logo:
+          type: string
+          nullable: true
+          title: Logo description
         student_count:
           type: integer
           maximum: 2147483647
@@ -3356,8 +3358,6 @@ components:
       properties:
         acronym:
           type: string
-        alt_logo:
-          type: string
         social_object:
           type: string
         current_projects:
@@ -3393,6 +3393,10 @@ components:
           format: binary
           nullable: true
           title: Dynamic thumbnails for the logo
+        alt_logo:
+          type: string
+          nullable: true
+          title: Logo description
         student_count:
           type: integer
           maximum: 2147483647

@@ -30,7 +30,6 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     acronym = serializers.CharField(required=False, allow_blank=True)
-    alt_logo = serializers.CharField(required=False, allow_blank=True)
     social_object = serializers.CharField(required=False, allow_blank=True)
     current_projects = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
