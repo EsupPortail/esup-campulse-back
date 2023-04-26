@@ -74,7 +74,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 inactive_statuses = [
                     "PROJECT_DRAFT",
                     "PROJECT_REJECTED",
-                    "PROJECT_REVIEW_CANCELLED",
+                    "PROJECT_REVIEW_REJECTED",
                     "PROJECT_REVIEW_VALIDATED",
                 ]
                 if to_bool(active_projects) is False:

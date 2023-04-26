@@ -39,7 +39,7 @@ class CommissionDateList(generics.ListAPIView):
                     project_status__in=[
                         "PROJECT_DRAFT",
                         "PROJECT_REJECTED",
-                        "PROJECT_REVIEW_CANCELLED",
+                        "PROJECT_REVIEW_REJECTED",
                         "PROJECT_REVIEW_VALIDATED",
                     ]
                 )

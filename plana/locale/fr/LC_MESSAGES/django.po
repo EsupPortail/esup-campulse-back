@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 15:30+0200\n"
+"POT-Creation-Date: 2023-04-26 09:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,7 +143,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:85
-#: plana/apps/projects/models/project.py:73
+#: plana/apps/projects/models/project.py:72
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
@@ -417,7 +417,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:59
-#: plana/apps/projects/models/project.py:96
+#: plana/apps/projects/models/project.py:95
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:15
 #: plana/apps/projects/models/project_commission_date.py:13
@@ -556,12 +556,12 @@ msgid "Categories"
 msgstr "Catégories"
 
 #: plana/apps/projects/models/project.py:13
-#: plana/apps/projects/models/project.py:77
+#: plana/apps/projects/models/project.py:76
 msgid "Start date"
 msgstr "Date de début"
 
 #: plana/apps/projects/models/project.py:14
-#: plana/apps/projects/models/project.py:78
+#: plana/apps/projects/models/project.py:77
 msgid "End date"
 msgstr "Date de fin"
 
@@ -650,71 +650,67 @@ msgid "Project Validated"
 msgstr "Projet Validé"
 
 #: plana/apps/projects/models/project.py:65
-msgid "Project Review Cancelled"
-msgstr "Bilan de Projet annulé"
-
-#: plana/apps/projects/models/project.py:66
 msgid "Project Review Draft"
 msgstr "Bilan de Projet en Brouillon"
 
-#: plana/apps/projects/models/project.py:67
+#: plana/apps/projects/models/project.py:66
 msgid "Project Review Rejected"
 msgstr "Bilan de Projet Rejeté"
 
-#: plana/apps/projects/models/project.py:68
+#: plana/apps/projects/models/project.py:67
 msgid "Project Review Processing"
 msgstr "Bilan de Projet en Traitement"
 
-#: plana/apps/projects/models/project.py:69
+#: plana/apps/projects/models/project.py:68
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:74
+#: plana/apps/projects/models/project.py:73
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:75
+#: plana/apps/projects/models/project.py:74
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:76
+#: plana/apps/projects/models/project.py:75
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:79
+#: plana/apps/projects/models/project.py:78
 msgid "Organizer name"
 msgstr "Nom de l'organisateur"
 
-#: plana/apps/projects/models/project.py:80
+#: plana/apps/projects/models/project.py:79
 msgid "Organizer phone"
 msgstr "Téléphone de l'organisateur"
 
-#: plana/apps/projects/models/project.py:81
+#: plana/apps/projects/models/project.py:80
 msgid "Organizer email"
 msgstr "Adresse mail de l'organisateur"
 
-#: plana/apps/projects/models/project.py:83
+#: plana/apps/projects/models/project.py:82
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:85
+#: plana/apps/projects/models/project.py:84
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:87
+#: plana/apps/projects/models/project.py:86
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:89
+#: plana/apps/projects/models/project.py:88
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:90
+#: plana/apps/projects/models/project.py:89
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:97
+#: plana/apps/projects/models/project.py:96
 msgid "Projects"
 msgstr "Projets"
 
@@ -1327,7 +1323,9 @@ msgstr "Politique d'expiration des mots de passe"
 #: plana/management/commands/reset_permissions.py:14
 msgid ""
 "Applies permissions to groups according to the settings/permissions.py file."
-msgstr "Applique les permissions aux groupes indiquées dans le fichier settings/permissions.py ."
+msgstr ""
+"Applique les permissions aux groupes indiquées dans le fichier settings/"
+"permissions.py ."
 
 #: plana/management/commands/reset_permissions.py:20
 msgid "Set without value if database should be flushed before."

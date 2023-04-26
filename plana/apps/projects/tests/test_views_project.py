@@ -174,7 +174,7 @@ class ProjectsViewsTests(TestCase):
         inactive_statuses = [
             "PROJECT_DRAFT",
             "PROJECT_REJECTED",
-            "PROJECT_REVIEW_CANCELLED",
+            "PROJECT_REVIEW_REJECTED",
             "PROJECT_REVIEW_VALIDATED",
         ]
         inactive_projects = Project.objects.filter(project_status__in=inactive_statuses)
