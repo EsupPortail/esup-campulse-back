@@ -11,7 +11,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.fields.files import FieldFile
 from pyrage import decrypt, encrypt, x25519
-from rest_framework.renderers import BaseRenderer
 from storages.backends.s3boto3 import S3Boto3Storage
 from storages.utils import clean_name
 from thumbnails.fields import ImageField as ThumbnailImageField

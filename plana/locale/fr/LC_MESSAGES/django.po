@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-26 11:37+0200\n"
+"POT-Creation-Date: 2023-04-26 14:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1242,6 +1242,15 @@ msgstr "Régénère la structure et le contenu de la base de données."
 #: plana/management/commands/clean_database.py:19
 msgid "Database regenerated."
 msgstr "Base de données régénérée."
+
+#: plana/management/commands/clean_storages.py:8
+msgid "Resets S3 bucket content."
+msgstr "Réinitialise le contenu d'un bucket S3."
+
+#: plana/management/commands/clean_storages.py:23
+#, python-brace-format
+msgid "S3 bucket {bucket_name} content cleaned."
+msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
 
 #: plana/management/commands/createmanageruser.py:16
 msgid "Creates a new manager user."
