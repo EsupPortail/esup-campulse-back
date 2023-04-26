@@ -47,9 +47,9 @@
     "model": "contents.content",
     "pk": 5,
     "fields": {
-      "code": "ABOUT_INFO",
+      "code": "ABOUT_APP",
       "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
-      "header": "",
+      "header": "Origines du projet",
       "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": ""
     }
@@ -58,9 +58,9 @@
     "model": "contents.content",
     "pk": 6,
     "fields": {
-      "code": "ABOUT_SERVICES",
-      "label": "Paragraphe de la page à propos présentant les différents services proposés par la plateforme.",
-      "header": "",
+      "code": "ABOUT_PARTNERSHIP",
+      "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
+      "header": "Partenaires",
       "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": ""
     }
@@ -69,9 +69,9 @@
     "model": "contents.content",
     "pk": 7,
     "fields": {
-      "code": "ABOUT_CONTACT",
-      "label": "Paragraphe de la page à propos donnant les contacts pour proposer des pistes d'amélioration de la plateforme.",
-      "header": "",
+      "code": "ABOUT_FUNDING",
+      "label": "Paragraphe de la page à propos donnant les modes de financement de la plateforme.",
+      "header": "Financements",
       "body": "<p>Lorem ipsum.</p>",
       "footer": ""
     }
