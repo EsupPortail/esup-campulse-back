@@ -4,7 +4,8 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
@@ -19,40 +20,18 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
     """/projects/categories route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
-    def get_queryset(self):
-        queryset = ProjectCategory.objects.all()
-        if self.request.method == "GET":
-            project_id = self.request.query_params.get("project_id")
-            if project_id:
-                queryset = queryset.filter(project_id=project_id)
-
-            if not self.request.user.has_perm(
-                "projects.view_projectcommissiondate_any_commission"
-            ):
-                user_associations_ids = self.request.user.get_user_associations()
-                user_commissions_ids = self.request.user.get_user_commissions()
-                user_projects_ids = Project.objects.filter(
-                    models.Q(user_id=self.request.user.pk)
-                    | models.Q(association_id__in=user_associations_ids)
-                ).values_list("id")
-                queryset = queryset.filter(
-                    models.Q(project_id__in=user_projects_ids)
-                    | models.Q(
-                        project_id__in=(
-                            ProjectCommissionDate.objects.filter(
-                                commission_date_id__in=CommissionDate.objects.filter(
-                                    commission_id__in=user_commissions_ids
-                                ).values_list("id")
-                            ).values_list("project_id")
-                        )
-                    )
-                )
-
-        return queryset
-
     @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "project_id",
+                OpenApiTypes.NUMBER,
+                OpenApiParameter.QUERY,
+                description="Project id.",
+            ),
+        ],
         responses={
             status.HTTP_200_OK: ProjectCategorySerializer,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -62,6 +41,33 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all links between categories and projects."""
+        project_id = request.query_params.get("project_id")
+
+        if not request.user.has_perm(
+            "projects.view_projectcommissiondate_any_commission"
+        ):
+            user_associations_ids = request.user.get_user_associations()
+            user_commissions_ids = request.user.get_user_commissions()
+            user_projects_ids = Project.objects.filter(
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
+            ).values_list("id")
+            self.queryset = self.queryset.filter(
+                models.Q(project_id__in=user_projects_ids)
+                | models.Q(
+                    project_id__in=(
+                        ProjectCommissionDate.objects.filter(
+                            commission_date_id__in=CommissionDate.objects.filter(
+                                commission_id__in=user_commissions_ids
+                            ).values_list("id")
+                        ).values_list("project_id")
+                    )
+                )
+            )
+
+        if project_id:
+            self.queryset = self.queryset.filter(project_id=project_id)
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

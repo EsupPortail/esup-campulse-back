@@ -17,14 +17,8 @@ class ContentList(generics.ListAPIView):
     """/contents/ route"""
 
     permission_classes = [AllowAny]
+    queryset = Content.objects.all()
     serializer_class = ContentSerializer
-
-    def get_queryset(self):
-        queryset = Content.objects.all()
-        code = self.request.query_params.get("code")
-        if code is not None and code != "":
-            queryset = queryset.filter(code=code)
-        return queryset
 
     @extend_schema(
         parameters=[
@@ -41,6 +35,11 @@ class ContentList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all contents."""
+        code = request.query_params.get("code")
+
+        if code is not None and code != "":
+            self.queryset = self.queryset.filter(code=code)
+
         return self.list(request, *args, **kwargs)
 
 

@@ -12,14 +12,8 @@ class GroupList(generics.ListAPIView):
     """/groups/ route"""
 
     permission_classes = [AllowAny]
+    queryset = Group.objects.all().order_by("name")
     serializer_class = GroupSerializer
-
-    def get_queryset(self):
-        queryset = Group.objects.all().order_by("name")
-        name = self.request.query_params.get("name")
-        if name is not None and name != "":
-            queryset = queryset.filter(name=name)
-        return queryset
 
     @extend_schema(
         parameters=[
@@ -36,4 +30,9 @@ class GroupList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all groups."""
+        name = request.query_params.get("name")
+
+        if name is not None and name != "":
+            self.queryset = self.queryset.filter(name=name)
+
         return self.list(request, *args, **kwargs)

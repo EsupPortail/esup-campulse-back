@@ -23,17 +23,6 @@ class DocumentList(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
-    def get_queryset(self):
-        queryset = Document.objects.all()
-        if self.request.method == "GET":
-            acronym = self.request.query_params.get("acronym")
-            if acronym is not None and acronym != "":
-                queryset = queryset.filter(acronym=acronym)
-            process_type = self.request.query_params.get("process_type")
-            if process_type is not None and process_type != "":
-                queryset = queryset.filter(process_type=process_type)
-        return queryset
-
     @extend_schema(
         parameters=[
             OpenApiParameter(
@@ -55,6 +44,15 @@ class DocumentList(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""
+        acronym = request.query_params.get("acronym")
+        process_type = request.query_params.get("process_type")
+
+        if acronym is not None and acronym != "":
+            self.queryset = self.queryset.filter(acronym=acronym)
+
+        if process_type is not None and process_type != "":
+            self.queryset = self.queryset.filter(process_type=process_type)
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

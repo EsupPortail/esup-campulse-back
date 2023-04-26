@@ -24,40 +24,8 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     """/projects/commission_dates route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = ProjectCommissionDate.objects.all()
     serializer_class = ProjectCommissionDateSerializer
-
-    def get_queryset(self):
-        queryset = ProjectCommissionDate.objects.all()
-        if self.request.method == "GET":
-            project_id = self.request.query_params.get("project_id")
-            commission_id = self.request.query_params.get("commission_id")
-            if project_id:
-                queryset = queryset.filter(project_id=project_id)
-            if commission_id:
-                commission_dates_ids = CommissionDate.objects.filter(
-                    commission_id=commission_id
-                ).values_list("id")
-                queryset = queryset.filter(commission_date_id__in=commission_dates_ids)
-
-            if not self.request.user.has_perm(
-                "projects.view_projectcommissiondate_any_commission"
-            ):
-                user_associations_ids = self.request.user.get_user_associations()
-                user_commissions_ids = self.request.user.get_user_commissions()
-                user_projects_ids = Project.objects.filter(
-                    models.Q(user_id=self.request.user.pk)
-                    | models.Q(association_id__in=user_associations_ids)
-                ).values_list("id")
-                queryset = queryset.filter(
-                    models.Q(project_id__in=user_projects_ids)
-                    | models.Q(
-                        commission_date_id__in=CommissionDate.objects.filter(
-                            commission_id__in=user_commissions_ids
-                        ).values_list("id")
-                    )
-                )
-
-        return queryset
 
     @extend_schema(
         parameters=[
@@ -83,6 +51,38 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates that can be linked to a project."""
+        project_id = request.query_params.get("project_id")
+        commission_id = request.query_params.get("commission_id")
+
+        if not request.user.has_perm(
+            "projects.view_projectcommissiondate_any_commission"
+        ):
+            user_associations_ids = request.user.get_user_associations()
+            user_commissions_ids = request.user.get_user_commissions()
+            user_projects_ids = Project.objects.filter(
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
+            ).values_list("id")
+            self.queryset = self.queryset.filter(
+                models.Q(project_id__in=user_projects_ids)
+                | models.Q(
+                    commission_date_id__in=CommissionDate.objects.filter(
+                        commission_id__in=user_commissions_ids
+                    ).values_list("id")
+                )
+            )
+
+        if project_id:
+            self.queryset = self.queryset.filter(project_id=project_id)
+
+        if commission_id:
+            commission_dates_ids = CommissionDate.objects.filter(
+                commission_id=commission_id
+            ).values_list("id")
+            self.queryset = self.queryset.filter(
+                commission_date_id__in=commission_dates_ids
+            )
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

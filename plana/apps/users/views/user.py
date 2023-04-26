@@ -33,6 +33,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = User.objects.all().order_by("id")
     search_fields = [
         "username__nospaces__unaccent",
         "first_name__nospaces__unaccent",
@@ -40,106 +41,6 @@ class UserListCreate(generics.ListCreateAPIView):
         "email__nospaces__unaccent",
         "associations__name__nospaces__unaccent",
     ]
-
-    def get_queryset(self):
-        queryset = User.objects.all().order_by("id")
-        name = self.request.query_params.get("name")
-        is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
-        is_cas = self.request.query_params.get("is_cas")
-        association_id = self.request.query_params.get("association_id")
-        institutions = self.request.query_params.get("institutions")
-
-        if not self.request.user.has_perm(
-            "users.view_user_anyone"
-        ) and not self.request.user.has_perm("users.view_user_misc"):
-            queryset = queryset.filter(
-                id__in=AssociationUser.objects.filter(
-                    association_id__in=self.request.user.get_user_associations().values_list(
-                        "id"
-                    )
-                ).values_list("user_id")
-            )
-        else:
-            if name is not None and name != "":
-                name = str(name).strip()
-                queryset = queryset.filter(
-                    Q(first_name__nospaces__unaccent__icontains=name.replace(" ", ""))
-                    | Q(last_name__nospaces__unaccent__icontains=name.replace(" ", ""))
-                )
-
-            if is_validated_by_admin is not None and is_validated_by_admin != "":
-                is_validated_by_admin = to_bool(is_validated_by_admin)
-                email_validated_user_ids = EmailAddress.objects.filter(
-                    verified=True
-                ).values_list("user_id")
-                queryset = queryset.filter(
-                    is_validated_by_admin=is_validated_by_admin,
-                    id__in=email_validated_user_ids,
-                )
-
-            if is_cas is not None and is_cas != "":
-                is_cas = to_bool(is_cas)
-                cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
-                    "user_id"
-                )
-                queryset = (
-                    queryset.filter(id__in=cas_ids_list)
-                    if is_cas
-                    else queryset.exclude(id__in=cas_ids_list)
-                )
-
-            if association_id is not None and association_id != "":
-                assos_users_query = AssociationUser.objects.filter(
-                    association_id=association_id
-                ).values_list("user_id")
-                queryset = queryset.filter(id__in=assos_users_query)
-
-            if institutions is not None:
-                misc_users_query = User.objects.filter(
-                    Q(
-                        id__in=GroupInstitutionCommissionUser.objects.filter(
-                            institution_id__isnull=True, commission_id__isnull=True
-                        ).values_list("user_id")
-                    )
-                    & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
-                )
-                commission_users_query = User.objects.filter(
-                    id__in=GroupInstitutionCommissionUser.objects.filter(
-                        commission_id__isnull=False
-                    ).values_list("user_id")
-                ).values_list("id")
-                if institutions == "":
-                    queryset = queryset.filter(
-                        Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
-                    )
-                else:
-                    institutions_ids = institutions.split(",")
-                    check_other_users = False
-                    if "" in institutions_ids:
-                        check_other_users = True
-                    institutions_ids = [
-                        institution_id
-                        for institution_id in institutions_ids
-                        if institution_id != "" and institution_id.isdigit()
-                    ]
-
-                    associations_ids = Association.objects.filter(
-                        institution_id__in=institutions_ids
-                    ).values_list("id")
-                    assos_users_query = AssociationUser.objects.filter(
-                        association_id__in=associations_ids
-                    ).values_list("user_id")
-
-                    if check_other_users is True:
-                        queryset = queryset.filter(
-                            Q(id__in=assos_users_query)
-                            | Q(id__in=misc_users_query)
-                            | Q(id__in=commission_users_query)
-                        )
-                    else:
-                        queryset = queryset.filter(id__in=assos_users_query)
-
-        return queryset
 
     def get_serializer_class(self):
         if not self.request.user.has_perm(
@@ -191,6 +92,102 @@ class UserListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists users sharing the same association, or all users (manager)."""
+        name = request.query_params.get("name")
+        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
+        is_cas = request.query_params.get("is_cas")
+        association_id = request.query_params.get("association_id")
+        institutions = request.query_params.get("institutions")
+
+        if not request.user.has_perm(
+            "users.view_user_anyone"
+        ) and not request.user.has_perm("users.view_user_misc"):
+            self.queryset = self.queryset.filter(
+                id__in=AssociationUser.objects.filter(
+                    association_id__in=request.user.get_user_associations().values_list(
+                        "id"
+                    )
+                ).values_list("user_id")
+            )
+        else:
+            if name is not None and name != "":
+                name = str(name).strip()
+                self.queryset = self.queryset.filter(
+                    Q(first_name__nospaces__unaccent__icontains=name.replace(" ", ""))
+                    | Q(last_name__nospaces__unaccent__icontains=name.replace(" ", ""))
+                )
+
+            if is_validated_by_admin is not None and is_validated_by_admin != "":
+                is_validated_by_admin = to_bool(is_validated_by_admin)
+                email_validated_user_ids = EmailAddress.objects.filter(
+                    verified=True
+                ).values_list("user_id")
+                self.queryset = self.queryset.filter(
+                    is_validated_by_admin=is_validated_by_admin,
+                    id__in=email_validated_user_ids,
+                )
+
+            if is_cas is not None and is_cas != "":
+                is_cas = to_bool(is_cas)
+                cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
+                    "user_id"
+                )
+                self.queryset = (
+                    self.queryset.filter(id__in=cas_ids_list)
+                    if is_cas
+                    else self.queryset.exclude(id__in=cas_ids_list)
+                )
+
+            if association_id is not None and association_id != "":
+                assos_users_query = AssociationUser.objects.filter(
+                    association_id=association_id
+                ).values_list("user_id")
+                self.queryset = self.queryset.filter(id__in=assos_users_query)
+
+            if institutions is not None:
+                misc_users_query = User.objects.filter(
+                    Q(
+                        id__in=GroupInstitutionCommissionUser.objects.filter(
+                            institution_id__isnull=True, commission_id__isnull=True
+                        ).values_list("user_id")
+                    )
+                    & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
+                )
+                commission_users_query = User.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        commission_id__isnull=False
+                    ).values_list("user_id")
+                ).values_list("id")
+                if institutions == "":
+                    self.queryset = self.queryset.filter(
+                        Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
+                    )
+                else:
+                    institutions_ids = institutions.split(",")
+                    check_other_users = False
+                    if "" in institutions_ids:
+                        check_other_users = True
+                    institutions_ids = [
+                        institution_id
+                        for institution_id in institutions_ids
+                        if institution_id != "" and institution_id.isdigit()
+                    ]
+
+                    associations_ids = Association.objects.filter(
+                        institution_id__in=institutions_ids
+                    ).values_list("id")
+                    assos_users_query = AssociationUser.objects.filter(
+                        association_id__in=associations_ids
+                    ).values_list("user_id")
+
+                    if check_other_users is True:
+                        self.queryset = self.queryset.filter(
+                            Q(id__in=assos_users_query)
+                            | Q(id__in=misc_users_query)
+                            | Q(id__in=commission_users_query)
+                        )
+                    else:
+                        self.queryset = self.queryset.filter(id__in=assos_users_query)
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

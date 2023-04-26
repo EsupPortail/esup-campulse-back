@@ -33,76 +33,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-
-    def get_queryset(self):
-        queryset = Project.objects.all()
-        if self.request.method == "GET":
-            user = self.request.query_params.get("user_id")
-            association = self.request.query_params.get("association_id")
-            project_statuses = self.request.query_params.get("project_statuses")
-            commission_dates = self.request.query_params.get("commission_dates")
-            active_projects = self.request.query_params.get("active_projects")
-            if user is not None and user != "":
-                queryset = queryset.filter(user_id=user)
-            if association is not None and association != "":
-                queryset = queryset.filter(association_id=association)
-            if project_statuses is not None and project_statuses != "":
-                all_project_statuses = [
-                    c[0] for c in Project.project_status.field.choices
-                ]
-                project_statuses_codes = project_statuses.split(",")
-                project_statuses_codes = [
-                    project_status_code
-                    for project_status_code in project_statuses_codes
-                    if project_status_code != ""
-                    and project_status_code in all_project_statuses
-                ]
-                queryset = queryset.filter(project_status__in=project_statuses_codes)
-            if commission_dates is not None and commission_dates != "":
-                commission_dates_ids = commission_dates.split(",")
-                commission_dates_ids = [
-                    commission_date_id
-                    for commission_date_id in commission_dates
-                    if commission_date_id != "" and commission_date_id.isdigit()
-                ]
-                queryset = queryset.filter(
-                    id__in=ProjectCommissionDate.objects.filter(
-                        commission_date_id__in=commission_dates_ids
-                    ).values_list("project_id")
-                )
-            if active_projects is not None and active_projects != "":
-                inactive_statuses = [
-                    "PROJECT_DRAFT",
-                    "PROJECT_REJECTED",
-                    "PROJECT_REVIEW_REJECTED",
-                    "PROJECT_REVIEW_VALIDATED",
-                ]
-                if to_bool(active_projects) is False:
-                    queryset = queryset.filter(project_status__in=inactive_statuses)
-                else:
-                    queryset = queryset.exclude(project_status__in=inactive_statuses)
-
-            if not self.request.user.has_perm("projects.view_project_any_commission"):
-                user_associations_ids = self.request.user.get_user_associations()
-                user_commissions_ids = self.request.user.get_user_commissions()
-                user_projects_ids = Project.objects.filter(
-                    models.Q(user_id=self.request.user.pk)
-                    | models.Q(association_id__in=user_associations_ids)
-                ).values_list("id")
-                queryset = queryset.filter(
-                    models.Q(id__in=user_projects_ids)
-                    | models.Q(
-                        id__in=(
-                            ProjectCommissionDate.objects.filter(
-                                commission_date_id__in=CommissionDate.objects.filter(
-                                    commission_id__in=user_commissions_ids
-                                ).values_list("id")
-                            ).values_list("project_id")
-                        )
-                    )
-                )
-
-        return queryset
+    queryset = Project.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -152,6 +83,80 @@ class ProjectListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        user = request.query_params.get("user_id")
+        association = request.query_params.get("association_id")
+        project_statuses = request.query_params.get("project_statuses")
+        commission_dates = request.query_params.get("commission_dates")
+        active_projects = request.query_params.get("active_projects")
+
+        if not request.user.has_perm("projects.view_project_any_commission"):
+            user_associations_ids = request.user.get_user_associations()
+            user_commissions_ids = request.user.get_user_commissions()
+            user_projects_ids = Project.objects.filter(
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
+            ).values_list("id")
+            self.queryset = self.queryset.filter(
+                models.Q(id__in=user_projects_ids)
+                | models.Q(
+                    id__in=(
+                        ProjectCommissionDate.objects.filter(
+                            commission_date_id__in=CommissionDate.objects.filter(
+                                commission_id__in=user_commissions_ids
+                            ).values_list("id")
+                        ).values_list("project_id")
+                    )
+                )
+            )
+
+        if user is not None and user != "":
+            self.queryset = self.queryset.filter(user_id=user)
+
+        if association is not None and association != "":
+            self.queryset = self.queryset.filter(association_id=association)
+
+        if project_statuses is not None and project_statuses != "":
+            all_project_statuses = [c[0] for c in Project.project_status.field.choices]
+            project_statuses_codes = project_statuses.split(",")
+            project_statuses_codes = [
+                project_status_code
+                for project_status_code in project_statuses_codes
+                if project_status_code != ""
+                and project_status_code in all_project_statuses
+            ]
+            self.queryset = self.queryset.filter(
+                project_status__in=project_statuses_codes
+            )
+
+        if commission_dates is not None and commission_dates != "":
+            commission_dates_ids = commission_dates.split(",")
+            commission_dates_ids = [
+                commission_date_id
+                for commission_date_id in commission_dates
+                if commission_date_id != "" and commission_date_id.isdigit()
+            ]
+            self.queryset = self.queryset.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    commission_date_id__in=commission_dates_ids
+                ).values_list("project_id")
+            )
+
+        if active_projects is not None and active_projects != "":
+            inactive_statuses = [
+                "PROJECT_DRAFT",
+                "PROJECT_REJECTED",
+                "PROJECT_REVIEW_REJECTED",
+                "PROJECT_REVIEW_VALIDATED",
+            ]
+            if to_bool(active_projects) is False:
+                self.queryset = self.queryset.filter(
+                    project_status__in=inactive_statuses
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    project_status__in=inactive_statuses
+                )
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

@@ -29,6 +29,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route"""
 
     filter_backends = [filters.SearchFilter]
+    queryset = Association.objects.all().order_by("name")
     search_fields = [
         "name__nospaces__unaccent",
         "acronym__nospaces__unaccent",
@@ -43,72 +44,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_queryset(self):
-        queryset = Association.objects.all().order_by("name")
-        if self.request.method == "GET":
-            name = self.request.query_params.get("name")
-            acronym = self.request.query_params.get("acronym")
-            is_enabled = self.request.query_params.get("is_enabled")
-            is_public = self.request.query_params.get("is_public")
-            is_site = self.request.query_params.get("is_site")
-            institutions = self.request.query_params.get("institutions")
-            institution_component = self.request.query_params.get(
-                "institution_component"
-            )
-            activity_field = self.request.query_params.get("activity_field")
-            user_id = self.request.query_params.get("user_id")
-
-            if self.request.user.is_anonymous:
-                is_enabled = True
-                is_public = True
-
-            if not self.request.user.is_anonymous and not self.request.user.has_perm(
-                "associations.view_association_not_enabled"
-            ):
-                is_enabled = True
-
-            if not self.request.user.is_anonymous and not self.request.user.has_perm(
-                "associations.view_association_not_public"
-            ):
-                is_public = True
-
-            if name is not None and name != "":
-                name = str(name).strip()
-                queryset = queryset.filter(
-                    name__nospaces__unaccent__icontains=name.replace(" ", "")
-                )
-            if acronym is not None and acronym != "":
-                acronym = str(acronym).strip()
-                queryset = queryset.filter(acronym__icontains=acronym)
-            if is_enabled is not None and is_enabled != "":
-                queryset = queryset.filter(is_enabled=to_bool(is_enabled))
-            if is_public is not None and is_public != "":
-                queryset = queryset.filter(is_public=to_bool(is_public))
-            if is_site is not None and is_site != "":
-                queryset = queryset.filter(is_site=to_bool(is_site))
-            if institutions is not None and institutions != "":
-                queryset = queryset.filter(institution_id__in=institutions.split(","))
-            if institution_component is not None:
-                if institution_component == "":
-                    queryset = queryset.filter(institution_component_id__isnull=True)
-                else:
-                    queryset = queryset.filter(
-                        institution_component_id=institution_component
-                    )
-            if activity_field is not None and activity_field != "":
-                queryset = queryset.filter(activity_field_id=activity_field)
-            if (
-                user_id is not None
-                and user_id != ""
-                and self.request.user.has_perm("users.view_user_anyone")
-            ):
-                queryset = queryset.filter(
-                    id__in=AssociationUser.objects.filter(user_id=user_id).values_list(
-                        "association_id"
-                    )
-                )
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -180,6 +115,78 @@ class AssociationListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all associations with many filters."""
+        name = request.query_params.get("name")
+        acronym = request.query_params.get("acronym")
+        is_enabled = request.query_params.get("is_enabled")
+        is_public = request.query_params.get("is_public")
+        is_site = request.query_params.get("is_site")
+        institutions = request.query_params.get("institutions")
+        institution_component = request.query_params.get("institution_component")
+        activity_field = request.query_params.get("activity_field")
+        user_id = request.query_params.get("user_id")
+
+        if request.user.is_anonymous:
+            is_enabled = True
+            is_public = True
+
+        if not request.user.is_anonymous and not request.user.has_perm(
+            "associations.view_association_not_enabled"
+        ):
+            is_enabled = True
+
+        if not request.user.is_anonymous and not request.user.has_perm(
+            "associations.view_association_not_public"
+        ):
+            is_public = True
+
+        if name is not None and name != "":
+            name = str(name).strip()
+            self.queryset = self.queryset.filter(
+                name__nospaces__unaccent__icontains=name.replace(" ", "")
+            )
+
+        if acronym is not None and acronym != "":
+            acronym = str(acronym).strip()
+            self.queryset = self.queryset.filter(acronym__icontains=acronym)
+
+        if is_enabled is not None and is_enabled != "":
+            self.queryset = self.queryset.filter(is_enabled=to_bool(is_enabled))
+
+        if is_public is not None and is_public != "":
+            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
+
+        if is_site is not None and is_site != "":
+            self.queryset = self.queryset.filter(is_site=to_bool(is_site))
+
+        if institutions is not None and institutions != "":
+            self.queryset = self.queryset.filter(
+                institution_id__in=institutions.split(",")
+            )
+
+        if institution_component is not None:
+            if institution_component == "":
+                self.queryset = self.queryset.filter(
+                    institution_component_id__isnull=True
+                )
+            else:
+                self.queryset = self.queryset.filter(
+                    institution_component_id=institution_component
+                )
+
+        if activity_field is not None and activity_field != "":
+            self.queryset = self.queryset.filter(activity_field_id=activity_field)
+
+        if (
+            user_id is not None
+            and user_id != ""
+            and self.request.user.has_perm("users.view_user_anyone")
+        ):
+            self.queryset = self.queryset.filter(
+                id__in=AssociationUser.objects.filter(user_id=user_id).values_list(
+                    "association_id"
+                )
+            )
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(
@@ -552,40 +559,8 @@ class AssociationNameList(generics.ListAPIView):
     """/associations/names route"""
 
     permission_classes = [AllowAny]
+    queryset = Association.objects.all().order_by("name")
     serializer_class = AssociationNameSerializer
-
-    def get_queryset(self):
-        queryset = Association.objects.all()
-        institutions = self.request.query_params.get("institutions")
-        is_public = self.request.query_params.get("is_public")
-        allow_new_users = self.request.query_params.get("allow_new_users")
-        if institutions is not None and institutions != "":
-            institutions_ids = institutions.split(",")
-            institutions_ids = [
-                institution_id
-                for institution_id in institutions_ids
-                if institution_id != "" and institution_id.isdigit()
-            ]
-            queryset = queryset.filter(institution_id__in=institutions_ids)
-        if is_public is not None and is_public != "":
-            queryset = queryset.filter(is_public=to_bool(is_public))
-        if allow_new_users is not None and allow_new_users != "":
-            assos_ids_with_all_members = []
-            for association in queryset:
-                association_users = AssociationUser.objects.filter(
-                    association_id=association.id
-                )
-                if (
-                    not association.amount_members_allowed is None
-                    and association_users.count() >= association.amount_members_allowed
-                ):
-                    assos_ids_with_all_members.append(association.id)
-            if to_bool(allow_new_users) is True:
-                queryset = queryset.exclude(id__in=assos_ids_with_all_members)
-            else:
-                queryset = queryset.filter(id__in=assos_ids_with_all_members)
-
-        return queryset.order_by("name")
 
     @extend_schema(
         parameters=[
@@ -614,4 +589,32 @@ class AssociationNameList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists minimal details for all associations with many filters."""
+        institutions = request.query_params.get("institutions")
+        is_public = request.query_params.get("is_public")
+        allow_new_users = request.query_params.get("allow_new_users")
+        if institutions is not None and institutions != "":
+            institutions_ids = institutions.split(",")
+            institutions_ids = [
+                institution_id
+                for institution_id in institutions_ids
+                if institution_id != "" and institution_id.isdigit()
+            ]
+            self.queryset = self.queryset.filter(institution_id__in=institutions_ids)
+        if is_public is not None and is_public != "":
+            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
+        if allow_new_users is not None and allow_new_users != "":
+            assos_ids_with_all_members = []
+            for association in self.get_queryset():
+                association_users = AssociationUser.objects.filter(
+                    association_id=association.id
+                )
+                if (
+                    not association.amount_members_allowed is None
+                    and association_users.count() >= association.amount_members_allowed
+                ):
+                    assos_ids_with_all_members.append(association.id)
+            if to_bool(allow_new_users) is True:
+                self.queryset = self.queryset.exclude(id__in=assos_ids_with_all_members)
+            else:
+                self.queryset = self.queryset.filter(id__in=assos_ids_with_all_members)
         return self.list(request, *args, **kwargs)

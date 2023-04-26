@@ -1145,6 +1145,12 @@ paths:
     get:
       operationId: projects_categories_list
       description: Lists all links between categories and projects.
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: number
+        description: Project id.
       tags:
       - projects/categories
       security:

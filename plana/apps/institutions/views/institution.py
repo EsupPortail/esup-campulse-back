@@ -12,14 +12,8 @@ class InstitutionList(generics.ListAPIView):
     """/institutions/ route"""
 
     permission_classes = [AllowAny]
+    queryset = Institution.objects.all().order_by("name")
     serializer_class = InstitutionSerializer
-
-    def get_queryset(self):
-        queryset = Institution.objects.all().order_by("name")
-        acronym = self.request.query_params.get("acronym")
-        if acronym is not None and acronym != "":
-            queryset = queryset.filter(acronym=acronym)
-        return queryset
 
     @extend_schema(
         parameters=[
@@ -36,4 +30,9 @@ class InstitutionList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all institutions."""
+        acronym = request.query_params.get("acronym")
+
+        if acronym is not None and acronym != "":
+            self.queryset = self.queryset.filter(acronym=acronym)
+
         return self.list(request, *args, **kwargs)

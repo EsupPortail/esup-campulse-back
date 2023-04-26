@@ -27,52 +27,14 @@ from plana.utils import send_mail, to_bool
 class AssociationUserListCreate(generics.ListCreateAPIView):
     """/users/associations/ route"""
 
+    queryset = AssociationUser.objects.all()
+
     def get_permissions(self):
         if self.request.method == "POST":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_queryset(self):
-        association_id = self.request.query_params.get("association_id")
-
-        if (
-            association_id is not None
-            and association_id != ""
-            and (
-                self.request.user.has_perm("users.view_associationuser_anyone")
-                or self.request.user.is_president_in_association(association_id)
-            )
-        ):
-            queryset = AssociationUser.objects.filter(association_id=association_id)
-        elif self.request.user.has_perm("users.view_associationuser_anyone"):
-            queryset = AssociationUser.objects.all()
-        else:
-            queryset = AssociationUser.objects.filter(user_id=self.request.user.pk)
-
-        is_validated_by_admin = self.request.query_params.get("is_validated_by_admin")
-        institutions = self.request.query_params.get("institutions")
-
-        if is_validated_by_admin is not None and is_validated_by_admin != "":
-            queryset = queryset.filter(
-                is_validated_by_admin=to_bool(is_validated_by_admin)
-            )
-
-        if institutions is not None and institutions != "":
-            institutions_ids = institutions.split(",")
-            institutions_ids = [
-                institution_id
-                for institution_id in institutions_ids
-                if institution_id != "" and institution_id.isdigit()
-            ]
-            queryset = queryset.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=institutions_ids
-                ).values_list("id")
-            )
-
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -83,6 +45,12 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         parameters=[
+            OpenApiParameter(
+                "association_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Association ID.",
+            ),
             OpenApiParameter(
                 "is_validated_by_admin",
                 OpenApiTypes.BOOL,
@@ -95,12 +63,6 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter by Institutions IDs.",
             ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
         ],
         responses={
             status.HTTP_200_OK: AssociationUserSerializer,
@@ -111,6 +73,40 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all associations linked to a user, or all associations of all users (manager)."""
+        association_id = request.query_params.get("association_id")
+        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
+        institutions = request.query_params.get("institutions")
+
+        if (
+            association_id is not None
+            and association_id != ""
+            and (
+                request.user.has_perm("users.view_associationuser_anyone")
+                or request.user.is_president_in_association(association_id)
+            )
+        ):
+            self.queryset = self.queryset.filter(association_id=association_id)
+        elif not request.user.has_perm("users.view_associationuser_anyone"):
+            self.queryset = self.queryset.filter(user_id=request.user.pk)
+
+        if is_validated_by_admin is not None and is_validated_by_admin != "":
+            self.queryset = self.queryset.filter(
+                is_validated_by_admin=to_bool(is_validated_by_admin)
+            )
+
+        if institutions is not None and institutions != "":
+            institutions_ids = institutions.split(",")
+            institutions_ids = [
+                institution_id
+                for institution_id in institutions_ids
+                if institution_id != "" and institution_id.isdigit()
+            ]
+            self.queryset = self.queryset.filter(
+                association_id__in=Association.objects.filter(
+                    institution_id__in=institutions_ids
+                ).values_list("id")
+            )
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

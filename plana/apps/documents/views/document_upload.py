@@ -24,31 +24,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-
-    def get_queryset(self):
-        queryset = DocumentUpload.objects.all()
-        if self.request.method == "GET":
-            user = self.request.query_params.get("user_id")
-            association = self.request.query_params.get("association_id")
-            project = self.request.query_params.get("project_id")
-            if user is not None and user != "":
-                queryset = queryset.filter(user_id=user)
-            if association is not None and association != "":
-                queryset = queryset.filter(association_id=association)
-            if project is not None and project != "":
-                queryset = queryset.filter(project_id=project)
-
-            if not self.request.user.has_perm("documents.view_documentupload_all"):
-                user_associations_ids = AssociationUser.objects.filter(
-                    user_id=self.request.user.pk
-                ).values_list("association_id")
-                user_documents_ids = DocumentUpload.objects.filter(
-                    models.Q(user_id=self.request.user.pk)
-                    | models.Q(association_id__in=user_associations_ids)
-                ).values_list("id")
-                queryset = queryset.filter(id__in=user_documents_ids)
-
-        return queryset
+    queryset = DocumentUpload.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -86,6 +62,29 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all documents uploads."""
+        user = request.query_params.get("user_id")
+        association = request.query_params.get("association_id")
+        project = request.query_params.get("project_id")
+
+        if not request.user.has_perm("documents.view_documentupload_all"):
+            user_associations_ids = AssociationUser.objects.filter(
+                user_id=request.user.pk
+            ).values_list("association_id")
+            user_documents_ids = DocumentUpload.objects.filter(
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
+            ).values_list("id")
+            self.queryset = self.queryset.filter(id__in=user_documents_ids)
+
+        if user is not None and user != "":
+            self.queryset = self.queryset.filter(user_id=user)
+
+        if association is not None and association != "":
+            self.queryset = self.queryset.filter(association_id=association)
+
+        if project is not None and project != "":
+            self.queryset = self.queryset.filter(project_id=project)
+
         return self.list(request, *args, **kwargs)
 
     @extend_schema(

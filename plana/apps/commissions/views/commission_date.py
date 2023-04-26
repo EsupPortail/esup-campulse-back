@@ -16,47 +16,8 @@ class CommissionDateList(generics.ListAPIView):
     """/commissions/commission_dates route"""
 
     permission_classes = [AllowAny]
+    queryset = CommissionDate.objects.all().order_by("submission_date")
     serializer_class = CommissionDateSerializer
-
-    def get_queryset(self):
-        queryset = CommissionDate.objects.all().order_by("submission_date")
-        if self.request.method == "GET":
-            only_next = self.request.query_params.get("only_next")
-            active_projects = self.request.query_params.get("active_projects")
-            if only_next is not None and only_next != "" and to_bool(only_next) is True:
-                first_commissions_ids = []
-                commissions = Commission.objects.all().values_list("id")
-                for commission_id in commissions:
-                    first_commissions_ids.append(
-                        CommissionDate.objects.filter(commission_id=commission_id)
-                        .order_by("submission_date")
-                        .first()
-                        .id
-                    )
-                queryset = queryset.filter(id__in=first_commissions_ids)
-            if active_projects is not None and active_projects != "":
-                inactive_projects = Project.objects.filter(
-                    project_status__in=[
-                        "PROJECT_DRAFT",
-                        "PROJECT_REJECTED",
-                        "PROJECT_REVIEW_REJECTED",
-                        "PROJECT_REVIEW_VALIDATED",
-                    ]
-                )
-                if to_bool(active_projects) is False:
-                    queryset = queryset.filter(
-                        id__in=ProjectCommissionDate.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_date_id")
-                    )
-                else:
-                    queryset = queryset.exclude(
-                        id__in=ProjectCommissionDate.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_date_id")
-                    )
-
-        return queryset
 
     @extend_schema(
         parameters=[
@@ -79,4 +40,41 @@ class CommissionDateList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates."""
+        only_next = request.query_params.get("only_next")
+        active_projects = request.query_params.get("active_projects")
+
+        if only_next is not None and only_next != "" and to_bool(only_next) is True:
+            first_commissions_ids = []
+            commissions = Commission.objects.all().values_list("id")
+            for commission_id in commissions:
+                first_commissions_ids.append(
+                    CommissionDate.objects.filter(commission_id=commission_id)
+                    .order_by("submission_date")
+                    .first()
+                    .id
+                )
+            self.queryset = self.queryset.filter(id__in=first_commissions_ids)
+
+        if active_projects is not None and active_projects != "":
+            inactive_projects = Project.objects.filter(
+                project_status__in=[
+                    "PROJECT_DRAFT",
+                    "PROJECT_REJECTED",
+                    "PROJECT_REVIEW_REJECTED",
+                    "PROJECT_REVIEW_VALIDATED",
+                ]
+            )
+            if to_bool(active_projects) is False:
+                self.queryset = self.queryset.filter(
+                    id__in=ProjectCommissionDate.objects.filter(
+                        project_id__in=inactive_projects
+                    ).values_list("commission_date_id")
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    id__in=ProjectCommissionDate.objects.filter(
+                        project_id__in=inactive_projects
+                    ).values_list("commission_date_id")
+                )
+
         return self.list(request, *args, **kwargs)
