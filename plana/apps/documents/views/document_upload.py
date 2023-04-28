@@ -255,7 +255,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(self.queryset.filter(id=kwargs["pk"]))
+        serializer = self.serializer_class(self.queryset.get(id=kwargs["pk"]))
         return response.Response(serializer.data)
 
     @extend_schema(

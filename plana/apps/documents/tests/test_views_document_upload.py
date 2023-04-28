@@ -352,8 +352,6 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         """
-        # TODO Find how to fixture document.
-        """
         project_id = 1
         document_id = 20
         field = Mock()
@@ -377,7 +375,6 @@ class DocumentsViewsTests(TestCase):
             f"/documents/uploads/{response.data['id']}"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        """
 
     def test_get_document_upload_file_by_id_anonymous(self):
         """
