@@ -82,8 +82,8 @@
     "fields": {
       "code": "CONTACT_INFO",
       "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
-      "header": "",
-      "body": "<p>Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement.</p>",
+      "header": "<p>Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement.</p>",
+      "body": "",
       "footer": "<p>Attention : si vous êtes Porteur Individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire CROUS.</p>"
     }
   },
