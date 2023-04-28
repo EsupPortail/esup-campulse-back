@@ -2,11 +2,7 @@
 from django.urls import path
 
 from .views.category import CategoryList
-from .views.project import (
-    ProjectListCreate,
-    ProjectRestrictedUpdate,
-    ProjectRetrieveUpdate,
-)
+from .views.project import ProjectListCreate, ProjectRetrieveUpdate, ProjectStatusUpdate
 from .views.project_category import (
     ProjectCategoryDestroy,
     ProjectCategoryListCreate,
@@ -22,9 +18,9 @@ urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
     path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
     path(
-        "<int:pk>/restricted",
-        ProjectRestrictedUpdate.as_view(),
-        name="project_restricted_update",
+        "<int:pk>/status",
+        ProjectStatusUpdate.as_view(),
+        name="project_status_update",
     ),
     path(
         "categories/names",

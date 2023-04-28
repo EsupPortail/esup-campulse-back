@@ -1137,18 +1137,18 @@
     "model": "auth.permission",
     "pk": 127,
     "fields": {
-      "name": "Can update projects basic fields.",
+      "name": "Can update project fields filled by bearer (student).",
       "content_type": 27,
-      "codename": "change_project_basic_fields"
+      "codename": "change_project_as_bearer"
     }
   },
   {
     "model": "auth.permission",
     "pk": 128,
     "fields": {
-      "name": "Can update projects restricted fields (status, ...).",
+      "name": "Can update project fields filled by validator (manager).",
       "content_type": 27,
-      "codename": "change_project_restricted_fields"
+      "codename": "change_project_as_validator"
     }
   },
   {
@@ -1290,18 +1290,18 @@
     "model": "auth.permission",
     "pk": 144,
     "fields": {
-      "name": "Can update basic fields between a project and a commission date.",
+      "name": "Can update bearer fields (amount asked) between a project and a commission date.",
       "content_type": 30,
-      "codename": "change_projectcommissiondate_basic_fields"
+      "codename": "change_projectcommissiondate_as_bearer"
     }
   },
   {
     "model": "auth.permission",
     "pk": 145,
     "fields": {
-      "name": "Can update restricted fields (amount earned, ...) between a project and a commission date.",
+      "name": "Can update validator fields (amount earned) between a project and a commission date.",
       "content_type": 30,
-      "codename": "change_projectcommissiondate_restricted_fields"
+      "codename": "change_projectcommissiondate_as_validator"
     }
   },
   {

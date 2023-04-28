@@ -139,7 +139,10 @@ class User(AbstractUser):
         )
 
     def can_edit_project(self, project_obj):
-        """Check if a user can edit a project as association president or misc user."""
+        """Check if a user can edit a project as association president, misc user or manager."""
+        if self.is_staff:
+            return True
+
         if project_obj.user is not None and project_obj.user != self:
             return False
 

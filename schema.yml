@@ -803,13 +803,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ProjectRequest'
+              $ref: '#/components/schemas/ProjectUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProjectRequest'
+              $ref: '#/components/schemas/ProjectUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectRequest'
+              $ref: '#/components/schemas/ProjectUpdateRequest'
         required: true
       security:
       - jwtHeaderAuth: []
@@ -872,13 +872,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRequest'
+              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRequest'
+              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRequest'
+              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -897,10 +897,10 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/restricted:
+  /projects/{id}/status:
     patch:
-      operationId: projects_restricted_partial_update
-      description: Updates project restricted details (manager only).
+      operationId: projects_status_partial_update
+      description: Updates project status.
       parameters:
       - in: path
         name: id
@@ -913,13 +913,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+              $ref: '#/components/schemas/PatchedProjectStatusRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+              $ref: '#/components/schemas/PatchedProjectStatusRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectRestrictedRequest'
+              $ref: '#/components/schemas/PatchedProjectStatusRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -928,7 +928,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectRestricted'
+                $ref: '#/components/schemas/ProjectStatus'
           description: ''
         '401':
           description: No response body
@@ -1061,7 +1061,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDateData'
+                $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
         '400':
           description: No response body
@@ -1095,7 +1095,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDateData'
+                $ref: '#/components/schemas/ProjectCommissionDate'
           description: ''
         '401':
           description: No response body
@@ -3465,7 +3465,7 @@ components:
           nullable: true
     PatchedProjectCommissionDateDataRequest:
       type: object
-      description: Only data serializer.
+      description: Fields that can be updated by project's bearer.
       properties:
         is_first_edition:
           type: boolean
@@ -3489,9 +3489,15 @@ components:
           minimum: 0
         is_validated_by_admin:
           type: boolean
-    PatchedProjectRequest:
+    PatchedProjectStatusRequest:
       type: object
-      description: Main serializer.
+      description: Serializer for status field.
+      properties:
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+    PatchedProjectUpdateRequest:
+      type: object
+      description: Main serializer without project_status.
       properties:
         name:
           type: string
@@ -3573,14 +3579,6 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
-        project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
-    PatchedProjectRestrictedRequest:
-      type: object
-      description: Serializer for restricted fields.
-      properties:
-        project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -3749,7 +3747,7 @@ components:
       - project
     ProjectCommissionDate:
       type: object
-      description: Complete serializer.
+      description: Main serializer.
       properties:
         id:
           type: integer
@@ -3784,35 +3782,9 @@ components:
       - commission_date
       - id
       - project
-    ProjectCommissionDateData:
-      type: object
-      description: Only data serializer.
-      properties:
-        is_first_edition:
-          type: boolean
-        amount_asked_previous_edition:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount asked on previous edition
-        amount_earned_previous_edition:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount earned on previous edition
-        amount_asked:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        amount_earned:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        is_validated_by_admin:
-          type: boolean
     ProjectCommissionDateRequest:
       type: object
-      description: Complete serializer.
+      description: Main serializer.
       properties:
         project:
           type: integer
@@ -3871,9 +3843,26 @@ components:
       - edition_date
       - id
       - name
-    ProjectRequest:
+    ProjectStatus:
       type: object
-      description: Main serializer.
+      description: Serializer for status field.
+      properties:
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+    ProjectStatusEnum:
+      enum:
+      - PROJECT_DRAFT
+      - PROJECT_REJECTED
+      - PROJECT_PROCESSING
+      - PROJECT_VALIDATED
+      - PROJECT_REVIEW_DRAFT
+      - PROJECT_REVIEW_REJECTED
+      - PROJECT_REVIEW_PROCESSING
+      - PROJECT_REVIEW_VALIDATED
+      type: string
+    ProjectUpdateRequest:
+      type: object
+      description: Main serializer without project_status.
       properties:
         name:
           type: string
@@ -3955,27 +3944,8 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
-        project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
       required:
       - name
-    ProjectRestricted:
-      type: object
-      description: Serializer for restricted fields.
-      properties:
-        project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
-    ProjectStatusEnum:
-      enum:
-      - PROJECT_DRAFT
-      - PROJECT_REJECTED
-      - PROJECT_PROCESSING
-      - PROJECT_VALIDATED
-      - PROJECT_REVIEW_DRAFT
-      - PROJECT_REVIEW_REJECTED
-      - PROJECT_REVIEW_PROCESSING
-      - PROJECT_REVIEW_VALIDATED
-      type: string
     ResendEmailVerificationRequest:
       type: object
       properties:

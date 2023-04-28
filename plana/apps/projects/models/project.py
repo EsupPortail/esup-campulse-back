@@ -9,6 +9,53 @@ from plana.apps.users.models.user import User
 class Project(models.Model):
     """Main model."""
 
+    class ProjectStatus(models.TextChoices):
+        """List of statuses a project can have (for itself or reviews)."""
+
+        PROJECT_DRAFT = "PROJECT_DRAFT", _("Project Draft")
+        PROJECT_REJECTED = "PROJECT_REJECTED", _("Project Rejected")
+        PROJECT_PROCESSING = "PROJECT_PROCESSING", _("Project Processing")
+        PROJECT_VALIDATED = "PROJECT_VALIDATED", _("Project Validated")
+        PROJECT_REVIEW_DRAFT = "PROJECT_REVIEW_DRAFT", _("Project Review Draft")
+        PROJECT_REVIEW_REJECTED = "PROJECT_REVIEW_REJECTED", _(
+            "Project Review Rejected"
+        )
+        PROJECT_REVIEW_PROCESSING = "PROJECT_REVIEW_PROCESSING", _(
+            "Project Review Processing"
+        )
+        PROJECT_REVIEW_VALIDATED = "PROJECT_REVIEW_VALIDATED", _(
+            "Project Review Validated"
+        )
+
+        @staticmethod
+        def get_archived_project_statuses():
+            """Statuses for projects that can't be updated anymore."""
+
+            return [
+                "PROJECT_REJECTED",
+                "PROJECT_REVIEW_REJECTED",
+                "PROJECT_REVIEW_VALIDATED",
+            ]
+
+        @staticmethod
+        def get_bearer_project_statuses():
+            """Statuses for projects that can be set by project bearer."""
+
+            return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
+
+        @staticmethod
+        def get_validator_project_statuses():
+            """Statuses for projects that can be set by project validator."""
+
+            return [
+                "PROJECT_DRAFT",
+                "PROJECT_REJECTED",
+                "PROJECT_VALIDATED",
+                "PROJECT_REVIEW_DRAFT",
+                "PROJECT_REVIEW_REJECTED",
+                "PROJECT_REVIEW_VALIDATED",
+            ]
+
     name = models.CharField(_("Name"), max_length=250, blank=False)
     planned_start_date = models.DateTimeField(_("Start date"), null=True)
     planned_end_date = models.DateTimeField(_("End date"), null=True)
@@ -57,16 +104,7 @@ class Project(models.Model):
     project_status = models.CharField(
         _("Project Status"),
         max_length=32,
-        choices=[
-            ("PROJECT_DRAFT", _("Project Draft")),
-            ("PROJECT_REJECTED", _("Project Rejected")),
-            ("PROJECT_PROCESSING", _("Project Processing")),
-            ("PROJECT_VALIDATED", _("Project Validated")),
-            ("PROJECT_REVIEW_DRAFT", _("Project Review Draft")),
-            ("PROJECT_REVIEW_REJECTED", _("Project Review Rejected")),
-            ("PROJECT_REVIEW_PROCESSING", _("Project Review Processing")),
-            ("PROJECT_REVIEW_VALIDATED", _("Project Review Validated")),
-        ],
+        choices=ProjectStatus.choices,
         default="PROJECT_DRAFT",
     )
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
@@ -104,12 +142,12 @@ class Project(models.Model):
                 "Can add a project as a user.",
             ),
             (
-                "change_project_basic_fields",
-                "Can update projects basic fields.",
+                "change_project_as_bearer",
+                "Can update project fields filled by bearer (student).",
             ),
             (
-                "change_project_restricted_fields",
-                "Can update projects restricted fields (status, ...).",
+                "change_project_as_validator",
+                "Can update project fields filled by validator (manager).",
             ),
             (
                 "view_project_any_commission",

@@ -7,7 +7,7 @@ from plana.apps.projects.models.project_commission_date import ProjectCommission
 
 
 class ProjectCommissionDateSerializer(serializers.ModelSerializer):
-    """Complete serializer."""
+    """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
     commission_date = serializers.PrimaryKeyRelatedField(
@@ -20,7 +20,7 @@ class ProjectCommissionDateSerializer(serializers.ModelSerializer):
 
 
 class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
-    """Only data serializer."""
+    """Fields that can be updated by project's bearer."""
 
     class Meta:
         model = ProjectCommissionDate
@@ -31,4 +31,6 @@ class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
             "amount_asked",
             "amount_earned",
             "is_validated_by_admin",
+            "commission_date_id",
+            "project_id",
         ]

@@ -21,8 +21,9 @@ from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
-    ProjectRestrictedSerializer,
     ProjectSerializer,
+    ProjectStatusSerializer,
+    ProjectUpdateSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
@@ -37,7 +38,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "POST":
-            self.serializer_class = ProjectSerializer
+            self.serializer_class = ProjectUpdateSerializer
         else:
             self.serializer_class = ProjectPartialDataSerializer
         return super().get_serializer_class()
@@ -142,12 +143,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if active_projects is not None and active_projects != "":
-            inactive_statuses = [
-                "PROJECT_DRAFT",
-                "PROJECT_REJECTED",
-                "PROJECT_REVIEW_REJECTED",
-                "PROJECT_REVIEW_VALIDATED",
-            ]
+            inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
             if to_bool(active_projects) is False:
                 self.queryset = self.queryset.filter(
                     project_status__in=inactive_statuses
@@ -282,7 +278,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -290,6 +285,13 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = ProjectUpdateSerializer
+        else:
+            self.serializer_class = ProjectSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         responses={
@@ -364,9 +366,9 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.change_project_basic_fields"):
+        if not request.user.has_perm("projects.change_project_as_bearer"):
             return response.Response(
-                {"error": _("Not allowed to update basic fields for this project.")},
+                {"error": _("Not allowed to update bearer fields for this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -388,100 +390,15 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        authorized_status = ["PROJECT_DRAFT", "PROJECT_PROCESSING"]
-        if "project_status" in request.data:
-            if request.data["project_status"] not in authorized_status:
-                return response.Response(
-                    {"error": _("Wrong status.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if request.data["project_status"] == "PROJECT_PROCESSING":
-                missing_documents_names = (
-                    Document.objects.filter(
-                        process_type="DOCUMENT_PROJECT", is_required_in_process=True
-                    )
-                    .exclude(
-                        id__in=DocumentUpload.objects.filter(
-                            project_id=project.id,
-                        ).values_list("document_id")
-                    )
-                    .values_list("name", flat=True)
-                )
-                if missing_documents_names.count() > 0:
-                    missing_documents_names_string = ', '.join(
-                        str(item) for item in missing_documents_names
-                    )
-                    return response.Response(
-                        {
-                            "error": _(
-                                f"Missing documents : {missing_documents_names_string}."
-                            )
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-
-                template = None
-                managers_emails = []
-                current_site = get_current_site(request)
-                context = {
-                    "site_domain": current_site.domain,
-                    "site_name": current_site.name,
-                }
-                if project.association_id is not None:
-                    association = Association.objects.get(id=project.association_id)
-                    institution = Institution.objects.get(id=association.institution_id)
-                    commissions_misc_used = Commission.objects.filter(
-                        id__in=CommissionDate.objects.filter(
-                            id__in=ProjectCommissionDate.objects.filter(
-                                project_id=project.id
-                            ).values_list("commission_date_id")
-                        ).values_list("commission_id"),
-                        is_site=False,
-                    )
-                    context["association_name"] = association.name
-                    template = MailTemplate.objects.get(
-                        code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
-                    )
-                    managers_emails += (
-                        institution.default_institution_managers().values_list(
-                            "email", flat=True
-                        )
-                    )
-                    if commissions_misc_used.count() > 0:
-                        for user_to_check in User.objects.filter(
-                            is_superuser=False, is_staff=True
-                        ):
-                            if user_to_check.has_perm("users.change_user_misc"):
-                                managers_emails.append(user_to_check.email)
-                elif project.user_id is not None:
-                    context["first_name"] = request.user.first_name
-                    context["last_name"] = request.user.last_name
-                    template = MailTemplate.objects.get(
-                        code="NEW_USER_PROJECT_TO_PROCESS"
-                    )
-                    for user_to_check in User.objects.filter(
-                        is_superuser=False, is_staff=True
-                    ):
-                        if user_to_check.has_perm("users.change_user_misc"):
-                            managers_emails.append(user_to_check.email)
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=managers_emails,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
-                    message=template.parse_vars(request.user, request, context),
-                )
-
         request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)
 
 
-class ProjectRestrictedUpdate(generics.UpdateAPIView):
-    """/projects/{id}/restricted route"""
+class ProjectStatusUpdate(generics.UpdateAPIView):
+    """/projects/{id}/status route"""
 
     queryset = Project.objects.all()
-    serializer_class = ProjectRestrictedSerializer
+    serializer_class = ProjectStatusSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -501,30 +418,109 @@ class ProjectRestrictedUpdate(generics.UpdateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectRestrictedSerializer,
+            status.HTTP_200_OK: ProjectStatusSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project restricted details (manager only)."""
+        """Updates project status."""
         try:
-            self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(pk=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.change_project_restricted_fields"):
+        authorized_statuses = []
+        if request.user.has_perm("projects.change_project_as_bearer"):
+            authorized_statuses += Project.ProjectStatus.get_bearer_project_statuses()
+        if request.user.has_perm("projects.change_project_as_validator"):
+            authorized_statuses += (
+                Project.ProjectStatus.get_validator_project_statuses()
+            )
+        if request.data["project_status"] not in authorized_statuses:
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to update restricted fields for this project."
-                    )
-                },
+                {"error": _("Choosing this status is not allowed.")},
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if request.data["project_status"] == "PROJECT_PROCESSING":
+            missing_documents_names = (
+                Document.objects.filter(
+                    process_type="DOCUMENT_PROJECT", is_required_in_process=True
+                )
+                .exclude(
+                    id__in=DocumentUpload.objects.filter(
+                        project_id=project.id,
+                    ).values_list("document_id")
+                )
+                .values_list("name", flat=True)
+            )
+            if missing_documents_names.count() > 0:
+                missing_documents_names_string = ', '.join(
+                    str(item) for item in missing_documents_names
+                )
+                return response.Response(
+                    {
+                        "error": _(
+                            f"Missing documents : {missing_documents_names_string}."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            template = None
+            managers_emails = []
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            if project.association_id is not None:
+                association = Association.objects.get(id=project.association_id)
+                institution = Institution.objects.get(id=association.institution_id)
+                commissions_misc_used = Commission.objects.filter(
+                    id__in=CommissionDate.objects.filter(
+                        id__in=ProjectCommissionDate.objects.filter(
+                            project_id=project.id
+                        ).values_list("commission_date_id")
+                    ).values_list("commission_id"),
+                    is_site=False,
+                )
+                context["association_name"] = association.name
+                template = MailTemplate.objects.get(
+                    code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                )
+                managers_emails += (
+                    institution.default_institution_managers().values_list(
+                        "email", flat=True
+                    )
+                )
+                if commissions_misc_used.count() > 0:
+                    for user_to_check in User.objects.filter(
+                        is_superuser=False, is_staff=True
+                    ):
+                        if user_to_check.has_perm("users.change_user_misc"):
+                            managers_emails.append(user_to_check.email)
+            elif project.user_id is not None:
+                context["first_name"] = request.user.first_name
+                context["last_name"] = request.user.last_name
+                template = MailTemplate.objects.get(code="NEW_USER_PROJECT_TO_PROCESS")
+                for user_to_check in User.objects.filter(
+                    is_superuser=False, is_staff=True
+                ):
+                    if user_to_check.has_perm("users.change_user_misc"):
+                        managers_emails.append(user_to_check.email)
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=managers_emails,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
             )
 
         request.data["edition_date"] = datetime.date.today()

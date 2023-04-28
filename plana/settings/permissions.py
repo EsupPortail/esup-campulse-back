@@ -39,7 +39,7 @@ PERMISSIONS_GROUPS = {
         "view_documentupload_all",
         # projects
         "change_project",
-        "change_project_restricted_fields",
+        "change_project_as_validator",
         "view_project",
         "view_project_any_commission",
         "view_projectcategory",
@@ -50,7 +50,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "view_projectcomment_any_commission",
         "change_projectcommissiondate",
-        "change_projectcommissiondate_restricted_fields",
+        "change_projectcommissiondate_as_validator",
         "view_projectcommissiondate",
         "view_projectcommissiondate_any_commission",
         # users
@@ -101,7 +101,7 @@ PERMISSIONS_GROUPS = {
         "view_documentupload_all",
         # projects
         "change_project",
-        "change_project_restricted_fields",
+        "change_project_as_validator",
         "view_project",
         "view_projectcategory",
         "add_projectcomment",
@@ -109,7 +109,7 @@ PERMISSIONS_GROUPS = {
         "delete_projectcomment",
         "view_projectcomment",
         "change_projectcommissiondate",
-        "change_projectcommissiondate_restricted_fields",
+        "change_projectcommissiondate_as_validator",
         "view_projectcommissiondate",
         # users
         "add_user",
@@ -150,7 +150,7 @@ PERMISSIONS_GROUPS = {
         "view_documentupload_all",
         # projects
         "change_project",
-        "change_project_restricted_fields",
+        "change_project_as_validator",
         "view_project",
         "view_projectcategory",
         "add_projectcomment",
@@ -158,7 +158,7 @@ PERMISSIONS_GROUPS = {
         "delete_projectcomment",
         "view_projectcomment",
         "change_projectcommissiondate",
-        "change_projectcommissiondate_restricted_fields",
+        "change_projectcommissiondate_as_validator",
         "view_projectcommissiondate",
         # users
         "add_user",
@@ -207,7 +207,7 @@ PERMISSIONS_GROUPS = {
         "add_project",
         "add_project_association",
         "change_project",
-        "change_project_basic_fields",
+        "change_project_as_bearer",
         "view_project",
         "add_projectcategory",
         "delete_projectcategory",
@@ -215,7 +215,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "add_projectcommissiondate",
         "change_projectcommissiondate",
-        "change_projectcommissiondate_basic_fields",
+        "change_projectcommissiondate_as_bearer",
         "delete_projectcommissiondate",
         "view_projectcommissiondate",
         # users
@@ -234,7 +234,7 @@ PERMISSIONS_GROUPS = {
         "add_project",
         "add_project_user",
         "change_project",
-        "change_project_basic_fields",
+        "change_project_as_bearer",
         "view_project",
         "add_projectcategory",
         "delete_projectcategory",
@@ -242,7 +242,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "add_projectcommissiondate",
         "change_projectcommissiondate",
-        "change_projectcommissiondate_basic_fields",
+        "change_projectcommissiondate_as_bearer",
         "delete_projectcommissiondate",
         "view_projectcommissiondate",
         # users

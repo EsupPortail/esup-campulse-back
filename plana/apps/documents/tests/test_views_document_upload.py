@@ -197,7 +197,7 @@ class DocumentsViewsTests(TestCase):
             "project": 1,
             "document": 16,
         }
-        response = self.general_client.post("/documents/uploads", post_data)
+        response = self.student_site_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_document_upload_bad_request(self):

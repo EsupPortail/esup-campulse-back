@@ -77,12 +77,7 @@ class CommissionsViewsTests(TestCase):
         self.assertEqual(len(content), Commission.objects.count())
 
         inactive_projects = Project.objects.filter(
-            project_status__in=[
-                "PROJECT_DRAFT",
-                "PROJECT_REJECTED",
-                "PROJECT_REVIEW_REJECTED",
-                "PROJECT_REVIEW_VALIDATED",
-            ]
+            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
         )
         commission_dates_with_inactive_projects = CommissionDate.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(

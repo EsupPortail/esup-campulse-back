@@ -128,19 +128,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_post_project_cd_bad_request(self):
-        """
-        POST /projects/commission_dates .
-
-        - The route can be accessed by a student user.
-        - The attribute "amount_earned" is restricted.
-        """
-        response = self.student_misc_client.post(
-            "/projects/commission_dates",
-            {"project": 1, "commission_date": 1, "amount_earned": 1000},
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_post_project_cd_not_found(self):
         """
         POST /projects/commission_dates .
@@ -152,6 +139,28 @@ class ProjectCommissionDateViewsTests(TestCase):
             "/projects/commission_dates", {"project": 9999, "commission_date": 1}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_post_project_cd_manager_bad_request(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route cannot be accessed by a manager user.
+        """
+        response = self.general_client.post("/projects/commission_dates", {})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_cd_student_bad_request(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route can be accessed by a student user.
+        - The attribute "amount_earned" is restricted for students.
+        """
+        response = self.student_misc_client.post(
+            "/projects/commission_dates",
+            {"project": 1, "commission_date": 1, "amount_earned": 1000},
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_cd_forbidden_user(self):
         """
@@ -371,19 +380,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_cd_forbidden_manager(self):
-        """
-        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
-
-        - The route can be accessed by a manager.
-        - The manager must be authorized to update project commission dates basic fields.
-        """
-        response = self.general_client.patch(
-            "/projects/2/commission_dates/4", {}, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_cd_bad_request(self):
+    def test_patch_project_cd_student_bad_request(self):
         """
         PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
@@ -393,6 +390,20 @@ class ProjectCommissionDateViewsTests(TestCase):
         response = self.student_misc_client.patch(
             "/projects/1/commission_dates/3",
             {"amount_earned": 1000},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_cd_manager_bad_request(self):
+        """
+        PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The attributes to patch must be authorized.
+        """
+        response = self.general_client.patch(
+            "/projects/1/commission_dates/3",
+            {"amount_asked": 1000},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

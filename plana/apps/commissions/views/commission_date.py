@@ -57,12 +57,7 @@ class CommissionDateList(generics.ListAPIView):
 
         if active_projects is not None and active_projects != "":
             inactive_projects = Project.objects.filter(
-                project_status__in=[
-                    "PROJECT_DRAFT",
-                    "PROJECT_REJECTED",
-                    "PROJECT_REVIEW_REJECTED",
-                    "PROJECT_REVIEW_VALIDATED",
-                ]
+                project_status__in=Project.ProjectStatus.get_archived_project_statuses()
             )
             if to_bool(active_projects) is False:
                 self.queryset = self.queryset.filter(

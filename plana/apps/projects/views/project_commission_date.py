@@ -115,21 +115,26 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "amount_earned" in request.data
-            and request.data["amount_earned"] is not None
-        ) or (
-            "is_validated_by_admin" in request.data
-            and request.data["is_validated_by_admin"] is not None
+        validator_fields = [
+            "amount_earned",
+            "is_validated_by_admin",
+        ]
+        if not request.user.has_perm(
+            "project.change_projectcommissiondate_as_validator"
         ):
-            return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to update amount earned or validation for this project's commission."
+            for validator_field in validator_fields:
+                if (
+                    validator_field in request.data
+                    and request.data[validator_field] is not None
+                ):
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Not allowed to update validator fields for this project's commission."
+                            )
+                        },
+                        status=status.HTTP_403_FORBIDDEN,
                     )
-                },
-                status=status.HTTP_403_FORBIDDEN,
-            )
 
         if commission.is_site is True and (
             project.user_id is not None
@@ -266,7 +271,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectCommissionDateDataSerializer,
+            status.HTTP_200_OK: ProjectCommissionDateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -291,31 +296,55 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "projects.change_projectcommissiondate_basic_fields"
-        ):
-            return response.Response(
-                {"error": _("Not allowed to update basic fields for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
         if not request.user.can_edit_project(pcd.project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "amount_earned" in request.data
-            and request.data["amount_earned"] is not None
-        ) or (
-            "is_validated_by_admin" in request.data
-            and request.data["is_validated_by_admin"] is not None
+        bearer_fields = [
+            "is_first_edition",
+            "amount_asked_previous_edition",
+            "amount_earned_previous_edition",
+            "amount_asked",
+            "commission_date_id",
+            "project_id",
+        ]
+        if not request.user.has_perm("project.change_projectcommissiondate_as_bearer"):
+            for bearer_field in bearer_fields:
+                if (
+                    bearer_field in request.data
+                    and request.data[bearer_field] is not None
+                ):
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Not allowed to update bearer fields for this project's commission."
+                            )
+                        },
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+
+        validator_fields = [
+            "amount_earned",
+            "is_validated_by_admin",
+        ]
+        if not request.user.has_perm(
+            "project.change_projectcommissiondate_as_validator"
         ):
-            return response.Response(
-                {"error": _("Not allowed to update amount earned for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+            for validator_field in validator_fields:
+                if (
+                    validator_field in request.data
+                    and request.data[validator_field] is not None
+                ):
+                    return response.Response(
+                        {
+                            "error": _(
+                                "Not allowed to update validator fields for this project's commission."
+                            )
+                        },
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
 
         commission_date = CommissionDate.objects.get(pk=kwargs["commission_date_id"])
         if commission_date.submission_date < datetime.date.today():
@@ -331,7 +360,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: ProjectCommissionDateDataSerializer,
+            status.HTTP_204_NO_CONTENT: ProjectCommissionDateSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

@@ -171,12 +171,7 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        inactive_statuses = [
-            "PROJECT_DRAFT",
-            "PROJECT_REJECTED",
-            "PROJECT_REVIEW_REJECTED",
-            "PROJECT_REVIEW_VALIDATED",
-        ]
+        inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
         inactive_projects = Project.objects.filter(project_status__in=inactive_statuses)
         response = self.general_client.get("/projects/?active_projects=false")
         content = json.loads(response.content.decode("utf-8"))
@@ -429,19 +424,6 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_project_wrong_status(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by a student user.
-        - Status must be in authorized status list.
-        """
-        patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_misc_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_patch_project_forbidden_user(self):
         """
         PATCH /projects/{id} .
@@ -486,58 +468,6 @@ class ProjectsViewsTests(TestCase):
         project = Project.objects.get(pk=1)
         self.assertEqual(project.summary, "new summary")
 
-    def test_patch_project_user_status(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by a student misc.
-        - The project is correctly updated in db.
-        """
-        self.assertFalse(len(mail.outbox))
-        patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_misc_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=1)
-        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
-        self.assertTrue(len(mail.outbox))
-
-    def test_patch_project_association_status_missing_documents(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by a student president.
-        - Project cannot be updated if documents are missing.
-        """
-        DocumentUpload.objects.get(document=18, project_id=2).delete()
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
-        patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_president_client.patch(
-            "/projects/2", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        project = Project.objects.get(pk=2)
-        self.assertEqual(project.project_status, "PROJECT_DRAFT")
-
-    def test_patch_project_association_status(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by a student president.
-        - The project is correctly updated in db.
-        """
-        self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
-        patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_president_client.patch(
-            "/projects/2", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=2)
-        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
-        self.assertTrue(len(mail.outbox))
-
     def test_patch_project_manager_error(self):
         """
         PATCH /projects/{id} .
@@ -550,66 +480,118 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_put_project_restricted(self):
+    def test_put_project_status(self):
         """
-        PUT /projects/{id}/restricted .
+        PUT /projects/{id}/status .
 
         - Always returns a 405.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.put(
-            "/projects/1/restricted", patch_data, content_type="application/json"
+            "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_patch_project_restricted_anonymous(self):
+    def test_patch_project_status_anonymous(self):
         """
-        PATCH /projects/{id}/restricted .
+        PATCH /projects/{id}/status .
 
         - An anonymous user cannot execute this request.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.client.patch(
-            "/projects/1/restricted", patch_data, content_type="application/json"
+            "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_patch_project_restricted_forbidden_student(self):
+    def test_patch_project_status_not_found(self):
         """
-        PATCH /projects/{id}/restricted .
+        PATCH /projects/{id}/status .
 
-        - An student user cannot execute this request.
-        """
-        patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_offsite_client.patch(
-            "/projects/1/restricted", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_restricted_not_found(self):
-        """
-        PATCH /projects/{id}/restricted .
-
-        - The route can be accessed by a manager user.
         - Project must be existing.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
-            "/projects/999/restricted", patch_data, content_type="application/json"
+            "/projects/999/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_project_restricted_manager(self):
+    def test_patch_project_status_student(self):
         """
-        PATCH /projects/{id}/restricted .
+        PATCH /projects/{id}/status .
 
-        - The route can be accessed by a manager user.
-        - Project must exist.
+        - An student user cannot execute this request if status is not allowed.
+        - An student user can execute this request if status is allowed.
         """
+        self.assertFalse(len(mail.outbox))
+        patch_data = {"project_status": "PROJECT_REJECTED"}
+        response = self.student_offsite_client.patch(
+            "/projects/1/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(len(mail.outbox))
+
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_offsite_client.patch(
+            "/projects/1/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_status_manager(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - An manager user cannot execute this request if status is not allowed.
+        - An manager user can execute this request if status is allowed.
+        """
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.general_client.patch(
+            "/projects/1/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
-            "/projects/1/restricted", patch_data, content_type="application/json"
+            "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.objects.get(pk=1)
         self.assertEqual(project.project_status, "PROJECT_REJECTED")
+
+    def test_patch_project_association_status_missing_documents(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - The route can be accessed by a student president.
+        - Project cannot be updated if documents are missing.
+        """
+        DocumentUpload.objects.get(document=18, project_id=2).delete()
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_DRAFT")
+
+    def test_patch_project_association_status(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - The route can be accessed by a student president.
+        - The project is correctly updated in db.
+        """
+        self.assertFalse(len(mail.outbox))
+        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        response = self.student_president_client.patch(
+            "/projects/2/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=2)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
