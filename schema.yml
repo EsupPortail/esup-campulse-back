@@ -370,44 +370,6 @@ paths:
           description: ''
         '404':
           description: No response body
-    patch:
-      operationId: contents_partial_update
-      description: Updates content details (manager only).
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - contents
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedContentBodyRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedContentBodyRequest'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedContentBodyRequest'
-      security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContentBody'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
-        '404':
-          description: No response body
   /documents/:
     get:
       operationId: documents_list
@@ -2894,18 +2856,6 @@ components:
       - code
       - id
       - label
-    ContentBody:
-      type: object
-      description: Main serializer.
-      properties:
-        header:
-          type: string
-        body:
-          type: string
-        footer:
-          type: string
-      required:
-      - body
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -3464,19 +3414,6 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-    PatchedContentBodyRequest:
-      type: object
-      description: Main serializer.
-      properties:
-        header:
-          type: string
-          minLength: 1
-        body:
-          type: string
-          minLength: 1
-        footer:
-          type: string
-          minLength: 1
     PatchedDocumentRequest:
       type: object
       description: Main serializer.
