@@ -328,6 +328,15 @@ class DocumentsViewsTests(TestCase):
         response = self.client.get("/documents/uploads/2")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_document_upload_by_id_404(self):
+        """
+        GET /documents/uploads/{id} .
+
+        - The route returns a 404 if a wrong document upload id is given.
+        """
+        response = self.general_client.get("/documents/uploads/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_document_upload_by_id_forbidden_student(self):
         """
         GET /documents/uploads/{id} .
@@ -355,14 +364,50 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(content["document"], document_upload.document_id)
         """
 
-    def test_get_document_upload_by_id_404(self):
+    def test_get_document_upload_file_by_id_anonymous(self):
         """
-        GET /documents/uploads/{id} .
+        GET /documents/uploads/{id}/file .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/documents/uploads/2/file")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_document_upload_file_by_id_404(self):
+        """
+        GET /documents/uploads/{id}/file .
 
         - The route returns a 404 if a wrong document upload id is given.
         """
-        response = self.general_client.get("/documents/uploads/99999")
+        response = self.general_client.get("/documents/uploads/99999/file")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_document_upload_file_by_id_forbidden_student(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - An student user not owning the document cannot execute this request.
+        """
+        response = self.student_misc_client.get("/documents/uploads/6/file")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_document_upload_file_by_id(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - The route can be accessed by a manager user.
+        - Correct documents details are returned (test the "document" attribute).
+        """
+        # TODO Find how to fixture document.
+        """
+        document_upload_id = 1
+        document_upload = DocumentUpload.objects.get(id=document_upload_id)
+        response = self.general_client.get(f"/documents/uploads/{document_upload_id}/file")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(content["document"], document_upload.document_id)
+        """
 
     def test_delete_document_upload_anonymous(self):
         """

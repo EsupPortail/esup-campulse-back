@@ -10,6 +10,7 @@ from django.test import TestCase
 
 from plana.storages import (
     DynamicStorageFieldFile,
+    EncryptedPrivateFileStorage,
     PrivateFileStorage,
     PublicFileStorage,
 )
@@ -34,6 +35,15 @@ class UpdateACLStorageTest(TestCase):
         put.assert_called_with(ACL=PrivateFileStorage.default_acl)
         self.assertEqual(put.call_count, 1)
 
+    def test_encrypted_private_update_acl_method(self):
+        private_storage = EncryptedPrivateFileStorage()
+        bucket = Mock()
+        put = bucket.Object.return_value.Acl.return_value.put
+        private_storage._bucket = bucket
+        private_storage.update_acl("name")
+        put.assert_called_with(ACL=EncryptedPrivateFileStorage.default_acl)
+        self.assertEqual(put.call_count, 1)
+
 
 class DynamicStorageFieldFileTest(TestCase):
     def test_file_field_is_initialized_with_correct_storage_class(self):
@@ -48,7 +58,7 @@ class DynamicStorageFieldFileTest(TestCase):
         private_instance = Mock()
         private_instance.__class__.__name__ = "DocumentUpload"
         file = DynamicStorageFieldFile(private_instance, field=field, name="Name")
-        self.assertIsInstance(file.storage, PrivateFileStorage)
+        self.assertIsInstance(file.storage, EncryptedPrivateFileStorage)
 
     def test_file_field_update_acl_method_calls_update_acl_from_storage(self):
         field = Mock()
