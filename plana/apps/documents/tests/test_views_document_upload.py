@@ -350,18 +350,33 @@ class DocumentsViewsTests(TestCase):
         """
         GET /documents/uploads/{id} .
 
-        - The route can be accessed by a manager user.
-        - Correct documents details are returned (test the "document" attribute).
+        - The route can be accessed by a student user.
         """
         # TODO Find how to fixture document.
         """
-        document_upload_id = 1
-        document_upload = DocumentUpload.objects.get(id=document_upload_id)
-        response = self.general_client.get(f"/documents/uploads/{document_upload_id}")
+        project_id = 1
+        document_id = 20
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        post_data = {
+            "path_file": file,
+            "project": project_id,
+            "document": document_id,
+            "user": self.student_misc_user_id,
+        }
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        response = self.student_misc_client.get(
+            f"/documents/uploads/{response.data['id']}"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["document"], document_upload.document_id)
         """
 
     def test_get_document_upload_file_by_id_anonymous(self):
@@ -395,19 +410,31 @@ class DocumentsViewsTests(TestCase):
         """
         GET /documents/uploads/{id}/file .
 
-        - The route can be accessed by a manager user.
-        - Correct documents details are returned (test the "document" attribute).
+        - The route can be accessed by a student user.
         """
-        # TODO Find how to fixture document.
-        """
-        document_upload_id = 1
-        document_upload = DocumentUpload.objects.get(id=document_upload_id)
-        response = self.general_client.get(f"/documents/uploads/{document_upload_id}/file")
+        project_id = 1
+        document_id = 20
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        post_data = {
+            "path_file": file,
+            "project": project_id,
+            "document": document_id,
+            "user": self.student_misc_user_id,
+        }
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        response = self.student_misc_client.get(
+            f"/documents/uploads/{response.data['id']}/file"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["document"], document_upload.document_id)
-        """
 
     def test_delete_document_upload_anonymous(self):
         """
