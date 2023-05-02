@@ -18,7 +18,7 @@ from rest_framework import exceptions
 
 from plana.apps.users.models.user import User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import check_valid_password, send_mail
 
 
 class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
@@ -31,6 +31,11 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
             if user.is_cas_user():
                 raise exceptions.ValidationError(
                     {"detail": [_("Unable to change the password of a CAS account.")]}
+                )
+            valid_password = check_valid_password(request.data["new_password1"])
+            if not valid_password["valid"]:
+                raise exceptions.ValidationError(
+                    {"detail": [valid_password["message"]]}
                 )
             self.set_password_form.save()
             user.password_last_change_date = datetime.datetime.today()
