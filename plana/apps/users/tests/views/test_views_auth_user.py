@@ -63,7 +63,14 @@ class AuthUserViewsTests(TestCase):
 
         - Password must respect some rules.
         """
-        fake_passwords = ["ah", "saucisse", "SAUCISSE", "Saucisse", "Saucisse123"]
+        fake_passwords = [
+            "ah",
+            "saucisse",
+            "SAUCISSE",
+            "Saucisse",
+            "Saucisse123",
+            "Sociss123+",
+        ]
         for fake_password in fake_passwords:
             response_student = self.student_client.post(
                 "/users/auth/password/change/",
@@ -122,7 +129,14 @@ class AuthUserViewsTests(TestCase):
 
         - Password must respect some rules.
         """
-        fake_passwords = ["ah", "saucisse", "SAUCISSE", "Saucisse", "Saucisse123"]
+        fake_passwords = [
+            "ah",
+            "saucisse",
+            "SAUCISSE",
+            "Saucisse",
+            "Saucisse123",
+            "Sociss123+",
+        ]
         user = User.objects.get(id=self.student_user_id)
         for fake_password in fake_passwords:
             response_anonymous = self.anonymous_client.post(

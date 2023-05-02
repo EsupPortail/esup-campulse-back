@@ -33,8 +33,9 @@ def check_valid_password(password):
         ]
 
     password_result = zxcvbn(password)
-    if password_result["score"] < 4:
-        messages += password_result["feedback"]["suggestions"]
+    if password_result["score"] < 4 and len(messages) == 0:
+        messages += [_("Password is still too weak, please add some characters.")]
+    messages += password_result["feedback"]["suggestions"]
 
     return_messages = {
         "valid": len(messages) == 0,
