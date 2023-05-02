@@ -26,26 +26,21 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
 
     def save(self):
         request = self.context.get("request")
-        try:
-            user = User.objects.get(email=request.user.email)
-            if user.is_cas_user():
-                raise exceptions.ValidationError(
-                    {"detail": [_("Unable to change the password of a CAS account.")]}
-                )
-            valid_password = check_valid_password(request.data["new_password1"])
-            if not valid_password["valid"]:
-                raise exceptions.ValidationError(
-                    {"detail": [valid_password["message"]]}
-                )
-            self.set_password_form.save()
-            user.password_last_change_date = datetime.datetime.today()
-            user.save(update_fields=["password_last_change_date"])
-            if not self.logout_on_password_change:
-                from django.contrib.auth import update_session_auth_hash
+        user = User.objects.get(email=request.user.email)
+        if user.is_cas_user():
+            raise exceptions.ValidationError(
+                {"detail": [_("Unable to change the password of a CAS account.")]}
+            )
+        valid_password = check_valid_password(request.data["new_password1"])
+        if not valid_password["valid"]:
+            raise exceptions.ValidationError({"detail": valid_password["messages"]})
+        self.set_password_form.save()
+        user.password_last_change_date = datetime.datetime.today()
+        user.save(update_fields=["password_last_change_date"])
+        if not self.logout_on_password_change:
+            from django.contrib.auth import update_session_auth_hash
 
-                update_session_auth_hash(self.request, self.user)
-        except ObjectDoesNotExist:
-            pass
+            update_session_auth_hash(self.request, self.user)
 
 
 class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
@@ -83,6 +78,10 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
     """Overrided PasswordResetConfirmSerializer to send a email when password is reset."""
 
     def save(self):
+        request = self.context.get("request")
+        valid_password = check_valid_password(request.data["new_password1"])
+        if not valid_password["valid"]:
+            raise exceptions.ValidationError({"detail": valid_password["messages"]})
         self.user.password_last_change_date = datetime.datetime.today()
         self.user.save(update_fields=["password_last_change_date"])
         request = None

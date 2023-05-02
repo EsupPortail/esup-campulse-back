@@ -11,48 +11,36 @@ from zxcvbn import zxcvbn
 def check_valid_password(password):
     """Check password standard rules and zxcvbn rules."""
 
+    messages = []
     min_length = 8
     if len(password) < min_length:
-        return {
-            "valid": False,
-            "message": _(f"Password too short (at least {min_length} chars)."),
-        }
+        messages += [_(f"Password too short (at least {min_length} chars).")]
 
     if not re.search("[a-z]+", password):
-        return {
-            "valid": False,
-            "message": _("Password should contain at least one lowercase character."),
-        }
+        messages += [_("Password should contain at least one lowercase character.")]
 
     if not re.search("[A-Z]+", password):
-        return {
-            "valid": False,
-            "message": _("Password should contain at least one uppercase character."),
-        }
+        messages += [_("Password should contain at least one uppercase character.")]
 
     if not re.search("[0-9]+", password):
-        return {
-            "valid": False,
-            "message": _("Password should contain at least one digit."),
-        }
+        messages += [_("Password should contain at least one digit.")]
 
     if not re.search("[!-/:-@[-`{-~]", password):
-        return {
-            "valid": False,
-            "message": _(
+        messages += [
+            _(
                 "Password should contain at least one special char ( / * - + = . , ; : ! ? & \" \' ( ) _ [ ] { } @ % # $ < > )."
-            ),
-        }
+            )
+        ]
 
     password_result = zxcvbn(password)
     if password_result["score"] < 4:
-        print(password_result)
-        return {
-            "valid": False,
-            "message": password_result["feedback"]["suggestions"],
-        }
+        messages += password_result["feedback"]["suggestions"]
 
-    return {"valid": True}
+    return_messages = {
+        "valid": len(messages) == 0,
+        "messages": messages,
+    }
+    return return_messages
 
 
 def _listify(x):
