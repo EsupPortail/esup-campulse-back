@@ -1,7 +1,10 @@
 """Views directly linked to document uploads."""
+from pathlib import Path
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import FileResponse
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -203,7 +206,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
-        request.data["name"] = request.data["path_file"]._name
+        request.data[
+            "name"
+        ] = f"{slugify(document.name)}{'.'.join(Path(request.data['path_file'].name).suffixes)}"
 
         return super().create(request, *args, **kwargs)
 

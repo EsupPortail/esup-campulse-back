@@ -37,7 +37,7 @@ class DocumentsViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """Start clients used on tests."""
+        """Start clients used on tests, and post a fake document for GET routes."""
         cls.client = Client()
         url_login = reverse("rest_login")
 
@@ -79,6 +79,27 @@ class DocumentsViewsTests(TestCase):
             url_login, data_student_president
         )
 
+        project_id = 1
+        DocumentUpload.objects.filter(project_id=project_id).delete()
+        document_id = 18
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        post_data = {
+            "path_file": file,
+            "project": project_id,
+            "document": document_id,
+            "user": cls.student_misc_user_id,
+        }
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        cls.new_document = cls.student_misc_client.post("/documents/uploads", post_data)
+
     def test_get_document_upload_list_anonymous(self):
         """
         GET /documents/uploads .
@@ -112,6 +133,7 @@ class DocumentsViewsTests(TestCase):
         - A general manager user gets all documents uploads.
         - user, association and project filters work.
         """
+        DocumentUpload.objects.exclude(id=self.new_document.data["id"]).delete()
         response = self.general_client.get("/documents/uploads")
         documents_cnt = DocumentUpload.objects.all().count()
         content = json.loads(response.content.decode("utf-8"))
@@ -267,16 +289,26 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
-        - Object is correctly created in db.
+        - Object is not created if field is not is_multiple.
         """
         project_id = 1
-        document_id = 16
+        document_id = 18
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
         post_data = {
-            "path_file": "",
+            "path_file": file,
             "project": project_id,
             "document": document_id,
             "user": self.student_misc_user_id,
         }
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -290,7 +322,7 @@ class DocumentsViewsTests(TestCase):
         - Object is correctly created in db.
         """
         project_id = 1
-        document_id = 20
+        document_id = 19
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -317,7 +349,7 @@ class DocumentsViewsTests(TestCase):
                 project_id=project_id, document_id=document_id
             )
         )
-        self.assertEqual(du_cnt, 2)
+        self.assertEqual(du_cnt, 1)
 
     def test_get_document_upload_by_id_anonymous(self):
         """
@@ -352,27 +384,8 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         """
-        project_id = 1
-        document_id = 20
-        field = Mock()
-        field.storage = default_storage
-        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
-        file.storage = Mock()
-        post_data = {
-            "path_file": file,
-            "project": project_id,
-            "document": document_id,
-            "user": self.student_misc_user_id,
-        }
-        document = Document.objects.get(id=document_id)
-        document.mime_types = [
-            "application/vnd.novadigm.ext",
-            "application/octet-stream",
-        ]
-        document.save()
-        response = self.student_misc_client.post("/documents/uploads", post_data)
         response = self.student_misc_client.get(
-            f"/documents/uploads/{response.data['id']}"
+            f"/documents/uploads/{self.new_document.data['id']}"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -409,27 +422,8 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         """
-        project_id = 1
-        document_id = 20
-        field = Mock()
-        field.storage = default_storage
-        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
-        file.storage = Mock()
-        post_data = {
-            "path_file": file,
-            "project": project_id,
-            "document": document_id,
-            "user": self.student_misc_user_id,
-        }
-        document = Document.objects.get(id=document_id)
-        document.mime_types = [
-            "application/vnd.novadigm.ext",
-            "application/octet-stream",
-        ]
-        document.save()
-        response = self.student_misc_client.post("/documents/uploads", post_data)
         response = self.student_misc_client.get(
-            f"/documents/uploads/{response.data['id']}/file"
+            f"/documents/uploads/{self.new_document.data['id']}/file"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

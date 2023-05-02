@@ -2988,6 +2988,9 @@ components:
         path_file:
           type: string
           readOnly: true
+        size:
+          type: integer
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -3014,6 +3017,7 @@ components:
       - document
       - id
       - path_file
+      - size
       - upload_date
     DocumentUploadCreate:
       type: object

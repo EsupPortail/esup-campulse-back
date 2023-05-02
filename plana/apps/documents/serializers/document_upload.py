@@ -11,11 +11,17 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     path_file = serializers.SerializerMethodField()
+    size = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_path_file(self, document):
         """Return a link to DocumentUploadFileRetrieve view."""
         return reverse('document_upload_file_retrieve', args=[document.id])
+
+    @extend_schema_field(OpenApiTypes.INT)
+    def get_size(self, document):
+        """Return file size."""
+        return document.path_file.size
 
     class Meta:
         model = DocumentUpload
