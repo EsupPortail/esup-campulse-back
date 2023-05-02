@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 15:53+0200\n"
+"POT-Creation-Date: 2023-05-02 16:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1244,6 +1244,14 @@ msgstr "Réinitialise le contenu d'un bucket S3."
 #, python-brace-format
 msgid "S3 bucket {bucket_name} content cleaned."
 msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
+
+#: plana/management/commands/commission_expiration.py:12
+msgid ""
+"Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT "
+"status and CommissionDates with expired submission_date."
+msgstr ""
+"Supprime toutes les ProjectCommissionDates entre les Projets avec un statut "
+"PROJECT_DRAFT et les CommissionDates avec une submission_date expirée."
 
 #: plana/management/commands/createmanageruser.py:16
 msgid "Creates a new manager user."
