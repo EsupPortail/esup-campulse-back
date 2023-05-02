@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 09:15+0200\n"
+"POT-Creation-Date: 2023-05-02 13:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -967,7 +967,7 @@ msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
-#: plana/apps/users/serializers/user_auth.py:33
+#: plana/apps/users/serializers/user_auth.py:32
 msgid "Unable to change the password of a CAS account."
 msgstr "Impossible de changer le mot de passe d'un compte CAS."
 
@@ -1344,3 +1344,28 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#: plana/utils.py:17
+#, python-brace-format
+msgid "Password too short (at least {min_length} chars)."
+msgstr "Mot de passe trop court (au moins {min_length} caractères)."
+
+#: plana/utils.py:20
+msgid "Password should contain at least one lowercase character."
+msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
+
+#: plana/utils.py:23
+msgid "Password should contain at least one uppercase character."
+msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
+
+#: plana/utils.py:26
+msgid "Password should contain at least one digit."
+msgstr "Le mot de passe doit contenir au moins un chiffre."
+
+#: plana/utils.py:31
+msgid ""
+"Password should contain at least one special char ( / * - + = . , ; : ! ? & "
+"\" ' ( ) _ [ ] { } @ % # $ < > )."
+msgstr ""
+"Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
+"= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."

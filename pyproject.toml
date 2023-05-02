@@ -67,6 +67,7 @@ cryptography = "38.0.3"
 pillow = "^9.3.0"
 psycopg2-binary = "2.8.6"
 pyrage = "^1.0.3"
+zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"

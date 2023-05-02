@@ -57,41 +57,106 @@ class AuthUserViewsTests(TestCase):
         }
         cls.response_manager = cls.manager_client.post(url_login, data_manager)
 
-    def test_anonymous_get_auth_user_detail(self):
+    def test_anonymous_post_password_change_wrong_passsword(self):
         """
-        GET /users/auth/user/ .
+        POST /users/auth/password/change/ .
 
-        - An anonymous user cannot execute this request.
+        - Password must respect some rules.
         """
-        response_anonymous = self.anonymous_client.get("/users/auth/user/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        fake_passwords = ["ah", "saucisse", "SAUCISSE", "Saucisse", "Saucisse123"]
+        for fake_password in fake_passwords:
+            response_student = self.student_client.post(
+                "/users/auth/password/change/",
+                {
+                    "new_password1": fake_password,
+                    "new_password2": fake_password,
+                },
+            )
+            self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_student_get_auth_user_detail(self):
+    def test_anonymous_post_password_change(self):
         """
-        GET /users/auth/user/ .
+        POST /users/auth/password/change/ .
 
         - A student user can execute this request.
-        - A student user gets correct data when executing the request.
+        - An email is received if confirmation reset is successful.
         """
-        response_student = self.student_client.get("/users/auth/user/")
+        response_student = self.student_client.post(
+            "/users/auth/password/change/",
+            {
+                "new_password1": "Saucisse123+",
+                "new_password2": "Saucisse123+",
+            },
+        )
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(username=self.student_user_name)
-        user_data = json.loads(response_student.content.decode("utf-8"))
-        self.assertEqual(user_data["username"], user.username)
-
-    def test_manager_get_auth_user_detail(self):
+    def test_anonymous_post_password_reset_wrong_mail(self):
         """
-        GET /users/auth/user/ .
+        POST /users/auth/password/reset/ .
 
-        - A manager user can execute this request.
-        - A manager user gets correct data when executing the request.
+        - An anonymous user can execute this request.
+        - Nothing happens if email is wrong.
         """
-        response_manager = self.manager_client.get("/users/auth/user/")
-        user = User.objects.get(username=self.manager_general_user_name)
-        user_data = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        self.assertEqual(user_data["username"], user.username)
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/", {"email": "auguste-cornouailles@melun.fr"}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertFalse(len(mail.outbox))
+
+    def test_anonymous_post_password_reset_success(self):
+        """
+        POST /users/auth/password/reset/ .
+
+        - An anonymous user can execute this request.
+        - An email is received if reset is successful.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/", {"email": self.student_user_name}
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
+
+    def test_anonymous_post_password_reset_confirm_wrong_passsword(self):
+        """
+        POST /users/auth/password/reset/confirm/ .
+
+        - Password must respect some rules.
+        """
+        fake_passwords = ["ah", "saucisse", "SAUCISSE", "Saucisse", "Saucisse123"]
+        user = User.objects.get(id=self.student_user_id)
+        for fake_password in fake_passwords:
+            response_anonymous = self.anonymous_client.post(
+                "/users/auth/password/reset/confirm/",
+                {
+                    "new_password1": fake_password,
+                    "new_password2": fake_password,
+                    "uid": user_pk_to_url_str(user),
+                    "token": default_token_generator.make_token(user),
+                },
+            )
+            self.assertEqual(
+                response_anonymous.status_code, status.HTTP_400_BAD_REQUEST
+            )
+
+    def test_anonymous_post_password_reset_confirm(self):
+        """
+        POST /users/auth/password/reset/confirm/ .
+
+        - An anonymous user can execute this request.
+        - An email is received if confirmation reset is successful.
+        """
+        user = User.objects.get(id=self.student_user_id)
+        response_anonymous = self.anonymous_client.post(
+            "/users/auth/password/reset/confirm/",
+            {
+                "new_password1": "Saucisse123+",
+                "new_password2": "Saucisse123+",
+                "uid": user_pk_to_url_str(user),
+                "token": default_token_generator.make_token(user),
+            },
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_post_registration_bad_request(self):
         """
@@ -147,52 +212,6 @@ class AuthUserViewsTests(TestCase):
 
         response = self.anonymous_client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_anonymous_post_password_reset_wrong_mail(self):
-        """
-        POST /users/auth/password/reset/ .
-
-        - An anonymous user can execute this request.
-        - Nothing happens if email is wrong.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/password/reset/", {"email": "auguste-cornouailles@melun.fr"}
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
-        self.assertFalse(len(mail.outbox))
-
-    def test_anonymous_post_password_reset_success(self):
-        """
-        POST /users/auth/password/reset/ .
-
-        - An anonymous user can execute this request.
-        - An email is received if reset is successful.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/password/reset/", {"email": self.student_user_name}
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(mail.outbox))
-
-    def test_anonymous_post_password_reset_confirm(self):
-        """
-        POST /users/auth/password/reset/confirm/ .
-
-        - An anonymous user can execute this request.
-        - An email is received if confirmation reset is successful.
-        """
-        user = User.objects.get(id=self.student_user_id)
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/password/reset/confirm/",
-            {
-                "new_password1": "saucisse",
-                "new_password2": "saucisse",
-                "uid": user_pk_to_url_str(user),
-                "token": default_token_generator.make_token(user),
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(mail.outbox))
 
     def test_anonymous_post_registration_verify_email(self):
         """
@@ -263,6 +282,42 @@ class AuthUserViewsTests(TestCase):
             "/users/auth/registration/verify-email/", {"key": key}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+
+    def test_anonymous_get_auth_user_detail(self):
+        """
+        GET /users/auth/user/ .
+
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.anonymous_client.get("/users/auth/user/")
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_student_get_auth_user_detail(self):
+        """
+        GET /users/auth/user/ .
+
+        - A student user can execute this request.
+        - A student user gets correct data when executing the request.
+        """
+        response_student = self.student_client.get("/users/auth/user/")
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+
+        user = User.objects.get(username=self.student_user_name)
+        user_data = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(user_data["username"], user.username)
+
+    def test_manager_get_auth_user_detail(self):
+        """
+        GET /users/auth/user/ .
+
+        - A manager user can execute this request.
+        - A manager user gets correct data when executing the request.
+        """
+        response_manager = self.manager_client.get("/users/auth/user/")
+        user = User.objects.get(username=self.manager_general_user_name)
+        user_data = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        self.assertEqual(user_data["username"], user.username)
 
     def test_put_auth_user_detail(self):
         """
