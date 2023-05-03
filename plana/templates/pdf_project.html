@@ -1,6 +1,78 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Ceci est le nom du projet : {{ name }}</title>
+        <title>Ré'CAPE : {{ name }}</title>
     </head>
+    <body>
+        <h1>Récapitulatif de la demande de subventionnement pour le projet {{ name }}</h1>
+        <div>
+            <h2>Informations générales : </h2>
+            <h3>Le projet : </h3>
+            <ul>
+                <li>Nom du projet : {{ name }}</li>
+                <li>Date prévue de début du projet : {{ planned_start_date }}</li>
+                <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
+                <li>Lieu(x) du projet : {{ location }}</li>
+            </ul>
+            <h3>La personne portant le projet : </h3>
+            <ul>
+                <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
+                <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
+                <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
+                <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>Commissions sélectionnées : </h2>
+            <ul>
+                <li>Ici la liste des commissions choisies et leur date</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>Budget : </h2>
+            <ul>
+                <li>Réédition d'un précédent projet : ?</li>
+                <li>Public visé par le projet : {{ target_audience }}</li>
+                <li>Nombre d'étudiantes et étudiants visés : {{ amount_student_audience }}</li>
+                <li>Nombre de personnes visées au total : {{ amount_all_audience }}</li>
+                <li>Montant demandé par participant (billeterie) : {{ ticket_price }}</li>
+                <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }}</li>
+            </ul>
+            <h3>Montant demandé par commission sélectionnée : </h3>
+            <ul>
+                <li>Ici la liste des budgets demandés par commission chosie</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>Objectifs visés par le projet : </h2>
+            <div>
+                <h3>Objectifs</h3>
+                <p>{{ goals }}</p>
+            </div>
+            <div>
+                <h3>Résumé du projet</h3>
+                <p>{{ summary }}</p>
+            </div>
+            <div>
+                <h3>Programme des activités prévues</h3>
+                <p>{{ planned_activities }}</p>
+            </div>
+            <div>
+                <h3>Programme de prévention et de sécurité</h3>
+                <p>{{ prevention_safety }}</p>
+            </div>
+            <div>
+                <h3>Campagne de communication</h3>
+                <p>{{ marketing_campaign }}</p>
+            </div>
+        </div>
+
+        <div>
+            <h2>Documents : </h2>
+            <p>?</p>
+        </div>
+    </body>
 </html>
