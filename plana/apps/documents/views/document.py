@@ -7,14 +7,17 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.documents.models.document import Document
-from plana.apps.documents.serializers.document import DocumentSerializer
+from plana.apps.documents.serializers.document import (
+    DocumentCreateSerializer,
+    DocumentSerializer,
+    DocumentUpdateSerializer,
+)
 
 
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route"""
 
     queryset = Document.objects.all()
-    serializer_class = DocumentSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -22,6 +25,13 @@ class DocumentList(generics.ListCreateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = DocumentCreateSerializer
+        else:
+            self.serializer_class = DocumentSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         parameters=[
@@ -100,6 +110,13 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = DocumentUpdateSerializer
+        else:
+            self.serializer_class = DocumentSerializer
+        return super().get_serializer_class()
+
     @extend_schema(
         responses={
             status.HTTP_200_OK: DocumentSerializer,
@@ -136,7 +153,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         try:
-            self.queryset.get(id=kwargs["pk"])
+            document = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document does not exist.")},
@@ -144,9 +161,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            "institution" in request.data
+            document.institution is not None
             and not request.user.has_perm("documents.change_document_any_institution")
-            and not request.user.is_staff_in_institution(request.data["institution"])
+            and not request.user.is_staff_in_institution(document.institution)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this institution.")},
@@ -154,12 +171,22 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            "commission" in request.data
+            document.commission is not None
             and not request.user.has_perm("documents.change_document_any_commission")
-            and not request.user.is_member_in_commission(request.data["commission"])
+            and not request.user.is_member_in_commission(document.commission)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this commission.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if document.process_type not in Document.ProcessType.get_updatable_documents():
+            return response.Response(
+                {
+                    "error": _(
+                        "Not allowed to update a document with this process type."
+                    )
+                },
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -183,19 +210,29 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "documents.delete_document_any_institution"
-        ) and not request.user.is_staff_in_institution(document.institution):
+        if (
+            document.institution is not None
+            and not request.user.has_perm("documents.delete_document_any_institution")
+            and not request.user.is_staff_in_institution(document.institution)
+        ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this institution.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if not request.user.has_perm(
-            "documents.delete_document_any_commission"
-        ) and not request.user.is_member_in_commission(document.commission):
+        if (
+            document.commission is not None
+            and not request.user.has_perm("documents.delete_document_any_commission")
+            and not request.user.is_member_in_commission(document.commission)
+        ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this commission.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if document.process_type != "NO_PROCESS":
+            return response.Response(
+                {"error": _("Not allowed to delete a document with a process type.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

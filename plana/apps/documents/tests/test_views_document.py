@@ -60,6 +60,14 @@ class DocumentsViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
+        document = Document.objects.create(
+            name="Document factice d'établissement",
+            description="Document factice d'établissement",
+            institution_id=1,
+            mime_types=["application/pdf", "image/jpeg", "image/png"],
+        )
+        cls.institution_document_id = document.id
+
     def test_get_documents_list(self):
         """
         GET /documents/ .
@@ -93,6 +101,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_documents_anonymous(self):
         """
         POST /documents/ .
+
         - An anonymous user can't execute this request.
         """
         post_data = {"name": "test anonymous"}
@@ -102,6 +111,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_documents_forbidden(self):
         """
         POST /documents/ .
+
         - A user without proper permissions can't execute this request.
         """
         post_data = {"name": "Test anonymous"}
@@ -111,6 +121,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_documents_forbidden_institution(self):
         """
         POST /documents/ .
+
         - A user without access to requested institution can't execute this request.
         """
         institution = 1
@@ -121,6 +132,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_documents_forbidden_commission(self):
         """
         POST /documents/ .
+
         - A user without access to requested commission can't execute this request.
         """
         commission = 3
@@ -131,6 +143,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_documents_success(self):
         """
         POST /documents/ .
+
         - A user with proper permissions can execute this request.
         - Document object is successfully created in db.
         """
@@ -139,15 +152,13 @@ class DocumentsViewsTests(TestCase):
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
 
-        contact = "gestionnaire-svu@mail.tld"
         name = "Test success"
-        post_data = {"name": name, "contact": contact, "path_template": file}
+        post_data = {"name": name, "path_template": file}
         response = self.general_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         results = Document.objects.filter(name=name)
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].contact, contact)
 
     def test_get_document_by_id_anonymous(self):
         """
@@ -183,9 +194,20 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.get("/documents/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_put_document_by_id_405(self):
+        """
+        PUT /documents/{id} .
+
+        - The route returns a 405 everytime.
+        """
+        data = {"name": "name"}
+        response = self.general_client.put("/documents/1", data)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_patch_documents_anonymous(self):
         """
         PATCH /documents/{id} .
+
         - An anonymous user can't execute this request.
         """
         patch_data = {"name": "test anonymous"}
@@ -194,9 +216,24 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_documents_404(self):
+        """
+        PATCH /documents/{id} .
+
+        - A user with proper permissions can execute this request.
+        - Document must exist.
+        """
+        name = "Test fail"
+        patch_data = {"name": name}
+        response = self.general_client.patch(
+            "/documents/999", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_patch_documents_forbidden(self):
         """
         PATCH /documents/{id} .
+
         - A user without proper permissions can't execute this request.
         """
         patch_data = {"name": "Test anonymous"}
@@ -208,44 +245,48 @@ class DocumentsViewsTests(TestCase):
     def test_patch_documents_forbidden_institution(self):
         """
         PATCH /documents/{id} .
+
         - A user without access to requested institution can't execute this request.
         """
         institution = 1
         patch_data = {"name": "Test forbidden", "institution": institution}
         response = self.institution_client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
+            f"/documents/{self.institution_document_id}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_documents_forbidden_commission(self):
         """
         PATCH /documents/{id} .
+
         - A user without access to requested commission can't execute this request.
         """
         commission = 3
         patch_data = {"name": "Test forbidden", "commission": commission}
         response = self.institution_client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
+            "/documents/3", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_documents_404(self):
+    def test_patch_documents_wrong_process(self):
         """
         PATCH /documents/{id} .
-        - A user with proper permissions can execute this request.
-        - Document must exist.
+
+        - Document must have an updatable process type.
         """
-        contact = "gestionnaire-svu@mail.tld"
-        name = "Test fail"
-        patch_data = {"name": name, "contact": contact}
+        name = "Test process"
+        patch_data = {"name": name}
         response = self.general_client.patch(
-            "/documents/999", data=patch_data, content_type="application/json"
+            "/documents/9", data=patch_data, content_type="application/json"
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_documents_success(self):
         """
         PATCH /documents/{id} .
+
         - A user with proper permissions can execute this request.
         - Document object is successfully changed in db.
         """
@@ -254,10 +295,9 @@ class DocumentsViewsTests(TestCase):
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
 
-        contact = "gestionnaire-svu@mail.tld"
         name = "Test success"
         patch_data = encode_multipart(
-            data={"name": name, "contact": contact, "path_template": file},
+            data={"name": name, "path_template": file},
             boundary=BOUNDARY,
         )
         response = self.general_client.patch(
@@ -267,7 +307,6 @@ class DocumentsViewsTests(TestCase):
 
         results = Document.objects.filter(name=name)
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].contact, contact)
 
     def test_delete_document_by_id_anonymous(self):
         """
@@ -278,19 +317,14 @@ class DocumentsViewsTests(TestCase):
         response = self.client.delete("/documents/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_delete_document_by_id(self):
+    def test_delete_document_by_id_404(self):
         """
         DELETE /documents/{id} .
 
-        - The route can be accessed by an authenticated user with correct permissions.
-        - The document is correctly deleted.
+        - The route returns a 404 if a wrong document id is given.
         """
-        document_id = 1
-        response = self.general_client.delete(f"/documents/{document_id}")
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-        doc_deleted = Document.objects.filter(id=document_id)
-        self.assertEqual(len(doc_deleted), 0)
+        response = self.general_client.delete("/documents/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_document_by_id_forbidden_institution(self):
         """
@@ -312,21 +346,26 @@ class DocumentsViewsTests(TestCase):
         response = self.institution_client.delete(f"/documents/{document_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_delete_document_by_id_404(self):
+    def test_delete_document_wrong_process(self):
         """
         DELETE /documents/{id} .
 
-        - The route returns a 404 if a wrong document id is given.
+        - Document must have an updatable process type.
         """
-        response = self.general_client.delete("/documents/99999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.general_client.delete("/documents/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_put_document_by_id_405(self):
+    def test_delete_document_by_id(self):
         """
-        PUT /documents/{id} .
+        DELETE /documents/{id} .
 
-        - The route returns a 405 everytime.
+        - The route can be accessed by an authenticated user with correct permissions.
+        - The document is correctly deleted.
         """
-        data = {"name": "name", "contact": "test"}
-        response = self.general_client.put("/documents/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        response = self.general_client.delete(
+            f"/documents/{self.institution_document_id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        doc_deleted = Document.objects.filter(id=self.institution_document_id)
+        self.assertEqual(len(doc_deleted), 0)
