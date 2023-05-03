@@ -82,7 +82,7 @@ def to_bool(attr):
 
 
 def generate_pdf(dict_data, type_doc, base_url):
-    print(dict_data)
+    # print(dict_data)
     print(type_doc)
 
     if type_doc == "project_summary":
