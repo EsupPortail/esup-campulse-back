@@ -27,21 +27,9 @@ class ProjectDataExport(generics.ListAPIView):
                 'amount_earned',
             )
         )
-        #        data["project_commission_dates"] = list(
-        #            ProjectCommissionDate.objects.filter(project_id=data["id"]).annotate(
-        #                commisson_date=Subquery(CommissionDate.objects.filter(id=OuterRef('commission_date_id')).values('commission_date'), output_field=models.DateField()),
-        #                commission_acronym=Subquery(CommissionDate.objects.filter(id=OuterRef('commission_date_id')).values('commission_id').annotate(commission_acronym=Subquery(Commission.objects.filter(id=OuterRef('commission_id')).values('acronym'), output_field=models.CharField())))).values(
-        #                'commission_date_id',
-        #                'commission_date',
-        #                'is_first_edition',
-        #                'amount_asked_previous_edition',
-        #                'amount_earned_previous_edition',
-        #                'amount_asked',
-        #                'amount_earned',
-        #            )
-        #        )
         print(data["project_commission_dates"])
-        data["commissions"] = list(
+
+        commission_infos = list(
             CommissionDate.objects.filter(
                 pk__in=[
                     pcd["commission_date_id"]
@@ -56,8 +44,16 @@ class ProjectDataExport(generics.ListAPIView):
                     output_field=models.CharField(),
                 )
             )
-            .values('commission_acronym', 'commission_date')
+            .values('commission_acronym', 'commission_date', 'id')
         )
-        print(data["commissions"])
-        # print(data)
+        print(commission_infos)
+
+        for commission in commission_infos:
+            for link in data['project_commission_dates']:
+                if commission['id'] == link['commission_date_id']:
+                    print("fusion")
+                    link["commission_acronym"] = commission["commission_acronym"]
+                    link["commission_date"] = commission["commission_date"]
+
+        print(data["project_commission_dates"])
         return generate_pdf(data, "project_summary", request.build_absolute_uri('/'))

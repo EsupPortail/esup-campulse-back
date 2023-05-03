@@ -43,7 +43,7 @@
             <h3>Montant demandé par commission sélectionnée : </h3>
             <ul>
                 {% for commission in project_commission_dates %}
-                    <li>{{ commission_dates.commission }}{{ commission.amount_asked }}</li>
+                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }}</li>
                 {% endfor %}
             </ul>
         </div>
