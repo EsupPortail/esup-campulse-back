@@ -7,8 +7,10 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
@@ -55,6 +57,15 @@ class ProjectsViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.general_client.post(url_login, data_general)
+
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
+        data_institution = {
+            "username": cls.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.institution_client.post(url_login, data_institution)
 
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
@@ -120,6 +131,27 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), user_projects_cnt)
+
+    def test_get_project_institution(self):
+        """
+        GET /projects/ .
+
+        - An institution manager gets projects where rights are OK.
+        """
+        response = self.institution_client.get("/projects/")
+        user_institutions_ids = Institution.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
+                user_id=self.manager_institution_user_id
+            ).values_list("institution_id")
+        )
+        association_projects_cnt = Project.objects.filter(
+            association_id__in=Association.objects.filter(
+                institution_id__in=user_institutions_ids
+            ).values_list("id")
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), association_projects_cnt)
 
     def test_get_project_manager(self):
         """
@@ -342,6 +374,15 @@ class ProjectsViewsTests(TestCase):
         response = self.client.get("/projects/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_project_by_id_404(self):
+        """
+        GET /projects/{id} .
+
+        - The route returns a 404 if a wrong project id is given.
+        """
+        response = self.general_client.get("/projects/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_project_by_id_forbidden_student(self):
         """
         GET /projects/{id} .
@@ -356,6 +397,7 @@ class ProjectsViewsTests(TestCase):
         GET /projects/{id} .
 
         - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
         - Correct projects details are returned (test the "name" attribute).
         """
         project_id = 1
@@ -366,14 +408,13 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(content["name"], project_test.name)
 
-    def test_get_project_by_id_404(self):
-        """
-        GET /projects/{id} .
+        project_id = 2
+        project_test = Project.objects.get(id=project_id)
+        response = self.student_president_client.get(f"/projects/{project_id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        - The route returns a 404 if a wrong project id is given.
-        """
-        response = self.general_client.get("/projects/99999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(content["name"], project_test.name)
 
     def test_put_project(self):
         """
@@ -399,6 +440,19 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_project_not_found(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Project must exist.
+        """
+        patch_data = {"goals": "Testing patching"}
+        response = self.student_misc_client.patch(
+            "/projects/999", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_patch_project_forbidden_student(self):
         """
         PATCH /projects/{id} .
@@ -411,19 +465,6 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_not_found(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route can be accessed by a student user.
-        - Project must be existing.
-        """
-        patch_data = {"goals": "Testing patching"}
-        response = self.student_misc_client.patch(
-            "/projects/999", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
     def test_patch_project_forbidden_user(self):
         """
         PATCH /projects/{id} .
@@ -433,6 +474,18 @@ class ProjectsViewsTests(TestCase):
         """
         patch_data = {"description": "new desc"}
         response = self.student_site_client.patch(
+            "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_manager_error(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route cannot be accessed by a manager user.
+        """
+        patch_data = {"description": "new desc"}
+        response = self.general_client.patch(
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -468,18 +521,6 @@ class ProjectsViewsTests(TestCase):
         project = Project.objects.get(pk=1)
         self.assertEqual(project.summary, "new summary")
 
-    def test_patch_project_manager_error(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route cannot be accessed by a manager user.
-        """
-        patch_data = {"description": "new desc"}
-        response = self.general_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_put_project_status(self):
         """
         PUT /projects/{id}/status .
@@ -508,7 +549,7 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id}/status .
 
-        - Project must be existing.
+        - Project must exist.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(

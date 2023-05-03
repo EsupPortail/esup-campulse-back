@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project_commission_date import (
@@ -57,18 +58,45 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         if not request.user.has_perm(
             "projects.view_projectcommissiondate_any_commission"
         ):
+            if request.user.is_staff:
+                user_commissions_ids = request.user.get_user_managed_commissions()
+            else:
+                user_commissions_ids = request.user.get_user_commissions()
+        else:
+            user_commissions_ids = Commission.objects.all().values_list("id")
+        if not request.user.has_perm(
+            "projects.view_projectcommissiondate_any_institution"
+        ):
+            user_institutions_ids = request.user.get_user_managed_institutions()
+        else:
+            user_institutions_ids = Institution.objects.all().values_list("id")
+
+        if not request.user.has_perm(
+            "projects.view_projectcommissiondate_any_commission"
+        ) or not request.user.has_perm(
+            "projects.view_projectcommissiondate_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
-            user_commissions_ids = request.user.get_user_commissions()
             user_projects_ids = Project.objects.filter(
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
+
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
                     commission_date_id__in=CommissionDate.objects.filter(
                         commission_id__in=user_commissions_ids
                     ).values_list("id")
+                )
+                | models.Q(
+                    project_id__in=(
+                        Project.objects.filter(
+                            association_id__in=Association.objects.filter(
+                                institution_id__in=user_institutions_ids
+                            ).values_list("id")
+                        ).values_list("id")
+                    )
                 )
             )
 
@@ -207,6 +235,11 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
                     project_id=project.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
+            institutions_ids = []
+            if project.association_id is not None:
+                institutions_ids = Institution.objects.filter(
+                    id=Association.objects.get(id=project.association_id).institution_id
+                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -217,11 +250,31 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
             not request.user.has_perm(
                 "projects.view_projectcommissiondate_any_commission"
             )
+            and not request.user.has_perm(
+                "projects.view_projectcommissiondate_any_institution"
+            )
             and not request.user.can_edit_project(project)
             and (
                 len(
                     list(
-                        set(commissions_ids) & set(request.user.get_user_commissions())
+                        set(commissions_ids)
+                        & set(request.user.get_user_managed_commissions())
+                    )
+                )
+                == 0
+            )
+            and (
+                len(
+                    list(
+                        set(institutions_ids)
+                        & set(request.user.get_user_managed_institutions())
+                    )
+                )
+                == 0
+                or len(
+                    list(
+                        set(institutions_ids)
+                        & set(request.user.get_user_institutions())
                     )
                 )
                 == 0

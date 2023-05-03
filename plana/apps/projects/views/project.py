@@ -91,12 +91,26 @@ class ProjectListCreate(generics.ListCreateAPIView):
         active_projects = request.query_params.get("active_projects")
 
         if not request.user.has_perm("projects.view_project_any_commission"):
+            if request.user.is_staff:
+                user_commissions_ids = request.user.get_user_managed_commissions()
+            else:
+                user_commissions_ids = request.user.get_user_commissions()
+        else:
+            user_commissions_ids = Commission.objects.all().values_list("id")
+        if not request.user.has_perm("projects.view_project_any_institution"):
+            user_institutions_ids = request.user.get_user_managed_institutions()
+        else:
+            user_institutions_ids = Institution.objects.all().values_list("id")
+
+        if not request.user.has_perm(
+            "projects.view_project_any_commission"
+        ) or not request.user.has_perm("projects.view_project_any_institution"):
             user_associations_ids = request.user.get_user_associations()
-            user_commissions_ids = request.user.get_user_commissions()
             user_projects_ids = Project.objects.filter(
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
+
             self.queryset = self.queryset.filter(
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
@@ -107,6 +121,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
                             ).values_list("id")
                         ).values_list("project_id")
                     )
+                )
+                | models.Q(
+                    association_id__in=Association.objects.filter(
+                        institution_id__in=user_institutions_ids
+                    ).values_list("id")
                 )
             )
 
@@ -310,25 +329,51 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     project_id=project.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
+            institutions_ids = []
+            if project.association_id is not None:
+                institutions_ids = Institution.objects.filter(
+                    id=Association.objects.get(id=project.association_id).institution_id
+                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm("projects.view_project_any_commission") and (
-            (project.user_id is not None and request.user.pk != project.user_id)
-            or (
-                project.association_id is not None
-                and not request.user.is_in_association(project.association_id)
-            )
+        if (
+            not request.user.has_perm("projects.view_project_any_commission")
+            and not request.user.has_perm("projects.view_project_any_institution")
             and (
-                len(
-                    list(
-                        set(commissions_ids) & set(request.user.get_user_commissions())
-                    )
+                (project.user_id is not None and request.user.pk != project.user_id)
+                or (
+                    project.association_id is not None
+                    and not request.user.is_in_association(project.association_id)
                 )
-                == 0
+                and (
+                    len(
+                        list(
+                            set(commissions_ids)
+                            & set(request.user.get_user_managed_commissions())
+                        )
+                    )
+                    == 0
+                )
+                and (
+                    len(
+                        list(
+                            set(institutions_ids)
+                            & set(request.user.get_user_managed_institutions())
+                        )
+                    )
+                    == 0
+                    or len(
+                        list(
+                            set(institutions_ids)
+                            & set(request.user.get_user_institutions())
+                        )
+                    )
+                    == 0
+                )
             )
         ):
             return response.Response(

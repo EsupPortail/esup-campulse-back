@@ -153,7 +153,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                 )
                 and (
                     not request.user.is_anonymous
-                    and not institution in request.user.get_user_institutions()
+                    and not institution in request.user.get_user_managed_institutions()
                 )
             ):
                 return response.Response(
@@ -169,7 +169,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                 and (
                     not request.user.is_anonymous
                     and not commission.institution_id
-                    in request.user.get_user_institutions()
+                    in request.user.get_user_managed_institutions()
                 )
             ):
                 return response.Response(
@@ -320,7 +320,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
             "users.delete_groupinstitutioncommissionuser_any_group"
         ) and (
             not Commission.objects.get(id=kwargs["commission_id"]).institution_id
-            in request.user.get_user_institutions()
+            in request.user.get_user_managed_institutions()
         ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
@@ -373,7 +373,9 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
 
         if not request.user.has_perm(
             "users.delete_groupinstitutioncommissionuser_any_group"
-        ) and (not kwargs["institution_id"] in request.user.get_user_institutions()):
+        ) and (
+            not kwargs["institution_id"] in request.user.get_user_managed_institutions()
+        ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
                 status=status.HTTP_403_FORBIDDEN,

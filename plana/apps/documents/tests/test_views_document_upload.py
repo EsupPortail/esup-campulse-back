@@ -184,7 +184,7 @@ class DocumentsViewsTests(TestCase):
         """
         POST /documents/uploads .
         - The route can be accessed by any authenticated user.
-        - The project edited must be existing.
+        - The project edited must exist.
         """
         post_data = {
             "path_file": "",
@@ -198,7 +198,7 @@ class DocumentsViewsTests(TestCase):
         """
         POST /documents/uploads .
         - The route can be accessed by any authenticated user.
-        - The document linked must be existing.
+        - The document linked must exist.
         """
         post_data = {
             "path_file": "",
@@ -441,7 +441,7 @@ class DocumentsViewsTests(TestCase):
         DELETE /documents/uploads/{id} .
 
         - The route can be accessed by a student user.
-        - The document upload must be existing.
+        - The document upload must exist.
         """
         response = self.student_misc_client.delete("/documents/uploads/999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

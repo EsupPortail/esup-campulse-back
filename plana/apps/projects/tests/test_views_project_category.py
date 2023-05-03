@@ -5,8 +5,11 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
+from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
 
 class ProjectCategoryLinksViewsTests(TestCase):
@@ -47,6 +50,15 @@ class ProjectCategoryLinksViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
+        data_institution = {
+            "username": cls.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.institution_client.post(url_login, data_institution)
+
         cls.student_offsite_user_id = 10
         cls.student_offsite_user_name = "etudiant-asso-hors-site@mail.tld"
         cls.student_offsite_client = Client()
@@ -85,6 +97,29 @@ class ProjectCategoryLinksViewsTests(TestCase):
         response = self.student_offsite_client.get("/projects/categories")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_project_categories_institution_manager(self):
+        """
+        GET /projects/categories .
+
+        - An institution manager user gets project categories for correct projects.
+        """
+        response = self.institution_client.get("/projects/categories")
+        user_institutions_ids = Institution.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
+                user_id=self.manager_institution_user_id
+            ).values_list("institution_id")
+        )
+        projects_categories_cnt = ProjectCategory.objects.filter(
+            project_id__in=Project.objects.filter(
+                association_id__in=Association.objects.filter(
+                    institution_id__in=user_institutions_ids
+                ).values_list("id")
+            )
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), projects_categories_cnt)
+
     def test_get_project_categories_manager(self):
         """
         GET /projects/categories .
@@ -120,7 +155,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         POST /projects/categories .
 
         - The route can be accessed by a student user.
-        - The project must be existing
+        - The project must exist.
         """
         post_data = {
             "project": 999,
@@ -195,6 +230,15 @@ class ProjectCategoryLinksViewsTests(TestCase):
         response = self.client.get("/projects/1/categories")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_project_categories_by_id_404(self):
+        """
+        GET /projects/{project_id}/categories .
+
+        - The route returns a 404 if a wrong project id is given.
+        """
+        response = self.general_client.get("/projects/99999/categories")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_project_categories_by_id_forbidden_student(self):
         """
         GET /projects/{project_id}/categories .
@@ -209,6 +253,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         GET /projects/{project_id}/categories .
 
         - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
         - Correct projects categories are returned.
         """
         project_id = 1
@@ -219,14 +264,15 @@ class ProjectCategoryLinksViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-    def test_get_project_categories_by_id_404(self):
-        """
-        GET /projects/{project_id}/categories .
+        project_id = 2
+        project_test_cnt = ProjectCategory.objects.filter(project_id=project_id).count()
+        response = self.student_president_client.get(
+            f"/projects/{project_id}/categories"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        - The route returns a 404 if a wrong project id is given.
-        """
-        response = self.general_client.get("/projects/99999/categories")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), project_test_cnt)
 
     def test_delete_project_categories_anonymous(self):
         """
@@ -242,7 +288,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by a student user.
-        - The project must be existing.
+        - The project must exist.
         """
         project = 999
         category = 1

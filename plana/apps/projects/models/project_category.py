@@ -26,6 +26,10 @@ class ProjectCategory(models.Model):
         permissions = [
             (
                 "view_projectcategory_any_commission",
-                "Can view all categories linked to a project.",
+                "Can view all categories linked to all projects for a commission.",
+            ),
+            (
+                "view_projectcategory_any_institution",
+                "Can view all categories linked to all projects for an institution.",
             ),
         ]
