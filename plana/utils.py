@@ -2,8 +2,11 @@
 import ast
 import re
 
+import weasyprint
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
 
@@ -76,3 +79,15 @@ def to_bool(attr):
         return attr
     if isinstance(attr, str):
         return ast.literal_eval(attr.capitalize())
+
+
+def generate_pdf(dict_data, type_doc, base_url):
+    print(dict_data)
+    print(type_doc)
+    html = render_to_string('./pdf_project.html', dict_data)
+    response = HttpResponse(content_type="application/pdf")
+    response['Content-Disposition'] = (
+        'Content-Disposition: attachment; filename="test_pdf_export_%s.pdf"' % type_doc
+    )
+    weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
+    return response
