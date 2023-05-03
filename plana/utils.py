@@ -84,10 +84,15 @@ def to_bool(attr):
 def generate_pdf(dict_data, type_doc, base_url):
     print(dict_data)
     print(type_doc)
-    html = render_to_string('./pdf_project.html', dict_data)
+
+    if type_doc == "project_summary":
+        template_path = "./pdf_exports/project_summary.html"
+
+    html = render_to_string(template_path, dict_data)
     response = HttpResponse(content_type="application/pdf")
+    # TODO : find a correct file name pattern
     response['Content-Disposition'] = (
-        'Content-Disposition: attachment; filename="test_pdf_export_%s.pdf"' % type_doc
+        'Content-Disposition: attachment; filename="export_%s.pdf"' % type_doc
     )
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
     return response

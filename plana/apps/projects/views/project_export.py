@@ -15,5 +15,5 @@ class ProjectDataExport(generics.ListAPIView):
         print(kwargs)
         project = get_object_or_404(Project, id=kwargs['id'])
         return generate_pdf(
-            project.__dict__, "project", request.build_absolute_uri('/')
+            project.__dict__, "project_summary", request.build_absolute_uri('/')
         )
