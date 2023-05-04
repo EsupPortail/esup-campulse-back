@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, response, status
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated, AllowAny
 
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from drf_spectacular.types import OpenApiTypes
@@ -96,3 +96,85 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
                 {"error": _("Project does not exist")},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """/projects/{project_id}/comments/{comment_id} route"""
+
+    queryset = ProjectComment.objects.all()
+    serializer_class = ProjectCommentSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+
+    def get_permissions(self):
+        if self.request.method in ("GET", "PUT"):
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
+    def get(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCommentSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/comments"],
+    )
+    def patch(self, request, *args, **kwargs):
+        """Updates comments of the project"""
+        try:
+            pc = ProjectComment.objects.get(
+                project_id=kwargs["project_id"],
+            )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Link between this comment and project does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        pc.save()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: ProjectCommentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/comments"],
+    )
+    def delete(self, request, *args, **kwargs):
+        """Destroys comments of a project"""
+        try:
+            pc = ProjectComment.objects.get(
+                project_id=kwargs["project_id"],
+            )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": "Link between this comment and project does not exist."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        pc.delete()
+        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
