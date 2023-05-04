@@ -1,22 +1,86 @@
+"""Views for project PDF generation."""
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import OuterRef, Subquery
-from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, response, status
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models import Association
 from plana.apps.commissions.models import Commission, CommissionDate
+from plana.apps.institutions.models import Institution
 from plana.apps.projects.models import Project, ProjectCommissionDate
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
 from plana.utils import generate_pdf
 
 
-class ProjectDataExport(generics.ListAPIView):
+class ProjectDataExport(generics.RetrieveAPIView):
+    """/projects/{id}/export route"""
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
-        data = get_object_or_404(Project, id=kwargs['id']).__dict__
+        """Retrieves a PDF file."""
+        try:
+            project = self.queryset.get(id=kwargs["id"])
+            data = project.__dict__
+            commissions_ids = CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project_id=project.id
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
+            institution_id = []
+            if project.association_id is not None:
+                institution_id = Institution.objects.get(
+                    id=Association.objects.get(id=project.association_id).institution_id
+                )
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Project does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if (
+            not request.user.has_perm("projects.view_project_any_commission")
+            and not request.user.has_perm("projects.view_project_any_institution")
+            and (
+                (project.user_id is not None and request.user.pk != project.user_id)
+                or (
+                    project.association_id is not None
+                    and not request.user.is_in_association(project.association_id)
+                )
+                and (
+                    len(
+                        list(
+                            set(commissions_ids)
+                            & set(request.user.get_user_managed_commissions())
+                        )
+                    )
+                    == 0
+                )
+                and (
+                    institution_id in request.user.get_user_managed_institutions()
+                    or institution_id in request.user.get_user_institutions()
+                )
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         if data["association_id"] is not None:
             data["association"] = Association.objects.get(

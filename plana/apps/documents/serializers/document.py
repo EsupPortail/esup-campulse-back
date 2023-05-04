@@ -21,7 +21,6 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "path_template",
-            "mime_types",
             "institution",
             "commission",
         ]
@@ -36,5 +35,4 @@ class DocumentUpdateSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "path_template",
-            "mime_types",
         ]

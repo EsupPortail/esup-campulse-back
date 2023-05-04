@@ -329,9 +329,9 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     project_id=project.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
-            institutions_ids = []
+            institution_id = 0
             if project.association_id is not None:
-                institutions_ids = Institution.objects.filter(
+                institution_id = Institution.objects.get(
                     id=Association.objects.get(id=project.association_id).institution_id
                 )
         except ObjectDoesNotExist:
@@ -359,20 +359,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     == 0
                 )
                 and (
-                    len(
-                        list(
-                            set(institutions_ids)
-                            & set(request.user.get_user_managed_institutions())
-                        )
-                    )
-                    == 0
-                    or len(
-                        list(
-                            set(institutions_ids)
-                            & set(request.user.get_user_institutions())
-                        )
-                    )
-                    == 0
+                    institution_id not in request.user.get_user_managed_institutions()
+                    or institution_id not in request.user.get_user_institutions()
                 )
             )
         ):

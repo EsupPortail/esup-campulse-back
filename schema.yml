@@ -829,6 +829,34 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{id}/export:
+    get:
+      operationId: projects_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -2946,12 +2974,6 @@ components:
           format: binary
           nullable: true
           title: Example template file
-        mime_types:
-          type: array
-          items:
-            type: string
-            minLength: 1
-            maxLength: 128
         institution:
           type: integer
           nullable: true
@@ -3404,12 +3426,6 @@ components:
           format: binary
           nullable: true
           title: Example template file
-        mime_types:
-          type: array
-          items:
-            type: string
-            minLength: 1
-            maxLength: 128
     PatchedProjectCommissionDateDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.

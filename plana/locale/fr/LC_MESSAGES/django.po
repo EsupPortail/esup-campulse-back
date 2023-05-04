@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-03 15:55+0200\n"
+"POT-Creation-Date: 2023-05-04 14:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -477,12 +477,13 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
 #: plana/apps/documents/views/document_upload.py:126
 #: plana/apps/projects/views/project.py:339
-#: plana/apps/projects/views/project.py:410
-#: plana/apps/projects/views/project.py:478
+#: plana/apps/projects/views/project.py:398
+#: plana/apps/projects/views/project.py:466
 #: plana/apps/projects/views/project_category.py:108
 #: plana/apps/projects/views/project_category.py:163
-#: plana/apps/projects/views/project_category.py:235
+#: plana/apps/projects/views/project_category.py:223
 #: plana/apps/projects/views/project_commission_date.py:245
+#: plana/apps/projects/views/project_export.py:52
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -790,40 +791,41 @@ msgstr ""
 "Le nombre d'étudiants dans le public attendu ne peut être supérieur au "
 "nombre total de personnes attendues."
 
-#: plana/apps/projects/views/project.py:380
+#: plana/apps/projects/views/project.py:368
+#: plana/apps/projects/views/project_export.py:81
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:416
+#: plana/apps/projects/views/project.py:404
 msgid "Not allowed to update bearer fields for this project."
 msgstr "Non autorisé à mettre à jour les champs du porteur de ce projet."
 
-#: plana/apps/projects/views/project.py:422
+#: plana/apps/projects/views/project.py:410
 #: plana/apps/projects/views/project_commission_date.py:142
-#: plana/apps/projects/views/project_commission_date.py:354
-#: plana/apps/projects/views/project_commission_date.py:443
+#: plana/apps/projects/views/project_commission_date.py:342
+#: plana/apps/projects/views/project_commission_date.py:431
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:434
+#: plana/apps/projects/views/project.py:422
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:491
+#: plana/apps/projects/views/project.py:479
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/projects/views/project.py:514
+#: plana/apps/projects/views/project.py:502
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
 #: plana/apps/projects/views/project_category.py:114
-#: plana/apps/projects/views/project_category.py:241
+#: plana/apps/projects/views/project_category.py:229
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
-#: plana/apps/projects/views/project_category.py:200
+#: plana/apps/projects/views/project_category.py:188
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
@@ -832,7 +834,7 @@ msgid "Project or commission date does not exist."
 msgstr "Le projet ou la date de commission n'existe pas."
 
 #: plana/apps/projects/views/project_commission_date.py:161
-#: plana/apps/projects/views/project_commission_date.py:396
+#: plana/apps/projects/views/project_commission_date.py:384
 msgid "Not allowed to update validator fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du validateur pour cette commission."
@@ -842,7 +844,7 @@ msgid "Not allowed to submit a project to this commission."
 msgstr "Non autorisé à proposer un projet pour cette commission."
 
 #: plana/apps/projects/views/project_commission_date.py:181
-#: plana/apps/projects/views/project_commission_date.py:405
+#: plana/apps/projects/views/project_commission_date.py:393
 msgid "Submission date for this commission is gone."
 msgstr "La date de soumission de projet pour cette commission est passée."
 
@@ -856,18 +858,18 @@ msgstr ""
 msgid "This project is already submitted for this commission."
 msgstr "Ce projet a déjà postulé à cette commission."
 
-#: plana/apps/projects/views/project_commission_date.py:284
+#: plana/apps/projects/views/project_commission_date.py:272
 msgid "Not allowed to retrieve this project commission dates."
 msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses dates de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_date.py:346
-#: plana/apps/projects/views/project_commission_date.py:435
+#: plana/apps/projects/views/project_commission_date.py:334
+#: plana/apps/projects/views/project_commission_date.py:423
 msgid "Link between this project and commission does not exists."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_date.py:375
+#: plana/apps/projects/views/project_commission_date.py:363
 msgid "Not allowed to update bearer fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du porteur pour cette commission."
@@ -1337,24 +1339,24 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/utils.py:17
+#: plana/utils.py:20
 #, python-brace-format
 msgid "Password too short (at least {min_length} chars)."
 msgstr "Mot de passe trop court (au moins {min_length} caractères)."
 
-#: plana/utils.py:20
+#: plana/utils.py:23
 msgid "Password should contain at least one lowercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
 
-#: plana/utils.py:23
+#: plana/utils.py:26
 msgid "Password should contain at least one uppercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
 
-#: plana/utils.py:26
+#: plana/utils.py:29
 msgid "Password should contain at least one digit."
 msgstr "Le mot de passe doit contenir au moins un chiffre."
 
-#: plana/utils.py:31
+#: plana/utils.py:34
 msgid ""
 "Password should contain at least one special char ( / * - + = . , ; : ! ? & "
 "\" ' ( ) _ [ ] { } @ % # $ < > )."
@@ -1362,7 +1364,7 @@ msgstr ""
 "Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
 "= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."
 
-#: plana/utils.py:37
+#: plana/utils.py:40
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
