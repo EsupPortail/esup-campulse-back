@@ -16,6 +16,14 @@
                     <li>Lieu(x) du projet : {{ location }}</li>
                 </ul>
             </div>
+
+            {% if association %}
+                <div>
+                    <h3>L'association portant le projet :</h3>
+                    <p>{{ association }}</p>
+                </div>
+            {% endif %}
+
             <div>
                 <h3>La personne portant le projet : </h3>
                 <ul>

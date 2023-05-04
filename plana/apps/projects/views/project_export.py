@@ -3,6 +3,7 @@ from django.db.models import OuterRef, Subquery
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
+from plana.apps.associations.models import Association
 from plana.apps.commissions.models import Commission, CommissionDate
 from plana.apps.projects.models import Project, ProjectCommissionDate
 from plana.apps.projects.serializers.project import ProjectSerializer
@@ -14,7 +15,14 @@ class ProjectDataExport(generics.ListAPIView):
     serializer_class = ProjectSerializer
 
     def get(self, request, *args, **kwargs):
+        # TODO : Fill user "other" data when indivudual project
         data = get_object_or_404(Project, id=kwargs['id']).__dict__
+
+        if data["association_id"] is not None:
+            data["association"] = Association.objects.get(
+                id=data["association_id"]
+            ).name
+
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
                 'commission_date_id',
