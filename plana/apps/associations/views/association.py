@@ -211,10 +211,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         if (
             not "institution" in request.data
-            and request.user.get_user_institutions().count() == 1
+            and request.user.get_user_managed_institutions().count() == 1
         ):
             request.data["institution"] = (
-                request.user.get_user_institutions().first().id
+                request.user.get_user_managed_institutions().first().id
             )
         elif not "institution" in request.data:
             return response.Response(

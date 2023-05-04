@@ -440,24 +440,5 @@
         "image/png"
       ]
     }
-  },
-  {
-    "model": "documents.document",
-    "pk": 25,
-    "fields": {
-      "name": "Document factice d'établissement",
-      "acronym": "DOCUMENT_FACTICE_ETABLISSEMENT",
-      "description": "Document factice d'établissement",
-      "contact": "???",
-      "is_multiple": true,
-      "is_required_in_process": false,
-      "institution_id": 2,
-      "process_type": "DOCUMENT_PROJECT_REVIEW",
-      "mime_types": [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
-      ]
-    }
   }
 ]

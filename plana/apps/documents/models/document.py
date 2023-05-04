@@ -36,6 +36,27 @@ def get_template_path(instance, filename):
 class Document(models.Model):
     """Main model."""
 
+    class ProcessType(models.TextChoices):
+        """List of processes a document can be linked to."""
+
+        CHARTER_ASSOCIATION = "CHARTER_ASSOCIATION", _("Charter for Association")
+        CHARTER_PROJECT_COMMISSION = "CHARTER_PROJECT_COMMISSION", _(
+            "Charter for Project Commission"
+        )
+        DOCUMENT_ASSOCIATION = "DOCUMENT_ASSOCIATION", _("Document for Association")
+        DOCUMENT_USER = "DOCUMENT_USER", _("Document for User")
+        DOCUMENT_PROJECT = "DOCUMENT_PROJECT", _("Document for Project")
+        DOCUMENT_PROJECT_REVIEW = "DOCUMENT_PROJECT_REVIEW", _(
+            "Document for Project Review"
+        )
+        NO_PROCESS = "NO_PROCESS", _("Document not linked to a process")
+
+        @staticmethod
+        def get_updatable_documents():
+            """Documents with those processes can be replaced by a manager."""
+
+            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_COMMISSION"]
+
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")
@@ -69,19 +90,7 @@ class Document(models.Model):
     process_type = models.CharField(
         _("Document Status"),
         max_length=32,
-        choices=[
-            ("CHARTER_ASSOCIATION", _("Charter for Association")),
-            (
-                "CHARTER_ASSOCIATION_INSTITUTION",
-                _("Charter for Association Institution"),
-            ),
-            ("CHARTER_PROJECT_COMMISSION", _("Charter for Project Commission")),
-            ("DOCUMENT_ASSOCIATION", _("Document for Association")),
-            ("DOCUMENT_USER", _("Document for User")),
-            ("DOCUMENT_PROJECT", _("Document for Project")),
-            ("DOCUMENT_PROJECT_REVIEW", _("Document for Project Review")),
-            ("NO_PROCESS", _("Document not linked to a process")),
-        ],
+        choices=ProcessType.choices,
         default="NO_PROCESS",
     )
 

@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from plana.apps.commissions.models.commission import Commission
+# from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )
-        commission_choices = Commission.objects.all().values_list("acronym", flat=True)
+        # commission_choices = Commission.objects.all().values_list("acronym", flat=True)
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
@@ -42,11 +42,13 @@ class Command(BaseCommand):
             help=_("Institution codename (all by default)."),
             choices=institution_choices,
         )
+        """
         parser.add_argument(
             "--commission",
             help=_("Commission codename (all by default)."),
             choices=commission_choices,
         )
+        """
 
     def handle(self, *args, **options):
         try:
@@ -81,6 +83,7 @@ class Command(BaseCommand):
                         group_id=group.id,
                         institution_id=institution_id,
                     )
+            """
             if options["commission"] is not None:
                 commission = Commission.objects.get(acronym=options["commission"])
                 GroupInstitutionCommissionUser.objects.create(
@@ -93,6 +96,7 @@ class Command(BaseCommand):
                         group_id=group.id,
                         commission_id=commission_id,
                     )
+            """
             self.stdout.write(
                 self.style.SUCCESS(_(f"User created. Password : {password}"))
             )

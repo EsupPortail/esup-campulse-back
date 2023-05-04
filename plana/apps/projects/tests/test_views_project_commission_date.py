@@ -5,8 +5,12 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.institutions.models import Institution
+from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
 
 class ProjectCommissionDateViewsTests(TestCase):
@@ -47,6 +51,15 @@ class ProjectCommissionDateViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
+        data_institution = {
+            "username": cls.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.institution_client.post(url_login, data_institution)
+
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
         cls.student_misc_client = Client()
@@ -83,6 +96,29 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         response = self.student_misc_client.get("/projects/commission_dates")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_project_cd_manager(self):
+        """
+        GET /projects/commission_dates .
+
+        - A student user gets commission dates details where projects rights are OK.
+        """
+        response = self.institution_client.get("/projects/commission_dates")
+        user_institutions_ids = Institution.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
+                user_id=self.manager_institution_user_id
+            ).values_list("institution_id")
+        )
+        pcd_cnt = ProjectCommissionDate.objects.filter(
+            project_id__in=Project.objects.filter(
+                association_id__in=Association.objects.filter(
+                    institution_id__in=user_institutions_ids
+                ).values_list("id")
+            )
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), pcd_cnt)
 
     def test_get_project_cd_search(self):
         """
@@ -133,7 +169,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         POST /projects/commission_dates .
 
         - The route can be accessed by a student user.
-        - The project must be existing.
+        - The project must exist.
         """
         response = self.student_misc_client.post(
             "/projects/commission_dates", {"project": 9999, "commission_date": 1}
@@ -174,23 +210,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_cd_wrong_submission_date(self):
-        """
-        POST /projects/commission_dates .
-
-        - The route can be accessed by a student user.
-        - The commission submission date must not be over.
-        """
-        commission_date_id = 5
-        commission_date = CommissionDate.objects.get(pk=commission_date_id)
-        commission_date.submission_date = "1968-05-03"
-        commission_date.save()
-        response = self.student_misc_client.post(
-            "/projects/commission_dates",
-            {"project": 1, "commission_date": commission_date_id},
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_post_project_cd_user_not_site(self):
         """
         POST /projects/commission_dates .
@@ -208,6 +227,23 @@ class ProjectCommissionDateViewsTests(TestCase):
             "/projects/commission_dates", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_cd_wrong_submission_date(self):
+        """
+        POST /projects/commission_dates .
+
+        - The route can be accessed by a student user.
+        - The commission submission date must not be over.
+        """
+        commission_date_id = 5
+        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date.submission_date = "1968-05-03"
+        commission_date.save()
+        response = self.student_misc_client.post(
+            "/projects/commission_dates",
+            {"project": 1, "commission_date": commission_date_id},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_cd_not_next_commission(self):
         """
@@ -244,7 +280,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         POST /projects/commission_dates .
 
         - The route can be accessed by a student user.
-        - The project must be existing.
+        - The project must exist.
         - The authenticated user must be authorized to edit the requested project.
         - Object is correctly created in db.
         """
@@ -288,6 +324,15 @@ class ProjectCommissionDateViewsTests(TestCase):
         response = self.client.get("/projects/1/commission_dates")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_project_cd_by_id_404(self):
+        """
+        GET /projects/{project_id}/categories .
+
+        - The route returns a 404 if a wrong project id is given.
+        """
+        response = self.general_client.get("/projects/99999/commission_dates")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_project_cd_by_id_forbidden_student(self):
         """
         GET /projects/{project_id}/commission_dates .
@@ -302,6 +347,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         GET /projects/{project_id}/commission_dates .
 
         - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
         - Correct projects categories are returned.
         """
         project_id = 1
@@ -314,14 +360,17 @@ class ProjectCommissionDateViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-    def test_get_project_cd_by_id_404(self):
-        """
-        GET /projects/{project_id}/categories .
+        project_id = 2
+        project_test_cnt = ProjectCommissionDate.objects.filter(
+            project_id=project_id
+        ).count()
+        response = self.president_student_client.get(
+            f"/projects/{project_id}/commission_dates"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        - The route returns a 404 if a wrong project id is given.
-        """
-        response = self.general_client.get("/projects/99999/commission_dates")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), project_test_cnt)
 
     def test_get_project_cd(self):
         """
@@ -359,7 +408,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         PATCH /projects/{project_id}/commission_dates/{commission_date_id} .
 
         - The route can be accessed by a student user.
-        - The ProjectCommissionDate object must be existing.
+        - The ProjectCommissionDate object must exist.
         """
         response = self.student_misc_client.patch(
             "/projects/99999/commission_dates/99999",

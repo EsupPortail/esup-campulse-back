@@ -48,6 +48,10 @@ class ProjectCommissionDate(models.Model):
             ),
             (
                 "view_projectcommissiondate_any_commission",
-                "Can view all commission dates linked to a project.",
+                "Can view all commission dates linked to all projects for a commission.",
+            ),
+            (
+                "view_projectcommissiondate_any_institution",
+                "Can view all commission dates linked to all projects for an institution.",
             ),
         ]

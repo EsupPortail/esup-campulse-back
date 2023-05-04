@@ -151,6 +151,10 @@ class Project(models.Model):
             ),
             (
                 "view_project_any_commission",
-                "Can view all projects.",
+                "Can view all projects for a commission.",
+            ),
+            (
+                "view_project_any_institution",
+                "Can view all projects for an institution.",
             ),
         ]

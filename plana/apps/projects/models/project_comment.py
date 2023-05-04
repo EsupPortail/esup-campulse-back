@@ -34,6 +34,10 @@ class ProjectComment(models.Model):
         permissions = [
             (
                 "view_projectcomment_any_commission",
-                "Can view all comments linked to all projects.",
+                "Can view all comments linked to all projects for a commission.",
+            ),
+            (
+                "view_projectcomment_any_institution",
+                "Can view all comments linked to all projects for an institution.",
             ),
         ]

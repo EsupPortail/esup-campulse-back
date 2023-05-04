@@ -409,13 +409,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/DocumentRequest'
+              $ref: '#/components/schemas/DocumentCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DocumentRequest'
+              $ref: '#/components/schemas/DocumentCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/DocumentRequest'
+              $ref: '#/components/schemas/DocumentCreateRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -470,13 +470,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedDocumentRequest'
+              $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedDocumentRequest'
+              $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedDocumentRequest'
+              $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -2929,33 +2929,18 @@ components:
           nullable: true
       required:
       - id
-    DocumentRequest:
+    DocumentCreateRequest:
       type: object
-      description: Main serializer.
+      description: Serializer for document create.
       properties:
         name:
           type: string
           minLength: 1
           title: Nom
           maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
         description:
           type: string
           minLength: 1
-        contact:
-          type: string
-          minLength: 1
-          title: Contact address
-        is_multiple:
-          type: boolean
-        is_required_in_process:
-          type: boolean
-        days_before_expiration:
-          type: string
-          title: Days before document expiration
         path_template:
           type: string
           format: binary
@@ -2967,10 +2952,6 @@ components:
             type: string
             minLength: 1
             maxLength: 128
-        process_type:
-          allOf:
-          - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: Document Status
         institution:
           type: integer
           nullable: true
@@ -2999,8 +2980,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-        document_upload_status:
-          $ref: '#/components/schemas/DocumentUploadStatusEnum'
         document:
           type: integer
         user:
@@ -3038,8 +3017,6 @@ components:
           type: string
           format: uri
           title: Uploaded file
-        document_upload_status:
-          $ref: '#/components/schemas/DocumentUploadStatusEnum'
         document:
           type: integer
         user:
@@ -3070,8 +3047,6 @@ components:
           type: string
           format: binary
           title: Uploaded file
-        document_upload_status:
-          $ref: '#/components/schemas/DocumentUploadStatusEnum'
         document:
           type: integer
         user:
@@ -3101,12 +3076,6 @@ components:
           maxLength: 250
       required:
       - path_file
-    DocumentUploadStatusEnum:
-      enum:
-      - DOCUMENT_REJECTED
-      - DOCUMENT_PROCESSING
-      - DOCUMENT_VALIDATED
-      type: string
     ExternalUser:
       type: object
       description: External user serializer.
@@ -3418,33 +3387,18 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-    PatchedDocumentRequest:
+    PatchedDocumentUpdateRequest:
       type: object
-      description: Main serializer.
+      description: Serializer for document update.
       properties:
         name:
           type: string
           minLength: 1
           title: Nom
           maxLength: 250
-        acronym:
-          type: string
-          minLength: 1
-          title: Acronyme
         description:
           type: string
           minLength: 1
-        contact:
-          type: string
-          minLength: 1
-          title: Contact address
-        is_multiple:
-          type: boolean
-        is_required_in_process:
-          type: boolean
-        days_before_expiration:
-          type: string
-          title: Days before document expiration
         path_template:
           type: string
           format: binary
@@ -3456,17 +3410,6 @@ components:
             type: string
             minLength: 1
             maxLength: 128
-        process_type:
-          allOf:
-          - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: Document Status
-        institution:
-          type: integer
-          nullable: true
-          title: Etablissement
-        commission:
-          type: integer
-          nullable: true
     PatchedProjectCommissionDateDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
@@ -3619,7 +3562,6 @@ components:
     ProcessTypeEnum:
       enum:
       - CHARTER_ASSOCIATION
-      - CHARTER_ASSOCIATION_INSTITUTION
       - CHARTER_PROJECT_COMMISSION
       - DOCUMENT_ASSOCIATION
       - DOCUMENT_USER
