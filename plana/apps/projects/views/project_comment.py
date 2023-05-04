@@ -61,23 +61,38 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
         try:
             project = Project.objects.get(pk=request.data["project"])
             request.data["creation_date"] = datetime.date.today()
+            request.data["user"] = request.user.pk
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        if not request.user.has_perm("projects.add_projectcomment"):
-            return response.Response(
-                {"error": _("Not allowed to add comments for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return super().create(request, *args, **kwargs)
 
+
+class ProjectCommentRetrieve(generics.RetrieveAPIView):
+    """/projects/{project_id}/comments route"""
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = ProjectComment.objects.all()
+    serializer_class = ProjectCommentSerializer
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectCommentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["projects/comments"],
+    )
+    def get(self, request, *args, **kwargs):
+        """Retrieves all comments linked to a project"""
         try:
-            ProjectComment.objects.get(
-                project_id=request.data["project"], text=request.data["text"]
-            )
+            project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+            return response.Response(
+                {"error": _("Project does not exist")},
+                status=status.HTTP_404_NOT_FOUND
+            )
