@@ -5,32 +5,38 @@
     </head>
     <body>
         <h1>Récapitulatif de demande de subventionnement</h1>
-        <div>
+        <section>
             <h2>Informations générales : </h2>
-            <h3>Le projet : </h3>
-            <ul>
-                <li>Nom du projet : {{ name }}</li>
-                <li>Date prévue de début du projet : {{ planned_start_date }}</li>
-                <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
-                <li>Lieu(x) du projet : {{ location }}</li>
-            </ul>
-            <h3>La personne portant le projet : </h3>
-            <ul>
-                <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
-                <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
-                <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
-                <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
-            </ul>
-        </div>
+            <div>
+                <h3>Le projet : </h3>
+                <ul>
+                    <li>Nom du projet : {{ name }}</li>
+                    <li>Date prévue de début du projet : {{ planned_start_date }}</li>
+                    <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
+                    <li>Lieu(x) du projet : {{ location }}</li>
+                </ul>
+            </div>
+            <div>
+                <h3>La personne portant le projet : </h3>
+                <ul>
+                    <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
+                    <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
+                    <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
+                    <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
+                </ul>
+            </div>
+        </section>
 
-        <div>
+        <section>
             <h2>Commissions sélectionnées : </h2>
             <ul>
-                <li>Ici la liste des commissions choisies et leur date</li>
+                {% for commission in project_commission_dates %}
+                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }})</li>
+                {% endfor %}
             </ul>
-        </div>
+        </section>
 
-        <div>
+        <section>
             <h2>Budget : </h2>
             <ul>
                 <li>Réédition d'un précédent projet : {% if is_first_edition %} Non {% else %} Oui {% endif %}</li>
@@ -40,32 +46,38 @@
                 <li>Montant demandé par participant (billeterie) : {{ ticket_price }} €</li>
                 <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }} €</li>
             </ul>
-            {% if not is_first_edition %}
-                <h3>Edition Précedente : </h3>
-                <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
-                <ul>
-                    {% for commission in project_commission_dates %}
-                        <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
-                    {% endfor %}
-                </ul>
-                <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
-                <ul>
-                    {% for commission in project_commission_dates %}
-                        <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
-                    {% endfor %}
-                </ul>
-                <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
-                <p>{{ budget_previous_edition }} €</p>
-            {% endif %}
-            <h3>Montant demandé par commission sélectionnée : </h3>
-            <ul>
-                {% for commission in project_commission_dates %}
-                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
-                {% endfor %}
-            </ul>
-        </div>
 
-        <div>
+            <div>
+                {% if not is_first_edition %}
+                    <h3>Edition Précedente : </h3>
+                    <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
+                    <ul>
+                        {% for commission in project_commission_dates %}
+                            <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
+                    <ul>
+                        {% for commission in project_commission_dates %}
+                            <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
+                    <p>{{ budget_previous_edition }} €</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <h3>Montant(s) demandé(s) par commission sélectionnée : </h3>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section>
             <h2>Objectifs visés par le projet : </h2>
             <div>
                 <h3>Objectifs</h3>
@@ -87,11 +99,11 @@
                 <h3>Campagne de communication</h3>
                 <p>{{ marketing_campaign }}</p>
             </div>
-        </div>
+        </section>
 
-        <div>
+        <section>
             <h2>Documents : </h2>
             <p>?</p>
-        </div>
+        </section>
     </body>
 </html>
