@@ -164,7 +164,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a manager user.
         - The route can be accessed by a student user.
         """
-        project_id = 1
+        project_id = 3
         response = self.general_client.get(f"/projects/{project_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
