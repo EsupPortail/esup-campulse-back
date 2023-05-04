@@ -14,9 +14,7 @@ class ProjectDataExport(generics.ListAPIView):
     serializer_class = ProjectSerializer
 
     def get(self, request, *args, **kwargs):
-        # print(kwargs)
         data = get_object_or_404(Project, id=kwargs['id']).__dict__
-        # print(data)
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
                 'commission_date_id',
@@ -27,8 +25,6 @@ class ProjectDataExport(generics.ListAPIView):
                 'amount_earned',
             )
         )
-        print(data["project_commission_dates"])
-
         commission_infos = list(
             CommissionDate.objects.filter(
                 pk__in=[
@@ -46,14 +42,16 @@ class ProjectDataExport(generics.ListAPIView):
             )
             .values('commission_acronym', 'commission_date', 'id')
         )
-        print(commission_infos)
-
         for commission in commission_infos:
             for link in data['project_commission_dates']:
                 if commission['id'] == link['commission_date_id']:
-                    print("fusion")
                     link["commission_acronym"] = commission["commission_acronym"]
                     link["commission_date"] = commission["commission_date"]
 
-        print(data["project_commission_dates"])
+        data["is_first_edition"] = True
+        for edition in data["project_commission_dates"]:
+            if not edition["is_first_edition"]:
+                data["is_first_edition"] = False
+                break
+        print(data)
         return generate_pdf(data, "project_summary", request.build_absolute_uri('/'))
