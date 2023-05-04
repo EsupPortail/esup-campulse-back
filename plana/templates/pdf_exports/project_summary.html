@@ -37,13 +37,13 @@
                 <li>Public visé par le projet : {{ target_audience }}</li>
                 <li>Nombre d'étudiantes et étudiants visés : {{ amount_students_audience }}</li>
                 <li>Nombre de personnes visées au total : {{ amount_all_audience }}</li>
-                <li>Montant demandé par participant (billeterie) : {{ ticket_price }}</li>
-                <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }}</li>
+                <li>Montant demandé par participant (billeterie) : {{ ticket_price }} €</li>
+                <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }} €</li>
             </ul>
             <h3>Montant demandé par commission sélectionnée : </h3>
             <ul>
                 {% for commission in project_commission_dates %}
-                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }}</li>
+                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
                 {% endfor %}
             </ul>
         </div>
