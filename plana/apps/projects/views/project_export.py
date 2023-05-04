@@ -7,6 +7,7 @@ from plana.apps.associations.models import Association
 from plana.apps.commissions.models import Commission, CommissionDate
 from plana.apps.projects.models import Project, ProjectCommissionDate
 from plana.apps.projects.serializers.project import ProjectSerializer
+from plana.apps.users.models import User
 from plana.utils import generate_pdf
 
 
@@ -15,13 +16,19 @@ class ProjectDataExport(generics.ListAPIView):
     serializer_class = ProjectSerializer
 
     def get(self, request, *args, **kwargs):
-        # TODO : Fill user "other" data when indivudual project
         data = get_object_or_404(Project, id=kwargs['id']).__dict__
 
         if data["association_id"] is not None:
             data["association"] = Association.objects.get(
                 id=data["association_id"]
             ).name
+
+        if data["user_id"] is not None:
+            user = User.objects.get(id=data["user_id"])
+            data["other_first_name"] = user.first_name
+            data["other_last_name"] = user.last_name
+            data["other_email"] = user.email
+            data["other_phone"] = user.phone
 
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
@@ -61,5 +68,6 @@ class ProjectDataExport(generics.ListAPIView):
             if not edition["is_first_edition"]:
                 data["is_first_edition"] = False
                 break
-        print(data)
+
+        # print(data)
         return generate_pdf(data, "project_summary", request.build_absolute_uri('/'))
