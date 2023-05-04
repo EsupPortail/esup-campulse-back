@@ -38,3 +38,18 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
 
         if project_id:
             self.queryset = self.queryset.filter(project_id=project_id)
+
+        return self.list(request, *args, **kwargs)
+
+
+    @extend_schema(
+        responses={
+            status.HTTP_201_CREATED: ProjectCommentSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+        tags=["project/comments"],
+    )
+    def post(self, *args, **kwargs):
+        """Create a link between a comment and a project"""
