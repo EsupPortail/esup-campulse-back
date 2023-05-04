@@ -40,6 +40,23 @@
                 <li>Montant demandé par participant (billeterie) : {{ ticket_price }} €</li>
                 <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }} €</li>
             </ul>
+            {% if not is_first_edition %}
+                <h3>Edition Précedente : </h3>
+                <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
+                    {% endfor %}
+                </ul>
+                <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
+                    {% endfor %}
+                </ul>
+                <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
+                <p>{{ budget_previous_edition }} €</p>
+            {% endif %}
             <h3>Montant demandé par commission sélectionnée : </h3>
             <ul>
                 {% for commission in project_commission_dates %}
