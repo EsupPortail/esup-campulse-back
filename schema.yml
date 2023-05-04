@@ -381,7 +381,7 @@ paths:
           type: string
         description: Document acronym.
       - in: query
-        name: process_type
+        name: process_types
         schema:
           type: string
         description: Document process type.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-04 14:32+0200\n"
+"POT-Creation-Date: 2023-05-04 16:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -435,43 +435,43 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:83
+#: plana/apps/documents/views/document.py:90
 msgid "Not allowed to create a document for this institution."
 msgstr "Non autorisé à créer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:93
+#: plana/apps/documents/views/document.py:100
 msgid "Not allowed to create a document for this commission."
 msgstr "Non autorisé à créer un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:132
-#: plana/apps/documents/views/document.py:159
-#: plana/apps/documents/views/document.py:209
+#: plana/apps/documents/views/document.py:139
+#: plana/apps/documents/views/document.py:166
+#: plana/apps/documents/views/document.py:216
 #: plana/apps/documents/views/document_upload.py:108
 #: plana/apps/documents/views/document_upload.py:116
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:169
+#: plana/apps/documents/views/document.py:176
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:179
+#: plana/apps/documents/views/document.py:186
 msgid "Not allowed to update a document for this commission."
 msgstr "Non autorisé à mettre à jour un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:187
+#: plana/apps/documents/views/document.py:194
 msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
-#: plana/apps/documents/views/document.py:219
+#: plana/apps/documents/views/document.py:226
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:229
+#: plana/apps/documents/views/document.py:236
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:235
+#: plana/apps/documents/views/document.py:242
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 

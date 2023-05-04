@@ -94,9 +94,13 @@ class DocumentsViewsTests(TestCase):
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
 
-        process_type = "DOCUMENT_PROJECT"
-        response = self.client.get(f"/documents/?process_type={process_type}")
-        self.assertEqual(response.data[0]["process_type"], process_type)
+        process_types = ["DOCUMENT_PROJECT", "NO_PROCESS"]
+        response = self.general_client.get(
+            f"/documents/?process_types={','.join(str(x) for x in process_types)}"
+        )
+        documents_cnt = Document.objects.filter(process_type__in=process_types).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
 
     def test_post_documents_anonymous(self):
         """
