@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-04 16:17+0200\n"
+"POT-Creation-Date: 2023-05-05 08:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -444,34 +444,39 @@ msgid "Not allowed to create a document for this commission."
 msgstr "Non autorisé à créer un document pour cette commission."
 
 #: plana/apps/documents/views/document.py:139
-#: plana/apps/documents/views/document.py:166
-#: plana/apps/documents/views/document.py:216
+#: plana/apps/documents/views/document.py:167
+#: plana/apps/documents/views/document.py:226
 #: plana/apps/documents/views/document_upload.py:108
 #: plana/apps/documents/views/document_upload.py:116
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:176
+#: plana/apps/documents/views/document.py:177
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:186
+#: plana/apps/documents/views/document.py:187
 msgid "Not allowed to update a document for this commission."
 msgstr "Non autorisé à mettre à jour un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:194
+#: plana/apps/documents/views/document.py:195
 msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
-#: plana/apps/documents/views/document.py:226
+#: plana/apps/documents/views/document.py:206
+#: plana/apps/documents/views/document_upload.py:205
+msgid "Wrong media type for this document."
+msgstr "Mauvais format de document."
+
+#: plana/apps/documents/views/document.py:236
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:236
+#: plana/apps/documents/views/document.py:246
 msgid "Not allowed to delete a document for this commission."
 msgstr "Non autorisé à supprimer un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:242
+#: plana/apps/documents/views/document.py:252
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
@@ -510,10 +515,6 @@ msgstr "Le document n'est affecté à aucune personne ou association."
 #: plana/apps/documents/views/document_upload.py:199
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
-
-#: plana/apps/documents/views/document_upload.py:205
-msgid "Wrong media type for this document."
-msgstr "Mauvais format de document."
 
 #: plana/apps/documents/views/document_upload.py:238
 #: plana/apps/documents/views/document_upload.py:281

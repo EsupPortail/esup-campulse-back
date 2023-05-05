@@ -292,8 +292,10 @@ class DocumentsViewsTests(TestCase):
         PATCH /documents/{id} .
 
         - A user with proper permissions can execute this request.
+        - Returns 415 if MIME type is wrong.
         - Document object is successfully changed in db.
         """
+        document_id = 1
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -305,7 +307,18 @@ class DocumentsViewsTests(TestCase):
             boundary=BOUNDARY,
         )
         response = self.general_client.patch(
-            "/documents/1", data=patch_data, content_type=MULTIPART_CONTENT
+            f"/documents/{document_id}", data=patch_data, content_type=MULTIPART_CONTENT
+        )
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        response = self.general_client.patch(
+            f"/documents/{document_id}", data=patch_data, content_type=MULTIPART_CONTENT
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

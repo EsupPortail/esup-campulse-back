@@ -156,6 +156,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
         }
     )
     def patch(self, request, *args, **kwargs):
@@ -195,6 +196,15 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            document.mime_types is not None
+            and request.data["path_template"].content_type not in document.mime_types
+        ):
+            return response.Response(
+                {"error": _("Wrong media type for this document.")},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
         return self.partial_update(request, *args, **kwargs)
