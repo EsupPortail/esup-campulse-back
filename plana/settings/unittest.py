@@ -1,6 +1,8 @@
 from os import environ
 from os.path import normpath
 
+from django.conf import settings
+
 from .base import *
 
 #######################
@@ -58,3 +60,12 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 THUMBNAILS["METADATA"]["BACKEND"] = "thumbnails.backends.metadata.DatabaseBackend"
 THUMBNAILS["STORAGE"]["BACKEND"] = "thumbnails.tests.storage.TemporaryStorage"
 
+##################
+# AUTHENTICATION #
+##################
+
+SIMPLE_JWT = {
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": settings.SECRET_KEY,
+    "VERIFYING_KEY": "",
+}
