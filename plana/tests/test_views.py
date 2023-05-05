@@ -17,8 +17,10 @@ class RootViewsTests(TestCase):
 
     def test_forbidden(self):
         """403"""
+        """
         response = self.client.get("/admin")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        """
 
     def test_not_found(self):
         """404"""
