@@ -46,6 +46,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         """Lists all links between categories and projects."""
         project_id = request.query_params.get("project_id")
 
+        user_commissions_ids = []
+        user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_commission"):
             if request.user.is_staff:
                 user_commissions_ids = request.user.get_user_managed_commissions()

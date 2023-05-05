@@ -2,23 +2,26 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
-from django.views.static import serve
+from django.urls import include, path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from rest_framework.exceptions import bad_request, server_error
 
-from .views import home
+from .views import forbidden, not_found, ok
 
 admin.autodiscover()
 
+handler400 = bad_request
+handler403 = forbidden
+handler404 = not_found
+handler500 = server_error
+
 urlpatterns = [
-    path("", home, name="home"),
-    re_path(
-        r'^media/(?P<path>.*)$', serve, kwargs={'document_root': settings.MEDIA_ROOT}
-    ),
+    path("", ok, name="home"),
+    # re_path(r'^media/(?P<path>.*)$', serve, kwargs={'document_root': settings.MEDIA_ROOT}),
     path("associations/", include("plana.apps.associations.urls")),
     path("commissions/", include("plana.apps.commissions.urls")),
     path("contents/", include("plana.apps.contents.urls")),

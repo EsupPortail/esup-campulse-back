@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 08:11+0200\n"
+"POT-Creation-Date: 2023-05-05 13:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -484,9 +484,9 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project.py:339
 #: plana/apps/projects/views/project.py:398
 #: plana/apps/projects/views/project.py:466
-#: plana/apps/projects/views/project_category.py:108
-#: plana/apps/projects/views/project_category.py:163
-#: plana/apps/projects/views/project_category.py:223
+#: plana/apps/projects/views/project_category.py:110
+#: plana/apps/projects/views/project_category.py:165
+#: plana/apps/projects/views/project_category.py:225
 #: plana/apps/projects/views/project_commission_date.py:245
 #: plana/apps/projects/views/project_export.py:52
 msgid "Project does not exist."
@@ -821,12 +821,12 @@ msgstr "Choisir ce statut n'est pas autorisé."
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
-#: plana/apps/projects/views/project_category.py:114
-#: plana/apps/projects/views/project_category.py:229
+#: plana/apps/projects/views/project_category.py:116
+#: plana/apps/projects/views/project_category.py:231
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
-#: plana/apps/projects/views/project_category.py:188
+#: plana/apps/projects/views/project_category.py:190
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
