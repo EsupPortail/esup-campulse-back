@@ -301,6 +301,12 @@ paths:
         description: Filter to get commission_dates where projects reviews are still
           pending.
       - in: query
+        name: managed_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates with projects managed by the current
+          user.
+      - in: query
         name: only_next
         schema:
           type: boolean

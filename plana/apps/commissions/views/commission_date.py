@@ -33,6 +33,12 @@ class CommissionDateList(generics.ListAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter to get commission_dates where projects reviews are still pending.",
             ),
+            OpenApiParameter(
+                "managed_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get commission_dates with projects managed by the current user.",
+            ),
         ],
         responses={
             status.HTTP_200_OK: CommissionDateSerializer,
@@ -42,6 +48,7 @@ class CommissionDateList(generics.ListAPIView):
         """Lists all commission dates."""
         only_next = request.query_params.get("only_next")
         active_projects = request.query_params.get("active_projects")
+        managed_projects = request.query_params.get("managed_projects")
 
         if only_next is not None and only_next != "" and to_bool(only_next) is True:
             first_commissions_ids = []
@@ -69,6 +76,28 @@ class CommissionDateList(generics.ListAPIView):
                 self.queryset = self.queryset.exclude(
                     id__in=ProjectCommissionDate.objects.filter(
                         project_id__in=inactive_projects
+                    ).values_list("commission_date_id")
+                )
+
+        if (
+            managed_projects is not None
+            and managed_projects != ""
+            and not request.user.is_anonymous
+        ):
+            if to_bool(managed_projects) is True:
+                self.queryset = self.queryset.filter(
+                    id__in=ProjectCommissionDate.objects.filter(
+                        project_id__in=Project.objects.filter(
+                            association_id__in=request.user.get_user_managed_associations()
+                        ).values_list("id")
+                    ).values_list("commission_date_id")
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    id__in=ProjectCommissionDate.objects.filter(
+                        project_id__in=Project.objects.filter(
+                            association_id__in=request.user.get_user_managed_associations()
+                        ).values_list("id")
                     ).values_list("commission_date_id")
                 )
 

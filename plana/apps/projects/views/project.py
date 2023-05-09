@@ -198,7 +198,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-            if association.can_submit_projects:
+            if association.can_submit_projects and association.is_enabled:
                 try:
                     member = AssociationUser.objects.get(
                         association_id=request.data["association"],
@@ -235,6 +235,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["user"] != ""
             and (
                 not request.user.can_submit_projects
+                or not request.user.is_active
                 or int(request.data["user"]) != request.user.pk
                 or not request.user.has_perm("projects.add_project_user")
             )
