@@ -515,6 +515,7 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = "plana-auth"
 JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
+"""
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
@@ -522,6 +523,7 @@ SIMPLE_JWT = {
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
+"""
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
