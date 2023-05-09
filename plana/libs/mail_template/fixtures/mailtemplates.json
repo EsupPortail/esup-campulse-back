@@ -427,5 +427,36 @@
         5
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 25,
+    "fields": {
+      "code": "DEACTIVATE_PROJECT_SUBMISSION",
+      "label": "Deactivate Project Submission",
+      "description": "Message reçu par une association ou un porteur individuel si sa capacité à déposer une demande de subventionnement vient à être désactivée.",
+      "subject": "{{ site_name }} – Vous ne pouvez plus déposer de demande de subventionnement",
+      "body": "Bonjour,<br/><br/>Vous n'avez pas déposé un bilan de projet subventionné par une CAPE. Par conséquent, vous ne pouvez plus déposer des demandes de subvention CAPE sur votre espace.<br/>Merci de prendre contact avec votre gestionnaire afin de régulariser votre situation à l'adresse mail suivante : {{ manager_email_address }}.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        6
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 26,
+    "fields": {
+      "code": "REACTIVATE_PROJECT_SUBMISSION",
+      "label": "Reactivate Association Project Submission",
+      "description": "Message reçu par une association ou un porteur individuel si sa capacité à déposer une demande de subventionnement vient à être réactivée.",
+      "subject": "{{ site_name }} – Vous ne pouvez plus déposer de demande de subventionnement",
+      "body": "Bonjour,<br/><br/>Votre situation vient d'être régularisée, vous pouvez à nouveau déposer des demandes de subvention CAPE sur votre espace.<br/>Merci de votre compréhension.<br/><br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

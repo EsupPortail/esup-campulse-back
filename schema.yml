@@ -1385,13 +1385,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
       security:
       - jwtHeaderAuth: []
       - jwtCookieAuth: []
@@ -3544,6 +3544,32 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
+    PatchedUserPartialDataRequest:
+      type: object
+      description: Used to get data from another student in the same associations.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        is_cas:
+          type: boolean
+          default: false
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
     PatchedUserRequest:
       type: object
       description: Main serializer.

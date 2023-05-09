@@ -272,7 +272,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{id} route"""
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -280,6 +279,15 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if not self.request.user.has_perm(
+            "users.view_user_anyone"
+        ) and not self.request.user.has_perm("users.view_user_misc"):
+            self.serializer_class = UserPartialDataSerializer
+        else:
+            self.serializer_class = UserSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         exclude=True,
