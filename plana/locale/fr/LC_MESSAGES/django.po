@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 09:49+0200\n"
+"POT-Creation-Date: 2023-05-09 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,7 +215,7 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:318
 #: plana/apps/associations/views/association.py:382
-#: plana/apps/associations/views/association.py:518
+#: plana/apps/associations/views/association.py:539
 #: plana/apps/documents/views/document_upload.py:145
 #: plana/apps/projects/views/project.py:197
 msgid "Association does not exist."
@@ -249,15 +249,15 @@ msgstr "Erreur de valeurs de réseaux sociaux"
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:449
+#: plana/apps/associations/views/association.py:455
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:524
+#: plana/apps/associations/views/association.py:545
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:534
+#: plana/apps/associations/views/association.py:555
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -1005,7 +1005,7 @@ msgstr "L'association a déjà un président."
 #: plana/apps/users/views/association_user.py:270
 #: plana/apps/users/views/group_institution_commission_user.py:212
 #: plana/apps/users/views/user.py:307 plana/apps/users/views/user.py:343
-#: plana/apps/users/views/user.py:450
+#: plana/apps/users/views/user.py:470
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
@@ -1117,7 +1117,7 @@ msgstr "Non autorisé à récupérer cet utilisateur."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:456
+#: plana/apps/users/views/user.py:476
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 

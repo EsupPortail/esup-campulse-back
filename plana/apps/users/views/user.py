@@ -371,20 +371,40 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 )
             request.data.update({"username": request.data["email"]})
 
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "manager_email_address": request.user.email,
+        }
+
+        if "can_submit_projects" in request.data:
+            template = None
+            if to_bool(request.data["can_submit_projects"]) is False:
+                template = MailTemplate.objects.get(
+                    code="DEACTIVATE_PROJECT_SUBMISSION"
+                )
+            elif to_bool(request.data["can_submit_projects"]) is True:
+                template = MailTemplate.objects.get(
+                    code="REACTIVATE_PROJECT_SUBMISSION"
+                )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=user.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         if (
             "is_validated_by_admin" in request.data
             and to_bool(request.data["is_validated_by_admin"]) is True
         ):
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "manager_email_address": request.user.email,
-                "documentation_url": settings.APP_DOCUMENTATION_URL,
-            }
+            context["username"] = user.username
+            context["first_name"] = user.first_name
+            context["last_name"] = user.last_name
+            context["documentation_url"] = settings.APP_DOCUMENTATION_URL
             if user.is_cas_user():
                 template = MailTemplate.objects.get(
                     code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"

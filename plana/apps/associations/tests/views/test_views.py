@@ -715,6 +715,7 @@ class AssociationsViewsTests(TestCase):
 
         - A General Manager can edit an association.
         - An email is received if change is successful.
+        - can_submit_projects can be set by a manager.
         """
         association_id = 1
 
@@ -724,6 +725,7 @@ class AssociationsViewsTests(TestCase):
             {
                 "name": "Association Amicale des Amateurs d'Andouillette Authentique",
                 "institution": 1,
+                "can_submit_projects": False,
             },
             content_type="application/json",
         )
@@ -734,7 +736,17 @@ class AssociationsViewsTests(TestCase):
             "Association Amicale des Amateurs d'Andouillette Authentique",
         )
         self.assertEqual(association.institution_id, 1)
+        self.assertEqual(association.can_submit_projects, False)
         self.assertTrue(len(mail.outbox))
+
+        response_general = self.general_client.patch(
+            f"/associations/{association_id}",
+            {"can_submit_projects": True},
+            content_type="application/json",
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.can_submit_projects, True)
 
     def test_patch_association_lower_amount_members(self):
         """

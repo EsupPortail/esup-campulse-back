@@ -479,6 +479,7 @@ class UserViewsTests(TestCase):
         - A manager user can execute this request.
         - A manager user can update user details.
         - An email is received if validation is successful.
+        - can_submit_projects can be set by a manager.
         """
         self.assertFalse(len(mail.outbox))
         response_manager = self.manager_client.patch(
@@ -487,6 +488,7 @@ class UserViewsTests(TestCase):
                 "email": "aymar-venceslas@oui.org",
                 "phone": "0 118 999 881 999 119 725 3",
                 "is_validated_by_admin": True,
+                "can_submit_projects": False,
             },
             content_type="application/json",
         )
@@ -494,7 +496,17 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
+        self.assertEqual(user.can_submit_projects, False)
         self.assertTrue(len(mail.outbox))
+
+        response_manager = self.manager_client.patch(
+            f"/users/{self.unvalidated_user_id}",
+            data={"can_submit_projects": True},
+            content_type="application/json",
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        user = User.objects.get(pk=self.unvalidated_user_id)
+        self.assertEqual(user.can_submit_projects, True)
 
     def test_anonymous_delete_user(self):
         """
