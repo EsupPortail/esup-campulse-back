@@ -108,10 +108,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route"""
 
     queryset = Document.objects.all()
-    serializer_class = DocumentSerializer
 
     def get_permissions(self):
-        if self.request.method == "GET":
+        if self.request.method in ("GET", "PUT"):
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -160,6 +159,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
+        """Updates document details."""
         try:
             document = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

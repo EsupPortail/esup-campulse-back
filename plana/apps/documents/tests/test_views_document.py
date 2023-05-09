@@ -164,6 +164,15 @@ class DocumentsViewsTests(TestCase):
         results = Document.objects.filter(name=name)
         self.assertEqual(len(results), 1)
 
+    def test_get_document_by_id_404(self):
+        """
+        GET /documents/{id} .
+
+        - The route returns a 404 if a wrong document id is given.
+        """
+        response = self.general_client.get("/documents/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_document_by_id_anonymous(self):
         """
         GET /documents/{id} .
@@ -188,15 +197,6 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         document = content
         self.assertEqual(document["name"], doc_test.name)
-
-    def test_get_document_by_id_404(self):
-        """
-        GET /documents/{id} .
-
-        - The route returns a 404 if a wrong document id is given.
-        """
-        response = self.general_client.get("/documents/99999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_put_document_by_id_405(self):
         """

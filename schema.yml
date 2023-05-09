@@ -326,6 +326,131 @@ paths:
                 items:
                   $ref: '#/components/schemas/CommissionDate'
           description: ''
+    post:
+      operationId: commissions_commission_dates_create
+      description: Creates a new commission date (manager only).
+      tags:
+      - commissions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommissionDateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommissionDateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionDateRequest'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionDate'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+  /commissions/commission_dates/{id}:
+    get:
+      operationId: commissions_commission_dates_retrieve
+      description: Retrieves a document type with all its details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionDate'
+          description: ''
+        '404':
+          description: No response body
+    patch:
+      operationId: commissions_commission_dates_partial_update
+      description: Updates commission date details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionDate'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: commissions_commission_dates_destroy
+      description: Destroys an entire commission date (manager only).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionDate'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /contents/:
     get:
       operationId: contents_list
@@ -463,7 +588,7 @@ paths:
           description: No response body
     patch:
       operationId: documents_partial_update
-      description: /documents/{id} route
+      description: Updates document details.
       parameters:
       - in: path
         name: id
@@ -3417,6 +3542,19 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
+    PatchedCommissionDateRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        submission_date:
+          type: string
+          format: date
+          title: Project submission limit date
+        commission_date:
+          type: string
+          format: date
+        commission:
+          type: integer
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

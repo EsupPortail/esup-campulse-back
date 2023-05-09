@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-09 14:14+0200\n"
+"POT-Creation-Date: 2023-05-09 16:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,6 +288,17 @@ msgstr "Date de Commission"
 msgid "Commissions Dates"
 msgstr "Dates de Commissions"
 
+#: plana/apps/commissions/views/commission_date.py:133
+#: plana/apps/commissions/views/commission_date.py:206
+msgid "Can't set submission date after commission date."
+msgstr "La date de soumission ne peut avoir lieu après la date de commission."
+
+#: plana/apps/commissions/views/commission_date.py:165
+#: plana/apps/commissions/views/commission_date.py:195
+#: plana/apps/commissions/views/commission_date.py:226
+msgid "Commission Date does not exist."
+msgstr "La date de commission n'existe pas."
+
 #: plana/apps/consents/models/consent.py:9
 msgid "GDPR Consent title"
 msgstr "Titre du consentement RGPD"
@@ -443,7 +454,7 @@ msgstr "Non autorisé à créer un document pour cet établissement."
 msgid "Not allowed to create a document for this commission."
 msgstr "Non autorisé à créer un document pour cette commission."
 
-#: plana/apps/documents/views/document.py:139
+#: plana/apps/documents/views/document.py:138
 #: plana/apps/documents/views/document.py:167
 #: plana/apps/documents/views/document.py:226
 #: plana/apps/documents/views/document_upload.py:108
