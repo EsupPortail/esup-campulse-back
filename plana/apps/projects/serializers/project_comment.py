@@ -7,7 +7,6 @@ from plana.apps.users.models.user import User
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):
-
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -21,7 +20,4 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectComment
-        fields = [
-            "project_id",
-            "text"
-        ]
+        fields = ["project_id", "text"]

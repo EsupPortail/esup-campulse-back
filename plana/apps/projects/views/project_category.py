@@ -46,6 +46,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         """Lists all links between categories and projects."""
         project_id = request.query_params.get("project_id")
 
+        user_commissions_ids = []
+        user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_commission"):
             if request.user.is_staff:
                 user_commissions_ids = request.user.get_user_managed_commissions()
@@ -153,9 +155,9 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
                     project_id=project.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
-            institutions_ids = []
+            institution_id = 0
             if project.association_id is not None:
-                institutions_ids = Institution.objects.filter(
+                institution_id = Institution.objects.get(
                     id=Association.objects.get(id=project.association_id).institution_id
                 )
         except ObjectDoesNotExist:
@@ -180,20 +182,8 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
                 == 0
             )
             and (
-                len(
-                    list(
-                        set(institutions_ids)
-                        & set(request.user.get_user_managed_institutions())
-                    )
-                )
-                == 0
-                or len(
-                    list(
-                        set(institutions_ids)
-                        & set(request.user.get_user_institutions())
-                    )
-                )
-                == 0
+                institution_id not in request.user.get_user_managed_institutions()
+                and institution_id not in request.user.get_user_institutions()
             )
         ):
             return response.Response(

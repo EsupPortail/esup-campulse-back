@@ -1,6 +1,8 @@
 from os import environ
 from os.path import normpath
 
+from django.conf import settings
+
 from .base import *
 
 #######################
@@ -58,3 +60,25 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 THUMBNAILS["METADATA"]["BACKEND"] = "thumbnails.backends.metadata.DatabaseBackend"
 THUMBNAILS["STORAGE"]["BACKEND"] = "thumbnails.tests.storage.TemporaryStorage"
 
+
+#########################
+# DJANGO REST FRAMEWORK #
+#########################
+
+REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = [
+    "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+]
+
+
+##################
+# AUTHENTICATION #
+##################
+
+JWT_AUTH_COOKIE = "plana-auth"
+JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
+
+SIMPLE_JWT = {
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": settings.SECRET_KEY,
+    "VERIFYING_KEY": "",
+}

@@ -5,15 +5,14 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.institutions.models import Institution
 from plana.apps.associations.models.association import Association
-from plana.apps.projects.models.project_comment import ProjectComment
+from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.users.models import GroupInstitutionCommissionUser
 
 
 class ProjectCommentLinksViewsTests(TestCase):
-
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",
@@ -159,10 +158,7 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - The route cannot be accessed by a student user
         """
-        post_data = {
-            "project": 1,
-            "text": "Le chiffre 6 c'est comme saucisse"
-        }
+        post_data = {"project": 1, "text": "Le chiffre 6 c'est comme saucisse"}
         response = self.student_offsite_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -233,9 +229,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         project = 999
         comment = 1
-        response = self.general_client.delete(
-            f"/projects/{project}/comments/{comment}"
-        )
+        response = self.general_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_categories_forbidden_user(self):
@@ -244,10 +238,12 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         - The owner of the project must be the authenticated user.
-         """
+        """
         project = 1
         comment = 5
-        response = self.student_offsite_client.delete(f"/projects/{project}/comments/{comment}")
+        response = self.student_offsite_client.delete(
+            f"/projects/{project}/comments/{comment}"
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_categories_association_success(self):
@@ -256,15 +252,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         project = 2
         comment = 1
-        response = self.general_client.delete(
-            f"/projects/{project}/comments/{comment}"
-        )
+        response = self.general_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,
             len(ProjectComment.objects.filter(project=project, text=comment)),
         )
-        response = self.general_client.delete(
-            f"/projects/{project}/comments/{comment}"
-        )
+        response = self.general_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

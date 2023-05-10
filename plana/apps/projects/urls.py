@@ -8,16 +8,18 @@ from .views.project_category import (
     ProjectCategoryListCreate,
     ProjectCategoryRetrieve,
 )
+from .views.project_comment import (
+    ProjectCommentListCreate,
+    ProjectCommentRetrieve,
+    ProjectCommentUpdateDestroy,
+)
 from .views.project_commission_date import (
     ProjectCommissionDateListCreate,
     ProjectCommissionDateRetrieve,
     ProjectCommissionDateUpdateDestroy,
 )
-from .views.project_comment import (
-    ProjectCommentListCreate,
-    ProjectCommentRetrieve,
-    ProjectCommentUpdateDestroy
-)
+from .views.project_export import ProjectDataExport
+
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
     path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
@@ -64,16 +66,21 @@ urlpatterns = [
     path(
         "comments",
         ProjectCommentListCreate.as_view(),
-        name="project_comment_list_create"
+        name="project_comment_list_create",
     ),
     path(
         "<int:project_id>/comments",
         ProjectCommentRetrieve.as_view(),
-        name="project_comment_list_create"
+        name="project_comment_list_create",
     ),
     path(
         "<int:project_id>/comments/<int:comment_id>",
         ProjectCommentUpdateDestroy.as_view(),
-        name="project_comment_update_destroy"
-    )
+        name="project_comment_update_destroy",
+    ),
+    path(
+        "<int:id>/export",
+        ProjectDataExport.as_view(),
+        name="project_data_export",
+    ),
 ]

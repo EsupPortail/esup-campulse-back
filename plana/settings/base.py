@@ -387,15 +387,11 @@ LOGGING = {
 #########################
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
     ],
     "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
@@ -512,9 +508,9 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Using SimpleJWT with dj-rest-auth
 REST_USE_JWT = True
-JWT_AUTH_COOKIE = "plana-auth"
-JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
+# TODO Re-test navigation on PPRD with this JWT format.
+"""
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
@@ -522,6 +518,7 @@ SIMPLE_JWT = {
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
+"""
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
@@ -571,6 +568,14 @@ SPECTACULAR_SETTINGS = {
         "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
     ],
     "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+            }
+        }
+    },
 }
 
 

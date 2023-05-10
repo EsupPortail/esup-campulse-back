@@ -42,7 +42,7 @@ class DocumentList(generics.ListCreateAPIView):
                 description="Document acronym.",
             ),
             OpenApiParameter(
-                "process_type",
+                "process_types",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Document process type.",
@@ -55,13 +55,20 @@ class DocumentList(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""
         acronym = request.query_params.get("acronym")
-        process_type = request.query_params.get("process_type")
+        process_types = request.query_params.get("process_types")
 
         if acronym is not None and acronym != "":
             self.queryset = self.queryset.filter(acronym=acronym)
 
-        if process_type is not None and process_type != "":
-            self.queryset = self.queryset.filter(process_type=process_type)
+        if process_types is not None and process_types != "":
+            all_process_types = [c[0] for c in Document.process_type.field.choices]
+            process_types_codes = process_types.split(",")
+            process_types_codes = [
+                project_type_code
+                for project_type_code in process_types_codes
+                if project_type_code != "" and project_type_code in all_process_types
+            ]
+            self.queryset = self.queryset.filter(process_type__in=process_types_codes)
 
         return self.list(request, *args, **kwargs)
 
@@ -101,10 +108,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route"""
 
     queryset = Document.objects.all()
-    serializer_class = DocumentSerializer
 
     def get_permissions(self):
-        if self.request.method == "GET":
+        if self.request.method in ("GET", "PUT"):
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -149,9 +155,11 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
         }
     )
     def patch(self, request, *args, **kwargs):
+        """Updates document details."""
         try:
             document = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -188,6 +196,15 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 },
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            document.mime_types is not None
+            and request.data["path_template"].content_type not in document.mime_types
+        ):
+            return response.Response(
+                {"error": _("Wrong media type for this document.")},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
         return self.partial_update(request, *args, **kwargs)

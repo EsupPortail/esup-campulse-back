@@ -198,7 +198,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-            if association.can_submit_projects:
+            if association.can_submit_projects and association.is_enabled:
                 try:
                     member = AssociationUser.objects.get(
                         association_id=request.data["association"],
@@ -235,6 +235,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["user"] != ""
             and (
                 not request.user.can_submit_projects
+                or not request.user.is_active
                 or int(request.data["user"]) != request.user.pk
                 or not request.user.has_perm("projects.add_project_user")
             )
@@ -287,6 +288,19 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            "planned_start_date" in request.data
+            and "planned_end_date" in request.data
+            and datetime.datetime.strptime(
+                request.data["planned_start_date"], "%Y-%m-%d"
+            )
+            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%d")
+        ):
+            return response.Response(
+                {"error": _("Can't set planned start date after planned end date.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         request.data["creation_date"] = datetime.date.today()
         request.data["edition_date"] = datetime.date.today()
 
@@ -329,9 +343,9 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     project_id=project.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
-            institutions_ids = []
+            institution_id = 0
             if project.association_id is not None:
-                institutions_ids = Institution.objects.filter(
+                institution_id = Institution.objects.get(
                     id=Association.objects.get(id=project.association_id).institution_id
                 )
         except ObjectDoesNotExist:
@@ -359,20 +373,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                     == 0
                 )
                 and (
-                    len(
-                        list(
-                            set(institutions_ids)
-                            & set(request.user.get_user_managed_institutions())
-                        )
-                    )
-                    == 0
-                    or len(
-                        list(
-                            set(institutions_ids)
-                            & set(request.user.get_user_institutions())
-                        )
-                    )
-                    == 0
+                    institution_id not in request.user.get_user_managed_institutions()
+                    or institution_id not in request.user.get_user_institutions()
                 )
             )
         ):
@@ -432,6 +434,34 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if expired_project_commission_dates_count > 0:
             return response.Response(
                 {"error": _("Project is linked to expired commissions.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            "amount_students_audience" in request.data
+            and "amount_all_audience" in request.data
+            and int(request.data["amount_students_audience"])
+            > int(request.data["amount_all_audience"])
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Number of students in audience cannot exceed number of all people in audience."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            "planned_start_date" in request.data
+            and "planned_end_date" in request.data
+            and datetime.datetime.strptime(
+                request.data["planned_start_date"], "%Y-%m-%d"
+            )
+            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%d")
+        ):
+            return response.Response(
+                {"error": _("Can't set planned start date after planned end date.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

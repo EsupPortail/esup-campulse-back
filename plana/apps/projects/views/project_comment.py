@@ -3,16 +3,17 @@ import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
-
-from rest_framework import generics, response, status
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated, AllowAny
-
-from drf_spectacular.utils import OpenApiParameter, extend_schema
 from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import generics, response, status
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.serializers.project_comment import (ProjectCommentSerializer, ProjectCommentDataSerializer)
+from plana.apps.projects.models.project_comment import ProjectComment
+from plana.apps.projects.serializers.project_comment import (
+    ProjectCommentDataSerializer,
+    ProjectCommentSerializer,
+)
 
 
 class ProjectCommentListCreate(generics.ListCreateAPIView):
@@ -28,7 +29,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 "project_id",
                 OpenApiTypes.NUMBER,
                 OpenApiParameter.QUERY,
-                description="Project id."
+                description="Project id.",
             ),
         ],
         responses={
@@ -36,7 +37,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
         },
-        tags=["projects/comments"]
+        tags=["projects/comments"],
     )
     def get(self, request, *args, **kwargs):
         """Lists all links between projects and comments"""
@@ -65,7 +66,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         return super().create(request, *args, **kwargs)
@@ -93,8 +94,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             project = Project.objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project does not exist")},
-                status=status.HTTP_404_NOT_FOUND
+                {"error": _("Project does not exist")}, status=status.HTTP_404_NOT_FOUND
             )
 
 

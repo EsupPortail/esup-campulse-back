@@ -325,6 +325,22 @@ class ProjectsViewsTests(TestCase):
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_project_association_wrong_dates(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - Planned start date cannot be set after planned end date.
+        """
+        project_data = {
+            "name": "Testing creation",
+            "association": 2,
+            "planned_start_date": "2099-12-25",
+            "planned_end_date": "2099-11-30",
+        }
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_association_success(self):
         """
         POST /projects/ .
@@ -503,6 +519,38 @@ class ProjectsViewsTests(TestCase):
         patch_data = {"summary": "new summary"}
         response = self.student_misc_client.patch(
             "/projects/1", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_association_wrong_audience(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Number of students in audience cannot exceed number of all people in audience.
+        """
+        project_data = {
+            "amount_students_audience": 1000,
+            "amount_all_audience": 8,
+        }
+        response = self.student_president_client.patch(
+            "/projects/2", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_association_wrong_dates(self):
+        """
+        PATCH /projects/ .
+
+        - The route can be accessed by a student user.
+        - Planned start date cannot be set after planned end date.
+        """
+        project_data = {
+            "planned_start_date": "2099-12-25",
+            "planned_end_date": "2099-11-30",
+        }
+        response = self.student_president_client.patch(
+            "/projects/2", project_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

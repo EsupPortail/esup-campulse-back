@@ -94,9 +94,13 @@ class DocumentsViewsTests(TestCase):
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
 
-        process_type = "DOCUMENT_PROJECT"
-        response = self.client.get(f"/documents/?process_type={process_type}")
-        self.assertEqual(response.data[0]["process_type"], process_type)
+        process_types = ["DOCUMENT_PROJECT", "NO_PROCESS"]
+        response = self.general_client.get(
+            f"/documents/?process_types={','.join(str(x) for x in process_types)}"
+        )
+        documents_cnt = Document.objects.filter(process_type__in=process_types).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
 
     def test_post_documents_anonymous(self):
         """
@@ -160,6 +164,15 @@ class DocumentsViewsTests(TestCase):
         results = Document.objects.filter(name=name)
         self.assertEqual(len(results), 1)
 
+    def test_get_document_by_id_404(self):
+        """
+        GET /documents/{id} .
+
+        - The route returns a 404 if a wrong document id is given.
+        """
+        response = self.general_client.get("/documents/99999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_get_document_by_id_anonymous(self):
         """
         GET /documents/{id} .
@@ -184,15 +197,6 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         document = content
         self.assertEqual(document["name"], doc_test.name)
-
-    def test_get_document_by_id_404(self):
-        """
-        GET /documents/{id} .
-
-        - The route returns a 404 if a wrong document id is given.
-        """
-        response = self.general_client.get("/documents/99999")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_put_document_by_id_405(self):
         """
@@ -288,8 +292,10 @@ class DocumentsViewsTests(TestCase):
         PATCH /documents/{id} .
 
         - A user with proper permissions can execute this request.
+        - Returns 415 if MIME type is wrong.
         - Document object is successfully changed in db.
         """
+        document_id = 1
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -301,7 +307,18 @@ class DocumentsViewsTests(TestCase):
             boundary=BOUNDARY,
         )
         response = self.general_client.patch(
-            "/documents/1", data=patch_data, content_type=MULTIPART_CONTENT
+            f"/documents/{document_id}", data=patch_data, content_type=MULTIPART_CONTENT
+        )
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        response = self.general_client.patch(
+            f"/documents/{document_id}", data=patch_data, content_type=MULTIPART_CONTENT
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

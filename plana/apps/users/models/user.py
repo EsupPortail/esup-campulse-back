@@ -161,11 +161,21 @@ class User(AbstractUser):
         return True
 
     def get_user_associations(self):
-        """Return a list of Association IDs linked to a user."""
+        """Return a list of Association IDs linked to a student user."""
         return Association.objects.filter(
             id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
                 "association_id"
             )
+        )
+
+    def get_user_managed_associations(self):
+        """Return a list of Association IDs linked to a manager user."""
+        return Association.objects.filter(
+            institution_id__in=Institution.objects.filter(
+                id__in=GroupInstitutionCommissionUser.objects.filter(
+                    user_id=self.pk
+                ).values_list("institution_id")
+            ).values_list("id")
         )
 
     def get_user_commissions(self):
