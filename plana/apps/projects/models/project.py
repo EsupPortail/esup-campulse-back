@@ -57,9 +57,9 @@ class Project(models.Model):
             ]
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
-    planned_start_date = models.DateTimeField(_("Start date"), null=True)
-    planned_end_date = models.DateTimeField(_("End date"), null=True)
-    location = models.TextField(_("Location"), default="")
+    planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
+    planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
+    planned_location = models.TextField(_("Planned location"), default="")
     other_first_name = models.CharField(
         _("Other first name"), max_length=150, default="", null=True
     )
@@ -111,8 +111,9 @@ class Project(models.Model):
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
     outcome = models.PositiveIntegerField(_("Outcome"), default=0)
     income = models.PositiveIntegerField(_("Income"), default=0)
-    real_start_date = models.DateTimeField(_("Start date"), null=True)
-    real_end_date = models.DateTimeField(_("End date"), null=True)
+    real_start_date = models.DateTimeField(_("Real start date"), null=True)
+    real_end_date = models.DateTimeField(_("Real end date"), null=True)
+    real_location = models.TextField(_("Real location"), default="")
     organizer_name = models.CharField(_("Organizer name"), max_length=256, default="")
     organizer_phone = models.CharField(_("Organizer phone"), max_length=32, default="")
     organizer_email = models.CharField(_("Organizer email"), max_length=256, default="")

@@ -23,7 +23,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "name",
             "planned_start_date",
             "planned_end_date",
-            "location",
+            "planned_location",
             "other_first_name",
             "other_last_name",
             "other_email",
@@ -47,6 +47,36 @@ class ProjectSerializer(serializers.ModelSerializer):
         ]
 
 
+class ProjectReviewSerializer(serializers.ModelSerializer):
+    """Main review serializer."""
+
+    class Meta:
+        model = Project
+        fields = [
+            "id",
+            "name",
+            "other_first_name",
+            "other_last_name",
+            "other_email",
+            "other_phone",
+            "user",
+            "association",
+            "outcome",
+            "income",
+            "real_start_date",
+            "real_end_date",
+            "real_location",
+            "organizer_name",
+            "organizer_phone",
+            "organizer_email",
+            "review",
+            "impact_students",
+            "description",
+            "difficulties",
+            "improvements",
+        ]
+
+
 class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
@@ -64,7 +94,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "name",
             "planned_start_date",
             "planned_end_date",
-            "location",
+            "planned_location",
             "other_first_name",
             "other_last_name",
             "other_email",
@@ -84,6 +114,28 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "planned_activities",
             "prevention_safety",
             "marketing_campaign",
+        ]
+
+
+class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
+    """Main review serializer for update."""
+
+    class Meta:
+        model = Project
+        fields = [
+            "outcome",
+            "income",
+            "real_start_date",
+            "real_end_date",
+            "real_location",
+            "organizer_name",
+            "organizer_phone",
+            "organizer_email",
+            "review",
+            "impact_students",
+            "description",
+            "difficulties",
+            "improvements",
         ]
 
 
