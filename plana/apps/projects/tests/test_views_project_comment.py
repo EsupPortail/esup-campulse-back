@@ -26,7 +26,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
-        "projects_projectcategory.json",
+        "projects_projectcomment.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
         "users_groupinstitutioncommissionuser.json",
@@ -119,7 +119,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), project_comments_cnt)
 
-    def test_get_project_categories_manager(self):
+    def test_get_project_comments_manager(self):
         """
         GET /projects/comments .
 
@@ -180,13 +180,13 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.general_client.get("/projects/99999/comments")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_project_comments_by_id_401(self):
+    def test_get_project_comments_by_id_403(self):
         """
         GET /projects/{project_id}/comments
 
         - A student user not owning the project cannot execute this request
         """
-        response = self.student_offsite_client.get("/projects/1/comments")
+        response = self.student_offsite_client.get("/projects/2/comments")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_project_comments_by_id(self):
@@ -212,7 +212,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-    def test_delete_project_categories_anonymous(self):
+    def test_delete_project_comments_anonymous(self):
         """
         DELETE /projects/{project_id}/comments/{comment_id} .
 
@@ -221,7 +221,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.client.delete("/projects/1/comments/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_delete_project_categories_not_found(self):
+    def test_delete_project_comments_not_found(self):
         """
         DELETE /projects/{project_id}/comments/{comment_id} .
 
@@ -232,12 +232,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.general_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_delete_project_categories_forbidden_user(self):
+    def test_delete_project_comments_forbidden_user(self):
         """
         DELETE /projects/{project_id}/categories/{category_id} .
 
-        - The route can be accessed by a student user.
-        - The owner of the project must be the authenticated user.
+        - The route cannot be accessed by a student user.
         """
         project = 1
         comment = 5
@@ -246,9 +245,12 @@ class ProjectCommentLinksViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_delete_project_categories_association_success(self):
+    def test_delete_project_comments_success(self):
         """
         DELETE /projects/{project_id}/comments/{comment_id} .
+
+        - The route cannot be accessed by a manager user.
+        - Comment is correctly deleted.
         """
         project = 2
         comment = 1

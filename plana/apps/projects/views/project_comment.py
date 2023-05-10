@@ -55,7 +55,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["project/comments"],
+        tags=["projects/comments"],
     )
     def post(self, request, *args, **kwargs):
         """Create a link between a comment and a project"""
@@ -96,6 +96,11 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             return response.Response(
                 {"error": _("Project does not exist")}, status=status.HTTP_404_NOT_FOUND
             )
+
+        serializer = self.serializer_class(
+            self.queryset.filter(project_id=kwargs["project_id"]), many=True
+        )
+        return response.Response(serializer.data)
 
 
 class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -144,7 +149,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Updates comments of the project"""
         try:
             pc = ProjectComment.objects.get(
-                project_id=kwargs["project_id"],
+                project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -153,7 +158,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         pc.save()
-        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+        return response.Response({}, status=status.HTTP_200_OK)
 
     @extend_schema(
         responses={
@@ -168,7 +173,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Destroys comments of a project"""
         try:
             pc = ProjectComment.objects.get(
-                project_id=kwargs["project_id"],
+                project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
         except ObjectDoesNotExist:
             return response.Response(
