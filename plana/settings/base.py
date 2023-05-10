@@ -509,6 +509,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # Using SimpleJWT with dj-rest-auth
 REST_USE_JWT = True
 
+# TODO Re-test navigation on PPRD with this JWT format.
 """
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
