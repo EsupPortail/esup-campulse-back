@@ -97,6 +97,16 @@ EMAIL_USE_TLS = False
 EMAIL_TEMPLATE_FRONTEND_URL = "http://localhost:3000/"
 
 
+#########################
+# DJANGO REST FRAMEWORK #
+#########################
+
+REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
+    "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+]
+
+
 ##################
 # AUTHENTICATION #
 ##################
