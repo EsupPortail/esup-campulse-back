@@ -425,8 +425,12 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.data["can_be_president_from"] is not None
             and "can_be_president_to" in request.data
             and request.data["can_be_president_to"] is not None
-            and request.data["can_be_president_from"]
-            > request.data["can_be_president_to"]
+            and datetime.datetime.strptime(
+                request.data["can_be_president_from"], "%Y-%m-%d"
+            )
+            > datetime.datetime.strptime(
+                request.data["can_be_president_to"], "%Y-%m-%d"
+            )
         ):
             return response.Response(
                 {"error": _("Can't remove president delegation before giving it.")},

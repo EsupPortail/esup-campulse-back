@@ -221,49 +221,6 @@ class UserViewsTests(TestCase):
             response = self.manager_client.get(f"/users/?name={similar_name}")
             self.assertEqual(response.data[0]["first_name"], similar_names[0])
 
-    def test_anonymous_get_user_detail(self):
-        """
-        GET /users/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get(
-            f"/users/{self.unvalidated_user_id}"
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_manager_get_unexisting_user(self):
-        """
-        GET /users/{id} .
-
-        - 404 error if user not found.
-        """
-        response_manager = self.manager_client.get("/users/404")
-        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_student_get_user_detail(self):
-        """
-        GET /users/{id} .
-
-        - A student user cannot execute this request.
-        """
-        response_student = self.student_client.get(f"/users/{self.student_user_id}")
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_manager_get_user_detail(self):
-        """
-        GET /users/{id} .
-
-        - A manager user can execute this request.
-        - User details are returned (test the "username" attribute).
-        """
-        response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
-        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-
-        user = User.objects.get(pk=self.student_user_id)
-        user_requested = json.loads(response_manager.content.decode("utf-8"))
-        self.assertEqual(user_requested["username"], user.username)
-
     def test_anonymous_post_user(self):
         """
         POST /users/ .
@@ -357,6 +314,63 @@ class UserViewsTests(TestCase):
 
         user = SocialAccount.objects.get(uid=username)
         self.assertEqual(user.uid, username)
+
+    def test_anonymous_get_user_detail(self):
+        """
+        GET /users/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        response_anonymous = self.anonymous_client.get(
+            f"/users/{self.unvalidated_user_id}"
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_manager_get_unexisting_user(self):
+        """
+        GET /users/{id} .
+
+        - 404 error if user not found.
+        """
+        response_manager = self.manager_client.get("/users/404")
+        self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_student_get_user_detail(self):
+        """
+        GET /users/{id} .
+
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.get(f"/users/{self.student_user_id}")
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_institution_manager_get_user_detail(self):
+        """
+        GET /users/{id} .
+
+        - An institution manager user can execute this request.
+        - User details are returned (test the "username" attribute).
+        """
+        response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        user = User.objects.get(pk=self.student_user_id)
+        user_requested = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(user_requested["username"], user.username)
+
+    def test_manager_get_user_detail(self):
+        """
+        GET /users/{id} .
+
+        - A manager user can execute this request.
+        - User details are returned (test the "username" attribute).
+        """
+        response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        user = User.objects.get(pk=self.student_user_id)
+        user_requested = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(user_requested["username"], user.username)
 
     def test_put_user_detail(self):
         """
