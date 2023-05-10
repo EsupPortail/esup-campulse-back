@@ -90,10 +90,6 @@ PERMISSIONS_GROUPS = {
         "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
-        # commissions
-        "add_commissiondate",
-        "change_commissiondate",
-        "delete_commissiondate",
         # documents
         "add_document",
         "change_document",
@@ -140,10 +136,6 @@ PERMISSIONS_GROUPS = {
         "delete_association",
         "view_association_not_enabled",
         "view_association_not_public",
-        # commissions
-        "add_commissiondate",
-        "change_commissiondate",
-        "delete_commissiondate",
         # documents
         "add_document",
         "change_document",

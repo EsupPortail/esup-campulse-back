@@ -387,11 +387,8 @@ LOGGING = {
 #########################
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
@@ -511,8 +508,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Using SimpleJWT with dj-rest-auth
 REST_USE_JWT = True
-JWT_AUTH_COOKIE = "plana-auth"
-JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
 
 """
 SIMPLE_JWT = {
@@ -572,6 +567,14 @@ SPECTACULAR_SETTINGS = {
         "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
     ],
     "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+            }
+        }
+    },
 }
 
 

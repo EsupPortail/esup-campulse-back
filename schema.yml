@@ -63,8 +63,7 @@ paths:
       tags:
       - associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -94,8 +93,7 @@ paths:
               $ref: '#/components/schemas/AssociationMandatoryDataRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -124,8 +122,7 @@ paths:
       tags:
       - associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -162,8 +159,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedAssociationAllDataUpdateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -195,8 +191,7 @@ paths:
       tags:
       - associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -217,8 +212,7 @@ paths:
       tags:
       - associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -252,8 +246,7 @@ paths:
       tags:
       - associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -277,8 +270,7 @@ paths:
       tags:
       - commissions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -314,8 +306,7 @@ paths:
       tags:
       - commissions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -344,8 +335,7 @@ paths:
               $ref: '#/components/schemas/CommissionDateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -372,8 +362,7 @@ paths:
       tags:
       - commissions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -407,8 +396,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedCommissionDateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -436,8 +424,7 @@ paths:
       tags:
       - commissions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -464,8 +451,7 @@ paths:
       tags:
       - contents
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -489,8 +475,7 @@ paths:
       tags:
       - contents
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -519,8 +504,7 @@ paths:
       tags:
       - documents
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -548,8 +532,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DocumentCreateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -574,8 +557,7 @@ paths:
       tags:
       - documents
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -609,8 +591,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedDocumentUpdateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -638,8 +619,7 @@ paths:
       tags:
       - documents
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -676,8 +656,7 @@ paths:
       tags:
       - documents/uploads
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -707,8 +686,7 @@ paths:
               $ref: '#/components/schemas/DocumentUploadCreateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -739,8 +717,7 @@ paths:
       tags:
       - documents/uploads
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -766,8 +743,7 @@ paths:
       tags:
       - documents/uploads
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -794,8 +770,7 @@ paths:
       tags:
       - documents/uploads
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -822,8 +797,7 @@ paths:
       tags:
       - groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -847,8 +821,7 @@ paths:
       tags:
       - institutions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -866,8 +839,7 @@ paths:
       tags:
       - institutions
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -912,8 +884,7 @@ paths:
       tags:
       - projects
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -945,8 +916,7 @@ paths:
               $ref: '#/components/schemas/ProjectUpdateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -975,8 +945,7 @@ paths:
       tags:
       - projects
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1003,8 +972,7 @@ paths:
       tags:
       - projects
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1041,8 +1009,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProjectUpdateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1082,8 +1049,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProjectStatusRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1110,8 +1076,7 @@ paths:
       tags:
       - projects/categories
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1143,8 +1108,7 @@ paths:
       tags:
       - projects/categories
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1171,8 +1135,7 @@ paths:
       tags:
       - projects/commission_dates
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1215,8 +1178,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1249,8 +1211,7 @@ paths:
       tags:
       - projects/commission_dates
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1277,8 +1238,7 @@ paths:
       tags:
       - projects/categories
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1310,8 +1270,7 @@ paths:
               $ref: '#/components/schemas/ProjectCategoryRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -1332,8 +1291,7 @@ paths:
       tags:
       - projects/categories
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1362,8 +1320,7 @@ paths:
       tags:
       - projects/commission_dates
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1395,8 +1352,7 @@ paths:
               $ref: '#/components/schemas/ProjectCommissionDateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -1451,8 +1407,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1484,8 +1439,7 @@ paths:
               $ref: '#/components/schemas/UserPartialDataRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -1516,16 +1470,15 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
+              $ref: '#/components/schemas/PatchedUserRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
+              $ref: '#/components/schemas/PatchedUserRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUserPartialDataRequest'
+              $ref: '#/components/schemas/PatchedUserRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1554,8 +1507,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1582,8 +1534,7 @@ paths:
       tags:
       - users/associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1626,8 +1577,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedAssociationUserUpdateRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1660,8 +1610,7 @@ paths:
       tags:
       - users/associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1688,8 +1637,7 @@ paths:
       tags:
       - users/groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1721,8 +1669,7 @@ paths:
       tags:
       - users/groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1759,8 +1706,7 @@ paths:
       tags:
       - users/groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1797,8 +1743,7 @@ paths:
       tags:
       - users/groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           content:
@@ -1836,8 +1781,7 @@ paths:
       tags:
       - users/associations
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -1869,8 +1813,7 @@ paths:
               $ref: '#/components/schemas/AssociationUserCreateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '201':
@@ -1907,8 +1850,7 @@ paths:
               $ref: '#/components/schemas/CASRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1929,8 +1871,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1962,8 +1903,7 @@ paths:
               $ref: '#/components/schemas/CASRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -1998,8 +1938,7 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -2019,8 +1958,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -2052,8 +1990,7 @@ paths:
               $ref: '#/components/schemas/PasswordChangeRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -2084,8 +2021,7 @@ paths:
               $ref: '#/components/schemas/PasswordResetRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -2119,8 +2055,7 @@ paths:
               $ref: '#/components/schemas/PasswordResetConfirmRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -2147,8 +2082,7 @@ paths:
               $ref: '#/components/schemas/CustomRegisterRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '201':
@@ -2175,8 +2109,7 @@ paths:
               $ref: '#/components/schemas/ResendEmailVerificationRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '201':
@@ -2204,8 +2137,7 @@ paths:
               $ref: '#/components/schemas/VerifyEmailRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
@@ -2270,8 +2202,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -2296,8 +2227,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedUserRequest'
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -2311,8 +2241,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '204':
           description: No response body
@@ -2329,8 +2258,7 @@ paths:
       tags:
       - users
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -2355,8 +2283,7 @@ paths:
       tags:
       - users/groups
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -2388,8 +2315,7 @@ paths:
               $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
         required: true
       security:
-      - jwtHeaderAuth: []
-      - jwtCookieAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '201':
@@ -3688,32 +3614,6 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
-    PatchedUserPartialDataRequest:
-      type: object
-      description: Used to get data from another student in the same associations.
-      properties:
-        username:
-          type: string
-          minLength: 1
-          title: Nom d’utilisateur
-          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
-            et les caractères « @ », « . », « + », « - » et « _ ».
-          pattern: ^[\w.@+-]+$
-          maxLength: 150
-        first_name:
-          type: string
-          minLength: 1
-          maxLength: 150
-        last_name:
-          type: string
-          minLength: 1
-          maxLength: 150
-        is_cas:
-          type: boolean
-          default: false
-        is_validated_by_admin:
-          type: boolean
-          title: Is validated by administrator
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -4225,11 +4125,6 @@ components:
       required:
       - key
   securitySchemes:
-    jwtCookieAuth:
-      type: apiKey
-      in: cookie
-      name: plana-auth
-    jwtHeaderAuth:
+    jwtAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
