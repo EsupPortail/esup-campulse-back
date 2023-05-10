@@ -388,13 +388,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -3534,9 +3534,9 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-    PatchedCommissionDateRequest:
+    PatchedCommissionDateUpdateRequest:
       type: object
-      description: Main serializer.
+      description: Update serializer.
       properties:
         submission_date:
           type: string
@@ -3545,8 +3545,6 @@ components:
         commission_date:
           type: string
           format: date
-        commission:
-          type: integer
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

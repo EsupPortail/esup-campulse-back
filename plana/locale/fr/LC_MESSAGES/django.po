@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-10 15:18+0200\n"
+"POT-Creation-Date: 2023-05-10 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,14 +288,14 @@ msgstr "Date de Commission"
 msgid "Commissions Dates"
 msgstr "Dates de Commissions"
 
-#: plana/apps/commissions/views/commission_date.py:133
-#: plana/apps/commissions/views/commission_date.py:206
+#: plana/apps/commissions/views/commission_date.py:136
+#: plana/apps/commissions/views/commission_date.py:216
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission_date.py:165
-#: plana/apps/commissions/views/commission_date.py:195
-#: plana/apps/commissions/views/commission_date.py:226
+#: plana/apps/commissions/views/commission_date.py:175
+#: plana/apps/commissions/views/commission_date.py:205
+#: plana/apps/commissions/views/commission_date.py:236
 msgid "Commission Date does not exist."
 msgstr "La date de commission n'existe pas."
 
