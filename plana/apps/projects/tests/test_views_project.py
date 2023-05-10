@@ -335,8 +335,8 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
-            "planned_start_date": "2099-12-25",
-            "planned_end_date": "2099-11-30",
+            "planned_start_date": "2099-12-25T14:00:00.000Z",
+            "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -546,8 +546,8 @@ class ProjectsViewsTests(TestCase):
         - Planned start date cannot be set after planned end date.
         """
         project_data = {
-            "planned_start_date": "2099-12-25",
-            "planned_end_date": "2099-11-30",
+            "planned_start_date": "2099-12-25T14:00:00.000Z",
+            "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
         response = self.student_president_client.patch(
             "/projects/2", project_data, content_type="application/json"

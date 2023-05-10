@@ -292,9 +292,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
             and datetime.datetime.strptime(
-                request.data["planned_start_date"], "%Y-%m-%d"
+                request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
             )
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%d")
+            > datetime.datetime.strptime(
+                request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},
@@ -456,9 +458,11 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
             and datetime.datetime.strptime(
-                request.data["planned_start_date"], "%Y-%m-%d"
+                request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
             )
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%d")
+            > datetime.datetime.strptime(
+                request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},

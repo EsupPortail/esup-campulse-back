@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-10 10:11+0200\n"
+"POT-Creation-Date: 2023-05-10 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,9 +492,9 @@ msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
 #: plana/apps/documents/views/document_upload.py:126
-#: plana/apps/projects/views/project.py:353
-#: plana/apps/projects/views/project.py:412
-#: plana/apps/projects/views/project.py:508
+#: plana/apps/projects/views/project.py:355
+#: plana/apps/projects/views/project.py:414
+#: plana/apps/projects/views/project.py:512
 #: plana/apps/projects/views/project_category.py:110
 #: plana/apps/projects/views/project_category.py:165
 #: plana/apps/projects/views/project_category.py:225
@@ -796,7 +796,7 @@ msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou association."
 
 #: plana/apps/projects/views/project.py:285
-#: plana/apps/projects/views/project.py:449
+#: plana/apps/projects/views/project.py:451
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
@@ -804,36 +804,36 @@ msgstr ""
 "Le nombre d'étudiants dans le public attendu ne peut être supérieur au "
 "nombre total de personnes attendues."
 
-#: plana/apps/projects/views/project.py:300
-#: plana/apps/projects/views/project.py:464
+#: plana/apps/projects/views/project.py:302
+#: plana/apps/projects/views/project.py:468
 msgid "Can't set planned start date after planned end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
-#: plana/apps/projects/views/project.py:382
+#: plana/apps/projects/views/project.py:384
 #: plana/apps/projects/views/project_export.py:81
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:418
+#: plana/apps/projects/views/project.py:420
 msgid "Not allowed to update bearer fields for this project."
 msgstr "Non autorisé à mettre à jour les champs du porteur de ce projet."
 
-#: plana/apps/projects/views/project.py:424
+#: plana/apps/projects/views/project.py:426
 #: plana/apps/projects/views/project_commission_date.py:142
 #: plana/apps/projects/views/project_commission_date.py:342
 #: plana/apps/projects/views/project_commission_date.py:431
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:436
+#: plana/apps/projects/views/project.py:438
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:521
+#: plana/apps/projects/views/project.py:525
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/projects/views/project.py:544
+#: plana/apps/projects/views/project.py:548
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
