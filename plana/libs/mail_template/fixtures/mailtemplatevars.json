@@ -128,5 +128,14 @@
       "description": "URL menant vers une page de validation de lien entre association et utilisateur.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 15,
+    "fields": {
+      "code": "{{ project_name }}",
+      "description": "Nom du projet.",
+      "fake_vars": []
+    }
   }
 ]

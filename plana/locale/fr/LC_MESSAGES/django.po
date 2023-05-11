@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 10:30+0200\n"
+"POT-Creation-Date: 2023-05-11 14:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: plana/apps/institutions/models/institution.py:10
 #: plana/apps/institutions/models/institution_component.py:9
 #: plana/apps/projects/models/category.py:9
-#: plana/apps/projects/models/project.py:80
+#: plana/apps/projects/models/project.py:86
 msgid "Name"
 msgstr "Nom"
 
@@ -143,7 +143,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:85
-#: plana/apps/projects/models/project.py:131
+#: plana/apps/projects/models/project.py:137
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
@@ -175,7 +175,7 @@ msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:119
 #: plana/apps/documents/models/document_upload.py:53
-#: plana/apps/projects/models/project.py:100 plana/apps/users/models/user.py:22
+#: plana/apps/projects/models/project.py:106 plana/apps/users/models/user.py:22
 #: plana/apps/users/models/user.py:38
 msgid "Association"
 msgstr "Association"
@@ -424,7 +424,7 @@ msgid "Documents"
 msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:47
-#: plana/apps/projects/models/project.py:97
+#: plana/apps/projects/models/project.py:103
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:20 plana/apps/users/models/user.py:61
 #: plana/apps/users/models/user.py:306
@@ -432,7 +432,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:59
-#: plana/apps/projects/models/project.py:155
+#: plana/apps/projects/models/project.py:161
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:15
 #: plana/apps/projects/models/project_commission_date.py:13
@@ -598,140 +598,140 @@ msgstr "Bilan de Projet Rejeté"
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:81
+#: plana/apps/projects/models/project.py:87
 msgid "Planned start date"
 msgstr "Date de début prévue"
 
-#: plana/apps/projects/models/project.py:82
+#: plana/apps/projects/models/project.py:88
 msgid "Planned end date"
 msgstr "Date de fin prévue"
 
-#: plana/apps/projects/models/project.py:83
+#: plana/apps/projects/models/project.py:89
 msgid "Planned location"
 msgstr "Lieu prévu"
 
-#: plana/apps/projects/models/project.py:85
+#: plana/apps/projects/models/project.py:91
 msgid "Other first name"
 msgstr "Autre prénom"
 
-#: plana/apps/projects/models/project.py:88
+#: plana/apps/projects/models/project.py:94
 msgid "Other last name"
 msgstr "Autre nom de famille"
 
-#: plana/apps/projects/models/project.py:91
+#: plana/apps/projects/models/project.py:97
 msgid "Other email"
 msgstr "Autre adresse mail"
 
-#: plana/apps/projects/models/project.py:94
+#: plana/apps/projects/models/project.py:100
 msgid "Other phone"
 msgstr "Autre téléphone"
 
-#: plana/apps/projects/models/project.py:103
+#: plana/apps/projects/models/project.py:109
 msgid "Budget on previous edition"
 msgstr "Budget de l'édition précédente"
 
-#: plana/apps/projects/models/project.py:105
+#: plana/apps/projects/models/project.py:111
 msgid "Target audience"
 msgstr "Public visé"
 
-#: plana/apps/projects/models/project.py:107
+#: plana/apps/projects/models/project.py:113
 msgid "Amount of students in target audience"
 msgstr "Nombre d'étudiants dans le public visé"
 
-#: plana/apps/projects/models/project.py:110
+#: plana/apps/projects/models/project.py:116
 msgid "Amount of all people in target audience"
 msgstr "Nombre de personnes au total dans le public visé"
 
-#: plana/apps/projects/models/project.py:113
+#: plana/apps/projects/models/project.py:119
 msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
-#: plana/apps/projects/models/project.py:116
+#: plana/apps/projects/models/project.py:122
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:118
+#: plana/apps/projects/models/project.py:124
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:119
+#: plana/apps/projects/models/project.py:125
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:120
+#: plana/apps/projects/models/project.py:126
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:122
+#: plana/apps/projects/models/project.py:128
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:124
+#: plana/apps/projects/models/project.py:130
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:126
+#: plana/apps/projects/models/project.py:132
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:132
+#: plana/apps/projects/models/project.py:138
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:133
+#: plana/apps/projects/models/project.py:139
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:134
+#: plana/apps/projects/models/project.py:140
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:135
+#: plana/apps/projects/models/project.py:141
 msgid "Real start date"
 msgstr "Date de début réelle"
 
-#: plana/apps/projects/models/project.py:136
+#: plana/apps/projects/models/project.py:142
 msgid "Real end date"
 msgstr "Date de fin réelle"
 
-#: plana/apps/projects/models/project.py:137
+#: plana/apps/projects/models/project.py:143
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:138
+#: plana/apps/projects/models/project.py:144
 msgid "Organizer name"
 msgstr "Nom de l'organisateur"
 
-#: plana/apps/projects/models/project.py:139
+#: plana/apps/projects/models/project.py:145
 msgid "Organizer phone"
 msgstr "Téléphone de l'organisateur"
 
-#: plana/apps/projects/models/project.py:140
+#: plana/apps/projects/models/project.py:146
 msgid "Organizer email"
 msgstr "Adresse mail de l'organisateur"
 
-#: plana/apps/projects/models/project.py:142
+#: plana/apps/projects/models/project.py:148
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:144
+#: plana/apps/projects/models/project.py:150
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:146
+#: plana/apps/projects/models/project.py:152
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:148
+#: plana/apps/projects/models/project.py:154
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:149
+#: plana/apps/projects/models/project.py:155
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:156
+#: plana/apps/projects/models/project.py:162
 msgid "Projects"
 msgstr "Projets"
 
@@ -1278,10 +1278,6 @@ msgstr "Le template #%s n'a pas été trouvé"
 msgid "A syntax error occured in template #%s"
 msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 
-#: plana/management/commands/account_expiration.py:17
-msgid "Expired accounts policy"
-msgstr "Politique d'expiration des comptes"
-
 #: plana/management/commands/clean_database.py:9
 msgid "Resets database structure and content."
 msgstr "Régénère la structure et le contenu de la base de données."
@@ -1299,14 +1295,6 @@ msgstr "Réinitialise le contenu d'un bucket S3."
 msgid "S3 bucket {bucket_name} content cleaned."
 msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
 
-#: plana/management/commands/commission_expiration.py:12
-msgid ""
-"Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT "
-"status and CommissionDates with expired submission_date."
-msgstr ""
-"Supprime toutes les ProjectCommissionDates entre les Projets avec un statut "
-"PROJECT_DRAFT et les CommissionDates avec une submission_date expirée."
-
 #: plana/management/commands/createmanageruser.py:16
 msgid "Creates a new manager user."
 msgstr "Crée un utilisateur gestionnaire."
@@ -1323,6 +1311,30 @@ msgstr "Nom de code d'établissement (tous par défaut)."
 #, python-brace-format
 msgid "User created. Password : {password}"
 msgstr "Utilisateur crée. Mot de passe : {password}"
+
+#: plana/management/commands/cron_account_expiration.py:17
+msgid "Expired accounts policy"
+msgstr "Politique d'expiration des comptes"
+
+#: plana/management/commands/cron_commission_expiration.py:12
+msgid ""
+"Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT "
+"status and CommissionDates with expired submission_date."
+msgstr ""
+"Supprime toutes les ProjectCommissionDates entre les Projets avec un statut "
+"PROJECT_DRAFT et les CommissionDates avec une submission_date expirée."
+
+#: plana/management/commands/cron_password_expiration.py:18
+msgid "Expired password policy"
+msgstr "Politique d'expiration des mots de passe"
+
+#: plana/management/commands/cron_review_expiration.py:18
+msgid ""
+"If a project that earned financial support from a commission didn't submit a "
+"review one month after its planned end date, send an email."
+msgstr ""
+"Si un projet ayant reçu une aide financière d'une commission n'a pas soumis "
+"de bilan un mois après sa date de fin planifiée, on envoie un email."
 
 #: plana/management/commands/generate_age_keys.py:10
 msgid "Generate pair of AGE private and public keys to encrypt file uploads."
@@ -1375,10 +1387,6 @@ msgstr "Importe les données initiales de l'application."
 #: plana/management/commands/initial_import.py:29
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
-
-#: plana/management/commands/password_expiration.py:18
-msgid "Expired password policy"
-msgstr "Politique d'expiration des mots de passe"
 
 #: plana/management/commands/reset_permissions.py:14
 msgid ""

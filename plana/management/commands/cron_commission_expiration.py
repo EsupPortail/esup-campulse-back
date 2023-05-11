@@ -9,7 +9,7 @@ from plana.apps.projects.models import Project, ProjectCommissionDate
 
 class Command(BaseCommand):
     help = _(
-        'Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT status and CommissionDates with expired submission_date.'
+        "Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT status and CommissionDates with expired submission_date."
     )
 
     def handle(self, *args, **options):
