@@ -23,3 +23,11 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectComment
         fields = ["project_id", "text"]
+
+
+class ProjectCommentTextSerializer(serializers.ModelSerializer):
+    """ Field that can only be interacted with"""
+
+    class Meta:
+        model = ProjectComment
+        fields = ["text"]

@@ -12,7 +12,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
     ProjectCommentDataSerializer,
-    ProjectCommentSerializer,
+    ProjectCommentSerializer, ProjectCommentTextSerializer,
 )
 
 
@@ -22,6 +22,13 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = ProjectCommentSerializer
+        else:
+            self.serializer_class = ProjectCommentDataSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         parameters=[
@@ -116,6 +123,13 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method in ("PATCH", "DELETE"):
+            self.serializer_class = ProjectCommentTextSerializer
+        else:
+            self.serializer_class = ProjectCommentDataSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         exclude=True,
