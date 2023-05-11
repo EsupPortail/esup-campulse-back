@@ -388,13 +388,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateRequest'
+              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1008,6 +1008,72 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /projects/{id}/review:
+    get:
+      operationId: projects_review_retrieve
+      description: Retrieves a project review with all its details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: projects_review_partial_update
+      description: Updates project details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectReviewUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectReviewUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectReviewUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -3468,9 +3534,9 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-    PatchedCommissionDateRequest:
+    PatchedCommissionDateUpdateRequest:
       type: object
-      description: Main serializer.
+      description: Update serializer.
       properties:
         submission_date:
           type: string
@@ -3479,8 +3545,6 @@ components:
         commission_date:
           type: string
           format: date
-        commission:
-          type: integer
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.
@@ -3524,6 +3588,59 @@ components:
           minimum: 0
         is_validated_by_admin:
           type: boolean
+    PatchedProjectReviewUpdateRequest:
+      type: object
+      description: Main review serializer for update.
+      properties:
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_location:
+          type: string
+          minLength: 1
+        organizer_name:
+          type: string
+          minLength: 1
+          maxLength: 256
+        organizer_phone:
+          type: string
+          minLength: 1
+          maxLength: 32
+        organizer_email:
+          type: string
+          minLength: 1
+          maxLength: 256
+        review:
+          type: string
+          minLength: 1
+          title: Review (amount of students, partnerships, ...)
+        impact_students:
+          type: string
+          minLength: 1
+          title: Impact on students
+        description:
+          type: string
+          minLength: 1
+          title: Description (activities done, changes from planning, ...)
+        difficulties:
+          type: string
+          minLength: 1
+        improvements:
+          type: string
+          minLength: 1
     PatchedProjectStatusRequest:
       type: object
       description: Serializer for status field.
@@ -3543,16 +3660,13 @@ components:
           type: string
           format: date-time
           nullable: true
-          title: Start date
         planned_end_date:
           type: string
           format: date-time
           nullable: true
-          title: End date
-        location:
+        planned_location:
           type: string
           minLength: 1
-          title: Adresse
         other_first_name:
           type: string
         other_last_name:
@@ -3672,15 +3786,12 @@ components:
           type: string
           format: date-time
           nullable: true
-          title: Start date
         planned_end_date:
           type: string
           format: date-time
           nullable: true
-          title: End date
-        location:
+        planned_location:
           type: string
-          title: Adresse
         other_first_name:
           type: string
         other_last_name:
@@ -3907,16 +4018,13 @@ components:
           type: string
           format: date-time
           nullable: true
-          title: Start date
         planned_end_date:
           type: string
           format: date-time
           nullable: true
-          title: End date
-        location:
+        planned_location:
           type: string
           minLength: 1
-          title: Adresse
         other_first_name:
           type: string
         other_last_name:

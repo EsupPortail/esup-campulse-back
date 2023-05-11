@@ -10,7 +10,10 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.commissions.serializers.commission_date import CommissionDateSerializer
+from plana.apps.commissions.serializers.commission_date import (
+    CommissionDateSerializer,
+    CommissionDateUpdateSerializer,
+)
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.utils import to_bool
@@ -149,6 +152,13 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = CommissionDateUpdateSerializer
+        else:
+            self.serializer_class = CommissionDateSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         responses={

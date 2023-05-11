@@ -234,7 +234,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
         }
         response = self.student_site_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -262,7 +262,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
             "user": 10,
         }
         response = self.student_offsite_client.post("/projects/", project_data)
@@ -282,7 +282,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
             "association": 3,
         }
         response = self.student_offsite_client.post("/projects/", project_data)
@@ -299,7 +299,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
             "association": 1,
         }
         response = self.student_site_client.post("/projects/", project_data)
@@ -335,8 +335,8 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
-            "planned_start_date": "2099-12-25",
-            "planned_end_date": "2099-11-30",
+            "planned_start_date": "2099-12-25T14:00:00.000Z",
+            "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -352,7 +352,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation association",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
             "association": 2,
         }
         response = self.student_president_client.post("/projects/", project_data)
@@ -372,7 +372,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation user",
             "goals": "Goals",
-            "location": "address",
+            "planned_location": "address",
             "user": self.student_misc_user_id,
         }
         response = self.student_misc_client.post("/projects/", project_data)
@@ -540,14 +540,14 @@ class ProjectsViewsTests(TestCase):
 
     def test_patch_project_association_wrong_dates(self):
         """
-        PATCH /projects/ .
+        PATCH /projects/{id} .
 
         - The route can be accessed by a student user.
         - Planned start date cannot be set after planned end date.
         """
         project_data = {
-            "planned_start_date": "2099-12-25",
-            "planned_end_date": "2099-11-30",
+            "planned_start_date": "2099-12-25T14:00:00.000Z",
+            "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
         response = self.student_president_client.patch(
             "/projects/2", project_data, content_type="application/json"
@@ -568,6 +568,164 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.objects.get(pk=1)
         self.assertEqual(project.summary, "new summary")
+
+    def test_get_project_review_by_id_anonymous(self):
+        """
+        GET /projects/{id}/review .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/projects/1/review")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_project_review_by_id_404(self):
+        """
+        GET /projects/{id}/review .
+
+        - The route returns a 404 if a wrong project id is given.
+        """
+        response = self.general_client.get("/projects/99999/review")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_project_review_by_id_forbidden_student(self):
+        """
+        GET /projects/{id}/review .
+
+        - An student user not owning the project cannot execute this request.
+        """
+        response = self.student_offsite_client.get("/projects/1/review")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_project_review_by_id(self):
+        """
+        GET /projects/{id}/review .
+
+        - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
+        - Correct projects details are returned (test the "name" attribute).
+        """
+        project_id = 1
+        project_test = Project.objects.get(id=project_id)
+        response = self.general_client.get(f"/projects/{project_id}/review")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(content["name"], project_test.name)
+
+        project_id = 2
+        project_test = Project.objects.get(id=project_id)
+        response = self.student_president_client.get(f"/projects/{project_id}/review")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(content["name"], project_test.name)
+
+    def test_put_project_review(self):
+        """
+        PUT /projects/{id}/review .
+
+        - Always returns a 405.
+        """
+        patch_data = {"name": "Test anonymous"}
+        response = self.general_client.put(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_patch_project_review_anonymous(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - An anonymous user cannot execute this request.
+        """
+        patch_data = {"review": "C'était bien"}
+        response = self.client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_project_review_not_found(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route can be accessed by a student user.
+        - Project must exist.
+        """
+        patch_data = {"review": "C'était pas ouf"}
+        response = self.student_misc_client.patch(
+            "/projects/999/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_review_forbidden_student(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - An student user not owning the project cannot execute this request.
+        """
+        patch_data = {"review": "C'était moyen"}
+        response = self.student_offsite_client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_review_forbidden_user(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route can be accessed by a student user.
+        - The project owner must be the authenticated user.
+        """
+        patch_data = {"review": "Du pur génie, 9 sélec sur Gamekult"}
+        response = self.student_site_client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_review_manager_error(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route cannot be accessed by a manager user.
+        """
+        patch_data = {"review": "Mon chien aurait fait mieux"}
+        response = self.general_client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_review_association_wrong_dates(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route can be accessed by a student user.
+        - Real start date cannot be set after real end date.
+        """
+        project_data = {
+            "real_start_date": "2099-12-25T14:00:00.000Z",
+            "real_end_date": "2099-11-30T18:00:00.000Z",
+        }
+        response = self.student_president_client.patch(
+            "/projects/2/review", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_review_user_success(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route can be accessed by a student user.
+        - The project is correctly updated in db.
+        """
+        patch_data = {
+            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
+        }
+        response = self.student_misc_client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(pk=1)
+        self.assertEqual(project.review, patch_data["review"])
 
     def test_put_project_status(self):
         """

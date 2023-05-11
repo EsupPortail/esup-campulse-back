@@ -10,3 +10,11 @@ class CommissionDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommissionDate
         fields = "__all__"
+
+
+class CommissionDateUpdateSerializer(serializers.ModelSerializer):
+    """Update serializer."""
+
+    class Meta:
+        model = CommissionDate
+        fields = ["submission_date", "commission_date"]
