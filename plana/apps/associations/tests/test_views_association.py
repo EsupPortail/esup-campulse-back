@@ -411,7 +411,7 @@ class AssociationsViewsTests(TestCase):
         - A non-enabled association can be seen by a student user who's in it.
         - A non-public association can be seen by a student user who's in it.
         """
-        association = Association.objects.get(pk=1)
+        association = Association.objects.get(id=1)
 
         response = self.client.get("/associations/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

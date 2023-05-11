@@ -104,7 +104,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Creates a link between a category and a project."""
         try:
-            project = Project.objects.get(pk=request.data["project"])
+            project = Project.objects.get(id=request.data["project"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -216,7 +216,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
         try:
-            project = Project.objects.get(pk=kwargs["project_id"])
+            project = Project.objects.get(id=kwargs["project_id"])
             project_category = ProjectCategory.objects.get(
                 project_id=kwargs["project_id"], category_id=kwargs["category_id"]
             )

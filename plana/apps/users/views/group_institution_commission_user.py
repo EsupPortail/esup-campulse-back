@@ -66,7 +66,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         """Creates a new link between a non-validated user and a group."""
         try:
             group_id = request.data["group"]
-            group = Group.objects.get(pk=group_id)
+            group = Group.objects.get(id=group_id)
             user = User.objects.get(username=request.data["username"])
             institution = None
             institution_id = None

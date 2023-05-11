@@ -193,7 +193,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["association"] != ""
         ):
             try:
-                association = Association.objects.get(pk=request.data["association"])
+                association = Association.objects.get(id=request.data["association"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
@@ -410,7 +410,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -574,7 +574,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -645,7 +645,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project status."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},

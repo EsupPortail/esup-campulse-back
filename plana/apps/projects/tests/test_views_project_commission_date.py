@@ -236,7 +236,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 5
-        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date = CommissionDate.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.post(
@@ -465,7 +465,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 3
-        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date = CommissionDate.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.patch(

@@ -513,7 +513,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must be linked to non expired commission dates.
         """
-        expired_commission_date = CommissionDate.objects.get(pk=3)
+        expired_commission_date = CommissionDate.objects.get(id=3)
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}
@@ -566,7 +566,7 @@ class ProjectsViewsTests(TestCase):
             "/projects/1", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(id=1)
         self.assertEqual(project.summary, "new summary")
 
     def test_get_project_review_by_id_anonymous(self):
@@ -724,7 +724,7 @@ class ProjectsViewsTests(TestCase):
             "/projects/1/review", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(id=1)
         self.assertEqual(project.review, patch_data["review"])
 
     def test_put_project_status(self):
@@ -783,7 +783,7 @@ class ProjectsViewsTests(TestCase):
             "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(id=1)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
         self.assertTrue(len(mail.outbox))
 
@@ -821,7 +821,7 @@ class ProjectsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=project_id)
+        project = Project.objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REJECTED")
 
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
@@ -869,7 +869,7 @@ class ProjectsViewsTests(TestCase):
             "/projects/2/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        project = Project.objects.get(pk=2)
+        project = Project.objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_DRAFT")
 
     def test_patch_project_association_status(self):
@@ -886,6 +886,6 @@ class ProjectsViewsTests(TestCase):
             "/projects/2/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=2)
+        project = Project.objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
         self.assertTrue(len(mail.outbox))

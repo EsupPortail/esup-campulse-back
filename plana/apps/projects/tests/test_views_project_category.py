@@ -193,11 +193,11 @@ class ProjectCategoryLinksViewsTests(TestCase):
             "category": 3,
         }
         old_project_edition_date = Project.objects.get(
-            pk=post_data["project"]
+            id=post_data["project"]
         ).edition_date
         response = self.student_president_client.post("/projects/categories", post_data)
         new_project_edition_date = Project.objects.get(
-            pk=post_data["project"]
+            id=post_data["project"]
         ).edition_date
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
@@ -322,11 +322,11 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         project = 2
         category = 1
-        old_project_edition_date = Project.objects.get(pk=project).edition_date
+        old_project_edition_date = Project.objects.get(id=project).edition_date
         response = self.student_president_client.delete(
             f"/projects/{project}/categories/{category}"
         )
-        new_project_edition_date = Project.objects.get(pk=project).edition_date
+        new_project_edition_date = Project.objects.get(id=project).edition_date
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,

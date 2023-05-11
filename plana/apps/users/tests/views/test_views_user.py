@@ -354,7 +354,7 @@ class UserViewsTests(TestCase):
         response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=self.student_user_id)
+        user = User.objects.get(id=self.student_user_id)
         user_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(user_requested["username"], user.username)
 
@@ -368,7 +368,7 @@ class UserViewsTests(TestCase):
         response_manager = self.manager_client.get(f"/users/{self.student_user_id}")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        user = User.objects.get(pk=self.student_user_id)
+        user = User.objects.get(id=self.student_user_id)
         user_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(user_requested["username"], user.username)
 
@@ -506,7 +506,7 @@ class UserViewsTests(TestCase):
             },
             content_type="application/json",
         )
-        user = User.objects.get(pk=self.unvalidated_user_id)
+        user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
@@ -519,7 +519,7 @@ class UserViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        user = User.objects.get(pk=self.unvalidated_user_id)
+        user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(user.can_submit_projects, True)
 
     def test_anonymous_delete_user(self):
@@ -576,13 +576,13 @@ class UserViewsTests(TestCase):
         response = self.manager_client.delete(f"/users/{self.student_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            User.objects.get(pk=self.student_user_id)
+            User.objects.get(id=self.student_user_id)
         self.assertTrue(len(mail.outbox))
 
         response = self.manager_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            User.objects.get(pk=self.unvalidated_user_id)
+            User.objects.get(id=self.unvalidated_user_id)
 
     def test_manager_delete_user_non_validated(self):
         """
@@ -596,5 +596,5 @@ class UserViewsTests(TestCase):
         response = self.manager_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(ObjectDoesNotExist):
-            User.objects.get(pk=self.unvalidated_user_id)
+            User.objects.get(id=self.unvalidated_user_id)
         self.assertTrue(len(mail.outbox))

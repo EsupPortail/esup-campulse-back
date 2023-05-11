@@ -126,11 +126,11 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Creates a link between a project and a commission date."""
         try:
-            project = Project.objects.get(pk=request.data["project"])
+            project = Project.objects.get(id=request.data["project"])
             commission_date = CommissionDate.objects.get(
-                pk=request.data["commission_date"]
+                id=request.data["commission_date"]
             )
-            commission = Commission.objects.get(pk=commission_date.commission_id)
+            commission = Commission.objects.get(id=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
@@ -387,7 +387,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        commission_date = CommissionDate.objects.get(pk=kwargs["commission_date_id"])
+        commission_date = CommissionDate.objects.get(id=kwargs["commission_date_id"])
         if commission_date.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
@@ -411,7 +411,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
         try:
-            project = Project.objects.get(pk=kwargs["project_id"])
+            project = Project.objects.get(id=kwargs["project_id"])
             pcd = ProjectCommissionDate.objects.get(
                 project_id=kwargs["project_id"],
                 commission_date_id=kwargs["commission_date_id"],
