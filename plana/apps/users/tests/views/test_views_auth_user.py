@@ -9,7 +9,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.users.models import AssociationUser, User
+from plana.apps.users.models.user import AssociationUser, User
 
 
 class AuthUserViewsTests(TestCase):

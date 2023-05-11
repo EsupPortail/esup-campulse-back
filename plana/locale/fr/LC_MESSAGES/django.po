@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 14:32+0200\n"
+"POT-Creation-Date: 2023-05-11 14:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: plana/apps/associations/models/activity_field.py:9
-#: plana/apps/associations/models/association.py:39
+#: plana/apps/associations/models/association.py:40
 #: plana/apps/commissions/models/commission.py:12
 #: plana/apps/documents/models/document.py:60
 #: plana/apps/documents/models/document_upload.py:39
@@ -31,7 +31,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
-#: plana/apps/associations/models/association.py:110
+#: plana/apps/associations/models/association.py:111
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -39,128 +39,128 @@ msgstr "Domaine d'activité"
 msgid "Activity fields"
 msgstr "Domaines d'activités"
 
-#: plana/apps/associations/models/association.py:41
+#: plana/apps/associations/models/association.py:42
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/documents/models/document.py:61
 #: plana/apps/institutions/models/institution.py:11
 msgid "Acronym"
 msgstr "Acronyme"
 
-#: plana/apps/associations/models/association.py:43
+#: plana/apps/associations/models/association.py:44
 msgid "Dynamic thumbnails for the logo"
 msgstr "Miniatures dynamiques pour le logo"
 
-#: plana/apps/associations/models/association.py:51
+#: plana/apps/associations/models/association.py:52
 msgid "Logo description"
 msgstr "Description du logo"
 
-#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:54
 msgid "Social object"
 msgstr "Objet social"
 
-#: plana/apps/associations/models/association.py:54
+#: plana/apps/associations/models/association.py:55
 msgid "Current projects"
 msgstr "Projets en cours"
 
-#: plana/apps/associations/models/association.py:55
+#: plana/apps/associations/models/association.py:56
 msgid "Address"
 msgstr "Adresse"
 
-#: plana/apps/associations/models/association.py:56
+#: plana/apps/associations/models/association.py:57
 #: plana/apps/users/models/user.py:104
 msgid "Phone"
 msgstr "Téléphone"
 
-#: plana/apps/associations/models/association.py:57
+#: plana/apps/associations/models/association.py:58
 #: plana/apps/users/models/user.py:101
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models/association.py:58
+#: plana/apps/associations/models/association.py:59
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models/association.py:59
+#: plana/apps/associations/models/association.py:60
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models/association.py:60
+#: plana/apps/associations/models/association.py:61
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models/association.py:61
+#: plana/apps/associations/models/association.py:62
 msgid "President names"
 msgstr "Noms du président"
 
-#: plana/apps/associations/models/association.py:62
+#: plana/apps/associations/models/association.py:63
 msgid "President phone"
 msgstr "Numéro de téléphone du président"
 
-#: plana/apps/associations/models/association.py:63
+#: plana/apps/associations/models/association.py:64
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:64
+#: plana/apps/associations/models/association.py:65
 msgid "Is public"
 msgstr "Est publique"
 
-#: plana/apps/associations/models/association.py:66
+#: plana/apps/associations/models/association.py:67
 #: plana/apps/commissions/models/commission.py:15
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:69
+#: plana/apps/associations/models/association.py:70
 msgid "Amount of members allowed"
 msgstr "Nombre de membres autorisés"
 
-#: plana/apps/associations/models/association.py:72
+#: plana/apps/associations/models/association.py:73
 #: plana/apps/users/models/user.py:105
 msgid "Can submit projects"
 msgstr "Peut soumettre des projets"
 
-#: plana/apps/associations/models/association.py:74
+#: plana/apps/associations/models/association.py:75
 msgid "Charter status"
 msgstr "Statut de la charte"
 
-#: plana/apps/associations/models/association.py:77
+#: plana/apps/associations/models/association.py:78
 msgid "Charter Draft"
 msgstr "Charte en Brouillon"
 
-#: plana/apps/associations/models/association.py:78
+#: plana/apps/associations/models/association.py:79
 msgid "Charter Rejected"
 msgstr "Charte Rejetée"
 
-#: plana/apps/associations/models/association.py:79
+#: plana/apps/associations/models/association.py:80
 msgid "Charter Processing"
 msgstr "Charte en Traitement"
 
-#: plana/apps/associations/models/association.py:80
+#: plana/apps/associations/models/association.py:81
 msgid "Charter Validated"
 msgstr "Charte Validée"
 
-#: plana/apps/associations/models/association.py:81
+#: plana/apps/associations/models/association.py:82
 msgid "Charter Expired"
 msgstr "Charte Expirée"
 
-#: plana/apps/associations/models/association.py:85
+#: plana/apps/associations/models/association.py:86
 #: plana/apps/projects/models/project.py:137
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:86
+#: plana/apps/associations/models/association.py:87
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:88
+#: plana/apps/associations/models/association.py:89
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:90
+#: plana/apps/associations/models/association.py:91
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:96
+#: plana/apps/associations/models/association.py:97
 #: plana/apps/commissions/models/commission.py:19
 #: plana/apps/documents/models/document.py:80
 #: plana/apps/institutions/models/institution.py:38
@@ -168,19 +168,19 @@ msgstr "Date de dernière AG constitutive"
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:103
+#: plana/apps/associations/models/association.py:104
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:119
+#: plana/apps/associations/models/association.py:120
 #: plana/apps/documents/models/document_upload.py:53
 #: plana/apps/projects/models/project.py:106 plana/apps/users/models/user.py:22
 #: plana/apps/users/models/user.py:38
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:120
+#: plana/apps/associations/models/association.py:121
 #: plana/apps/users/models/user.py:39 plana/apps/users/models/user.py:113
 msgid "Associations"
 msgstr "Associations"
@@ -506,11 +506,11 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project.py:521
 #: plana/apps/projects/views/project.py:580
 #: plana/apps/projects/views/project.py:667
-#: plana/apps/projects/views/project_category.py:110
-#: plana/apps/projects/views/project_category.py:165
-#: plana/apps/projects/views/project_category.py:225
+#: plana/apps/projects/views/project_category.py:109
+#: plana/apps/projects/views/project_category.py:164
+#: plana/apps/projects/views/project_category.py:224
 #: plana/apps/projects/views/project_commission_date.py:245
-#: plana/apps/projects/views/project_export.py:52
+#: plana/apps/projects/views/project_export.py:54
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -832,7 +832,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
 #: plana/apps/projects/views/project.py:386
 #: plana/apps/projects/views/project.py:550
-#: plana/apps/projects/views/project_export.py:81
+#: plana/apps/projects/views/project_export.py:83
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
@@ -884,12 +884,12 @@ msgstr "Mauvais statut de projet."
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
-#: plana/apps/projects/views/project_category.py:116
-#: plana/apps/projects/views/project_category.py:231
+#: plana/apps/projects/views/project_category.py:115
+#: plana/apps/projects/views/project_category.py:230
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
-#: plana/apps/projects/views/project_category.py:190
+#: plana/apps/projects/views/project_category.py:189
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
@@ -1316,7 +1316,7 @@ msgstr "Utilisateur crée. Mot de passe : {password}"
 msgid "Expired accounts policy"
 msgstr "Politique d'expiration des comptes"
 
-#: plana/management/commands/cron_commission_expiration.py:12
+#: plana/management/commands/cron_commission_expiration.py:13
 msgid ""
 "Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT "
 "status and CommissionDates with expired submission_date."

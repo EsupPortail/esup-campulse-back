@@ -10,9 +10,8 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate

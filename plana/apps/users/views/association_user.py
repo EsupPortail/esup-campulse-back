@@ -12,7 +12,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,

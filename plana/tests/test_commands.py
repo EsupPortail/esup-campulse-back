@@ -6,8 +6,9 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from plana.apps.commissions.models import CommissionDate
-from plana.apps.projects.models import Project, ProjectCommissionDate
+from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
 User = get_user_model()
 

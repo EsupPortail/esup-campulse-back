@@ -5,10 +5,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from plana.apps.associations.models import Association
-from plana.apps.institutions.models import Institution
-from plana.apps.projects.models import Project
-from plana.apps.users.models import User
+from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects.models.project import Project
+from plana.apps.users.models.user import User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 

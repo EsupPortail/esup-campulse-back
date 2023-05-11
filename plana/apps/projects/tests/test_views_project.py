@@ -11,7 +11,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser

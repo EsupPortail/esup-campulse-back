@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project_commission_date import (
