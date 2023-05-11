@@ -13,19 +13,40 @@ class Project(models.Model):
         """List of statuses a project can have (for itself or reviews)."""
 
         PROJECT_DRAFT = "PROJECT_DRAFT", _("Project Draft")
-        PROJECT_REJECTED = "PROJECT_REJECTED", _("Project Rejected")
         PROJECT_PROCESSING = "PROJECT_PROCESSING", _("Project Processing")
+        PROJECT_REJECTED = "PROJECT_REJECTED", _("Project Rejected")
         PROJECT_VALIDATED = "PROJECT_VALIDATED", _("Project Validated")
         PROJECT_REVIEW_DRAFT = "PROJECT_REVIEW_DRAFT", _("Project Review Draft")
-        PROJECT_REVIEW_REJECTED = "PROJECT_REVIEW_REJECTED", _(
-            "Project Review Rejected"
-        )
         PROJECT_REVIEW_PROCESSING = "PROJECT_REVIEW_PROCESSING", _(
             "Project Review Processing"
+        )
+        PROJECT_REVIEW_REJECTED = "PROJECT_REVIEW_REJECTED", _(
+            "Project Review Rejected"
         )
         PROJECT_REVIEW_VALIDATED = "PROJECT_REVIEW_VALIDATED", _(
             "Project Review Validated"
         )
+
+        @staticmethod
+        def get_project_statuses_order():
+            """Status can only be changed to the next associated number."""
+
+            return {
+                "PROJECT_DRAFT": 1,
+                "PROJECT_PROCESSING": 2,
+                "PROJECT_REJECTED": 3,
+                "PROJECT_VALIDATED": 3,
+                "PROJECT_REVIEW_DRAFT": 4,
+                "PROJECT_REVIEW_PROCESSING": 5,
+                "PROJECT_REVIEW_REJECTED": 6,
+                "PROJECT_REVIEW_VALIDATED": 6,
+            }
+
+        @staticmethod
+        def get_rollbackable_project_statuses():
+            """Statuses for projects that can be changed to the previous associated number."""
+
+            return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
         def get_archived_project_statuses():

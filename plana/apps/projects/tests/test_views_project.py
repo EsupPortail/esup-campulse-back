@@ -791,22 +791,69 @@ class ProjectsViewsTests(TestCase):
         """
         PATCH /projects/{id}/status .
 
-        - An manager user cannot execute this request if status is not allowed.
-        - An manager user can execute this request if status is allowed.
+        - A manager user cannot execute this request if status is not allowed.
+        - Statuses must follow order defined in ProjectStatus sub-model.
+        - A manager user can execute this request if status is allowed.
+        - Archived statuses cannot be updated anymore.
+        - Cannot rollback to a previous status, except if allowed in order.
         """
-        patch_data = {"project_status": "PROJECT_PROCESSING"}
+        project_id = 3
+        patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.general_client.patch(
-            "/projects/1/status", patch_data, content_type="application/json"
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+        patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
-            "/projects/1/status", patch_data, content_type="application/json"
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(pk=project_id)
         self.assertEqual(project.project_status, "PROJECT_REJECTED")
+
+        patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_REVIEW_DRAFT"
+        project.save()
+        patch_data = {"project_status": "PROJECT_VALIDATED"}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_REVIEW_PROCESSING"
+        project.save()
+        patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_project_association_status_missing_documents(self):
         """
