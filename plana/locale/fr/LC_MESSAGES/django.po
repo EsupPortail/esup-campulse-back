@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 10:03+0200\n"
+"POT-Creation-Date: 2023-05-11 10:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -505,7 +505,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project.py:416
 #: plana/apps/projects/views/project.py:521
 #: plana/apps/projects/views/project.py:580
-#: plana/apps/projects/views/project.py:651
+#: plana/apps/projects/views/project.py:667
 #: plana/apps/projects/views/project_category.py:110
 #: plana/apps/projects/views/project_category.py:165
 #: plana/apps/projects/views/project_category.py:225
@@ -857,23 +857,29 @@ msgstr "Ce projet est lié à des commissions passées."
 msgid "Can't set start date after end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
-#: plana/apps/projects/views/project.py:667
+#: plana/apps/projects/views/project.py:621
+msgid "Cannot edit review if commission dates are still pending."
+msgstr ""
+"Impossible de rédiger un bilan si des dates de commission liées ne sont pas "
+"passées."
+
+#: plana/apps/projects/views/project.py:683
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/projects/views/project.py:674
+#: plana/apps/projects/views/project.py:690
 msgid "Cannot change this project status anymore."
 msgstr "Il n'est plus possible de changer le statut de ce projet."
 
-#: plana/apps/projects/views/project.py:683
+#: plana/apps/projects/views/project.py:699
 msgid "Cannot rollback to a previous status."
 msgstr "Un projet ne peut revenir à un état précédent."
 
-#: plana/apps/projects/views/project.py:692
+#: plana/apps/projects/views/project.py:708
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
-#: plana/apps/projects/views/project.py:715
+#: plana/apps/projects/views/project.py:731
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"

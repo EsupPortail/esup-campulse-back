@@ -1,4 +1,5 @@
 """List of tests done on projects views."""
+import datetime
 import json
 
 from django.core import mail
@@ -710,6 +711,20 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_patch_project_review_not_ended(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - A review can't be submitted if commission dates are still pending.
+        """
+        patch_data = {
+            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
+        }
+        response = self.student_misc_client.patch(
+            "/projects/1/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_review_user_success(self):
         """
         PATCH /projects/{id}/review .
@@ -717,6 +732,11 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
+        commission_date = CommissionDate.objects.get(id=3)
+        commission_date.commission_date = datetime.datetime.strptime(
+            "1993-12-25", "%Y-%m-%d"
+        ).date()
+        commission_date.save()
         patch_data = {
             "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
         }

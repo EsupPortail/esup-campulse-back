@@ -608,6 +608,22 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        pending_commission_dates_count = ProjectCommissionDate.objects.filter(
+            project_id=kwargs["pk"],
+            commission_date_id__in=CommissionDate.objects.filter(
+                commission_date__gt=datetime.datetime.now()
+            ).values_list("id"),
+        ).count()
+        if pending_commission_dates_count > 0:
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot edit review if commission dates are still pending."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)
 
