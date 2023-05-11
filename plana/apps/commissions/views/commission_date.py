@@ -128,6 +128,22 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
         """Creates a new commission date (manager only)."""
         if (
             "submission_date" in request.data
+            and datetime.datetime.strptime(
+                request.data["submission_date"], "%Y-%m-%d"
+            ).date()
+            < datetime.date.today()
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot create commission date taking place before today."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            "submission_date" in request.data
             and "commission_date" in request.data
             and datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d")
             > datetime.datetime.strptime(request.data["commission_date"], "%Y-%m-%d")
@@ -208,6 +224,22 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
         if (
             "submission_date" in request.data
+            and datetime.datetime.strptime(
+                request.data["submission_date"], "%Y-%m-%d"
+            ).date()
+            < datetime.date.today()
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot create commission date taking place before today."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if (
+            "submission_date" in request.data
             and "commission_date" in request.data
             and datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d")
             > datetime.datetime.strptime(request.data["commission_date"], "%Y-%m-%d")
@@ -230,11 +262,21 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     def delete(self, request, *args, **kwargs):
         """Destroys an entire commission date (manager only)."""
         try:
-            self.queryset.get(id=kwargs["pk"])
+            commission_date = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Commission Date does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if commission_date.commission_date < datetime.date.today():
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot delete commission date taking place before today."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         return self.destroy(request, *args, **kwargs)

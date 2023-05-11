@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 09:31+0200\n"
+"POT-Creation-Date: 2023-05-11 10:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,16 +288,25 @@ msgstr "Date de Commission"
 msgid "Commissions Dates"
 msgstr "Dates de Commissions"
 
-#: plana/apps/commissions/views/commission_date.py:136
-#: plana/apps/commissions/views/commission_date.py:216
+#: plana/apps/commissions/views/commission_date.py:139
+#: plana/apps/commissions/views/commission_date.py:235
+msgid "Cannot create commission date taking place before today."
+msgstr "Impossible de créer une date de commission passée."
+
+#: plana/apps/commissions/views/commission_date.py:152
+#: plana/apps/commissions/views/commission_date.py:248
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission_date.py:175
-#: plana/apps/commissions/views/commission_date.py:205
-#: plana/apps/commissions/views/commission_date.py:236
+#: plana/apps/commissions/views/commission_date.py:191
+#: plana/apps/commissions/views/commission_date.py:221
+#: plana/apps/commissions/views/commission_date.py:268
 msgid "Commission Date does not exist."
 msgstr "La date de commission n'existe pas."
+
+#: plana/apps/commissions/views/commission_date.py:276
+msgid "Cannot delete commission date taking place before today."
+msgstr "Impossible de supprimer une date de commission passée"
 
 #: plana/apps/consents/models/consent.py:9
 msgid "GDPR Consent title"
