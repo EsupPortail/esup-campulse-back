@@ -451,7 +451,7 @@
       "code": "REACTIVATE_PROJECT_SUBMISSION",
       "label": "Reactivate Association Project Submission",
       "description": "Message reçu par une association ou un porteur individuel si sa capacité à déposer une demande de subventionnement vient à être réactivée.",
-      "subject": "{{ site_name }} – Vous ne pouvez plus déposer de demande de subventionnement",
+      "subject": "{{ site_name }} – Vous pouvez à nouveau déposer une demande de subventionnement",
       "body": "Bonjour,<br/><br/>Votre situation vient d'être régularisée, vous pouvez à nouveau déposer des demandes de subvention CAPE sur votre espace.<br/>Merci de votre compréhension.<br/><br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
