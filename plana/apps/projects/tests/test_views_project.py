@@ -495,18 +495,6 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_manager_error(self):
-        """
-        PATCH /projects/{id} .
-
-        - The route cannot be accessed by a manager user.
-        """
-        patch_data = {"description": "new desc"}
-        response = self.general_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_patch_project_expired_commission(self):
         """
         PATCH /projects/{id} .
@@ -555,6 +543,29 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_patch_project_manager_success(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a manager user, but for some fields only.
+        """
+        project_id = 1
+        patch_data = {
+            "description": "new desc",
+            "planned_end_date": "2099-12-25T14:00:00.000000Z",
+        }
+        response = self.general_client.patch(
+            f"/projects/{project_id}", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        project = Project.objects.get(id=project_id)
+        self.assertNotEqual(project.description, patch_data["description"])
+        self.assertEqual(
+            project.planned_end_date.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+            patch_data["planned_end_date"],
+        )
+
     def test_patch_project_user_success(self):
         """
         PATCH /projects/{id} .
@@ -562,12 +573,13 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
+        project_id = 1
         patch_data = {"summary": "new summary"}
         response = self.student_misc_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
+            f"/projects/{project_id}", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(id=1)
+        project = Project.objects.get(id=project_id)
         self.assertEqual(project.summary, "new summary")
 
     def test_get_project_review_by_id_anonymous(self):
@@ -872,7 +884,6 @@ class ProjectsViewsTests(TestCase):
             patch_data,
             content_type="application/json",
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_project_association_status_missing_documents(self):

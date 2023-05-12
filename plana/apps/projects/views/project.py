@@ -25,6 +25,7 @@ from plana.apps.projects.serializers.project import (
     ProjectReviewUpdateSerializer,
     ProjectSerializer,
     ProjectStatusSerializer,
+    ProjectUpdateManagerSerializer,
     ProjectUpdateSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
@@ -325,7 +326,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
-            self.serializer_class = ProjectUpdateSerializer
+            if self.request.user.has_perm("projects.change_project_as_bearer"):
+                self.serializer_class = ProjectUpdateSerializer
+            elif self.request.user.has_perm("projects.change_project_as_validator"):
+                self.serializer_class = ProjectUpdateManagerSerializer
         else:
             self.serializer_class = ProjectSerializer
         return super().get_serializer_class()
@@ -415,12 +419,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if not request.user.has_perm("projects.change_project_as_bearer"):
-            return response.Response(
-                {"error": _("Not allowed to update bearer fields for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
             )
 
         if not request.user.can_edit_project(project):

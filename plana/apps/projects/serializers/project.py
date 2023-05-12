@@ -117,6 +117,17 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
         ]
 
 
+class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
+    """Update serializer for manager."""
+
+    class Meta:
+        model = Project
+        fields = [
+            "planned_start_date",
+            "planned_end_date",
+        ]
+
+
 class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
     """Main review serializer for update."""
 
