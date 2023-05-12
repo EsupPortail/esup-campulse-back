@@ -55,6 +55,9 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "planned_start_date",
+            "planned_end_date",
+            "planned_location",
             "other_first_name",
             "other_last_name",
             "other_email",
