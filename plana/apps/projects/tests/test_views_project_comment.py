@@ -1,6 +1,8 @@
 """List of tests done on projects comments links views"""
+import datetime
 import json
 
+from django.utils import timezone
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -13,6 +15,8 @@ from plana.apps.users.models import GroupInstitutionCommissionUser
 
 
 class ProjectCommentLinksViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",
@@ -138,7 +142,17 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), projects_categories_cnt)
 
-    def test_post_project_comment_not_found(self):
+    def test_post_project_comments_anonymous(self):
+        """
+        POST /projects/comments
+
+        - An anonymous user cannot execute this command
+        """
+
+        response = self.client.post("/projects/comments", {"name": "Testing anonymous"})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_post_project_comments_not_found(self):
         """
         POST /projects/comments .
 
@@ -152,7 +166,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.general_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_post_project_comment_forbidden_user(self):
+    def test_post_project_comments_forbidden_user(self):
         """
         POST /projects/comments
 
@@ -161,6 +175,33 @@ class ProjectCommentLinksViewsTests(TestCase):
         post_data = {"project": 1, "text": "Le chiffre 6 c'est comme saucisse"}
         response = self.student_offsite_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_comments_manager_success(self):
+        """
+        POST /projects/comments
+
+        - The route can be accessed by a manager
+        - The ProjectComment link is created in db
+        - Project creation date is created
+        """
+        post_data = {
+            "project": 2,
+            "text": "Commentaire"
+        }
+        response = self.general_client.post("/projects/comments", post_data)
+        new_creation_date = Project.objects.get(
+            id=post_data["project"]
+        ).creation_date
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            1,
+            len(
+                ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])
+            ),
+        )
+        self.assertEqual(new_creation_date, datetime.datetime.today().strftime("%Y-%m-%d"))
+        print(response.data)
+
 
     def test_get_project_comments_by_id_anonymous(self):
         """
@@ -249,7 +290,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/comments/{comment_id} .
 
-        - The route cannot be accessed by a manager user.
+        - The route cannot be accessed by a student user.
         - Comment is correctly deleted.
         """
         project = 2
@@ -258,7 +299,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,
-            len(ProjectComment.objects.filter(project=project, text=comment)),
+            len(ProjectComment.objects.filter(project=project, id=comment)),
         )
         response = self.general_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

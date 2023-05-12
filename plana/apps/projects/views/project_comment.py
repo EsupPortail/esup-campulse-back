@@ -90,14 +90,15 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                     )
                 )
                 | models.Q(
-                    association_id__in=Association.objects.filter(
-                        institution_id__in=user_institutions_ids
-                    ).values_list("id")
+                    project_id__in=(
+                        Project.objects.filter(
+                            association_id__in=Association.objects.filter(
+                                institution_id__in=user_institutions_ids
+                            ).values_list("id")
+                        ).values_list("id")
+                    )
                 )
             )
-
-        if user is not None and user != "":
-            self.queryset = self.queryset.filter(user_id=user)
 
         if project_id:
             self.queryset = self.queryset.filter(project_id=project_id)
@@ -116,7 +117,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Create a link between a comment and a project"""
         try:
-            project = Project.objects.get(pk=request.data["project"])
+            project = Project.objects.get(id=request.data["project"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -148,9 +149,42 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
         """Retrieves all comments linked to a project"""
         try:
             project = Project.objects.get(id=kwargs["project_id"])
+            commissions_ids = CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project_id=project.id
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
+            institution_id = 0
+            if project.association_id is not None:
+                institution_id = Institution.objects.get(
+                    id=Association.objects.get(id=project.association_id).institution_id
+                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist")}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        if (
+            not request.user.has_perm("projects.view_projectcomment_any_commission")
+            and not request.user.has_perm("projects.view_projectcomment_any_institution")
+            and not request.user.can_edit_project(project)
+            and (
+                len(
+                    list(
+                        set(commissions_ids)
+                        & set(request.user.get_user_managed_commissions())
+                    )
+                )
+                == 0
+            )
+            and (
+                institution_id not in request.user.get_user_managed_institutions()
+                and institution_id not in request.user.get_user_institutions()
+            )
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this project comments.")},
+                status=status.HTTP_403_FORBIDDEN
             )
 
         serializer = self.serializer_class(
