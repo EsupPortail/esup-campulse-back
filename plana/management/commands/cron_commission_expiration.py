@@ -3,13 +3,14 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from plana.apps.commissions.models import CommissionDate
-from plana.apps.projects.models import Project, ProjectCommissionDate
+from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
 
 class Command(BaseCommand):
     help = _(
-        'Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT status and CommissionDates with expired submission_date.'
+        "Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT status and CommissionDates with expired submission_date."
     )
 
     def handle(self, *args, **options):

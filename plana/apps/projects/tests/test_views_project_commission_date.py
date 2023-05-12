@@ -7,7 +7,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import GroupInstitutionCommissionUser
@@ -27,9 +27,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         "commissions_commissiondate.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_category.json",
         "projects_project.json",
-        "projects_projectcategory.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
         "users_groupinstitutioncommissionuser.json",
@@ -236,7 +234,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 5
-        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date = CommissionDate.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.post(
@@ -465,7 +463,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 3
-        commission_date = CommissionDate.objects.get(pk=commission_date_id)
+        commission_date = CommissionDate.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.patch(

@@ -101,5 +101,5 @@ class ContentsViewsTests(TestCase):
         self.assertTrue(response.data.get("label"))
         self.assertTrue(response.data.get("body"))
 
-        content = Content.objects.get(pk=cid)
+        content = Content.objects.get(id=cid)
         self.assertEqual(content.code, response.data["code"])

@@ -10,7 +10,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.commissions.views.commission_date import ProjectCommissionDate
-from plana.apps.institutions.models import Institution
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
@@ -221,6 +221,20 @@ class CommissionsViewsTests(TestCase):
         response = self.general_client.post("/commissions/commission_dates", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_commission_dates_too_old(self):
+        """
+        POST /commissions/commission_dates .
+
+        - A commission date taking place before today cannot be created.
+        """
+        post_data = {
+            "submission_date": "1993-11-30",
+            "commission_date": "1993-12-25",
+            "commission": 1,
+        }
+        response = self.general_client.post("/commissions/commission_dates", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_commission_dates_success(self):
         """
         POST /commissions/commission_dates .
@@ -320,6 +334,20 @@ class CommissionsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_patch_commission_date_too_old(self):
+        """
+        PATCH /commissions/commission_dates/{id} .
+
+        - A commission date cannot be updated to a date taking place before today.
+        """
+        patch_data = {"submission_date": "1993-11-30", "commission_date": "2099-12-25"}
+        response = self.general_client.patch(
+            "/commissions/commission_dates/1",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_commission_date_success(self):
         """
         PATCH /commissions/commission_dates/{id} .
@@ -367,6 +395,21 @@ class CommissionsViewsTests(TestCase):
         """
         response = self.student_client.delete("/commissions/commission_dates/1")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_commission_date_too_old(self):
+        """
+        DELETE /commissions/commission_dates/{id} .
+
+        - A commission date taking place before today cannot be deleted.
+        """
+        commission_date_id = 1
+        commission_date = CommissionDate.objects.get(id=commission_date_id)
+        commission_date.commission_date = "1993-12-25"
+        commission_date.save()
+        response = self.general_client.delete(
+            f"/commissions/commission_dates/{commission_date_id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_commission_date_success(self):
         """

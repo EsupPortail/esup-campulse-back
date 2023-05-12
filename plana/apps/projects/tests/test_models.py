@@ -69,7 +69,7 @@ class ProjectsModelsTests(TestCase):
         Testing can_update_project Project helper
         - The project owner must be the authenticated user.
         """
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(id=1)
         user = User.objects.get(username="etudiant-porteur@mail.tld")
         self.assertTrue(user.can_edit_project(project))
 
@@ -78,7 +78,7 @@ class ProjectsModelsTests(TestCase):
         Testing can_update_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
-        project = Project.objects.get(pk=1)
+        project = Project.objects.get(id=1)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
         self.assertFalse(user.can_edit_project(project))
 
@@ -87,7 +87,7 @@ class ProjectsModelsTests(TestCase):
         Testing can_update_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
-        project = Project.objects.get(pk=2)
+        project = Project.objects.get(id=2)
         user = User.objects.get(username="president-asso-site@mail.tld")
         self.assertTrue(user.can_edit_project(project))
 
@@ -96,7 +96,7 @@ class ProjectsModelsTests(TestCase):
         Testing can_update_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
-        project = Project.objects.get(pk=2)
+        project = Project.objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
         self.assertFalse(user.can_edit_project(project))
 
@@ -105,6 +105,6 @@ class ProjectsModelsTests(TestCase):
         Testing can_update_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
-        project = Project.objects.get(pk=2)
+        project = Project.objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-site@mail.tld")
         self.assertFalse(user.can_edit_project(project))

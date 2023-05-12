@@ -3,7 +3,7 @@ source = plana/
 omit = plana/settings/*
        plana/wsgi.py
        plana/libs/api/*
-	*/migrations/*
-	*apps.py
-	*/tests/*
+       */migrations/*
+       *apps.py
+       */tests/*
        */commands/*

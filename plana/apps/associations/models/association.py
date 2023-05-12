@@ -7,7 +7,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from thumbnails.fields import ImageField
 
-from plana.apps.institutions.models import Institution, InstitutionComponent
+from plana.apps.institutions.models.institution import Institution
+from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
 # TODO : Remove S3 dependency in test environment.

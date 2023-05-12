@@ -36,7 +36,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by("edition_date")
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -194,7 +194,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["association"] != ""
         ):
             try:
-                association = Association.objects.get(pk=request.data["association"])
+                association = Association.objects.get(id=request.data["association"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
@@ -411,7 +411,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -575,7 +575,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -606,6 +606,22 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        pending_commission_dates_count = ProjectCommissionDate.objects.filter(
+            project_id=kwargs["pk"],
+            commission_date_id__in=CommissionDate.objects.filter(
+                commission_date__gt=datetime.datetime.now()
+            ).values_list("id"),
+        ).count()
+        if pending_commission_dates_count > 0:
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot edit review if commission dates are still pending."
+                    )
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -646,12 +662,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project status."""
         try:
-            project = self.queryset.get(pk=kwargs["pk"])
+            project = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        old_project_status = project.project_status
+        new_project_status = request.data["project_status"]
 
         authorized_statuses = []
         if request.user.has_perm("projects.change_project_as_bearer"):
@@ -660,13 +679,38 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             authorized_statuses += (
                 Project.ProjectStatus.get_validator_project_statuses()
             )
-        if request.data["project_status"] not in authorized_statuses:
+        if new_project_status not in authorized_statuses:
             return response.Response(
                 {"error": _("Choosing this status is not allowed.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if request.data["project_status"] == "PROJECT_PROCESSING":
+        statuses_order = Project.ProjectStatus.get_project_statuses_order()
+        if old_project_status in Project.ProjectStatus.get_archived_project_statuses():
+            return response.Response(
+                {"error": _("Cannot change this project status anymore.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        elif (
+            statuses_order[new_project_status] == statuses_order[old_project_status] - 1
+            and old_project_status
+            not in Project.ProjectStatus.get_rollbackable_project_statuses()
+        ):
+            return response.Response(
+                {"error": _("Cannot rollback to a previous status.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        elif (
+            statuses_order[new_project_status] != statuses_order[old_project_status] + 1
+            and statuses_order[new_project_status]
+            != statuses_order[old_project_status] - 1
+        ):
+            return response.Response(
+                {"error": _("Wrong status process.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if new_project_status == "PROJECT_PROCESSING":
             missing_documents_names = (
                 Document.objects.filter(
                     process_type="DOCUMENT_PROJECT", is_required_in_process=True

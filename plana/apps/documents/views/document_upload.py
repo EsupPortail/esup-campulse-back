@@ -110,7 +110,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             )
 
         try:
-            document = Document.objects.get(pk=request.data["document"])
+            document = Document.objects.get(id=request.data["document"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document does not exist.")},
@@ -120,7 +120,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         if "project" in request.data:
             try:
-                project = Project.objects.get(pk=request.data["project"])
+                project = Project.objects.get(id=request.data["project"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Project does not exist.")},
@@ -139,7 +139,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["association"] != ""
         ):
             try:
-                association = Association.objects.get(pk=request.data["association"])
+                association = Association.objects.get(id=request.data["association"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},

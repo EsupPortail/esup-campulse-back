@@ -3997,12 +3997,12 @@ components:
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT
-      - PROJECT_REJECTED
       - PROJECT_PROCESSING
+      - PROJECT_REJECTED
       - PROJECT_VALIDATED
       - PROJECT_REVIEW_DRAFT
-      - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_PROCESSING
+      - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_VALIDATED
       type: string
     ProjectUpdateRequest:

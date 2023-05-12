@@ -458,5 +458,37 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 27,
+    "fields": {
+      "code": "PROJECT_NEEDS_REVIEW_STUDENT",
+      "label": "Project Needs Review Student",
+      "description": "Message reçu par une association ou un porteur individuel si un bilan doit être déposé pour un projet.",
+      "subject": "{{ site_name }} – Vous devez déposer le bilan de votre projet subventionné par la CAPE",
+      "body": "Bonjour,<br/><br/>Il semblerait que vous n'ayez pas encore déposé de bilan CAPE pour l'événement : {{ project_name }}.<br/><br/>Il vous reste 1 mois pour le faire, passée cette date, vous ne pourrez plus faire de demande de subventionnement CAPE tant que le bilan n'est pas déposé.<br/><br/>Merci de votre compréhension.<br/><br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        15
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 28,
+    "fields": {
+      "code": "PROJECT_NEEDS_REVIEW_MANAGER",
+      "label": "Project Needs Review Manager",
+      "description": "Message reçu par un gestionnaire si un bilan doit être déposé pour un projet.",
+      "subject": "{{ site_name }} – Un projet subventionné n'a pas encore rendu son bilan",
+      "body": "Bonjour,<br/><br/>Le bilan CAPE de l'événement \"{{ project_name }}\" n'a pas encore été déposé.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        15
+      ]
+    }
   }
 ]
