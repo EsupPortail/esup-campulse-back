@@ -959,6 +959,33 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{id}/review/export:
+    get:
+      operationId: projects_review_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -3610,12 +3637,25 @@ components:
           minLength: 1
         other_first_name:
           type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
         other_last_name:
           type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
         other_email:
           type: string
+          format: email
+          nullable: true
+          minLength: 1
+          maxLength: 150
         other_phone:
           type: string
+          nullable: true
+          minLength: 1
+          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3675,6 +3715,14 @@ components:
       type: object
       description: Main review serializer for update.
       properties:
+        other_first_name:
+          type: string
+        other_last_name:
+          type: string
+        other_email:
+          type: string
+        other_phone:
+          type: string
         outcome:
           type: integer
           maximum: 2147483647
@@ -3796,12 +3844,21 @@ components:
           type: string
         other_first_name:
           type: string
+          nullable: true
+          maxLength: 150
         other_last_name:
           type: string
+          nullable: true
+          maxLength: 150
         other_email:
           type: string
+          format: email
+          nullable: true
+          maxLength: 150
         other_phone:
           type: string
+          nullable: true
+          maxLength: 32
         user:
           type: integer
           nullable: true

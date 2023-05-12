@@ -85,6 +85,8 @@ def generate_pdf(dict_data, type_doc, base_url):
     template_path = ""
     if type_doc == "project_summary":
         template_path = "./pdf_exports/project_summary.html"
+    elif type_doc == "project_review_summary":
+        template_path = "./pdf_exports/project_review_summary.html"
 
     html = render_to_string(template_path, dict_data)
     response = HttpResponse(content_type="application/pdf")

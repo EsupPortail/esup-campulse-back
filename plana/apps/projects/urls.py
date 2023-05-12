@@ -18,7 +18,7 @@ from .views.project_commission_date import (
     ProjectCommissionDateRetrieve,
     ProjectCommissionDateUpdateDestroy,
 )
-from .views.project_export import ProjectDataExport
+from .views.project_export import ProjectDataExport, ProjectReviewDataExport
 
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
@@ -72,5 +72,10 @@ urlpatterns = [
         "<int:id>/export",
         ProjectDataExport.as_view(),
         name="project_data_export",
+    ),
+    path(
+        "<int:id>/review/export",
+        ProjectReviewDataExport.as_view(),
+        name="project_review_data_export",
     ),
 ]
