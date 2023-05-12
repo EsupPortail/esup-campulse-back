@@ -1001,13 +1001,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
       security:
       - jwtAuth: []
       responses:
@@ -3588,68 +3588,9 @@ components:
           minimum: 0
         is_validated_by_admin:
           type: boolean
-    PatchedProjectReviewUpdateRequest:
+    PatchedProjectRequest:
       type: object
-      description: Main review serializer for update.
-      properties:
-        outcome:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        income:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-        real_start_date:
-          type: string
-          format: date-time
-          nullable: true
-        real_end_date:
-          type: string
-          format: date-time
-          nullable: true
-        real_location:
-          type: string
-          minLength: 1
-        organizer_name:
-          type: string
-          minLength: 1
-          maxLength: 256
-        organizer_phone:
-          type: string
-          minLength: 1
-          maxLength: 32
-        organizer_email:
-          type: string
-          minLength: 1
-          maxLength: 256
-        review:
-          type: string
-          minLength: 1
-          title: Review (amount of students, partnerships, ...)
-        impact_students:
-          type: string
-          minLength: 1
-          title: Impact on students
-        description:
-          type: string
-          minLength: 1
-          title: Description (activities done, changes from planning, ...)
-        difficulties:
-          type: string
-          minLength: 1
-        improvements:
-          type: string
-          minLength: 1
-    PatchedProjectStatusRequest:
-      type: object
-      description: Serializer for status field.
-      properties:
-        project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
-    PatchedProjectUpdateRequest:
-      type: object
-      description: Main serializer without project_status.
+      description: Main serializer.
       properties:
         name:
           type: string
@@ -3728,6 +3669,67 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
+    PatchedProjectReviewUpdateRequest:
+      type: object
+      description: Main review serializer for update.
+      properties:
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_location:
+          type: string
+          minLength: 1
+        organizer_name:
+          type: string
+          minLength: 1
+          maxLength: 256
+        organizer_phone:
+          type: string
+          minLength: 1
+          maxLength: 32
+        organizer_email:
+          type: string
+          minLength: 1
+          maxLength: 256
+        review:
+          type: string
+          minLength: 1
+          title: Review (amount of students, partnerships, ...)
+        impact_students:
+          type: string
+          minLength: 1
+          title: Impact on students
+        description:
+          type: string
+          minLength: 1
+          title: Description (activities done, changes from planning, ...)
+        difficulties:
+          type: string
+          minLength: 1
+        improvements:
+          type: string
+          minLength: 1
+    PatchedProjectStatusRequest:
+      type: object
+      description: Serializer for status field.
+      properties:
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedUserRequest:
       type: object
       description: Main serializer.

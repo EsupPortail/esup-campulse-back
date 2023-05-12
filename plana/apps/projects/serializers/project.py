@@ -90,7 +90,6 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = [
-            "id",
             "name",
             "planned_start_date",
             "planned_end_date",

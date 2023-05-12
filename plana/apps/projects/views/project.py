@@ -330,6 +330,9 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 self.serializer_class = ProjectUpdateSerializer
             elif self.request.user.has_perm("projects.change_project_as_validator"):
                 self.serializer_class = ProjectUpdateManagerSerializer
+            # TODO OpenAPI problem if no serializer given.
+            else:
+                self.serializer_class = ProjectSerializer
         else:
             self.serializer_class = ProjectSerializer
         return super().get_serializer_class()
