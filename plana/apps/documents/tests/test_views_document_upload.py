@@ -79,26 +79,38 @@ class DocumentsViewsTests(TestCase):
             url_login, data_student_president
         )
 
-        project_id = 1
-        DocumentUpload.objects.filter(project_id=project_id).delete()
-        document_id = 18
+        documents = Document.objects.filter(id__in=[18, 21])
+        documents.update(
+            mime_types=[
+                "application/vnd.novadigm.ext",
+                "application/octet-stream",
+            ]
+        )
+        for document in documents:
+            document.save()
+        DocumentUpload.objects.filter(project_id__in=[1, 5]).delete()
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
-        post_data = {
+        post_data_1 = {
             "path_file": file,
-            "project": project_id,
-            "document": document_id,
+            "project": 1,
+            "document": 18,
             "user": cls.student_misc_user_id,
         }
-        document = Document.objects.get(id=document_id)
-        document.mime_types = [
-            "application/vnd.novadigm.ext",
-            "application/octet-stream",
-        ]
-        document.save()
-        cls.new_document = cls.student_misc_client.post("/documents/uploads", post_data)
+        post_data_2 = {
+            "path_file": file,
+            "project": 5,
+            "document": 21,
+            "user": cls.student_misc_user_id,
+        }
+        cls.new_document = cls.student_misc_client.post(
+            "/documents/uploads", post_data_1
+        )
+        cls.new_document = cls.student_misc_client.post(
+            "/documents/uploads", post_data_2
+        )
 
     def test_get_document_upload_list_anonymous(self):
         """

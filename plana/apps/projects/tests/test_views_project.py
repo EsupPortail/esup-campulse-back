@@ -903,7 +903,7 @@ class ProjectsViewsTests(TestCase):
         project = Project.objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_DRAFT")
 
-    def test_patch_project_association_status(self):
+    def test_patch_project_processing_association_status(self):
         """
         PATCH /projects/{id}/status .
 
@@ -919,4 +919,31 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_review_processing_association_status(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - The route can be accessed by a student president.
+        - The project is correctly updated in db.
+        """
+        project_id = 6
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_REVIEW_DRAFT"
+        project.save()
+
+        self.assertFalse(len(mail.outbox))
+        ProjectCommissionDate.objects.create(
+            project_id=project_id, commission_date_id=3
+        )
+        patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
+        response = self.student_president_client.patch(
+            f"/projects/{project_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(id=project_id)
+        self.assertEqual(project.project_status, "PROJECT_REVIEW_PROCESSING")
         self.assertTrue(len(mail.outbox))

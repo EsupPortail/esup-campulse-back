@@ -490,5 +490,38 @@
         15
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 29,
+    "fields": {
+      "code": "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS",
+      "label": "New Association Project Review To Process",
+      "description": "Message reçu par un gestionnaire pour l'informer du dépôt d'un nouveau bilan de projet par une association.",
+      "subject": "{{ site_name }} – Nouveau bilan de projet déposé par une association",
+      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE pour l'association \"{{ association_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        13
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 30,
+    "fields": {
+      "code": "NEW_USER_PROJECT_REVIEW_TO_PROCESS",
+      "label": "New User ProjectReview To Process",
+      "description": "Message reçu par un gestionnaire pour l'informer du dépôt d'un nouveau bilan de projet par un porteur individuel.",
+      "subject": "{{ site_name }} – Nouveau bilan de projet déposé par un porteur individuel",
+      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE par {{ first_name }} {{ last_name }} est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        4,
+        5
+      ]
+    }
   }
 ]

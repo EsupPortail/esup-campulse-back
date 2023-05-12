@@ -710,10 +710,26 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if new_project_status == "PROJECT_PROCESSING":
+        if (
+            new_project_status
+            in Project.ProjectStatus.get_manageable_project_statuses()
+        ):
+            document_process_type = ""
+            association_email_template_code = ""
+            user_email_template_code = ""
+            if new_project_status == "PROJECT_PROCESSING":
+                document_process_type = "DOCUMENT_PROJECT"
+                association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
+            elif new_project_status == "PROJECT_REVIEW_PROCESSING":
+                document_process_type = "DOCUMENT_PROJECT_REVIEW"
+                association_email_template_code = (
+                    "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
+                )
+                user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
             missing_documents_names = (
                 Document.objects.filter(
-                    process_type="DOCUMENT_PROJECT", is_required_in_process=True
+                    process_type=document_process_type, is_required_in_process=True
                 )
                 .exclude(
                     id__in=DocumentUpload.objects.filter(
@@ -755,7 +771,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 )
                 context["association_name"] = association.name
                 template = MailTemplate.objects.get(
-                    code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                    code=association_email_template_code
                 )
                 managers_emails += (
                     institution.default_institution_managers().values_list(
@@ -771,7 +787,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             elif project.user_id is not None:
                 context["first_name"] = request.user.first_name
                 context["last_name"] = request.user.last_name
-                template = MailTemplate.objects.get(code="NEW_USER_PROJECT_TO_PROCESS")
+                template = MailTemplate.objects.get(code=user_email_template_code)
                 for user_to_check in User.objects.filter(
                     is_superuser=False, is_staff=True
                 ):
