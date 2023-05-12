@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import generics, response, status
+from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -36,6 +36,7 @@ from plana.utils import send_mail, to_bool
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
+    filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all().order_by("edition_date")
     search_fields = [

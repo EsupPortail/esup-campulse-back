@@ -881,6 +881,12 @@ paths:
         schema:
           type: string
         description: Filter by Project Statuses codes.
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       - in: query
         name: user_id
         schema:
