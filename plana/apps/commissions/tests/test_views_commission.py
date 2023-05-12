@@ -411,6 +411,15 @@ class CommissionsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_delete_commission_date_non_draft_projects(self):
+        """
+        DELETE /commissions/commission_dates/{id} .
+
+        - A commission date with non-draft projects linked cannot be deleted.
+        """
+        response = self.general_client.delete("/commissions/commission_dates/3")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_delete_commission_date_success(self):
         """
         DELETE /commissions/commission_dates/{id} .

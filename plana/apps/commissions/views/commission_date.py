@@ -279,4 +279,16 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        projects_commission_date_count = ProjectCommissionDate.objects.filter(
+            commission_date_id=commission_date.id,
+            project_id__in=Project.objects.exclude(
+                project_status__in=Project.ProjectStatus.get_draft_project_statuses()
+            ),
+        ).count()
+        if projects_commission_date_count > 0:
+            return response.Response(
+                {"error": _("Cannot delete commission date with linked projects.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         return self.destroy(request, *args, **kwargs)
