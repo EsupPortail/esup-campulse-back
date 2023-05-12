@@ -99,6 +99,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 user_commissions_ids = request.user.get_user_commissions()
         else:
             user_commissions_ids = Commission.objects.all().values_list("id")
+
         if not request.user.has_perm("projects.view_project_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
         else:

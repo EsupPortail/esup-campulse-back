@@ -180,7 +180,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.general_client.get("/projects/99999/comments")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_project_comments_by_id_403(self):
+    def test_get_project_comments_by_id_forbidden_student(self):
         """
         GET /projects/{project_id}/comments
 
