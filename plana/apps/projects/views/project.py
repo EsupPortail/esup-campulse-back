@@ -38,6 +38,13 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all().order_by("edition_date")
+    search_fields = [
+        "name__nospaces__unaccent",
+        "creation_date__year",
+        "user_id",
+        "association_id",
+        "commission_dates",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -48,6 +55,18 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         parameters=[
+            OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by name.",
+            ),
+            OpenApiParameter(
+                "year",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by creation_date year.",
+            ),
             OpenApiParameter(
                 "user_id",
                 OpenApiTypes.INT,
@@ -87,11 +106,22 @@ class ProjectListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        name = request.query_params.get("name")
+        year = request.query_params.get("year")
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
         project_statuses = request.query_params.get("project_statuses")
         commission_dates = request.query_params.get("commission_dates")
         active_projects = request.query_params.get("active_projects")
+
+        if name is not None and name != "":
+            name = str(name).strip()
+            self.queryset = self.queryset.filter(
+                name__nospaces__unaccent__icontains=name.replace(" ", "")
+            )
+
+        if year is not None and year != "":
+            self.queryset = self.queryset.filter(creation_date__year=year)
 
         if not request.user.has_perm("projects.view_project_any_commission"):
             if request.user.is_staff:

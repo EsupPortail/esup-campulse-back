@@ -167,6 +167,25 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), projects_cnt)
 
+        similar_names = [
+            "Projet associatif de porteur de projet individuel",
+            "projet associatif de porteur de projet individuel",
+            "Projetassociatifdeporteurdeprojetindividuel",
+            "projetassociatifdeporteurdeprojetindividuel",
+            " Projet associatif de porteur de projet individuel ",
+            "Prôjêt àssöcïâtîf dë porteur de projet individuel",
+            "associatif de porteur de projet individuel",
+        ]
+        for similar_name in similar_names:
+            response = self.general_client.get(f"/projects/?name={similar_name}")
+            self.assertEqual(response.data[0]["name"], similar_names[0])
+
+        year = 2099
+        response = self.general_client.get(f"/projects/?year={year}")
+        projects_cnt = Project.objects.filter(creation_date__year=year).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), projects_cnt)
+
         response = self.general_client.get(
             f"/projects/?user_id={self.student_misc_user_id}"
         )

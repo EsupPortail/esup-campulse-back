@@ -872,6 +872,11 @@ paths:
           type: string
         description: Filter by Commission Dates linked to a project.
       - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by name.
+      - in: query
         name: project_statuses
         schema:
           type: string
@@ -881,6 +886,11 @@ paths:
         schema:
           type: integer
         description: Filter by User ID.
+      - in: query
+        name: year
+        schema:
+          type: integer
+        description: Filter by creation_date year.
       tags:
       - projects
       security:
@@ -3918,9 +3928,20 @@ components:
           type: string
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
       required:
       - categories
       - commission_dates
+      - creation_date
+      - edition_date
       - id
       - name
     ProjectCategory:

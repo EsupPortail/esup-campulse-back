@@ -40,6 +40,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "prevention_safety",
             "marketing_campaign",
             "project_status",
+            "creation_date",
+            "edition_date",
         ]
 
 
@@ -73,6 +75,8 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
             "description",
             "difficulties",
             "improvements",
+            "creation_date",
+            "edition_date",
         ]
 
 
