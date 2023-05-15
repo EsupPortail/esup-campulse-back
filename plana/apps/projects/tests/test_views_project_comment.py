@@ -81,6 +81,16 @@ class ProjectCommentLinksViewsTests(TestCase):
             url_login, data_student_president
         )
 
+        cls.student_user_id = 9
+        cls.student_user_name = "etudiant-porteur@mail.tld"
+        cls.student_client = Client()
+        data_student = {
+            "username": cls.student_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.student_client.post(url_login, data_student)
+
+
     def test_get_project_comments_anonymous(self):
         """
         GET /projects/comments .
@@ -251,6 +261,77 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
+
+    def test_get_project_comment_by_id_405(self):
+        """
+        GET /projects/{project_id}/comments/{comment_id}
+
+        - Always returns a 405 no matter which user tries to access it
+        """
+        project = 1
+        comment = 2
+        response = self.client.get(f"/projects/{project}/comments/{comment}")
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_put_project_comment_by_id_405(self):
+        """
+        PUT /projects/{project_id}/comments/{comment_id}
+
+        - Always returns a 405 no matter which user tries to access it
+        """
+        data = {"text": "Commentaire test"}
+        response = self.client.put(
+            "/projects/1/comments/1", data
+        )
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_patch_project_comment_anonymous(self):
+        """
+        PATCH /projects/{project_id}/comments{comment_id}
+
+        - An anonymous user cannot execute this command
+        """
+        patch_data = {"text": "Commentaire test"}
+        response = self.client.patch("/projects/2/comments/2", data=patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_project_comment_not_found(self):
+        """"
+        PATCH /projects/{project_id}/comments{comment_id}
+
+        - A user with proper permissions can execute this request.
+        """
+        patch_data = {"text": "Commentaire not found"}
+        response = self.general_client.patch("/projects/1/comments/1", data=patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_comment_forbidden(self):
+        """
+        PATCH /projects/{project_id}/comments{comment_id}
+
+        - A user without proper permissions cannot execute this command
+        """
+        patch_data = {"text": "Commentaire forbidden"}
+        response = self.student_client.patch(
+            "/projects/1/comments/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_comment_success(self):
+        """
+        PATCH /projects/{project_id}/comments/{comment_id}
+
+        - A user with proper permission can execute this command
+        """
+        project = 1
+        comment = 1
+        patch_data = {"text": "Commentaire sent with success"}
+        response = self.general_client.patch(
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_project_comments_anonymous(self):
         """
