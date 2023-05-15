@@ -46,5 +46,29 @@
       "category": 8,
       "project": 4
     }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 4,
+    "fields": {
+      "category": 4,
+      "project": 5
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 5,
+    "fields": {
+      "category": 7,
+      "project": 6
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 6,
+    "fields": {
+      "category": 8,
+      "project": 6
+    }
   }
 ]

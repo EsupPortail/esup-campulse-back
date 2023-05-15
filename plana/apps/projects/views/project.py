@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import generics, response, status
+from rest_framework import filters, generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -25,6 +25,7 @@ from plana.apps.projects.serializers.project import (
     ProjectReviewUpdateSerializer,
     ProjectSerializer,
     ProjectStatusSerializer,
+    ProjectUpdateManagerSerializer,
     ProjectUpdateSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
@@ -35,8 +36,16 @@ from plana.utils import send_mail, to_bool
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route"""
 
+    filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.objects.all().order_by("edition_date")
+    search_fields = [
+        "name__nospaces__unaccent",
+        "creation_date__year",
+        "user_id",
+        "association_id",
+        "commission_dates",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -47,6 +56,18 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         parameters=[
+            OpenApiParameter(
+                "name",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by name.",
+            ),
+            OpenApiParameter(
+                "year",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by creation_date year.",
+            ),
             OpenApiParameter(
                 "user_id",
                 OpenApiTypes.INT,
@@ -86,11 +107,22 @@ class ProjectListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        name = request.query_params.get("name")
+        year = request.query_params.get("year")
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
         project_statuses = request.query_params.get("project_statuses")
         commission_dates = request.query_params.get("commission_dates")
         active_projects = request.query_params.get("active_projects")
+
+        if name is not None and name != "":
+            name = str(name).strip()
+            self.queryset = self.queryset.filter(
+                name__nospaces__unaccent__icontains=name.replace(" ", "")
+            )
+
+        if year is not None and year != "":
+            self.queryset = self.queryset.filter(creation_date__year=year)
 
         if not request.user.has_perm("projects.view_project_any_commission"):
             if request.user.is_staff:
@@ -326,7 +358,13 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
-            self.serializer_class = ProjectUpdateSerializer
+            if self.request.user.has_perm("projects.change_project_as_bearer"):
+                self.serializer_class = ProjectUpdateSerializer
+            elif self.request.user.has_perm("projects.change_project_as_validator"):
+                self.serializer_class = ProjectUpdateManagerSerializer
+            # TODO OpenAPI problem if no serializer given.
+            else:
+                self.serializer_class = ProjectSerializer
         else:
             self.serializer_class = ProjectSerializer
         return super().get_serializer_class()
@@ -416,12 +454,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if not request.user.has_perm("projects.change_project_as_bearer"):
-            return response.Response(
-                {"error": _("Not allowed to update bearer fields for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
             )
 
         if not request.user.can_edit_project(project):
@@ -710,10 +742,26 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if new_project_status == "PROJECT_PROCESSING":
+        if (
+            new_project_status
+            in Project.ProjectStatus.get_manageable_project_statuses()
+        ):
+            document_process_type = ""
+            association_email_template_code = ""
+            user_email_template_code = ""
+            if new_project_status == "PROJECT_PROCESSING":
+                document_process_type = "DOCUMENT_PROJECT"
+                association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
+            elif new_project_status == "PROJECT_REVIEW_PROCESSING":
+                document_process_type = "DOCUMENT_PROJECT_REVIEW"
+                association_email_template_code = (
+                    "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
+                )
+                user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
             missing_documents_names = (
                 Document.objects.filter(
-                    process_type="DOCUMENT_PROJECT", is_required_in_process=True
+                    process_type=document_process_type, is_required_in_process=True
                 )
                 .exclude(
                     id__in=DocumentUpload.objects.filter(
@@ -755,7 +803,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 )
                 context["association_name"] = association.name
                 template = MailTemplate.objects.get(
-                    code="NEW_ASSOCIATION_PROJECT_TO_PROCESS"
+                    code=association_email_template_code
                 )
                 managers_emails += (
                     institution.default_institution_managers().values_list(
@@ -771,7 +819,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             elif project.user_id is not None:
                 context["first_name"] = request.user.first_name
                 context["last_name"] = request.user.last_name
-                template = MailTemplate.objects.get(code="NEW_USER_PROJECT_TO_PROCESS")
+                template = MailTemplate.objects.get(code=user_email_template_code)
                 for user_to_check in User.objects.filter(
                     is_superuser=False, is_staff=True
                 ):

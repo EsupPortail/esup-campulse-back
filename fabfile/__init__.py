@@ -67,6 +67,7 @@ env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You ne
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header X-XSS-Protection "1; mode=block"',
+    'add_header Strict-Transport-Security "max-age=63072000"',
     'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; frame-ancestors \'none\';"',
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started

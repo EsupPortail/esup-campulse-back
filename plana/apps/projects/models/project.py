@@ -49,6 +49,18 @@ class Project(models.Model):
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
+        def get_draft_project_statuses():
+            """Commission dates with projects having these statuses can be deleted."""
+
+            return ["PROJECT_DRAFT"]
+
+        @staticmethod
+        def get_manageable_project_statuses():
+            """Statuses for projects that trigger a mail sending to a validator."""
+
+            return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
+
+        @staticmethod
         def get_review_needed_project_statuses():
             """Projects with those statuses need to submit a review."""
 

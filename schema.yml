@@ -872,15 +872,31 @@ paths:
           type: string
         description: Filter by Commission Dates linked to a project.
       - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by name.
+      - in: query
         name: project_statuses
         schema:
           type: string
         description: Filter by Project Statuses codes.
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
       - in: query
         name: user_id
         schema:
           type: integer
         description: Filter by User ID.
+      - in: query
+        name: year
+        schema:
+          type: integer
+        description: Filter by creation_date year.
       tags:
       - projects
       security:
@@ -959,6 +975,33 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{id}/review/export:
+    get:
+      operationId: projects_review_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -1001,13 +1044,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectUpdateRequest'
+              $ref: '#/components/schemas/PatchedProjectRequest'
       security:
       - jwtAuth: []
       responses:
@@ -3588,10 +3631,114 @@ components:
           minimum: 0
         is_validated_by_admin:
           type: boolean
+    PatchedProjectRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        planned_location:
+          type: string
+          minLength: 1
+        other_first_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_last_name:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_email:
+          type: string
+          format: email
+          nullable: true
+          minLength: 1
+          maxLength: 150
+        other_phone:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 32
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        budget_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Budget on previous edition
+        target_audience:
+          type: string
+          minLength: 1
+        amount_students_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount of students in target audience
+        amount_all_audience:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount of all people in target audience
+        ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount of money asked for each person
+        individual_cost:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount of money needed by person
+        goals:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+          title: Résumé
+        planned_activities:
+          type: string
+          minLength: 1
+          title: Planned activites
+        prevention_safety:
+          type: string
+          minLength: 1
+          title: Planned prevention and safety actions
+        marketing_campaign:
+          type: string
+          minLength: 1
+        project_status:
+          $ref: '#/components/schemas/ProjectStatusEnum'
     PatchedProjectReviewUpdateRequest:
       type: object
       description: Main review serializer for update.
       properties:
+        other_first_name:
+          type: string
+        other_last_name:
+          type: string
+        other_email:
+          type: string
+        other_phone:
+          type: string
         outcome:
           type: integer
           maximum: 2147483647
@@ -3647,87 +3794,6 @@ components:
       properties:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
-    PatchedProjectUpdateRequest:
-      type: object
-      description: Main serializer without project_status.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        planned_start_date:
-          type: string
-          format: date-time
-          nullable: true
-        planned_end_date:
-          type: string
-          format: date-time
-          nullable: true
-        planned_location:
-          type: string
-          minLength: 1
-        other_first_name:
-          type: string
-        other_last_name:
-          type: string
-        other_email:
-          type: string
-        other_phone:
-          type: string
-        user:
-          type: integer
-          nullable: true
-          title: Utilisateur
-        association:
-          type: integer
-          nullable: true
-        budget_previous_edition:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Budget on previous edition
-        target_audience:
-          type: string
-          minLength: 1
-        amount_students_audience:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount of students in target audience
-        amount_all_audience:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount of all people in target audience
-        ticket_price:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount of money asked for each person
-        individual_cost:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          title: Amount of money needed by person
-        goals:
-          type: string
-          minLength: 1
-        summary:
-          type: string
-          minLength: 1
-          title: Résumé
-        planned_activities:
-          type: string
-          minLength: 1
-          title: Planned activites
-        prevention_safety:
-          type: string
-          minLength: 1
-          title: Planned prevention and safety actions
-        marketing_campaign:
-          type: string
-          minLength: 1
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -3794,12 +3860,21 @@ components:
           type: string
         other_first_name:
           type: string
+          nullable: true
+          maxLength: 150
         other_last_name:
           type: string
+          nullable: true
+          maxLength: 150
         other_email:
           type: string
+          format: email
+          nullable: true
+          maxLength: 150
         other_phone:
           type: string
+          nullable: true
+          maxLength: 32
         user:
           type: integer
           nullable: true
@@ -3859,9 +3934,20 @@ components:
           type: string
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
       required:
       - categories
       - commission_dates
+      - creation_date
+      - edition_date
       - id
       - name
     ProjectCategory:
