@@ -13,6 +13,11 @@ from .views.project_category import (
     ProjectCategoryListCreate,
     ProjectCategoryRetrieve,
 )
+from .views.project_comment import (
+    ProjectCommentListCreate,
+    ProjectCommentRetrieve,
+    ProjectCommentUpdateDestroy,
+)
 from .views.project_commission_date import (
     ProjectCommissionDateListCreate,
     ProjectCommissionDateRetrieve,
@@ -62,6 +67,21 @@ urlpatterns = [
         "<int:project_id>/commission_dates/<int:commission_date_id>",
         ProjectCommissionDateUpdateDestroy.as_view(),
         name="project_commission_date_update_destroy",
+    ),
+    path(
+        "comments",
+        ProjectCommentListCreate.as_view(),
+        name="project_comment_list_create",
+    ),
+    path(
+        "<int:project_id>/comments",
+        ProjectCommentRetrieve.as_view(),
+        name="project_comment_list_create",
+    ),
+    path(
+        "<int:project_id>/comments/<int:comment_id>",
+        ProjectCommentUpdateDestroy.as_view(),
+        name="project_comment_update_destroy",
     ),
     path(
         "<int:pk>/review",

@@ -597,7 +597,7 @@ class AssociationsViewsTests(TestCase):
         """
         PUT /associations/{id} .
 
-        - Always returns a 405 not matter which user tries to access it.
+        - Always returns a 405 no matter which user tries to access it.
         """
         response = self.client.put(
             "/associations/1", {"name": "Les aficionados d'endives au jambon"}

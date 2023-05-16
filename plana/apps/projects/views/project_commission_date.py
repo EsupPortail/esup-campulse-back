@@ -331,7 +331,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {
                     "error": _(
-                        "Link between this project and commission does not exists."
+                        "Link between this project and commission does not exist."
                     )
                 },
                 status=status.HTTP_404_NOT_FOUND,
@@ -420,7 +420,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {
                     "error": _(
-                        "Link between this project and commission does not exists."
+                        "Link between this project and commission does not exist."
                     )
                 },
                 status=status.HTTP_404_NOT_FOUND,

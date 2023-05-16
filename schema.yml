@@ -1246,6 +1246,109 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{project_id}/comments:
+    get:
+      operationId: projects_comments_retrieve
+      description: Retrieves all comments linked to a project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/comments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectComment'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /projects/{project_id}/comments/{comment_id}:
+    patch:
+      operationId: projects_comments_partial_update
+      description: Updates comments of the project
+      parameters:
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/comments
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectComment'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+    delete:
+      operationId: projects_comments_destroy
+      description: Destroys comments of a project
+      parameters:
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects/comments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectComment'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{project_id}/commission_dates:
     get:
       operationId: projects_commission_dates_retrieve
@@ -1426,6 +1529,65 @@ paths:
                 items:
                   $ref: '#/components/schemas/Category'
           description: ''
+  /projects/comments:
+    get:
+      operationId: projects_comments_list
+      description: Lists all links between projects and comments
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: number
+        description: Project id.
+      tags:
+      - projects/comments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectComment'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: projects_comments_create
+      description: Create a link between a comment and a project
+      tags:
+      - projects/comments
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectCommentDataRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectCommentDataRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCommentDataRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectComment'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/commission_dates:
     get:
       operationId: projects_commission_dates_list
@@ -3620,6 +3782,14 @@ components:
           format: binary
           nullable: true
           title: Example template file
+    PatchedProjectCommentTextRequest:
+      type: object
+      description: Field that can only be interacted with
+      properties:
+        text:
+          type: string
+          minLength: 1
+          title: Texte
     PatchedProjectCommissionDateDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
@@ -3991,6 +4161,41 @@ components:
       required:
       - category
       - project
+    ProjectComment:
+      type: object
+      description: Main serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          type: integer
+        user:
+          type: integer
+        text:
+          type: string
+          title: Texte
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+      required:
+      - creation_date
+      - id
+      - project
+      - text
+      - user
+    ProjectCommentDataRequest:
+      type: object
+      description: Fields that can be updated by an administrator
+      properties:
+        text:
+          type: string
+          minLength: 1
+          title: Texte
+      required:
+      - text
     ProjectCommissionDate:
       type: object
       description: Main serializer.
