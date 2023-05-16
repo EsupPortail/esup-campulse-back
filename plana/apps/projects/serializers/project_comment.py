@@ -26,7 +26,7 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
 
 
 class ProjectCommentTextSerializer(serializers.ModelSerializer):
-    """ Field that can only be interacted with"""
+    """Field that can only be interacted with"""
 
     class Meta:
         model = ProjectComment

@@ -2,8 +2,8 @@
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
@@ -17,7 +17,8 @@ from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
     ProjectCommentDataSerializer,
-    ProjectCommentSerializer, ProjectCommentTextSerializer,
+    ProjectCommentSerializer,
+    ProjectCommentTextSerializer,
 )
 
 
@@ -161,12 +162,15 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
                 )
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project does not exist")}, status=status.HTTP_404_NOT_FOUND
+                {"error": _("Project does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if (
             not request.user.has_perm("projects.view_projectcomment_any_commission")
-            and not request.user.has_perm("projects.view_projectcomment_any_institution")
+            and not request.user.has_perm(
+                "projects.view_projectcomment_any_institution"
+            )
             and not request.user.can_edit_project(project)
             and (
                 len(
@@ -183,8 +187,8 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             )
         ):
             return response.Response(
-                {"error": _("Not allowed to retrieve this project comments.")},
-                status=status.HTTP_403_FORBIDDEN
+                {"error": _("Not allowed to retrieve these project comments.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         serializer = self.serializer_class(

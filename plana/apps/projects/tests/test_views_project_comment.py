@@ -191,16 +191,15 @@ class ProjectCommentLinksViewsTests(TestCase):
         - The ProjectComment link is created in db
         - Project creation date is created
         """
-        post_data = {
-            "project": 1,
-            "text": "Commentaire"
-        }
+        post_data = {"project": 1, "text": "Commentaire"}
         response = self.general_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             0,
             len(
-                ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])
+                ProjectComment.objects.filter(
+                    project=post_data["project"], text=post_data["text"]
+                )
             ),
         )
         print(response.data)
@@ -273,9 +272,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         - Always returns a 405 no matter which user tries to access it
         """
         data = {"text": "Commentaire test"}
-        response = self.client.put(
-            "/projects/1/comments/1", data
-        )
+        response = self.client.put("/projects/1/comments/1", data)
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_comment_anonymous(self):
@@ -285,17 +282,21 @@ class ProjectCommentLinksViewsTests(TestCase):
         - An anonymous user cannot execute this command
         """
         patch_data = {"text": "Commentaire test"}
-        response = self.client.patch("/projects/2/comments/2", data=patch_data, content_type="application/json")
+        response = self.client.patch(
+            "/projects/2/comments/2", data=patch_data, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_comment_not_found(self):
-        """"
+        """ "
         PATCH /projects/{project_id}/comments{comment_id}
 
         - A user with proper permissions can execute this request.
         """
         patch_data = {"text": "Commentaire not found"}
-        response = self.general_client.patch("/projects/1/comments/1", data=patch_data, content_type="application/json")
+        response = self.general_client.patch(
+            "/projects/1/comments/1", data=patch_data, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_comment_forbidden(self):
@@ -318,9 +319,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         patch_data = {"text": "Commentaire sent with success"}
         response = self.general_client.patch(
-            "/projects/2/comments/1",
-            data=patch_data,
-            content_type="application/json"
+            "/projects/2/comments/1", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
