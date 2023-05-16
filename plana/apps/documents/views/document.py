@@ -200,6 +200,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             document.mime_types is not None
+            and len(document.mime_types) != 0
             and request.data["path_template"].content_type not in document.mime_types
         ):
             return response.Response(
