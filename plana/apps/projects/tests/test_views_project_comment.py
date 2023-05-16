@@ -288,7 +288,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_comment_not_found(self):
-        """ "
+        """
         PATCH /projects/{project_id}/comments{comment_id}
 
         - A user with proper permissions can execute this request.
