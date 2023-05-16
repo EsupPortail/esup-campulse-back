@@ -293,6 +293,16 @@ paths:
         description: Filter to get commission_dates where projects reviews are still
           pending.
       - in: query
+        name: commission_dates
+        schema:
+          type: string
+        description: Filter by commission_date field (multiple).
+      - in: query
+        name: is_site
+        schema:
+          type: boolean
+        description: Filter by is_site field.
+      - in: query
         name: managed_projects
         schema:
           type: boolean
