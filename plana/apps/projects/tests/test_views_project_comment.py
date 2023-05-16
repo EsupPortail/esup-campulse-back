@@ -1,8 +1,6 @@
 """List of tests done on projects comments links views"""
-import datetime
 import json
 
-from django.utils import timezone
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -89,7 +87,6 @@ class ProjectCommentLinksViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.student_client.post(url_login, data_student)
-
 
     def test_get_project_comments_anonymous(self):
         """
@@ -199,9 +196,6 @@ class ProjectCommentLinksViewsTests(TestCase):
             "text": "Commentaire"
         }
         response = self.general_client.post("/projects/comments", post_data)
-        #new_creation_date = ProjectComment.objects.get(
-            #project_id=post_data["project"]
-        #).creation_date
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             0,
@@ -209,7 +203,6 @@ class ProjectCommentLinksViewsTests(TestCase):
                 ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])
             ),
         )
-        #self.assertEqual(new_creation_date, datetime.datetime.today())
         print(response.data)
 
     def test_get_project_comments_by_id_anonymous(self):
@@ -323,11 +316,9 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - A user with proper permission can execute this command
         """
-        project = 1
-        comment = 1
         patch_data = {"text": "Commentaire sent with success"}
         response = self.general_client.patch(
-            f"/projects/{project}/comments/{comment}",
+            "/projects/2/comments/1",
             data=patch_data,
             content_type="application/json"
         )

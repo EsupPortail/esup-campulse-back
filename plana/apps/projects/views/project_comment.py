@@ -197,8 +197,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/comments/{comment_id} route"""
 
     queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    serializer_class = ProjectCommentTextSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -206,13 +205,6 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_serializer_class(self):
-        if self.request.method in ("PATCH", "DELETE"):
-            self.serializer_class = ProjectCommentTextSerializer
-        else:
-            self.serializer_class = ProjectCommentDataSerializer
-        return super().get_serializer_class()
 
     @extend_schema(
         exclude=True,
