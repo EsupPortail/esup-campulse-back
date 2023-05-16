@@ -109,6 +109,7 @@ class CommissionsViewsTests(TestCase):
         - is_site filters by is_site field.
         - only_next returns only one date by commission.
         - active_projects returns commissions dates depending on their projects statuses.
+        - managed_commissions returns commissions managed by current user.
         - managed_projects returns commissions where current user manages projects.
         """
         commission_dates_cnt = CommissionDate.objects.count()
@@ -171,6 +172,35 @@ class CommissionsViewsTests(TestCase):
         response = self.client.get("/commissions/commission_dates?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_with_active_projects.count())
+
+        managed_commission_dates = CommissionDate.objects.filter(
+            commission_id__in=Commission.objects.filter(
+                institution_id__in=Institution.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        user_id=self.manager_institution_user_id
+                    ).values_list("institution_id")
+                ).values_list("id")
+            ).values_list("id")
+        )
+        response = self.institution_client.get(
+            "/commissions/commission_dates?managed_commissions=true"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), managed_commission_dates.count())
+        unmanaged_commission_dates = CommissionDate.objects.exclude(
+            commission_id__in=Commission.objects.filter(
+                institution_id__in=Institution.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        user_id=self.manager_institution_user_id
+                    ).values_list("institution_id")
+                ).values_list("id")
+            ).values_list("id")
+        )
+        response = self.institution_client.get(
+            "/commissions/commission_dates?managed_commissions=false"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), unmanaged_commission_dates.count())
 
         commission_dates_with_managed_projects = CommissionDate.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(

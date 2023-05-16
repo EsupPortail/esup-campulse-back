@@ -59,6 +59,12 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                 description="Filter to get commission_dates where projects reviews are still pending.",
             ),
             OpenApiParameter(
+                "managed_commissions",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get commission_dates managed by the current user.",
+            ),
+            OpenApiParameter(
                 "managed_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -75,6 +81,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
         is_site = request.query_params.get("is_site")
         only_next = request.query_params.get("only_next")
         active_projects = request.query_params.get("active_projects")
+        managed_commissions = request.query_params.get("managed_commissions")
         managed_projects = request.query_params.get("managed_projects")
 
         if commission_dates is not None and commission_dates != "":
@@ -121,6 +128,20 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                     id__in=ProjectCommissionDate.objects.filter(
                         project_id__in=inactive_projects
                     ).values_list("commission_date_id")
+                )
+
+        if (
+            managed_commissions is not None
+            and managed_commissions != ""
+            and not request.user.is_anonymous
+        ):
+            if to_bool(managed_commissions) is True:
+                self.queryset = self.queryset.filter(
+                    commission_id__in=request.user.get_user_managed_commissions()
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    commission_id__in=request.user.get_user_managed_commissions()
                 )
 
         if (

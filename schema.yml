@@ -303,6 +303,11 @@ paths:
           type: boolean
         description: Filter by is_site field.
       - in: query
+        name: managed_commissions
+        schema:
+          type: boolean
+        description: Filter to get commission_dates managed by the current user.
+      - in: query
         name: managed_projects
         schema:
           type: boolean
