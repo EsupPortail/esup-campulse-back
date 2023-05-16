@@ -202,7 +202,6 @@ class ProjectCommentLinksViewsTests(TestCase):
                 )
             ),
         )
-        print(response.data)
 
     def test_get_project_comments_by_id_anonymous(self):
         """

@@ -187,7 +187,11 @@ class ReviewExpirationCommandTest(TestCase):
     def test_review_expiration(self):
         """An email is sent if review should be sent."""
         today = datetime.date.today()
-        mail_sending_due_date = today - datetime.timedelta(days=30)
+        mail_sending_due_date = timezone.make_aware(
+            datetime.datetime.combine(
+                today - datetime.timedelta(days=30), datetime.datetime.min.time()
+            )
+        )
         projects_needing_review = Project.objects.filter(id__in=[1, 2])
         for project_needing_review in projects_needing_review:
             project_needing_review.planned_start_date = mail_sending_due_date
