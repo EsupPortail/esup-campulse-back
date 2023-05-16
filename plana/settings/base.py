@@ -509,8 +509,6 @@ SOCIALACCOUNT_PROVIDERS = {
 # Using SimpleJWT with dj-rest-auth
 REST_USE_JWT = True
 
-# TODO Re-test navigation on PPRD with this JWT format.
-"""
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
@@ -518,7 +516,6 @@ SIMPLE_JWT = {
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
-"""
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
