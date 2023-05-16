@@ -35,6 +35,18 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
     @extend_schema(
         parameters=[
             OpenApiParameter(
+                "commission_dates",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by commission_date field (multiple).",
+            ),
+            OpenApiParameter(
+                "is_site",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter by is_site field.",
+            ),
+            OpenApiParameter(
                 "only_next",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -45,6 +57,12 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter to get commission_dates where projects reviews are still pending.",
+            ),
+            OpenApiParameter(
+                "managed_commissions",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get commission_dates managed by the current user.",
             ),
             OpenApiParameter(
                 "managed_projects",
@@ -59,21 +77,41 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates."""
+        commission_dates = request.query_params.get("commission_dates")
+        is_site = request.query_params.get("is_site")
         only_next = request.query_params.get("only_next")
         active_projects = request.query_params.get("active_projects")
+        managed_commissions = request.query_params.get("managed_commissions")
         managed_projects = request.query_params.get("managed_projects")
 
-        if only_next is not None and only_next != "" and to_bool(only_next) is True:
-            first_commissions_ids = []
-            commissions = Commission.objects.all().values_list("id")
-            for commission_id in commissions:
-                first_commissions_ids.append(
-                    CommissionDate.objects.filter(commission_id=commission_id)
-                    .order_by("submission_date")
-                    .first()
-                    .id
+        if commission_dates is not None and commission_dates != "":
+            commission_dates = commission_dates.split(",")
+            commission_dates = [
+                datetime.datetime.strptime(commission_date, "%Y-%m-%d").date()
+                for commission_date in commission_dates
+                if commission_date != ""
+                and isinstance(
+                    datetime.datetime.strptime(commission_date, "%Y-%m-%d").date(),
+                    datetime.date,
                 )
-            self.queryset = self.queryset.filter(id__in=first_commissions_ids)
+            ]
+            self.queryset = self.queryset.filter(commission_date__in=commission_dates)
+
+        if is_site is not None and is_site != "":
+            self.queryset = self.queryset.filter(
+                id__in=Commission.objects.filter(is_site=to_bool(is_site)).values_list(
+                    "id"
+                )
+            )
+
+        if only_next is not None and only_next != "" and to_bool(only_next) is True:
+            first_commission_date = (
+                CommissionDate.objects.all()
+                .order_by("commission_date")
+                .first()
+                .commission_date
+            )
+            self.queryset = self.queryset.filter(commission_date=first_commission_date)
 
         if active_projects is not None and active_projects != "":
             inactive_projects = Project.objects.filter(
@@ -90,6 +128,20 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                     id__in=ProjectCommissionDate.objects.filter(
                         project_id__in=inactive_projects
                     ).values_list("commission_date_id")
+                )
+
+        if (
+            managed_commissions is not None
+            and managed_commissions != ""
+            and not request.user.is_anonymous
+        ):
+            if to_bool(managed_commissions) is True:
+                self.queryset = self.queryset.filter(
+                    commission_id__in=request.user.get_user_managed_commissions()
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    commission_id__in=request.user.get_user_managed_commissions()
                 )
 
         if (

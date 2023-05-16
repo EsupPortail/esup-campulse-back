@@ -105,8 +105,11 @@ class CommissionsViewsTests(TestCase):
         - There's at least one commission date in the commission dates list.
         - The route can be accessed by anyone.
         - We get the same amount of commission dates through the model and through the view.
+        - commission_dates filters by commission_date field.
+        - is_site filters by is_site field.
         - only_next returns only one date by commission.
         - active_projects returns commissions dates depending on their projects statuses.
+        - managed_commissions returns commissions managed by current user.
         - managed_projects returns commissions where current user manages projects.
         """
         commission_dates_cnt = CommissionDate.objects.count()
@@ -115,6 +118,32 @@ class CommissionsViewsTests(TestCase):
         response = self.client.get("/commissions/commission_dates")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commission_dates_cnt)
+
+        commission_dates = ["2099-10-20", "2099-10-21"]
+        commission_dates = [
+            datetime.datetime.strptime(commission_date, "%Y-%m-%d").date()
+            for commission_date in commission_dates
+            if commission_date != ""
+            and isinstance(
+                datetime.datetime.strptime(commission_date, "%Y-%m-%d").date(),
+                datetime.date,
+            )
+        ]
+        response = self.client.get(
+            f"/commissions/commission_dates?commission_dates={','.join(str(x) for x in commission_dates)}"
+        )
+        commission_dates_cnt = CommissionDate.objects.filter(
+            commission_date__in=commission_dates
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commission_dates_cnt)
+
+        response = self.client.get("/commissions/commission_dates?is_site=true")
+        commission_dates_cnt = CommissionDate.objects.filter(
+            id__in=Commission.objects.filter(is_site=True).values_list("id")
+        ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_cnt)
 
@@ -143,6 +172,35 @@ class CommissionsViewsTests(TestCase):
         response = self.client.get("/commissions/commission_dates?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_with_active_projects.count())
+
+        managed_commission_dates = CommissionDate.objects.filter(
+            commission_id__in=Commission.objects.filter(
+                institution_id__in=Institution.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        user_id=self.manager_institution_user_id
+                    ).values_list("institution_id")
+                ).values_list("id")
+            ).values_list("id")
+        )
+        response = self.institution_client.get(
+            "/commissions/commission_dates?managed_commissions=true"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), managed_commission_dates.count())
+        unmanaged_commission_dates = CommissionDate.objects.exclude(
+            commission_id__in=Commission.objects.filter(
+                institution_id__in=Institution.objects.filter(
+                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                        user_id=self.manager_institution_user_id
+                    ).values_list("institution_id")
+                ).values_list("id")
+            ).values_list("id")
+        )
+        response = self.institution_client.get(
+            "/commissions/commission_dates?managed_commissions=false"
+        )
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), unmanaged_commission_dates.count())
 
         commission_dates_with_managed_projects = CommissionDate.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(
