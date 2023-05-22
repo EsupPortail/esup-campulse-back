@@ -38,7 +38,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.objects.all().order_by("edition_date")
     search_fields = [
         "name__nospaces__unaccent",
         "creation_date__year",
@@ -46,6 +45,19 @@ class ProjectListCreate(generics.ListCreateAPIView):
         "association_id",
         "commission_dates",
     ]
+
+    def get_queryset(self):
+        queryset = Project.objects.all().order_by("edition_date")
+        invisible_projects_ids = []
+        for project in queryset:
+            if datetime.datetime.now(
+                datetime.timezone(datetime.timedelta(hours=0))
+            ) > project.edition_date + datetime.timedelta(
+                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
+            ):
+                invisible_projects_ids.append(project.id)
+        queryset = queryset.exclude(id__in=invisible_projects_ids)
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -107,6 +119,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        queryset = self.get_queryset()
+
         name = request.query_params.get("name")
         year = request.query_params.get("year")
         user = request.query_params.get("user_id")
@@ -117,12 +131,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if name is not None and name != "":
             name = str(name).strip()
-            self.queryset = self.queryset.filter(
+            queryset = queryset.filter(
                 name__nospaces__unaccent__icontains=name.replace(" ", "")
             )
 
         if year is not None and year != "":
-            self.queryset = self.queryset.filter(creation_date__year=year)
+            queryset = queryset.filter(creation_date__year=year)
 
         if not request.user.has_perm("projects.view_project_any_commission"):
             if request.user.is_staff:
@@ -146,7 +160,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
-            self.queryset = self.queryset.filter(
+            queryset = queryset.filter(
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
                     id__in=(
@@ -165,10 +179,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if user is not None and user != "":
-            self.queryset = self.queryset.filter(user_id=user)
+            queryset = queryset.filter(user_id=user)
 
         if association is not None and association != "":
-            self.queryset = self.queryset.filter(association_id=association)
+            queryset = queryset.filter(association_id=association)
 
         if project_statuses is not None and project_statuses != "":
             all_project_statuses = [c[0] for c in Project.project_status.field.choices]
@@ -179,9 +193,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 if project_status_code != ""
                 and project_status_code in all_project_statuses
             ]
-            self.queryset = self.queryset.filter(
-                project_status__in=project_statuses_codes
-            )
+            queryset = queryset.filter(project_status__in=project_statuses_codes)
 
         if commission_dates is not None and commission_dates != "":
             commission_dates_ids = commission_dates.split(",")
@@ -190,7 +202,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 for commission_date_id in commission_dates
                 if commission_date_id != "" and commission_date_id.isdigit()
             ]
-            self.queryset = self.queryset.filter(
+            queryset = queryset.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     commission_date_id__in=commission_dates_ids
                 ).values_list("project_id")
@@ -199,15 +211,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if active_projects is not None and active_projects != "":
             inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
             if to_bool(active_projects) is False:
-                self.queryset = self.queryset.filter(
-                    project_status__in=inactive_statuses
-                )
+                queryset = queryset.filter(project_status__in=inactive_statuses)
             else:
-                self.queryset = self.queryset.exclude(
-                    project_status__in=inactive_statuses
-                )
+                queryset = queryset.exclude(project_status__in=inactive_statuses)
 
-        return self.list(request, *args, **kwargs)
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return response.Response(serializer.data)
 
     @extend_schema(
         responses={
@@ -347,14 +356,25 @@ class ProjectListCreate(generics.ListCreateAPIView):
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
-    queryset = Project.objects.all()
-
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        invisible_projects_ids = []
+        for project in queryset:
+            if datetime.datetime.now(
+                datetime.timezone(datetime.timedelta(hours=0))
+            ) > project.edition_date + datetime.timedelta(
+                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
+            ):
+                invisible_projects_ids.append(project.id)
+        queryset = queryset.exclude(id__in=invisible_projects_ids)
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -379,8 +399,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieves a project with all its details."""
+        queryset = self.get_queryset()
+
         try:
-            project = self.queryset.get(id=kwargs["pk"])
+            project = queryset.get(id=kwargs["pk"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -448,8 +470,10 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
+        queryset = self.get_queryset()
+
         try:
-            project = self.queryset.get(id=kwargs["pk"])
+            project = queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -511,14 +535,25 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route"""
 
-    queryset = Project.objects.all()
-
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        invisible_projects_ids = []
+        for project in queryset:
+            if datetime.datetime.now(
+                datetime.timezone(datetime.timedelta(hours=0))
+            ) > project.edition_date + datetime.timedelta(
+                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
+            ):
+                invisible_projects_ids.append(project.id)
+        queryset = queryset.exclude(id__in=invisible_projects_ids)
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -537,8 +572,10 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieves a project review with all its details."""
+        queryset = self.get_queryset()
+
         try:
-            project = self.queryset.get(id=kwargs["pk"])
+            project = queryset.get(id=kwargs["pk"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -606,8 +643,10 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
+        queryset = self.get_queryset()
+
         try:
-            project = self.queryset.get(id=kwargs["pk"])
+            project = queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -664,7 +703,6 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route"""
 
-    queryset = Project.objects.all()
     serializer_class = ProjectStatusSerializer
 
     def get_permissions(self):
@@ -673,6 +711,19 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        invisible_projects_ids = []
+        for project in queryset:
+            if datetime.datetime.now(
+                datetime.timezone(datetime.timedelta(hours=0))
+            ) > project.edition_date + datetime.timedelta(
+                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
+            ):
+                invisible_projects_ids.append(project.id)
+        queryset = queryset.exclude(id__in=invisible_projects_ids)
+        return queryset
 
     @extend_schema(
         exclude=True,
@@ -693,8 +744,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project status."""
+        queryset = self.get_queryset()
+
         try:
-            project = self.queryset.get(id=kwargs["pk"])
+            project = queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},

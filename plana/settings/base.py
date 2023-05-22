@@ -623,6 +623,10 @@ ACCOUNTS_API_CONF = {}
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
 
+# Amount of years before an archived project is hidden, then deleted.
+AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = 5
+AMOUNT_YEARS_BEFORE_PROJECT_DELETION = 10
+
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
