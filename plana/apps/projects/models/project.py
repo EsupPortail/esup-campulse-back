@@ -10,8 +10,10 @@ from plana.apps.users.models.user import User
 
 
 class VisibleProjectManager(models.Manager):
+    """Outside of django-admin, the app only uses projects where edition_date is lower than 5 years old."""
+
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Project.objects.all()
         invisible_projects_ids = []
         for project in queryset:
             if datetime.datetime.now(
