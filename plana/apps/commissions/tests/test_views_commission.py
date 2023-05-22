@@ -151,7 +151,7 @@ class CommissionsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), Commission.objects.count())
 
-        inactive_projects = Project.objects.filter(
+        inactive_projects = Project.visible_objects.filter(
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
         )
         commission_dates_with_inactive_projects = CommissionDate.objects.filter(
@@ -204,7 +204,7 @@ class CommissionsViewsTests(TestCase):
 
         commission_dates_with_managed_projects = CommissionDate.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(
-                project_id__in=Project.objects.filter(
+                project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(
                             id__in=GroupInstitutionCommissionUser.objects.filter(
@@ -222,7 +222,7 @@ class CommissionsViewsTests(TestCase):
         self.assertEqual(len(content), commission_dates_with_managed_projects.count())
         commission_dates_not_with_managed_projects = CommissionDate.objects.exclude(
             id__in=ProjectCommissionDate.objects.filter(
-                project_id__in=Project.objects.filter(
+                project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(
                             id__in=GroupInstitutionCommissionUser.objects.filter(

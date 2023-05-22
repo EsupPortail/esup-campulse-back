@@ -77,7 +77,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             "projects.view_projectcommissiondate_any_institution"
         ):
             user_associations_ids = request.user.get_user_associations()
-            user_projects_ids = Project.objects.filter(
+            user_projects_ids = Project.visible_objects.filter(
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
@@ -91,7 +91,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 )
                 | models.Q(
                     project_id__in=(
-                        Project.objects.filter(
+                        Project.visible_objects.filter(
                             association_id__in=Association.objects.filter(
                                 institution_id__in=user_institutions_ids
                             ).values_list("id")
@@ -126,7 +126,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Creates a link between a project and a commission date."""
         try:
-            project = Project.objects.get(id=request.data["project"])
+            project = Project.visible_objects.get(id=request.data["project"])
             commission_date = CommissionDate.objects.get(
                 id=request.data["commission_date"]
             )
@@ -229,7 +229,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves all commission dates linked to a project."""
         try:
-            project = Project.objects.get(id=kwargs["project_id"])
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -411,7 +411,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
         try:
-            project = Project.objects.get(id=kwargs["project_id"])
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             pcd = ProjectCommissionDate.objects.get(
                 project_id=kwargs["project_id"],
                 commission_date_id=kwargs["commission_date_id"],

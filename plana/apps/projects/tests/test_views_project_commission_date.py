@@ -108,7 +108,7 @@ class ProjectCommissionDateViewsTests(TestCase):
             ).values_list("institution_id")
         )
         pcd_cnt = ProjectCommissionDate.objects.filter(
-            project_id__in=Project.objects.filter(
+            project_id__in=Project.visible_objects.filter(
                 association_id__in=Association.objects.filter(
                     institution_id__in=user_institutions_ids
                 ).values_list("id")

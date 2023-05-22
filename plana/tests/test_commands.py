@@ -192,7 +192,7 @@ class ReviewExpirationCommandTest(TestCase):
                 today - datetime.timedelta(days=30), datetime.datetime.min.time()
             )
         )
-        projects_needing_review = Project.objects.filter(id__in=[1, 2])
+        projects_needing_review = Project.visible_objects.filter(id__in=[1, 2])
         for project_needing_review in projects_needing_review:
             project_needing_review.planned_start_date = mail_sending_due_date
             project_needing_review.planned_end_date = mail_sending_due_date

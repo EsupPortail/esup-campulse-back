@@ -59,7 +59,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
             "projects.view_projectcategory_any_commission"
         ) or not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_associations_ids = request.user.get_user_associations()
-            user_projects_ids = Project.objects.filter(
+            user_projects_ids = Project.visible_objects.filter(
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
@@ -77,7 +77,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 )
                 | models.Q(
                     project_id__in=(
-                        Project.objects.filter(
+                        Project.visible_objects.filter(
                             association_id__in=Association.objects.filter(
                                 institution_id__in=user_institutions_ids
                             ).values_list("id")
@@ -103,7 +103,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Creates a link between a category and a project."""
         try:
-            project = Project.objects.get(id=request.data["project"])
+            project = Project.visible_objects.get(id=request.data["project"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -148,7 +148,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves all categories linked to a project."""
         try:
-            project = Project.objects.get(id=kwargs["project_id"])
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -215,7 +215,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
         try:
-            project = Project.objects.get(id=kwargs["project_id"])
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             project_category = ProjectCategory.objects.get(
                 project_id=kwargs["project_id"], category_id=kwargs["category_id"]
             )

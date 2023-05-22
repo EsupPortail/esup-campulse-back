@@ -110,7 +110,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
             ).values_list("institution_id")
         )
         projects_categories_cnt = ProjectCategory.objects.filter(
-            project_id__in=Project.objects.filter(
+            project_id__in=Project.visible_objects.filter(
                 association_id__in=Association.objects.filter(
                     institution_id__in=user_institutions_ids
                 ).values_list("id")
@@ -192,11 +192,11 @@ class ProjectCategoryLinksViewsTests(TestCase):
             "project": 2,
             "category": 3,
         }
-        old_project_edition_date = Project.objects.get(
+        old_project_edition_date = Project.visible_objects.get(
             id=post_data["project"]
         ).edition_date
         response = self.student_president_client.post("/projects/categories", post_data)
-        new_project_edition_date = Project.objects.get(
+        new_project_edition_date = Project.visible_objects.get(
             id=post_data["project"]
         ).edition_date
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -322,11 +322,11 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         project = 2
         category = 1
-        old_project_edition_date = Project.objects.get(id=project).edition_date
+        old_project_edition_date = Project.visible_objects.get(id=project).edition_date
         response = self.student_president_client.delete(
             f"/projects/{project}/categories/{category}"
         )
-        new_project_edition_date = Project.objects.get(id=project).edition_date
+        new_project_edition_date = Project.visible_objects.get(id=project).edition_date
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,

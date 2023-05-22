@@ -22,7 +22,7 @@ class Command(BaseCommand):
         try:
             today = datetime.date.today()
             mail_sending_due_date = today - datetime.timedelta(days=30)
-            projects_needing_reviews = Project.objects.filter(
+            projects_needing_reviews = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_review_needed_project_statuses(),
                 planned_end_date__year=mail_sending_due_date.year,
                 planned_end_date__month=mail_sending_due_date.month,

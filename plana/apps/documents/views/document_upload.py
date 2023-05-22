@@ -120,7 +120,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         if "project" in request.data:
             try:
-                project = Project.objects.get(id=request.data["project"])
+                project = Project.visible_objects.get(id=request.data["project"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("Project does not exist.")},
@@ -243,7 +243,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
             (
                 document_upload.project_id is not None
                 and not request.user.can_edit_project(
-                    Project.objects.get(id=document_upload.project_id)
+                    Project.visible_objects.get(id=document_upload.project_id)
                 )
             )
             or (
@@ -286,7 +286,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
             (
                 document_upload.project_id is not None
                 and not request.user.can_edit_project(
-                    Project.objects.get(id=document_upload.project_id)
+                    Project.visible_objects.get(id=document_upload.project_id)
                 )
             )
             or (
@@ -336,7 +336,7 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
             (
                 document_upload.project_id is not None
                 and not request.user.can_edit_project(
-                    Project.objects.get(id=document_upload.project_id)
+                    Project.visible_objects.get(id=document_upload.project_id)
                 )
             )
             or (

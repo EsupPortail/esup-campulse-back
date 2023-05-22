@@ -9,7 +9,7 @@ from plana.apps.users.models.user import User
 class ProjectCommentSerializer(serializers.ModelSerializer):
     """Main serializer"""
 
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:

@@ -16,7 +16,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             ProjectCommissionDate.objects.filter(
-                project_id__in=Project.objects.filter(project_status="PROJECT_DRAFT"),
+                project_id__in=Project.visible_objects.filter(
+                    project_status="PROJECT_DRAFT"
+                ),
                 commission_date_id__in=CommissionDate.objects.filter(
                     submission_date__lte=datetime.date.today()
                 ),

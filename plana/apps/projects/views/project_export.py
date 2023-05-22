@@ -26,7 +26,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
     """/projects/{id}/export route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.objects.all()
+    queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
     @extend_schema(
@@ -146,7 +146,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
     """/projects/{id}/review/export route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.objects.all()
+    queryset = Project.visible_objects.all()
     serializer_class = ProjectReviewSerializer
 
     @extend_schema(

@@ -114,7 +114,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(commission_date=first_commission_date)
 
         if active_projects is not None and active_projects != "":
-            inactive_projects = Project.objects.filter(
+            inactive_projects = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_archived_project_statuses()
             )
             if to_bool(active_projects) is False:
@@ -152,7 +152,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
             if to_bool(managed_projects) is True:
                 self.queryset = self.queryset.filter(
                     id__in=ProjectCommissionDate.objects.filter(
-                        project_id__in=Project.objects.filter(
+                        project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
                     ).values_list("commission_date_id")
@@ -160,7 +160,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
             else:
                 self.queryset = self.queryset.exclude(
                     id__in=ProjectCommissionDate.objects.filter(
-                        project_id__in=Project.objects.filter(
+                        project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
                     ).values_list("commission_date_id")
@@ -333,7 +333,7 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
         projects_commission_date_count = ProjectCommissionDate.objects.filter(
             commission_date_id=commission_date.id,
-            project_id__in=Project.objects.exclude(
+            project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_draft_project_statuses()
             ),
         ).count()

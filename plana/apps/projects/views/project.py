@@ -38,6 +38,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Project.visible_objects.all().order_by("edition_date")
     search_fields = [
         "name__nospaces__unaccent",
         "creation_date__year",
@@ -45,19 +46,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
         "association_id",
         "commission_dates",
     ]
-
-    def get_queryset(self):
-        queryset = Project.objects.all().order_by("edition_date")
-        invisible_projects_ids = []
-        for project in queryset:
-            if datetime.datetime.now(
-                datetime.timezone(datetime.timedelta(hours=0))
-            ) > project.edition_date + datetime.timedelta(
-                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
-            ):
-                invisible_projects_ids.append(project.id)
-        queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -155,7 +143,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             "projects.view_project_any_commission"
         ) or not request.user.has_perm("projects.view_project_any_institution"):
             user_associations_ids = request.user.get_user_associations()
-            user_projects_ids = Project.objects.filter(
+            user_projects_ids = Project.visible_objects.filter(
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
@@ -356,25 +344,14 @@ class ProjectListCreate(generics.ListCreateAPIView):
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
+    queryset = Project.visible_objects.all()
+
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_queryset(self):
-        queryset = Project.objects.all()
-        invisible_projects_ids = []
-        for project in queryset:
-            if datetime.datetime.now(
-                datetime.timezone(datetime.timedelta(hours=0))
-            ) > project.edition_date + datetime.timedelta(
-                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
-            ):
-                invisible_projects_ids.append(project.id)
-        queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -535,25 +512,14 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route"""
 
+    queryset = Project.visible_objects.all()
+
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_queryset(self):
-        queryset = Project.objects.all()
-        invisible_projects_ids = []
-        for project in queryset:
-            if datetime.datetime.now(
-                datetime.timezone(datetime.timedelta(hours=0))
-            ) > project.edition_date + datetime.timedelta(
-                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
-            ):
-                invisible_projects_ids.append(project.id)
-        queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -703,6 +669,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route"""
 
+    queryset = Project.visible_objects.all()
     serializer_class = ProjectStatusSerializer
 
     def get_permissions(self):
@@ -711,19 +678,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_queryset(self):
-        queryset = Project.objects.all()
-        invisible_projects_ids = []
-        for project in queryset:
-            if datetime.datetime.now(
-                datetime.timezone(datetime.timedelta(hours=0))
-            ) > project.edition_date + datetime.timedelta(
-                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
-            ):
-                invisible_projects_ids.append(project.id)
-        queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
 
     @extend_schema(
         exclude=True,
