@@ -49,7 +49,7 @@
     "fields": {
       "code": "ABOUT_APP",
       "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
-      "header": "Origines du projet",
+      "header": "Les origines de Campulse",
       "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": ""
     }
