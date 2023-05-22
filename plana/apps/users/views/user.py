@@ -60,6 +60,12 @@ class UserListCreate(generics.ListCreateAPIView):
                 description="Filter by first name and last name.",
             ),
             OpenApiParameter(
+                "email",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by email.",
+            ),
+            OpenApiParameter(
                 "is_validated_by_admin",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -93,6 +99,7 @@ class UserListCreate(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         """Lists users sharing the same association, or all users (manager)."""
         name = request.query_params.get("name")
+        email = request.query_params.get("email")
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
         is_cas = request.query_params.get("is_cas")
         association_id = request.query_params.get("association_id")
@@ -114,6 +121,12 @@ class UserListCreate(generics.ListCreateAPIView):
                 self.queryset = self.queryset.filter(
                     Q(first_name__nospaces__unaccent__icontains=name.replace(" ", ""))
                     | Q(last_name__nospaces__unaccent__icontains=name.replace(" ", ""))
+                )
+
+            if email is not None and email != "":
+                email = str(email).strip()
+                self.queryset = self.queryset.filter(
+                    email__nospaces__unaccent__icontains=email.replace(" ", "")
                 )
 
             if is_validated_by_admin is not None and is_validated_by_admin != "":

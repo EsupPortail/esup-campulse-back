@@ -1665,6 +1665,11 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
+        name: email
+        schema:
+          type: string
+        description: Filter by email.
+      - in: query
         name: institutions
         schema:
           type: string

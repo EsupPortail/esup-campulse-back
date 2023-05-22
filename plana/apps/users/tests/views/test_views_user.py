@@ -206,7 +206,7 @@ class UserViewsTests(TestCase):
         GET /users/ .
 
         - The route can be accessed by anyone.
-        - An association can be found with its name.
+        - A user can be found by name.
         """
         similar_names = [
             "Association Hors Site",
@@ -220,6 +220,24 @@ class UserViewsTests(TestCase):
         for similar_name in similar_names:
             response = self.manager_client.get(f"/users/?name={similar_name}")
             self.assertEqual(response.data[0]["first_name"], similar_names[0])
+
+    def test_manager_get_users_list_filter_email(self):
+        """
+        GET /users/ .
+
+        - The route can be accessed by anyone.
+        - A user can be found by email.
+        """
+        similar_emails = [
+            "etudiant-asso-hors-site@mail.tld",
+            "Etudiant-Asso-Hors-Site@Mail.TLD",
+            " etudiant-asso-hors-site@mail.tld ",
+            "étûdïànt-âssô-hörs-sîtè@mäil.tld",
+            "hors",
+        ]
+        for similar_email in similar_emails:
+            response = self.manager_client.get(f"/users/?email={similar_email}")
+            self.assertEqual(response.data[0]["email"], similar_emails[0])
 
     def test_anonymous_post_user(self):
         """
