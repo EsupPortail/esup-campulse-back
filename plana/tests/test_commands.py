@@ -156,6 +156,46 @@ class PasswordExpirationCommandTest(TestCase):
         self.assertTrue(len(mail.outbox))
 
 
+class ProjectExpirationCommandTest(TestCase):
+    """Test project_expiration command."""
+
+    fixtures = [
+        "account_emailaddress.json",
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
+        "commissions_commission.json",
+        "commissions_commissiondate.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
+        "projects_project.json",
+        "users_associationuser.json",
+        "users_groupinstitutioncommissionuser.json",
+        "users_user.json",
+    ]
+
+    def test_no_project_expiration(self):
+        """Nothing should change if all projects are up to date."""
+        project_to_delete = Project.objects.get(id=7)
+        project_to_delete.save()
+
+        old_projects_cnt = Project.objects.all().count()
+        call_command("cron_project_expiration")
+        new_projects_cnt = Project.objects.all().count()
+        self.assertEqual(old_projects_cnt, new_projects_cnt)
+
+    def test_project_expiration(self):
+        """Delete a too old project."""
+        old_projects_cnt = Project.objects.all().count()
+        call_command("cron_project_expiration")
+        new_projects_cnt = Project.objects.all().count()
+        self.assertNotEqual(old_projects_cnt, new_projects_cnt)
+
+
 class ReviewExpirationCommandTest(TestCase):
     """Test review_expiration command."""
 

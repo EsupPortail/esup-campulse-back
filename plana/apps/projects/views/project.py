@@ -38,7 +38,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.visible_objects.all().order_by("edition_date")
     search_fields = [
         "name__nospaces__unaccent",
         "creation_date__year",
@@ -46,6 +45,9 @@ class ProjectListCreate(generics.ListCreateAPIView):
         "association_id",
         "commission_dates",
     ]
+
+    def get_queryset(self):
+        return Project.visible_objects.all().order_by("edition_date")
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -344,14 +346,15 @@ class ProjectListCreate(generics.ListCreateAPIView):
 class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id} route"""
 
-    queryset = Project.visible_objects.all()
-
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        return Project.visible_objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -376,10 +379,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieves a project with all its details."""
-        queryset = self.get_queryset()
-
         try:
-            project = queryset.get(id=kwargs["pk"])
+            project = self.get_queryset().get(id=kwargs["pk"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -447,10 +448,8 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
-        queryset = self.get_queryset()
-
         try:
-            project = queryset.get(id=kwargs["pk"])
+            project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -512,14 +511,15 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route"""
 
-    queryset = Project.visible_objects.all()
-
     def get_permissions(self):
         if self.request.method == "PUT":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        return Project.visible_objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -538,10 +538,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieves a project review with all its details."""
-        queryset = self.get_queryset()
-
         try:
-            project = queryset.get(id=kwargs["pk"])
+            project = self.get_queryset().get(id=kwargs["pk"])
             commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project.id
@@ -609,10 +607,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
-        queryset = self.get_queryset()
-
         try:
-            project = queryset.get(id=kwargs["pk"])
+            project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -669,7 +665,6 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route"""
 
-    queryset = Project.visible_objects.all()
     serializer_class = ProjectStatusSerializer
 
     def get_permissions(self):
@@ -678,6 +673,9 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
+
+    def get_queryset(self):
+        return Project.visible_objects.all()
 
     @extend_schema(
         exclude=True,
@@ -698,10 +696,8 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project status."""
-        queryset = self.get_queryset()
-
         try:
-            project = queryset.get(id=kwargs["pk"])
+            project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
