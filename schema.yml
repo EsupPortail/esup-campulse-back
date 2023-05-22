@@ -3789,7 +3789,7 @@ components:
           title: Example template file
     PatchedProjectCommentTextRequest:
       type: object
-      description: Field that can only be interacted with
+      description: Field that can be updated.
       properties:
         text:
           type: string
@@ -4188,13 +4188,16 @@ components:
       - user
     ProjectCommentDataRequest:
       type: object
-      description: Fields that can be updated by an administrator
+      description: Fields that can be created.
       properties:
+        project:
+          type: integer
         text:
           type: string
           minLength: 1
           title: Texte
       required:
+      - project
       - text
     ProjectCommissionDate:
       type: object

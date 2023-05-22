@@ -523,5 +523,20 @@
         5
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 31,
+    "fields": {
+      "code": "NEW_PROJECT_COMMENT",
+      "label": "New Project Comment",
+      "description": "Message reçu par un utilisateur pour l'informer du dépôt d'un nouveau commentaire sur un de ses projets.",
+      "subject": "{{ site_name }} – Nouveau commentaire sur votre demande de subventionnement",
+      "body": "Bonjour,<br/><br/>Un nouveau commentaire a été posté sur l'une de vos demandes de subventionnements.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

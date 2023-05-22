@@ -18,15 +18,15 @@ class ProjectCommentSerializer(serializers.ModelSerializer):
 
 
 class ProjectCommentDataSerializer(serializers.ModelSerializer):
-    """Fields that can be updated by an administrator"""
+    """Fields that can be created."""
 
     class Meta:
         model = ProjectComment
-        fields = ["project_id", "text"]
+        fields = ["project", "text"]
 
 
 class ProjectCommentTextSerializer(serializers.ModelSerializer):
-    """Field that can only be interacted with"""
+    """Field that can be updated."""
 
     class Meta:
         model = ProjectComment

@@ -1,6 +1,8 @@
 """Views directly linked to projects comments."""
 import datetime
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -20,6 +22,9 @@ from plana.apps.projects.serializers.project_comment import (
     ProjectCommentSerializer,
     ProjectCommentTextSerializer,
 )
+from plana.apps.users.models.user import User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class ProjectCommentListCreate(generics.ListCreateAPIView):
@@ -27,7 +32,6 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentSerializer
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -124,9 +128,28 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
         request.data["creation_date"] = datetime.date.today()
         request.data["edition_date"] = datetime.date.today()
         request.data["user"] = request.user.pk
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
+        template = MailTemplate.objects.get(code="NEW_PROJECT_COMMENT")
+        email = None
+        if project.association_id is not None:
+            email = Association.objects.get(id=project.association_id).email
+        elif project.user_id is not None:
+            email = User.objects.get(id=project.user_id).email
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
 
         return super().create(request, *args, **kwargs)
 

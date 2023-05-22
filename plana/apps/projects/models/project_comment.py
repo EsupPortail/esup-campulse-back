@@ -16,7 +16,6 @@ class ProjectComment(models.Model):
         verbose_name=_("Project"),
         related_name="projects",
         on_delete=models.RESTRICT,
-        null=True,
     )
     user = models.ForeignKey(
         User,

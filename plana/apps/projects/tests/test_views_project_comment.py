@@ -1,6 +1,7 @@
 """List of tests done on projects comments links views"""
 import json
 
+from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -26,6 +27,8 @@ class ProjectCommentLinksViewsTests(TestCase):
         "commissions_commissiondate.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcomment.json",
@@ -92,7 +95,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/comments .
 
-        - An anonymous user cannot execute this request
+        - An anonymous user cannot execute this request.
         """
         response = self.client.get("/projects/comments")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -101,7 +104,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/comments
 
-        - A student user gets comments where projects rights are OK
+        - A student user gets comments where projects rights are OK.
         """
         response = self.student_offsite_client.get("/projects/comments")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -110,7 +113,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/comments
 
-        - An institution manager user gets project comments for correct projects
+        - An institution manager user gets project comments for correct projects.
         """
         response = self.institution_client.get("/projects/comments")
         user_institution_ids = Institution.objects.filter(
@@ -134,7 +137,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/comments .
 
-        - A general manager user gets all project categories.
+        - A general manager user gets all project comments.
         - project_id argument filters by Project ID.
         """
         response = self.general_client.get("/projects/comments")
@@ -153,7 +156,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         POST /projects/comments
 
-        - An anonymous user cannot execute this command
+        - An anonymous user cannot execute this command.
         """
 
         response = self.client.post("/projects/comments", {"name": "Testing anonymous"})
@@ -163,7 +166,6 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         POST /projects/comments .
 
-        - The route can be accessed by a manager.
         - The project must exist.
         """
         post_data = {
@@ -177,7 +179,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         POST /projects/comments
 
-        - The route cannot be accessed by a student user
+        - The route cannot be accessed by a student user.
         """
         post_data = {"project": 1, "text": "Le chiffre 6 c'est comme saucisse"}
         response = self.student_offsite_client.post("/projects/comments", post_data)
@@ -187,15 +189,27 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         POST /projects/comments
 
-        - The route can be accessed by a manager
-        - The ProjectComment link is created in db
-        - Project creation date is created
+        - The route can be accessed by a manager.
+        - The ProjectComment link is created in db.
         """
+        self.assertFalse(len(mail.outbox))
         post_data = {"project": 1, "text": "Commentaire"}
         response = self.general_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
-            0,
+            1,
+            len(
+                ProjectComment.objects.filter(
+                    project=post_data["project"], text=post_data["text"]
+                )
+            ),
+        )
+        self.assertTrue(len(mail.outbox))
+        post_data = {"project": 2, "text": "Autre Commentaire"}
+        response = self.general_client.post("/projects/comments", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            1,
             len(
                 ProjectComment.objects.filter(
                     project=post_data["project"], text=post_data["text"]
@@ -207,16 +221,16 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/{project_id}/comments
 
-        - An anonymous user cannot execute this request
+        - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/projects/1/comments")
+        response = self.client.get("/projects/2/comments")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_project_comments_by_id_404(self):
         """
         GET /projects/{project_id}/comments
 
-        - The route returns a 404 if a wrong project id is given
+        - The route returns a 404 if a wrong project id is given.
         """
         response = self.general_client.get("/projects/99999/comments")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -225,7 +239,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/{project_id}/comments
 
-        - A student user not owning the project cannot execute this request
+        - A student user not owning the project cannot execute this request.
         """
         response = self.student_offsite_client.get("/projects/2/comments")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -234,10 +248,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/{project_id}/comments
 
-        - The route can be accessed by a manager user and by a student user
-        - Correct projects comments are returned
+        - The route can be accessed by a manager user and by a student user.
+        - Correct projects comments are returned.
         """
-        project_id = 1
+        project_id = 2
+
         project_test_cnt = ProjectComment.objects.filter(project_id=project_id).count()
         response = self.general_client.get(f"/projects/{project_id}/comments")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -245,7 +260,6 @@ class ProjectCommentLinksViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-        project_id = 2
         project_test_cnt = ProjectComment.objects.filter(project_id=project_id).count()
         response = self.student_president_client.get(f"/projects/{project_id}/comments")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -257,10 +271,10 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         GET /projects/{project_id}/comments/{comment_id}
 
-        - Always returns a 405 no matter which user tries to access it
+        - Always returns a 405 no matter which user tries to access it.
         """
-        project = 1
-        comment = 2
+        project = 2
+        comment = 1
         response = self.client.get(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -268,21 +282,21 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         PUT /projects/{project_id}/comments/{comment_id}
 
-        - Always returns a 405 no matter which user tries to access it
+        - Always returns a 405 no matter which user tries to access it.
         """
         data = {"text": "Commentaire test"}
-        response = self.client.put("/projects/1/comments/1", data)
+        response = self.client.put("/projects/2/comments/1", data)
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_comment_anonymous(self):
         """
         PATCH /projects/{project_id}/comments{comment_id}
 
-        - An anonymous user cannot execute this command
+        - An anonymous user cannot execute this command.
         """
         patch_data = {"text": "Commentaire test"}
         response = self.client.patch(
-            "/projects/2/comments/2", data=patch_data, content_type="application/json"
+            "/projects/2/comments/1", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -290,11 +304,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         PATCH /projects/{project_id}/comments{comment_id}
 
-        - A user with proper permissions can execute this request.
+        - Comment must exist.
         """
         patch_data = {"text": "Commentaire not found"}
         response = self.general_client.patch(
-            "/projects/1/comments/1", data=patch_data, content_type="application/json"
+            "/projects/2/comments/2", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -302,11 +316,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         PATCH /projects/{project_id}/comments{comment_id}
 
-        - A user without proper permissions cannot execute this command
+        - A user without proper permissions cannot execute this command.
         """
         patch_data = {"text": "Commentaire forbidden"}
         response = self.student_client.patch(
-            "/projects/1/comments/1", data=patch_data, content_type="application/json"
+            "/projects/2/comments/1", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -314,7 +328,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         PATCH /projects/{project_id}/comments/{comment_id}
 
-        - A user with proper permission can execute this command
+        - A user with proper permissions can execute this command.
         """
         patch_data = {"text": "Commentaire sent with success"}
         response = self.general_client.patch(
@@ -348,8 +362,8 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - The route cannot be accessed by a student user.
         """
-        project = 1
-        comment = 5
+        project = 2
+        comment = 1
         response = self.student_offsite_client.delete(
             f"/projects/{project}/comments/{comment}"
         )
@@ -359,7 +373,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         DELETE /projects/{project_id}/comments/{comment_id} .
 
-        - The route cannot be accessed by a student user.
+        - The route can be accessed by a manager user.
         - Comment is correctly deleted.
         """
         project = 2
