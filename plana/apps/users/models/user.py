@@ -101,6 +101,7 @@ class User(AbstractUser):
     email = models.EmailField(_("Email"), unique=True)
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
+    address = models.TextField(_("Address"), default="")
     phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     password_last_change_date = models.DateField(

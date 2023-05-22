@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-22 08:53+0200\n"
+"POT-Creation-Date: 2023-05-22 09:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,11 +63,12 @@ msgid "Current projects"
 msgstr "Projets en cours"
 
 #: plana/apps/associations/models/association.py:56
+#: plana/apps/users/models/user.py:104
 msgid "Address"
 msgstr "Adresse"
 
 #: plana/apps/associations/models/association.py:57
-#: plana/apps/users/models/user.py:104
+#: plana/apps/users/models/user.py:105
 msgid "Phone"
 msgstr "Téléphone"
 
@@ -114,7 +115,7 @@ msgid "Amount of members allowed"
 msgstr "Nombre de membres autorisés"
 
 #: plana/apps/associations/models/association.py:73
-#: plana/apps/users/models/user.py:105
+#: plana/apps/users/models/user.py:106
 msgid "Can submit projects"
 msgstr "Peut soumettre des projets"
 
@@ -181,7 +182,7 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:121
-#: plana/apps/users/models/user.py:39 plana/apps/users/models/user.py:113
+#: plana/apps/users/models/user.py:39 plana/apps/users/models/user.py:114
 msgid "Associations"
 msgstr "Associations"
 
@@ -429,16 +430,16 @@ msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:47
 #: plana/apps/projects/models/project.py:115
-#: plana/apps/projects/models/project_comment.py:22
+#: plana/apps/projects/models/project_comment.py:23
 #: plana/apps/users/models/user.py:20 plana/apps/users/models/user.py:61
-#: plana/apps/users/models/user.py:306
+#: plana/apps/users/models/user.py:307
 msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:59
-#: plana/apps/projects/models/project.py:173
+#: plana/apps/projects/models/project.py:170
 #: plana/apps/projects/models/project_category.py:11
-#: plana/apps/projects/models/project_comment.py:15
+#: plana/apps/projects/models/project_comment.py:16
 #: plana/apps/projects/models/project_commission_date.py:13
 msgid "Project"
 msgstr "Projet"
@@ -514,7 +515,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project_category.py:164
 #: plana/apps/projects/views/project_category.py:224
 #: plana/apps/projects/views/project_comment.py:124
-#: plana/apps/projects/views/project_comment.py:165
+#: plana/apps/projects/views/project_comment.py:166
 #: plana/apps/projects/views/project_commission_date.py:245
 #: plana/apps/projects/views/project_export.py:57
 #: plana/apps/projects/views/project_export.py:177
@@ -682,6 +683,7 @@ msgid "Project Status"
 msgstr "Statut du Projet"
 
 #: plana/apps/projects/models/project.py:150
+#: plana/apps/projects/models/project_comment.py:13
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
@@ -705,40 +707,28 @@ msgstr "Date de fin réelle"
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:156
-msgid "Organizer name"
-msgstr "Nom de l'organisateur"
-
 #: plana/apps/projects/models/project.py:157
-msgid "Organizer phone"
-msgstr "Téléphone de l'organisateur"
-
-#: plana/apps/projects/models/project.py:158
-msgid "Organizer email"
-msgstr "Adresse mail de l'organisateur"
-
-#: plana/apps/projects/models/project.py:160
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:162
+#: plana/apps/projects/models/project.py:159
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:164
+#: plana/apps/projects/models/project.py:161
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:166
+#: plana/apps/projects/models/project.py:163
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:167
+#: plana/apps/projects/models/project.py:164
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:174
+#: plana/apps/projects/models/project.py:171
 msgid "Projects"
 msgstr "Projets"
 
@@ -758,11 +748,11 @@ msgstr "Catégories de projets"
 msgid "Text"
 msgstr "Texte"
 
-#: plana/apps/projects/models/project_comment.py:32
+#: plana/apps/projects/models/project_comment.py:33
 msgid "Project comment"
 msgstr "Commentaire de projet"
 
-#: plana/apps/projects/models/project_comment.py:33
+#: plana/apps/projects/models/project_comment.py:34
 msgid "Projects comments"
 msgstr "Commentaires liés aux projets"
 
@@ -900,11 +890,11 @@ msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:190
+#: plana/apps/projects/views/project_comment.py:191
 msgid "Not allowed to retrieve these project comments."
 msgstr "Non autorisé à récupérer les commentaires de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:249
+#: plana/apps/projects/views/project_comment.py:250
 msgid "Link between this comment and project does not exist."
 msgstr "Ce commentaire de projet n'existe pas."
 
@@ -993,19 +983,19 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/models/user.py:107
+#: plana/apps/users/models/user.py:108
 msgid "Password last change date"
 msgstr "Date de dernier changement du mot de passe"
 
-#: plana/apps/users/models/user.py:110
+#: plana/apps/users/models/user.py:111
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:117
+#: plana/apps/users/models/user.py:118
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:307
+#: plana/apps/users/models/user.py:308
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1032,7 +1022,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:120
+#: plana/apps/users/serializers/user.py:122
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 

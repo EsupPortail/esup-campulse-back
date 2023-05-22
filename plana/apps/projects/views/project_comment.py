@@ -125,6 +125,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         request.data["creation_date"] = datetime.date.today()
+        request.data["edition_date"] = datetime.date.today()
         request.data["user"] = request.user.pk
 
         return super().create(request, *args, **kwargs)
@@ -250,6 +251,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        pc.edition_date = datetime.date.today()
         pc.save()
         return response.Response({}, status=status.HTTP_200_OK)
 

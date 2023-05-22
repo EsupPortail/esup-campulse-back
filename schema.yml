@@ -3948,18 +3948,6 @@ components:
         real_location:
           type: string
           minLength: 1
-        organizer_name:
-          type: string
-          minLength: 1
-          maxLength: 256
-        organizer_phone:
-          type: string
-          minLength: 1
-          maxLength: 32
-        organizer_email:
-          type: string
-          minLength: 1
-          maxLength: 256
         review:
           type: string
           minLength: 1
@@ -4010,6 +3998,8 @@ components:
           minLength: 1
           title: Courriel
           maxLength: 254
+        address:
+          type: string
         phone:
           type: string
         is_validated_by_admin:
@@ -4185,8 +4175,13 @@ components:
           format: date-time
           readOnly: true
           title: Date de création
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
       required:
       - creation_date
+      - edition_date
       - id
       - project
       - text
@@ -4467,6 +4462,8 @@ components:
           format: email
           title: Courriel
           maxLength: 254
+        address:
+          type: string
         phone:
           type: string
         is_cas:

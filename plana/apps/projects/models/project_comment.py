@@ -10,6 +10,7 @@ class ProjectComment(models.Model):
 
     text = models.TextField(_("Text"))
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
+    edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
     project = models.ForeignKey(
         "Project",
         verbose_name=_("Project"),

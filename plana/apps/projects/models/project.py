@@ -153,9 +153,6 @@ class Project(models.Model):
     real_start_date = models.DateTimeField(_("Real start date"), null=True)
     real_end_date = models.DateTimeField(_("Real end date"), null=True)
     real_location = models.TextField(_("Real location"), default="")
-    organizer_name = models.CharField(_("Organizer name"), max_length=256, default="")
-    organizer_phone = models.CharField(_("Organizer phone"), max_length=32, default="")
-    organizer_email = models.CharField(_("Organizer email"), max_length=256, default="")
     review = models.TextField(
         _("Review (amount of students, partnerships, ...)"), default=""
     )
