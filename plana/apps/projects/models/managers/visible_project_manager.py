@@ -7,6 +7,7 @@ from django.db import models
 
 class VisibleProjectManager(models.Manager):
     def get_queryset(self):
+        """
         queryset = super().get_queryset()
         invisible_projects_ids = []
         for project in queryset:
@@ -17,4 +18,5 @@ class VisibleProjectManager(models.Manager):
             ):
                 invisible_projects_ids.append(project.id)
         queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
+        """
+        return super().get_queryset()
