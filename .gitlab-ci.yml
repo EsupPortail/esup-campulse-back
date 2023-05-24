@@ -13,7 +13,6 @@ variables:
 before_script:
   - apt-get update && apt-get install -y age
 
-
 unittest:
   stage: test
   tags:

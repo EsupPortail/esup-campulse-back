@@ -1,29 +1,13 @@
 """Models describing projects."""
-import datetime
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.projects.models.managers.visible_project_manager import (
+    VisibleProjectManager,
+)
 from plana.apps.users.models.user import User
-
-
-class VisibleProjectManager(models.Manager):
-    """Outside of django-admin, the app only uses projects where edition_date is lower than 5 years old."""
-
-    def get_queryset(self):
-        queryset = Project.objects.all()
-        invisible_projects_ids = []
-        for project in queryset:
-            if datetime.datetime.now(
-                datetime.timezone(datetime.timedelta(hours=0))
-            ) > project.edition_date + datetime.timedelta(
-                days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
-            ):
-                invisible_projects_ids.append(project.id)
-        queryset = queryset.exclude(id__in=invisible_projects_ids)
-        return queryset
 
 
 class Project(models.Model):
