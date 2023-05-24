@@ -42,16 +42,6 @@ class ProjectDataExport(generics.RetrieveAPIView):
         try:
             project = self.queryset.get(id=kwargs["id"])
             data = project.__dict__
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = []
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -61,26 +51,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
         if (
             not request.user.has_perm("projects.view_project_any_commission")
             and not request.user.has_perm("projects.view_project_any_institution")
-            and (
-                (project.user_id is not None and request.user.pk != project.user_id)
-                or (
-                    project.association_id is not None
-                    and not request.user.is_in_association(project.association_id)
-                )
-                and (
-                    len(
-                        list(
-                            set(commissions_ids)
-                            & set(request.user.get_user_managed_commissions())
-                        )
-                    )
-                    == 0
-                )
-                and (
-                    institution_id in request.user.get_user_managed_institutions()
-                    or institution_id in request.user.get_user_institutions()
-                )
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},
@@ -162,16 +133,6 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         try:
             project = self.queryset.get(id=kwargs["id"])
             data = project.__dict__
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = []
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -181,26 +142,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         if (
             not request.user.has_perm("projects.view_project_any_commission")
             and not request.user.has_perm("projects.view_project_any_institution")
-            and (
-                (project.user_id is not None and request.user.pk != project.user_id)
-                or (
-                    project.association_id is not None
-                    and not request.user.is_in_association(project.association_id)
-                )
-                and (
-                    len(
-                        list(
-                            set(commissions_ids)
-                            & set(request.user.get_user_managed_commissions())
-                        )
-                    )
-                    == 0
-                )
-                and (
-                    institution_id in request.user.get_user_managed_institutions()
-                    or institution_id in request.user.get_user_institutions()
-                )
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},

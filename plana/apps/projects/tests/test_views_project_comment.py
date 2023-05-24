@@ -290,7 +290,7 @@ class ProjectCommentLinksViewsTests(TestCase):
 
     def test_patch_project_comment_anonymous(self):
         """
-        PATCH /projects/{project_id}/comments{comment_id}
+        PATCH /projects/{project_id}/comments/{comment_id}
 
         - An anonymous user cannot execute this command.
         """
@@ -302,7 +302,7 @@ class ProjectCommentLinksViewsTests(TestCase):
 
     def test_patch_project_comment_not_found(self):
         """
-        PATCH /projects/{project_id}/comments{comment_id}
+        PATCH /projects/{project_id}/comments/{comment_id}
 
         - Comment must exist.
         """
@@ -314,12 +314,18 @@ class ProjectCommentLinksViewsTests(TestCase):
 
     def test_patch_project_comment_forbidden(self):
         """
-        PATCH /projects/{project_id}/comments{comment_id}
+        PATCH /projects/{project_id}/comments/{comment_id}
 
         - A user without proper permissions cannot execute this command.
+        - Manager must be from the correct institution.
         """
         patch_data = {"text": "Commentaire forbidden"}
         response = self.student_client.patch(
+            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.institution_client.patch(
             "/projects/2/comments/1", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -358,13 +364,19 @@ class ProjectCommentLinksViewsTests(TestCase):
 
     def test_delete_project_comments_forbidden_user(self):
         """
-        DELETE /projects/{project_id}/categories/{category_id} .
+        DELETE /projects/{project_id}/comments/{category_id} .
 
         - The route cannot be accessed by a student user.
+        - Manager must be from the correct institution.
         """
         project = 2
         comment = 1
         response = self.student_offsite_client.delete(
+            f"/projects/{project}/comments/{comment}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.institution_client.delete(
             f"/projects/{project}/comments/{comment}"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

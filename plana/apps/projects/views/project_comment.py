@@ -174,16 +174,6 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
         """Retrieves all comments linked to a project"""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = 0
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -195,20 +185,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             and not request.user.has_perm(
                 "projects.view_projectcomment_any_institution"
             )
-            and not request.user.can_edit_project(project)
-            and (
-                len(
-                    list(
-                        set(commissions_ids)
-                        & set(request.user.get_user_managed_commissions())
-                    )
-                )
-                == 0
-            )
-            and (
-                institution_id not in request.user.get_user_managed_institutions()
-                and institution_id not in request.user.get_user_institutions()
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve these project comments.")},
@@ -265,6 +242,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates comments of the project"""
         try:
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             pc = ProjectComment.objects.get(
                 project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
@@ -272,6 +250,12 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {"error": _("Link between this comment and project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.can_access_project(project):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         pc.edition_date = datetime.date.today()
@@ -290,6 +274,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys comments of a project"""
         try:
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             pc = ProjectComment.objects.get(
                 project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
@@ -297,6 +282,12 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {"error": "Link between this comment and project does not exist."},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.can_access_project(project):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         pc.delete()

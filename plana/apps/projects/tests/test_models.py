@@ -1,12 +1,14 @@
 """List of tests done on projects models."""
 from django.test import Client, TestCase
 
+from plana.apps.commissions.models.commission import Commission
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
 
 
 class ProjectsModelsTests(TestCase):
@@ -15,6 +17,9 @@ class ProjectsModelsTests(TestCase):
     fixtures = [
         "associations_association.json",
         "associations_activityfield.json",
+        "auth_group.json",
+        "auth_group_permissions.json",
+        "auth_permission.json",
         "commissions_commission.json",
         "commissions_commissiondate.json",
         "institutions_institution.json",
@@ -25,6 +30,7 @@ class ProjectsModelsTests(TestCase):
         "projects_projectcomment.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
+        "users_groupinstitutioncommissionuser.json",
         "users_user.json",
     ]
 
@@ -64,47 +70,87 @@ class ProjectsModelsTests(TestCase):
             str(project_cd), f"{project_cd.project} {project_cd.commission_date}"
         )
 
-    def test_can_edit_project_success_user(self):
+    def test_can_access_project_success_user(self):
         """
-        Testing can_update_project Project helper
+        Testing can_access_project Project helper
         - The project owner must be the authenticated user.
         """
         project = Project.visible_objects.get(id=1)
         user = User.objects.get(username="etudiant-porteur@mail.tld")
-        self.assertTrue(user.can_edit_project(project))
+        self.assertTrue(user.can_access_project(project))
 
-    def test_can_edit_project_forbidden_user(self):
+    def test_can_access_project_forbidden_user(self):
         """
-        Testing can_update_project Project helper
+        Testing can_access_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=1)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
-        self.assertFalse(user.can_edit_project(project))
+        self.assertFalse(user.can_access_project(project))
 
-    def test_can_edit_project_success_association(self):
+    def test_can_access_project_success_association(self):
         """
-        Testing can_update_project Project helper
+        Testing can_access_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
         user = User.objects.get(username="president-asso-site@mail.tld")
-        self.assertTrue(user.can_edit_project(project))
+        self.assertTrue(user.can_access_project(project))
 
-    def test_can_edit_project_forbidden_association(self):
+    def test_can_access_project_forbidden_association(self):
         """
-        Testing can_update_project Project helper
+        Testing can_access_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-hors-site@mail.tld")
-        self.assertFalse(user.can_edit_project(project))
+        self.assertFalse(user.can_access_project(project))
 
-    def test_can_edit_project_forbidden_president(self):
+    def test_can_access_project_forbidden_president(self):
         """
-        Testing can_update_project Project helper
+        Testing can_access_project Project helper
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-site@mail.tld")
-        self.assertFalse(user.can_edit_project(project))
+        self.assertFalse(user.can_access_project(project))
+
+    def test_can_access_project_success_commission(self):
+        """
+        Testing can_access_project Project helper
+        - The authenticated user must be linked to a commission linked to a project.
+        """
+        project = Project.visible_objects.get(id=1)
+        user = User.objects.get(username="membre-culture-actions@mail.tld")
+        self.assertTrue(user.can_access_project(project))
+
+    def test_can_access_project_forbidden_commission(self):
+        """
+        Testing can_access_project Project helper
+        - The authenticated user must be linked to a commission linked to a project.
+        """
+        project = Project.visible_objects.get(id=1)
+        user = User.objects.get(username="membre-fsdie-idex@mail.tld")
+        self.assertFalse(user.can_access_project(project))
+
+    def test_can_access_project_success_institution(self):
+        """
+        Testing can_access_project Project helper
+        - The authenticated user must be linked to an institution linked to a project.
+        """
+        project = Project.visible_objects.get(id=1)
+        user = User.objects.get(username="gestionnaire-crous@mail.tld")
+        self.assertTrue(user.can_access_project(project))
+
+    def test_can_access_project_forbidden_institution(self):
+        """
+        Testing can_access_project Project helper
+        - The authenticated user must be linked to an institution linked to a project.
+        """
+        user = User.objects.get(username="gestionnaire-uha@mail.tld")
+
+        project = Project.visible_objects.get(id=1)
+        self.assertFalse(user.can_access_project(project))
+
+        project = Project.visible_objects.get(id=2)
+        self.assertFalse(user.can_access_project(project))

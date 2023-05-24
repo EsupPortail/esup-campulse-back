@@ -7,6 +7,7 @@ from django.db import models
 
 class VisibleProjectManager(models.Manager):
     def get_queryset(self):
+        # TODO This breaks migrate command on new databases.
         """
         queryset = super().get_queryset()
         invisible_projects_ids = []

@@ -10,7 +10,9 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.provider import CASProvider
 
 
@@ -139,13 +141,40 @@ class User(AbstractUser):
             > 0
         )
 
-    def can_edit_project(self, project_obj):
-        """Check if a user can edit a project as association president, misc user or manager."""
+    def can_access_project(self, project_obj):
+        """Check if a user can access a project as association president, misc user, commission member, or manager."""
         if self.is_staff:
+            if project_obj.association_id is not None:
+                institution_id = Institution.objects.get(
+                    id=Association.objects.get(
+                        id=project_obj.association_id
+                    ).institution_id
+                )
+                if institution_id not in self.get_user_managed_institutions():
+                    return False
+            if project_obj.user is not None and not self.has_perm(
+                "users.change_user_misc"
+            ):
+                return False
             return True
 
-        if project_obj.user is not None and project_obj.user != self:
-            return False
+        if self.get_user_commissions().count() != 0:
+            commissions_ids = CommissionDate.objects.filter(
+                id__in=ProjectCommissionDate.objects.filter(
+                    project_id=project_obj.id
+                ).values_list("commission_date_id")
+            ).values_list("commission_id")
+            if (
+                len(
+                    list(
+                        set(commissions_ids)
+                        & set(self.get_user_commissions().values_list('id'))
+                    )
+                )
+                == 0
+            ):
+                return False
+            return True
 
         if project_obj.association is not None:
             try:
@@ -158,8 +187,12 @@ class User(AbstractUser):
                     return False
             except ObjectDoesNotExist:
                 return False
+            return True
 
-        return True
+        if project_obj.user is not None:
+            if project_obj.user != self:
+                return False
+            return True
 
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""

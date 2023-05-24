@@ -381,16 +381,6 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """Retrieves a project with all its details."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = 0
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -400,26 +390,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             not request.user.has_perm("projects.view_project_any_commission")
             and not request.user.has_perm("projects.view_project_any_institution")
-            and (
-                (project.user_id is not None and request.user.pk != project.user_id)
-                or (
-                    project.association_id is not None
-                    and not request.user.is_in_association(project.association_id)
-                )
-                and (
-                    len(
-                        list(
-                            set(commissions_ids)
-                            & set(request.user.get_user_managed_commissions())
-                        )
-                    )
-                    == 0
-                )
-                and (
-                    institution_id not in request.user.get_user_managed_institutions()
-                    or institution_id not in request.user.get_user_institutions()
-                )
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},
@@ -456,7 +427,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_edit_project(project):
+        if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -540,16 +511,6 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """Retrieves a project review with all its details."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = 0
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -559,26 +520,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             not request.user.has_perm("projects.view_project_any_commission")
             and not request.user.has_perm("projects.view_project_any_institution")
-            and (
-                (project.user_id is not None and request.user.pk != project.user_id)
-                or (
-                    project.association_id is not None
-                    and not request.user.is_in_association(project.association_id)
-                )
-                and (
-                    len(
-                        list(
-                            set(commissions_ids)
-                            & set(request.user.get_user_managed_commissions())
-                        )
-                    )
-                    == 0
-                )
-                and (
-                    institution_id not in request.user.get_user_managed_institutions()
-                    or institution_id not in request.user.get_user_institutions()
-                )
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},
@@ -621,7 +563,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if not request.user.can_edit_project(project):
+        if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,

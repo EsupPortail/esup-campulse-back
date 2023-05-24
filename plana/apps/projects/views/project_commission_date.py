@@ -137,7 +137,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_edit_project(project):
+        if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -230,16 +230,6 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
         """Retrieves all commission dates linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            commissions_ids = CommissionDate.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    project_id=project.id
-                ).values_list("commission_date_id")
-            ).values_list("commission_id")
-            institution_id = []
-            if project.association_id is not None:
-                institution_id = Institution.objects.get(
-                    id=Association.objects.get(id=project.association_id).institution_id
-                )
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
@@ -253,20 +243,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
             and not request.user.has_perm(
                 "projects.view_projectcommissiondate_any_institution"
             )
-            and not request.user.can_edit_project(project)
-            and (
-                len(
-                    list(
-                        set(commissions_ids)
-                        & set(request.user.get_user_managed_commissions())
-                    )
-                )
-                == 0
-            )
-            and (
-                institution_id not in request.user.get_user_managed_institutions()
-                or institution_id not in request.user.get_user_institutions()
-            )
+            and not request.user.can_access_project(project)
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project commission dates.")},
@@ -337,7 +314,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_edit_project(pcd.project):
+        if not request.user.can_access_project(pcd.project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -426,7 +403,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_edit_project(pcd.project):
+        if not request.user.can_access_project(pcd.project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
