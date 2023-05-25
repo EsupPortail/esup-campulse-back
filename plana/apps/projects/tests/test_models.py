@@ -1,14 +1,12 @@
 """List of tests done on projects models."""
 from django.test import Client, TestCase
 
-from plana.apps.commissions.models.commission import Commission
-from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
+from plana.apps.users.models.user import User
 
 
 class ProjectsModelsTests(TestCase):

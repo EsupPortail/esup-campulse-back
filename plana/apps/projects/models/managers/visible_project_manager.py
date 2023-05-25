@@ -7,9 +7,9 @@ from django.db import models
 
 class VisibleProjectManager(models.Manager):
     def get_queryset(self):
+        queryset = super().get_queryset()
         # TODO This breaks migrate command on new databases.
         """
-        queryset = super().get_queryset()
         invisible_projects_ids = []
         for project in queryset:
             if datetime.datetime.now(
@@ -20,4 +20,4 @@ class VisibleProjectManager(models.Manager):
                 invisible_projects_ids.append(project.id)
         queryset = queryset.exclude(id__in=invisible_projects_ids)
         """
-        return super().get_queryset()
+        return queryset

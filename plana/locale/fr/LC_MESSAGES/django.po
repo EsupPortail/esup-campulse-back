@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 11:51+0200\n"
+"POT-Creation-Date: 2023-05-25 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,63 +202,63 @@ msgstr "Pas d'établissement donné."
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:241
+#: plana/apps/associations/views/association.py:243
 msgid "No rights to set is_site on this association."
 msgstr "Aucun droit d'éditer le champ is_site de cette association."
 
-#: plana/apps/associations/views/association.py:249
+#: plana/apps/associations/views/association.py:251
 msgid "No association name given."
 msgstr "Pas de nom d'association donné."
 
-#: plana/apps/associations/views/association.py:272
+#: plana/apps/associations/views/association.py:274
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:318
-#: plana/apps/associations/views/association.py:382
-#: plana/apps/associations/views/association.py:539
+#: plana/apps/associations/views/association.py:320
+#: plana/apps/associations/views/association.py:384
+#: plana/apps/associations/views/association.py:541
 #: plana/apps/documents/views/document_upload.py:145
 #: plana/apps/projects/views/project.py:231
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/associations/views/association.py:326
+#: plana/apps/associations/views/association.py:328
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:337
+#: plana/apps/associations/views/association.py:339
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:348
+#: plana/apps/associations/views/association.py:350
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:394
+#: plana/apps/associations/views/association.py:396
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:412
+#: plana/apps/associations/views/association.py:414
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:417
+#: plana/apps/associations/views/association.py:419
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:433
+#: plana/apps/associations/views/association.py:435
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:455
+#: plana/apps/associations/views/association.py:457
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:545
+#: plana/apps/associations/views/association.py:547
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:555
+#: plana/apps/associations/views/association.py:557
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
@@ -1335,7 +1335,7 @@ msgstr ""
 msgid "Expired password policy"
 msgstr "Politique d'expiration des mots de passe"
 
-#: plana/management/commands/cron_project_expiration.py:11
+#: plana/management/commands/cron_project_expiration.py:12
 msgid "Deletes all Projects older than the given amount of years."
 msgstr "Supprime tous les projets plus vieux que le nombre d'années données."
 

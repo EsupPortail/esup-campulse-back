@@ -234,8 +234,10 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "is_site" in request.data and not request.user.has_perm(
-            "associations.add_association_all_fields"
+        if (
+            "is_site" in request.data
+            and to_bool(request.data["is_site"]) is True
+            and not request.user.has_perm("associations.add_association_all_fields")
         ):
             return response.Response(
                 {"error": _("No rights to set is_site on this association.")},

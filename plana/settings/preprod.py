@@ -84,6 +84,7 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 ########
 
 MIGRATION_SITE_DOMAIN = "plana-pprd.app.unistra.fr"
+MIGRATION_SITE_NAME = "Campulse"
 DEFAULT_FROM_EMAIL = "appli-plana-pprd@unistra.fr"
 
 # External APIs

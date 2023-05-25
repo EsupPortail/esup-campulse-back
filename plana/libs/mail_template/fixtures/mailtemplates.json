@@ -402,7 +402,7 @@
       "code": "NEW_ASSOCIATION_PROJECT_TO_PROCESS",
       "label": "New Association Project To Process",
       "description": "Message reçu par un gestionnaire pour l'informer du dépôt d'une nouvelle demande de subventions par une association.",
-      "subject": "{{ site_name }} – Nouvelle demande de subventions déposé par une association",
+      "subject": "{{ site_name }} – Nouvelle demande de subventions déposée par une association",
       "body": "Bonjour,<br/><br/>Un nouveau dossier CAPE pour l'association \"{{ association_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
