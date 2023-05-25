@@ -908,6 +908,11 @@ paths:
           type: integer
         description: Filter by User ID.
       - in: query
+        name: with_comments
+        schema:
+          type: boolean
+        description: Filter to get projects where comments are posted.
+      - in: query
         name: year
         schema:
           type: integer

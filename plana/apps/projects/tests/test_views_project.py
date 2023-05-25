@@ -13,6 +13,7 @@ from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
 
@@ -226,6 +227,16 @@ class ProjectsViewsTests(TestCase):
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
+
+        projects_ids_with_comments = ProjectComment.objects.all().values_list(
+            "project_id"
+        )
+        response = self.general_client.get("/projects/?with_comments=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), len(projects_ids_with_comments))
+        response = self.general_client.get("/projects/?with_comments=false")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertNotEqual(len(content), len(projects_ids_with_comments))
 
         inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
         inactive_projects = Project.visible_objects.filter(
