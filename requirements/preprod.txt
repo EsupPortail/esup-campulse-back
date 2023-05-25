@@ -688,9 +688,9 @@ sqlparse==0.4.4 ; python_version >= "3.8" and python_version < "3.11" \
 tinycss2==1.2.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:2b80a96d41e7c3914b8cda8bc7f705a4d9c49275616e886103dd839dfc847847 \
     --hash=sha256:8cff3a8f066c2ec677c06dbc7b45619804a6938478d9d73c284b29d14ecb0627
-typing-extensions==4.6.1 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:558bc0c4145f01e6405f4a5fdbd82050bd221b119f4bf72a961a1cfd471349d6 \
-    --hash=sha256:6bac751f4789b135c43228e72de18637e9a6c29d12777023a703fd1a6858469f
+typing-extensions==4.6.2 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:06006244c70ac8ee83fa8282cb188f697b8db25bc8b4df07be1873c43897060c \
+    --hash=sha256:3a8b36f13dd5fdc5d1b16fe317f5668545de77fa0b8e02006381fd49d731ab98
 uritemplate==4.1.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0 \
     --hash=sha256:830c08b8d99bdd312ea4ead05994a38e8936266f84b9a7878232db50b044e02e

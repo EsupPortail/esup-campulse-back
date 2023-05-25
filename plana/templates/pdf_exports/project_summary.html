@@ -112,7 +112,11 @@
 
         <section>
             <h2>Documents : </h2>
-            <p>?</p>
+            <ul>
+                {% for document in documents %}
+                    <li>{{ document.name }}</li>
+                {% endfor %}
+            </ul>
         </section>
     </body>
 </html>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 13:35+0200\n"
+"POT-Creation-Date: 2023-05-25 16:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -533,7 +533,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project_comment.py:179
 #: plana/apps/projects/views/project_commission_date.py:235
 #: plana/apps/projects/views/project_export.py:47
-#: plana/apps/projects/views/project_export.py:138
+#: plana/apps/projects/views/project_export.py:144
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -845,7 +845,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 #: plana/apps/projects/views/project.py:413
 #: plana/apps/projects/views/project.py:543
 #: plana/apps/projects/views/project_export.py:57
-#: plana/apps/projects/views/project_export.py:148
+#: plana/apps/projects/views/project_export.py:154
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 

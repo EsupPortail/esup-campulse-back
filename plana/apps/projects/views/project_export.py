@@ -11,7 +11,7 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.institutions.models.institution import Institution
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project import (
@@ -72,12 +72,12 @@ class ProjectDataExport(generics.RetrieveAPIView):
 
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
-                'commission_date_id',
-                'is_first_edition',
-                'amount_asked_previous_edition',
-                'amount_earned_previous_edition',
-                'amount_asked',
-                'amount_earned',
+                "commission_date_id",
+                "is_first_edition",
+                "amount_asked_previous_edition",
+                "amount_earned_previous_edition",
+                "amount_asked",
+                "amount_earned",
             )
         )
         commission_infos = list(
@@ -89,17 +89,17 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
             .annotate(
                 commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef('commission_id')).values(
-                        'acronym'
+                    Commission.objects.filter(id=OuterRef("commission_id")).values(
+                        "acronym"
                     ),
                     output_field=models.CharField(),
                 )
             )
-            .values('commission_acronym', 'commission_date', 'id')
+            .values("commission_acronym", "commission_date", "id")
         )
         for commission in commission_infos:
-            for link in data['project_commission_dates']:
-                if commission['id'] == link['commission_date_id']:
+            for link in data["project_commission_dates"]:
+                if commission["id"] == link["commission_date_id"]:
                     link["commission_acronym"] = commission["commission_acronym"]
                     link["commission_date"] = commission["commission_date"]
 
@@ -109,8 +109,14 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 data["is_first_edition"] = False
                 break
 
+        data["documents"] = list(
+            DocumentUpload.objects.filter(project_id=data["id"]).values(
+                "name",
+            )
+        )
+
         # print(data)
-        return generate_pdf(data, "project_summary", request.build_absolute_uri('/'))
+        return generate_pdf(data, "project_summary", request.build_absolute_uri("/"))
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -163,12 +169,12 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
 
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
-                'commission_date_id',
-                'is_first_edition',
-                'amount_asked_previous_edition',
-                'amount_earned_previous_edition',
-                'amount_asked',
-                'amount_earned',
+                "commission_date_id",
+                "is_first_edition",
+                "amount_asked_previous_edition",
+                "amount_earned_previous_edition",
+                "amount_asked",
+                "amount_earned",
             )
         )
         commission_infos = list(
@@ -180,17 +186,17 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
             .annotate(
                 commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef('commission_id')).values(
-                        'acronym'
+                    Commission.objects.filter(id=OuterRef("commission_id")).values(
+                        "acronym"
                     ),
                     output_field=models.CharField(),
                 )
             )
-            .values('commission_acronym', 'commission_date', 'id')
+            .values("commission_acronym", "commission_date", "id")
         )
         for commission in commission_infos:
-            for link in data['project_commission_dates']:
-                if commission['id'] == link['commission_date_id']:
+            for link in data["project_commission_dates"]:
+                if commission["id"] == link["commission_date_id"]:
                     link["commission_acronym"] = commission["commission_acronym"]
                     link["commission_date"] = commission["commission_date"]
 
@@ -199,6 +205,12 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             if not edition["is_first_edition"]:
                 data["is_first_edition"] = False
                 break
+
+        data["documents"] = list(
+            DocumentUpload.objects.filter(project_id=data["id"]).values(
+                "name",
+            )
+        )
 
         # print(data)
         return generate_pdf(
