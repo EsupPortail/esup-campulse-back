@@ -35,6 +35,7 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False, allow_blank=True)
     zipcode = serializers.CharField(required=False, allow_blank=True)
     city = serializers.CharField(required=False, allow_blank=True)
+    country = serializers.CharField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
     email = serializers.CharField(required=False, allow_blank=True)
     siret = serializers.CharField(required=False, allow_blank=True)

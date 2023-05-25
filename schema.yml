@@ -2680,6 +2680,9 @@ components:
         city:
           type: string
           maxLength: 128
+        country:
+          type: string
+          maxLength: 128
         phone:
           type: string
           title: Téléphone
@@ -2773,6 +2776,8 @@ components:
         zipcode:
           type: string
         city:
+          type: string
+        country:
           type: string
         phone:
           type: string
@@ -3681,6 +3686,8 @@ components:
           type: string
         city:
           type: string
+        country:
+          type: string
         phone:
           type: string
         email:
@@ -4019,6 +4026,8 @@ components:
         zipcode:
           type: string
         city:
+          type: string
+        country:
           type: string
         phone:
           type: string
@@ -4490,6 +4499,8 @@ components:
         zipcode:
           type: string
         city:
+          type: string
+        country:
           type: string
         phone:
           type: string

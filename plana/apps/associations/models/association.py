@@ -56,6 +56,7 @@ class Association(models.Model):
     address = models.TextField(_("Address"), default="")
     zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
     city = models.CharField(_("City"), max_length=128, default="")
+    country = models.CharField(_("Country"), max_length=128, default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
     email = models.EmailField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)

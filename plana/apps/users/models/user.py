@@ -106,6 +106,7 @@ class User(AbstractUser):
     address = models.TextField(_("Address"), default="")
     zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
     city = models.CharField(_("City"), max_length=128, default="")
+    country = models.CharField(_("Country"), max_length=128, default="")
     phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     password_last_change_date = models.DateField(
