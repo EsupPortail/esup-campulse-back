@@ -2674,12 +2674,19 @@ components:
         address:
           type: string
           title: Adresse
+        zipcode:
+          type: string
+          maxLength: 32
+        city:
+          type: string
+          maxLength: 128
         phone:
           type: string
           title: Téléphone
           maxLength: 32
         email:
           type: string
+          format: email
           title: Courriel
           maxLength: 256
         siret:
@@ -2762,6 +2769,10 @@ components:
         current_projects:
           type: string
         address:
+          type: string
+        zipcode:
+          type: string
+        city:
           type: string
         phone:
           type: string
@@ -2939,6 +2950,7 @@ components:
           maxLength: 30
         email:
           type: string
+          format: email
           title: Courriel
           maxLength: 256
         is_enabled:
@@ -3665,6 +3677,10 @@ components:
           type: string
         address:
           type: string
+        zipcode:
+          type: string
+        city:
+          type: string
         phone:
           type: string
         email:
@@ -3999,6 +4015,10 @@ components:
           title: Courriel
           maxLength: 254
         address:
+          type: string
+        zipcode:
+          type: string
+        city:
           type: string
         phone:
           type: string
@@ -4466,6 +4486,10 @@ components:
           title: Courriel
           maxLength: 254
         address:
+          type: string
+        zipcode:
+          type: string
+        city:
           type: string
         phone:
           type: string

@@ -17,6 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     address = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True)
+    city = serializers.CharField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
     is_cas = serializers.SerializerMethodField("is_cas_user")
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
@@ -63,6 +65,8 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "address",
+            "zipcode",
+            "city",
             "phone",
             "is_cas",
             "has_validated_email",

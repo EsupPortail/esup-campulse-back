@@ -33,6 +33,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     social_object = serializers.CharField(required=False, allow_blank=True)
     current_projects = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True)
+    city = serializers.CharField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
     email = serializers.CharField(required=False, allow_blank=True)
     siret = serializers.CharField(required=False, allow_blank=True)
