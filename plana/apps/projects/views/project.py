@@ -18,6 +18,7 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
@@ -95,6 +96,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 description="Filter by Commission Dates linked to a project.",
             ),
             OpenApiParameter(
+                "with_comments",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get projects where comments are posted.",
+            ),
+            OpenApiParameter(
                 "active_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -117,6 +124,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         association = request.query_params.get("association_id")
         project_statuses = request.query_params.get("project_statuses")
         commission_dates = request.query_params.get("commission_dates")
+        with_comments = request.query_params.get("with_comments")
         active_projects = request.query_params.get("active_projects")
 
         if name is not None and name != "":
@@ -197,6 +205,15 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     commission_date_id__in=commission_dates_ids
                 ).values_list("project_id")
             )
+
+        if with_comments is not None and with_comments != "":
+            projects_ids_with_comments = ProjectComment.objects.all().values_list(
+                "project_id"
+            )
+            if to_bool(with_comments) is False:
+                queryset = queryset.exclude(id__in=projects_ids_with_comments)
+            else:
+                queryset = queryset.filter(id__in=projects_ids_with_comments)
 
         if active_projects is not None and active_projects != "":
             inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
