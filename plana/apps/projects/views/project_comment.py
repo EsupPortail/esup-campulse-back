@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -113,6 +114,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
     @extend_schema(
         responses={
             status.HTTP_201_CREATED: ProjectCommentSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -127,6 +129,15 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         request.data["creation_date"] = datetime.date.today()
@@ -241,6 +252,15 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates comments of the project"""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
             pc = ProjectComment.objects.get(

@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.commissions.models.commission import Commission
@@ -178,6 +179,15 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """Creates a new commission date (manager only)."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             "submission_date" in request.data
             and datetime.datetime.strptime(
@@ -266,6 +276,15 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     )
     def patch(self, request, *args, **kwargs):
         """Updates commission date details."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

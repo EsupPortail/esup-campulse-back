@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -23,7 +24,11 @@ from plana.apps.users.models.user import (
     User,
 )
 from plana.apps.users.provider import CASProvider
-from plana.apps.users.serializers.user import UserPartialDataSerializer, UserSerializer
+from plana.apps.users.serializers.user import (
+    UserPartialDataSerializer,
+    UserSerializer,
+    UserUpdateSerializer,
+)
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
@@ -229,6 +234,15 @@ class UserListCreate(generics.ListCreateAPIView):
                 )
             request.data.update({"username": request.data["email"]})
 
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         request.data.update({"is_validated_by_admin": True})
         user_response = self.create(request, *args, **kwargs)
         user = User.objects.get(id=user_response.data["id"])
@@ -285,7 +299,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{id} route"""
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -343,6 +357,15 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates a user field (with a restriction on CAS auto-generated fields)."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             user = User.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

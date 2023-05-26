@@ -83,6 +83,7 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
 class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
+    name = serializers.CharField(required=False, allow_blank=True)
     other_first_name = serializers.CharField(required=False, allow_blank=True)
     other_last_name = serializers.CharField(required=False, allow_blank=True)
     other_email = serializers.CharField(required=False, allow_blank=True)

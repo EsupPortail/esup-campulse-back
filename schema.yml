@@ -555,6 +555,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -614,6 +616,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
           description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -950,7 +954,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProjectUpdateRequest'
-        required: true
       security:
       - jwtAuth: []
       responses:
@@ -1186,6 +1189,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectStatus'
           description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -1510,6 +1515,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectCategory'
           description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -1587,6 +1594,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectComment'
           description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -1766,13 +1775,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUserRequest'
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -2771,6 +2780,8 @@ components:
         id:
           type: integer
           readOnly: true
+        name:
+          type: string
         acronym:
           type: string
         social_object:
@@ -2799,15 +2810,13 @@ components:
           type: string
         institution:
           type: integer
+          nullable: true
         institution_component:
           type: integer
           nullable: true
         activity_field:
           type: integer
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
+          nullable: true
         path_logo:
           type: string
           format: uri
@@ -2862,12 +2871,8 @@ components:
           type: object
           additionalProperties: {}
       required:
-      - activity_field
       - creation_date
       - id
-      - institution
-      - institution_component
-      - name
     AssociationMandatoryData:
       type: object
       description: Smaller serializer to return only the main informations of an association.
@@ -3680,6 +3685,8 @@ components:
       type: object
       description: Main serializer.
       properties:
+        name:
+          type: string
         acronym:
           type: string
         social_object:
@@ -3708,16 +3715,13 @@ components:
           type: string
         institution:
           type: integer
+          nullable: true
         institution_component:
           type: integer
           nullable: true
         activity_field:
           type: integer
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
+          nullable: true
         path_logo:
           type: string
           format: binary
@@ -4027,6 +4031,33 @@ components:
           minLength: 1
           title: Courriel
           maxLength: 254
+        address:
+          type: string
+        zipcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+        can_submit_projects:
+          type: boolean
+    PatchedUserUpdateRequest:
+      type: object
+      description: Serializer to patch the user.
+      properties:
+        username:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
         address:
           type: string
         zipcode:
@@ -4355,9 +4386,6 @@ components:
       properties:
         name:
           type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
         planned_start_date:
           type: string
           format: date-time
@@ -4430,8 +4458,6 @@ components:
         marketing_campaign:
           type: string
           minLength: 1
-      required:
-      - name
     ResendEmailVerificationRequest:
       type: object
       properties:

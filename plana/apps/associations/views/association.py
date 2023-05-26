@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -244,18 +245,16 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "name" in request.data:
-            association_name = request.data["name"]
-        else:
+        if "name" not in request.data:
             return response.Response(
-                {"error": _("No association name given.")},
+                {"error": _("Association name not set.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Removes spaces, uppercase and accented characters to avoid similar association names.
         new_association_name = (
             unicodedata.normalize(
-                "NFD", association_name.strip().replace(" ", "").lower()
+                "NFD", request.data["name"].strip().replace(" ", "").lower()
             )
             .encode("ascii", "ignore")
             .decode("utf-8")
@@ -274,6 +273,15 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     {"error": _("Association name already taken.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if "is_site" not in request.data:
             request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
@@ -383,6 +391,15 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {"error": _("Association does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if (

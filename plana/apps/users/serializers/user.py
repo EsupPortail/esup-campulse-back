@@ -80,6 +80,37 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Serializer to patch the user."""
+
+    username = serializers.CharField(required=False, allow_blank=True)
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.CharField(required=False, allow_blank=True)
+    address = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True)
+    city = serializers.CharField(required=False, allow_blank=True)
+    country = serializers.CharField(required=False, allow_blank=True)
+    phone = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "address",
+            "zipcode",
+            "city",
+            "country",
+            "phone",
+            "is_validated_by_admin",
+            "can_submit_projects",
+        ]
+
+
 class UserPartialDataSerializer(serializers.ModelSerializer):
     """Used to get data from another student in the same associations."""
 

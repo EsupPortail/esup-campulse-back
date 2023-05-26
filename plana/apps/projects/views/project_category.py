@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -94,6 +95,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
     @extend_schema(
         responses={
             status.HTTP_201_CREATED: ProjectCategorySerializer,
+            status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -108,6 +110,15 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if not request.user.can_access_project(project):

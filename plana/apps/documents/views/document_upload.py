@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -165,6 +166,18 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     {"error": _("Not allowed to upload documents with this user.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
+
+        # TODO Re-enable serializer when fixtures for unit tests will be OK.
+        """
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        """
 
         if (
             "association" in request.data

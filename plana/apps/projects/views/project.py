@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -296,6 +297,15 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             "association" in request.data
             and request.data["association"] is not None
@@ -437,6 +447,15 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
@@ -567,6 +586,15 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates project details."""
         try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
@@ -648,6 +676,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     @extend_schema(
         responses={
             status.HTTP_200_OK: ProjectStatusSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -655,6 +684,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates project status."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:

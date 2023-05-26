@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -129,6 +130,15 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             return response.Response(
                 {"error": _("User or association does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if request.user.is_anonymous and user.is_validated_by_admin:
@@ -341,10 +351,17 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         """Updates user role in an association (manager and president)."""
         try:
-            user = User.objects.get(id=kwargs["user_id"])
-            association = Association.objects.get(id=kwargs["association_id"])
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = User.objects.get(id=kwargs["user_id"])
+            association = Association.objects.get(id=kwargs["association_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("User or association does not exist.")},
@@ -561,8 +578,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             user = User.objects.get(id=kwargs["user_id"])
             request.data["user"] = user.id
             request.data["association"] = association.id
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("User or association does not exist.")},
