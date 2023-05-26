@@ -537,7 +537,7 @@ class UserViewsTests(TestCase):
             f"/users/{self.unvalidated_user_id}",
             data={
                 "email": "aymar-venceslas@oui.org",
-                "phone": "0 118 999 881 999 119 725 3",
+                "phone": "0836656565",
                 "is_validated_by_admin": True,
                 "can_submit_projects": False,
             },
@@ -545,7 +545,7 @@ class UserViewsTests(TestCase):
         )
         user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
-        self.assertEqual(user.phone, "0 118 999 881 999 119 725 3")
+        self.assertEqual(user.phone, "0836656565")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
         self.assertEqual(user.can_submit_projects, False)
         self.assertTrue(len(mail.outbox))

@@ -2700,7 +2700,6 @@ components:
         phone:
           type: string
           title: Téléphone
-          pattern: ^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$
           maxLength: 32
         email:
           type: string

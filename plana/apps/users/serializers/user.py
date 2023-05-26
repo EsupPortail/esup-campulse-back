@@ -1,4 +1,6 @@
 """Serializers describing fields used on users and related forms."""
+import re
+
 from allauth.account.adapter import get_adapter
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -57,6 +59,13 @@ class UserSerializer(serializers.ModelSerializer):
         """Calculate field "has_validated_email" (True if user finished registration)."""
         return user.has_validated_email_user()
 
+    def validate_phone(self, value):
+        """Check phone field with a regex."""
+        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
+        if not re.match(pattern, value):
+            raise serializers.ValidationError("Wrong phone number format.")
+        return value
+
     class Meta:
         model = User
         fields = [
@@ -92,6 +101,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=False, allow_blank=True)
     country = serializers.CharField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
+
+    def validate_phone(self, value):
+        """Check phone field with a regex."""
+        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
+        if not re.match(pattern, value):
+            raise serializers.ValidationError("Wrong phone number format.")
+        return value
 
     class Meta:
         model = User

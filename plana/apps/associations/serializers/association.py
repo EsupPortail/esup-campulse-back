@@ -1,4 +1,6 @@
 """Serializers describing fields used on associations."""
+import re
+
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
@@ -52,6 +54,13 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     activity_field = serializers.PrimaryKeyRelatedField(
         queryset=ActivityField.objects.all(), allow_null=True, default=None
     )
+
+    def validate_phone(self, value):
+        """Check phone field with a regex."""
+        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
+        if not re.match(pattern, value):
+            raise serializers.ValidationError("Wrong phone number format.")
+        return value
 
     class Meta:
         model = Association
