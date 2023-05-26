@@ -11,6 +11,7 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -111,7 +112,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
 
         data["documents"] = list(
             DocumentUpload.objects.filter(project_id=data["id"]).values(
-                "name",
+                "name", "document__name"
             )
         )
 
@@ -208,7 +209,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
 
         data["documents"] = list(
             DocumentUpload.objects.filter(project_id=data["id"]).values(
-                "name",
+                "name", "document__name"
             )
         )
 

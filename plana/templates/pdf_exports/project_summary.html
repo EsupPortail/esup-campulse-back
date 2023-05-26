@@ -114,7 +114,7 @@
             <h2>Documents : </h2>
             <ul>
                 {% for document in documents %}
-                    <li>{{ document.name }}</li>
+                    <li>{{ document.document__name }} : {{ document.name }}</li>
                 {% endfor %}
             </ul>
         </section>
