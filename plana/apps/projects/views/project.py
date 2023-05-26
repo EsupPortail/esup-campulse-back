@@ -302,7 +302,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -451,7 +451,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -590,7 +590,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -689,7 +689,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

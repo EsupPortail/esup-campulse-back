@@ -137,7 +137,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -355,7 +355,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

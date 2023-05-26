@@ -143,7 +143,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -314,7 +314,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
-                {"error": error},
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
