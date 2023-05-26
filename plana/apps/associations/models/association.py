@@ -3,6 +3,7 @@ import datetime
 import os
 
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from thumbnails.fields import ImageField
@@ -36,6 +37,11 @@ def get_logo_path(instance, filename):
 class Association(models.Model):
     """Main model."""
 
+    phone_regex = RegexValidator(
+        regex=r'^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$',
+        message=_("Wrong phone number format."),
+    )
+
     name = models.CharField(
         _("Name"), max_length=250, null=False, blank=False, unique=True
     )
@@ -57,7 +63,9 @@ class Association(models.Model):
     zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
     city = models.CharField(_("City"), max_length=128, default="")
     country = models.CharField(_("Country"), max_length=128, default="")
-    phone = models.CharField(_("Phone"), default="", max_length=32)
+    phone = models.CharField(
+        _("Phone"), default="", max_length=32, validators=[phone_regex]
+    )
     email = models.EmailField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)

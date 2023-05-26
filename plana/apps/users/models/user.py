@@ -5,6 +5,7 @@ from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -100,6 +101,11 @@ class User(AbstractUser):
     - is_active
     """
 
+    phone_regex = RegexValidator(
+        regex=r'^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$',
+        message=_("Wrong phone number format."),
+    )
+
     email = models.EmailField(_("Email"), unique=True)
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
@@ -107,7 +113,9 @@ class User(AbstractUser):
     zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
     city = models.CharField(_("City"), max_length=128, default="")
     country = models.CharField(_("Country"), max_length=128, default="")
-    phone = models.CharField(_("Phone"), max_length=32, default="", null=True)
+    phone = models.CharField(
+        _("Phone"), default="", max_length=32, null=True, validators=[phone_regex]
+    )
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     password_last_change_date = models.DateField(
         _("Password last change date"), null=True

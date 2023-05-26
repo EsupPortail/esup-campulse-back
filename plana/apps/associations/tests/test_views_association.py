@@ -617,6 +617,22 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_association_wrong_phone_number(self):
+        """
+        PATCH /associations/{id} .
+
+        - A member of the association's office can edit information from the association.
+        - Phone number must respect a given format.
+        """
+        association_id = 2
+        self.president_client.patch(
+            f"/associations/{association_id}",
+            {"phone": "Waluigi"},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertNotEqual(association.phone, "Waluigi")
+
     def test_patch_association_manager_misc(self):
         """
         PATCH /associations/{id} .

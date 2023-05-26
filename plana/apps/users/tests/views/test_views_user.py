@@ -288,6 +288,25 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertFalse(len(mail.outbox))
 
+    def test_manager_post_user_wrong_phone(self):
+        """
+        POST /users/ .
+
+        - A manager user can execute this request.
+        - Phone number must be correct.
+        """
+        self.manager_client.post(
+            "/users/",
+            {
+                "first_name": "Didier",
+                "last_name": "Serveur",
+                "email": "serveur-didier@gmail.com",
+                "phone": "serveur didier",
+            },
+        )
+        user_cnt = User.objects.filter(email="serveur-didier@gmail.com").count()
+        self.assertEqual(user_cnt, 0)
+
     def test_manager_post_user(self):
         """
         POST /users/ .
