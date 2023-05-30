@@ -4651,13 +4651,37 @@ components:
           type: string
         phone:
           type: string
+        is_cas:
+          type: boolean
+          readOnly: true
+        has_validated_email:
+          type: boolean
+          readOnly: true
         is_validated_by_admin:
           type: boolean
           title: Is validated by administrator
         can_submit_projects:
           type: boolean
+        associations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssociationMandatoryData'
+          readOnly: true
+        groups:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        permissions:
+          type: object
+          additionalProperties: {}
+          readOnly: true
       required:
+      - associations
+      - groups
+      - has_validated_email
       - id
+      - is_cas
+      - permissions
     VerifyEmailRequest:
       type: object
       properties:

@@ -59,6 +59,13 @@ class UserSerializer(serializers.ModelSerializer):
         """Calculate field "has_validated_email" (True if user finished registration)."""
         return user.has_validated_email_user()
 
+    def validate_phone(self, value):
+        """Check phone field with a regex."""
+        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
+        if not re.match(pattern, value):
+            raise serializers.ValidationError("Wrong phone number format.")
+        return value
+
     class Meta:
         model = User
         fields = [
@@ -94,6 +101,41 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=False, allow_blank=True)
     country = serializers.CharField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
+    is_cas = serializers.SerializerMethodField("is_cas_user")
+    has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
+    associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
+    groups = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.OBJECT)
+    def get_permissions(self, user):
+        """Return permissions linked to the user."""
+        permissions = []
+        groups = Group.objects.filter(
+            id__in=GroupInstitutionCommissionUser.objects.filter(
+                user_id=user.id
+            ).values_list("group_id")
+        )
+        for group in groups:
+            permissions = [
+                *permissions,
+                *group.permissions.values_list("codename", flat=True),
+            ]
+        return permissions
+        # return user.get_group_permissions()
+
+    @extend_schema_field(OpenApiTypes.OBJECT)
+    def get_groups(self, user):
+        """Return groups-institutions-users links."""
+        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
+
+    def is_cas_user(self, user) -> bool:
+        """Calculate field "is_cas" (True if user registered through CAS)."""
+        return user.is_cas_user()
+
+    def has_validated_email_user(self, user) -> bool:
+        """Calculate field "has_validated_email" (True if user finished registration)."""
+        return user.has_validated_email_user()
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
@@ -115,8 +157,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "city",
             "country",
             "phone",
+            "is_cas",
+            "has_validated_email",
             "is_validated_by_admin",
             "can_submit_projects",
+            "associations",
+            "groups",
+            "permissions",
         ]
 
 

@@ -299,6 +299,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{id} route"""
 
     queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
