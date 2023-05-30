@@ -51,17 +51,3 @@ class AssociationUserUpdateSerializer(serializers.ModelSerializer):
             "is_secretary",
             "is_treasurer",
         ]
-
-
-class AssociationUserDeleteSerializer(serializers.ModelSerializer):
-    """Serializer for user-associations deletion."""
-
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
-
-    class Meta:
-        model = AssociationUser
-        fields = [
-            "user",
-            "association",
-        ]

@@ -17,7 +17,6 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
-    AssociationUserDeleteSerializer,
     AssociationUserSerializer,
     AssociationUserUpdateSerializer,
 )
@@ -305,6 +304,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
+    serializer_class = AssociationUserUpdateSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -312,13 +312,6 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
-
-    def get_serializer_class(self):
-        if self.request.method == "PATCH":
-            self.serializer_class = AssociationUserUpdateSerializer
-        elif self.request.method == "DELETE":
-            self.serializer_class = AssociationUserDeleteSerializer
-        return super().get_serializer_class()
 
     @extend_schema(
         exclude=True,
@@ -564,7 +557,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: AssociationUserDeleteSerializer,
+            status.HTTP_204_NO_CONTENT: AssociationUserUpdateSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

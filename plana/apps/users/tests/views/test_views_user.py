@@ -318,7 +318,12 @@ class UserViewsTests(TestCase):
         username = "bourvil@splatoon.com"
         response_manager = self.manager_client.post(
             "/users/",
-            {"first_name": "Bourvil", "last_name": "André", "email": username},
+            {
+                "first_name": "Bourvil",
+                "last_name": "André",
+                "email": username,
+                "phone": "0836656565",
+            },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
         self.assertTrue(len(mail.outbox))
@@ -489,6 +494,20 @@ class UserViewsTests(TestCase):
         user_manager = User.objects.get(email=self.manager_misc_user_name)
         self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(user_manager.email, self.manager_misc_user_name)
+
+    def test_manager_patch_user_detail_wrong_phone(self):
+        """
+        PATCH /users/{id} .
+
+        - A manager user can execute this request.
+        - Phone number format must be correct.
+        """
+        response_manager = self.manager_client.patch(
+            f"/users/{self.unvalidated_user_id}",
+            data={"phone": "oui"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_patch_user_detail_cas(self):
         """

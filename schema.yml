@@ -1947,7 +1947,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssociationUserDelete'
+                $ref: '#/components/schemas/AssociationUserUpdate'
           description: ''
         '401':
           description: No response body
@@ -3089,17 +3089,6 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-      required:
-      - association
-      - user
-    AssociationUserDelete:
-      type: object
-      description: Serializer for user-associations deletion.
-      properties:
-        user:
-          type: integer
-        association:
-          type: integer
       required:
       - association
       - user
