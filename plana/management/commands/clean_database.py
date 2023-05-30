@@ -13,6 +13,10 @@ class Command(BaseCommand):
             call_command("flush")
             call_command("migrate")
             apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
+            # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
+            for app_fixture in apps_fixtures:
+                if app_fixture.name.endswith("documents_documentupload.json"):
+                    apps_fixtures.remove(app_fixture)
             call_command("loaddata", *apps_fixtures)
             libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
             call_command("loaddata", *libs_fixtures)
