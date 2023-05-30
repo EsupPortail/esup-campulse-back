@@ -520,6 +520,33 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_association_similar_names(self):
+        """
+        POST /associations/ .
+
+        - A General Manager can add an association.
+        - An association with the same name cannot be added twice.
+        - An association cannot have a similar name compared to another one.
+        """
+        response_general = self.general_client.post(
+            "/associations/",
+            {"name": "Les Fans de Georges la Saucisse", "institution": 2},
+        )
+
+        similar_names = [
+            "Les Fans de Georges la Saucisse",
+            "LesFansdeGeorgeslaSaucisse",
+            "lesfansdegeorgeslasaucisse",
+            " Les Fans de Georges la Saucisse ",
+            "Lés Fàns dè Gêörgës lâ Säùcîsse",
+        ]
+        for similar_name in similar_names:
+            response_general = self.general_client.post(
+                "/associations/",
+                {"name": similar_name, "institution": 2},
+            )
+            self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_association_success_manager_institution(self):
         """
         POST /associations/ .
@@ -566,33 +593,6 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(site_association["isSite"])
         self.assertTrue(site_association["isPublic"])
 
-    def test_post_association_similar_names(self):
-        """
-        POST /associations/ .
-
-        - A General Manager can add an association.
-        - An association with the same name cannot be added twice.
-        - An association cannot have a similar name compared to another one.
-        """
-        response_general = self.general_client.post(
-            "/associations/",
-            {"name": "Les Fans de Georges la Saucisse", "institution": 2},
-        )
-
-        similar_names = [
-            "Les Fans de Georges la Saucisse",
-            "LesFansdeGeorgeslaSaucisse",
-            "lesfansdegeorgeslasaucisse",
-            " Les Fans de Georges la Saucisse ",
-            "Lés Fàns dè Gêörgës lâ Säùcîsse",
-        ]
-        for similar_name in similar_names:
-            response_general = self.general_client.post(
-                "/associations/",
-                {"name": similar_name, "institution": 2},
-            )
-            self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_put_association(self):
         """
         PUT /associations/{id} .
@@ -625,11 +625,12 @@ class AssociationsViewsTests(TestCase):
         - Phone number must respect a given format.
         """
         association_id = 2
-        self.president_client.patch(
+        response_president = self.president_client.patch(
             f"/associations/{association_id}",
             {"phone": "Waluigi"},
             content_type="application/json",
         )
+        self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
         association = Association.objects.get(id=association_id)
         self.assertNotEqual(association.phone, "Waluigi")
 
@@ -714,7 +715,10 @@ class AssociationsViewsTests(TestCase):
         association_id = 2
         response_correct_president = self.president_client.patch(
             f"/associations/{association_id}",
-            {"name": "Moi je peux vraiment éditer l'asso, nananère."},
+            {
+                "name": "Moi je peux vraiment éditer l'asso, nananère.",
+                "phone": "0836656565",
+            },
             content_type="application/json",
         )
         self.assertEqual(response_correct_president.status_code, status.HTTP_200_OK)

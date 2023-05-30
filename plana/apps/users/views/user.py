@@ -299,7 +299,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/users/{id} route"""
 
     queryset = User.objects.all()
-    serializer_class = UserUpdateSerializer
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -308,8 +307,14 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            self.serializer_class = UserSerializer
+        else:
+            self.serializer_class = UserUpdateSerializer
+        return super().get_serializer_class()
+
     @extend_schema(
-        exclude=True,
         responses={
             status.HTTP_200_OK: UserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -348,7 +353,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: UserSerializer,
+            status.HTTP_200_OK: UserUpdateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -485,7 +490,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: UserSerializer,
+            status.HTTP_204_NO_CONTENT: UserUpdateSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

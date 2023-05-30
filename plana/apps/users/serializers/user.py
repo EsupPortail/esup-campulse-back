@@ -59,13 +59,6 @@ class UserSerializer(serializers.ModelSerializer):
         """Calculate field "has_validated_email" (True if user finished registration)."""
         return user.has_validated_email_user()
 
-    def validate_phone(self, value):
-        """Check phone field with a regex."""
-        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
-        if not re.match(pattern, value):
-            raise serializers.ValidationError("Wrong phone number format.")
-        return value
-
     class Meta:
         model = User
         fields = [

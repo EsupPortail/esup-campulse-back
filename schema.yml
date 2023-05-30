@@ -1759,6 +1759,32 @@ paths:
         '403':
           description: No response body
   /users/{id}:
+    get:
+      operationId: users_retrieve
+      description: Retrieves a user with all details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     patch:
       operationId: users_partial_update
       description: Updates a user field (with a restriction on CAS auto-generated
@@ -1789,7 +1815,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserUpdate'
           description: ''
         '400':
           description: No response body
@@ -1818,7 +1844,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserUpdate'
           description: ''
         '401':
           description: No response body
@@ -4600,6 +4626,38 @@ components:
       - first_name
       - last_name
       - username
+    UserUpdate:
+      type: object
+      description: Serializer to patch the user.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        zipcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+        is_validated_by_admin:
+          type: boolean
+          title: Is validated by administrator
+        can_submit_projects:
+          type: boolean
+      required:
+      - id
     VerifyEmailRequest:
       type: object
       properties:
