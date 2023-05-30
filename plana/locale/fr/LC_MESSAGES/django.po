@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 13:28+0200\n"
+"POT-Creation-Date: 2023-05-30 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -447,7 +447,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:119
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:22 plana/apps/users/models/user.py:63
-#: plana/apps/users/models/user.py:343
+#: plana/apps/users/models/user.py:339
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1012,7 +1012,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:344
+#: plana/apps/users/models/user.py:340
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1304,7 +1304,7 @@ msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 msgid "Resets database structure and content."
 msgstr "Régénère la structure et le contenu de la base de données."
 
-#: plana/management/commands/clean_database.py:19
+#: plana/management/commands/clean_database.py:23
 msgid "Database regenerated."
 msgstr "Base de données régénérée."
 

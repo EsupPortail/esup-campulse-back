@@ -245,7 +245,7 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a document type with all its details."""
+        """Retrieves a commission date with all its details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

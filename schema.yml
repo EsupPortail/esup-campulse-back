@@ -367,7 +367,7 @@ paths:
   /commissions/commission_dates/{id}:
     get:
       operationId: commissions_commission_dates_retrieve
-      description: Retrieves a document type with all its details.
+      description: Retrieves a commission date with all its details.
       parameters:
       - in: path
         name: id
