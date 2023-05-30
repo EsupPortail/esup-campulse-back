@@ -162,18 +162,14 @@ class User(AbstractUser):
             return True
 
         if self.get_user_commissions().count() != 0:
-            commissions_ids = CommissionDate.objects.filter(
+            user_commissions_ids = self.get_user_commissions().values_list("id")
+            project_commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project_obj.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
             if (
-                len(
-                    list(
-                        set(commissions_ids)
-                        & set(self.get_user_commissions().values_list('id'))
-                    )
-                )
+                len(set(project_commissions_ids).intersection(user_commissions_ids))
                 == 0
             ):
                 return False
