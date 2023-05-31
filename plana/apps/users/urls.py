@@ -68,7 +68,7 @@ urlpatterns = [
         name="group_institution_commission_user_destroy",
     ),
     path(
-        "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
+        "<int:user_id>/groups/<int:group_id>/funds/<int:fund_id>",
         GroupInstitutionCommissionUserDestroyWithCommission.as_view(),
         name="group_institution_commission_user_destroy_with_commission",
     ),

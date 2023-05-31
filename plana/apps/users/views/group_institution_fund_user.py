@@ -279,7 +279,7 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
 
 
 class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
-    """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
+    """/users/{user_id}/groups/{group_id}/funds/{fund_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
@@ -296,7 +296,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         tags=["users/groups"],
     )
     def delete(self, request, *args, **kwargs):
-        """Destroys a group linked to a user with commission argument (manager)."""
+        """Destroys a group linked to a user with fund argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
             user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
@@ -304,8 +304,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
-                # TODO : change kwargs "commission_id" to "fund_id"
-                fund_id=kwargs["commission_id"],
+                fund_id=kwargs["fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -316,8 +315,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         if not request.user.has_perm(
             "users.delete_groupinstitutionfunduser_any_group"
         ) and (
-            # TODO : change kwargs "commission_id" to "fund_id"
-            not Fund.objects.get(id=kwargs["commission_id"]).institution_id
+            not Fund.objects.get(id=kwargs["fund_id"]).institution_id
             in request.user.get_user_managed_institutions()
         ):
             return response.Response(

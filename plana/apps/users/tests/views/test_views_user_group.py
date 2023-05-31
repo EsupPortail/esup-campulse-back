@@ -403,7 +403,7 @@ class AuthUserViewsTests(TestCase):
 
     def test_manager_misc_delete_user_group_commission_forbidden(self):
         """
-        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+        DELETE /users/{user_id}/groups/{group_id}/funds/{fund_id} .
 
         - A misc manager user cannot execute this request.
         """
@@ -413,13 +413,13 @@ class AuthUserViewsTests(TestCase):
         first_user_group_id = response.data[0]["group"]
 
         response_delete = self.manager_misc_client.delete(
-            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/funds/1"
         )
         self.assertEqual(response_delete.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_manager_delete_user_group_commission_double_delete(self):
         """
-        DELETE /users/{user_id}/groups/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id}/funds/{fund_id} .
 
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
@@ -431,18 +431,18 @@ class AuthUserViewsTests(TestCase):
         first_user_group_id = response.data[0]["group"]
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/funds/1"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/funds/1"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_delete_user_group_commission_success(self):
         """
-        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+        DELETE /users/{user_id}/groups/{group_id}/funds/{fund_id} .
 
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
@@ -455,12 +455,12 @@ class AuthUserViewsTests(TestCase):
         second_user_group_id = response.data[1]["group"]
 
         first_response_delete = self.manager_client.delete(
-            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/commissions/1"
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(first_user_group_id)}/funds/1"
         )
         self.assertEqual(first_response_delete.status_code, status.HTTP_204_NO_CONTENT)
 
         second_response_delete = self.manager_client.delete(
-            f"/users/{self.user_id_del_group_user_commission}/groups/{str(second_user_group_id)}/commissions/2"
+            f"/users/{self.user_id_del_group_user_commission}/groups/{str(second_user_group_id)}/funds/2"
         )
         self.assertEqual(
             second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
@@ -468,7 +468,7 @@ class AuthUserViewsTests(TestCase):
 
     def test_manager_delete_user_group_institution_404(self):
         """
-        DELETE /users/{user_id}/groups/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id}/institutions/{institution_id} .
 
         - Cannot delete a group from a non-existing user
         """
@@ -487,7 +487,7 @@ class AuthUserViewsTests(TestCase):
 
     def test_manager_misc_delete_user_group_institution_forbidden(self):
         """
-        DELETE /users/{user_id}/groups/{group_id}/commissions/{commission_id} .
+        DELETE /users/{user_id}/groups/{group_id}/institutions/{institution_id} .
 
         - A misc manager user cannot execute this request.
         """
@@ -506,7 +506,7 @@ class AuthUserViewsTests(TestCase):
 
     def test_manager_delete_user_group_institution_double_delete(self):
         """
-        DELETE /users/{user_id}/groups/{group_id} .
+        DELETE /users/{user_id}/groups/{group_id}/institutions/{institution_id} .
 
         - A manager user can execute this request.
         - The link between a group and a user is deleted.
