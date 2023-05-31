@@ -19,7 +19,7 @@ class CommissionsModelsTests(TestCase):
         self.client = Client()
 
     def test_fund_model(self):
-        """There's at least one commission in the database."""
+        """There's at least one fund in the database."""
         fund = Fund.objects.first()
         self.assertEqual(str(fund), f"{fund.name} ({fund.acronym})")
 

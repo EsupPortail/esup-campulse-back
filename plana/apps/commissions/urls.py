@@ -8,7 +8,7 @@ from .views.commission_date import (
 from .views.fund import FundList
 
 urlpatterns = [
-    path("funds", FundList.as_view(), name="fund_list"),
+    path("funds/", FundList.as_view(), name="fund_list"),
     path(
         "commission_dates",
         CommissionDateListCreate.as_view(),

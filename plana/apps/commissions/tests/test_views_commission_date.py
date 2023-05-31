@@ -15,7 +15,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import GroupInstitutionCommissionUser
 
 
-class CommissionsViewsTests(TestCase):
+class CommissionDatesViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
@@ -67,36 +67,6 @@ class CommissionsViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.student_client.post(url_login, data_student)
-
-    def test_get_commissions_list(self):
-        """
-        GET /commissions/ .
-
-        - There's at least one commission in the commissions list.
-        - The route can be accessed by anyone.
-        - We get the same amount of commissions through the model and through the view.
-        - Commissions details are returned (test the "name" attribute).
-        - Filter by acronym is available.
-        """
-        commissions_cnt = Fund.objects.count()
-        self.assertTrue(commissions_cnt > 0)
-
-        response = self.client.get("/commissions/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
-
-        commission_1 = content[0]
-        self.assertTrue(commission_1.get("name"))
-
-        acronym = "FSDIE"
-        response = self.client.get(f"/commissions/?acronym={acronym}")
-        self.assertEqual(response.data[0]["acronym"], acronym)
-
-        response = self.client.get("/commissions/?only_next=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
 
     def test_get_commissions_dates_list(self):
         """
