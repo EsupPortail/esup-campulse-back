@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
-from plana.apps.users.serializers.group_institution_commission_user import (
+from plana.apps.users.serializers.group_institution_fund_user import (
     GroupInstitutionCommissionUserCreateSerializer,
     GroupInstitutionCommissionUserSerializer,
 )

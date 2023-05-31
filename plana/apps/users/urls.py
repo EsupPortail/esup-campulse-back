@@ -9,7 +9,7 @@ from .views.association_user import (
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserList
-from .views.group_institution_commission_user import (
+from .views.group_institution_fund_user import (
     GroupInstitutionCommissionUserDestroy,
     GroupInstitutionCommissionUserDestroyWithCommission,
     GroupInstitutionCommissionUserDestroyWithInstitution,
