@@ -4,7 +4,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 
-from plana.apps.commissions.models.commission import Fund
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission import CommissionSerializer
 
 

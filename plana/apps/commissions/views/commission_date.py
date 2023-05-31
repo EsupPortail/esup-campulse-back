@@ -9,8 +9,8 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission_date import (
     CommissionDateSerializer,
     CommissionDateUpdateSerializer,
