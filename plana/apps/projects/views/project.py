@@ -139,11 +139,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if not request.user.has_perm("projects.view_project_any_commission"):
             if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+                user_funds_ids = request.user.get_user_managed_commissions()
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_commissions()
         else:
-            user_commissions_ids = Fund.objects.all().values_list("id")
+            user_funds_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm("projects.view_project_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
@@ -165,7 +165,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     id__in=(
                         ProjectCommissionDate.objects.filter(
                             commission_date_id__in=CommissionDate.objects.filter(
-                                commission_id__in=user_commissions_ids
+                                commission_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
                     )
@@ -793,7 +793,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
-                commissions_misc_used = Fund.objects.filter(
+                funds_misc_used = Fund.objects.filter(
                     id__in=CommissionDate.objects.filter(
                         id__in=ProjectCommissionDate.objects.filter(
                             project_id=project.id
@@ -810,7 +810,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                         "email", flat=True
                     )
                 )
-                if commissions_misc_used.count() > 0:
+                if funds_misc_used.count() > 0:
                     for user_to_check in User.objects.filter(
                         is_superuser=False, is_staff=True
                     ):

@@ -60,11 +60,11 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             "projects.view_projectcommissiondate_any_commission"
         ):
             if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+                user_funds_ids = request.user.get_user_managed_commissions()
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_commissions()
         else:
-            user_commissions_ids = Fund.objects.all().values_list("id")
+            user_funds_ids = Fund.objects.all().values_list("id")
         if not request.user.has_perm(
             "projects.view_projectcommissiondate_any_institution"
         ):
@@ -87,7 +87,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
                     commission_date_id__in=CommissionDate.objects.filter(
-                        commission_id__in=user_commissions_ids
+                        commission_id__in=user_funds_ids
                     ).values_list("id")
                 )
                 | models.Q(
@@ -131,7 +131,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             commission_date = CommissionDate.objects.get(
                 id=request.data["commission_date"]
             )
-            commission = Fund.objects.get(id=commission_date.commission_id)
+            fund = Fund.objects.get(id=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
@@ -174,7 +174,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        if commission.is_site is True and (
+        if fund.is_site is True and (
             project.user_id is not None
             or (
                 project.association_id is not None
