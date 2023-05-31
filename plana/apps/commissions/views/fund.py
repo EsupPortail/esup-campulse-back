@@ -8,8 +8,8 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.fund import FundSerializer
 
 
-class CommissionList(generics.ListAPIView):
-    """/commissions/ route"""
+class FundList(generics.ListAPIView):
+    """/commissions/funds/ route"""
 
     permission_classes = [AllowAny]
     queryset = Fund.objects.all()

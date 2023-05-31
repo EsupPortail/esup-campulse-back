@@ -5,10 +5,10 @@ from .views.commission_date import (
     CommissionDateListCreate,
     CommissionDateRetrieveUpdateDestroy,
 )
-from .views.fund import CommissionList
+from .views.fund import FundList
 
 urlpatterns = [
-    path("", CommissionList.as_view(), name="commission_list"),
+    path("funds", FundList.as_view(), name="fund_list"),
     path(
         "commission_dates",
         CommissionDateListCreate.as_view(),
