@@ -12,8 +12,8 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.serializers.group_institution_fund_user import (
-    GroupInstitutionCommissionUserCreateSerializer,
-    GroupInstitutionCommissionUserSerializer,
+    GroupInstitutionFundUserCreateSerializer,
+    GroupInstitutionFundUserSerializer,
 )
 
 
@@ -21,7 +21,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
     queryset = GroupInstitutionFundUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserCreateSerializer
+    serializer_class = GroupInstitutionFundUserCreateSerializer
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -32,7 +32,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_200_OK: GroupInstitutionFundUserCreateSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
         },
@@ -51,7 +51,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_201_CREATED: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_201_CREATED: GroupInstitutionFundUserCreateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -190,11 +190,11 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_200_OK: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -229,12 +229,12 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         operation_id="users_groups_destroy",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -283,12 +283,12 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         operation_id="users_groups_destroy_with_commission",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -340,12 +340,12 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         operation_id="users_groups_destroy_with_institution",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

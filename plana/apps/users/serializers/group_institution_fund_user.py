@@ -7,7 +7,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
-class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
+class GroupInstitutionFundUserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -24,7 +24,7 @@ class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer):
+class GroupInstitutionFundUserCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-groups creation (with username instead of id)."""
 
     user = serializers.SlugRelatedField(
