@@ -542,7 +542,7 @@ class AuthUserViewsTests(TestCase):
             user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
         )
         GroupInstitutionFundUser.objects.filter(
-            user_id=self.user_id_del_group_user_insitution, commission_id__isnull=False
+            user_id=self.user_id_del_group_user_insitution, fund_id__isnull=False
         ).delete()
         response = self.manager_client.get(
             f"/users/{self.user_id_del_group_user_insitution}/groups/"

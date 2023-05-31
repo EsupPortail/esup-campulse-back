@@ -15,7 +15,7 @@ class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    commission = serializers.PrimaryKeyRelatedField(
+    fund = serializers.PrimaryKeyRelatedField(
         queryset=Fund.objects.all(), allow_null=True, required=False
     )
 
@@ -34,10 +34,10 @@ class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    commission = serializers.PrimaryKeyRelatedField(
+    fund = serializers.PrimaryKeyRelatedField(
         queryset=Fund.objects.all(), allow_null=True, required=False
     )
 
     class Meta:
         model = GroupInstitutionFundUser
-        fields = ["user", "group", "institution", "commission"]
+        fields = ["user", "group", "institution", "fund"]

@@ -44,5 +44,5 @@ class UsersModelsTests(TestCase):
         group_user = GroupInstitutionFundUser.objects.first()
         self.assertEqual(
             str(group_user),
-            f"{group_user.user}, {group_user.group}, {group_user.institution}, {group_user.commission}",
+            f"{group_user.user}, {group_user.group}, {group_user.institution}, {group_user.fund}",
         )

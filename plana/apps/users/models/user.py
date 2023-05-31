@@ -63,10 +63,10 @@ class GroupInstitutionFundUser(models.Model):
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
-    commission = models.ForeignKey(Fund, on_delete=models.CASCADE, null=True)
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.user}, {self.group}, {self.institution}, {self.commission}"
+        return f"{self.user}, {self.group}, {self.institution}, {self.fund}"
 
     class Meta:
         verbose_name = _("User Institution Fund Groups")
@@ -215,7 +215,7 @@ class User(AbstractUser):
         """Return a list of Commission IDs linked to a student user."""
         return Fund.objects.filter(
             id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
-                "commission_id"
+                "fund_id"
             )
         )
 
@@ -329,11 +329,10 @@ class User(AbstractUser):
             )
         return False
 
-    def is_member_in_commission(self, commission_id):
+    # TODO : rename in "is_member_in_fund"
+    def is_member_in_commission(self, fund_id):
         """Check if a user is linked as member to a commission."""
-        return GroupInstitutionFundUser.objects.filter(
-            user_id=self.pk, commission_id=commission_id
-        )
+        return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
 
     class Meta:
         verbose_name = _("User")

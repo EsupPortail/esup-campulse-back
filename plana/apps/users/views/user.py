@@ -161,14 +161,14 @@ class UserListCreate(generics.ListCreateAPIView):
                 misc_users_query = User.objects.filter(
                     Q(
                         id__in=GroupInstitutionFundUser.objects.filter(
-                            institution_id__isnull=True, commission_id__isnull=True
+                            institution_id__isnull=True, fund_id__isnull=True
                         ).values_list("user_id")
                     )
                     & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
                 )
                 commission_users_query = User.objects.filter(
                     id__in=GroupInstitutionFundUser.objects.filter(
-                        commission_id__isnull=False
+                        fund_id__isnull=False
                     ).values_list("user_id")
                 ).values_list("id")
                 if institutions == "":

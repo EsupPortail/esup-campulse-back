@@ -165,7 +165,7 @@
     "fields": {
       "user_id": 6,
       "group_id": 4,
-      "commission_id": 1
+      "fund_id": 1
     }
   },
   {
@@ -174,7 +174,7 @@
     "fields": {
       "user_id": 6,
       "group_id": 4,
-      "commission_id": 2
+      "fund_id": 2
     }
   },
   {
@@ -183,7 +183,7 @@
     "fields": {
       "user_id": 7,
       "group_id": 4,
-      "commission_id": 3
+      "fund_id": 3
     }
   },
   {
@@ -192,7 +192,7 @@
     "fields": {
       "user_id": 8,
       "group_id": 4,
-      "commission_id": 1
+      "fund_id": 1
     }
   },
   {
@@ -201,7 +201,7 @@
     "fields": {
       "user_id": 8,
       "group_id": 4,
-      "commission_id": 2
+      "fund_id": 2
     }
   },
   {
@@ -210,7 +210,7 @@
     "fields": {
       "user_id": 8,
       "group_id": 4,
-      "commission_id": 3
+      "fund_id": 3
     }
   },
   {
@@ -267,7 +267,7 @@
     "fields": {
       "user_id": 14,
       "group_id": 4,
-      "commission_id": 1
+      "fund_id": 1
     }
   },
   {
@@ -276,7 +276,7 @@
     "fields": {
       "user_id": 14,
       "group_id": 4,
-      "commission_id": 2
+      "fund_id": 2
     }
   },
   {
@@ -285,7 +285,7 @@
     "fields": {
       "user_id": 14,
       "group_id": 4,
-      "commission_id": 3
+      "fund_id": 3
     }
   },
   {

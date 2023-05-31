@@ -72,11 +72,12 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             ):
                 institution = Institution.objects.get(id=request.data["institution"])
                 institution_id = institution.id
-            commission = None
-            commission_id = None
+            fund = None
+            fund_id = None
+            # TODO : rename "commission" param to "fund"
             if "commission" in request.data and request.data["commission"] is not None:
-                commission = Fund.objects.get(id=request.data["commission"])
-                commission_id = commission.id
+                fund = Fund.objects.get(id=request.data["commission"])
+                fund_id = fund.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
                 {
@@ -157,14 +158,15 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        if commission_id is not None:
+        # TODO : check group structure
+        if fund_id is not None:
             if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
                     "users.add_groupinstitutionfunduser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
-                    and not commission.institution_id
+                    and not fund.institution_id
                     in request.user.get_user_managed_institutions()
                 )
             ):
@@ -177,7 +179,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             user_id=user.id,
             group_id=group_id,
             institution_id=institution_id,
-            commission_id=commission_id,
+            fund_id=fund_id,
         )
 
         return response.Response({}, status=status.HTTP_201_CREATED)
@@ -248,7 +250,7 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
-                commission_id=None,
+                fund_id=None,
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -302,7 +304,8 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
-                commission_id=kwargs["commission_id"],
+                # TODO : change kwargs "commission_id" to "fund_id"
+                fund_id=kwargs["commission_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -313,6 +316,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         if not request.user.has_perm(
             "users.delete_groupinstitutionfunduser_any_group"
         ) and (
+            # TODO : change kwargs "commission_id" to "fund_id"
             not Fund.objects.get(id=kwargs["commission_id"]).institution_id
             in request.user.get_user_managed_institutions()
         ):
@@ -357,7 +361,7 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],
-                commission_id=None,
+                fund_id=None,
             )
         except ObjectDoesNotExist:
             return response.Response(
