@@ -1,11 +1,11 @@
 """List of URLs directly linked to operations that can be done on commissions."""
 from django.urls import path
 
-from .views.commission import CommissionList
 from .views.commission_date import (
     CommissionDateListCreate,
     CommissionDateRetrieveUpdateDestroy,
 )
+from .views.fund import CommissionList
 
 urlpatterns = [
     path("", CommissionList.as_view(), name="commission_list"),

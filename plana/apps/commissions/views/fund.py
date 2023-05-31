@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 
 from plana.apps.commissions.models.fund import Fund
-from plana.apps.commissions.serializers.commission import FundSerializer
+from plana.apps.commissions.serializers.fund import FundSerializer
 
 
 class CommissionList(generics.ListAPIView):
