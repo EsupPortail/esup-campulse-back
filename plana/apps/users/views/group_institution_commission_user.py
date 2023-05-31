@@ -10,11 +10,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import (
-    AssociationUser,
-    GroupInstitutionCommissionUser,
-    User,
-)
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.serializers.group_institution_commission_user import (
     GroupInstitutionCommissionUserCreateSerializer,
     GroupInstitutionCommissionUserSerializer,
@@ -24,7 +20,7 @@ from plana.apps.users.serializers.group_institution_commission_user import (
 class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
-    queryset = GroupInstitutionCommissionUser.objects.all()
+    queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserCreateSerializer
 
     def get_permissions(self):
@@ -177,7 +173,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        GroupInstitutionCommissionUser.objects.create(
+        GroupInstitutionFundUser.objects.create(
             user_id=user.id,
             group_id=group_id,
             institution_id=institution_id,
@@ -191,7 +187,7 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/groups/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
+    queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
     @extend_schema(
@@ -231,8 +227,10 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
 class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]  # , DjangoModelPermissions] TMP during refacto
+    queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
     @extend_schema(
@@ -249,8 +247,8 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         """Destroys a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -285,8 +283,10 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
 class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]  # , DjangoModelPermissions] TMP during refacto
+    queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
     @extend_schema(
@@ -303,8 +303,8 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         """Destroys a group linked to a user with commission argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
@@ -340,8 +340,10 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
 class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]  # , DjangoModelPermissions] TMP during refacto
+    queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
     @extend_schema(
@@ -358,8 +360,8 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
         """Destroys a group linked to a user with institution argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],

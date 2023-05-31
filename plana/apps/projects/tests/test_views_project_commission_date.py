@@ -10,7 +10,7 @@ from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class ProjectCommissionDateViewsTests(TestCase):
@@ -103,7 +103,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/commission_dates")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )

@@ -10,7 +10,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.users.models import GroupInstitutionCommissionUser
+from plana.apps.users.models import GroupInstitutionFundUser
 
 
 class ProjectCommentLinksViewsTests(TestCase):
@@ -117,7 +117,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/comments")
         user_institution_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )

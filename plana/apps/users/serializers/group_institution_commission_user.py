@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
+from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
 class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUser
+        model = GroupInstitutionFundUser
         fields = "__all__"
 
 
@@ -39,5 +39,5 @@ class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUser
+        model = GroupInstitutionFundUser
         fields = ["user", "group", "institution", "commission"]

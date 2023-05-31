@@ -15,7 +15,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -142,7 +142,7 @@ class ProjectsViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )
@@ -284,7 +284,7 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
-        GroupInstitutionCommissionUser.objects.create(
+        GroupInstitutionFundUser.objects.create(
             user_id=self.student_president_user_id, group_id=6
         )
         response = self.student_president_client.post("/projects/", project_data)

@@ -52,12 +52,12 @@ class AssociationUser(models.Model):
         ]
 
 
-class GroupInstitutionCommissionUser(models.Model):
+class GroupInstitutionFundUser(models.Model):
     """
     Define the link between a user and a group.
 
     And an institution if user is a manager.
-    And a commission if user is a commission member.
+    And a fund if user is a fund member.
     """
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
@@ -69,8 +69,8 @@ class GroupInstitutionCommissionUser(models.Model):
         return f"{self.user}, {self.group}, {self.institution}, {self.commission}"
 
     class Meta:
-        verbose_name = _("User Institution Commission Groups")
-        verbose_name_plural = _("Users Institution Commission Groups")
+        verbose_name = _("User Institution Fund Groups")
+        verbose_name_plural = _("Users Institution Fund Groups")
         permissions = [
             (
                 "add_groupinstitutioncommissionuser_any_group",
@@ -121,7 +121,7 @@ class User(AbstractUser):
     groups_institutions_commissions = models.ManyToManyField(
         Group,
         verbose_name=_("Groups"),
-        through="GroupInstitutionCommissionUser",
+        through="GroupInstitutionFundUser",
         related_name="group_institution_commission_set",
     )
 
@@ -135,7 +135,7 @@ class User(AbstractUser):
         return (
             Permission.objects.filter(
                 group__id__in=Group.objects.filter(
-                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                    id__in=GroupInstitutionFundUser.objects.filter(
                         user_id=self.pk
                     ).values_list("group_id")
                 ).values_list("id"),
@@ -205,7 +205,7 @@ class User(AbstractUser):
         """Return a list of Association IDs linked to a manager user."""
         return Association.objects.filter(
             institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionCommissionUser.objects.filter(
+                id__in=GroupInstitutionFundUser.objects.filter(
                     user_id=self.pk
                 ).values_list("institution_id")
             ).values_list("id")
@@ -214,16 +214,16 @@ class User(AbstractUser):
     def get_user_commissions(self):
         """Return a list of Commission IDs linked to a student user."""
         return Fund.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=self.pk
-            ).values_list("commission_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
+                "commission_id"
+            )
         )
 
     def get_user_managed_commissions(self):
         """Return a list of Commission IDs linked to a manager user."""
         return Fund.objects.filter(
             institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionCommissionUser.objects.filter(
+                id__in=GroupInstitutionFundUser.objects.filter(
                     user_id=self.pk
                 ).values_list("institution_id")
             ).values_list("id")
@@ -232,9 +232,9 @@ class User(AbstractUser):
     def get_user_groups(self):
         """Return a list of Group IDs linked to a user."""
         return Group.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=self.pk
-            ).values_list("group_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
+                "group_id"
+            )
         )
 
     def get_user_institutions(self):
@@ -250,9 +250,9 @@ class User(AbstractUser):
     def get_user_managed_institutions(self):
         """Return a list of Institution IDs linked to a manager user."""
         return Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=self.pk
-            ).values_list("institution_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
+                "institution_id"
+            )
         )
 
     def has_validated_email_user(self):
@@ -313,7 +313,7 @@ class User(AbstractUser):
     def is_staff_for_association(self, association_id):
         """Check if a user is linked as manager for an association."""
         if self.is_staff:
-            return GroupInstitutionCommissionUser.objects.filter(
+            return GroupInstitutionFundUser.objects.filter(
                 user_id=self.pk,
                 institution_id=Association.objects.get(
                     id=association_id
@@ -324,14 +324,14 @@ class User(AbstractUser):
     def is_staff_in_institution(self, institution_id):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            return GroupInstitutionCommissionUser.objects.filter(
+            return GroupInstitutionFundUser.objects.filter(
                 user_id=self.pk, institution_id=institution_id
             )
         return False
 
     def is_member_in_commission(self, commission_id):
         """Check if a user is linked as member to a commission."""
-        return GroupInstitutionCommissionUser.objects.filter(
+        return GroupInstitutionFundUser.objects.filter(
             user_id=self.pk, commission_id=commission_id
         )
 

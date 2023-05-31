@@ -10,11 +10,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import (
-    AssociationUser,
-    GroupInstitutionCommissionUser,
-    User,
-)
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -146,14 +142,14 @@ class UserViewsTests(TestCase):
         """
         misc_users_query = User.objects.filter(
             Q(
-                id__in=GroupInstitutionCommissionUser.objects.filter(
+                id__in=GroupInstitutionFundUser.objects.filter(
                     institution_id__isnull=True, commission_id__isnull=True
                 ).values_list("user_id")
             )
             & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
         )
         commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 commission_id__isnull=False
             ).values_list("user_id")
         ).values_list("id")

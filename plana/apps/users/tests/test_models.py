@@ -1,11 +1,7 @@
 """List of tests done on users models."""
 from django.test import Client, TestCase
 
-from plana.apps.users.models.user import (
-    AssociationUser,
-    GroupInstitutionCommissionUser,
-    User,
-)
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
 
 class UsersModelsTests(TestCase):
@@ -43,9 +39,9 @@ class UsersModelsTests(TestCase):
         self.assertEqual(asso_user.user.is_in_association(asso_user.association), True)
         self.assertEqual(asso_user.user.is_in_association(7), False)
 
-    def test_group_institution_commission_user_model(self):
+    def test_group_institution_fund_user_model(self):
         """There's at least one user linked to a group in the database."""
-        group_user = GroupInstitutionCommissionUser.objects.first()
+        group_user = GroupInstitutionFundUser.objects.first()
         self.assertEqual(
             str(group_user),
             f"{group_user.user}, {group_user.group}, {group_user.institution}, {group_user.commission}",

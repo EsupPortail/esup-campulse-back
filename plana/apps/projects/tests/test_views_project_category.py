@@ -9,7 +9,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class ProjectCategoryLinksViewsTests(TestCase):
@@ -105,7 +105,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/categories")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )

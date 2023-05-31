@@ -12,7 +12,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.views.commission_date import ProjectCommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class CommissionDatesViewsTests(TestCase):
@@ -146,7 +146,7 @@ class CommissionDatesViewsTests(TestCase):
         managed_commission_dates = CommissionDate.objects.filter(
             commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
-                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                    id__in=GroupInstitutionFundUser.objects.filter(
                         user_id=self.manager_institution_user_id
                     ).values_list("institution_id")
                 ).values_list("id")
@@ -160,7 +160,7 @@ class CommissionDatesViewsTests(TestCase):
         unmanaged_commission_dates = CommissionDate.objects.exclude(
             commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
-                    id__in=GroupInstitutionCommissionUser.objects.filter(
+                    id__in=GroupInstitutionFundUser.objects.filter(
                         user_id=self.manager_institution_user_id
                     ).values_list("institution_id")
                 ).values_list("id")
@@ -177,7 +177,7 @@ class CommissionDatesViewsTests(TestCase):
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(
-                            id__in=GroupInstitutionCommissionUser.objects.filter(
+                            id__in=GroupInstitutionFundUser.objects.filter(
                                 user_id=self.manager_institution_user_id
                             ).values_list("institution_id")
                         ).values_list("id")
@@ -195,7 +195,7 @@ class CommissionDatesViewsTests(TestCase):
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(
-                            id__in=GroupInstitutionCommissionUser.objects.filter(
+                            id__in=GroupInstitutionFundUser.objects.filter(
                                 user_id=self.manager_institution_user_id
                             ).values_list("institution_id")
                         ).values_list("id")
