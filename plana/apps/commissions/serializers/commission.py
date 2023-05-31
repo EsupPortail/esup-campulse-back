@@ -4,7 +4,7 @@ from rest_framework import serializers
 from plana.apps.commissions.models.fund import Fund
 
 
-class CommissionSerializer(serializers.ModelSerializer):
+class FundSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     class Meta:
