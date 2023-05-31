@@ -15,7 +15,7 @@ class UsersModelsTests(TestCase):
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

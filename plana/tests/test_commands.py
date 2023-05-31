@@ -174,7 +174,7 @@ class ProjectExpirationCommandTest(TestCase):
         "mailtemplatevars",
         "projects_project.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -215,7 +215,7 @@ class ReviewExpirationCommandTest(TestCase):
         "projects_project.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

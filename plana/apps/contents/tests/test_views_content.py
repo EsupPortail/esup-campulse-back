@@ -19,7 +19,7 @@ class ContentsViewsTests(TestCase):
         "commissions_commission.json",
         "contents_content.json",
         "institutions_institution.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

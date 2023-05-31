@@ -30,7 +30,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         "projects_project.json",
         "projects_projectcommissiondate.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

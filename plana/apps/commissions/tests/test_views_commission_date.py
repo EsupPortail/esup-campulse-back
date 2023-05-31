@@ -31,7 +31,7 @@ class CommissionDatesViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "projects_project.json",
         "projects_projectcommissiondate.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

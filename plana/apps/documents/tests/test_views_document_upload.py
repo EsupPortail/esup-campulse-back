@@ -31,7 +31,7 @@ class DocumentsViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "projects_project.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

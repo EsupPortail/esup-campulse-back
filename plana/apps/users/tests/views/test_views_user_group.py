@@ -19,7 +19,7 @@ class AuthUserViewsTests(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

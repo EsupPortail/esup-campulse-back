@@ -34,7 +34,7 @@ class AssociationsViewsTests(TestCase):
         "mailtemplatevars",
         "users_associationuser.json",
         "users_user.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
     ]
 
     @classmethod
