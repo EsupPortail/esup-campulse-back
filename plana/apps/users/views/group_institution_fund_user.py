@@ -17,7 +17,7 @@ from plana.apps.users.serializers.group_institution_fund_user import (
 )
 
 
-class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
+class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
     queryset = GroupInstitutionFundUser.objects.all()
@@ -185,7 +185,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         return response.Response({}, status=status.HTTP_201_CREATED)
 
 
-class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
+class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/groups/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -224,7 +224,7 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
 
 
 # TODO Optimize this route to avoid code duplication with other delete routes.
-class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
+class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -278,7 +278,7 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
+class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/funds/{fund_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -333,7 +333,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
+class GroupInstitutionFundUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
