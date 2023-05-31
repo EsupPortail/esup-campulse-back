@@ -9,7 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -63,7 +63,7 @@ class GroupInstitutionCommissionUser(models.Model):
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
-    commission = models.ForeignKey(Commission, on_delete=models.CASCADE, null=True)
+    commission = models.ForeignKey(Fund, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.user}, {self.group}, {self.institution}, {self.commission}"
@@ -213,7 +213,7 @@ class User(AbstractUser):
 
     def get_user_commissions(self):
         """Return a list of Commission IDs linked to a student user."""
-        return Commission.objects.filter(
+        return Fund.objects.filter(
             id__in=GroupInstitutionCommissionUser.objects.filter(
                 user_id=self.pk
             ).values_list("commission_id")
@@ -221,7 +221,7 @@ class User(AbstractUser):
 
     def get_user_managed_commissions(self):
         """Return a list of Commission IDs linked to a manager user."""
-        return Commission.objects.filter(
+        return Fund.objects.filter(
             institution_id__in=Institution.objects.filter(
                 id__in=GroupInstitutionCommissionUser.objects.filter(
                     user_id=self.pk

@@ -9,8 +9,8 @@ class CommissionDate(models.Model):
     submission_date = models.DateField(_("Project submission limit date"))
     commission_date = models.DateField(_("Commission date"))
     commission = models.ForeignKey(
-        "Commission",
-        verbose_name=_("Commission"),
+        "Fund",
+        verbose_name=_("Fund"),
         on_delete=models.RESTRICT,
     )
 

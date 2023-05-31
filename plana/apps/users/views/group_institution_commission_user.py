@@ -8,7 +8,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import (
     AssociationUser,
@@ -79,7 +79,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             commission = None
             commission_id = None
             if "commission" in request.data and request.data["commission"] is not None:
-                commission = Commission.objects.get(id=request.data["commission"])
+                commission = Fund.objects.get(id=request.data["commission"])
                 commission_id = commission.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
@@ -319,7 +319,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         if not request.user.has_perm(
             "users.delete_groupinstitutioncommissionuser_any_group"
         ) and (
-            not Commission.objects.get(id=kwargs["commission_id"]).institution_id
+            not Fund.objects.get(id=kwargs["commission_id"]).institution_id
             in request.user.get_user_managed_institutions()
         ):
             return response.Response(

@@ -1,6 +1,6 @@
 [
   {
-    "model": "commissions.commission",
+    "model": "commissions.fund",
     "pk": 1,
     "fields": {
       "name": "Fonds de Solidarité et de Développement des Initiatives Étudiantes",
@@ -10,7 +10,7 @@
     }
   },
   {
-    "model": "commissions.commission",
+    "model": "commissions.fund",
     "pk": 2,
     "fields": {
       "name": "Initiative d'Excellence « Creative Thinkers »",
@@ -20,7 +20,7 @@
     }
   },
   {
-    "model": "commissions.commission",
+    "model": "commissions.fund",
     "pk": 3,
     "fields": {
       "name": "Culture-ActionS",

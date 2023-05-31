@@ -7,7 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
 
@@ -82,8 +82,8 @@ class Document(models.Model):
         null=True,
     )
     commission = models.ForeignKey(
-        Commission,
-        verbose_name=_("Commission"),
+        Fund,
+        verbose_name=_("Fund"),
         on_delete=models.RESTRICT,
         null=True,
     )

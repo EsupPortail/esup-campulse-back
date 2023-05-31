@@ -9,7 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.commissions.serializers.commission_date import (
     CommissionDateSerializer,
@@ -100,9 +100,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
 
         if is_site is not None and is_site != "":
             self.queryset = self.queryset.filter(
-                id__in=Commission.objects.filter(is_site=to_bool(is_site)).values_list(
-                    "id"
-                )
+                id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
             )
 
         if only_next is not None and only_next != "" and to_bool(only_next) is True:

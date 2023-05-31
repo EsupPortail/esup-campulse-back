@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
@@ -64,7 +64,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             else:
                 user_commissions_ids = request.user.get_user_commissions()
         else:
-            user_commissions_ids = Commission.objects.all().values_list("id")
+            user_commissions_ids = Fund.objects.all().values_list("id")
         if not request.user.has_perm(
             "projects.view_projectcommissiondate_any_institution"
         ):
@@ -131,7 +131,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             commission_date = CommissionDate.objects.get(
                 id=request.data["commission_date"]
             )
-            commission = Commission.objects.get(id=commission_date.commission_id)
+            commission = Fund.objects.get(id=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
@@ -201,7 +201,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commissions_with_project = Commission.objects.filter(
+        commissions_with_project = Fund.objects.filter(
             id__in=CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project=request.data["project"]

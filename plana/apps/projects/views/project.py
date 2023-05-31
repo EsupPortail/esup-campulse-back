@@ -13,7 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
@@ -143,7 +143,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             else:
                 user_commissions_ids = request.user.get_user_commissions()
         else:
-            user_commissions_ids = Commission.objects.all().values_list("id")
+            user_commissions_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm("projects.view_project_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
@@ -793,7 +793,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
-                commissions_misc_used = Commission.objects.filter(
+                commissions_misc_used = Fund.objects.filter(
                     id__in=CommissionDate.objects.filter(
                         id__in=ProjectCommissionDate.objects.filter(
                             project_id=project.id

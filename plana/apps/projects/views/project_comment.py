@@ -13,7 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, CommissionDate
+from plana.apps.commissions.models import CommissionDate, Fund
 from plana.apps.institutions.models import Institution
 from plana.apps.projects.models import ProjectCommissionDate
 from plana.apps.projects.models.project import Project
@@ -73,7 +73,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
             else:
                 user_commissions_ids = request.user.get_user_commissions()
         else:
-            user_commissions_ids = Commission.objects.all().values_list("id")
+            user_commissions_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm(
             "projects.view_projectcomment_any_commission"

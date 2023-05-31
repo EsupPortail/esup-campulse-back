@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.commissions.views.commission_date import ProjectCommissionDate
 from plana.apps.institutions.models.institution import Institution
@@ -78,7 +78,7 @@ class CommissionsViewsTests(TestCase):
         - Commissions details are returned (test the "name" attribute).
         - Filter by acronym is available.
         """
-        commissions_cnt = Commission.objects.count()
+        commissions_cnt = Fund.objects.count()
         self.assertTrue(commissions_cnt > 0)
 
         response = self.client.get("/commissions/")
@@ -142,14 +142,14 @@ class CommissionsViewsTests(TestCase):
 
         response = self.client.get("/commissions/commission_dates?is_site=true")
         commission_dates_cnt = CommissionDate.objects.filter(
-            id__in=Commission.objects.filter(is_site=True).values_list("id")
+            id__in=Fund.objects.filter(is_site=True).values_list("id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_cnt)
 
         response = self.client.get("/commissions/commission_dates?only_next=true")
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), Commission.objects.count())
+        self.assertEqual(len(content), Fund.objects.count())
 
         inactive_projects = Project.visible_objects.filter(
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
@@ -174,7 +174,7 @@ class CommissionsViewsTests(TestCase):
         self.assertEqual(len(content), commission_dates_with_active_projects.count())
 
         managed_commission_dates = CommissionDate.objects.filter(
-            commission_id__in=Commission.objects.filter(
+            commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
                     id__in=GroupInstitutionCommissionUser.objects.filter(
                         user_id=self.manager_institution_user_id
@@ -188,7 +188,7 @@ class CommissionsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), managed_commission_dates.count())
         unmanaged_commission_dates = CommissionDate.objects.exclude(
-            commission_id__in=Commission.objects.filter(
+            commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
                     id__in=GroupInstitutionCommissionUser.objects.filter(
                         user_id=self.manager_institution_user_id

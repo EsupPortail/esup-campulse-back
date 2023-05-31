@@ -4,7 +4,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.serializers.commission import CommissionSerializer
 
 
@@ -12,7 +12,7 @@ class CommissionList(generics.ListAPIView):
     """/commissions/ route"""
 
     permission_classes = [AllowAny]
-    queryset = Commission.objects.all()
+    queryset = Fund.objects.all()
     serializer_class = CommissionSerializer
 
     @extend_schema(

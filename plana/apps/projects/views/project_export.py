@@ -9,7 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission import Fund
 from plana.apps.commissions.models.commission_date import CommissionDate
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
@@ -90,9 +90,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
             .annotate(
                 commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef("commission_id")).values(
-                        "acronym"
-                    ),
+                    Fund.objects.filter(id=OuterRef("commission_id")).values("acronym"),
                     output_field=models.CharField(),
                 )
             )
@@ -187,9 +185,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
             .annotate(
                 commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef("commission_id")).values(
-                        "acronym"
-                    ),
+                    Fund.objects.filter(id=OuterRef("commission_id")).values("acronym"),
                     output_field=models.CharField(),
                 )
             )

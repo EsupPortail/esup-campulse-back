@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Commission, CommissionDate
+from .models import CommissionDate, Fund
 
-admin.site.register(Commission)
+admin.site.register(Fund)
 admin.site.register(CommissionDate)

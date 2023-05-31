@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.institutions.models.institution import Institution
 
 
-class Commission(models.Model):
+class Fund(models.Model):
     """Main model."""
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
@@ -24,5 +24,5 @@ class Commission(models.Model):
         return f"{self.name} ({self.acronym})"
 
     class Meta:
-        verbose_name = _("Commission")
-        verbose_name_plural = _("Commissions")
+        verbose_name = _("Fund")
+        verbose_name_plural = _("Funds")
