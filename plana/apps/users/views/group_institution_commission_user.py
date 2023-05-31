@@ -40,7 +40,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user, or all groups of all users (manager)."""
-        if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
+        if request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             serializer = self.serializer_class(self.queryset.all(), many=True)
             return response.Response(serializer.data)
         serializer = self.serializer_class(
@@ -104,7 +104,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             )
 
         if (user.is_superuser or user.is_staff) and not request.user.has_perm(
-            "users.add_groupinstitutioncommissionuser_any_group"
+            "users.add_groupinstitutionfunduser_any_group"
         ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
@@ -115,7 +115,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         if (
             group_structure["REGISTRATION_ALLOWED"] is False
             and not request.user.has_perm(
-                "users.add_groupinstitutioncommissionuser_any_group"
+                "users.add_groupinstitutionfunduser_any_group"
             )
             and (
                 not request.user.is_staff
@@ -145,7 +145,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         if institution_id is not None:
             if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionuser_any_group"
+                    "users.add_groupinstitutionfunduser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
@@ -160,7 +160,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         if commission_id is not None:
             if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionuser_any_group"
+                    "users.add_groupinstitutionfunduser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
@@ -209,9 +209,7 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "users.view_groupinstitutioncommissionuser_any_group"
-        ):
+        if not request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             return response.Response(
                 {"error": _("Not allowed to get this link between group and user.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -227,9 +225,7 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
 class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
-    permission_classes = [
-        IsAuthenticated
-    ]  # , DjangoModelPermissions] TMP during refacto
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
@@ -283,9 +279,7 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
 class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
 
-    permission_classes = [
-        IsAuthenticated
-    ]  # , DjangoModelPermissions] TMP during refacto
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
@@ -317,7 +311,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionuser_any_group"
+            "users.delete_groupinstitutionfunduser_any_group"
         ) and (
             not Fund.objects.get(id=kwargs["commission_id"]).institution_id
             in request.user.get_user_managed_institutions()
@@ -340,9 +334,7 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
 class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
-    permission_classes = [
-        IsAuthenticated
-    ]  # , DjangoModelPermissions] TMP during refacto
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionCommissionUserSerializer
 
@@ -374,7 +366,7 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionuser_any_group"
+            "users.delete_groupinstitutionfunduser_any_group"
         ) and (
             not kwargs["institution_id"] in request.user.get_user_managed_institutions()
         ):

@@ -73,15 +73,15 @@ class GroupInstitutionFundUser(models.Model):
         verbose_name_plural = _("Users Institution Fund Groups")
         permissions = [
             (
-                "add_groupinstitutioncommissionuser_any_group",
+                "add_groupinstitutionfunduser_any_group",
                 "Can add restricted groups to a user.",
             ),
             (
-                "delete_groupinstitutioncommissionuser_any_group",
+                "delete_groupinstitutionfunduser_any_group",
                 "Can delete restricted groups to a user.",
             ),
             (
-                "view_groupinstitutioncommissionuser_any_group",
+                "view_groupinstitutionfunduser_any_group",
                 "Can view all groups for a user.",
             ),
         ]

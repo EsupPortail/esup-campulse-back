@@ -75,11 +75,11 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser_any_institution",
         "view_associationuser",
         "view_associationuser_anyone",
-        "add_groupinstitutioncommissionuser_any_group",
-        "delete_groupinstitutioncommissionuser",
-        "delete_groupinstitutioncommissionuser_any_group",
-        "view_groupinstitutioncommissionuser",
-        "view_groupinstitutioncommissionuser_any_group",
+        "add_groupinstitutionfunduser_any_group",
+        "delete_groupinstitutionfunduser",
+        "delete_groupinstitutionfunduser_any_group",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
     ],
     "MANAGER_INSTITUTION": [
         # associations
@@ -124,9 +124,9 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
-        "delete_groupinstitutioncommissionuser",
-        "view_groupinstitutioncommissionuser",
-        "view_groupinstitutioncommissionuser_any_group",
+        "delete_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
     ],
     "MANAGER_MISC": [
         # associations
@@ -173,9 +173,9 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
-        "delete_groupinstitutioncommissionuser",
-        "view_groupinstitutioncommissionuser",
-        "view_groupinstitutioncommissionuser_any_group",
+        "delete_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
     ],
     "COMMISSION": [
         # associations
@@ -196,7 +196,7 @@ PERMISSIONS_GROUPS = {
         "view_user_misc",
         "view_user_anyone",
         "view_associationuser",
-        "view_groupinstitutioncommissionuser",
+        "view_groupinstitutionfunduser",
     ],
     "STUDENT_INSTITUTION": [
         # associations
@@ -225,7 +225,7 @@ PERMISSIONS_GROUPS = {
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
-        "view_groupinstitutioncommissionuser",
+        "view_groupinstitutionfunduser",
     ],
     "STUDENT_MISC": [
         # documents
@@ -248,6 +248,6 @@ PERMISSIONS_GROUPS = {
         "delete_projectcommissiondate",
         "view_projectcommissiondate",
         # users
-        "view_groupinstitutioncommissionuser",
+        "view_groupinstitutionfunduser",
     ],
 }

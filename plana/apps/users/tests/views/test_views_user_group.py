@@ -304,18 +304,17 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    # TODO : uncomment after feacto of permissions with new names
-    #    def test_student_delete_user_group(self):
-    #        """
-    #        DELETE /users/{user_id}/groups/{group_id} .
-    #
-    #        - A student user cannot execute this request.
-    #        """
-    #        response_student = self.student_client.delete(
-    #            f"/users/{self.user_id_del_group}/groups/6"
-    #        )
-    #        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-    #
+    def test_student_delete_user_group(self):
+        """
+        DELETE /users/{user_id}/groups/{group_id} .
+
+        - A student user cannot execute this request.
+        """
+        response_student = self.student_client.delete(
+            f"/users/{self.user_id_del_group}/groups/6"
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_manager_delete_user_group_404(self):
         """
         DELETE /users/{user_id}/groups/{group_id} .
