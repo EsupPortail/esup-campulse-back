@@ -100,24 +100,24 @@ class Document(models.Model):
         verbose_name_plural = _("Documents")
         permissions = [
             (
-                "add_document_any_commission",
-                "Can add documents linked to any commission.",
+                "add_document_any_fund",
+                "Can add documents linked to any fund.",
             ),
             (
                 "add_document_any_institution",
                 "Can add documents linked to any institution.",
             ),
             (
-                "change_document_any_commission",
-                "Can change documents linked to any commission.",
+                "change_document_any_fund",
+                "Can change documents linked to any fund.",
             ),
             (
                 "change_document_any_institution",
                 "Can change documents linked to any institution.",
             ),
             (
-                "delete_document_any_commission",
-                "Can delete documents linked to any commission.",
+                "delete_document_any_fund",
+                "Can delete documents linked to any fund.",
             ),
             (
                 "delete_document_any_institution",

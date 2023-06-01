@@ -858,9 +858,9 @@
   "model": "auth.permission",
   "pk": 96,
   "fields": {
-    "name": "Can add documents linked to any commission.",
+    "name": "Can add documents linked to any fund.",
     "content_type": 22,
-    "codename": "add_document_any_commission"
+    "codename": "add_document_any_fund"
   }
 },
 {
@@ -876,9 +876,9 @@
   "model": "auth.permission",
   "pk": 98,
   "fields": {
-    "name": "Can change documents linked to any commission.",
+    "name": "Can change documents linked to any fund.",
     "content_type": 22,
-    "codename": "change_document_any_commission"
+    "codename": "change_document_any_fund"
   }
 },
 {
@@ -894,9 +894,9 @@
   "model": "auth.permission",
   "pk": 100,
   "fields": {
-    "name": "Can delete documents linked to any commission.",
+    "name": "Can delete documents linked to any fund.",
     "content_type": 22,
-    "codename": "delete_document_any_commission"
+    "codename": "delete_document_any_fund"
   }
 },
 {
