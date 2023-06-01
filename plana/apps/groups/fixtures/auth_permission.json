@@ -1227,9 +1227,9 @@
   "model": "auth.permission",
   "pk": 137,
   "fields": {
-    "name": "Can view all projects for a commission.",
+    "name": "Can view all projects for a fund.",
     "content_type": 28,
-    "codename": "view_project_any_commission"
+    "codename": "view_project_any_fund"
   }
 },
 {

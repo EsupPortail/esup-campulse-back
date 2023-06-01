@@ -137,7 +137,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if year is not None and year != "":
             queryset = queryset.filter(creation_date__year=year)
 
-        if not request.user.has_perm("projects.view_project_any_commission"):
+        if not request.user.has_perm("projects.view_project_any_fund"):
             if request.user.is_staff:
                 user_funds_ids = request.user.get_user_managed_funds()
             else:
@@ -151,7 +151,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             user_institutions_ids = Institution.objects.all().values_list("id")
 
         if not request.user.has_perm(
-            "projects.view_project_any_commission"
+            "projects.view_project_any_fund"
         ) or not request.user.has_perm("projects.view_project_any_institution"):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
@@ -415,7 +415,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -554,7 +554,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):

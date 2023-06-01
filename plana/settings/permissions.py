@@ -42,7 +42,7 @@ PERMISSIONS_GROUPS = {
         "change_project",
         "change_project_as_validator",
         "view_project",
-        "view_project_any_commission",
+        "view_project_any_fund",
         "view_project_any_institution",
         "view_projectcategory",
         "view_projectcategory_any_commission",

@@ -50,7 +50,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -145,7 +145,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
