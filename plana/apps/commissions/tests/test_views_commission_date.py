@@ -77,10 +77,10 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commission dates through the model and through the view.
         - commission_dates filters by commission_date field.
         - is_site filters by is_site field.
-        - only_next returns only one date by commission.
+        - only_next returns only one date by fund.
         - active_projects returns commissions dates depending on their projects statuses.
-        - managed_commissions returns commissions managed by current user.
-        - managed_projects returns commissions where current user manages projects.
+        - managed_commissions returns funds managed by current user.
+        - managed_projects returns funds where current user manages projects.
         """
         commission_dates_cnt = CommissionDate.objects.count()
         self.assertTrue(commission_dates_cnt > 0)

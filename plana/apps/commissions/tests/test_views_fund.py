@@ -1,4 +1,4 @@
-"""List of tests done on commissions views."""
+"""List of tests done on funds views."""
 import json
 
 from django.test import Client, TestCase
