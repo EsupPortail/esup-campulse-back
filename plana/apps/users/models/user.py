@@ -327,9 +327,8 @@ class User(AbstractUser):
             )
         return False
 
-    # TODO : rename in "is_member_in_fund"
-    def is_member_in_commission(self, fund_id):
-        """Check if a user is linked as member to a commission."""
+    def is_member_in_fund(self, fund_id):
+        """Check if a user is linked as member to a fund."""
         return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
 
     class Meta:

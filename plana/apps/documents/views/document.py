@@ -105,7 +105,7 @@ class DocumentList(generics.ListCreateAPIView):
         if (
             "fund" in request.data
             and not request.user.has_perm("documents.add_document_any_fund")
-            and not request.user.is_member_in_commission(request.data["fund"])
+            and not request.user.is_member_in_fund(request.data["fund"])
         ):
             return response.Response(
                 {"error": _("Not allowed to create a document for this fund.")},
@@ -202,7 +202,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             document.fund is not None
             and not request.user.has_perm("documents.change_document_any_fund")
-            and not request.user.is_member_in_commission(document.fund)
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this fund.")},
@@ -262,7 +262,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             document.fund is not None
             and not request.user.has_perm("documents.delete_document_any_fund")
-            and not request.user.is_member_in_commission(document.fund)
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this fund.")},
