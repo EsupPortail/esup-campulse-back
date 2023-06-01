@@ -43,7 +43,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 1,
+      "fund_id": 1,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf"
@@ -60,7 +60,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 2,
+      "fund_id": 2,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf"
@@ -77,7 +77,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 1,
+      "fund_id": 1,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf",
@@ -96,7 +96,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 2,
+      "fund_id": 2,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf",
@@ -115,7 +115,7 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 3,
+      "fund_id": 3,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf"
@@ -132,7 +132,7 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 3,
+      "fund_id": 3,
       "process_type": "CHARTER_PROJECT_COMMISSION",
       "mime_types": [
         "application/pdf",

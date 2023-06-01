@@ -81,7 +81,7 @@ class Document(models.Model):
         on_delete=models.RESTRICT,
         null=True,
     )
-    commission = models.ForeignKey(
+    fund = models.ForeignKey(
         Fund,
         verbose_name=_("Fund"),
         on_delete=models.RESTRICT,

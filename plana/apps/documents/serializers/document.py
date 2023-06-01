@@ -22,7 +22,7 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
             "description",
             "path_template",
             "institution",
-            "commission",
+            "fund",
         ]
 
 

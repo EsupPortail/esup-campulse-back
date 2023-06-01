@@ -140,7 +140,7 @@ class DocumentsViewsTests(TestCase):
         - A user without access to requested commission can't execute this request.
         """
         commission = 3
-        post_data = {"name": "Test forbidden", "commission": commission}
+        post_data = {"name": "Test forbidden", "fund": commission}
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
