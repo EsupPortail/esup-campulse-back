@@ -257,30 +257,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/AssociationName'
           description: ''
-  /commissions/:
-    get:
-      operationId: commissions_list
-      description: Lists all commission types.
-      parameters:
-      - in: query
-        name: acronym
-        schema:
-          type: string
-        description: Commission acronym.
-      tags:
-      - commissions
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Commission'
-          description: ''
   /commissions/commission_dates:
     get:
       operationId: commissions_commission_dates_list
@@ -453,6 +429,30 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /commissions/funds/:
+    get:
+      operationId: commissions_funds_list
+      description: Lists all fund types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Fund acronym.
+      tags:
+      - commissions
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fund'
+          description: ''
   /contents/:
     get:
       operationId: contents_list
@@ -1974,7 +1974,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2006,7 +2006,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2014,13 +2014,13 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /users/{user_id}/groups/{group_id}/commissions/{commission_id}:
+  /users/{user_id}/groups/{group_id}/funds/{fund_id}:
     delete:
-      operationId: users_groups_destroy_with_commission
-      description: Destroys a group linked to a user with commission argument (manager).
+      operationId: users_groups_destroy_with_fund
+      description: Destroys a group linked to a user with fund argument (manager).
       parameters:
       - in: path
-        name: commission_id
+        name: fund_id
         schema:
           type: integer
         required: true
@@ -2043,7 +2043,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2080,7 +2080,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2622,7 +2622,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
+                  $ref: '#/components/schemas/GroupInstitutionFundUserCreate'
           description: ''
         '401':
           description: No response body
@@ -2637,13 +2637,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -2653,7 +2653,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
+                $ref: '#/components/schemas/GroupInstitutionFundUserCreate'
           description: ''
         '400':
           description: No response body
@@ -2701,7 +2701,6 @@ components:
           maxLength: 250
         acronym:
           type: string
-          title: Acronyme
           maxLength: 30
         alt_logo:
           type: string
@@ -2713,7 +2712,6 @@ components:
           type: string
         address:
           type: string
-          title: Adresse
         zipcode:
           type: string
           maxLength: 32
@@ -2725,7 +2723,6 @@ components:
           maxLength: 128
         phone:
           type: string
-          title: Téléphone
           maxLength: 32
         email:
           type: string
@@ -2738,13 +2735,11 @@ components:
         website:
           type: string
           format: uri
-          title: Site
           maxLength: 200
         student_count:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Nombre d'étudiants
         president_names:
           type: string
           maxLength: 256
@@ -2757,7 +2752,6 @@ components:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         amount_members_allowed:
           type: integer
           maximum: 2147483647
@@ -2771,22 +2765,18 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Date de création
         approval_date:
           type: string
           format: date
           nullable: true
-          title: Date d'agrément
         last_goa_date:
           type: string
           format: date
           nullable: true
-          title: Date de la dernière AGO
         cga_date:
           type: string
           format: date
           nullable: true
-          title: Date de dernière AG constitutive
         social_networks:
           type: object
           additionalProperties: {}
@@ -2855,14 +2845,12 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Nombre d'étudiants
         is_enabled:
           type: boolean
         is_public:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         amount_members_allowed:
           type: integer
           maximum: 2147483647
@@ -2876,22 +2864,18 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Date de création
         approval_date:
           type: string
           format: date
           nullable: true
-          title: Date d'agrément
         last_goa_date:
           type: string
           format: date
           nullable: true
-          title: Date de la dernière AGO
         cga_date:
           type: string
           format: date
           nullable: true
-          title: Date de dernière AG constitutive
         social_networks:
           type: object
           additionalProperties: {}
@@ -2915,11 +2899,9 @@ components:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         institution:
           type: integer
           nullable: true
-          title: Etablissement
       required:
       - id
       - name
@@ -2938,11 +2920,9 @@ components:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         institution:
           type: integer
           nullable: true
-          title: Etablissement
       required:
       - name
     AssociationName:
@@ -2962,7 +2942,6 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
       required:
       - has_president
       - id
@@ -2987,7 +2966,6 @@ components:
           maxLength: 250
         acronym:
           type: string
-          title: Acronyme
           maxLength: 30
         email:
           type: string
@@ -3000,7 +2978,6 @@ components:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         alt_logo:
           type: string
           nullable: true
@@ -3188,32 +3165,6 @@ components:
       - CHARTER_VALIDATED
       - CHARTER_EXPIRED
       type: string
-    Commission:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-        is_site:
-          type: boolean
-          title: Site ?
-        institution:
-          type: integer
-          title: Etablissement
-      required:
-      - acronym
-      - id
-      - institution
-      - name
     CommissionDate:
       type: object
       description: Main serializer.
@@ -3230,6 +3181,7 @@ components:
           format: date
         commission:
           type: integer
+          title: Fund
       required:
       - commission
       - commission_date
@@ -3248,6 +3200,7 @@ components:
           format: date
         commission:
           type: integer
+          title: Fund
       required:
       - commission
       - commission_date
@@ -3313,7 +3266,6 @@ components:
           maxLength: 250
         acronym:
           type: string
-          title: Acronyme
         description:
           type: string
         contact:
@@ -3343,8 +3295,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
@@ -3369,8 +3320,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
-        commission:
+        fund:
           type: integer
           nullable: true
     DocumentUpload:
@@ -3502,6 +3452,29 @@ components:
           type: string
         username:
           type: string
+    Fund:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          maxLength: 30
+        is_site:
+          type: boolean
+        institution:
+          type: integer
+      required:
+      - acronym
+      - id
+      - institution
+      - name
     Group:
       type: object
       description: Main serializer.
@@ -3525,7 +3498,7 @@ components:
       - is_public
       - name
       - permissions
-    GroupInstitutionCommissionUser:
+    GroupInstitutionFundUser:
       type: object
       description: Main serializer.
       properties:
@@ -3539,14 +3512,14 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
       - group
       - id
       - user
-    GroupInstitutionCommissionUserCreate:
+    GroupInstitutionFundUserCreate:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:
@@ -3557,13 +3530,13 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
       - group
       - user
-    GroupInstitutionCommissionUserCreateRequest:
+    GroupInstitutionFundUserCreateRequest:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:
@@ -3574,7 +3547,7 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
@@ -3593,7 +3566,6 @@ components:
           maxLength: 250
         acronym:
           type: string
-          title: Acronyme
           maxLength: 30
       required:
       - acronym
@@ -3613,7 +3585,6 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
       required:
       - id
       - name
@@ -3749,14 +3720,12 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Nombre d'étudiants
         is_enabled:
           type: boolean
         is_public:
           type: boolean
         is_site:
           type: boolean
-          title: Site ?
         amount_members_allowed:
           type: integer
           maximum: 2147483647
@@ -3770,17 +3739,14 @@ components:
           type: string
           format: date
           nullable: true
-          title: Date d'agrément
         last_goa_date:
           type: string
           format: date
           nullable: true
-          title: Date de la dernière AGO
         cga_date:
           type: string
           format: date
           nullable: true
-          title: Date de dernière AG constitutive
         social_networks:
           type: object
           additionalProperties: {}
@@ -4090,7 +4056,7 @@ components:
     ProcessTypeEnum:
       enum:
       - CHARTER_ASSOCIATION
-      - CHARTER_PROJECT_COMMISSION
+      - CHARTER_PROJECT_FUND
       - DOCUMENT_ASSOCIATION
       - DOCUMENT_USER
       - DOCUMENT_PROJECT
@@ -4198,7 +4164,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Date de création
         edition_date:
           type: string
           format: date-time
@@ -4254,7 +4219,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Date de création
         edition_date:
           type: string
           format: date-time
