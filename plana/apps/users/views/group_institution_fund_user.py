@@ -74,17 +74,12 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 institution_id = institution.id
             fund = None
             fund_id = None
-            # TODO : rename "commission" param to "fund"
-            if "commission" in request.data and request.data["commission"] is not None:
-                fund = Fund.objects.get(id=request.data["commission"])
+            if "fund" in request.data and request.data["fund"] is not None:
+                fund = Fund.objects.get(id=request.data["fund"])
                 fund_id = fund.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {
-                    "error": _(
-                        "User or group or institution or commission does not exist."
-                    )
-                },
+                {"error": _("User or group or institution or fund does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -158,9 +153,8 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        # TODO : check group structure
         if fund_id is not None:
-            if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
+            if (group_structure["FUND_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
                     "users.add_groupinstitutionfunduser_any_group"
                 )
@@ -171,7 +165,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 )
             ):
                 return response.Response(
-                    {"error": _("Adding commission in this group is not possible.")},
+                    {"error": _("Adding fund in this group is not possible.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -286,7 +280,7 @@ class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
     serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
-        operation_id="users_groups_destroy_with_commission",
+        operation_id="users_groups_destroy_with_fund",
         responses={
             status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,

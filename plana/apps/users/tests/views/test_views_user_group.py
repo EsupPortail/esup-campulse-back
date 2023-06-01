@@ -208,18 +208,17 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # TODO : check view
-    #    def test_anonymous_post_user_groups_bad_fund(self):
-    #        """
-    #        POST /users/groups/ .
-    #
-    #        - fund field must be valid for the given group.
-    #        """
-    #        response_anonymous = self.anonymous_client.post(
-    #            "/users/groups/",
-    #            {"username": self.unvalidated_user_name, "group": 6, "fund": 1},
-    #        )
-    #        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_anonymous_post_user_groups_bad_fund(self):
+        """
+        POST /users/groups/ .
+
+        - fund field must be valid for the given group.
+        """
+        response_anonymous = self.anonymous_client.post(
+            "/users/groups/",
+            {"username": self.unvalidated_user_name, "group": 6, "fund": 1},
+        )
+        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_anonymous_post_user_groups_success(self):
         """
