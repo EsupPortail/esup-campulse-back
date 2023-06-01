@@ -141,7 +141,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             if request.user.is_staff:
                 user_funds_ids = request.user.get_user_managed_commissions()
             else:
-                user_funds_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_funds()
         else:
             user_funds_ids = Fund.objects.all().values_list("id")
 

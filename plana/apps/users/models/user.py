@@ -161,8 +161,8 @@ class User(AbstractUser):
                 return False
             return True
 
-        if self.get_user_commissions().count() != 0:
-            user_commissions_ids = self.get_user_commissions().values_list("id")
+        if self.get_user_funds().count() != 0:
+            user_commissions_ids = self.get_user_funds().values_list("id")
             project_commissions_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project_obj.id
@@ -211,8 +211,8 @@ class User(AbstractUser):
             ).values_list("id")
         )
 
-    def get_user_commissions(self):
-        """Return a list of Commission IDs linked to a student user."""
+    def get_user_funds(self):
+        """Return a list of Fund IDs linked to a student user."""
         return Fund.objects.filter(
             id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
                 "fund_id"

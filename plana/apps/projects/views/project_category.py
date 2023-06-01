@@ -52,7 +52,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
             if request.user.is_staff:
                 user_commissions_ids = request.user.get_user_managed_commissions()
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_commissions_ids = request.user.get_user_funds()
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
 
