@@ -25,7 +25,7 @@ class CommissionDatesViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "commissions_commissiondate.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",

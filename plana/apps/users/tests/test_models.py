@@ -11,7 +11,7 @@ class UsersModelsTests(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "users_associationuser.json",

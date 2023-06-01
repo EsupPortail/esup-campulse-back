@@ -9,7 +9,7 @@ class CommissionsModelsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "commissions_commission.json",
+        "commissions_fund.json",
         "commissions_commissiondate.json",
         "institutions_institution.json",
     ]

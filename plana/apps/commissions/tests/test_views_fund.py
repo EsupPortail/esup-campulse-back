@@ -11,7 +11,7 @@ class FundsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "commissions_commission.json",
+        "commissions_fund.json",
         "institutions_institution.json",
     ]
 

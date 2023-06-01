@@ -11,7 +11,7 @@ class DocumentsModelsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
