@@ -136,11 +136,11 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
         ):
             if to_bool(managed_commissions) is True:
                 self.queryset = self.queryset.filter(
-                    commission_id__in=request.user.get_user_managed_commissions()
+                    commission_id__in=request.user.get_user_managed_funds()
                 )
             else:
                 self.queryset = self.queryset.exclude(
-                    commission_id__in=request.user.get_user_managed_commissions()
+                    commission_id__in=request.user.get_user_managed_funds()
                 )
 
         if (

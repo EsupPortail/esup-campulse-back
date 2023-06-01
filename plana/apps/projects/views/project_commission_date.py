@@ -60,7 +60,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             "projects.view_projectcommissiondate_any_commission"
         ):
             if request.user.is_staff:
-                user_funds_ids = request.user.get_user_managed_commissions()
+                user_funds_ids = request.user.get_user_managed_funds()
             else:
                 user_funds_ids = request.user.get_user_funds()
         else:

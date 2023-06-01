@@ -69,7 +69,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
 
         if not request.user.has_perm("projects.view_projectcomment_any_commission"):
             if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+                user_commissions_ids = request.user.get_user_managed_funds()
             else:
                 user_commissions_ids = request.user.get_user_funds()
         else:

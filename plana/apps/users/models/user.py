@@ -161,17 +161,15 @@ class User(AbstractUser):
                 return False
             return True
 
+        # TODO : update db fields and tables
         if self.get_user_funds().count() != 0:
-            user_commissions_ids = self.get_user_funds().values_list("id")
-            project_commissions_ids = CommissionDate.objects.filter(
+            user_funds_ids = self.get_user_funds().values_list("id")
+            project_funds_ids = CommissionDate.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project_obj.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
-            if (
-                len(set(project_commissions_ids).intersection(user_commissions_ids))
-                == 0
-            ):
+            if len(set(project_funds_ids).intersection(user_funds_ids)) == 0:
                 return False
             return True
 
@@ -219,8 +217,8 @@ class User(AbstractUser):
             )
         )
 
-    def get_user_managed_commissions(self):
-        """Return a list of Commission IDs linked to a manager user."""
+    def get_user_managed_funds(self):
+        """Return a list of Fund IDs linked to a manager user."""
         return Fund.objects.filter(
             institution_id__in=Institution.objects.filter(
                 id__in=GroupInstitutionFundUser.objects.filter(
