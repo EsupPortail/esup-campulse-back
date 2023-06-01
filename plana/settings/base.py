@@ -647,7 +647,7 @@ GROUPS_STRUCTURE = {
         "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
-    "FUND": {
+    "MEMBER_FUND": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
         "FUND_ID_POSSIBLE": True,

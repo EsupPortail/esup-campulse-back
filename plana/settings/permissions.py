@@ -177,7 +177,7 @@ PERMISSIONS_GROUPS = {
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
     ],
-    "FUND": [
+    "MEMBER_FUND": [
         # associations
         "view_association_not_public",
         # documents
