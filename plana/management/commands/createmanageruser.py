@@ -7,9 +7,9 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-# from plana.apps.commissions.models.commission import Commission
+# from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class Command(BaseCommand):
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )
-        # commission_choices = Commission.objects.all().values_list("acronym", flat=True)
+        # fund_choices = Fund.objects.all().values_list("acronym", flat=True)
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
@@ -44,9 +44,9 @@ class Command(BaseCommand):
         )
         """
         parser.add_argument(
-            "--commission",
-            help=_("Commission codename (all by default)."),
-            choices=commission_choices,
+            "--fund",
+            help=_("Fund codename (all by default)."),
+            choices=fund_choices,
         )
         """
 
@@ -73,28 +73,28 @@ class Command(BaseCommand):
             group = Group.objects.get(name=options["group"])
             if options["institution"] is not None:
                 institution = Institution.objects.get(acronym=options["institution"])
-                GroupInstitutionCommissionUser.objects.create(
+                GroupInstitutionFundUser.objects.create(
                     user_id=user.id, group_id=group.id, institution_id=institution.id
                 )
             else:
                 for institution_id in Institution.objects.values_list("id", flat=True):
-                    GroupInstitutionCommissionUser.objects.create(
+                    GroupInstitutionFundUser.objects.create(
                         user_id=user.id,
                         group_id=group.id,
                         institution_id=institution_id,
                     )
             """
-            if options["commission"] is not None:
-                commission = Commission.objects.get(acronym=options["commission"])
-                GroupInstitutionCommissionUser.objects.create(
-                    user_id=user.id, group_id=group.id, commission_id=commission.id
+            if options["fund"] is not None:
+                fund = Fund.objects.get(acronym=options["fund"])
+                GroupInstitutionFundUser.objects.create(
+                    user_id=user.id, group_id=group.id, fund_id=fund.id
                 )
             else:
-                for commission_id in Commission.objects.values_list("id", flat=True):
-                    GroupInstitutionCommissionUser.objects.create(
+                for fund_id in Fund.objects.values_list("id", flat=True):
+                    GroupInstitutionFundUser.objects.create(
                         user_id=user.id,
                         group_id=group.id,
-                        commission_id=commission_id,
+                        fund_id=fund_id,
                     )
             """
             self.stdout.write(
