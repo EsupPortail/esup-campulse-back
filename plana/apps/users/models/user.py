@@ -118,11 +118,11 @@ class User(AbstractUser):
     associations = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUser"
     )
-    groups_institutions_commissions = models.ManyToManyField(
+    groups_institutions_funds = models.ManyToManyField(
         Group,
         verbose_name=_("Groups"),
         through="GroupInstitutionFundUser",
-        related_name="group_institution_commission_set",
+        related_name="group_institution_fund_set",
     )
 
     def __str__(self):
@@ -145,7 +145,7 @@ class User(AbstractUser):
         )
 
     def can_access_project(self, project_obj):
-        """Check if a user can access a project as association president, misc user, commission member, or manager."""
+        """Check if a user can access a project as association president, misc user, fund member, or manager."""
         if self.is_staff:
             if project_obj.association_id is not None:
                 institution_id = Institution.objects.get(
