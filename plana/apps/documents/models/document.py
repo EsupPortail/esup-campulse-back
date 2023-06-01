@@ -40,9 +40,7 @@ class Document(models.Model):
         """List of processes a document can be linked to."""
 
         CHARTER_ASSOCIATION = "CHARTER_ASSOCIATION", _("Charter for Association")
-        CHARTER_PROJECT_COMMISSION = "CHARTER_PROJECT_COMMISSION", _(
-            "Charter for Project Commission"
-        )
+        CHARTER_PROJECT_FUND = "CHARTER_PROJECT_FUND", _("Charter for Project Fund")
         DOCUMENT_ASSOCIATION = "DOCUMENT_ASSOCIATION", _("Document for Association")
         DOCUMENT_USER = "DOCUMENT_USER", _("Document for User")
         DOCUMENT_PROJECT = "DOCUMENT_PROJECT", _("Document for Project")
@@ -55,7 +53,7 @@ class Document(models.Model):
         def get_updatable_documents():
             """Documents with those processes can be replaced by a manager."""
 
-            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_COMMISSION"]
+            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
 
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")

@@ -44,7 +44,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 1,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -61,7 +61,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 2,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -78,7 +78,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 1,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -97,7 +97,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 2,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -116,7 +116,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 3,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -133,7 +133,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 3,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
