@@ -116,7 +116,7 @@ class ProjectsModelsTests(TestCase):
     def test_can_access_project_success_commission(self):
         """
         Testing can_access_project Project helper
-        - The authenticated user must be linked to a commission linked to a project.
+        - The authenticated user must be linked to a fund linked to a project.
         """
         project = Project.visible_objects.get(id=1)
         user = User.objects.get(username="membre-culture-actions@mail.tld")
@@ -125,7 +125,7 @@ class ProjectsModelsTests(TestCase):
     def test_can_access_project_forbidden_commission(self):
         """
         Testing can_access_project Project helper
-        - The authenticated user must be linked to a commission linked to a project.
+        - The authenticated user must be linked to a fund linked to a project.
         """
         project = Project.visible_objects.get(id=1)
         user = User.objects.get(username="membre-fsdie-idex@mail.tld")

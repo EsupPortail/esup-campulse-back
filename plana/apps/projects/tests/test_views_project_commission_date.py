@@ -212,7 +212,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         POST /projects/commission_dates .
 
-        - A misc student cannot submit a project to a is_site commission.
+        - A misc student cannot submit a project to a is_site fund.
         """
         project_id = 1
         commission_date_id = 2
@@ -248,7 +248,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         POST /projects/commission_dates .
 
         - The route can be accessed by a student user.
-        - A project can only be submitted to the first date for a commission.
+        - A project can only be submitted to the first date for a fund.
         """
         response = self.student_misc_client.post(
             "/projects/commission_dates",
