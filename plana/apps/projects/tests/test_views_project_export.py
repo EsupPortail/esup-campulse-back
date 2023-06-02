@@ -32,7 +32,7 @@ class ProjectsViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
         "users_user.json",

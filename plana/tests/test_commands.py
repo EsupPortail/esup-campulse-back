@@ -72,7 +72,7 @@ class CommissionExpirationCommandTest(TestCase):
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_project.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_user.json",
     ]
@@ -213,7 +213,7 @@ class ReviewExpirationCommandTest(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "projects_project.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
         "users_user.json",
