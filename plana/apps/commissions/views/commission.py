@@ -1,4 +1,4 @@
-"""Views linked to commissions dates."""
+"""Views linked to commissions."""
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,7 +21,7 @@ from plana.utils import to_bool
 
 
 class CommissionListCreate(generics.ListCreateAPIView):
-    """/commissions/commission_dates route"""
+    """/commissions/ route"""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
@@ -77,7 +77,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all commission dates."""
+        """Lists all commissions."""
         commission_dates = request.query_params.get("commission_dates")
         is_site = request.query_params.get("is_site")
         only_next = request.query_params.get("only_next")
@@ -176,7 +176,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new commission date (manager only)."""
+        """Creates a new commission (manager only)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
