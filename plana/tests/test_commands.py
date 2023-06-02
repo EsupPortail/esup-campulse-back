@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
 User = get_user_model()
 

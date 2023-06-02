@@ -16,7 +16,7 @@ from plana.apps.commissions.serializers.commission import (
     CommissionUpdateSerializer,
 )
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.utils import to_bool
 
 

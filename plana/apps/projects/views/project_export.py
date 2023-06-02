@@ -14,7 +14,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectReviewSerializer,
     ProjectSerializer,

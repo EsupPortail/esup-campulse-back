@@ -5,7 +5,7 @@ from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.users.models.user import User
 
 
