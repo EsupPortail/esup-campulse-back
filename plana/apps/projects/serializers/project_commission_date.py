@@ -6,7 +6,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
 
-class ProjectCommissionDateSerializer(serializers.ModelSerializer):
+class ProjectCommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
@@ -19,7 +19,7 @@ class ProjectCommissionDateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
+class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
     """Fields that can be updated by project's bearer."""
 
     class Meta:

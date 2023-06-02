@@ -17,17 +17,17 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_commission_date import (
-    ProjectCommissionDateDataSerializer,
-    ProjectCommissionDateSerializer,
+    ProjectCommissionFundDataSerializer,
+    ProjectCommissionFundSerializer,
 )
 
 
-class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
+class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
     """/projects/commission_dates route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
-    serializer_class = ProjectCommissionDateSerializer
+    serializer_class = ProjectCommissionFundSerializer
 
     @extend_schema(
         parameters=[
@@ -45,7 +45,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             ),
         ],
         responses={
-            status.HTTP_200_OK: ProjectCommissionDateSerializer,
+            status.HTTP_200_OK: ProjectCommissionFundSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
         },
@@ -116,7 +116,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_201_CREATED: ProjectCommissionDateSerializer,
+            status.HTTP_201_CREATED: ProjectCommissionFundSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -218,16 +218,16 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
+class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/commission_dates route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
-    serializer_class = ProjectCommissionDateSerializer
+    serializer_class = ProjectCommissionFundSerializer
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectCommissionDateSerializer,
+            status.HTTP_200_OK: ProjectCommissionFundSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -264,11 +264,11 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_dates/{commission_date_id} route"""
 
     queryset = ProjectCommissionFund.objects.all()
-    serializer_class = ProjectCommissionDateDataSerializer
+    serializer_class = ProjectCommissionFundDataSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -297,7 +297,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectCommissionDateSerializer,
+            status.HTTP_200_OK: ProjectCommissionFundSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -395,7 +395,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: ProjectCommissionDateSerializer,
+            status.HTTP_204_NO_CONTENT: ProjectCommissionFundSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
