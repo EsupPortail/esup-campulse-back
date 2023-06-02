@@ -12,7 +12,7 @@ urlpatterns = [
         name="commission_list_create",
     ),
     path(
-        "commission_dates/<int:pk>",
+        "<int:pk>",
         CommissionRetrieveUpdateDestroy.as_view(),
         name="commission_retrieve_update_destroy",
     ),

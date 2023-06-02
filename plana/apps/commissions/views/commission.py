@@ -217,7 +217,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
 
 class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/commissions/commission_dates/{id} route"""
+    """/commissions/{id} route"""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
