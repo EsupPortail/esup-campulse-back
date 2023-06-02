@@ -167,7 +167,7 @@ class User(AbstractUser):
             project_funds_ids = Commission.objects.filter(
                 id__in=ProjectCommissionFund.objects.filter(
                     project_id=project_obj.id
-                ).values_list("commission_date_id")
+                ).values_list("commission_fund_id")
             ).values_list("commission_id")
             if len(set(project_funds_ids).intersection(user_funds_ids)) == 0:
                 return False

@@ -120,13 +120,13 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 self.queryset = self.queryset.filter(
                     id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=inactive_projects
-                    ).values_list("commission_date_id")
+                    ).values_list("commission_fund_id")
                 )
             else:
                 self.queryset = self.queryset.exclude(
                     id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=inactive_projects
-                    ).values_list("commission_date_id")
+                    ).values_list("commission_fund_id")
                 )
 
         if (
@@ -154,7 +154,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                         project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
-                    ).values_list("commission_date_id")
+                    ).values_list("commission_fund_id")
                 )
             else:
                 self.queryset = self.queryset.exclude(
@@ -162,7 +162,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                         project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
-                    ).values_list("commission_date_id")
+                    ).values_list("commission_fund_id")
                 )
 
         return self.list(request, *args, **kwargs)
@@ -330,6 +330,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire commission date (manager only)."""
+        # A Commission object
         try:
             commission_date = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -349,7 +350,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         projects_commission_date_count = ProjectCommissionFund.objects.filter(
-            commission_date_id=commission_date.id,
+            commission_fund_id=commission_date.id,
             project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_draft_project_statuses()
             ),

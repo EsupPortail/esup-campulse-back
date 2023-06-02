@@ -61,11 +61,11 @@ class ProjectsModelsTests(TestCase):
             f"{project_comm.user} {project_comm.project} : {project_comm.text}",
         )
 
-    def test_project_commission_date_model(self):
-        """There's at least one project commission date link in the database."""
+    def test_project_commission_fund_model(self):
+        """There's at least one project commission fund link in the database."""
         project_cd = ProjectCommissionFund.objects.first()
         self.assertEqual(
-            str(project_cd), f"{project_cd.project} {project_cd.commission_date}"
+            str(project_cd), f"{project_cd.project} {project_cd.commission_fund}"
         )
 
     def test_can_access_project_success_user(self):

@@ -70,7 +70,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     project_id__in=(
                         ProjectCommissionFund.objects.filter(
-                            commission_date_id__in=Commission.objects.filter(
+                            # TODO : Change to CommissionFund
+                            commission_fund_id__in=Commission.objects.filter(
                                 commission_id__in=user_commissions_ids
                             ).values_list("id")
                         ).values_list("project_id")

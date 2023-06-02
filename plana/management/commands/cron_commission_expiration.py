@@ -10,7 +10,7 @@ from plana.apps.projects.models.project_commission_fund import ProjectCommission
 
 class Command(BaseCommand):
     help = _(
-        "Deletes all ProjectCommissionDates between Projects with PROJECT_DRAFT status and Commissions with expired submission_date."
+        "Deletes all ProjectCommissionFunds between Projects with PROJECT_DRAFT status and Commissions with expired submission_date."
     )
 
     def handle(self, *args, **options):
@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 project_id__in=Project.visible_objects.filter(
                     project_status="PROJECT_DRAFT"
                 ),
-                commission_date_id__in=Commission.objects.filter(
+                commission_fund_id__in=Commission.objects.filter(
                     submission_date__lte=datetime.date.today()
                 ),
             ).delete()

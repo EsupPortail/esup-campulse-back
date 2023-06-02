@@ -139,7 +139,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         commission_id = 1
         search_db_count = len(
             ProjectCommissionFund.objects.filter(
-                commission_date_id__in=Commission.objects.filter(
+                commission_fund_id__in=Commission.objects.filter(
                     commission_id=commission_id
                 )
             )
@@ -273,34 +273,34 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    #    def test_post_project_cf_user_success(self):
-    #        """
-    #        POST /projects/commission_funds .
-    #
-    #        - The route can be accessed by a student user.
-    #        - The project must exist.
-    #        - The authenticated user must be authorized to edit the requested project.
-    #        - Object is correctly created in db.
-    #        """
-    #        project_id = 2
-    #        commission_fund_id = 3
-    #        ProjectCommissionFund.objects.get(
-    #            project_id=project_id, commission_date_id=4
-    #        ).delete()
-    #        post_data = {
-    #            "project": project_id,
-    #            "commission_fund": commission_fund_id,
-    #            "amount_asked": 500,
-    #        }
-    #        response = self.president_student_client.post(
-    #            "/projects/commission_funds", post_data
-    #        )
-    #        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #
-    #        results = ProjectCommissionFund.objects.filter(
-    #            project_id=project_id, commission_date_id=commission_fund_id
-    #        )
-    #        self.assertEqual(len(results), 1)
+    def test_post_project_cf_user_success(self):
+        """
+        POST /projects/commission_funds .
+
+        - The route can be accessed by a student user.
+        - The project must exist.
+        - The authenticated user must be authorized to edit the requested project.
+        - Object is correctly created in db.
+        """
+        project_id = 2
+        commission_fund_id = 3
+        ProjectCommissionFund.objects.get(
+            project_id=project_id, commission_fund_id=4
+        ).delete()
+        post_data = {
+            "project": project_id,
+            "commission_fund": commission_fund_id,
+            "amount_asked": 500,
+        }
+        response = self.president_student_client.post(
+            "/projects/commission_funds", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        results = ProjectCommissionFund.objects.filter(
+            project_id=project_id, commission_fund_id=commission_fund_id
+        )
+        self.assertEqual(len(results), 1)
 
     def test_put_project_cf_not_existing(self):
         """
@@ -488,7 +488,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        pcf_data = ProjectCommissionFund.objects.get(project_id=1, commission_date_id=3)
+        pcf_data = ProjectCommissionFund.objects.get(project_id=1, commission_fund_id=3)
         self.assertEqual(pcf_data.amount_asked, patch_data["amount_asked"])
 
     def test_delete_project_cf_anonymous(self):
@@ -534,6 +534,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         pcf_not_found = len(
-            ProjectCommissionFund.objects.filter(project_id=1, commission_date_id=3)
+            ProjectCommissionFund.objects.filter(project_id=1, commission_fund_id=3)
         )
         self.assertEqual(pcf_not_found, 0)

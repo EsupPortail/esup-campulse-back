@@ -222,7 +222,7 @@ class ProjectsViewsTests(TestCase):
         )
         projects_cnt = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_date_id__in=commission_dates
+                commission_fund_id__in=commission_dates
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -932,7 +932,7 @@ class ProjectsViewsTests(TestCase):
         - Project cannot be updated if documents are missing.
         """
         DocumentUpload.objects.get(document=18, project_id=2).delete()
-        ProjectCommissionFund.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -949,7 +949,7 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionFund.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -973,7 +973,7 @@ class ProjectsViewsTests(TestCase):
 
         self.assertFalse(len(mail.outbox))
         ProjectCommissionFund.objects.create(
-            project_id=project_id, commission_date_id=3
+            project_id=project_id, commission_fund_id=3
         )
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.student_president_client.patch(

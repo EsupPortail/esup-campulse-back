@@ -13,7 +13,8 @@ class ProjectCommissionFund(models.Model):
         verbose_name=_("Project"),
         on_delete=models.CASCADE,
     )
-    commission_date = models.ForeignKey(
+    # TODO : update link to CommissionFund
+    commission_fund = models.ForeignKey(
         Commission,
         verbose_name=_("Commission"),
         on_delete=models.CASCADE,
@@ -32,7 +33,7 @@ class ProjectCommissionFund(models.Model):
     )
 
     def __str__(self):
-        return f"{self.project} {self.commission_date}"
+        return f"{self.project} {self.commission_fund}"
 
     class Meta:
         verbose_name = _("Project commission date")

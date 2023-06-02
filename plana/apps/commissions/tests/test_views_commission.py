@@ -127,7 +127,7 @@ class CommissionDatesViewsTests(TestCase):
         commissions_with_inactive_projects = Commission.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=inactive_projects
-            ).values_list("commission_date_id")
+            ).values_list("commission_fund_id")
         )
         response = self.client.get("/commissions/?active_projects=false")
         content = json.loads(response.content.decode("utf-8"))
@@ -136,7 +136,7 @@ class CommissionDatesViewsTests(TestCase):
         commissions_with_active_projects = Commission.objects.exclude(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=inactive_projects
-            ).values_list("commission_date_id")
+            ).values_list("commission_fund_id")
         )
         response = self.client.get("/commissions/?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
@@ -180,7 +180,7 @@ class CommissionDatesViewsTests(TestCase):
                         ).values_list("id")
                     ).values_list("id")
                 ).values_list("id")
-            ).values_list("commission_date_id")
+            ).values_list("commission_fund_id")
         )
         response = self.institution_client.get("/commissions/?managed_projects=true")
         content = json.loads(response.content.decode("utf-8"))
@@ -197,7 +197,7 @@ class CommissionDatesViewsTests(TestCase):
                         ).values_list("id")
                     ).values_list("id")
                 ).values_list("id")
-            ).values_list("commission_date_id")
+            ).values_list("commission_fund_id")
         )
         response = self.institution_client.get("/commissions/?managed_projects=false")
         content = json.loads(response.content.decode("utf-8"))

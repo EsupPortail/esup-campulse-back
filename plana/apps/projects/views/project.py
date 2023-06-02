@@ -164,7 +164,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     id__in=(
                         ProjectCommissionFund.objects.filter(
-                            commission_date_id__in=Commission.objects.filter(
+                            commission_fund_id__in=Commission.objects.filter(
                                 commission_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
@@ -203,7 +203,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             ]
             queryset = queryset.filter(
                 id__in=ProjectCommissionFund.objects.filter(
-                    commission_date_id__in=commission_dates_ids
+                    commission_fund_id__in=commission_dates_ids
                 ).values_list("project_id")
             )
 
@@ -471,7 +471,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,
-            commission_date_id__in=Commission.objects.filter(
+            commission_fund_id__in=Commission.objects.filter(
                 submission_date__lte=datetime.datetime.today()
             ).values_list("id"),
         ).count()
@@ -631,7 +631,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         pending_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=kwargs["pk"],
-            commission_date_id__in=Commission.objects.filter(
+            commission_fund_id__in=Commission.objects.filter(
                 commission_date__gt=datetime.datetime.now()
             ).values_list("id"),
         ).count()
@@ -797,7 +797,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     id__in=Commission.objects.filter(
                         id__in=ProjectCommissionFund.objects.filter(
                             project_id=project.id
-                        ).values_list("commission_date_id")
+                        ).values_list("commission_fund_id")
                     ).values_list("commission_id"),
                     is_site=False,
                 )

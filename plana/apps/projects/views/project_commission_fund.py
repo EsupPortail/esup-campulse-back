@@ -52,7 +52,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         tags=["projects/commission_funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all commission dates that can be linked to a project."""
+        """Lists all commission funds that can be linked to a project."""
         project_id = request.query_params.get("project_id")
         commission_id = request.query_params.get("commission_id")
 
@@ -86,7 +86,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
-                    commission_date_id__in=Commission.objects.filter(
+                    commission_fund_id__in=Commission.objects.filter(
                         commission_id__in=user_funds_ids
                     ).values_list("id")
                 )
@@ -105,11 +105,11 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(project_id=project_id)
 
         if commission_id:
-            commission_dates_ids = Commission.objects.filter(
+            commission_funds_ids = Commission.objects.filter(
                 commission_id=commission_id
             ).values_list("id")
             self.queryset = self.queryset.filter(
-                commission_date_id__in=commission_dates_ids
+                commission_fund_id__in=commission_funds_ids
             )
 
         return self.list(request, *args, **kwargs)
@@ -128,23 +128,23 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         """Creates a link between a project and a commission fund object."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
-            commission_date = Commission.objects.get(id=request.data["commission_fund"])
-            fund = Fund.objects.get(id=commission_date.commission_id)
+            commission_fund = Commission.objects.get(id=request.data["commission_fund"])
+            fund = Fund.objects.get(id=commission_fund.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        #        try:
-        #            serializer = self.get_serializer(data=request.data)
-        #            serializer.is_valid(raise_exception=True)
-        #        except ValidationError as error:
-        #            return response.Response(
-        #                {"error": error.detail},
-        #                status=status.HTTP_400_BAD_REQUEST,
-        #            )
-        #
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
@@ -184,16 +184,16 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if commission_date.submission_date < datetime.date.today():
+        if commission_fund.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commission_date_next = Commission.objects.filter(
-            commission_id=commission_date.commission_id
+        commission_next = Commission.objects.filter(
+            commission_id=commission_fund.commission_id
         ).order_by("submission_date")[0]
-        if commission_date != commission_date_next:
+        if commission_fund != commission_next:
             return response.Response(
                 {"error": _("Submissions are only available for the next commission.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -203,10 +203,10 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             id__in=Commission.objects.filter(
                 id__in=ProjectCommissionFund.objects.filter(
                     project=request.data["project"]
-                ).values_list("commission_date_id")
+                ).values_list("commission_fund_id")
             ).values_list("commission_id")
         ).values_list("id", flat=True)
-        if commission_date.commission_id in commissions_with_project:
+        if commission_fund.commission_id in commissions_with_project:
             return response.Response(
                 {"error": _("This project is already submitted for this commission.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -319,7 +319,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
-                commission_date_id=kwargs["commission_fund_id"],
+                commission_fund_id=kwargs["commission_fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -342,7 +342,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "amount_asked_previous_edition",
             "amount_earned_previous_edition",
             "amount_asked",
-            "commission_date_id",
+            "commission_fund_id",
             "project_id",
         ]
         if not request.user.has_perm("project.change_projectcommissiondate_as_bearer"):
@@ -381,8 +381,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        commission_date = Commission.objects.get(id=kwargs["commission_fund_id"])
-        if commission_date.submission_date < datetime.date.today():
+        # TODO : Change to CommissionFund
+        commission_fund = Commission.objects.get(id=kwargs["commission_fund_id"])
+        if commission_fund.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -408,7 +409,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project = Project.visible_objects.get(id=kwargs["project_id"])
             pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
-                commission_date_id=kwargs["commission_fund_id"],
+                commission_fund_id=kwargs["commission_fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(

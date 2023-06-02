@@ -78,14 +78,14 @@ class CommissionExpirationCommandTest(TestCase):
     ]
 
     def test_no_expire_commission(self):
-        """Don't remove ProjectCommissionDate if Commission isn't expired."""
+        """Don't remove ProjectCommissionFund if Commission isn't expired."""
         expired_commission_id = 3
         old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_date_id=expired_commission_id
+            commission_fund_id=expired_commission_id
         ).count()
         call_command("cron_commission_expiration")
         new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_date_id=expired_commission_id
+            commission_fund_id=expired_commission_id
         ).count()
         self.assertEqual(
             old_project_commission_dates_count, new_project_commission_dates_count
@@ -100,11 +100,11 @@ class CommissionExpirationCommandTest(TestCase):
         ).date()
         expired_commission.save()
         old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_date_id=expired_commission_id
+            commission_fund_id=expired_commission_id
         ).count()
         call_command("cron_commission_expiration")
         new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_date_id=expired_commission_id
+            commission_fund_id=expired_commission_id
         ).count()
         self.assertNotEqual(
             old_project_commission_dates_count, new_project_commission_dates_count

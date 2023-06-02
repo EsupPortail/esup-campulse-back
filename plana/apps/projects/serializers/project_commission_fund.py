@@ -10,7 +10,7 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
-    commission_date = serializers.PrimaryKeyRelatedField(
+    commission_fund = serializers.PrimaryKeyRelatedField(
         queryset=Commission.objects.all()
     )
 
@@ -31,6 +31,6 @@ class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
             "amount_asked",
             "amount_earned",
             "is_validated_by_admin",
-            "commission_date_id",
+            "commission_fund_id",
             "project_id",
         ]
