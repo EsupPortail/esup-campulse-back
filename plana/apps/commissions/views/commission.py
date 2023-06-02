@@ -12,19 +12,19 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission import (
-    CommissionDateSerializer,
-    CommissionDateUpdateSerializer,
+    CommissionSerializer,
+    CommissionUpdateSerializer,
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 from plana.utils import to_bool
 
 
-class CommissionDateListCreate(generics.ListCreateAPIView):
+class CommissionListCreate(generics.ListCreateAPIView):
     """/commissions/commission_dates route"""
 
     queryset = Commission.objects.all().order_by("submission_date")
-    serializer_class = CommissionDateSerializer
+    serializer_class = CommissionSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -73,7 +73,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
             ),
         ],
         responses={
-            status.HTTP_200_OK: CommissionDateSerializer,
+            status.HTTP_200_OK: CommissionSerializer,
         },
     )
     def get(self, request, *args, **kwargs):
@@ -169,7 +169,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_201_CREATED: CommissionDateSerializer,
+            status.HTTP_201_CREATED: CommissionSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -216,11 +216,11 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/commissions/commission_dates/{id} route"""
 
     queryset = Commission.objects.all().order_by("submission_date")
-    serializer_class = CommissionDateSerializer
+    serializer_class = CommissionSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -231,14 +231,14 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
-            self.serializer_class = CommissionDateUpdateSerializer
+            self.serializer_class = CommissionUpdateSerializer
         else:
-            self.serializer_class = CommissionDateSerializer
+            self.serializer_class = CommissionSerializer
         return super().get_serializer_class()
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: CommissionDateSerializer,
+            status.HTTP_200_OK: CommissionSerializer,
             status.HTTP_404_NOT_FOUND: None,
         },
     )
@@ -265,7 +265,7 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: CommissionDateSerializer,
+            status.HTTP_200_OK: CommissionSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -322,7 +322,7 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: CommissionDateSerializer,
+            status.HTTP_204_NO_CONTENT: CommissionSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

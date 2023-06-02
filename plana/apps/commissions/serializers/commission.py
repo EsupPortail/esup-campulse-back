@@ -4,7 +4,7 @@ from rest_framework import serializers
 from plana.apps.commissions.models.commission import Commission
 
 
-class CommissionDateSerializer(serializers.ModelSerializer):
+class CommissionSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     class Meta:
@@ -12,7 +12,7 @@ class CommissionDateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CommissionDateUpdateSerializer(serializers.ModelSerializer):
+class CommissionUpdateSerializer(serializers.ModelSerializer):
     """Update serializer."""
 
     class Meta:
