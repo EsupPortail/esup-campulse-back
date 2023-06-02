@@ -9,6 +9,7 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
+  PYTHON_VERSION: "3.9"
 
 before_script:
   - apt-get update && apt-get install -y age
@@ -28,3 +29,15 @@ unittest:
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
+licenses:
+  stage: test
+  tags:
+    - cluster
+  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
+  script:
+    - pip3 install -r requirements/dev.txt
+    - pip3 install pip-licenses
+    - pip-licenses --order=license
+    - pip-licenses --summary
+  only:
+    - tags
