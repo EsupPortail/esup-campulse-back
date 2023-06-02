@@ -9,7 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload

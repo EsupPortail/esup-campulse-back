@@ -1,7 +1,7 @@
 """List of URLs directly linked to operations that can be done on commissions."""
 from django.urls import path
 
-from .views.commission_date import (
+from .views.commission import (
     CommissionDateListCreate,
     CommissionDateRetrieveUpdateDestroy,
 )

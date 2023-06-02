@@ -7,9 +7,9 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
-from plana.apps.commissions.views.commission_date import ProjectCommissionDate
+from plana.apps.commissions.views.commission import ProjectCommissionDate
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import GroupInstitutionFundUser

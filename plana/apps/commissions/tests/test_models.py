@@ -1,7 +1,7 @@
 """List of tests done on commissions models."""
 from django.test import Client, TestCase
 
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 
 

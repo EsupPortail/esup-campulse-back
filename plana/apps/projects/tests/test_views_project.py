@@ -9,7 +9,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project

@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project

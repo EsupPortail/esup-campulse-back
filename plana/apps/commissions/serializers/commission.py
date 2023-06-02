@@ -1,7 +1,7 @@
 """Serializers describing fields used on commissions dates."""
 from rest_framework import serializers
 
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 
 
 class CommissionDateSerializer(serializers.ModelSerializer):

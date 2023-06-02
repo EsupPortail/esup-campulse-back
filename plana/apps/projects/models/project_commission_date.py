@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 
 
 class ProjectCommissionDate(models.Model):

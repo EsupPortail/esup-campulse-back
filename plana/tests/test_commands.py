@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 

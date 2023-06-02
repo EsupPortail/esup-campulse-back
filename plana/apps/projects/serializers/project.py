@@ -1,7 +1,7 @@
 """Serializers describing fields used on projects."""
 from rest_framework import serializers
 
-from plana.apps.commissions.serializers.commission_date import CommissionDateSerializer
+from plana.apps.commissions.serializers.commission import CommissionDateSerializer
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
 

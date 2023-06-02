@@ -1,2 +1,2 @@
-from .commission_date import Commission
+from .commission import Commission
 from .fund import Fund

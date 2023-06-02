@@ -3,7 +3,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from plana.apps.commissions.models.commission_date import Commission
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
