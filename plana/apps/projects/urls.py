@@ -18,7 +18,7 @@ from .views.project_comment import (
     ProjectCommentRetrieve,
     ProjectCommentUpdateDestroy,
 )
-from .views.project_commission_date import (
+from .views.project_commission_fund import (
     ProjectCommissionFundListCreate,
     ProjectCommissionFundRetrieve,
     ProjectCommissionFundUpdateDestroy,

@@ -16,7 +16,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.projects.serializers.project_commission_date import (
+from plana.apps.projects.serializers.project_commission_fund import (
     ProjectCommissionFundDataSerializer,
     ProjectCommissionFundSerializer,
 )
