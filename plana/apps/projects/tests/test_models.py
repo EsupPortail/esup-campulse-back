@@ -5,7 +5,7 @@ from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.users.models.user import User
 
 
@@ -63,7 +63,7 @@ class ProjectsModelsTests(TestCase):
 
     def test_project_commission_date_model(self):
         """There's at least one project commission date link in the database."""
-        project_cd = ProjectCommissionDate.objects.first()
+        project_cd = ProjectCommissionFund.objects.first()
         self.assertEqual(
             str(project_cd), f"{project_cd.project} {project_cd.commission_date}"
         )

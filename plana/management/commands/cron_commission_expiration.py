@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            ProjectCommissionDate.objects.filter(
+            ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     project_status="PROJECT_DRAFT"
                 ),

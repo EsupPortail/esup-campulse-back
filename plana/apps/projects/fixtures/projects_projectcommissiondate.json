@@ -1,6 +1,6 @@
 [
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 1,
     "fields": {
       "project": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 2,
     "fields": {
       "project": 2,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 3,
     "fields": {
       "project": 2,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 4,
     "fields": {
       "project": 3,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 5,
     "fields": {
       "project": 4,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 6,
     "fields": {
       "project": 5,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 7,
     "fields": {
       "project": 6,

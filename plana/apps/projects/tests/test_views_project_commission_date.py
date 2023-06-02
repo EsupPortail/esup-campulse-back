@@ -9,7 +9,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
@@ -107,7 +107,7 @@ class ProjectCommissionDateViewsTests(TestCase):
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )
-        pcd_cnt = ProjectCommissionDate.objects.filter(
+        pcd_cnt = ProjectCommissionFund.objects.filter(
             project_id__in=Project.visible_objects.filter(
                 association_id__in=Association.objects.filter(
                     institution_id__in=user_institutions_ids
@@ -127,7 +127,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         project_id = 1
         search_db_count = len(
-            ProjectCommissionDate.objects.filter(project_id=project_id)
+            ProjectCommissionFund.objects.filter(project_id=project_id)
         )
         response = self.general_client.get(
             f"/projects/commission_dates?project_id={project_id}"
@@ -138,7 +138,7 @@ class ProjectCommissionDateViewsTests(TestCase):
 
         commission_id = 1
         search_db_count = len(
-            ProjectCommissionDate.objects.filter(
+            ProjectCommissionFund.objects.filter(
                 commission_date_id__in=Commission.objects.filter(
                     commission_id=commission_id
                 )
@@ -284,7 +284,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         """
         project_id = 2
         commission_date_id = 3
-        ProjectCommissionDate.objects.get(
+        ProjectCommissionFund.objects.get(
             project_id=project_id, commission_date_id=4
         ).delete()
         post_data = {
@@ -297,7 +297,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        results = ProjectCommissionDate.objects.filter(
+        results = ProjectCommissionFund.objects.filter(
             project_id=project_id, commission_date_id=commission_date_id
         )
         self.assertEqual(len(results), 1)
@@ -349,7 +349,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - Correct projects categories are returned.
         """
         project_id = 1
-        project_test_cnt = ProjectCommissionDate.objects.filter(
+        project_test_cnt = ProjectCommissionFund.objects.filter(
             project_id=project_id
         ).count()
         response = self.general_client.get(f"/projects/{project_id}/commission_dates")
@@ -359,7 +359,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         self.assertEqual(len(content), project_test_cnt)
 
         project_id = 2
-        project_test_cnt = ProjectCommissionDate.objects.filter(
+        project_test_cnt = ProjectCommissionFund.objects.filter(
             project_id=project_id
         ).count()
         response = self.president_student_client.get(
@@ -488,7 +488,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        pcd_data = ProjectCommissionDate.objects.get(project_id=1, commission_date_id=3)
+        pcd_data = ProjectCommissionFund.objects.get(project_id=1, commission_date_id=3)
         self.assertEqual(pcd_data.amount_asked, patch_data["amount_asked"])
 
     def test_delete_project_cd_anonymous(self):
@@ -534,6 +534,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         pcd_not_found = len(
-            ProjectCommissionDate.objects.filter(project_id=1, commission_date_id=3)
+            ProjectCommissionFund.objects.filter(project_id=1, commission_date_id=3)
         )
         self.assertEqual(pcd_not_found, 0)

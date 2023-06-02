@@ -14,7 +14,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectReviewSerializer,
     ProjectSerializer,
@@ -72,7 +72,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             data["other_phone"] = user.phone
 
         data["project_commission_dates"] = list(
-            ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
+            ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
                 "commission_date_id",
                 "is_first_edition",
                 "amount_asked_previous_edition",
@@ -167,7 +167,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             data["other_phone"] = user.phone
 
         data["project_commission_dates"] = list(
-            ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
+            ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
                 "commission_date_id",
                 "is_first_edition",
                 "amount_asked_previous_edition",

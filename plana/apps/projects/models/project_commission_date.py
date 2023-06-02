@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.commissions.models.commission import Commission
 
 
-class ProjectCommissionDate(models.Model):
+class ProjectCommissionFund(models.Model):
     """Main model."""
 
     project = models.ForeignKey(

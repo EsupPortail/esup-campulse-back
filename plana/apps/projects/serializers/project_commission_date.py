@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 
 
 class ProjectCommissionDateSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class ProjectCommissionDateSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = ProjectCommissionDate
+        model = ProjectCommissionFund
         fields = "__all__"
 
 
@@ -23,7 +23,7 @@ class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
     """Fields that can be updated by project's bearer."""
 
     class Meta:
-        model = ProjectCommissionDate
+        model = ProjectCommissionFund
         fields = [
             "is_first_edition",
             "amount_asked_previous_edition",

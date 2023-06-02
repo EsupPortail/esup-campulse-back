@@ -16,7 +16,7 @@ from plana.apps.commissions.serializers.commission import (
     CommissionUpdateSerializer,
 )
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.utils import to_bool
 
 
@@ -118,13 +118,13 @@ class CommissionListCreate(generics.ListCreateAPIView):
             )
             if to_bool(active_projects) is False:
                 self.queryset = self.queryset.filter(
-                    id__in=ProjectCommissionDate.objects.filter(
+                    id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=inactive_projects
                     ).values_list("commission_date_id")
                 )
             else:
                 self.queryset = self.queryset.exclude(
-                    id__in=ProjectCommissionDate.objects.filter(
+                    id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=inactive_projects
                     ).values_list("commission_date_id")
                 )
@@ -150,7 +150,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         ):
             if to_bool(managed_projects) is True:
                 self.queryset = self.queryset.filter(
-                    id__in=ProjectCommissionDate.objects.filter(
+                    id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
@@ -158,7 +158,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 )
             else:
                 self.queryset = self.queryset.exclude(
-                    id__in=ProjectCommissionDate.objects.filter(
+                    id__in=ProjectCommissionFund.objects.filter(
                         project_id__in=Project.visible_objects.filter(
                             association_id__in=request.user.get_user_managed_associations()
                         ).values_list("id")
@@ -348,7 +348,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        projects_commission_date_count = ProjectCommissionDate.objects.filter(
+        projects_commission_date_count = ProjectCommissionFund.objects.filter(
             commission_date_id=commission_date.id,
             project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_draft_project_statuses()

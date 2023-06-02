@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 
 User = get_user_model()
 
@@ -80,11 +80,11 @@ class CommissionExpirationCommandTest(TestCase):
     def test_no_expire_commission(self):
         """Don't remove ProjectCommissionDate if Commission isn't expired."""
         expired_commission_id = 3
-        old_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             commission_date_id=expired_commission_id
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             commission_date_id=expired_commission_id
         ).count()
         self.assertEqual(
@@ -99,11 +99,11 @@ class CommissionExpirationCommandTest(TestCase):
             "1993-12-25", "%Y-%m-%d"
         ).date()
         expired_commission.save()
-        old_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             commission_date_id=expired_commission_id
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             commission_date_id=expired_commission_id
         ).count()
         self.assertNotEqual(

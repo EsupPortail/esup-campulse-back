@@ -12,7 +12,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.users.provider import CASProvider
 
 
@@ -165,7 +165,7 @@ class User(AbstractUser):
         if self.get_user_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")
             project_funds_ids = Commission.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
                     project_id=project_obj.id
                 ).values_list("commission_date_id")
             ).values_list("commission_id")

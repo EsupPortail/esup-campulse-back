@@ -20,7 +20,7 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectReviewSerializer,
@@ -163,7 +163,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
                     id__in=(
-                        ProjectCommissionDate.objects.filter(
+                        ProjectCommissionFund.objects.filter(
                             commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_funds_ids
                             ).values_list("id")
@@ -202,7 +202,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 if commission_date_id != "" and commission_date_id.isdigit()
             ]
             queryset = queryset.filter(
-                id__in=ProjectCommissionDate.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
                     commission_date_id__in=commission_dates_ids
                 ).values_list("project_id")
             )
@@ -469,7 +469,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,
             commission_date_id__in=Commission.objects.filter(
                 submission_date__lte=datetime.datetime.today()
@@ -629,7 +629,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        pending_commission_dates_count = ProjectCommissionDate.objects.filter(
+        pending_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=kwargs["pk"],
             commission_date_id__in=Commission.objects.filter(
                 commission_date__gt=datetime.datetime.now()
@@ -795,7 +795,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 institution = Institution.objects.get(id=association.institution_id)
                 funds_misc_used = Fund.objects.filter(
                     id__in=Commission.objects.filter(
-                        id__in=ProjectCommissionDate.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
                             project_id=project.id
                         ).values_list("commission_date_id")
                     ).values_list("commission_id"),

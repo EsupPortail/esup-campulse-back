@@ -15,7 +15,7 @@ from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
@@ -69,7 +69,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
                     project_id__in=(
-                        ProjectCommissionDate.objects.filter(
+                        ProjectCommissionFund.objects.filter(
                             commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_commissions_ids
                             ).values_list("id")

@@ -1085,7 +1085,7 @@
   "fields": {
     "name": "Can add Project commission date",
     "content_type": 27,
-    "codename": "add_projectcommissiondate"
+    "codename": "add_projectcommissionfund"
   }
 },
 {
@@ -1094,7 +1094,7 @@
   "fields": {
     "name": "Can change Project commission date",
     "content_type": 27,
-    "codename": "change_projectcommissiondate"
+    "codename": "change_projectcommissionfund"
   }
 },
 {
@@ -1103,7 +1103,7 @@
   "fields": {
     "name": "Can delete Project commission date",
     "content_type": 27,
-    "codename": "delete_projectcommissiondate"
+    "codename": "delete_projectcommissionfund"
   }
 },
 {
@@ -1112,7 +1112,7 @@
   "fields": {
     "name": "Can view Project commission date",
     "content_type": 27,
-    "codename": "view_projectcommissiondate"
+    "codename": "view_projectcommissionfund"
   }
 },
 {

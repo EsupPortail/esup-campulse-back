@@ -15,7 +15,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, Fund
 from plana.apps.institutions.models import Institution
-from plana.apps.projects.models import ProjectCommissionDate
+from plana.apps.projects.models import ProjectCommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
@@ -88,7 +88,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
                     project_id__in=(
-                        ProjectCommissionDate.objects.filter(
+                        ProjectCommissionFund.objects.filter(
                             commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_commissions_ids
                             ).values_list("id")

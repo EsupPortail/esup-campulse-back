@@ -9,7 +9,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
-from plana.apps.commissions.views.commission import ProjectCommissionDate
+from plana.apps.commissions.views.commission import ProjectCommissionFund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import GroupInstitutionFundUser
@@ -125,7 +125,7 @@ class CommissionDatesViewsTests(TestCase):
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
         )
         commissions_with_inactive_projects = Commission.objects.filter(
-            id__in=ProjectCommissionDate.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=inactive_projects
             ).values_list("commission_date_id")
         )
@@ -134,7 +134,7 @@ class CommissionDatesViewsTests(TestCase):
         self.assertEqual(len(content), commissions_with_inactive_projects.count())
 
         commissions_with_active_projects = Commission.objects.exclude(
-            id__in=ProjectCommissionDate.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=inactive_projects
             ).values_list("commission_date_id")
         )
@@ -170,7 +170,7 @@ class CommissionDatesViewsTests(TestCase):
         self.assertEqual(len(content), unmanaged_commissions.count())
 
         commissions_with_managed_projects = Commission.objects.filter(
-            id__in=ProjectCommissionDate.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(
@@ -187,7 +187,7 @@ class CommissionDatesViewsTests(TestCase):
         self.assertEqual(len(content), commissions_with_managed_projects.count())
 
         commissions_not_with_managed_projects = Commission.objects.exclude(
-            id__in=ProjectCommissionDate.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
                         institution_id__in=Institution.objects.filter(

@@ -15,7 +15,7 @@ from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.projects.serializers.project_commission_date import (
     ProjectCommissionDateDataSerializer,
     ProjectCommissionDateSerializer,
@@ -26,7 +26,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
     """/projects/commission_dates route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = ProjectCommissionDate.objects.all()
+    queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionDateSerializer
 
     @extend_schema(
@@ -201,7 +201,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
 
         commissions_with_project = Fund.objects.filter(
             id__in=Commission.objects.filter(
-                id__in=ProjectCommissionDate.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
                     project=request.data["project"]
                 ).values_list("commission_date_id")
             ).values_list("commission_id")
@@ -222,7 +222,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/commission_dates route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = ProjectCommissionDate.objects.all()
+    queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionDateSerializer
 
     @extend_schema(
@@ -267,7 +267,7 @@ class ProjectCommissionDateRetrieve(generics.RetrieveAPIView):
 class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_dates/{commission_date_id} route"""
 
-    queryset = ProjectCommissionDate.objects.all()
+    queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionDateDataSerializer
 
     def get_permissions(self):
@@ -317,7 +317,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         try:
-            pcd = ProjectCommissionDate.objects.get(
+            pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
                 commission_date_id=kwargs["commission_date_id"],
             )
@@ -406,7 +406,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Destroys details of a project linked to a commission date."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            pcd = ProjectCommissionDate.objects.get(
+            pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
                 commission_date_id=kwargs["commission_date_id"],
             )

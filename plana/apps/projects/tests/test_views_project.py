@@ -14,7 +14,7 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_date import ProjectCommissionFund
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
@@ -221,7 +221,7 @@ class ProjectsViewsTests(TestCase):
             f"/projects/?commission_dates={','.join(str(x) for x in commission_dates)}"
         )
         projects_cnt = Project.visible_objects.filter(
-            id__in=ProjectCommissionDate.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
                 commission_date_id__in=commission_dates
             ).values_list("project_id")
         ).count()
@@ -932,7 +932,7 @@ class ProjectsViewsTests(TestCase):
         - Project cannot be updated if documents are missing.
         """
         DocumentUpload.objects.get(document=18, project_id=2).delete()
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_date_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -949,7 +949,7 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_date_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -972,7 +972,7 @@ class ProjectsViewsTests(TestCase):
         project.save()
 
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(
+        ProjectCommissionFund.objects.create(
             project_id=project_id, commission_date_id=3
         )
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
