@@ -54,17 +54,17 @@ urlpatterns = [
         name="project_category_destroy",
     ),
     path(
-        "commission_dates",
+        "commission_funds",
         ProjectCommissionFundListCreate.as_view(),
         name="project_commission_fund_list_create",
     ),
     path(
-        "<int:project_id>/commission_dates",
+        "<int:project_id>/commission_funds",
         ProjectCommissionFundRetrieve.as_view(),
         name="project_commission_fund_retrieve",
     ),
     path(
-        "<int:project_id>/commission_dates/<int:commission_date_id>",
+        "<int:project_id>/commission_funds/<int:commission_fund_id>",
         ProjectCommissionFundUpdateDestroy.as_view(),
         name="project_commission_fund_update_destroy",
     ),

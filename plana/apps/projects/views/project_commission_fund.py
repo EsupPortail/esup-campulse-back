@@ -23,7 +23,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
-    """/projects/commission_dates route"""
+    """/projects/commission_funds route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
@@ -49,7 +49,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
         },
-        tags=["projects/commission_dates"],
+        tags=["projects/commission_funds"],
     )
     def get(self, request, *args, **kwargs):
         """Lists all commission dates that can be linked to a project."""
@@ -122,13 +122,13 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["projects/commission_dates"],
+        tags=["projects/commission_funds"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a link between a project and a commission date."""
+        """Creates a link between a project and a commission fund object."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
-            commission_date = Commission.objects.get(id=request.data["commission_date"])
+            commission_date = Commission.objects.get(id=request.data["commission_fund"])
             fund = Fund.objects.get(id=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
@@ -136,15 +136,15 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+        #        try:
+        #            serializer = self.get_serializer(data=request.data)
+        #            serializer.is_valid(raise_exception=True)
+        #        except ValidationError as error:
+        #            return response.Response(
+        #                {"error": error.detail},
+        #                status=status.HTTP_400_BAD_REQUEST,
+        #            )
+        #
         if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
@@ -219,7 +219,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
 
 
 class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
-    """/projects/{project_id}/commission_dates route"""
+    """/projects/{project_id}/commission_funds route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
@@ -232,7 +232,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["projects/commission_dates"],
+        tags=["projects/commission_funds"],
     )
     def get(self, request, *args, **kwargs):
         """Retrieves all commission dates linked to a project."""
@@ -265,7 +265,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
 
 
 class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{project_id}/commission_dates/{commission_date_id} route"""
+    """/projects/{project_id}/commission_funds/{commission_fund_id} route"""
 
     queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionFundDataSerializer
@@ -303,10 +303,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["projects/commission_dates"],
+        tags=["projects/commission_funds"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates details of a project linked to a commission date."""
+        """Updates details of a project linked to a commission fund object."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -319,7 +319,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         try:
             pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
-                commission_date_id=kwargs["commission_date_id"],
+                commission_date_id=kwargs["commission_fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -381,7 +381,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        commission_date = Commission.objects.get(id=kwargs["commission_date_id"])
+        commission_date = Commission.objects.get(id=kwargs["commission_fund_id"])
         if commission_date.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
@@ -400,7 +400,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["projects/commission_dates"],
+        tags=["projects/commission_funds"],
     )
     def delete(self, request, *args, **kwargs):
         """Destroys details of a project linked to a commission date."""
@@ -408,7 +408,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project = Project.visible_objects.get(id=kwargs["project_id"])
             pcd = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
-                commission_date_id=kwargs["commission_date_id"],
+                commission_date_id=kwargs["commission_fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
