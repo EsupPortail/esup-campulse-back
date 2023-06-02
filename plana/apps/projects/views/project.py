@@ -13,7 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
@@ -164,7 +164,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     id__in=(
                         ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
+                            commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
@@ -471,7 +471,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
             project_id=project.id,
-            commission_date_id__in=CommissionDate.objects.filter(
+            commission_date_id__in=Commission.objects.filter(
                 submission_date__lte=datetime.datetime.today()
             ).values_list("id"),
         ).count()
@@ -631,7 +631,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         pending_commission_dates_count = ProjectCommissionDate.objects.filter(
             project_id=kwargs["pk"],
-            commission_date_id__in=CommissionDate.objects.filter(
+            commission_date_id__in=Commission.objects.filter(
                 commission_date__gt=datetime.datetime.now()
             ).values_list("id"),
         ).count()
@@ -794,7 +794,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
                 funds_misc_used = Fund.objects.filter(
-                    id__in=CommissionDate.objects.filter(
+                    id__in=Commission.objects.filter(
                         id__in=ProjectCommissionDate.objects.filter(
                             project_id=project.id
                         ).values_list("commission_date_id")

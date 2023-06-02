@@ -9,7 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
@@ -82,7 +82,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
         )
         commission_infos = list(
-            CommissionDate.objects.filter(
+            Commission.objects.filter(
                 pk__in=[
                     pcd["commission_date_id"]
                     for pcd in data["project_commission_dates"]
@@ -177,7 +177,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
         )
         commission_infos = list(
-            CommissionDate.objects.filter(
+            Commission.objects.filter(
                 pk__in=[
                     pcd["commission_date_id"]
                     for pcd in data["project_commission_dates"]

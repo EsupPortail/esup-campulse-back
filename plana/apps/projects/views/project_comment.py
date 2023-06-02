@@ -13,7 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import CommissionDate, Fund
+from plana.apps.commissions.models import Commission, Fund
 from plana.apps.institutions.models import Institution
 from plana.apps.projects.models import ProjectCommissionDate
 from plana.apps.projects.models.project import Project
@@ -89,7 +89,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     project_id__in=(
                         ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
+                            commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_commissions_ids
                             ).values_list("id")
                         ).values_list("project_id")

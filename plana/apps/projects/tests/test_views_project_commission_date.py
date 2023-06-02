@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -139,7 +139,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         commission_id = 1
         search_db_count = len(
             ProjectCommissionDate.objects.filter(
-                commission_date_id__in=CommissionDate.objects.filter(
+                commission_date_id__in=Commission.objects.filter(
                     commission_id=commission_id
                 )
             )
@@ -234,7 +234,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 5
-        commission_date = CommissionDate.objects.get(id=commission_date_id)
+        commission_date = Commission.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.post(
@@ -463,7 +463,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_date_id = 3
-        commission_date = CommissionDate.objects.get(id=commission_date_id)
+        commission_date = Commission.objects.get(id=commission_date_id)
         commission_date.submission_date = "1968-05-03"
         commission_date.save()
         response = self.student_misc_client.patch(

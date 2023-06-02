@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
@@ -78,7 +78,7 @@ class CommissionExpirationCommandTest(TestCase):
     ]
 
     def test_no_expire_commission(self):
-        """Don't remove ProjectCommissionDate if CommissionDate isn't expired."""
+        """Don't remove ProjectCommissionDate if Commission isn't expired."""
         expired_commission_id = 3
         old_project_commission_dates_count = ProjectCommissionDate.objects.filter(
             commission_date_id=expired_commission_id
@@ -92,9 +92,9 @@ class CommissionExpirationCommandTest(TestCase):
         )
 
     def test_expire_commission(self):
-        """Remove ProjectCommissionDate if CommissionDate is expired."""
+        """Remove ProjectCommissionDate if Commission is expired."""
         expired_commission_id = 3
-        expired_commission = CommissionDate.objects.get(id=expired_commission_id)
+        expired_commission = Commission.objects.get(id=expired_commission_id)
         expired_commission.submission_date = datetime.datetime.strptime(
             "1993-12-25", "%Y-%m-%d"
         ).date()

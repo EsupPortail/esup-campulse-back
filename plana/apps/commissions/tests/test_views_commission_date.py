@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.views.commission_date import ProjectCommissionDate
 from plana.apps.institutions.models.institution import Institution
@@ -82,7 +82,7 @@ class CommissionDatesViewsTests(TestCase):
         - managed_commissions returns funds managed by current user.
         - managed_projects returns funds where current user manages projects.
         """
-        commission_dates_cnt = CommissionDate.objects.count()
+        commission_dates_cnt = Commission.objects.count()
         self.assertTrue(commission_dates_cnt > 0)
 
         response = self.client.get("/commissions/commission_dates")
@@ -104,14 +104,14 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get(
             f"/commissions/commission_dates?commission_dates={','.join(str(x) for x in commission_dates)}"
         )
-        commission_dates_cnt = CommissionDate.objects.filter(
+        commission_dates_cnt = Commission.objects.filter(
             commission_date__in=commission_dates
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_cnt)
 
         response = self.client.get("/commissions/commission_dates?is_site=true")
-        commission_dates_cnt = CommissionDate.objects.filter(
+        commission_dates_cnt = Commission.objects.filter(
             id__in=Fund.objects.filter(is_site=True).values_list("id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -124,7 +124,7 @@ class CommissionDatesViewsTests(TestCase):
         inactive_projects = Project.visible_objects.filter(
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
         )
-        commission_dates_with_inactive_projects = CommissionDate.objects.filter(
+        commission_dates_with_inactive_projects = Commission.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(
                 project_id__in=inactive_projects
             ).values_list("commission_date_id")
@@ -134,7 +134,7 @@ class CommissionDatesViewsTests(TestCase):
         )
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_with_inactive_projects.count())
-        commission_dates_with_active_projects = CommissionDate.objects.exclude(
+        commission_dates_with_active_projects = Commission.objects.exclude(
             id__in=ProjectCommissionDate.objects.filter(
                 project_id__in=inactive_projects
             ).values_list("commission_date_id")
@@ -143,7 +143,7 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_with_active_projects.count())
 
-        managed_commission_dates = CommissionDate.objects.filter(
+        managed_commission_dates = Commission.objects.filter(
             commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
                     id__in=GroupInstitutionFundUser.objects.filter(
@@ -157,7 +157,7 @@ class CommissionDatesViewsTests(TestCase):
         )
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), managed_commission_dates.count())
-        unmanaged_commission_dates = CommissionDate.objects.exclude(
+        unmanaged_commission_dates = Commission.objects.exclude(
             commission_id__in=Fund.objects.filter(
                 institution_id__in=Institution.objects.filter(
                     id__in=GroupInstitutionFundUser.objects.filter(
@@ -172,7 +172,7 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), unmanaged_commission_dates.count())
 
-        commission_dates_with_managed_projects = CommissionDate.objects.filter(
+        commission_dates_with_managed_projects = Commission.objects.filter(
             id__in=ProjectCommissionDate.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
@@ -190,7 +190,7 @@ class CommissionDatesViewsTests(TestCase):
         )
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_dates_with_managed_projects.count())
-        commission_dates_not_with_managed_projects = CommissionDate.objects.exclude(
+        commission_dates_not_with_managed_projects = Commission.objects.exclude(
             id__in=ProjectCommissionDate.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     association_id__in=Association.objects.filter(
@@ -390,7 +390,7 @@ class CommissionDatesViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        commission_date = CommissionDate.objects.get(id=1)
+        commission_date = Commission.objects.get(id=1)
         self.assertEqual(
             patch_data["submission_date"],
             commission_date.submission_date.strftime("%Y-%m-%d"),
@@ -431,7 +431,7 @@ class CommissionDatesViewsTests(TestCase):
         - A commission date taking place before today cannot be deleted.
         """
         commission_date_id = 1
-        commission_date = CommissionDate.objects.get(id=commission_date_id)
+        commission_date = Commission.objects.get(id=commission_date_id)
         commission_date.commission_date = "1993-12-25"
         commission_date.save()
         response = self.general_client.delete(
@@ -457,5 +457,5 @@ class CommissionDatesViewsTests(TestCase):
         response = self.general_client.delete("/commissions/commission_dates/1")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        commission_date = CommissionDate.objects.filter(id=1)
+        commission_date = Commission.objects.filter(id=1)
         self.assertEqual(len(commission_date), 0)

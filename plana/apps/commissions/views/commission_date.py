@@ -9,7 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission_date import (
     CommissionDateSerializer,
@@ -23,7 +23,7 @@ from plana.utils import to_bool
 class CommissionDateListCreate(generics.ListCreateAPIView):
     """/commissions/commission_dates route"""
 
-    queryset = CommissionDate.objects.all().order_by("submission_date")
+    queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionDateSerializer
 
     def get_permissions(self):
@@ -105,7 +105,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
 
         if only_next is not None and only_next != "" and to_bool(only_next) is True:
             first_commission_date = (
-                CommissionDate.objects.all()
+                Commission.objects.all()
                 .order_by("commission_date")
                 .first()
                 .commission_date
@@ -219,7 +219,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
 class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/commissions/commission_dates/{id} route"""
 
-    queryset = CommissionDate.objects.all().order_by("submission_date")
+    queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionDateSerializer
 
     def get_permissions(self):

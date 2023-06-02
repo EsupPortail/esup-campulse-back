@@ -716,7 +716,7 @@
   "fields": {
     "name": "Can add Commission Date",
     "content_type": 19,
-    "codename": "add_commissiondate"
+    "codename": "add_commission"
   }
 },
 {
@@ -725,7 +725,7 @@
   "fields": {
     "name": "Can change Commission Date",
     "content_type": 19,
-    "codename": "change_commissiondate"
+    "codename": "change_commission"
   }
 },
 {
@@ -734,7 +734,7 @@
   "fields": {
     "name": "Can delete Commission Date",
     "content_type": 19,
-    "codename": "delete_commissiondate"
+    "codename": "delete_commission"
   }
 },
 {
@@ -743,7 +743,7 @@
   "fields": {
     "name": "Can view Commission Date",
     "content_type": 19,
-    "codename": "view_commissiondate"
+    "codename": "view_commission"
   }
 },
 {

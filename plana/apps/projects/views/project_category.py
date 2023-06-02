@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
@@ -70,7 +70,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     project_id__in=(
                         ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
+                            commission_date_id__in=Commission.objects.filter(
                                 commission_id__in=user_commissions_ids
                             ).values_list("id")
                         ).values_list("project_id")

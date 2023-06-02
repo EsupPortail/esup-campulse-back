@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 
 
 class ProjectCommissionDate(models.Model):
@@ -14,8 +14,8 @@ class ProjectCommissionDate(models.Model):
         on_delete=models.CASCADE,
     )
     commission_date = models.ForeignKey(
-        CommissionDate,
-        verbose_name=_("Commission Date"),
+        Commission,
+        verbose_name=_("Commission"),
         on_delete=models.CASCADE,
     )
     is_first_edition = models.BooleanField(_("Is first edition"), default=True)

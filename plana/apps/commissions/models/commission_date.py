@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class CommissionDate(models.Model):
+class Commission(models.Model):
     """Main model."""
 
     submission_date = models.DateField(_("Project submission limit date"))

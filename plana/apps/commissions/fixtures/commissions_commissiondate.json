@@ -1,6 +1,6 @@
 [
   {
-    "model": "commissions.commissiondate",
+    "model": "commissions.commission",
     "pk": 1,
     "fields": {
       "submission_date": "2099-10-06",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "commissions.commissiondate",
+    "model": "commissions.commission",
     "pk": 2,
     "fields": {
       "submission_date": "2099-10-06",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "commissions.commissiondate",
+    "model": "commissions.commission",
     "pk": 3,
     "fields": {
       "submission_date": "2099-10-06",
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "commissions.commissiondate",
+    "model": "commissions.commission",
     "pk": 4,
     "fields": {
       "submission_date": "2099-10-08",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "commissions.commissiondate",
+    "model": "commissions.commission",
     "pk": 5,
     "fields": {
       "submission_date": "2099-10-07",

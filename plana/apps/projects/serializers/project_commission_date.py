@@ -1,7 +1,7 @@
 """Serializers describing fields used on project commission date table."""
 from rest_framework import serializers
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
 
@@ -11,7 +11,7 @@ class ProjectCommissionDateSerializer(serializers.ModelSerializer):
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
     commission_date = serializers.PrimaryKeyRelatedField(
-        queryset=CommissionDate.objects.all()
+        queryset=Commission.objects.all()
     )
 
     class Meta:

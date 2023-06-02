@@ -9,7 +9,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
@@ -540,7 +540,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must be linked to non expired commission dates.
         """
-        expired_commission_date = CommissionDate.objects.get(id=3)
+        expired_commission_date = Commission.objects.get(id=3)
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}
@@ -782,7 +782,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
-        commission_date = CommissionDate.objects.get(id=3)
+        commission_date = Commission.objects.get(id=3)
         commission_date.commission_date = datetime.datetime.strptime(
             "1993-12-25", "%Y-%m-%d"
         ).date()

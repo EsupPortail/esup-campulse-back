@@ -9,7 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
@@ -164,7 +164,7 @@ class User(AbstractUser):
         # TODO : update db fields and tables
         if self.get_user_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")
-            project_funds_ids = CommissionDate.objects.filter(
+            project_funds_ids = Commission.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project_id=project_obj.id
                 ).values_list("commission_date_id")

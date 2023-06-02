@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_date import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
@@ -86,7 +86,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
-                    commission_date_id__in=CommissionDate.objects.filter(
+                    commission_date_id__in=Commission.objects.filter(
                         commission_id__in=user_funds_ids
                     ).values_list("id")
                 )
@@ -105,7 +105,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(project_id=project_id)
 
         if commission_id:
-            commission_dates_ids = CommissionDate.objects.filter(
+            commission_dates_ids = Commission.objects.filter(
                 commission_id=commission_id
             ).values_list("id")
             self.queryset = self.queryset.filter(
@@ -128,9 +128,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
         """Creates a link between a project and a commission date."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
-            commission_date = CommissionDate.objects.get(
-                id=request.data["commission_date"]
-            )
+            commission_date = Commission.objects.get(id=request.data["commission_date"])
             fund = Fund.objects.get(id=commission_date.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
@@ -192,7 +190,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commission_date_next = CommissionDate.objects.filter(
+        commission_date_next = Commission.objects.filter(
             commission_id=commission_date.commission_id
         ).order_by("submission_date")[0]
         if commission_date != commission_date_next:
@@ -202,7 +200,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
             )
 
         commissions_with_project = Fund.objects.filter(
-            id__in=CommissionDate.objects.filter(
+            id__in=Commission.objects.filter(
                 id__in=ProjectCommissionDate.objects.filter(
                     project=request.data["project"]
                 ).values_list("commission_date_id")
@@ -383,7 +381,7 @@ class ProjectCommissionDateUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        commission_date = CommissionDate.objects.get(id=kwargs["commission_date_id"])
+        commission_date = Commission.objects.get(id=kwargs["commission_date_id"])
         if commission_date.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
