@@ -29,15 +29,5 @@ unittest:
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
-licenses:
-  stage: test
-  tags:
-    - cluster
-  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
-  script:
-    - pip3 install -r requirements/dev.txt
-    - pip3 install pip-licenses
-    - pip-licenses --order=license
-    - pip-licenses --summary
-  only:
-    - tags
+include:
+  - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
