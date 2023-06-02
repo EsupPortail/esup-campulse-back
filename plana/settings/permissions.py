@@ -51,7 +51,7 @@ PERMISSIONS_GROUPS = {
         "change_projectcomment",
         "delete_projectcomment",
         "view_projectcomment",
-        "view_projectcomment_any_commission",
+        "view_projectcomment_any_fund",
         "view_projectcomment_any_institution",
         "change_projectcommissiondate",
         "change_projectcommissiondate_as_validator",

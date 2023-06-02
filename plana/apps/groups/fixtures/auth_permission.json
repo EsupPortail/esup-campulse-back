@@ -1335,9 +1335,9 @@
   "model": "auth.permission",
   "pk": 149,
   "fields": {
-    "name": "Can view all comments linked to all projects for a commission.",
+    "name": "Can view all comments linked to all projects for a fund.",
     "content_type": 30,
-    "codename": "view_projectcomment_any_commission"
+    "codename": "view_projectcomment_any_fund"
   }
 },
 {

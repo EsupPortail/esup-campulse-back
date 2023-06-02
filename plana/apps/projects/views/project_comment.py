@@ -67,7 +67,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
-        if not request.user.has_perm("projects.view_projectcomment_any_commission"):
+        if not request.user.has_perm("projects.view_projectcomment_any_fund"):
             if request.user.is_staff:
                 user_commissions_ids = request.user.get_user_managed_funds()
             else:
@@ -76,7 +76,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
             user_commissions_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm(
-            "projects.view_projectcomment_any_commission"
+            "projects.view_projectcomment_any_fund"
         ) or not request.user.has_perm("projects.view_projectcomment_any_institution"):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
@@ -192,7 +192,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_projectcomment_any_commission")
+            not request.user.has_perm("projects.view_projectcomment_any_fund")
             and not request.user.has_perm(
                 "projects.view_projectcomment_any_institution"
             )
