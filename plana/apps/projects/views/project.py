@@ -13,8 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.fund import Fund
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
@@ -164,8 +163,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 | models.Q(
                     id__in=(
                         ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=Commission.objects.filter(
-                                commission_id__in=user_funds_ids
+                            commission_fund_id__in=CommissionFund.objects.filter(
+                                fund_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
                     )
@@ -794,11 +793,11 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
                 funds_misc_used = Fund.objects.filter(
-                    id__in=Commission.objects.filter(
+                    id__in=CommissionFund.objects.filter(
                         id__in=ProjectCommissionFund.objects.filter(
                             project_id=project.id
                         ).values_list("commission_fund_id")
-                    ).values_list("commission_id"),
+                    ).values_list("fund_id"),
                     is_site=False,
                 )
                 context["association_name"] = association.name

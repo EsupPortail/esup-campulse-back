@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
@@ -78,15 +78,20 @@ class CommissionExpirationCommandTest(TestCase):
         "users_user.json",
     ]
 
+    # TODO : fix this one
     def test_no_expire_commission(self):
         """Don't remove ProjectCommissionFund if Commission isn't expired."""
         expired_commission_id = 3
         old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id=expired_commission_id
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id=expired_commission_id
+            ).values("commission_id")
         ).count()
         call_command("cron_commission_expiration")
         new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id=expired_commission_id
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission=expired_commission_id
+            ).values("id")
         ).count()
         self.assertEqual(
             old_project_commission_dates_count, new_project_commission_dates_count
@@ -101,11 +106,15 @@ class CommissionExpirationCommandTest(TestCase):
         ).date()
         expired_commission.save()
         old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id=expired_commission_id
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id=expired_commission_id
+            ).values("commission_id")
         ).count()
         call_command("cron_commission_expiration")
         new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id=expired_commission_id
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission=expired_commission_id
+            ).values("id")
         ).count()
         self.assertNotEqual(
             old_project_commission_dates_count, new_project_commission_dates_count

@@ -9,7 +9,7 @@ class CommissionFund(models.Model):
     commission = models.ForeignKey(
         "Commission",
         verbose_name=_("Commission"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
     )
     fund = models.ForeignKey(
         "Fund",

@@ -140,7 +140,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         commission_id = 1
         search_db_count = len(
             ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=Commission.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
                 )
             )

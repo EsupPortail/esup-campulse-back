@@ -85,8 +85,8 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
-                    commission_fund_id__in=Commission.objects.filter(
-                        commission_id__in=user_funds_ids
+                    commission_fund_id__in=CommissionFund.objects.filter(
+                        fund_id__in=user_funds_ids
                     ).values_list("id")
                 )
                 | models.Q(
@@ -104,7 +104,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(project_id=project_id)
 
         if commission_id:
-            commission_funds_ids = Commission.objects.filter(
+            commission_funds_ids = CommissionFund.objects.filter(
                 commission_id=commission_id
             ).values_list("id")
             self.queryset = self.queryset.filter(
