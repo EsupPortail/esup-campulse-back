@@ -1110,7 +1110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectReview'
           description: ''
         '401':
           description: No response body
@@ -1120,7 +1120,7 @@ paths:
           description: No response body
     patch:
       operationId: projects_review_partial_update
-      description: Updates project details.
+      description: Updates project review details.
       parameters:
       - in: path
         name: id
@@ -1147,7 +1147,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectReviewUpdate'
           description: ''
         '400':
           description: No response body
@@ -4377,6 +4377,152 @@ components:
       - edition_date
       - id
       - name
+    ProjectReview:
+      type: object
+      description: Main review serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        planned_location:
+          type: string
+        other_first_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        other_last_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        other_email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 150
+        other_phone:
+          type: string
+          nullable: true
+          maxLength: 32
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        commission_dates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommissionDate'
+          readOnly: true
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_location:
+          type: string
+        review:
+          type: string
+          title: Review (amount of students, partnerships, ...)
+        impact_students:
+          type: string
+          title: Impact on students
+        description:
+          type: string
+          title: Description (activities done, changes from planning, ...)
+        difficulties:
+          type: string
+        improvements:
+          type: string
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - commission_dates
+      - creation_date
+      - edition_date
+      - id
+      - name
+    ProjectReviewUpdate:
+      type: object
+      description: Main review serializer for update.
+      properties:
+        other_first_name:
+          type: string
+        other_last_name:
+          type: string
+        other_email:
+          type: string
+        other_phone:
+          type: string
+        commission_dates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommissionDate'
+          readOnly: true
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+        real_location:
+          type: string
+        review:
+          type: string
+          title: Review (amount of students, partnerships, ...)
+        impact_students:
+          type: string
+          title: Impact on students
+        description:
+          type: string
+          title: Description (activities done, changes from planning, ...)
+        difficulties:
+          type: string
+        improvements:
+          type: string
+      required:
+      - commission_dates
     ProjectStatus:
       type: object
       description: Serializer for status field.

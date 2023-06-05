@@ -180,7 +180,7 @@ class ProjectExpirationCommandTest(TestCase):
 
     def test_no_project_expiration(self):
         """Nothing should change if all projects are up to date."""
-        project_to_delete = Project.objects.get(id=7)
+        project_to_delete = Project.objects.get(id=9)
         project_to_delete.save()
 
         old_projects_cnt = Project.objects.all().count()

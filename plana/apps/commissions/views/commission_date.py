@@ -353,7 +353,7 @@ class CommissionDateRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         projects_commission_date_count = ProjectCommissionDate.objects.filter(
             commission_date_id=commission_date.id,
             project_id__in=Project.visible_objects.exclude(
-                project_status__in=Project.ProjectStatus.get_draft_project_statuses()
+                project_status__in=Project.ProjectStatus.get_deletable_project_statuses()
             ),
         ).count()
         if projects_commission_date_count > 0:

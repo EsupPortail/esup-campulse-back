@@ -53,7 +53,7 @@ class Project(models.Model):
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
-        def get_draft_project_statuses():
+        def get_deletable_project_statuses():
             """Commission dates with projects having these statuses can be deleted."""
 
             return ["PROJECT_DRAFT"]

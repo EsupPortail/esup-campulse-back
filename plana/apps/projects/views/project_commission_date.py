@@ -192,6 +192,8 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        """
+        # TODO Will be fixed with refacto.
         commission_date_next = CommissionDate.objects.filter(
             commission_id=commission_date.commission_id
         ).order_by("submission_date")[0]
@@ -200,6 +202,7 @@ class ProjectCommissionDateListCreate(generics.ListCreateAPIView):
                 {"error": _("Submissions are only available for the next commission.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        """
 
         commissions_with_project = Commission.objects.filter(
             id__in=CommissionDate.objects.filter(

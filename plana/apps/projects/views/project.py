@@ -469,6 +469,15 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        if (
+            not request.user.has_perm("projects.change_project_as_validator")
+            and project.project_status != "PROJECT_DRAFT"
+        ):
+            return response.Response(
+                {"error": _("Project is not a draft that can be edited.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
             project_id=project.id,
             commission_date_id__in=CommissionDate.objects.filter(
@@ -537,7 +546,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_200_OK: ProjectReviewSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -576,7 +585,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_200_OK: ProjectReviewUpdateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -584,7 +593,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project details."""
+        """Updates project review details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -611,6 +620,15 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            not request.user.has_perm("projects.change_project_as_validator")
+            and project.project_status != "PROJECT_REVIEW_DRAFT"
+        ):
+            return response.Response(
+                {"error": _("Project review is not a draft that can be edited.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

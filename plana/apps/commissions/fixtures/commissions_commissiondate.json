@@ -43,5 +43,14 @@
       "commission_date": "2099-10-21",
       "commission_id": 3
     }
+  },
+  {
+    "model": "commissions.commissiondate",
+    "pk": 6,
+    "fields": {
+      "submission_date": "1990-01-01",
+      "commission_date": "1990-01-30",
+      "commission_id": 3
+    }
   }
 ]
