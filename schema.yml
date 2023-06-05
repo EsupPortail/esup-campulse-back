@@ -257,10 +257,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/AssociationName'
           description: ''
-  /commissions/commission_dates:
+  /commissions/:
     get:
-      operationId: commissions_commission_dates_list
-      description: Lists all commission dates.
+      operationId: commissions_list
+      description: Lists all commissions.
       parameters:
       - in: query
         name: active_projects
@@ -306,24 +306,24 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CommissionDate'
+                  $ref: '#/components/schemas/Commission'
           description: ''
     post:
-      operationId: commissions_commission_dates_create
-      description: Creates a new commission date (manager only).
+      operationId: commissions_create
+      description: Creates a new commission (manager only).
       tags:
       - commissions
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
         required: true
       security:
       - jwtAuth: []
@@ -332,7 +332,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '400':
           description: No response body
@@ -340,9 +340,9 @@ paths:
           description: No response body
         '403':
           description: No response body
-  /commissions/commission_dates/{id}:
+  /commissions/{id}:
     get:
-      operationId: commissions_commission_dates_retrieve
+      operationId: commissions_retrieve
       description: Retrieves a commission date with all its details.
       parameters:
       - in: path
@@ -360,12 +360,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '404':
           description: No response body
     patch:
-      operationId: commissions_commission_dates_partial_update
+      operationId: commissions_partial_update
       description: Updates commission date details.
       parameters:
       - in: path
@@ -379,13 +379,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -393,7 +393,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '400':
           description: No response body
@@ -404,7 +404,7 @@ paths:
         '404':
           description: No response body
     delete:
-      operationId: commissions_commission_dates_destroy
+      operationId: commissions_destroy
       description: Destroys an entire commission date (manager only).
       parameters:
       - in: path
@@ -421,7 +421,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '401':
           description: No response body
@@ -1359,9 +1359,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{project_id}/commission_dates:
+  /projects/{project_id}/commission_funds:
     get:
-      operationId: projects_commission_dates_retrieve
+      operationId: projects_commission_funds_retrieve
       description: Retrieves all commission dates linked to a project.
       parameters:
       - in: path
@@ -1370,7 +1370,7 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1378,7 +1378,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
@@ -1386,13 +1386,13 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{project_id}/commission_dates/{commission_date_id}:
+  /projects/{project_id}/commission_funds/{commission_fund_id}:
     patch:
-      operationId: projects_commission_dates_partial_update
-      description: Updates details of a project linked to a commission date.
+      operationId: projects_commission_funds_partial_update
+      description: Updates details of a project linked to a commission fund object.
       parameters:
       - in: path
-        name: commission_date_id
+        name: commission_fund_id
         schema:
           type: integer
         required: true
@@ -1402,18 +1402,18 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1421,7 +1421,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '400':
           description: No response body
@@ -1432,11 +1432,11 @@ paths:
         '404':
           description: No response body
     delete:
-      operationId: projects_commission_dates_destroy
+      operationId: projects_commission_funds_destroy
       description: Destroys details of a project linked to a commission date.
       parameters:
       - in: path
-        name: commission_date_id
+        name: commission_fund_id
         schema:
           type: integer
         required: true
@@ -1446,7 +1446,7 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1454,7 +1454,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
@@ -1602,10 +1602,10 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/commission_dates:
+  /projects/commission_funds:
     get:
-      operationId: projects_commission_dates_list
-      description: Lists all commission dates that can be linked to a project.
+      operationId: projects_commission_funds_list
+      description: Lists all commission funds that can be linked to a project.
       parameters:
       - in: query
         name: commission_id
@@ -1618,7 +1618,7 @@ paths:
           type: number
         description: Project id.
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1628,28 +1628,28 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectCommissionDate'
+                  $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
         '403':
           description: No response body
     post:
-      operationId: projects_commission_dates_create
-      description: Creates a link between a project and a commission date.
+      operationId: projects_commission_funds_create
+      description: Creates a link between a project and a commission fund object.
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1658,7 +1658,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '400':
           description: No response body
@@ -3165,7 +3165,7 @@ components:
       - CHARTER_VALIDATED
       - CHARTER_EXPIRED
       type: string
-    CommissionDate:
+    Commission:
       type: object
       description: Main serializer.
       properties:
@@ -3187,7 +3187,7 @@ components:
       - commission_date
       - id
       - submission_date
-    CommissionDateRequest:
+    CommissionRequest:
       type: object
       description: Main serializer.
       properties:
@@ -3772,7 +3772,7 @@ components:
           type: boolean
         is_treasurer:
           type: boolean
-    PatchedCommissionDateUpdateRequest:
+    PatchedCommissionUpdateRequest:
       type: object
       description: Update serializer.
       properties:
@@ -3808,7 +3808,7 @@ components:
           type: string
           minLength: 1
           title: Texte
-    PatchedProjectCommissionDateDataRequest:
+    PatchedProjectCommissionFundDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
       properties:
@@ -4116,7 +4116,7 @@ components:
         commission_dates:
           type: array
           items:
-            $ref: '#/components/schemas/CommissionDate'
+            $ref: '#/components/schemas/Commission'
           readOnly: true
         budget_previous_edition:
           type: integer
@@ -4243,7 +4243,7 @@ components:
       required:
       - project
       - text
-    ProjectCommissionDate:
+    ProjectCommissionFund:
       type: object
       description: Main serializer.
       properties:
@@ -4252,7 +4252,7 @@ components:
           readOnly: true
         project:
           type: integer
-        commission_date:
+        commission_fund:
           type: integer
         is_first_edition:
           type: boolean
@@ -4277,16 +4277,16 @@ components:
         is_validated_by_admin:
           type: boolean
       required:
-      - commission_date
+      - commission_fund
       - id
       - project
-    ProjectCommissionDateRequest:
+    ProjectCommissionFundRequest:
       type: object
       description: Main serializer.
       properties:
         project:
           type: integer
-        commission_date:
+        commission_fund:
           type: integer
         is_first_edition:
           type: boolean
@@ -4311,7 +4311,7 @@ components:
         is_validated_by_admin:
           type: boolean
       required:
-      - commission_date
+      - commission_fund
       - project
     ProjectPartialData:
       type: object
