@@ -254,7 +254,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
             and not request.user.can_access_project(project)
         ):
             return response.Response(
-                {"error": _("Not allowed to retrieve this project commission dates.")},
+                {"error": _("Not allowed to retrieve this project commission funds.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

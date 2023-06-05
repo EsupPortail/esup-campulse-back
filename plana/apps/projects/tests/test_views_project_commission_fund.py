@@ -13,7 +13,7 @@ from plana.apps.projects.models.project_commission_fund import ProjectCommission
 from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
-class ProjectCommissionDateViewsTests(TestCase):
+class ProjectCommissionFundViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
@@ -406,7 +406,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by a student user.
-        - The ProjectCommissionDate object must exist.
+        - The ProjectCommissionFund object must exist.
         """
         response = self.student_misc_client.patch(
             "/projects/99999/commission_funds/99999",
@@ -505,7 +505,7 @@ class ProjectCommissionDateViewsTests(TestCase):
         DELETE /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by a student client.
-        - The ProjectCommissionDate object must exist.
+        - The ProjectCommissionFund object must exist.
         """
         response = self.student_misc_client.delete(
             "/projects/99999/commission_funds/99999"
@@ -528,7 +528,7 @@ class ProjectCommissionDateViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         - The authenticated user must be authorized to update the project commission funds.
-        - ProjectCommissionDate object is correctly removed from db.
+        - ProjectCommissionFund object is correctly removed from db.
         """
         response = self.student_misc_client.delete("/projects/1/commission_funds/3")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

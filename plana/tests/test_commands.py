@@ -92,7 +92,7 @@ class CommissionExpirationCommandTest(TestCase):
         )
 
     def test_expire_commission(self):
-        """Remove ProjectCommissionDate if Commission is expired."""
+        """Remove ProjectCommissionFund if Commission is expired."""
         expired_commission_id = 3
         expired_commission = Commission.objects.get(id=expired_commission_id)
         expired_commission.submission_date = datetime.datetime.strptime(
