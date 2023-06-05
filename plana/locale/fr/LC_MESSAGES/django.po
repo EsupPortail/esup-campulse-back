@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-05 10:47+0200\n"
+"POT-Creation-Date: 2023-06-05 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -304,27 +304,27 @@ msgstr "Date de Commission"
 msgid "Commissions Dates"
 msgstr "Dates de Commissions"
 
-#: plana/apps/commissions/views/commission_date.py:201
-#: plana/apps/commissions/views/commission_date.py:306
+#: plana/apps/commissions/views/commission_date.py:204
+#: plana/apps/commissions/views/commission_date.py:309
 msgid "Cannot create commission date taking place before today."
 msgstr "Impossible de créer une date de commission passée."
 
-#: plana/apps/commissions/views/commission_date.py:214
-#: plana/apps/commissions/views/commission_date.py:319
+#: plana/apps/commissions/views/commission_date.py:217
+#: plana/apps/commissions/views/commission_date.py:322
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission_date.py:253
-#: plana/apps/commissions/views/commission_date.py:292
-#: plana/apps/commissions/views/commission_date.py:339
+#: plana/apps/commissions/views/commission_date.py:256
+#: plana/apps/commissions/views/commission_date.py:295
+#: plana/apps/commissions/views/commission_date.py:342
 msgid "Commission Date does not exist."
 msgstr "La date de commission n'existe pas."
 
-#: plana/apps/commissions/views/commission_date.py:347
+#: plana/apps/commissions/views/commission_date.py:350
 msgid "Cannot delete commission date taking place before today."
 msgstr "Impossible de supprimer une date de commission passée"
 
-#: plana/apps/commissions/views/commission_date.py:361
+#: plana/apps/commissions/views/commission_date.py:364
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
@@ -533,7 +533,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project_comment.py:190
 #: plana/apps/projects/views/project_commission_date.py:248
 #: plana/apps/projects/views/project_export.py:48
-#: plana/apps/projects/views/project_export.py:145
+#: plana/apps/projects/views/project_export.py:138
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -561,15 +561,15 @@ msgstr "Le document n'est affecté à aucune personne ou association."
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:251
-#: plana/apps/documents/views/document_upload.py:294
-#: plana/apps/documents/views/document_upload.py:344
+#: plana/apps/documents/views/document_upload.py:250
+#: plana/apps/documents/views/document_upload.py:293
+#: plana/apps/documents/views/document_upload.py:343
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:272
-#: plana/apps/documents/views/document_upload.py:315
-#: plana/apps/documents/views/document_upload.py:365
+#: plana/apps/documents/views/document_upload.py:271
+#: plana/apps/documents/views/document_upload.py:314
+#: plana/apps/documents/views/document_upload.py:364
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
@@ -634,20 +634,20 @@ msgid "Planned location"
 msgstr "Lieu prévu"
 
 #: plana/apps/projects/models/project.py:107
-msgid "Other first name"
-msgstr "Autre prénom"
+msgid "Contact first name"
+msgstr "Prénom du contact"
 
 #: plana/apps/projects/models/project.py:110
-msgid "Other last name"
-msgstr "Autre nom de famille"
+msgid "Contact last name"
+msgstr "Nom de famille du contact"
 
 #: plana/apps/projects/models/project.py:113
-msgid "Other email"
-msgstr "Autre adresse mail"
+msgid "Contact email"
+msgstr "Adresse email du contact"
 
 #: plana/apps/projects/models/project.py:116
-msgid "Other phone"
-msgstr "Autre téléphone"
+msgid "Contact phone"
+msgstr "Téléphone du contact"
 
 #: plana/apps/projects/models/project.py:125
 msgid "Budget on previous edition"
@@ -845,7 +845,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 #: plana/apps/projects/views/project.py:423
 #: plana/apps/projects/views/project.py:571
 #: plana/apps/projects/views/project_export.py:58
-#: plana/apps/projects/views/project_export.py:155
+#: plana/apps/projects/views/project_export.py:148
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 

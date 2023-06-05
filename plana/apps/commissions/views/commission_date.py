@@ -105,6 +105,8 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                 )
             )
 
+        """
+        # TODO Will be corrected in refacto.
         if only_next is not None and only_next != "" and to_bool(only_next) is True:
             first_commission_date = (
                 CommissionDate.objects.all()
@@ -113,6 +115,7 @@ class CommissionDateListCreate(generics.ListCreateAPIView):
                 .commission_date
             )
             self.queryset = self.queryset.filter(commission_date=first_commission_date)
+        """
 
         if active_projects is not None and active_projects != "":
             inactive_projects = Project.visible_objects.filter(

@@ -64,13 +64,6 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 id=data["association_id"]
             ).name
 
-        if data["user_id"] is not None:
-            user = User.objects.get(id=data["user_id"])
-            data["other_first_name"] = user.first_name
-            data["other_last_name"] = user.last_name
-            data["other_email"] = user.email
-            data["other_phone"] = user.phone
-
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
                 "commission_date_id",
@@ -160,13 +153,6 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             data["association"] = Association.objects.get(
                 id=data["association_id"]
             ).name
-
-        if data["user_id"] is not None:
-            user = User.objects.get(id=data["user_id"])
-            data["other_first_name"] = user.first_name
-            data["other_last_name"] = user.last_name
-            data["other_email"] = user.email
-            data["other_phone"] = user.phone
 
         data["project_commission_dates"] = list(
             ProjectCommissionDate.objects.filter(project_id=data["id"]).values(

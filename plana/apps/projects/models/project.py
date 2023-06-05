@@ -103,17 +103,17 @@ class Project(models.Model):
     planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
     planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
     planned_location = models.TextField(_("Planned location"), default="")
-    other_first_name = models.CharField(
-        _("Other first name"), max_length=150, default="", null=True
+    contact_first_name = models.CharField(
+        _("Contact first name"), max_length=150, default="", null=True
     )
-    other_last_name = models.CharField(
-        _("Other last name"), max_length=150, default="", null=True
+    contact_last_name = models.CharField(
+        _("Contact last name"), max_length=150, default="", null=True
     )
-    other_email = models.EmailField(
-        _("Other email"), max_length=150, default="", null=True
+    contact_email = models.EmailField(
+        _("Contact email"), max_length=150, default="", null=True
     )
-    other_phone = models.CharField(
-        _("Other phone"), max_length=32, default="", null=True
+    contact_phone = models.CharField(
+        _("Contact phone"), max_length=32, default="", null=True
     )
     user = models.ForeignKey(
         User, verbose_name=_("User"), on_delete=models.CASCADE, null=True

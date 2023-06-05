@@ -295,7 +295,6 @@ class ProjectCommissionDateViewsTests(TestCase):
         response = self.president_student_client.post(
             "/projects/commission_dates", post_data
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         results = ProjectCommissionDate.objects.filter(

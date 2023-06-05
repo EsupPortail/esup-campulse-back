@@ -3888,23 +3888,23 @@ components:
         planned_location:
           type: string
           minLength: 1
-        other_first_name:
+        contact_first_name:
           type: string
           nullable: true
           minLength: 1
           maxLength: 150
-        other_last_name:
+        contact_last_name:
           type: string
           nullable: true
           minLength: 1
           maxLength: 150
-        other_email:
+        contact_email:
           type: string
           format: email
           nullable: true
           minLength: 1
           maxLength: 150
-        other_phone:
+        contact_phone:
           type: string
           nullable: true
           minLength: 1
@@ -3968,13 +3968,13 @@ components:
       type: object
       description: Main review serializer for update.
       properties:
-        other_first_name:
+        contact_first_name:
           type: string
-        other_last_name:
+        contact_last_name:
           type: string
-        other_email:
+        contact_email:
           type: string
-        other_phone:
+        contact_phone:
           type: string
         outcome:
           type: integer
@@ -4118,20 +4118,20 @@ components:
           nullable: true
         planned_location:
           type: string
-        other_first_name:
+        contact_first_name:
           type: string
           nullable: true
           maxLength: 150
-        other_last_name:
+        contact_last_name:
           type: string
           nullable: true
           maxLength: 150
-        other_email:
+        contact_email:
           type: string
           format: email
           nullable: true
           maxLength: 150
-        other_phone:
+        contact_phone:
           type: string
           nullable: true
           maxLength: 32
@@ -4398,20 +4398,20 @@ components:
           nullable: true
         planned_location:
           type: string
-        other_first_name:
+        contact_first_name:
           type: string
           nullable: true
           maxLength: 150
-        other_last_name:
+        contact_last_name:
           type: string
           nullable: true
           maxLength: 150
-        other_email:
+        contact_email:
           type: string
           format: email
           nullable: true
           maxLength: 150
-        other_phone:
+        contact_phone:
           type: string
           nullable: true
           maxLength: 32
@@ -4477,13 +4477,13 @@ components:
       type: object
       description: Main review serializer for update.
       properties:
-        other_first_name:
+        contact_first_name:
           type: string
-        other_last_name:
+        contact_last_name:
           type: string
-        other_email:
+        contact_email:
           type: string
-        other_phone:
+        contact_phone:
           type: string
         commission_dates:
           type: array
@@ -4557,13 +4557,13 @@ components:
         planned_location:
           type: string
           minLength: 1
-        other_first_name:
+        contact_first_name:
           type: string
-        other_last_name:
+        contact_last_name:
           type: string
-        other_email:
+        contact_email:
           type: string
-        other_phone:
+        contact_phone:
           type: string
         user:
           type: integer

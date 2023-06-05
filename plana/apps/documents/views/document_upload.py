@@ -219,9 +219,8 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
-        request.data[
-            "name"
-        ] = f"{slugify(document.name)}{'.'.join(Path(request.data['path_file'].name).suffixes)}"
+        # request.data["name"] = f"{slugify(document.name)}{'.'.join(Path(request.data["path_file"].name).suffixes)}"
+        request.data["name"] = request.data["path_file"].name
 
         return super().create(request, *args, **kwargs)
 
@@ -369,6 +368,6 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
         file = document_upload.path_file.open(mode="r+b")
         return FileResponse(
             file.open(),
-            as_attachment=True,
+            as_attachment=False,
             filename=document_upload.name,
         )
