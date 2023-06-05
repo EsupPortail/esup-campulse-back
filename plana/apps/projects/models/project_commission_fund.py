@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_fund import CommissionFund
 
 
 class ProjectCommissionFund(models.Model):
@@ -13,10 +13,9 @@ class ProjectCommissionFund(models.Model):
         verbose_name=_("Project"),
         on_delete=models.CASCADE,
     )
-    # TODO : update link to CommissionFund
     commission_fund = models.ForeignKey(
-        Commission,
-        verbose_name=_("Commission"),
+        CommissionFund,
+        verbose_name=_("Commission Fund"),
         on_delete=models.CASCADE,
     )
     is_first_edition = models.BooleanField(_("Is first edition"), default=True)

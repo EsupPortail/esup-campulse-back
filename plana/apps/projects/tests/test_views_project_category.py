@@ -24,6 +24,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         "auth_permission.json",
         "commissions_fund.json",
         "commissions_commission.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",

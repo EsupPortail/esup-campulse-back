@@ -30,6 +30,7 @@ class ProjectsViewsTests(TestCase):
         "auth_permission.json",
         "commissions_fund.json",
         "commissions_commission.json",
+        "commissions_commissionfund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
