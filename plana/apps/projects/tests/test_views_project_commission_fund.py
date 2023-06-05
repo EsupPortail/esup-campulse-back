@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -235,9 +235,9 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_fund_id = 5
-        commission = Commission.objects.get(id=commission_fund_id)
-        commission.submission_date = "1968-05-03"
-        commission.save()
+        commission_fund = CommissionFund.objects.get(id=commission_fund_id)
+        commission_fund.submission_date = "1968-05-03"
+        commission_fund.save()
         response = self.student_misc_client.post(
             "/projects/commission_funds",
             {"project": 1, "commission_fund": commission_fund_id},

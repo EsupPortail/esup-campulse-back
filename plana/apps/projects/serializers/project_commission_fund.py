@@ -1,7 +1,7 @@
 """Serializers describing fields used on project commission fund table."""
 from rest_framework import serializers
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
@@ -11,7 +11,7 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
     commission_fund = serializers.PrimaryKeyRelatedField(
-        queryset=Commission.objects.all()
+        queryset=CommissionFund.objects.all()
     )
 
     class Meta:

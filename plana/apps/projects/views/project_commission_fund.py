@@ -11,8 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.fund import Fund
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -128,7 +127,9 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         """Creates a link between a project and a commission fund object."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
-            commission_fund = Commission.objects.get(id=request.data["commission_fund"])
+            commission_fund = CommissionFund.objects.get(
+                id=request.data["commission_fund"]
+            )
             fund = Fund.objects.get(id=commission_fund.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
@@ -166,7 +167,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                     return response.Response(
                         {
                             "error": _(
-                                "Not allowed to update validator fields for this project's commission."
+                                "Not allowed to update validator fields for this project's commission fund."
                             )
                         },
                         status=status.HTTP_403_FORBIDDEN,
@@ -184,29 +185,28 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if commission_fund.submission_date < datetime.date.today():
+        commission = Commission.objects.get(id=commission_fund.commission_id)
+
+        if not commission.is_open_to_projects:
+            return response.Response(
+                {"error": _("This commission is not accepting submissions for now.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if commission.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commission_next = Commission.objects.filter(
-            commission_id=commission_fund.commission_id
-        ).order_by("submission_date")[0]
-        if commission_fund != commission_next:
-            return response.Response(
-                {"error": _("Submissions are only available for the next commission.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         commissions_with_project = Fund.objects.filter(
-            id__in=Commission.objects.filter(
+            id__in=CommissionFund.objects.filter(
                 id__in=ProjectCommissionFund.objects.filter(
                     project=request.data["project"]
                 ).values_list("commission_fund_id")
-            ).values_list("commission_id")
+            ).values_list("fund_id")
         ).values_list("id", flat=True)
-        if commission_fund.commission_id in commissions_with_project:
+        if commission_fund.fund_id in commissions_with_project:
             return response.Response(
                 {"error": _("This project is already submitted for this commission.")},
                 status=status.HTTP_400_BAD_REQUEST,
