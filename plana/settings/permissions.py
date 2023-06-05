@@ -54,10 +54,10 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment_any_fund",
         "view_projectcomment_any_institution",
         "change_projectcommissionfund",
-        "change_projectcommissiondate_as_validator",
+        "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
-        "view_projectcommissiondate_any_commission",
-        "view_projectcommissiondate_any_institution",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
         # users
         "add_user",
         "add_user_misc",
@@ -111,7 +111,7 @@ PERMISSIONS_GROUPS = {
         "delete_projectcomment",
         "view_projectcomment",
         "change_projectcommissionfund",
-        "change_projectcommissiondate_as_validator",
+        "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
         # users
         "add_user",
@@ -157,7 +157,7 @@ PERMISSIONS_GROUPS = {
         "delete_projectcomment",
         "view_projectcomment",
         "change_projectcommissionfund",
-        "change_projectcommissiondate_as_validator",
+        "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
         # users
         "add_user",
@@ -217,7 +217,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "add_projectcommissionfund",
         "change_projectcommissionfund",
-        "change_projectcommissiondate_as_bearer",
+        "change_projectcommissionfund_as_bearer",
         "delete_projectcommissionfund",
         "view_projectcommissionfund",
         # users
@@ -244,7 +244,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "add_projectcommissionfund",
         "change_projectcommissionfund",
-        "change_projectcommissiondate_as_bearer",
+        "change_projectcommissionfund_as_bearer",
         "delete_projectcommissionfund",
         "view_projectcommissionfund",
         # users

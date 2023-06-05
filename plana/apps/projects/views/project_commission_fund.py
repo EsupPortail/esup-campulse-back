@@ -1,4 +1,4 @@
-"""Views linked to project commission dates links."""
+"""Views linked to project commission funds links."""
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -57,7 +57,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         commission_id = request.query_params.get("commission_id")
 
         if not request.user.has_perm(
-            "projects.view_projectcommissiondate_any_commission"
+            "projects.view_projectcommissionfund_any_commission"
         ):
             if request.user.is_staff:
                 user_funds_ids = request.user.get_user_managed_funds()
@@ -66,16 +66,16 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         else:
             user_funds_ids = Fund.objects.all().values_list("id")
         if not request.user.has_perm(
-            "projects.view_projectcommissiondate_any_institution"
+            "projects.view_projectcommissionfund_any_institution"
         ):
             user_institutions_ids = request.user.get_user_managed_institutions()
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
         if not request.user.has_perm(
-            "projects.view_projectcommissiondate_any_commission"
+            "projects.view_projectcommissionfund_any_commission"
         ) or not request.user.has_perm(
-            "projects.view_projectcommissiondate_any_institution"
+            "projects.view_projectcommissionfund_any_institution"
         ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
@@ -156,7 +156,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             "is_validated_by_admin",
         ]
         if not request.user.has_perm(
-            "project.change_projectcommissiondate_as_validator"
+            "project.change_projectcommissionfund_as_validator"
         ):
             for validator_field in validator_fields:
                 if (
@@ -246,10 +246,10 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
 
         if (
             not request.user.has_perm(
-                "projects.view_projectcommissiondate_any_commission"
+                "projects.view_projectcommissionfund_any_commission"
             )
             and not request.user.has_perm(
-                "projects.view_projectcommissiondate_any_institution"
+                "projects.view_projectcommissionfund_any_institution"
             )
             and not request.user.can_access_project(project)
         ):
@@ -345,7 +345,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "commission_fund_id",
             "project_id",
         ]
-        if not request.user.has_perm("project.change_projectcommissiondate_as_bearer"):
+        if not request.user.has_perm("project.change_projectcommissionfund_as_bearer"):
             for bearer_field in bearer_fields:
                 if (
                     bearer_field in request.data
@@ -365,7 +365,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "is_validated_by_admin",
         ]
         if not request.user.has_perm(
-            "project.change_projectcommissiondate_as_validator"
+            "project.change_projectcommissionfund_as_validator"
         ):
             for validator_field in validator_fields:
                 if (

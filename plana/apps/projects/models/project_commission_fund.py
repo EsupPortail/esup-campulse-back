@@ -36,23 +36,23 @@ class ProjectCommissionFund(models.Model):
         return f"{self.project} {self.commission_fund}"
 
     class Meta:
-        verbose_name = _("Project commission date")
-        verbose_name_plural = _("Projects commissions dates")
+        verbose_name = _("Project commission fund")
+        verbose_name_plural = _("Projects commissions funds")
         permissions = [
             (
-                "change_projectcommissiondate_as_bearer",
-                "Can update bearer fields (amount asked) between a project and a commission date.",
+                "change_projectcommissionfund_as_bearer",
+                "Can update bearer fields (amount asked) between a project and a commission fund.",
             ),
             (
-                "change_projectcommissiondate_as_validator",
-                "Can update validator fields (amount earned) between a project and a commission date.",
+                "change_projectcommissionfund_as_validator",
+                "Can update validator fields (amount earned) between a project and a commission fund.",
             ),
             (
-                "view_projectcommissiondate_any_commission",
-                "Can view all commission dates linked to all projects for a commission.",
+                "view_projectcommissionfund_any_commission",
+                "Can view all commission funds linked to all projects for a commission.",
             ),
             (
-                "view_projectcommissiondate_any_institution",
-                "Can view all commission dates linked to all projects for an institution.",
+                "view_projectcommissionfund_any_institution",
+                "Can view all commission funds linked to all projects for an institution.",
             ),
         ]
