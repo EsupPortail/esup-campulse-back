@@ -28,5 +28,5 @@ class CommissionsModelsTests(TestCase):
         commission = Commission.objects.first()
         self.assertEqual(
             str(commission),
-            f"{commission.submission_date}, {commission.commission_date}",
+            f"{commission.submission_date}, {commission.commission_date}, {commission.is_open_to_projects}",
         )

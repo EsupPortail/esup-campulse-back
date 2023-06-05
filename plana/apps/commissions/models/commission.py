@@ -8,15 +8,11 @@ class Commission(models.Model):
 
     submission_date = models.DateField(_("Project submission limit date"))
     commission_date = models.DateField(_("Commission date"))
-    commission = models.ForeignKey(
-        "Fund",
-        verbose_name=_("Fund"),
-        on_delete=models.RESTRICT,
-    )
+    is_open_to_projects = models.BooleanField(_("Is open to projects"), default=False)
 
     def __str__(self):
-        return f"{self.submission_date}, {self.commission_date}"
+        return f"{self.submission_date}, {self.commission_date}, {self.is_open_to_projects}"
 
     class Meta:
-        verbose_name = _("Commission Date")
-        verbose_name_plural = _("Commissions Dates")
+        verbose_name = _("Commission")
+        verbose_name_plural = _("Commissions")

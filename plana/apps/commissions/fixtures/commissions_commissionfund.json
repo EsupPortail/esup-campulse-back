@@ -1,0 +1,42 @@
+[
+  {
+    "model": "commissions.commissionfund",
+    "pk": 1,
+    "fields": {
+      "commission_id": 1,
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "commissions.commissionfund",
+    "pk": 2,
+    "fields": {
+      "commission_id": 1,
+      "fund_id": 2
+    }
+  },
+  {
+    "model": "commissions.commissionfund",
+    "pk": 3,
+    "fields": {
+      "commission_id": 1,
+      "fund_id": 3
+    }
+  },
+  {
+    "model": "commissions.commissionfund",
+    "pk": 4,
+    "fields": {
+      "commission_id": 2,
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "commissions.commissionfund",
+    "pk": 5,
+    "fields": {
+      "commission_id": 3,
+      "fund_id": 3
+    }
+  }
+]

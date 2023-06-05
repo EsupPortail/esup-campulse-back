@@ -4,44 +4,23 @@
     "pk": 1,
     "fields": {
       "submission_date": "2099-10-06",
-      "commission_date": "2099-10-20",
-      "commission_id": 1
+      "commission_date": "2099-10-20"
     }
   },
   {
     "model": "commissions.commission",
     "pk": 2,
     "fields": {
-      "submission_date": "2099-10-06",
-      "commission_date": "2099-10-20",
-      "commission_id": 2
+      "submission_date": "2099-10-08",
+      "commission_date": "2099-10-22"
     }
   },
   {
     "model": "commissions.commission",
     "pk": 3,
     "fields": {
-      "submission_date": "2099-10-06",
-      "commission_date": "2099-10-20",
-      "commission_id": 3
-    }
-  },
-  {
-    "model": "commissions.commission",
-    "pk": 4,
-    "fields": {
-      "submission_date": "2099-10-08",
-      "commission_date": "2099-10-22",
-      "commission_id": 1
-    }
-  },
-  {
-    "model": "commissions.commission",
-    "pk": 5,
-    "fields": {
       "submission_date": "2099-10-07",
-      "commission_date": "2099-10-21",
-      "commission_id": 3
+      "commission_date": "2099-10-21"
     }
   }
 ]
