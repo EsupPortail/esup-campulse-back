@@ -9,6 +9,7 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
+  PYTHON_VERSION: "3.9"
 
 before_script:
   - apt-get update && apt-get install -y age
@@ -28,3 +29,5 @@ unittest:
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
+include:
+  - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
