@@ -329,28 +329,24 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def delete(self, request, *args, **kwargs):
-        """Destroys an entire commission date (manager only)."""
-        # A Commission object
+        """Destroys an entire commission (manager only)."""
         try:
-            commission_date = self.queryset.get(id=kwargs["pk"])
+            commission_id = self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Commission Date does not exist.")},
+                {"error": _("Commission does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if commission_date.commission_date < datetime.date.today():
+        if commission_id.commission_date < datetime.date.today():
             return response.Response(
-                {
-                    "error": _(
-                        "Cannot delete commission date taking place before today."
-                    )
-                },
+                {"error": _("Cannot delete commission taking place before today.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # TODO : fix request to match new db model
         projects_commission_date_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id=commission_date.id,
+            commission_fund_id=commission_id.id,
             project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_draft_project_statuses()
             ),
