@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views.commission import CommissionListCreate, CommissionRetrieveUpdateDestroy
-from .views.commission_fund import CommissionFundListCreate
+from .views.commission_fund import CommissionFundDestroy, CommissionFundListCreate
 from .views.fund import FundList
 
 urlpatterns = [
@@ -11,6 +11,11 @@ urlpatterns = [
         "commission_funds/",
         CommissionFundListCreate.as_view(),
         name="commission_fund_list_create",
+    ),
+    path(
+        "commission_funds/<int:pk>",
+        CommissionFundDestroy.as_view(),
+        name="commission_fund_destroy",
     ),
     path(
         "",
