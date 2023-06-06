@@ -149,8 +149,6 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 #              self.queryset = self.queryset.exclude(
                 #                  commission_id__in=request.user.get_user_managed_funds()
                 #              )
-                print("QUERYSET")
-                print(self.queryset)
 
         if (
             managed_projects is not None

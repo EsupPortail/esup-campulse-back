@@ -81,19 +81,19 @@ class CommissionExpirationCommandTest(TestCase):
     def test_no_expire_commission(self):
         """Don't remove ProjectCommissionFund if Commission isn't expired."""
         expired_commission_id = 3
-        old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id=expired_commission_id
             ).values("id")
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        new_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission=expired_commission_id
             ).values("id")
         ).count()
         self.assertEqual(
-            old_project_commission_dates_count, new_project_commission_dates_count
+            old_project_commission_funds_count, new_project_commission_funds_count
         )
 
     def test_expire_commission(self):
@@ -104,19 +104,19 @@ class CommissionExpirationCommandTest(TestCase):
             "1993-12-25", "%Y-%m-%d"
         ).date()
         expired_commission.save()
-        old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id=expired_commission_id
             ).values("commission_id")
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        new_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission=expired_commission_id
             ).values("id")
         ).count()
         self.assertNotEqual(
-            old_project_commission_dates_count, new_project_commission_dates_count
+            old_project_commission_funds_count, new_project_commission_funds_count
         )
 
 

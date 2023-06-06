@@ -77,12 +77,6 @@ class CommissionDatesViewsTests(TestCase):
         - There's at least one commission in the commissions list.
         - The route can be accessed by anyone.
         - We get the same amount of commissions through the model and through the view.
-        - commission_dates filters by commission_date field.
-        - is_site filters by is_site field.
-        - only_next returns only one date by fund.
-        - active_projects returns commissions depending on their projects statuses.
-        - managed_commissions returns funds managed by current user.
-        - managed_projects returns funds where current user manages projects.
         """
         commissions_cnt = Commission.objects.count()
         self.assertTrue(commissions_cnt > 0)
@@ -93,6 +87,12 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
+    def test_get_commissions_list_filter_commission_date(self):
+        """
+        GET /commissions/ .
+
+        - commission_dates filters by commission_date field.
+        """
         commission_dates = ["2099-10-20", "2099-10-21"]
         commission_dates = [
             datetime.datetime.strptime(commission_date, "%Y-%m-%d").date()
@@ -112,6 +112,12 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
+    def test_get_commissions_list_filter_is_site(self):
+        """
+        GET /commissions/ .
+
+        - is_site filters by is_site field.
+        """
         response = self.client.get("/commissions/?is_site=true")
         commissions_cnt = Commission.objects.filter(
             id__in=Fund.objects.filter(is_site=True).values_list("id")
@@ -119,11 +125,23 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
-        # TODO : replace by is_open_to_projects
-        #   response = self.client.get("/commissions/?only_next=true")
-        #   content = json.loads(response.content.decode("utf-8"))
-        #   self.assertEqual(len(content), Fund.objects.count())
+    #    def test_get_commissions_list_filter_open_to_projects(self):
+    #        """
+    #        GET /commissions/ .
+    #
+    #        - only_next returns only one date by fund.
+    #        """
+    #        # TODO : replace by is_open_to_projects
+    #        #   response = self.client.get("/commissions/?only_next=true")
+    #        #   content = json.loads(response.content.decode("utf-8"))
+    #        #   self.assertEqual(len(content), Fund.objects.count())
 
+    def test_get_commissions_list_filter_active_projects(self):
+        """
+        GET /commissions/ .
+
+        - active_projects returns commissions depending on their projects statuses.
+        """
         inactive_projects = Project.visible_objects.filter(
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
         )
@@ -145,6 +163,14 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_with_active_projects.count())
 
+    # TODO : replace by managed_funds
+    def test_get_commissions_list_filter_managed_commissions(self):
+        """
+        GET /commissions/ .
+
+        - managed_commissions returns funds managed by current user.
+        - managed_projects returns funds where current user manages projects.
+        """
         managed_commissions = Fund.objects.filter(
             institution_id__in=Institution.objects.filter(
                 id__in=GroupInstitutionFundUser.objects.filter(
@@ -168,6 +194,13 @@ class CommissionDatesViewsTests(TestCase):
         )
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), Commission.objects.count())
+
+    def test_get_commissions_list_filter_managed_projects(self):
+        """
+        GET /commissions/ .
+
+        - managed_projects returns funds where current user manages projects.
+        """
 
         commissions_with_managed_projects = Commission.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
