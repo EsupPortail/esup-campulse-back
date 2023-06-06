@@ -87,28 +87,26 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
-    def test_get_commissions_list_filter_commission_date(self):
+    def test_get_commissions_list_filter_dates(self):
         """
         GET /commissions/ .
 
-        - commission_dates filters by commission_date field.
+        - dates filters by commission_date field.
         """
-        commission_dates = ["2099-10-20", "2099-10-21"]
-        commission_dates = [
-            datetime.datetime.strptime(commission_date, "%Y-%m-%d").date()
-            for commission_date in commission_dates
-            if commission_date != ""
+        dates = ["2099-10-20", "2099-10-21"]
+        dates = [
+            datetime.datetime.strptime(date, "%Y-%m-%d").date()
+            for date in dates
+            if date != ""
             and isinstance(
-                datetime.datetime.strptime(commission_date, "%Y-%m-%d").date(),
+                datetime.datetime.strptime(date, "%Y-%m-%d").date(),
                 datetime.date,
             )
         ]
         response = self.client.get(
-            f"/commissions/?commission_dates={','.join(str(x) for x in commission_dates)}"
+            f"/commissions/?dates={','.join(str(x) for x in dates)}"
         )
-        commissions_cnt = Commission.objects.filter(
-            commission_date__in=commission_dates
-        ).count()
+        commissions_cnt = Commission.objects.filter(commission_date__in=dates).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
@@ -125,16 +123,21 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
-    #    def test_get_commissions_list_filter_open_to_projects(self):
-    #        """
-    #        GET /commissions/ .
-    #
-    #        - only_next returns only one date by fund.
-    #        """
-    #        # TODO : replace by is_open_to_projects
-    #        #   response = self.client.get("/commissions/?only_next=true")
-    #        #   content = json.loads(response.content.decode("utf-8"))
-    #        #   self.assertEqual(len(content), Fund.objects.count())
+    def test_get_commissions_list_filter_open_to_projects(self):
+        """
+        GET /commissions/ .
+
+        - is_open_to_projects returns only one date by fund.
+        """
+        response_true = self.client.get("/commissions/?is_open_to_projects=true")
+        commissions_cnt = Commission.objects.filter(is_open_to_projects=True).count()
+        content = json.loads(response_true.content.decode("utf-8"))
+        self.assertEqual(len(content), commissions_cnt)
+
+        response_false = self.client.get("/commissions/?is_open_to_projects=false")
+        commissions_cnt = Commission.objects.filter(is_open_to_projects=False).count()
+        content = json.loads(response_false.content.decode("utf-8"))
+        self.assertEqual(len(content), commissions_cnt)
 
     def test_get_commissions_list_filter_active_projects(self):
         """

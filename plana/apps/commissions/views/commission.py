@@ -36,9 +36,8 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         parameters=[
-            # TODO : Replace by commission
             OpenApiParameter(
-                "commission_dates",
+                "dates",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Filter by commission_date field (multiple).",
@@ -49,25 +48,23 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter by is_site field.",
             ),
-            # TODO : replace by is_open_to_projects
-            #            OpenApiParameter(
-            #                "only_next",
-            #                OpenApiTypes.BOOL,
-            #                OpenApiParameter.QUERY,
-            #                description="Filter to get only chronologically first commission of each type",
-            #            ),
+            OpenApiParameter(
+                "is_open_to_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get only commissions with open projects submissions.",
+            ),
             OpenApiParameter(
                 "active_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter to get commission_dates where projects reviews are still pending.",
             ),
-            # TODO : Replace by funds
             OpenApiParameter(
                 "managed_commissions",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="Filter to get commission_dates managed by the current user.",
+                description="Filter to get commissions managed by the current user depending on its linked funds. If false returns all commissions.",
             ),
             OpenApiParameter(
                 "managed_projects",
@@ -82,15 +79,15 @@ class CommissionListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all commissions."""
-        commission_dates = request.query_params.get("commission_dates")
+        dates = request.query_params.get("dates")
         is_site = request.query_params.get("is_site")
-        only_next = request.query_params.get("only_next")
+        is_open_to_projects = request.query_params.get("is_open_to_projects")
         active_projects = request.query_params.get("active_projects")
         managed_commissions = request.query_params.get("managed_commissions")
         managed_projects = request.query_params.get("managed_projects")
 
-        if commission_dates is not None and commission_dates != "":
-            commission_dates = commission_dates.split(",")
+        if dates is not None and dates != "":
+            commission_dates = dates.split(",")
             commission_dates = [
                 datetime.datetime.strptime(commission_date, "%Y-%m-%d").date()
                 for commission_date in commission_dates
@@ -107,15 +104,10 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
             )
 
-        # TODO : replace by is_open_to_projects
-        #        if only_next is not None and only_next != "" and to_bool(only_next) is True:
-        #            first_commission_date = (
-        #                Commission.objects.all()
-        #                .order_by("commission_date")
-        #                .first()
-        #                .commission_date
-        #            )
-        #            self.queryset = self.queryset.filter(commission_date=first_commission_date)
+        if is_open_to_projects is not None and is_open_to_projects != "":
+            self.queryset = self.queryset.filter(
+                is_open_to_projects=to_bool(is_open_to_projects)
+            )
 
         if active_projects is not None and active_projects != "":
             inactive_projects = Project.visible_objects.filter(
