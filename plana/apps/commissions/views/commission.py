@@ -9,6 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission import (
@@ -35,6 +36,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         parameters=[
+            # TODO : Replace by commission
             OpenApiParameter(
                 "commission_dates",
                 OpenApiTypes.STR,
@@ -47,18 +49,20 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter by is_site field.",
             ),
-            OpenApiParameter(
-                "only_next",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get only chronologically first commission of each type",
-            ),
+            # TODO : replace by is_open_to_projects
+            #            OpenApiParameter(
+            #                "only_next",
+            #                OpenApiTypes.BOOL,
+            #                OpenApiParameter.QUERY,
+            #                description="Filter to get only chronologically first commission of each type",
+            #            ),
             OpenApiParameter(
                 "active_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
                 description="Filter to get commission_dates where projects reviews are still pending.",
             ),
+            # TODO : Replace by funds
             OpenApiParameter(
                 "managed_commissions",
                 OpenApiTypes.BOOL,
@@ -103,14 +107,15 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
             )
 
-        if only_next is not None and only_next != "" and to_bool(only_next) is True:
-            first_commission_date = (
-                Commission.objects.all()
-                .order_by("commission_date")
-                .first()
-                .commission_date
-            )
-            self.queryset = self.queryset.filter(commission_date=first_commission_date)
+        # TODO : replace by is_open_to_projects
+        #        if only_next is not None and only_next != "" and to_bool(only_next) is True:
+        #            first_commission_date = (
+        #                Commission.objects.all()
+        #                .order_by("commission_date")
+        #                .first()
+        #                .commission_date
+        #            )
+        #            self.queryset = self.queryset.filter(commission_date=first_commission_date)
 
         if active_projects is not None and active_projects != "":
             inactive_projects = Project.visible_objects.filter(
@@ -136,12 +141,16 @@ class CommissionListCreate(generics.ListCreateAPIView):
         ):
             if to_bool(managed_commissions) is True:
                 self.queryset = self.queryset.filter(
-                    commission_id__in=request.user.get_user_managed_funds()
+                    id__in=CommissionFund.objects.filter(
+                        fund_id__in=request.user.get_user_managed_funds()
+                    ).values_list('commission_id')
                 )
-            else:
-                self.queryset = self.queryset.exclude(
-                    commission_id__in=request.user.get_user_managed_funds()
-                )
+                #          else:
+                #              self.queryset = self.queryset.exclude(
+                #                  commission_id__in=request.user.get_user_managed_funds()
+                #              )
+                print("QUERYSET")
+                print(self.queryset)
 
         if (
             managed_projects is not None

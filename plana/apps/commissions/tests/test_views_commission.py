@@ -7,6 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.views.commission import ProjectCommissionFund
@@ -118,9 +119,10 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
-        response = self.client.get("/commissions/?only_next=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), Fund.objects.count())
+        # TODO : replace by is_open_to_projects
+        #   response = self.client.get("/commissions/?only_next=true")
+        #   content = json.loads(response.content.decode("utf-8"))
+        #   self.assertEqual(len(content), Fund.objects.count())
 
         inactive_projects = Project.visible_objects.filter(
             project_status__in=Project.ProjectStatus.get_archived_project_statuses()
@@ -143,32 +145,29 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_with_active_projects.count())
 
-        managed_commissions = Commission.objects.filter(
-            commission_id__in=Fund.objects.filter(
-                institution_id__in=Institution.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(
-                        user_id=self.manager_institution_user_id
-                    ).values_list("institution_id")
-                ).values_list("id")
+        managed_commissions = Fund.objects.filter(
+            institution_id__in=Institution.objects.filter(
+                id__in=GroupInstitutionFundUser.objects.filter(
+                    user_id=self.manager_institution_user_id
+                ).values_list("institution_id")
             ).values_list("id")
         )
         response = self.institution_client.get("/commissions/?managed_commissions=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), managed_commissions.count())
-        unmanaged_commissions = Commission.objects.exclude(
-            commission_id__in=Fund.objects.filter(
-                institution_id__in=Institution.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(
-                        user_id=self.manager_institution_user_id
-                    ).values_list("institution_id")
-                ).values_list("id")
-            ).values_list("id")
-        )
+        #        unmanaged_commissions = Commission.objects.exclude(
+        #            commission_id__in=Fund.objects.filter(
+        #                institution_id__in=Institution.objects.filter(
+        #                    id__in=GroupInstitutionFundUser.objects.filter(
+        #                        user_id=self.manager_institution_user_id
+        #                    ).values_list("institution_id")
+        #                ).values_list("id")
+        #            ))
         response = self.institution_client.get(
             "/commissions/?managed_commissions=false"
         )
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), unmanaged_commissions.count())
+        self.assertEqual(len(content), Commission.objects.count())
 
         commissions_with_managed_projects = Commission.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(

@@ -130,7 +130,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             commission_fund = CommissionFund.objects.get(
                 id=request.data["commission_fund"]
             )
-            fund = Fund.objects.get(id=commission_fund.commission_id)
+            fund = Fund.objects.get(id=commission_fund.fund_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Project or commission date does not exist.")},

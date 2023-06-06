@@ -78,14 +78,13 @@ class CommissionExpirationCommandTest(TestCase):
         "users_user.json",
     ]
 
-    # TODO : fix this one
     def test_no_expire_commission(self):
         """Don't remove ProjectCommissionFund if Commission isn't expired."""
         expired_commission_id = 3
         old_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id=expired_commission_id
-            ).values("commission_id")
+            ).values("id")
         ).count()
         call_command("cron_commission_expiration")
         new_project_commission_dates_count = ProjectCommissionFund.objects.filter(

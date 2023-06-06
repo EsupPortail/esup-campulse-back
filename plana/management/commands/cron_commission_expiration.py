@@ -3,6 +3,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -19,8 +20,10 @@ class Command(BaseCommand):
                 project_id__in=Project.visible_objects.filter(
                     project_status="PROJECT_DRAFT"
                 ),
-                commission_fund_id__in=Commission.objects.filter(
-                    submission_date__lte=datetime.date.today()
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    commission_id__in=Commission.objects.filter(
+                        submission_date__lte=datetime.date.today()
+                    ).values_list("id"),
                 ),
             ).delete()
 
