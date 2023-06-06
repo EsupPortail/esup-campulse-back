@@ -162,7 +162,6 @@ class User(AbstractUser):
                 return False
             return True
 
-        # TODO : update db fields and tables
         if self.get_user_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")
             project_funds_ids = CommissionFund.objects.filter(

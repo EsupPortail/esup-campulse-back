@@ -166,7 +166,6 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_with_active_projects.count())
 
-    # TODO : replace by managed_funds
     def test_get_commissions_list_filter_managed_commissions(self):
         """
         GET /commissions/ .
