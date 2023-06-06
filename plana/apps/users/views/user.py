@@ -263,7 +263,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
         template = None
         if not is_cas:
-            password = User.objects.make_random_password()
+            password = User.objects.make_random_password(length=15)
             user.set_password(password)
             user.password_last_change_date = datetime.datetime.today()
             user.save(update_fields=["password", "password_last_change_date"])

@@ -42,7 +42,7 @@ class Command(BaseCommand):
 
             template = MailTemplate.objects.get(code="PASSWORD_RESET_MANDATORY")
             for user in change_password_queryset:
-                password = User.objects.make_random_password()
+                password = User.objects.make_random_password(length=15)
                 user.set_password(password)
                 user.save()
                 self.send_password_mail(user, context, template)

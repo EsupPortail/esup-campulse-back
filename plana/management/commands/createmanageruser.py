@@ -56,7 +56,7 @@ class Command(BaseCommand):
                 username=options["email"], email=options["email"]
             )
             if options["password"] is None:
-                password = get_user_model().objects.make_random_password()
+                password = get_user_model().objects.make_random_password(length=15)
             else:
                 password = options["password"]
             user.set_password(password)
