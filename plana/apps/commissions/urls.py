@@ -2,10 +2,16 @@
 from django.urls import path
 
 from .views.commission import CommissionListCreate, CommissionRetrieveUpdateDestroy
+from .views.commission_fund import CommissionFundListCreate
 from .views.fund import FundList
 
 urlpatterns = [
     path("funds/", FundList.as_view(), name="fund_list"),
+    path(
+        "commission_funds/",
+        CommissionFundListCreate.as_view(),
+        name="commission_fund_list_create",
+    ),
     path(
         "",
         CommissionListCreate.as_view(),
