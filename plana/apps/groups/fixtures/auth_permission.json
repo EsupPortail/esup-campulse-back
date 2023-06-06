@@ -714,7 +714,7 @@
   "model": "auth.permission",
   "pk": 80,
   "fields": {
-    "name": "Can add Commission Date",
+    "name": "Can add Commission",
     "content_type": 19,
     "codename": "add_commission"
   }
@@ -723,7 +723,7 @@
   "model": "auth.permission",
   "pk": 81,
   "fields": {
-    "name": "Can change Commission Date",
+    "name": "Can change Commission",
     "content_type": 19,
     "codename": "change_commission"
   }
@@ -732,7 +732,7 @@
   "model": "auth.permission",
   "pk": 82,
   "fields": {
-    "name": "Can delete Commission Date",
+    "name": "Can delete Commission",
     "content_type": 19,
     "codename": "delete_commission"
   }
@@ -741,7 +741,7 @@
   "model": "auth.permission",
   "pk": 83,
   "fields": {
-    "name": "Can view Commission Date",
+    "name": "Can view Commission",
     "content_type": 19,
     "codename": "view_commission"
   }

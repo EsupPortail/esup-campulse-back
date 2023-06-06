@@ -19,6 +19,8 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    # TODO : add restriction to not create same link twice
+
 
 class CommissionFundDestroy(generics.DestroyAPIView):
     """Used to destroy links between commissions and funds"""

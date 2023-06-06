@@ -19,6 +19,8 @@ PERMISSIONS_GROUPS = {
         "add_commission",
         "change_commission",
         "delete_commission",
+        "add_commissionfund",
+        "delete_commissionfund",
         # contents
         "change_content",
         # documents
