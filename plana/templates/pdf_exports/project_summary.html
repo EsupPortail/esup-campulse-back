@@ -39,8 +39,8 @@
         <section>
             <h2>Commissions sélectionnées : </h2>
             <ul>
-                {% for commission in project_commission_dates %}
-                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }})</li>
+                {% for commission in project_commission_funds %}
+                    <li>{{ commission.fund_data.acronym }} ({{ commission.commission_data.commission_date }})</li>
                 {% endfor %}
             </ul>
         </section>
@@ -61,14 +61,14 @@
                     <h3>Edition Précedente : </h3>
                     <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
                     <ul>
-                        {% for commission in project_commission_dates %}
-                            <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
+                        {% for commission in project_commission_funds %}
+                            <li>{{ commission.fund_data.acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
                         {% endfor %}
                     </ul>
                     <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
                     <ul>
-                        {% for commission in project_commission_dates %}
-                            <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
+                        {% for commission in project_commission_funds %}
+                            <li>{{ commission.fund_data.acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
                         {% endfor %}
                     </ul>
                     <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
@@ -77,10 +77,10 @@
             </div>
 
             <div>
-                <h3>Montant(s) demandé(s) par commission sélectionnée : </h3>
+                <h3>Montant(s) demandé(s) par fonds sélectionné : </h3>
                 <ul>
-                    {% for commission in project_commission_dates %}
-                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
+                    {% for commission in project_commission_funds %}
+                        <li>{{ commission.fund_data.acronym }} ({{ commission.commission_data.commission_date }}) : {{ commission.amount_asked }} €</li>
                     {% endfor %}
                 </ul>
             </div>
