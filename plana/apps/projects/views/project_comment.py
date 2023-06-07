@@ -280,6 +280,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         pc.edition_date = datetime.date.today()
+        pc.text = request.data["text"]
         pc.save()
         return response.Response({}, status=status.HTTP_200_OK)
 
