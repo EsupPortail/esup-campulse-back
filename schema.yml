@@ -205,6 +205,46 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /associations/{id}/status:
+    patch:
+      operationId: associations_status_partial_update
+      description: Updates association charter status.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationStatus'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /associations/activity_fields:
     get:
       operationId: associations_activity_fields_list
@@ -724,6 +764,11 @@ paths:
         schema:
           type: integer
         description: Filter by Association ID.
+      - in: query
+        name: process_types
+        schema:
+          type: string
+        description: Document process type.
       - in: query
         name: project_id
         schema:
@@ -2829,6 +2874,10 @@ components:
           type: boolean
         charter_status:
           $ref: '#/components/schemas/CharterStatusEnum'
+        charter_date:
+          type: string
+          format: date
+          nullable: true
         creation_date:
           type: string
           format: date-time
@@ -2934,6 +2983,10 @@ components:
           type: boolean
         charter_status:
           $ref: '#/components/schemas/CharterStatusEnum'
+        charter_date:
+          type: string
+          format: date
+          nullable: true
         creation_date:
           type: string
           format: date-time
@@ -3072,6 +3125,12 @@ components:
           additionalProperties: {}
           readOnly: true
           description: URL for each thumbnail size
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
+        charter_date:
+          type: string
+          format: date
+          nullable: true
       required:
       - activity_field
       - id
@@ -3079,6 +3138,12 @@ components:
       - institution_component
       - name
       - path_logo
+    AssociationStatus:
+      type: object
+      description: Serializer for status field.
+      properties:
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
     AssociationUser:
       type: object
       description: Main serializer.
@@ -3852,6 +3917,10 @@ components:
           type: boolean
         charter_status:
           $ref: '#/components/schemas/CharterStatusEnum'
+        charter_date:
+          type: string
+          format: date
+          nullable: true
         approval_date:
           type: string
           format: date
@@ -3870,6 +3939,12 @@ components:
         social_networks:
           type: object
           additionalProperties: {}
+    PatchedAssociationStatusRequest:
+      type: object
+      description: Serializer for status field.
+      properties:
+        charter_status:
+          $ref: '#/components/schemas/CharterStatusEnum'
     PatchedAssociationUserUpdateRequest:
       type: object
       description: Serializer for user-associations change.
