@@ -86,6 +86,9 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
+    charter_date = models.DateField(
+        _("Charter date"), null=True
+    )  # date de dernier dépôt de charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateField(_("Approval date"), null=True)  # date d'agrément
     last_goa_date = models.DateField(

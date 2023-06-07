@@ -94,6 +94,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
             "is_site",
             "alt_logo",
             "path_logo",
+            "charter_status",
         ]
 
 

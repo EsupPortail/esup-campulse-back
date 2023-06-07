@@ -1,4 +1,5 @@
 """Views directly linked to associations."""
+import datetime
 import json
 import unicodedata
 
@@ -754,5 +755,8 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 {"error": _(f"Missing documents : {missing_documents_names_string}.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if request.data["association_status"] != "CHARTER_PROCESSING":
+            request.data["charter_date"] = datetime.date.today()
 
         return self.update(request, *args, **kwargs)
