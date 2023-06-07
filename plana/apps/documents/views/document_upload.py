@@ -147,7 +147,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             existing_document = existing_document.filter(association_id=association.id)
-            if not request.user.is_president_in_association(
+            if not request.user.has_perm(
+                "documents.add_documentupload_all"
+            ) and not request.user.is_president_in_association(
                 request.data["association"]
             ):
                 return response.Response(
@@ -161,7 +163,10 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["user"] != ""
         ):
             existing_document = existing_document.filter(user_id=request.user.pk)
-            if int(request.data["user"]) != request.user.pk:
+            if (
+                not request.user.has_perm("documents.add_documentupload_all")
+                and int(request.data["user"]) != request.user.pk
+            ):
                 return response.Response(
                     {"error": _("Not allowed to upload documents with this user.")},
                     status=status.HTTP_403_FORBIDDEN,
@@ -311,7 +316,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
             )
         ):
             return response.Response(
-                {"error": _("Not allowed to retrieve this uploaded document.")},
+                {"error": _("Not allowed to delete this uploaded document.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

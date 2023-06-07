@@ -6,6 +6,7 @@ from .views.association import (
     AssociationListCreate,
     AssociationNameList,
     AssociationRetrieveUpdateDestroy,
+    AssociationStatusUpdate,
 )
 
 urlpatterns = [
@@ -14,6 +15,11 @@ urlpatterns = [
         "<int:pk>",
         AssociationRetrieveUpdateDestroy.as_view(),
         name="association_retrieve_update_destroy",
+    ),
+    path(
+        "<int:pk>/status",
+        AssociationStatusUpdate.as_view(),
+        name="association_status_update",
     ),
     path(
         "activity_fields",

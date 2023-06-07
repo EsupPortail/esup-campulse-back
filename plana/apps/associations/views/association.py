@@ -19,7 +19,10 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationNameSerializer,
     AssociationPartialDataSerializer,
+    AssociationStatusSerializer,
 )
+from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
@@ -658,3 +661,98 @@ class AssociationNameList(generics.ListAPIView):
             else:
                 self.queryset = self.queryset.filter(id__in=assos_ids_with_all_members)
         return self.list(request, *args, **kwargs)
+
+
+class AssociationStatusUpdate(generics.UpdateAPIView):
+    """/associations/{id}/status route"""
+
+    queryset = Association.objects.all()
+    serializer_class = AssociationStatusSerializer
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationStatusSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
+    def patch(self, request, *args, **kwargs):
+        """Updates association charter status."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            association = self.get_queryset().get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if (
+            not request.user.is_president_in_association(association.id)
+            and not request.user.has_perm(
+                "associations.change_association_any_institution"
+            )
+            and not request.user.is_staff_in_institution(association.institution_id)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to edit this association.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            not request.user.has_perm("associations.change_association_all_fields")
+            and request.data["association_status"] != "CHARTER_PROCESSING"
+        ):
+            return response.Response(
+                {"error": _("Choosing this status is not allowed.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        document_process_type = "DOCUMENT_ASSOCIATION"
+        missing_documents_names = (
+            Document.objects.filter(
+                process_type=document_process_type, is_required_in_process=True
+            )
+            .exclude(
+                id__in=DocumentUpload.objects.filter(
+                    association_id=association.id,
+                ).values_list("document_id")
+            )
+            .values_list("name", flat=True)
+        )
+        if missing_documents_names.count() > 0:
+            missing_documents_names_string = ', '.join(
+                str(item) for item in missing_documents_names
+            )
+            return response.Response(
+                {"error": _(f"Missing documents : {missing_documents_names_string}.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return self.update(request, *args, **kwargs)

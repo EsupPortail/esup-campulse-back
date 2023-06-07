@@ -131,3 +131,11 @@ class AssociationNameSerializer(serializers.ModelSerializer):
             "has_president",
             "institution",
         ]
+
+
+class AssociationStatusSerializer(serializers.ModelSerializer):
+    """Serializer for status field."""
+
+    class Meta:
+        model = Association
+        fields = ["charter_status"]
