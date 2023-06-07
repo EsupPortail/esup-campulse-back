@@ -568,5 +568,20 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 34,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_SENT",
+      "label": "Association Charter Sent",
+      "description": "Message reçu par une association au dépôt d'une nouvelle charte.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a bien été déposée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été déposée. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]
