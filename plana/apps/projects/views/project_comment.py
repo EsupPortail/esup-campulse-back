@@ -28,88 +28,12 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
 
-class ProjectCommentListCreate(generics.ListCreateAPIView):
+class ProjectCommentCreate(generics.CreateAPIView):
     """/projects/comments route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == "POST":
-            self.serializer_class = ProjectCommentDataSerializer
-        else:
-            self.serializer_class = ProjectCommentSerializer
-        return super().get_serializer_class()
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Project id.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: ProjectCommentSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-        tags=["projects/comments"],
-    )
-    def get(self, request, *args, **kwargs):
-        """Lists all links between projects and comments"""
-
-        project_id = request.query_params.get("project_id")
-
-        if not request.user.has_perm("projects.view_projectcomment_any_institution"):
-            user_institutions_ids = request.user.get_user_managed_institutions()
-        else:
-            user_institutions_ids = Institution.objects.all().values_list("id")
-
-        if not request.user.has_perm("projects.view_projectcomment_any_fund"):
-            if request.user.is_staff:
-                user_funds_ids = request.user.get_user_managed_funds()
-            else:
-                user_funds_ids = request.user.get_user_funds()
-        else:
-            user_funds_ids = Fund.objects.all().values_list("id")
-
-        if not request.user.has_perm(
-            "projects.view_projectcomment_any_fund"
-        ) or not request.user.has_perm("projects.view_projectcomment_any_institution"):
-            user_associations_ids = request.user.get_user_associations()
-            user_projects_ids = Project.visible_objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
-            ).values_list("id")
-
-            self.queryset = self.queryset.filter(
-                models.Q(id__in=user_projects_ids)
-                | models.Q(
-                    project_id__in=(
-                        ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=CommissionFund.objects.filter(
-                                fund_id__in=user_funds_ids
-                            ).values_list("id")
-                        ).values_list("project_id")
-                    )
-                )
-                | models.Q(
-                    project_id__in=(
-                        Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=user_institutions_ids
-                            ).values_list("id")
-                        ).values_list("id")
-                    )
-                )
-            )
-
-        if project_id:
-            self.queryset = self.queryset.filter(project_id=project_id)
-
-        return self.list(request, *args, **kwargs)
+    serializer_class = ProjectCommentDataSerializer
 
     @extend_schema(
         responses={

@@ -92,67 +92,6 @@ class ProjectCommentLinksViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
-    def test_get_project_comments_anonymous(self):
-        """
-        GET /projects/comments .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/comments")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_get_project_comments_student(self):
-        """
-        GET /projects/comments
-
-        - A student user gets comments where projects rights are OK.
-        """
-        response = self.student_offsite_client.get("/projects/comments")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_project_comments_institution_manager(self):
-        """
-        GET /projects/comments
-
-        - An institution manager user gets project comments for correct projects.
-        """
-        response = self.institution_client.get("/projects/comments")
-        user_institution_ids = Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                user_id=self.manager_institution_user_id
-            ).values_list("institution_id")
-        )
-        project_comments_cnt = ProjectComment.objects.filter(
-            project_id__in=Project.visible_objects.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=user_institution_ids
-                ).values_list("id")
-            )
-        ).count()
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), project_comments_cnt)
-
-    def test_get_project_comments_manager(self):
-        """
-        GET /projects/comments .
-
-        - A general manager user gets all project comments.
-        - project_id argument filters by Project ID.
-        """
-        response = self.general_client.get("/projects/comments")
-        projects_categories_cnt = ProjectComment.objects.all().count()
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), projects_categories_cnt)
-
-        response = self.general_client.get("/projects/comments?project_id=2")
-        projects_categories_cnt = ProjectComment.objects.filter(project_id=2).count()
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), projects_categories_cnt)
-
     def test_post_project_comments_anonymous(self):
         """
         POST /projects/comments

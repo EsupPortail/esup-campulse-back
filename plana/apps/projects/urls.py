@@ -14,7 +14,7 @@ from .views.project_category import (
     ProjectCategoryRetrieve,
 )
 from .views.project_comment import (
-    ProjectCommentListCreate,
+    ProjectCommentCreate,
     ProjectCommentRetrieve,
     ProjectCommentUpdateDestroy,
 )
@@ -70,8 +70,8 @@ urlpatterns = [
     ),
     path(
         "comments",
-        ProjectCommentListCreate.as_view(),
-        name="project_comment_list_create",
+        ProjectCommentCreate.as_view(),
+        name="project_comment_create",
     ),
     path(
         "<int:project_id>/comments",
