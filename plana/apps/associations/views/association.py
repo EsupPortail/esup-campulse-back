@@ -757,6 +757,27 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             )
 
         if request.data["association_status"] != "CHARTER_PROCESSING":
+            managers_emails = []
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(
+                code="NEW_ASSOCIATION_CHARTER_TO_PROCESS"
+            )
+            institution = Institution.objects.get(id=association.institution_id)
+            managers_emails += institution.default_institution_managers().values_list(
+                "email", flat=True
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=managers_emails,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
             request.data["charter_date"] = datetime.date.today()
 
         return self.update(request, *args, **kwargs)
