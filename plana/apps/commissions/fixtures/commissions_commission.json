@@ -5,7 +5,8 @@
     "fields": {
       "submission_date": "2099-10-06",
       "commission_date": "2099-10-20",
-      "is_open_to_projects": true
+      "is_open_to_projects": true,
+      "name": "Commission numéro 1"
     }
   },
   {
@@ -13,7 +14,8 @@
     "pk": 2,
     "fields": {
       "submission_date": "2099-10-08",
-      "commission_date": "2099-10-22"
+      "commission_date": "2099-10-22",
+      "name": "Une autre commission de rentrée d'octobre 2099"
     }
   },
   {
@@ -21,7 +23,8 @@
     "pk": 3,
     "fields": {
       "submission_date": "2099-10-07",
-      "commission_date": "2099-10-21"
+      "commission_date": "2099-10-21",
+      "name": "Commission de rentrée d'octobre 2099"
     }
   },
   {
@@ -29,7 +32,8 @@
     "pk": 4,
     "fields": {
       "submission_date": "1990-01-01",
-      "commission_date": "1990-01-30"
+      "commission_date": "1990-01-30",
+      "name": "Commission du passé"
     }
   }
 ]
