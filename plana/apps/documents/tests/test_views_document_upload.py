@@ -24,14 +24,14 @@ class DocumentsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_project.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

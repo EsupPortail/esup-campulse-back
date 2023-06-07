@@ -8,24 +8,20 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import (
-    AssociationUser,
-    GroupInstitutionCommissionUser,
-    User,
-)
-from plana.apps.users.serializers.group_institution_commission_user import (
-    GroupInstitutionCommissionUserCreateSerializer,
-    GroupInstitutionCommissionUserSerializer,
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.serializers.group_institution_fund_user import (
+    GroupInstitutionFundUserCreateSerializer,
+    GroupInstitutionFundUserSerializer,
 )
 
 
-class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
+class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
     """/users/groups/ route"""
 
-    queryset = GroupInstitutionCommissionUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserCreateSerializer
+    queryset = GroupInstitutionFundUser.objects.all()
+    serializer_class = GroupInstitutionFundUserCreateSerializer
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -36,7 +32,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_200_OK: GroupInstitutionFundUserCreateSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
         },
@@ -44,7 +40,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Lists all groups linked to a user, or all groups of all users (manager)."""
-        if request.user.has_perm("users.view_groupinstitutioncommissionuser_any_group"):
+        if request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             serializer = self.serializer_class(self.queryset.all(), many=True)
             return response.Response(serializer.data)
         serializer = self.serializer_class(
@@ -55,7 +51,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_201_CREATED: GroupInstitutionCommissionUserCreateSerializer,
+            status.HTTP_201_CREATED: GroupInstitutionFundUserCreateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -76,18 +72,14 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             ):
                 institution = Institution.objects.get(id=request.data["institution"])
                 institution_id = institution.id
-            commission = None
-            commission_id = None
-            if "commission" in request.data and request.data["commission"] is not None:
-                commission = Commission.objects.get(id=request.data["commission"])
-                commission_id = commission.id
+            fund = None
+            fund_id = None
+            if "fund" in request.data and request.data["fund"] is not None:
+                fund = Fund.objects.get(id=request.data["fund"])
+                fund_id = fund.id
         except (ObjectDoesNotExist, MultiValueDictKeyError):
             return response.Response(
-                {
-                    "error": _(
-                        "User or group or institution or commission does not exist."
-                    )
-                },
+                {"error": _("User or group or institution or fund does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -108,7 +100,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
             )
 
         if (user.is_superuser or user.is_staff) and not request.user.has_perm(
-            "users.add_groupinstitutioncommissionuser_any_group"
+            "users.add_groupinstitutionfunduser_any_group"
         ):
             return response.Response(
                 {"error": _("Groups for a manager cannot be changed.")},
@@ -119,7 +111,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         if (
             group_structure["REGISTRATION_ALLOWED"] is False
             and not request.user.has_perm(
-                "users.add_groupinstitutioncommissionuser_any_group"
+                "users.add_groupinstitutionfunduser_any_group"
             )
             and (
                 not request.user.is_staff
@@ -149,7 +141,7 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
         if institution_id is not None:
             if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionuser_any_group"
+                    "users.add_groupinstitutionfunduser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
@@ -161,42 +153,42 @@ class GroupInstitutionCommissionUserListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        if commission_id is not None:
-            if (group_structure["COMMISSION_ID_POSSIBLE"] is False) or (
+        if fund_id is not None:
+            if (group_structure["FUND_ID_POSSIBLE"] is False) or (
                 not request.user.has_perm(
-                    "users.add_groupinstitutioncommissionuser_any_group"
+                    "users.add_groupinstitutionfunduser_any_group"
                 )
                 and (
                     not request.user.is_anonymous
-                    and not commission.institution_id
+                    and not fund.institution_id
                     in request.user.get_user_managed_institutions()
                 )
             ):
                 return response.Response(
-                    {"error": _("Adding commission in this group is not possible.")},
+                    {"error": _("Adding fund in this group is not possible.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        GroupInstitutionCommissionUser.objects.create(
+        GroupInstitutionFundUser.objects.create(
             user_id=user.id,
             group_id=group_id,
             institution_id=institution_id,
-            commission_id=commission_id,
+            fund_id=fund_id,
         )
 
         return response.Response({}, status=status.HTTP_201_CREATED)
 
 
-class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
+class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/groups/ route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    queryset = GroupInstitutionFundUser.objects.all()
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_200_OK: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -213,9 +205,7 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "users.view_groupinstitutioncommissionuser_any_group"
-        ):
+        if not request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             return response.Response(
                 {"error": _("Not allowed to get this link between group and user.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -228,17 +218,17 @@ class GroupInstitutionCommissionUserRetrieve(generics.RetrieveAPIView):
 
 
 # TODO Optimize this route to avoid code duplication with other delete routes.
-class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
+class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    queryset = GroupInstitutionFundUser.objects.all()
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         operation_id="users_groups_destroy",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -249,12 +239,12 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         """Destroys a group linked to a user (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
-                commission_id=None,
+                fund_id=None,
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -282,17 +272,17 @@ class GroupInstitutionCommissionUserDestroy(generics.DestroyAPIView):
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIView):
-    """/users/{user_id}/groups/{group_id}/commissions/{commission_id}"""
+class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
+    """/users/{user_id}/groups/{group_id}/funds/{fund_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    queryset = GroupInstitutionFundUser.objects.all()
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
-        operation_id="users_groups_destroy_with_commission",
+        operation_id="users_groups_destroy_with_fund",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -300,15 +290,15 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         tags=["users/groups"],
     )
     def delete(self, request, *args, **kwargs):
-        """Destroys a group linked to a user with commission argument (manager)."""
+        """Destroys a group linked to a user with fund argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=None,
-                commission_id=kwargs["commission_id"],
+                fund_id=kwargs["fund_id"],
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -317,9 +307,9 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionuser_any_group"
+            "users.delete_groupinstitutionfunduser_any_group"
         ) and (
-            not Commission.objects.get(id=kwargs["commission_id"]).institution_id
+            not Fund.objects.get(id=kwargs["fund_id"]).institution_id
             in request.user.get_user_managed_institutions()
         ):
             return response.Response(
@@ -337,17 +327,17 @@ class GroupInstitutionCommissionUserDestroyWithCommission(generics.DestroyAPIVie
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
-class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIView):
+class GroupInstitutionFundUserDestroyWithInstitution(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = GroupInstitutionCommissionUser.objects.all()
-    serializer_class = GroupInstitutionCommissionUserSerializer
+    queryset = GroupInstitutionFundUser.objects.all()
+    serializer_class = GroupInstitutionFundUserSerializer
 
     @extend_schema(
         operation_id="users_groups_destroy_with_institution",
         responses={
-            status.HTTP_204_NO_CONTENT: GroupInstitutionCommissionUserSerializer,
+            status.HTTP_204_NO_CONTENT: GroupInstitutionFundUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -358,12 +348,12 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
         """Destroys a group linked to a user with institution argument (manager)."""
         try:
             user = User.objects.get(id=kwargs["user_id"])
-            user_groups = GroupInstitutionCommissionUser.objects.filter(user_id=user.id)
-            user_group_to_delete = GroupInstitutionCommissionUser.objects.get(
+            user_groups = GroupInstitutionFundUser.objects.filter(user_id=user.id)
+            user_group_to_delete = GroupInstitutionFundUser.objects.get(
                 user_id=user.id,
                 group_id=kwargs["group_id"],
                 institution_id=kwargs["institution_id"],
-                commission_id=None,
+                fund_id=None,
             )
         except ObjectDoesNotExist:
             return response.Response(
@@ -372,7 +362,7 @@ class GroupInstitutionCommissionUserDestroyWithInstitution(generics.DestroyAPIVi
             )
 
         if not request.user.has_perm(
-            "users.delete_groupinstitutioncommissionuser_any_group"
+            "users.delete_groupinstitutionfunduser_any_group"
         ) and (
             not kwargs["institution_id"] in request.user.get_user_managed_institutions()
         ):

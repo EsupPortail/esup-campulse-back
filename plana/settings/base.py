@@ -632,37 +632,37 @@ GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "MANAGER_INSTITUTION": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "MANAGER_MISC": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
-    "COMMISSION": {
+    "MEMBER_FUND": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": True,
+        "FUND_ID_POSSIBLE": True,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "STUDENT_INSTITUTION": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": True,
     },
     "STUDENT_MISC": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
 }

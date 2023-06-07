@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
 class AssociationUserViewsTests(TestCase):
@@ -19,13 +19,13 @@ class AssociationUserViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -327,7 +327,7 @@ class AssociationUserViewsTests(TestCase):
 
         - Link cannot be added to a user without a group where associations can be linked.
         """
-        GroupInstitutionCommissionUser.objects.filter(
+        GroupInstitutionFundUser.objects.filter(
             user_id=self.unvalidated_user_id, group_id=5
         ).delete()
         response_anonymous = self.anonymous_client.post(

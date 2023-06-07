@@ -2,12 +2,12 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
+from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
-class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
+class GroupInstitutionFundUserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -15,16 +15,16 @@ class GroupInstitutionCommissionUserSerializer(serializers.ModelSerializer):
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    commission = serializers.PrimaryKeyRelatedField(
-        queryset=Commission.objects.all(), allow_null=True, required=False
+    fund = serializers.PrimaryKeyRelatedField(
+        queryset=Fund.objects.all(), allow_null=True, required=False
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUser
+        model = GroupInstitutionFundUser
         fields = "__all__"
 
 
-class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer):
+class GroupInstitutionFundUserCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-groups creation (with username instead of id)."""
 
     user = serializers.SlugRelatedField(
@@ -34,10 +34,10 @@ class GroupInstitutionCommissionUserCreateSerializer(serializers.ModelSerializer
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, required=False
     )
-    commission = serializers.PrimaryKeyRelatedField(
-        queryset=Commission.objects.all(), allow_null=True, required=False
+    fund = serializers.PrimaryKeyRelatedField(
+        queryset=Fund.objects.all(), allow_null=True, required=False
     )
 
     class Meta:
-        model = GroupInstitutionCommissionUser
-        fields = ["user", "group", "institution", "commission"]
+        model = GroupInstitutionFundUser
+        fields = ["user", "group", "institution", "fund"]

@@ -1,10 +1,10 @@
 [
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 1,
     "fields": {
       "project": 1,
-      "commission_date": 3,
+      "commission_fund": 3,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
@@ -13,11 +13,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 2,
     "fields": {
       "project": 2,
-      "commission_date": 4,
+      "commission_fund": 4,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
@@ -26,11 +26,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 3,
     "fields": {
       "project": 2,
-      "commission_date": 2,
+      "commission_fund": 2,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
@@ -39,11 +39,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 4,
     "fields": {
       "project": 3,
-      "commission_date": 3,
+      "commission_fund": 3,
       "is_first_edition": false,
       "amount_asked_previous_edition": 1000,
       "amount_earned_previous_edition": 800,
@@ -52,11 +52,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 5,
     "fields": {
       "project": 4,
-      "commission_date": 3,
+      "commission_fund": 3,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
@@ -65,11 +65,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 6,
     "fields": {
       "project": 5,
-      "commission_date": 6,
+      "commission_fund": 6,
       "is_first_edition": false,
       "amount_asked_previous_edition": 1000,
       "amount_earned_previous_edition": 800,
@@ -78,11 +78,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 7,
     "fields": {
       "project": 6,
-      "commission_date": 6,
+      "commission_fund": 6,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
@@ -91,11 +91,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 8,
     "fields": {
       "project": 7,
-      "commission_date": 6,
+      "commission_fund": 6,
       "is_first_edition": false,
       "amount_asked_previous_edition": 1000,
       "amount_earned_previous_edition": 800,
@@ -104,11 +104,11 @@
     }
   },
   {
-    "model": "projects.projectcommissiondate",
+    "model": "projects.projectcommissionfund",
     "pk": 9,
     "fields": {
       "project": 8,
-      "commission_date": 6,
+      "commission_fund": 6,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,

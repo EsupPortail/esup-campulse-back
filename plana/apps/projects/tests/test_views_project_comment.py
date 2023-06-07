@@ -10,7 +10,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.users.models import GroupInstitutionCommissionUser
+from plana.apps.users.models import GroupInstitutionFundUser
 
 
 class ProjectCommentLinksViewsTests(TestCase):
@@ -23,8 +23,9 @@ class ProjectCommentLinksViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
@@ -32,9 +33,9 @@ class ProjectCommentLinksViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcomment.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -117,7 +118,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/comments")
         user_institution_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )

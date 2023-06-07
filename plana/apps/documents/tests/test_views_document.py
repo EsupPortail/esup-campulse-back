@@ -20,10 +20,10 @@ class DocumentsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "documents_document.json",
         "institutions_institution.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -133,14 +133,14 @@ class DocumentsViewsTests(TestCase):
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_documents_forbidden_commission(self):
+    def test_post_documents_forbidden_fund(self):
         """
         POST /documents/ .
 
-        - A user without access to requested commission can't execute this request.
+        - A user without access to requested fund can't execute this request.
         """
-        commission = 3
-        post_data = {"name": "Test forbidden", "commission": commission}
+        fund = 3
+        post_data = {"name": "Test forbidden", "fund": fund}
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -261,14 +261,14 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_documents_forbidden_commission(self):
+    def test_patch_documents_forbidden_fund(self):
         """
         PATCH /documents/{id} .
 
-        - A user without access to requested commission can't execute this request.
+        - A user without access to requested fund can't execute this request.
         """
-        commission = 3
-        patch_data = {"name": "Test forbidden", "commission": commission}
+        fund = 3
+        patch_data = {"name": "Test forbidden", "fund": fund}
         response = self.institution_client.patch(
             "/documents/3", data=patch_data, content_type="application/json"
         )
@@ -353,11 +353,11 @@ class DocumentsViewsTests(TestCase):
         response = self.institution_client.delete(f"/documents/{document_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_delete_document_by_id_forbidden_commission(self):
+    def test_delete_document_by_id_forbidden_fund(self):
         """
         DELETE /documents/{id} .
 
-        - A document linked to a commission cannot be deleted by a user who's not linked to the same commission.
+        - A document linked to a fund cannot be deleted by a user who's not linked to the same fund.
         """
         document_id = 7
         response = self.institution_client.delete(f"/documents/{document_id}")

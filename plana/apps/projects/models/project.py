@@ -194,8 +194,8 @@ class Project(models.Model):
                 "Can update project fields filled by validator (manager).",
             ),
             (
-                "view_project_any_commission",
-                "Can view all projects for a commission.",
+                "view_project_any_fund",
+                "Can view all projects for a fund.",
             ),
             (
                 "view_project_any_institution",

@@ -1,29 +1,29 @@
-"""Serializers describing fields used on project commission date table."""
+"""Serializers describing fields used on project commission fund table."""
 from rest_framework import serializers
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
 
-class ProjectCommissionDateSerializer(serializers.ModelSerializer):
+class ProjectCommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
-    commission_date = serializers.PrimaryKeyRelatedField(
-        queryset=CommissionDate.objects.all()
+    commission_fund = serializers.PrimaryKeyRelatedField(
+        queryset=CommissionFund.objects.all()
     )
 
     class Meta:
-        model = ProjectCommissionDate
+        model = ProjectCommissionFund
         fields = "__all__"
 
 
-class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
+class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
     """Fields that can be updated by project's bearer."""
 
     class Meta:
-        model = ProjectCommissionDate
+        model = ProjectCommissionFund
         fields = [
             "is_first_edition",
             "amount_asked_previous_edition",
@@ -31,6 +31,6 @@ class ProjectCommissionDateDataSerializer(serializers.ModelSerializer):
             "amount_asked",
             "amount_earned",
             "is_validated_by_admin",
-            "commission_date_id",
+            "commission_fund_id",
             "project_id",
         ]

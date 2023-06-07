@@ -1,27 +1,17 @@
-"""Models describing commissions (FSDIE, IdEx, Culture-ActionS, ...)."""
-from django.conf import settings
+"""Models describing commissions."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from plana.apps.institutions.models.institution import Institution
 
 
 class Commission(models.Model):
     """Main model."""
 
-    name = models.CharField(_("Name"), max_length=250, blank=False)
-    acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
-    is_site = models.BooleanField(
-        _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
-    )
-    institution = models.ForeignKey(
-        Institution,
-        verbose_name=_("Institution"),
-        on_delete=models.RESTRICT,
-    )
+    submission_date = models.DateField(_("Project submission limit date"))
+    commission_date = models.DateField(_("Commission date"))
+    is_open_to_projects = models.BooleanField(_("Is open to projects"), default=False)
 
     def __str__(self):
-        return f"{self.name} ({self.acronym})"
+        return f"{self.submission_date}, {self.commission_date}, {self.is_open_to_projects}"
 
     class Meta:
         verbose_name = _("Commission")

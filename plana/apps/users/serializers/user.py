@@ -12,7 +12,7 @@ from rest_framework import exceptions, serializers
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
-from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
+from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,9 +34,9 @@ class UserSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=user.id
-            ).values_list("group_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
+                "group_id"
+            )
         )
         for group in groups:
             permissions = [
@@ -49,7 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
+        return GroupInstitutionFundUser.objects.filter(user_id=user.id).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
@@ -112,9 +112,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=user.id
-            ).values_list("group_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
+                "group_id"
+            )
         )
         for group in groups:
             permissions = [
@@ -127,7 +127,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
+        return GroupInstitutionFundUser.objects.filter(user_id=user.id).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""

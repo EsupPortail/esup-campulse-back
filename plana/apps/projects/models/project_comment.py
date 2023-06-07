@@ -33,8 +33,8 @@ class ProjectComment(models.Model):
         verbose_name_plural = _("Projects comments")
         permissions = [
             (
-                "view_projectcomment_any_commission",
-                "Can view all comments linked to all projects for a commission.",
+                "view_projectcomment_any_fund",
+                "Can view all comments linked to all projects for a fund.",
             ),
             (
                 "view_projectcomment_any_institution",

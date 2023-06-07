@@ -19,13 +19,13 @@ class Institution(models.Model):
             "users.user"
         ).objects.filter(
             is_superuser=False,
-            pk__in=apps.get_model("users.groupinstitutioncommissionuser")
+            pk__in=apps.get_model("users.groupinstitutionfunduser")
             .objects.filter(institution_id=self.pk)
             .values_list("user_id"),
         )
         better_institution_managers_query = default_institution_managers_query.filter(
             pk__in=apps.get_model("users.user")
-            .objects.annotate(num_groups=models.Count("groupinstitutioncommissionuser"))
+            .objects.annotate(num_groups=models.Count("groupinstitutionfunduser"))
             .filter(num_groups__lt=2)
             .values_list("id")
         )

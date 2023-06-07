@@ -21,8 +21,9 @@ class ProjectsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
@@ -32,9 +33,9 @@ class ProjectsViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 

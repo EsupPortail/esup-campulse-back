@@ -13,14 +13,13 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectReviewSerializer,
@@ -137,13 +136,13 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if year is not None and year != "":
             queryset = queryset.filter(creation_date__year=year)
 
-        if not request.user.has_perm("projects.view_project_any_commission"):
+        if not request.user.has_perm("projects.view_project_any_fund"):
             if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+                user_funds_ids = request.user.get_user_managed_funds()
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_funds()
         else:
-            user_commissions_ids = Commission.objects.all().values_list("id")
+            user_funds_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm("projects.view_project_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
@@ -151,7 +150,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             user_institutions_ids = Institution.objects.all().values_list("id")
 
         if not request.user.has_perm(
-            "projects.view_project_any_commission"
+            "projects.view_project_any_fund"
         ) or not request.user.has_perm("projects.view_project_any_institution"):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
@@ -163,9 +162,9 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
                     id__in=(
-                        ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
-                                commission_id__in=user_commissions_ids
+                        ProjectCommissionFund.objects.filter(
+                            commission_fund_id__in=CommissionFund.objects.filter(
+                                fund_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
                     )
@@ -202,8 +201,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 if commission_date_id != "" and commission_date_id.isdigit()
             ]
             queryset = queryset.filter(
-                id__in=ProjectCommissionDate.objects.filter(
-                    commission_date_id__in=commission_dates_ids
+                id__in=ProjectCommissionFund.objects.filter(
+                    commission_fund_id__in=commission_dates_ids
                 ).values_list("project_id")
             )
 
@@ -415,7 +414,7 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -478,9 +477,9 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        expired_project_commission_dates_count = ProjectCommissionDate.objects.filter(
+        expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,
-            commission_date_id__in=CommissionDate.objects.filter(
+            commission_fund_id__in=Commission.objects.filter(
                 submission_date__lte=datetime.datetime.today()
             ).values_list("id"),
         ).count()
@@ -563,7 +562,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -647,10 +646,12 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        pending_commission_dates_count = ProjectCommissionDate.objects.filter(
+        pending_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=kwargs["pk"],
-            commission_date_id__in=CommissionDate.objects.filter(
-                commission_date__gt=datetime.datetime.now()
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id__in=Commission.objects.filter(
+                    commission_date__gt=datetime.datetime.now()
+                ).values_list("id")
             ).values_list("id"),
         ).count()
         if pending_commission_dates_count > 0:
@@ -811,12 +812,12 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
-                commissions_misc_used = Commission.objects.filter(
-                    id__in=CommissionDate.objects.filter(
-                        id__in=ProjectCommissionDate.objects.filter(
+                funds_misc_used = Fund.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
                             project_id=project.id
-                        ).values_list("commission_date_id")
-                    ).values_list("commission_id"),
+                        ).values_list("commission_fund_id")
+                    ).values_list("fund_id"),
                     is_site=False,
                 )
                 context["association_name"] = association.name
@@ -828,7 +829,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                         "email", flat=True
                     )
                 )
-                if commissions_misc_used.count() > 0:
+                if funds_misc_used.count() > 0:
                     for user_to_check in User.objects.filter(
                         is_superuser=False, is_staff=True
                     ):

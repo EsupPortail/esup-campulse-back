@@ -9,12 +9,13 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectReviewSerializer,
     ProjectSerializer,
@@ -50,7 +51,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -64,9 +65,9 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 id=data["association_id"]
             ).name
 
-        data["project_commission_dates"] = list(
-            ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
-                "commission_date_id",
+        data["project_commission_funds"] = list(
+            ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
+                "commission_fund_id",
                 "is_first_edition",
                 "amount_asked_previous_edition",
                 "amount_earned_previous_edition",
@@ -74,31 +75,18 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 "amount_earned",
             )
         )
-        commission_infos = list(
-            CommissionDate.objects.filter(
-                pk__in=[
-                    pcd["commission_date_id"]
-                    for pcd in data["project_commission_dates"]
-                ]
-            )
-            .annotate(
-                commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef("commission_id")).values(
-                        "acronym"
-                    ),
-                    output_field=models.CharField(),
-                )
-            )
-            .values("commission_acronym", "commission_date", "id")
-        )
-        for commission in commission_infos:
-            for link in data["project_commission_dates"]:
-                if commission["id"] == link["commission_date_id"]:
-                    link["commission_acronym"] = commission["commission_acronym"]
-                    link["commission_date"] = commission["commission_date"]
+        for pcf in data["project_commission_funds"]:
+            pcf["commission_data"] = Commission.objects.get(
+                id=CommissionFund.objects.get(
+                    id=pcf["commission_fund_id"]
+                ).commission_id
+            ).__dict__
+            pcf["fund_data"] = Fund.objects.get(
+                id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
+            ).__dict__
 
         data["is_first_edition"] = True
-        for edition in data["project_commission_dates"]:
+        for edition in data["project_commission_funds"]:
             if not edition["is_first_edition"]:
                 data["is_first_edition"] = False
                 break
@@ -109,7 +97,6 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
         )
 
-        # print(data)
         return generate_pdf(data, "project_summary", request.build_absolute_uri("/"))
 
 
@@ -140,7 +127,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_project_any_commission")
+            not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
         ):
@@ -154,9 +141,9 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 id=data["association_id"]
             ).name
 
-        data["project_commission_dates"] = list(
-            ProjectCommissionDate.objects.filter(project_id=data["id"]).values(
-                "commission_date_id",
+        data["project_commission_funds"] = list(
+            ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
+                "commission_fund_id",
                 "is_first_edition",
                 "amount_asked_previous_edition",
                 "amount_earned_previous_edition",
@@ -164,31 +151,18 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 "amount_earned",
             )
         )
-        commission_infos = list(
-            CommissionDate.objects.filter(
-                pk__in=[
-                    pcd["commission_date_id"]
-                    for pcd in data["project_commission_dates"]
-                ]
-            )
-            .annotate(
-                commission_acronym=Subquery(
-                    Commission.objects.filter(id=OuterRef("commission_id")).values(
-                        "acronym"
-                    ),
-                    output_field=models.CharField(),
-                )
-            )
-            .values("commission_acronym", "commission_date", "id")
-        )
-        for commission in commission_infos:
-            for link in data["project_commission_dates"]:
-                if commission["id"] == link["commission_date_id"]:
-                    link["commission_acronym"] = commission["commission_acronym"]
-                    link["commission_date"] = commission["commission_date"]
+        for pcf in data["project_commission_funds"]:
+            pcf["commission_data"] = Commission.objects.get(
+                id=CommissionFund.objects.get(
+                    id=pcf["commission_fund_id"]
+                ).commission_id
+            ).__dict__
+            pcf["fund_data"] = Fund.objects.get(
+                id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
+            ).__dict__
 
         data["is_first_edition"] = True
-        for edition in data["project_commission_dates"]:
+        for edition in data["project_commission_funds"]:
             if not edition["is_first_edition"]:
                 data["is_first_edition"] = False
                 break
@@ -199,7 +173,6 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
         )
 
-        # print(data)
         return generate_pdf(
             data, "project_review_summary", request.build_absolute_uri('/')
         )

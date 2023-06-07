@@ -1,7 +1,7 @@
 """Serializers describing fields used on projects."""
 from rest_framework import serializers
 
-from plana.apps.commissions.serializers.commission_date import CommissionDateSerializer
+from plana.apps.commissions.serializers.commission import CommissionSerializer
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
 
@@ -10,7 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commission_dates = CommissionDateSerializer(many=True, read_only=True)
+    commission_dates = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -48,7 +48,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectReviewSerializer(serializers.ModelSerializer):
     """Main review serializer."""
 
-    commission_dates = CommissionDateSerializer(many=True, read_only=True)
+    commission_dates = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -89,7 +89,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     contact_email = serializers.CharField(required=False, allow_blank=True)
     contact_phone = serializers.CharField(required=False, allow_blank=True)
     categories = CategorySerializer(many=True, read_only=True)
-    commission_dates = CommissionDateSerializer(many=True, read_only=True)
+    commission_dates = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -139,7 +139,7 @@ class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
     contact_last_name = serializers.CharField(required=False, allow_blank=True)
     contact_email = serializers.CharField(required=False, allow_blank=True)
     contact_phone = serializers.CharField(required=False, allow_blank=True)
-    commission_dates = CommissionDateSerializer(many=True, read_only=True)
+    commission_dates = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project

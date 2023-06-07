@@ -10,11 +10,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import (
-    AssociationUser,
-    GroupInstitutionCommissionUser,
-    User,
-)
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
 
 
@@ -26,13 +22,13 @@ class UserViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -146,15 +142,15 @@ class UserViewsTests(TestCase):
         """
         misc_users_query = User.objects.filter(
             Q(
-                id__in=GroupInstitutionCommissionUser.objects.filter(
-                    institution_id__isnull=True, commission_id__isnull=True
+                id__in=GroupInstitutionFundUser.objects.filter(
+                    institution_id__isnull=True, fund_id__isnull=True
                 ).values_list("user_id")
             )
             & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
         )
         commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                commission_id__isnull=False
+            id__in=GroupInstitutionFundUser.objects.filter(
+                fund_id__isnull=False
             ).values_list("user_id")
         ).values_list("id")
 

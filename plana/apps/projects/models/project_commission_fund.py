@@ -2,10 +2,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission_fund import CommissionFund
 
 
-class ProjectCommissionDate(models.Model):
+class ProjectCommissionFund(models.Model):
     """Main model."""
 
     project = models.ForeignKey(
@@ -13,9 +13,9 @@ class ProjectCommissionDate(models.Model):
         verbose_name=_("Project"),
         on_delete=models.CASCADE,
     )
-    commission_date = models.ForeignKey(
-        CommissionDate,
-        verbose_name=_("Commission Date"),
+    commission_fund = models.ForeignKey(
+        CommissionFund,
+        verbose_name=_("Commission Fund"),
         on_delete=models.CASCADE,
     )
     is_first_edition = models.BooleanField(_("Is first edition"), default=True)
@@ -32,26 +32,26 @@ class ProjectCommissionDate(models.Model):
     )
 
     def __str__(self):
-        return f"{self.project} {self.commission_date}"
+        return f"{self.project} {self.commission_fund}"
 
     class Meta:
-        verbose_name = _("Project commission date")
-        verbose_name_plural = _("Projects commissions dates")
+        verbose_name = _("Project commission fund")
+        verbose_name_plural = _("Projects commissions funds")
         permissions = [
             (
-                "change_projectcommissiondate_as_bearer",
-                "Can update bearer fields (amount asked) between a project and a commission date.",
+                "change_projectcommissionfund_as_bearer",
+                "Can update bearer fields (amount asked) between a project and a commission fund.",
             ),
             (
-                "change_projectcommissiondate_as_validator",
-                "Can update validator fields (amount earned) between a project and a commission date.",
+                "change_projectcommissionfund_as_validator",
+                "Can update validator fields (amount earned) between a project and a commission fund.",
             ),
             (
-                "view_projectcommissiondate_any_commission",
-                "Can view all commission dates linked to all projects for a commission.",
+                "view_projectcommissionfund_any_commission",
+                "Can view all commission funds linked to all projects for a commission.",
             ),
             (
-                "view_projectcommissiondate_any_institution",
-                "Can view all commission dates linked to all projects for an institution.",
+                "view_projectcommissionfund_any_institution",
+                "Can view all commission funds linked to all projects for an institution.",
             ),
         ]

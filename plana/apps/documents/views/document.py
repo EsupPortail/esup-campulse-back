@@ -103,12 +103,12 @@ class DocumentList(generics.ListCreateAPIView):
             )
 
         if (
-            "commission" in request.data
-            and not request.user.has_perm("documents.add_document_any_commission")
-            and not request.user.is_member_in_commission(request.data["commission"])
+            "fund" in request.data
+            and not request.user.has_perm("documents.add_document_any_fund")
+            and not request.user.is_member_in_fund(request.data["fund"])
         ):
             return response.Response(
-                {"error": _("Not allowed to create a document for this commission.")},
+                {"error": _("Not allowed to create a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -200,12 +200,12 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.commission is not None
-            and not request.user.has_perm("documents.change_document_any_commission")
-            and not request.user.is_member_in_commission(document.commission)
+            document.fund is not None
+            and not request.user.has_perm("documents.change_document_any_fund")
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
-                {"error": _("Not allowed to update a document for this commission.")},
+                {"error": _("Not allowed to update a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -260,12 +260,12 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.commission is not None
-            and not request.user.has_perm("documents.delete_document_any_commission")
-            and not request.user.is_member_in_commission(document.commission)
+            document.fund is not None
+            and not request.user.has_perm("documents.delete_document_any_fund")
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
-                {"error": _("Not allowed to delete a document for this commission.")},
+                {"error": _("Not allowed to delete a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

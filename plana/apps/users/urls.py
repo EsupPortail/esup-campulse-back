@@ -9,12 +9,12 @@ from .views.association_user import (
 )
 from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserList
-from .views.group_institution_commission_user import (
-    GroupInstitutionCommissionUserDestroy,
-    GroupInstitutionCommissionUserDestroyWithCommission,
-    GroupInstitutionCommissionUserDestroyWithInstitution,
-    GroupInstitutionCommissionUserListCreate,
-    GroupInstitutionCommissionUserRetrieve,
+from .views.group_institution_fund_user import (
+    GroupInstitutionFundUserDestroy,
+    GroupInstitutionFundUserDestroyWithFund,
+    GroupInstitutionFundUserDestroyWithInstitution,
+    GroupInstitutionFundUserListCreate,
+    GroupInstitutionFundUserRetrieve,
 )
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
 from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
@@ -54,28 +54,28 @@ urlpatterns = [
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path(
         "groups/",
-        GroupInstitutionCommissionUserListCreate.as_view(),
-        name="group_institution_commission_user_list_create",
+        GroupInstitutionFundUserListCreate.as_view(),
+        name="group_institution_fund_user_list_create",
     ),
     path(
         "<int:user_id>/groups/",
-        GroupInstitutionCommissionUserRetrieve.as_view(),
-        name="group_institution_commission_user_retrieve",
+        GroupInstitutionFundUserRetrieve.as_view(),
+        name="group_institution_fund_user_retrieve",
     ),
     path(
         "<int:user_id>/groups/<int:group_id>",
-        GroupInstitutionCommissionUserDestroy.as_view(),
-        name="group_institution_commission_user_destroy",
+        GroupInstitutionFundUserDestroy.as_view(),
+        name="group_institution_fund_user_destroy",
     ),
     path(
-        "<int:user_id>/groups/<int:group_id>/commissions/<int:commission_id>",
-        GroupInstitutionCommissionUserDestroyWithCommission.as_view(),
-        name="group_institution_commission_user_destroy_with_commission",
+        "<int:user_id>/groups/<int:group_id>/funds/<int:fund_id>",
+        GroupInstitutionFundUserDestroyWithFund.as_view(),
+        name="group_institution_fund_user_destroy_with_fund",
     ),
     path(
         "<int:user_id>/groups/<int:group_id>/institutions/<int:institution_id>",
-        GroupInstitutionCommissionUserDestroyWithInstitution.as_view(),
-        name="group_institution_commission_user_destroy_with_institution",
+        GroupInstitutionFundUserDestroyWithInstitution.as_view(),
+        name="group_institution_fund_user_destroy_with_institution",
     ),
     path(
         "external/",

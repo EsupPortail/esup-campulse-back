@@ -9,13 +9,13 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -28,8 +28,9 @@ class ProjectsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
@@ -39,9 +40,9 @@ class ProjectsViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -142,7 +143,7 @@ class ProjectsViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )
@@ -221,8 +222,8 @@ class ProjectsViewsTests(TestCase):
             f"/projects/?commission_dates={','.join(str(x) for x in commission_dates)}"
         )
         projects_cnt = Project.visible_objects.filter(
-            id__in=ProjectCommissionDate.objects.filter(
-                commission_date_id__in=commission_dates
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=commission_dates
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -284,7 +285,7 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
-        GroupInstitutionCommissionUser.objects.create(
+        GroupInstitutionFundUser.objects.create(
             user_id=self.student_president_user_id, group_id=6
         )
         response = self.student_president_client.post("/projects/", project_data)
@@ -554,7 +555,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must be linked to non expired commission dates.
         """
-        expired_commission_date = CommissionDate.objects.get(id=3)
+        expired_commission_date = Commission.objects.get(id=3)
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}
@@ -796,11 +797,11 @@ class ProjectsViewsTests(TestCase):
 
         - A review can't be submitted if commission dates are still pending.
         """
-        commission_date = CommissionDate.objects.get(id=6)
-        commission_date.commission_date = datetime.datetime.strptime(
+        commission = Commission.objects.get(id=4)
+        commission.commission_date = datetime.datetime.strptime(
             "2099-12-25", "%Y-%m-%d"
         ).date()
-        commission_date.save()
+        commission.save()
         patch_data = {"review": "Au secours."}
         response = self.student_misc_client.patch(
             "/projects/5/review", patch_data, content_type="application/json"
@@ -959,7 +960,7 @@ class ProjectsViewsTests(TestCase):
         - Project cannot be updated if documents are missing.
         """
         DocumentUpload.objects.get(document=18, project_id=2).delete()
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -976,7 +977,7 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -999,8 +1000,8 @@ class ProjectsViewsTests(TestCase):
         project.save()
 
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(
-            project_id=project_id, commission_date_id=3
+        ProjectCommissionFund.objects.create(
+            project_id=project_id, commission_fund_id=3
         )
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.student_president_client.patch(

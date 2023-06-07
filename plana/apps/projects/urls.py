@@ -18,10 +18,10 @@ from .views.project_comment import (
     ProjectCommentRetrieve,
     ProjectCommentUpdateDestroy,
 )
-from .views.project_commission_date import (
-    ProjectCommissionDateListCreate,
-    ProjectCommissionDateRetrieve,
-    ProjectCommissionDateUpdateDestroy,
+from .views.project_commission_fund import (
+    ProjectCommissionFundListCreate,
+    ProjectCommissionFundRetrieve,
+    ProjectCommissionFundUpdateDestroy,
 )
 from .views.project_export import ProjectDataExport, ProjectReviewDataExport
 
@@ -54,19 +54,19 @@ urlpatterns = [
         name="project_category_destroy",
     ),
     path(
-        "commission_dates",
-        ProjectCommissionDateListCreate.as_view(),
-        name="project_commission_date_list_create",
+        "commission_funds",
+        ProjectCommissionFundListCreate.as_view(),
+        name="project_commission_fund_list_create",
     ),
     path(
-        "<int:project_id>/commission_dates",
-        ProjectCommissionDateRetrieve.as_view(),
-        name="project_commission_date_retrieve",
+        "<int:project_id>/commission_funds",
+        ProjectCommissionFundRetrieve.as_view(),
+        name="project_commission_fund_retrieve",
     ),
     path(
-        "<int:project_id>/commission_dates/<int:commission_date_id>",
-        ProjectCommissionDateUpdateDestroy.as_view(),
-        name="project_commission_date_update_destroy",
+        "<int:project_id>/commission_funds/<int:commission_fund_id>",
+        ProjectCommissionFundUpdateDestroy.as_view(),
+        name="project_commission_fund_update_destroy",
     ),
     path(
         "comments",

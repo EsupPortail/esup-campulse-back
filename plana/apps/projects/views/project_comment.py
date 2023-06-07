@@ -13,9 +13,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, CommissionDate
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.institutions.models import Institution
-from plana.apps.projects.models import ProjectCommissionDate
+from plana.apps.projects.models import ProjectCommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
@@ -67,16 +67,16 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
-        if not request.user.has_perm("projects.view_projectcomment_any_commission"):
+        if not request.user.has_perm("projects.view_projectcomment_any_fund"):
             if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+                user_funds_ids = request.user.get_user_managed_funds()
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_funds()
         else:
-            user_commissions_ids = Commission.objects.all().values_list("id")
+            user_funds_ids = Fund.objects.all().values_list("id")
 
         if not request.user.has_perm(
-            "projects.view_projectcomment_any_commission"
+            "projects.view_projectcomment_any_fund"
         ) or not request.user.has_perm("projects.view_projectcomment_any_institution"):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
@@ -88,9 +88,9 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 models.Q(id__in=user_projects_ids)
                 | models.Q(
                     project_id__in=(
-                        ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
-                                commission_id__in=user_commissions_ids
+                        ProjectCommissionFund.objects.filter(
+                            commission_fund_id__in=CommissionFund.objects.filter(
+                                fund_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
                     )
@@ -192,7 +192,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_projectcomment_any_commission")
+            not request.user.has_perm("projects.view_projectcomment_any_fund")
             and not request.user.has_perm(
                 "projects.view_projectcomment_any_institution"
             )

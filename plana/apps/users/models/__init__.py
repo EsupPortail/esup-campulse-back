@@ -1,1 +1,1 @@
-from .user import AssociationUser, GroupInstitutionCommissionUser, User
+from .user import AssociationUser, GroupInstitutionFundUser, User

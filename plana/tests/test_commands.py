@@ -6,9 +6,9 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
 User = get_user_model()
 
@@ -67,47 +67,56 @@ class CommissionExpirationCommandTest(TestCase):
         "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_project.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_user.json",
     ]
 
     def test_no_expire_commission(self):
-        """Don't remove ProjectCommissionDate if CommissionDate isn't expired."""
+        """Don't remove ProjectCommissionFund if Commission isn't expired."""
         expired_commission_id = 3
-        old_project_commission_dates_count = ProjectCommissionDate.objects.filter(
-            commission_date_id=expired_commission_id
+        old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id=expired_commission_id
+            ).values("id")
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionDate.objects.filter(
-            commission_date_id=expired_commission_id
+        new_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission=expired_commission_id
+            ).values("id")
         ).count()
         self.assertEqual(
-            old_project_commission_dates_count, new_project_commission_dates_count
+            old_project_commission_funds_count, new_project_commission_funds_count
         )
 
     def test_expire_commission(self):
-        """Remove ProjectCommissionDate if CommissionDate is expired."""
+        """Remove ProjectCommissionFund if Commission is expired."""
         expired_commission_id = 3
-        expired_commission = CommissionDate.objects.get(id=expired_commission_id)
+        expired_commission = Commission.objects.get(id=expired_commission_id)
         expired_commission.submission_date = datetime.datetime.strptime(
             "1993-12-25", "%Y-%m-%d"
         ).date()
         expired_commission.save()
-        old_project_commission_dates_count = ProjectCommissionDate.objects.filter(
-            commission_date_id=expired_commission_id
+        old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id=expired_commission_id
+            ).values("commission_id")
         ).count()
         call_command("cron_commission_expiration")
-        new_project_commission_dates_count = ProjectCommissionDate.objects.filter(
-            commission_date_id=expired_commission_id
+        new_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission=expired_commission_id
+            ).values("id")
         ).count()
         self.assertNotEqual(
-            old_project_commission_dates_count, new_project_commission_dates_count
+            old_project_commission_funds_count, new_project_commission_funds_count
         )
 
 
@@ -166,15 +175,16 @@ class ProjectExpirationCommandTest(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "projects_project.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -206,16 +216,17 @@ class ReviewExpirationCommandTest(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "projects_project.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
