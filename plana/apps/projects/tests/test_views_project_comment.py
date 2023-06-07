@@ -242,14 +242,16 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - A student user not owning the project cannot execute this request.
         """
-        response = self.student_offsite_client.get("/projects/2/comments")
+        project_id = 2
+        response = self.student_offsite_client.get(f"/projects/{project_id}/comments")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_project_comments_by_id(self):
+    def test_get_project_comments_by_id_success(self):
         """
         GET /projects/{project_id}/comments
 
-        - The route can be accessed by a manager user and by a student user.
+        - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
         - Correct projects comments are returned.
         """
         project_id = 2
@@ -307,9 +309,13 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - Comment must exist.
         """
+        comment = 2
+        project = 2
         patch_data = {"text": "Commentaire not found"}
         response = self.general_client.patch(
-            "/projects/2/comments/2", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -320,14 +326,20 @@ class ProjectCommentLinksViewsTests(TestCase):
         - A user without proper permissions cannot execute this command.
         - Manager must be from the correct institution.
         """
+        comment = 1
+        project = 2
         patch_data = {"text": "Commentaire forbidden"}
         response = self.student_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         response = self.institution_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -335,11 +347,16 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         PATCH /projects/{project_id}/comments/{comment_id}
 
-        - A user with proper permissions can execute this command.
+        - A user with proper permissions can execute this request.
+        - TOOD : The comment is correctly updated in db.
         """
+        comment = 1
+        project = 2
         patch_data = {"text": "Commentaire sent with success"}
         response = self.general_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
