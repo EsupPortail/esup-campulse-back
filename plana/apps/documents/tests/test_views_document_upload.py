@@ -143,7 +143,7 @@ class DocumentsViewsTests(TestCase):
         GET /documents/uploads .
 
         - A general manager user gets all documents uploads.
-        - user, association and project filters work.
+        - user, association, project and process_types filters work.
         """
         DocumentUpload.objects.exclude(id=self.new_document.data["id"]).delete()
         response = self.general_client.get("/documents/uploads")
@@ -174,6 +174,14 @@ class DocumentsViewsTests(TestCase):
         project_id = 1
         response = self.general_client.get(
             f"/documents/uploads?project_id={project_id}"
+        )
+        documents_cnt = DocumentUpload.objects.filter(project_id=project_id).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
+
+        document_statuses = ["CHARTER_DRAFT", "CHARTER_PROCESSING"]
+        response = self.general_client.get(
+            f"/documents/uploads?process_types={','.join(str(x) for x in document_statuses)}"
         )
         documents_cnt = DocumentUpload.objects.filter(project_id=project_id).count()
         content = json.loads(response.content.decode("utf-8"))
