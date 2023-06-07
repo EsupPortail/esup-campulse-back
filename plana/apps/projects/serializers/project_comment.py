@@ -20,9 +20,11 @@ class ProjectCommentSerializer(serializers.ModelSerializer):
 class ProjectCommentDataSerializer(serializers.ModelSerializer):
     """Fields that can be created."""
 
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = ProjectComment
-        fields = ["project", "text"]
+        fields = ["project", "text", "user"]
 
 
 class ProjectCommentTextSerializer(serializers.ModelSerializer):

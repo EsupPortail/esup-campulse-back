@@ -131,6 +131,7 @@ class ProjectCommentListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        request.data["user"] = request.user.id
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
