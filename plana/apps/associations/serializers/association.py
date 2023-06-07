@@ -95,6 +95,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
             "alt_logo",
             "path_logo",
             "charter_status",
+            "charter_date",
         ]
 
 
