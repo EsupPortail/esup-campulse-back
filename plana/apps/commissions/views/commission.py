@@ -19,7 +19,7 @@ from plana.apps.commissions.serializers.commission import (
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.utils import to_bool
+from plana.utils import to_bool, valid_date_format
 
 
 class CommissionListCreate(generics.ListCreateAPIView):
@@ -192,7 +192,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Removes spaces, uppercase and accented characters to avoid similar association names.
+        # Removes spaces, uppercase and accented characters to avoid similar commission names.
         new_commission_name = (
             unicodedata.normalize(
                 "NFD", request.data["name"].strip().replace(" ", "").lower()
@@ -303,14 +303,14 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates commission date details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # try:
+        #     serializer = self.get_serializer(data=request.data)
+        #     serializer.is_valid(raise_exception=True)
+        # except ValidationError as error:
+        #     return response.Response(
+        #         {"error": error.detail},
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
 
         try:
             self.queryset.get(id=kwargs["pk"])
@@ -349,30 +349,70 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             "submission_date" in request.data
-            and datetime.datetime.strptime(
-                request.data["submission_date"], "%Y-%m-%d"
-            ).date()
-            < datetime.date.today()
+            and request.data["submission_date"] is not None
+            and valid_date_format(request.data["submission_date"])
         ):
-            return response.Response(
-                {
-                    "error": _(
-                        "Cannot create commission date taking place before today."
-                    )
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            if (
+                datetime.datetime.strptime(
+                    request.data["submission_date"], "%Y-%m-%d"
+                ).date()
+                < datetime.date.today()
+            ):
+                return response.Response(
+                    {
+                        "error": _(
+                            "Cannot create commission date taking place before today."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if (
+                "commission_date" in request.data
+                and request.data["commission_date"] is not None
+                and valid_date_format(request.data["commission_date"])
+            ):
+                commission_date = datetime.datetime.strptime(
+                    request.data["commission_date"], "%Y-%m-%d"
+                ).date()
+            else:
+                commission_date = self.queryset.get(id=kwargs["pk"]).commission_date
+            if (
+                datetime.datetime.strptime(
+                    request.data["submission_date"], "%Y-%m-%d"
+                ).date()
+                > commission_date
+            ):
+                return response.Response(
+                    {"error": _("Can't set submission date after commission date.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         if (
-            "submission_date" in request.data
-            and "commission_date" in request.data
-            and datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d")
-            > datetime.datetime.strptime(request.data["commission_date"], "%Y-%m-%d")
+            "commission_date" in request.data
+            and request.data["commission_date"] is not None
+            and valid_date_format(request.data["commission_date"])
         ):
-            return response.Response(
-                {"error": _("Can't set submission date after commission date.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            if (
+                "submission_date" in request.data
+                and request.data["commission_date"] is not None
+                and valid_date_format(request.data["submission_date"])
+            ):
+                submission_date = datetime.datetime.strptime(
+                    request.data["submission_date"], "%Y-%m-%d"
+                ).date()
+            else:
+                submission_date = self.queryset.get(id=kwargs["pk"]).submission_date
+            if (
+                submission_date
+                > datetime.datetime.strptime(
+                    request.data["commission_date"], "%Y-%m-%d"
+                ).date()
+            ):
+                return response.Response(
+                    {"error": _("Can't set commission date before submission date.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         return self.partial_update(request, *args, **kwargs)
 
