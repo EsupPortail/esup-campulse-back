@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-08 11:42+0200\n"
+"POT-Creation-Date: 2023-06-08 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -340,39 +340,39 @@ msgstr "Fonds liés à des Commissions"
 msgid "Funds"
 msgstr "Fonds"
 
-#: plana/apps/commissions/views/commission.py:191
-msgid "Commission name not set."
-msgstr "Le nom de commission n'existe pas."
-
-#: plana/apps/commissions/views/commission.py:214
-#: plana/apps/commissions/views/commission.py:346
+#: plana/apps/commissions/views/commission.py:211
+#: plana/apps/commissions/views/commission.py:343
 msgid "Commission name already taken."
 msgstr "Nom de commission déjà enregistré."
 
-#: plana/apps/commissions/views/commission.py:228
-#: plana/apps/commissions/views/commission.py:360
+#: plana/apps/commissions/views/commission.py:225
+#: plana/apps/commissions/views/commission.py:361
 msgid "Cannot create commission date taking place before today."
 msgstr "Impossible de créer une date de commission passée."
 
-#: plana/apps/commissions/views/commission.py:241
-#: plana/apps/commissions/views/commission.py:373
+#: plana/apps/commissions/views/commission.py:238
+#: plana/apps/commissions/views/commission.py:384
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission.py:280
+#: plana/apps/commissions/views/commission.py:277
 msgid "Commission Date does not exist."
 msgstr "La date de commission n'existe pas."
 
-#: plana/apps/commissions/views/commission.py:319
-#: plana/apps/commissions/views/commission.py:393
+#: plana/apps/commissions/views/commission.py:316
+#: plana/apps/commissions/views/commission.py:430
 msgid "Commission does not exist."
 msgstr "La commission n'existe pas."
 
-#: plana/apps/commissions/views/commission.py:399
+#: plana/apps/commissions/views/commission.py:410
+msgid "Can't set commission date before submission date."
+msgstr "La date de commission ne peut avoir lieu avant la date de soumission."
+
+#: plana/apps/commissions/views/commission.py:436
 msgid "Cannot delete commission taking place before today."
 msgstr "Impossible de supprimer une commission passée."
 
-#: plana/apps/commissions/views/commission.py:411
+#: plana/apps/commissions/views/commission.py:448
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
@@ -1494,24 +1494,24 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/utils.py:20
+#: plana/utils.py:21
 #, python-brace-format
 msgid "Password too short (at least {min_length} chars)."
 msgstr "Mot de passe trop court (au moins {min_length} caractères)."
 
-#: plana/utils.py:23
+#: plana/utils.py:24
 msgid "Password should contain at least one lowercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
 
-#: plana/utils.py:26
+#: plana/utils.py:27
 msgid "Password should contain at least one uppercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
 
-#: plana/utils.py:29
+#: plana/utils.py:30
 msgid "Password should contain at least one digit."
 msgstr "Le mot de passe doit contenir au moins un chiffre."
 
-#: plana/utils.py:34
+#: plana/utils.py:35
 msgid ""
 "Password should contain at least one special char ( / * - + = . , ; : ! ? & "
 "\" ' ( ) _ [ ] { } @ % # $ < > )."
@@ -1519,7 +1519,7 @@ msgstr ""
 "Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
 "= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."
 
-#: plana/utils.py:40
+#: plana/utils.py:41
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "

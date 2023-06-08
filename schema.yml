@@ -351,16 +351,10 @@ paths:
           type: boolean
         description: Filter by is_site field.
       - in: query
-        name: managed_commissions
-        schema:
-          type: boolean
-        description: Filter to get commissions managed by the current user depending
-          on its linked funds. If false returns all commissions.
-      - in: query
         name: managed_projects
         schema:
           type: boolean
-        description: Filter to get commission_dates with projects managed by the current
+        description: Filter to get commissions with projects managed by the current
           user.
       tags:
       - commissions
@@ -3993,6 +3987,8 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        is_open_to_projects:
+          type: boolean
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

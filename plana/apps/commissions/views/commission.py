@@ -3,6 +3,7 @@ import datetime
 import unicodedata
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -62,16 +63,10 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 description="Filter to get commission_dates where projects reviews are still pending.",
             ),
             OpenApiParameter(
-                "managed_commissions",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get commissions managed by the current user depending on its linked funds. If false returns all commissions.",
-            ),
-            OpenApiParameter(
                 "managed_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="Filter to get commission_dates with projects managed by the current user.",
+                description="Filter to get commissions with projects managed by the current user.",
             ),
         ],
         responses={
@@ -128,41 +123,43 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 )
 
         if (
-            managed_commissions is not None
-            and managed_commissions != ""
-            and not request.user.is_anonymous
-        ):
-            if to_bool(managed_commissions) is True:
-                self.queryset = self.queryset.filter(
-                    id__in=CommissionFund.objects.filter(
-                        fund_id__in=request.user.get_user_managed_funds()
-                    ).values_list('commission_id')
-                )
-                #          else:
-                #              self.queryset = self.queryset.exclude(
-                #                  commission_id__in=request.user.get_user_managed_funds()
-                #              )
-
-        if (
             managed_projects is not None
             and managed_projects != ""
             and not request.user.is_anonymous
         ):
             if to_bool(managed_projects) is True:
                 self.queryset = self.queryset.filter(
-                    id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=Project.visible_objects.filter(
-                            association_id__in=request.user.get_user_managed_associations()
-                        ).values_list("id")
-                    ).values_list("commission_fund_id")
+                    models.Q(
+                        id__in=CommissionFund.objects.filter(
+                            fund_id__in=ProjectCommissionFund.objects.filter(
+                                project_id__in=Project.visible_objects.filter(
+                                    association_id__in=request.user.get_user_managed_associations()
+                                ).values_list("id")
+                            ).values_list("commission_fund_id")
+                        ).values_list('commission_id')
+                    )
+                    | models.Q(
+                        id__in=CommissionFund.objects.filter(
+                            fund_id__in=request.user.get_user_managed_funds()
+                        ).values_list('commission_id')
+                    )
                 )
             else:
                 self.queryset = self.queryset.exclude(
-                    id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=Project.visible_objects.filter(
-                            association_id__in=request.user.get_user_managed_associations()
-                        ).values_list("id")
-                    ).values_list("commission_fund_id")
+                    models.Q(
+                        id__in=CommissionFund.objects.filter(
+                            fund_id__in=ProjectCommissionFund.objects.filter(
+                                project_id__in=Project.visible_objects.filter(
+                                    association_id__in=request.user.get_user_managed_associations()
+                                ).values_list("id")
+                            ).values_list("commission_fund_id")
+                        ).values_list('commission_id')
+                    )
+                    | models.Q(
+                        id__in=CommissionFund.objects.filter(
+                            fund_id__in=request.user.get_user_managed_funds()
+                        ).values_list('commission_id')
+                    )
                 )
 
         return self.list(request, *args, **kwargs)
