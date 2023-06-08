@@ -175,6 +175,18 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_post_project_cf_serializer_error(self):
+        """
+        POST /projects/commission_funds .
+
+        - If data format is not good we get a bad request from the serializer.
+        """
+        post_data = {"project": 1, "commission_fund": 1, "amount_asked": True}
+        response = self.student_misc_client.post(
+            "/projects/commission_funds", post_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_cf_manager_bad_request(self):
         """
         POST /projects/commission_funds .
