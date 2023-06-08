@@ -13,6 +13,7 @@ from rest_framework import filters, generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
+from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
     AssociationAllDataReadSerializer,
@@ -25,6 +26,7 @@ from plana.apps.associations.serializers.association import (
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import generate_pdf, send_mail, to_bool
@@ -634,6 +636,16 @@ class AssociationDataExport(generics.RetrieveAPIView):
                 {"error": _("Not allowed to retrieve this association.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
+
+        data["institution"] = Institution.objects.get(
+            id=association.institution_id
+        ).name
+        data["institution_component"] = InstitutionComponent.objects.get(
+            id=association.institution_component_id
+        ).name
+        data["activity_field"] = ActivityField.objects.get(
+            id=association.activity_field_id
+        ).name
 
         data["documents"] = list(
             DocumentUpload.objects.filter(

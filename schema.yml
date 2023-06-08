@@ -1676,32 +1676,6 @@ paths:
                   $ref: '#/components/schemas/Category'
           description: ''
   /projects/comments:
-    get:
-      operationId: projects_comments_list
-      description: Lists all links between projects and comments
-      parameters:
-      - in: query
-        name: project_id
-        schema:
-          type: number
-        description: Project id.
-      tags:
-      - projects/comments
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectComment'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
     post:
       operationId: projects_comments_create
       description: Create a link between a comment and a project
@@ -3358,6 +3332,10 @@ components:
           format: date
         is_open_to_projects:
           type: boolean
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
       required:
       - commission_date
       - id
@@ -3401,6 +3379,11 @@ components:
           format: date
         is_open_to_projects:
           type: boolean
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
       required:
       - commission_date
       - submission_date
@@ -4005,6 +3988,11 @@ components:
         commission_date:
           type: string
           format: date
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.
@@ -4434,7 +4422,7 @@ components:
         project:
           type: integer
         user:
-          type: integer
+          $ref: '#/components/schemas/UserName'
         text:
           type: string
           title: Texte
@@ -4464,9 +4452,12 @@ components:
           type: string
           minLength: 1
           title: Texte
+        user:
+          type: integer
       required:
       - project
       - text
+      - user
     ProjectCommissionFund:
       type: object
       description: Main serializer.
@@ -4919,6 +4910,23 @@ components:
       - last_name
       - permissions
       - username
+    UserName:
+      type: object
+      description: Used to get data from another student in the same associations.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+      required:
+      - first_name
+      - id
+      - last_name
     UserPartialDataRequest:
       type: object
       description: Used to get data from another student in the same associations.
