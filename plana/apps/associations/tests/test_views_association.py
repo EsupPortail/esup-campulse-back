@@ -13,6 +13,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicThumbnailImageField
 
@@ -28,10 +29,13 @@ class AssociationsViewsTests(TestCase):
         "auth_group_permissions.json",
         "auth_permission.json",
         "commissions_fund.json",
+        "documents_document.json",
+        "documents_documentupload.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
+        "projects_project.json",
         "users_associationuser.json",
         "users_user.json",
         "users_groupinstitutionfunduser.json",
@@ -295,81 +299,6 @@ class AssociationsViewsTests(TestCase):
         response = self.general_client.get("/associations/?is_public=false")
         for association in response.data:
             self.assertEqual(association["is_public"], False)
-
-    def test_get_association_names_list(self):
-        """
-        GET /associations/names .
-
-        - The route can be accessed by anyone.
-        - We get the same amount of associations through the model and through the view.
-        - Only id and names of the associations are returned.
-        """
-        response = self.client.get("/associations/names")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        associations = Association.objects.all()
-        self.assertEqual(len(response.data), len(associations))
-
-        content_all_assos = json.loads(response.content.decode("utf-8"))
-        asso_name_1 = content_all_assos[0]
-        self.assertTrue(asso_name_1.get("name"))
-        self.assertTrue(asso_name_1.get("id"))
-        self.assertFalse(asso_name_1.get("institution_component"))
-
-    def test_get_association_names_list_filter_institution(self):
-        """
-        GET /associations/names .
-
-        - The route can be accessed by anyone.
-        - Get the same amount of associations by institution through model and view.
-        """
-        asso_names_cnt_institution = Association.objects.filter(
-            institution_id__in=[2, 3]
-        ).count()
-        response = self.client.get("/associations/names?institutions=2,3")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), asso_names_cnt_institution)
-
-    def test_get_association_names_list_filter_public(self):
-        """
-        GET /associations/names .
-
-        - The route can be accessed by anyone.
-        - Get the same amount of public associations through model and view.
-        """
-        asso_names_cnt_public = Association.objects.filter(is_public=True).count()
-        response = self.client.get("/associations/names?is_public=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), asso_names_cnt_public)
-
-    def test_get_association_names_list_allow_new_user(self):
-        """
-        GET /associations/names .
-
-        - The route can be accessed by anyone.
-        - Get a different amount of associations with allow_new_users filter.
-        """
-        response = self.client.get("/associations/names")
-        content_all_assos = json.loads(response.content.decode("utf-8"))
-
-        AssociationUser.objects.create(user_id=12, association_id=2)
-
-        response_assos_users_allowed = self.client.get(
-            "/associations/names?allow_new_users=true"
-        )
-        content_assos_users_allowed = json.loads(
-            response_assos_users_allowed.content.decode("utf-8")
-        )
-        response_assos_users_not_allowed = self.client.get(
-            "/associations/names?allow_new_users=false"
-        )
-        content_assos_users_not_allowed = json.loads(
-            response_assos_users_not_allowed.content.decode("utf-8")
-        )
-        self.assertEqual(
-            len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
-            len(content_all_assos),
-        )
 
     def test_get_association_details_404(self):
         """
@@ -974,6 +903,122 @@ class AssociationsViewsTests(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
 
+    def test_put_association_status(self):
+        """
+        PUT /associations/{id}/status .
+
+        - Always returns a 405.
+        """
+        patch_data = {"charter_status": "CHARTER_REJECTED"}
+        response = self.general_client.put(
+            "/associations/2/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_patch_association_status_anonymous(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - An anonymous user cannot execute this request.
+        """
+        patch_data = {"charter_status": "CHARTER_REJECTED"}
+        response = self.client.patch(
+            "/associations/2/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_patch_association_status_not_found(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - Association must exist.
+        """
+        patch_data = {"charter_status": "CHARTER_REJECTED"}
+        response = self.general_client.patch(
+            "/associations/999/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_association_status_wrong_student(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - An student user cannot execute this request if not president.
+        """
+        association_id = 2
+        patch_data = {"charter_status": "CHARTER_PROCESSING"}
+        response = self.member_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_association_status_student(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - An student user cannot execute this request if status is not allowed.
+        - An student user can execute this request if status is allowed.
+        """
+        association_id = 2
+        self.assertFalse(len(mail.outbox))
+        patch_data = {"charter_status": "CHARTER_REJECTED"}
+        response = self.president_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(len(mail.outbox))
+
+        patch_data = {"charter_status": "CHARTER_PROCESSING"}
+        response = self.president_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.charter_status, "CHARTER_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_patch_association_status_manager(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - A manager user can execute this request.
+        """
+        association_id = 2
+        patch_data = {"charter_status": "CHARTER_REJECTED"}
+        response = self.general_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.charter_status, "CHARTER_REJECTED")
+
+    def test_patch_association_status_missing_documents(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - The route can be accessed by a student president.
+        - Association cannot be updated if documents are missing.
+        """
+        association_id = 2
+        DocumentUpload.objects.get(document_id=9, association_id=2).delete()
+        patch_data = {"charter_status": "CHARTER_PROCESSING"}
+        response = self.president_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        association = Association.objects.get(id=association_id)
+        self.assertNotEqual(association.charter_status, "CHARTER_PROCESSING")
+
     def test_get_activity_fields_list(self):
         """
         GET /associations/activity_fields .
@@ -994,3 +1039,78 @@ class AssociationsViewsTests(TestCase):
 
         activity_field_1 = content[0]
         self.assertTrue(activity_field_1.get("name"))
+
+    def test_get_association_names_list(self):
+        """
+        GET /associations/names .
+
+        - The route can be accessed by anyone.
+        - We get the same amount of associations through the model and through the view.
+        - Only id and names of the associations are returned.
+        """
+        response = self.client.get("/associations/names")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        associations = Association.objects.all()
+        self.assertEqual(len(response.data), len(associations))
+
+        content_all_assos = json.loads(response.content.decode("utf-8"))
+        asso_name_1 = content_all_assos[0]
+        self.assertTrue(asso_name_1.get("name"))
+        self.assertTrue(asso_name_1.get("id"))
+        self.assertFalse(asso_name_1.get("institution_component"))
+
+    def test_get_association_names_list_filter_institution(self):
+        """
+        GET /associations/names .
+
+        - The route can be accessed by anyone.
+        - Get the same amount of associations by institution through model and view.
+        """
+        asso_names_cnt_institution = Association.objects.filter(
+            institution_id__in=[2, 3]
+        ).count()
+        response = self.client.get("/associations/names?institutions=2,3")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), asso_names_cnt_institution)
+
+    def test_get_association_names_list_filter_public(self):
+        """
+        GET /associations/names .
+
+        - The route can be accessed by anyone.
+        - Get the same amount of public associations through model and view.
+        """
+        asso_names_cnt_public = Association.objects.filter(is_public=True).count()
+        response = self.client.get("/associations/names?is_public=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), asso_names_cnt_public)
+
+    def test_get_association_names_list_allow_new_user(self):
+        """
+        GET /associations/names .
+
+        - The route can be accessed by anyone.
+        - Get a different amount of associations with allow_new_users filter.
+        """
+        response = self.client.get("/associations/names")
+        content_all_assos = json.loads(response.content.decode("utf-8"))
+
+        AssociationUser.objects.create(user_id=12, association_id=2)
+
+        response_assos_users_allowed = self.client.get(
+            "/associations/names?allow_new_users=true"
+        )
+        content_assos_users_allowed = json.loads(
+            response_assos_users_allowed.content.decode("utf-8")
+        )
+        response_assos_users_not_allowed = self.client.get(
+            "/associations/names?allow_new_users=false"
+        )
+        content_assos_users_not_allowed = json.loads(
+            response_assos_users_not_allowed.content.decode("utf-8")
+        )
+        self.assertEqual(
+            len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
+            len(content_all_assos),
+        )

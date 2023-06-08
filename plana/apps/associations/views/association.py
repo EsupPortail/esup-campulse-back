@@ -728,7 +728,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
 
         if (
             not request.user.has_perm("associations.change_association_all_fields")
-            and request.data["association_status"] != "CHARTER_PROCESSING"
+            and request.data["charter_status"] != "CHARTER_PROCESSING"
         ):
             return response.Response(
                 {"error": _("Choosing this status is not allowed.")},
@@ -756,7 +756,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if request.data["association_status"] != "CHARTER_PROCESSING":
+        if request.data["charter_status"] == "CHARTER_PROCESSING":
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,

@@ -106,5 +106,137 @@
       "project": 6,
       "association": 2
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 10,
+    "fields": {
+      "name": "charte-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 1,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 11,
+    "fields": {
+      "name": "rgpd-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 12,
+    "fields": {
+      "name": "copie-des-statuts.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 9,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 13,
+    "fields": {
+      "name": "pv-ag-constitutive.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 10,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 14,
+    "fields": {
+      "name": "certificat-scolarite.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 11,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 15,
+    "fields": {
+      "name": "certificat-tribunal-judiciaire.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 12,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 16,
+    "fields": {
+      "name": "extrait-registre-associations.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 13,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 17,
+    "fields": {
+      "name": "charte-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 1,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 18,
+    "fields": {
+      "name": "rgpd-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 2,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 19,
+    "fields": {
+      "name": "copie-des-statuts.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 9,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 20,
+    "fields": {
+      "name": "pv-ag-constitutive.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 10,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 21,
+    "fields": {
+      "name": "certificat-scolarite.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 11,
+      "association": 4
+    }
   }
 ]

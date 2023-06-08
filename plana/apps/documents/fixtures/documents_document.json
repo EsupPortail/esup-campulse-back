@@ -204,7 +204,7 @@
       "description": "Certificat envoyé par le Tribunal Judiciaire",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": true,
+      "is_required_in_process": false,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -237,9 +237,9 @@
     "fields": {
       "name": "Certificat de scolarité du porteur individuel",
       "acronym": "CERTIFICAT_SCOLARITE_USER",
-      "description": "Certificats de scolarité du porteur individuel",
+      "description": "Certificat de scolarité du porteur individuel",
       "contact": "???",
-      "is_multiple": true,
+      "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_USER",
       "mime_types": [
