@@ -10,6 +10,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
@@ -217,13 +218,13 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        commission_dates = [2, 4]
-        response = self.general_client.get(
-            f"/projects/?commission_dates={','.join(str(x) for x in commission_dates)}"
-        )
+        commission = 2
+        response = self.general_client.get(f"/projects/?commission_id={commission}")
         projects_cnt = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=commission_dates
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    commission_id=commission
+                ).values_list("id")
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))

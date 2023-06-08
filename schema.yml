@@ -1020,10 +1020,10 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
-        name: commission_dates
+        name: commission_id
         schema:
           type: string
-        description: Filter by Commission Dates linked to a project.
+        description: Filter by Commission ID linked to a project.
       - in: query
         name: name
         schema:

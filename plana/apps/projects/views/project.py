@@ -84,16 +84,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 description="Filter by Association ID.",
             ),
             OpenApiParameter(
+                "commission_id",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Commission ID linked to a project.",
+            ),
+            OpenApiParameter(
                 "project_statuses",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Filter by Project Statuses codes.",
-            ),
-            OpenApiParameter(
-                "commission_dates",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Commission Dates linked to a project.",
             ),
             OpenApiParameter(
                 "with_comments",
@@ -122,8 +122,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
         year = request.query_params.get("year")
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
+        commission = request.query_params.get("commission_id")
         project_statuses = request.query_params.get("project_statuses")
-        commission_dates = request.query_params.get("commission_dates")
         with_comments = request.query_params.get("with_comments")
         active_projects = request.query_params.get("active_projects")
 
@@ -193,16 +193,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
             ]
             queryset = queryset.filter(project_status__in=project_statuses_codes)
 
-        if commission_dates is not None and commission_dates != "":
-            commission_dates_ids = commission_dates.split(",")
-            commission_dates_ids = [
-                commission_date_id
-                for commission_date_id in commission_dates
-                if commission_date_id != "" and commission_date_id.isdigit()
-            ]
+        if commission is not None and commission != "":
             queryset = queryset.filter(
                 id__in=ProjectCommissionFund.objects.filter(
-                    commission_fund_id__in=commission_dates_ids
+                    commission_fund_id__in=CommissionFund.objects.filter(
+                        commission_id=commission
+                    ).values_list("id")
                 ).values_list("project_id")
             )
 
