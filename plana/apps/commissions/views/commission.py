@@ -186,11 +186,11 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "name" not in request.data:
-            return response.Response(
-                {"error": _("Commission name not set.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        #      if "name" not in request.data:
+        #          return response.Response(
+        #              {"error": _("Commission name not set.")},
+        #              status=status.HTTP_400_BAD_REQUEST,
+        #          )
 
         # Removes spaces, uppercase and accented characters to avoid similar commission names.
         new_commission_name = (
