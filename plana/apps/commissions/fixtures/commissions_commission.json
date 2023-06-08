@@ -15,6 +15,7 @@
     "fields": {
       "submission_date": "2099-10-08",
       "commission_date": "2099-10-22",
+      "is_open_to_projects": true,
       "name": "Une autre commission de rentrée d'octobre 2099"
     }
   },

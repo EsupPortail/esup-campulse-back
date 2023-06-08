@@ -257,19 +257,19 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_project_cf_commission_already_used(self):
+    def test_post_project_cf_multiple_commissions(self):
         """
         POST /projects/commission_funds .
 
-        - A student cannot submit a same project twice in the same commission.
+        - A student cannot submit a same project to multiple commissions.
         """
-        project_id = 1
-        commission_fund_id = 3
+        project_id = 2
+        commission_fund_id = 4
         post_data = {
             "project": project_id,
             "commission_fund": commission_fund_id,
         }
-        response = self.student_misc_client.post(
+        response = self.president_student_client.post(
             "/projects/commission_funds", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -283,17 +283,17 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The authenticated user must be authorized to edit the requested project.
         - Object is correctly created in db.
         """
-        project_id = 2
+        project_id = 1
         commission_fund_id = 3
         ProjectCommissionFund.objects.get(
-            project_id=project_id, commission_fund_id=4
+            project_id=project_id, commission_fund_id=commission_fund_id
         ).delete()
         post_data = {
             "project": project_id,
             "commission_fund": commission_fund_id,
             "amount_asked": 500,
         }
-        response = self.president_student_client.post(
+        response = self.student_misc_client.post(
             "/projects/commission_funds", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -424,7 +424,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The student must be authorized to update the project commission funds.
         """
         response = self.student_misc_client.patch(
-            "/projects/2/commission_funds/4", {}, content_type="application/json"
+            "/projects/2/commission_funds/2", {}, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -520,7 +520,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The authenticated user must be authorized to update the project commission funds.
         """
-        response = self.student_misc_client.delete("/projects/2/commission_funds/4")
+        response = self.student_misc_client.delete("/projects/2/commission_funds/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_cf_success(self):
