@@ -394,7 +394,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        # TODO : Change to CommissionFund
         commission_fund = Commission.objects.get(id=kwargs["commission_fund_id"])
         if commission_fund.submission_date < datetime.date.today():
             return response.Response(

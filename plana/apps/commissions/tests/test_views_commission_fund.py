@@ -105,7 +105,8 @@ class CommissionDatesViewsTests(TestCase):
 
         - A user with proper permissions can execute this request.
         """
-        # TODO : complete this test
         post_data = {"commission": 3, "fund": 2}
         response = self.general_client.post("/commissions/commission_funds/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        commission_fund = CommissionFund.objects.filter(commission_id=3, fund_id=2)
+        self.assertEqual(commission_fund.count(), 1)

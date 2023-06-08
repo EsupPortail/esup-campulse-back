@@ -79,7 +79,6 @@ class CommissionListCreate(generics.ListCreateAPIView):
         is_site = request.query_params.get("is_site")
         is_open_to_projects = request.query_params.get("is_open_to_projects")
         active_projects = request.query_params.get("active_projects")
-        managed_commissions = request.query_params.get("managed_commissions")
         managed_projects = request.query_params.get("managed_projects")
 
         if dates is not None and dates != "":
