@@ -25,6 +25,7 @@
     "fields": {
       "submission_date": "2099-10-07",
       "commission_date": "2099-10-21",
+      "is_open_to_projects": false,
       "name": "Commission de rentrée d'octobre 2099"
     }
   },
@@ -34,6 +35,7 @@
     "fields": {
       "submission_date": "1990-01-01",
       "commission_date": "1990-01-30",
+      "is_open_to_projects": false,
       "name": "Commission du passé"
     }
   }

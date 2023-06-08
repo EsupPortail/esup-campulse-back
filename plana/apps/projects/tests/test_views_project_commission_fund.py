@@ -246,10 +246,21 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The commission submission date must not be over.
         """
+        commission_fund_id = 6
+        response = self.student_misc_client.post(
+            "/projects/commission_funds",
+            {"project": 1, "commission_fund": commission_fund_id},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_cf_not_open_to_projects(self):
+        """
+        POST /projects/commission_funds .
+
+        - The route can be accessed by a student user.
+        - The commission must be open.
+        """
         commission_fund_id = 5
-        commission_fund = CommissionFund.objects.get(id=commission_fund_id)
-        commission_fund.submission_date = "1968-05-03"
-        commission_fund.save()
         response = self.student_misc_client.post(
             "/projects/commission_funds",
             {"project": 1, "commission_fund": commission_fund_id},

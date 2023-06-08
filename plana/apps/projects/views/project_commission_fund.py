@@ -187,15 +187,15 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
 
         commission = Commission.objects.get(id=commission_fund.commission_id)
 
-        if not commission.is_open_to_projects:
-            return response.Response(
-                {"error": _("This commission is not accepting submissions for now.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if commission.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not commission.is_open_to_projects:
+            return response.Response(
+                {"error": _("This commission is not accepting submissions for now.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
