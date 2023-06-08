@@ -544,7 +544,7 @@ class CommissionDatesViewsTests(TestCase):
 
         - A commission with non-draft projects linked cannot be deleted.
         """
-        response = self.general_client.delete("/commissions/3")
+        response = self.general_client.delete("/commissions/1")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_commission_success(self):
@@ -554,8 +554,8 @@ class CommissionDatesViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Commission object is correctly deleted
         """
-        response = self.general_client.delete("/commissions/1")
+        response = self.general_client.delete("/commissions/3")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        commission_date = Commission.objects.filter(id=1)
+        commission_date = Commission.objects.filter(id=3)
         self.assertEqual(len(commission_date), 0)
