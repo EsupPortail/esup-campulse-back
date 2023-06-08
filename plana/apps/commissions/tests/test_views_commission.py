@@ -244,7 +244,11 @@ class CommissionDatesViewsTests(TestCase):
 
         - An anonymous user can't execute this request.
         """
-        post_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
+        post_data = {
+            "submission_date": "2099-11-30",
+            "commission_date": "2099-12-25",
+            "name": "New Commission",
+        }
         response = self.client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -257,7 +261,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {
             "submission_date": "2099-11-30",
             "commission_date": "2099-12-25",
-            "commission": 1,
+            "name": "New Commission",
         }
         response = self.student_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -271,7 +275,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {
             "submission_date": "2099-12-25",
             "commission_date": "2099-11-30",
-            "commission": 1,
+            "name": "New Commission",
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -285,7 +289,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {
             "submission_date": "1993-11-30",
             "commission_date": "1993-12-25",
-            "commission": 1,
+            "name": "New Commission",
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -299,7 +303,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {
             "submission_date": "2099-11-30",
             "commission_date": "2099-12-25",
-            "commission": 1,
+            "name": "New Commission",
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
