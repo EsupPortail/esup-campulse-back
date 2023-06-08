@@ -294,6 +294,34 @@ class CommissionDatesViewsTests(TestCase):
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_commissions_serializer_error(self):
+        """
+        POST /commissions/ .
+
+        - If data format is not good we get a bad request from the serializer.
+        """
+        post_data = {
+            "submission_date": 1,
+            "commission_date": "2099-12-25",
+            "name": "New Commission",
+        }
+        response = self.general_client.post("/commissions/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_commissions_name_already_taken(self):
+        """
+        POST /commissions/ .
+
+        - The commission name must be unique, aven unaccented and without spaces.
+        """
+        post_data = {
+            "submission_date": "2099-11-23",
+            "commission_date": "2099-12-25",
+            "name": "Commissionnumero 1",
+        }
+        response = self.general_client.post("/commissions/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_commissions_success(self):
         """
         POST /commissions/ .
@@ -379,6 +407,20 @@ class CommissionDatesViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_commission_wrong_name(self):
+        """
+        PATCH /commissions/{id} .
+
+        - The commission name must be unique, aven unaccented and without spaces.
+        """
+        patch_data = {"name": "Commissionnumero1"}
+        response = self.general_client.patch(
+            "/commissions/2",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_commission_wrong_dates(self):
         """
         PATCH /commissions/{id} .
@@ -400,6 +442,34 @@ class CommissionDatesViewsTests(TestCase):
         - A commission date cannot be updated to a date taking place before today.
         """
         patch_data = {"submission_date": "1993-11-30", "commission_date": "2099-12-25"}
+        response = self.general_client.patch(
+            "/commissions/1",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_commission_only_submission_date(self):
+        """
+        PATCH /commissions/{id} .
+
+        - submission_date cannot come after commission_date.
+        """
+        patch_data = {"submission_date": "2200-12-25"}
+        response = self.general_client.patch(
+            "/commissions/1",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_commission_only_commission_date(self):
+        """
+        PATCH /commissions/{id} .
+
+        - submission_date cannot come after commission_date.
+        """
+        patch_data = {"commission_date": "2050-12-25"}
         response = self.general_client.patch(
             "/commissions/1",
             data=patch_data,

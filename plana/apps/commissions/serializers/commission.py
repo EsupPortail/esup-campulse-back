@@ -17,4 +17,4 @@ class CommissionUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Commission
-        fields = ["submission_date", "commission_date", "name"]
+        fields = ["submission_date", "commission_date", "name", "is_open_to_projects"]

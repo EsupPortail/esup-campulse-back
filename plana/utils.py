@@ -1,5 +1,6 @@
 """Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
+import datetime
 import re
 
 import weasyprint
@@ -79,6 +80,15 @@ def to_bool(attr):
         return attr
     if isinstance(attr, str):
         return ast.literal_eval(attr.capitalize())
+
+
+def valid_date_format(date):
+    date_format = "%Y-%m-%d"
+    try:
+        date_object = datetime.datetime.strptime(date, date_format)
+    except ValueError:
+        return False
+    return True
 
 
 def generate_pdf(dict_data, type_doc, base_url):
