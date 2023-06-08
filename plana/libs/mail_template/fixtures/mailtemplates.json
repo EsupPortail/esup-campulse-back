@@ -538,5 +538,50 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 32,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_NEARLY_EXPIRED",
+      "label": "Association Charter Nearly Expired",
+      "description": "Message reçu par une association si sa charte va bientôt expirer.",
+      "subject": "{{ site_name }} – La charte de votre association va bientôt expirer",
+      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 33,
+    "fields": {
+      "code": "NEW_ASSOCIATION_CHARTER_TO_PROCESS",
+      "label": "New Association Charter To Process",
+      "description": "Message reçu par un gestionnaire au dépôt d'une nouvelle charte par une association.",
+      "subject": "{{ site_name }} – Une association vient de déposer une charte",
+      "body": "Bonjour,<br/><br/>Une association vient de déposer une nouvelle charte, vous pouvez la vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 34,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_SENT",
+      "label": "Association Charter Sent",
+      "description": "Message reçu par une association au dépôt d'une nouvelle charte.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a bien été déposée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été déposée. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

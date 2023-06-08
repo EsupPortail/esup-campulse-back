@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Signature de la charte des associations : {{ name }}</title>
+    </head>
+    <body>
+        <h1>Récapitulatif de la signature de la charte des associations</h1>
+        <section>
+            <h2>Informations de l'association : </h2>
+            <div>
+                <ul>
+                    <li>Nom de l'association : {{ name }}</li>
+                    <li>Adresse de l'association : {{ address }} {{ zipcode }} {{ city }}</li>
+                    <li>Composante de rattachement : {{ institution.name }}</li>
+                    <li>Domaine d'activité : {{ activity_field.name }}</li>
+                    <li>Date de l'assemblée générale constitutive : {{ cga_date }}</li>
+                    <li>Numéro SIRET : {{ siret }}</li>
+                    <li>Nom du président : {{ president_names }}</li>
+                    <li>Téléphone du président : {{ president_phone }}</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Documents : </h2>
+            <ul>
+                {% for document in documents %}
+                    <li>{{ document.document__name }} : {{ document.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </body>
+</html>

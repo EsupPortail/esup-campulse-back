@@ -57,6 +57,12 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 OpenApiParameter.QUERY,
                 description="Filter by Project ID.",
             ),
+            OpenApiParameter(
+                "process_types",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Document process type.",
+            ),
         ],
         responses={
             status.HTTP_200_OK: DocumentUploadSerializer,
@@ -69,6 +75,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
         project = request.query_params.get("project_id")
+        process_types = request.query_params.get("process_types")
 
         if not request.user.has_perm("documents.view_documentupload_all"):
             user_associations_ids = AssociationUser.objects.filter(
@@ -88,6 +95,20 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         if project is not None and project != "":
             self.queryset = self.queryset.filter(project_id=project)
+
+        if process_types is not None and process_types != "":
+            all_process_types = [c[0] for c in Document.process_type.field.choices]
+            process_types_codes = process_types.split(",")
+            process_types_codes = [
+                project_type_code
+                for project_type_code in process_types_codes
+                if project_type_code != "" and project_type_code in all_process_types
+            ]
+            self.queryset = self.queryset.filter(
+                document_id__in=Document.objects.filter(
+                    process_type__in=process_types_codes
+                ).values_list("id")
+            )
 
         return self.list(request, *args, **kwargs)
 
@@ -147,7 +168,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             existing_document = existing_document.filter(association_id=association.id)
-            if not request.user.is_president_in_association(
+            if not request.user.has_perm(
+                "documents.add_documentupload_all"
+            ) and not request.user.is_president_in_association(
                 request.data["association"]
             ):
                 return response.Response(
@@ -161,7 +184,10 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["user"] != ""
         ):
             existing_document = existing_document.filter(user_id=request.user.pk)
-            if int(request.data["user"]) != request.user.pk:
+            if (
+                not request.user.has_perm("documents.add_documentupload_all")
+                and int(request.data["user"]) != request.user.pk
+            ):
                 return response.Response(
                     {"error": _("Not allowed to upload documents with this user.")},
                     status=status.HTTP_403_FORBIDDEN,
@@ -311,7 +337,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
             )
         ):
             return response.Response(
-                {"error": _("Not allowed to retrieve this uploaded document.")},
+                {"error": _("Not allowed to delete this uploaded document.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

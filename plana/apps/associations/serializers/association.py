@@ -94,6 +94,8 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
             "is_site",
             "alt_logo",
             "path_logo",
+            "charter_status",
+            "charter_date",
         ]
 
 
@@ -131,3 +133,11 @@ class AssociationNameSerializer(serializers.ModelSerializer):
             "has_president",
             "institution",
         ]
+
+
+class AssociationStatusSerializer(serializers.ModelSerializer):
+    """Serializer for status field."""
+
+    class Meta:
+        model = Association
+        fields = ["charter_status"]

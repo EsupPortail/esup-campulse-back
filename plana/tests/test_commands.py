@@ -6,6 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
+from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -58,6 +59,54 @@ class AccountExpirationCommandTest(TestCase):
         call_command('cron_account_expiration')
         self.assertFalse(len(mail.outbox))
         self.assertFalse(User.objects.filter(pk=self.user.pk).exists())
+
+
+class AssociationExpirationCommandTest(TestCase):
+    """Test association_expiration command."""
+
+    fixtures = [
+        "associations_activityfield.json",
+        "associations_association.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
+    ]
+
+    def setUp(self):
+        """Cache all associations."""
+        self.associations = Association.objects.all()
+        self.today = datetime.date.today()
+
+    def test_no_association_expiration(self):
+        """Nothing should change if no charter expires."""
+        call_command("cron_association_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_almost_association_expiration(self):
+        """An email is sent if charter expires in 10 days."""
+        self.associations.update(
+            charter_date=(self.today - datetime.timedelta(days=(355)))
+        )
+        call_command("cron_association_expiration")
+        self.assertTrue(len(mail.outbox))
+
+    def test_almost_association_expiration_but_no_association_expiration(self):
+        """Nothing should change if charter expires in 5 days."""
+        self.associations.update(
+            charter_date=(self.today - datetime.timedelta(days=(360)))
+        )
+        call_command("cron_association_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_association_expiration(self):
+        """Association charter status expires today."""
+        self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
+        self.associations.update(
+            charter_date=(self.today - datetime.timedelta(days=(365)))
+        )
+        call_command("cron_association_expiration")
+        self.assertEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
 
 
 class CommissionExpirationCommandTest(TestCase):
