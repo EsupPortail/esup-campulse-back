@@ -16,14 +16,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
+            expired_commissions = Commission.objects.filter(
+                submission_date__lte=datetime.date.today()
+            )
+            expired_commissions.update(is_open_to_projects=False)
+
             ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     project_status="PROJECT_DRAFT"
                 ),
                 commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id__in=Commission.objects.filter(
-                        submission_date__lte=datetime.date.today()
-                    ).values_list("id"),
+                    commission_id__in=expired_commissions.values_list("id"),
                 ),
             ).delete()
 

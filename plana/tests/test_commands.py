@@ -129,7 +129,7 @@ class CommissionExpirationCommandTest(TestCase):
 
     def test_no_expire_commission(self):
         """Don't remove ProjectCommissionFund if Commission isn't expired."""
-        expired_commission_id = 3
+        expired_commission_id = 2
         old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id=expired_commission_id
@@ -147,12 +147,14 @@ class CommissionExpirationCommandTest(TestCase):
 
     def test_expire_commission(self):
         """Remove ProjectCommissionFund if Commission is expired."""
-        expired_commission_id = 3
+        expired_commission_id = 2
         expired_commission = Commission.objects.get(id=expired_commission_id)
         expired_commission.submission_date = datetime.datetime.strptime(
             "1993-12-25", "%Y-%m-%d"
         ).date()
         expired_commission.save()
+        self.assertTrue(expired_commission.is_open_to_projects)
+
         old_project_commission_funds_count = ProjectCommissionFund.objects.filter(
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id=expired_commission_id
@@ -167,6 +169,9 @@ class CommissionExpirationCommandTest(TestCase):
         self.assertNotEqual(
             old_project_commission_funds_count, new_project_commission_funds_count
         )
+
+        expired_commission = Commission.objects.get(id=expired_commission_id)
+        self.assertFalse(expired_commission.is_open_to_projects)
 
 
 class PasswordExpirationCommandTest(TestCase):
