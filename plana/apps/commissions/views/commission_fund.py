@@ -1,5 +1,6 @@
 """Views linked to commissions funds."""
-from rest_framework import generics
+from django.utils.translation import gettext_lazy as _
+from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.commissions.models import CommissionFund
@@ -19,7 +20,19 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
-    # TODO : add restriction to not create same link twice
+    def post(self, request, *args, **kwargs):
+        """Creates a link between a commission and a fund."""
+        commission_funds = CommissionFund.objects.filter(
+            commission_id=request.data["commission"],
+            fund_id=request.data["fund"],
+        ).count()
+        if commission_funds > 0:
+            return response.Response(
+                {"error": _("This commission is already linked to this fund.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return super().create(request, *args, **kwargs)
 
 
 class CommissionFundDestroy(generics.DestroyAPIView):

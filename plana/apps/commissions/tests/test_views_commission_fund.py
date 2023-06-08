@@ -89,6 +89,16 @@ class CommissionDatesViewsTests(TestCase):
         response = self.student_client.post("/commissions/commission_funds/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_commission_fund_already_exists(self):
+        """
+        POST /commissions/commission_funds/ .
+
+        - A commission and a fund cannot be linked twice together.
+        """
+        post_data = {"commission": 1, "fund": 1}
+        response = self.general_client.post("/commissions/commission_funds/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_commission_fund_success(self):
         """
         POST /commissions/commission_funds/ .
