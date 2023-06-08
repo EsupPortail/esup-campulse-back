@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Ré'CAPE - Bilan : {{ name }}</title>
+    </head>
+    <body>
+        <h1>Récapitulatif du bilan de la demande de subventionnement</h1>
+        <section>
+            <h2>Informations générales : </h2>
+            <div>
+                <h3>Le projet : </h3>
+                <ul>
+                    <li>Nom du projet : {{ name }}</li>
+                    <li>Date prévue de début du projet : {{ planned_start_date }}</li>
+                    <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
+                    <li>Lieu(x) prévu(s) du projet : {{ planned_location }}</li>
+                    <li>Date réelle de début du projet : {{ real_start_date }}</li>
+                    <li>Date réelle de fin du projet : {{ real_end_date }}</li>
+                    <li>Lieu(x) réel(s) du projet : {{ real_location }}</li>
+                </ul>
+            </div>
+
+            {% if association %}
+                <div>
+                    <h3>L'association portant le projet :</h3>
+                    <p>{{ association }}</p>
+                </div>
+            {% endif %}
+
+            <div>
+                <h3>La personne portant le projet : </h3>
+                <ul>
+                    <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
+                    <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
+                    <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
+                    <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Commissions sélectionnées : </h2>
+            <ul>
+                {% for commission in project_commission_dates %}
+                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }})</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Budget : </h2>
+            <ul>
+                <li>Dépenses : {{ outcome }} €</li>
+                <li>Recettes : {{ income }} €</li>
+            </ul>
+
+            <div>
+                <h3>Montant(s) demandé(s) par commission sélectionnée : </h3>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Montant(s) obtenu(s) par commission sélectionnée : </h3>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_earned }} €</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Bilan du projet : </h2>
+            <div>
+                <h3>Bilan moral (résultat obtenu, nombre d'étudiants impactés, partenariats développés)</h3>
+                <p>{{ review }}</p>
+            </div>
+            <div>
+                <h3>Retombées pour les étudiants</h3>
+                <p>{{ impact_students }}</p>
+            </div>
+            <div>
+                <h3>Déroulement du projet (description des activités réalisées, modifications par rapport au programme initial)</h3>
+                <p>{{ description }}</p>
+            </div>
+            <div>
+                <h3>Difficultés rencontrées</h3>
+                <p>{{ difficulties }}</p>
+            </div>
+            <div>
+                <h3>Points à améliorer</h3>
+                <p>{{ improvements }}</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Documents : </h2>
+            <ul>
+                {% for document in documents %}
+                    <li>{{ document.document__name }} : {{ document.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </body>
+</html>

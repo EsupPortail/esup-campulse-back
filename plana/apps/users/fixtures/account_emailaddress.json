@@ -1,0 +1,152 @@
+[
+  {
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+      "email": "admin@admin.admin",
+      "verified": true,
+      "primary": true,
+      "user_id": 1
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 2,
+    "fields": {
+      "email": "compte-non-valide@mail.tld",
+      "verified": false,
+      "primary": false,
+      "user_id": 2
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 3,
+    "fields": {
+      "email": "gestionnaire-svu@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 3
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 4,
+    "fields": {
+      "email": "gestionnaire-uha@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 4
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 5,
+    "fields": {
+      "email": "gestionnaire-crous@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 5
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 6,
+    "fields": {
+      "email": "membre-fsdie-idex@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 6
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 7,
+    "fields": {
+      "email": "membre-culture-actions@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 7
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 8,
+    "fields": {
+      "email": "membre-commissions@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 8
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 9,
+    "fields": {
+      "email": "etudiant-porteur@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 9
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 10,
+    "fields": {
+      "email": "etudiant-asso-hors-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 10
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 11,
+    "fields": {
+      "email": "etudiant-asso-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 11
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 12,
+    "fields": {
+      "email": "president-asso-hors-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 12
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 13,
+    "fields": {
+      "email": "president-asso-site@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 13
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 14,
+    "fields": {
+      "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 14
+    }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 15,
+    "fields": {
+      "email": "compte-presque-valide@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 15
+    }
+  }
+]

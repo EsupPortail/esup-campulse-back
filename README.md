@@ -1,92 +1,72 @@
-# PlanA
+# PlanA / Opaline
+
+## Health
+
+### develop
+
+[![pipeline status](https://git.unistra.fr/di/plan_a/plana/badges/develop/pipeline.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/develop)
+[![coverage report](https://git.unistra.fr/di/plan_a/plana/badges/develop/coverage.svg)](https://git.unistra.fr/di/plan_a/plana/-/commits/develop)
+
+## Description
 
 Création d'une application web pour la gestion des associations étudiantes et de leurs projets.
 
-## Getting started
+## Prérequis
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+python (>=3.9), pip, virtualenv, virtualenvwrapper
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Installation rapide en ligne de commande
 
-## Add your files
+1. Créer l'environnement virtuel : `mkvirtualenv plana`.
+2. Configurer les variables d'environnement nécessaires (fichier `postactivate` du venv) : `export DJANGO_SETTINGS_MODULE=plana.settings.dev`.
+3. Ajouter l'extension unaccent à PostgreSQL : se connecter à l'interface en ligne de commande psql (`psql -U plana -h localhost`) puis `CREATE EXTENSION unaccent;` puis `\q` pour quitter.
+4. Lancer la base de données PostgreSQL et le service de mail en local avec Docker : `sudo docker-compose up -d` ou `sudo docker compose up -d`.
+5. Lancer l'environnement virtuel : `workon plana`.
+6. Installer les dépendances sans Poetry : `pip install -r requirements/dev.txt`.
+7. Migrer les modèles de données dans la base de données : `python manage.py migrate`.
+8. Charger les fixtures dans la base de données : `python manage.py loaddata plana/apps/*/fixtures/*.json` et `python manage.py loaddata plana/libs/*/fixtures/*.json`.
+9. Lancer le serveur local : `python manage.py runserver`.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Liens
 
-```
-cd existing_repo
-git remote add origin https://git.unistra.fr/di/plana.git
-git branch -M main
-git push -uf origin main
-```
+- [http://localhost:3000/](http://localhost:3000/) : frontend.
+- [http://localhost:8000/](http://localhost:8000/) : backend.
+- [http://localhost:8000/api/schema/](http://localhost:8000/api/schema/) : télécharger un fichier YAML contenant la documentation.
+- [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/) : consulter la documentation de l'API en mode Swagger.
+- [http://localhost:8000/api/schema/redoc/](http://localhost:8000/api/schema/redoc/) : consulter la documentation de l'API en mode Redoc.
+- [http://localhost:1080/](http://localhost:1080/) : serveur mail.
 
-## Integrate with your tools
+## Développement
 
-- [ ] [Set up project integrations](https://git.unistra.fr/di/plana/-/settings/integrations)
+Consulter [le wiki d'aide au développement](https://git.unistra.fr/di/plan_a/plana/-/wikis/home) pour obtenir des instructions détaillées sur chaque commande.
 
-## Collaborate with your team
+### Avant un commit
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- Mettre à jour les dépendances : `poetry lock && poetry install --sync && ./generate_requirements.sh`.
+- Régénérer le fichier de traductions : `python manage.py makemessages -l fr --extension html,txt,py`.
+- Régénérer le fichier de documentation de l'API : `python manage.py spectacular --file schema.yml`.
+- Réordonner les imports et linter les fichiers : `isort plana && black plana`.
+- Exécuter les tests unitaires : `tox` ou `DEFAULT_DB_TEST_HOST=localhost tox`.
 
-## Test and Deploy
+### Autres commandes
 
-Use the built-in continuous integration in GitLab.
+- Réinitialiser la structure de la base de données et son contenu : `python manage.py clean_database`.
+- Créer un utilisateur gestionnaire : `python manage.py createmanageruser --email EMAIL --firstname FIRST_NAME --lastname LAST_NAME --group GROUP_NAME [--institution INSTITUTION] [--password PASSWORD]`.
+- Réinitialiser les permissions et leurs fixtures : `python manage.py reset_permissions`.
+- Obtenir une liste des améliorations de code possibles (génère un fichier `pylint.json` à la racine) : `pylint plana --output-format=json:pylint.json`.
+- Visualiser le coverage des tests unitaires : `firefox htmlcov/index.html`.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Déployer sur le serveur de test
 
-***
+- Déployer le projet : `fab tag:develop test deploy -u root`.
+- Charger les fixtures générales : `fab test custom_manage_cmd:loaddata\ plana/apps/*/fixtures/*.json -u root`.
+- Charger les fixtures des templates de mails : `fab test custom_manage_cmd:loaddata\ plana/libs/*/fixtures/*.json -u root`.
 
-# Editing this README
+Le front est accessible à cette adresse : [https://plana-test.app.unistra.fr/](https://plana-test.app.unistra.fr/)
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Le back est accessible à cette adresse : [https://plana-api-test.app.unistra.fr/](https://plana-api-test.app.unistra.fr/)
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### Déployer sur le serveur de prod
 
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- Déployer le projet : `fab tag:release/X.X.X prod deploy -u root`.
+- Charger les fixtures obligatoires : `fab prod custom_manage_cmd:initial_import -u root`.

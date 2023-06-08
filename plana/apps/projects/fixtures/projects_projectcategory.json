@@ -1,0 +1,74 @@
+[
+  {
+    "model": "projects.projectcategory",
+    "pk": 1,
+    "fields": {
+      "category": 5,
+      "project": 1
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "project": 2
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 3,
+    "fields": {
+      "category": 11,
+      "project": 2
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 4,
+    "fields": {
+      "category": 4,
+      "project": 3
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 5,
+    "fields": {
+      "category": 7,
+      "project": 4
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 6,
+    "fields": {
+      "category": 8,
+      "project": 4
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 4,
+    "fields": {
+      "category": 4,
+      "project": 5
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 5,
+    "fields": {
+      "category": 7,
+      "project": 6
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 6,
+    "fields": {
+      "category": 8,
+      "project": 6
+    }
+  }
+]

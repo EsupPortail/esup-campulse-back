@@ -1,0 +1,30 @@
+stages:
+  - test
+
+services:
+  - postgres
+
+variables:
+  POSTGRES_DB: plana_test
+  POSTGRES_USER: plana
+  POSTGRES_PASSWORD: plana
+  DJANGO_SETTINGS_MODULE: plana.settings.unittest
+
+before_script:
+  - apt-get update && apt-get install -y age
+
+unittest:
+  stage: test
+  tags:
+    - python3.9
+  script:
+    - pip3 install -r requirements/dev.txt
+    - python manage.py generate_jwt_keys
+    - touch keys/jwt-public-key.pem
+    - touch keys/jwt-private-key.pem
+    - python manage.py generate_age_keys
+    - touch keys/age-public-key.key
+    - touch keys/age-private-key.key
+    - tox
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+

@@ -1,0 +1,86 @@
+[
+  {
+    "model": "projects.category",
+    "pk": 1,
+    "fields": {
+      "name": "Accueil des étudiants"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 2,
+    "fields": {
+      "name": "Culture Artistique"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 3,
+    "fields": {
+      "name": "Culture Scientifique et Technique"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 4,
+    "fields": {
+      "name": "Découverte pays / Culture"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 5,
+    "fields": {
+      "name": "Environnement / Développement Durable"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 6,
+    "fields": {
+      "name": "Forum / Orientation"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 7,
+    "fields": {
+      "name": "Handicap"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 8,
+    "fields": {
+      "name": "Humanitaire / Solidarité"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 9,
+    "fields": {
+      "name": "Journaux / Annuaires"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 10,
+    "fields": {
+      "name": "Santé"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 11,
+    "fields": {
+      "name": "Social"
+    }
+  },
+  {
+    "model": "projects.category",
+    "pk": 12,
+    "fields": {
+      "name": "Sport"
+    }
+  }
+]

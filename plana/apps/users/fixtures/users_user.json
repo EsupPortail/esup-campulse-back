@@ -1,0 +1,214 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "first_name": "admin",
+      "last_name": "admin",
+      "username": "admin@admin.admin",
+      "email": "admin@admin.admin",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "first_name": "Mail",
+      "last_name": "Non Validé",
+      "username": "compte-non-valide@mail.tld",
+      "email": "compte-non-valide@mail.tld",
+      "is_validated_by_admin": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "first_name": "SVU",
+      "last_name": "Gestionnaire",
+      "username": "gestionnaire-svu@mail.tld",
+      "email": "gestionnaire-svu@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "first_name": "UHA",
+      "last_name": "Gestionnaire",
+      "username": "gestionnaire-uha@mail.tld",
+      "email": "gestionnaire-uha@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "first_name": "Crous",
+      "last_name": "Gestionnaire",
+      "username": "gestionnaire-crous@mail.tld",
+      "email": "gestionnaire-crous@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "is_staff": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "first_name": "FSDIE/IdEx",
+      "last_name": "Commission",
+      "username": "membre-fsdie-idex@mail.tld",
+      "email": "membre-fsdie-idex@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+      "first_name": "Culture-ActionS",
+      "last_name": "Commission",
+      "username": "membre-culture-actions@mail.tld",
+      "email": "membre-culture-actions@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 8,
+    "fields": {
+      "first_name": "Culture-ActionS + FSDIE/IdEx",
+      "last_name": "Commission",
+      "username": "membre-commissions@mail.tld",
+      "email": "membre-commissions@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 9,
+    "fields": {
+      "first_name": "Porteur",
+      "last_name": "Étudiant",
+      "username": "etudiant-porteur@mail.tld",
+      "email": "etudiant-porteur@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 10,
+    "fields": {
+      "first_name": "Association Hors Site",
+      "last_name": "Étudiant",
+      "username": "etudiant-asso-hors-site@mail.tld",
+      "email": "etudiant-asso-hors-site@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true,
+      "can_submit_projects": false
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 11,
+    "fields": {
+      "first_name": "Association Site",
+      "last_name": "Étudiant",
+      "username": "etudiant-asso-site@mail.tld",
+      "email": "etudiant-asso-site@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 12,
+    "fields": {
+      "first_name": "Président Hors Site",
+      "last_name": "Étudiant",
+      "username": "president-asso-hors-site@mail.tld",
+      "email": "president-asso-hors-site@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 13,
+    "fields": {
+      "first_name": "Président Site",
+      "last_name": "Étudiant",
+      "username": "president-asso-site@mail.tld",
+      "email": "president-asso-site@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 14,
+    "fields": {
+      "first_name": "Président Site + Étudiant Hors Site + Porteur + Commissions",
+      "last_name": "Étudiant",
+      "username": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
+      "email": "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld",
+      "password": "pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",
+      "password_last_change_date": "2022-10-26",
+      "is_validated_by_admin": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 15,
+    "fields": {
+      "first_name": "Mail",
+      "last_name": "Validé",
+      "username": "compte-presque-valide@mail.tld",
+      "email": "compte-presque-valide@mail.tld",
+      "is_validated_by_admin": false,
+      "is_active": true
+    }
+  }
+]

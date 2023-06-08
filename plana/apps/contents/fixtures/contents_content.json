@@ -1,0 +1,101 @@
+[
+  {
+    "model": "contents.content",
+    "pk": 1,
+    "fields": {
+      "code": "HOME_ASSOCIATION",
+      "label": "Paragraphe de la page d'accueil lié aux associations.",
+      "header": "Annuaire des associations",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "footer": "Consulter l'annuaire"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 2,
+    "fields": {
+      "code": "HOME_CHARTER",
+      "label": "Paragraphe de la page d'accueil lié aux chartes du Site Alsace.",
+      "header": "Charte des associations du Site Alsace",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>",
+      "footer": "Espace charte"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 3,
+    "fields": {
+      "code": "HOME_PROJECT",
+      "label": "Paragraphe de la page d'accueil lié aux demandes de subventions.",
+      "header": "CAPE Commission d'aide aux projets étudiants",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>",
+      "footer": "Espace CAPE"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 4,
+    "fields": {
+      "code": "HOME_INFO",
+      "label": "Paragraphe de la page d'accueil lié aux informations générales / bandeau d'informations.",
+      "header": "INFORMATIONS: Commission de CAPE le 10 décembre 2022",
+      "body": "<p>Association, porteur ou porteuse de projet, venez présenter votre projet.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "footer": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 5,
+    "fields": {
+      "code": "ABOUT_APP",
+      "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
+      "header": "Les origines de Campulse",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "footer": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 6,
+    "fields": {
+      "code": "ABOUT_PARTNERSHIP",
+      "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
+      "header": "Partenaires",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "footer": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 7,
+    "fields": {
+      "code": "ABOUT_FUNDING",
+      "label": "Paragraphe de la page à propos donnant les modes de financement de la plateforme.",
+      "header": "Financements",
+      "body": "<p>Lorem ipsum.</p>",
+      "footer": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 8,
+    "fields": {
+      "code": "CONTACT_INFO",
+      "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
+      "header": "<p>Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement.</p>",
+      "body": "<p>Si vous êtes une association hors-site ou un porteur individuel, veuillez contacter le gestionnaire Crous</p>",
+      "footer": "<p>Attention : si vous êtes Porteur Individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire CROUS.</p>"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 9,
+    "fields": {
+      "code": "CONTACT_LIST",
+      "label": "Paragraphe de la page contact listant les contacts des gestionnaires établissements.",
+      "header": "",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "footer": ""
+    }
+  }
+]

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Ré'CAPE : {{ name }}</title>
+    </head>
+    <body>
+        <h1>Récapitulatif de demande de subventionnement</h1>
+        <section>
+            <h2>Informations générales : </h2>
+            <div>
+                <h3>Le projet : </h3>
+                <ul>
+                    <li>Nom du projet : {{ name }}</li>
+                    <li>Date prévue de début du projet : {{ planned_start_date }}</li>
+                    <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
+                    <li>Lieu(x) prévu(s) du projet : {{ planned_location }}</li>
+                </ul>
+            </div>
+
+            {% if association %}
+                <div>
+                    <h3>L'association portant le projet :</h3>
+                    <p>{{ association }}</p>
+                </div>
+            {% endif %}
+
+            <div>
+                <h3>La personne portant le projet : </h3>
+                <ul>
+                    <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
+                    <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
+                    <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
+                    <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Commissions sélectionnées : </h2>
+            <ul>
+                {% for commission in project_commission_dates %}
+                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }})</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Budget : </h2>
+            <ul>
+                <li>Réédition d'un précédent projet : {% if is_first_edition %} Non {% else %} Oui {% endif %}</li>
+                <li>Public visé par le projet : {{ target_audience }}</li>
+                <li>Nombre d'étudiantes et étudiants visés : {{ amount_students_audience }}</li>
+                <li>Nombre de personnes visées au total : {{ amount_all_audience }}</li>
+                <li>Montant demandé par participant (billeterie) : {{ ticket_price }} €</li>
+                <li>Coût par personne (budget total / nombre de personnes visées) : {{ individual_cost }} €</li>
+            </ul>
+
+            <div>
+                {% if not is_first_edition %}
+                    <h3>Edition Précedente : </h3>
+                    <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
+                    <ul>
+                        {% for commission in project_commission_dates %}
+                            <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
+                    <ul>
+                        {% for commission in project_commission_dates %}
+                            <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
+                    <p>{{ budget_previous_edition }} €</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <h3>Montant(s) demandé(s) par commission sélectionnée : </h3>
+                <ul>
+                    {% for commission in project_commission_dates %}
+                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Objectifs visés par le projet : </h2>
+            <div>
+                <h3>Objectifs</h3>
+                <p>{{ goals }}</p>
+            </div>
+            <div>
+                <h3>Résumé du projet</h3>
+                <p>{{ summary }}</p>
+            </div>
+            <div>
+                <h3>Programme des activités prévues</h3>
+                <p>{{ planned_activities }}</p>
+            </div>
+            <div>
+                <h3>Programme de prévention et de sécurité</h3>
+                <p>{{ prevention_safety }}</p>
+            </div>
+            <div>
+                <h3>Campagne de communication</h3>
+                <p>{{ marketing_campaign }}</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Documents : </h2>
+            <ul>
+                {% for document in documents %}
+                    <li>{{ document.document__name }} : {{ document.name }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </body>
+</html>

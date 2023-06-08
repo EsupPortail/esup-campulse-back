@@ -1,0 +1,86 @@
+[
+  {
+    "model": "users.associationuser",
+    "pk": 1,
+    "fields": {
+      "user_id": 2,
+      "association_id": 2,
+      "is_president": false,
+      "is_validated_by_admin": false,
+      "is_secretary": true,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 2,
+    "fields": {
+      "user_id": 10,
+      "association_id": 3,
+      "is_president": false,
+      "is_validated_by_admin": true,
+      "is_secretary": true,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 3,
+    "fields": {
+      "user_id": 11,
+      "association_id": 2,
+      "is_president": false,
+      "is_validated_by_admin": true,
+      "is_secretary": true,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 4,
+    "fields": {
+      "user_id": 12,
+      "association_id": 3,
+      "is_president": true,
+      "is_validated_by_admin": true,
+      "is_secretary": false,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 5,
+    "fields": {
+      "user_id": 13,
+      "association_id": 2,
+      "is_president": true,
+      "is_validated_by_admin": true,
+      "is_secretary": false,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 6,
+    "fields": {
+      "user_id": 14,
+      "association_id": 4,
+      "is_president": true,
+      "is_validated_by_admin": true,
+      "is_secretary": false,
+      "is_treasurer": false
+    }
+  },
+  {
+    "model": "users.associationuser",
+    "pk": 7,
+    "fields": {
+      "user_id": 14,
+      "association_id": 5,
+      "is_president": false,
+      "is_validated_by_admin": true,
+      "is_secretary": false,
+      "is_treasurer": true
+    }
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "model": "associations.activityfield",
+    "pk": 1,
+    "fields": {
+      "name": "Arts, lettres, langues"
+    }
+  },
+  {
+    "model": "associations.ActivityField",
+    "pk": 2,
+    "fields": {
+      "name": "Bureau d'étudiants"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 3,
+    "fields": {
+      "name": "Culture"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 4,
+    "fields": {
+      "name": "Citoyenneté, organisations"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 5,
+    "fields": {
+      "name": "Doctorants"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 6,
+    "fields": {
+      "name": "Droit, écocomie, sciences politiques"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 7,
+    "fields": {
+      "name": "Environnement"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 8,
+    "fields": {
+      "name": "International"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 9,
+    "fields": {
+      "name": "Santé"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 10,
+    "fields": {
+      "name": "Sciences humaines et sociales"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 11,
+    "fields": {
+      "name": "Sciences, technologie"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 12,
+    "fields": {
+      "name": "Sport"
+    }
+  },
+  {
+    "model": "associations.activityfield",
+    "pk": 13,
+    "fields": {
+      "name": "Autres"
+    }
+  }
+]

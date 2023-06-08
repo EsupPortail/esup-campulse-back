@@ -1,0 +1,171 @@
+[
+  {
+    "model": "associations.association",
+    "pk": 1,
+    "fields": {
+      "name": "Plateforme de Liaison et ANnuaire Associatif",
+      "acronym": "PLANA",
+      "social_object": "Projet développé par le service Développement, Intégration et Paramétrage de l'Université de Strasbourg.",
+      "current_projects": "L'équipe pense l'architecture de l'application, la conçoit et la teste.",
+      "address": "Université de Strasbourg (Le Portique, 3ème étage), Rue René Descartes",
+      "zipcode": "67000",
+      "city": "Strasbourg",
+      "country": "France",
+      "phone": "0836656565",
+      "email": "test@unistra.fr",
+      "siret": 1234567890,
+      "website": "https://www.unistra.fr/",
+      "student_count": 150,
+      "president_names": "Ministère de l'Enseignement Supérieur et de la Recherche",
+      "president_phone": "+33 6 00 11 22 33",
+      "creation_date": "2022-10-26T15:45:35.000Z",
+      "approval_date": "2022-10-27",
+      "last_goa_date": "2022-10-28",
+      "cga_date": "2022-10-29",
+      "activity_field_id": 1,
+      "institution_id": 2,
+      "institution_component_id": 1,
+      "social_networks": [
+        {
+          "type": "Mastodon",
+          "location": "https://joinmastodon.org/"
+        },
+        {
+          "type": "PeerTube",
+          "location": "https://joinpeertube.org/"
+        }
+      ],
+      "is_site": true,
+      "is_public": true,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 2,
+    "fields": {
+      "name": "Association du Site Alsace",
+      "acronym": "AssoSite",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "activity_field_id": 3,
+      "institution_id": 2,
+      "institution_component_id": 1,
+      "is_site": true,
+      "is_public": true,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 3,
+    "fields": {
+      "name": "Association Hors Site",
+      "acronym": "AssoHorsSite",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 1,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true,
+      "can_submit_projects": false
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 4,
+    "fields": {
+      "name": "Association du Site Alsace 2",
+      "acronym": "AssoSite2",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "activity_field_id": 3,
+      "institution_id": 3,
+      "institution_component_id": 1,
+      "is_site": true,
+      "is_public": false,
+      "is_enabled": false
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 5,
+    "fields": {
+      "name": "Association Hors Site 2",
+      "acronym": "AssoHorsSite2",
+      "email": "asso-hors-site@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 5,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": false
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 6,
+    "fields": {
+      "name": "Association Hors Site UHA",
+      "acronym": "AssoHorsSiteUHA",
+      "email": "asso-hors-site-uha@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 3,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 7,
+    "fields": {
+      "name": "Association Hors Site INSA",
+      "acronym": "AssoHorsSiteINSA",
+      "email": "asso-hors-site-insa@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 4,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 8,
+    "fields": {
+      "name": "Association Hors Site HEAR",
+      "acronym": "AssoHorsSiteHEAR",
+      "email": "asso-hors-site-hear@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 5,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 9,
+    "fields": {
+      "name": "Association Hors Site ENGEES",
+      "acronym": "AssoHorsSiteENGEES",
+      "email": "asso-hors-site-engees@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 6,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  },
+  {
+    "model": "associations.association",
+    "pk": 10,
+    "fields": {
+      "name": "Association Hors Site ENSAS",
+      "acronym": "AssoHorsSiteENSAS",
+      "email": "asso-hors-site-ensas@mail.tld",
+      "creation_date": "2022-10-27T14:12:11.000Z",
+      "institution_id": 7,
+      "is_site": false,
+      "is_public": false,
+      "is_enabled": true
+    }
+  }
+]
