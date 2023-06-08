@@ -187,7 +187,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_project_cf_manager_bad_request(self):
+    def test_post_project_cf_manager_forbidden(self):
         """
         POST /projects/commission_funds .
 
@@ -256,16 +256,15 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_project_cf_not_next_commission(self):
+    def test_post_project_cf_already_exists(self):
         """
         POST /projects/commission_funds .
 
-        - The route can be accessed by a student user.
-        - A project can only be submitted to the next commission for a fund.
+        - A project cannot be linked twice to the same commission fund.
         """
+        post_data = {"project": 1, "commission_fund": 3}
         response = self.student_misc_client.post(
-            "/projects/commission_funds",
-            {"project": 1, "commission_fund": 5},
+            "/projects/commission_funds", post_data
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

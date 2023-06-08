@@ -199,6 +199,20 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        pcf = ProjectCommissionFund.objects.filter(
+            project_id=request.data["project"],
+            commission_fund_id=request.data["commission_fund"],
+        ).count()
+        if pcf > 0:
+            return response.Response(
+                {
+                    "error": _(
+                        "This project is already submitted to this commission fund."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         commission_funds = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id=project.id
