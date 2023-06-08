@@ -199,18 +199,17 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commissions_with_project = Fund.objects.filter(
-            id__in=CommissionFund.objects.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    project=request.data["project"]
-                ).values_list("commission_fund_id")
-            ).values_list("fund_id")
-        ).values_list("id", flat=True)
-        if commission_fund.fund_id in commissions_with_project:
-            return response.Response(
-                {"error": _("This project is already submitted for this commission.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        commission_funds = CommissionFund.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id=project.id
+            ).values_list("commission_fund_id")
+        )
+        for commission_fund in commission_funds:
+            if commission_fund.commission_id != commission.id:
+                return response.Response(
+                    {"error": _("Cannot submit a project to multiple commissions.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         project.edition_date = datetime.date.today()
         project.save()
