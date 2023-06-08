@@ -3,6 +3,7 @@ from django.urls import path
 
 from .views.activity_field import AssociationActivityFieldList
 from .views.association import (
+    AssociationDataExport,
     AssociationListCreate,
     AssociationNameList,
     AssociationRetrieveUpdateDestroy,
@@ -15,6 +16,11 @@ urlpatterns = [
         "<int:pk>",
         AssociationRetrieveUpdateDestroy.as_view(),
         name="association_retrieve_update_destroy",
+    ),
+    path(
+        "<int:pk>/export",
+        AssociationDataExport.as_view(),
+        name="association_data_export",
     ),
     path(
         "<int:pk>/status",

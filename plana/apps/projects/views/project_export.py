@@ -1,8 +1,6 @@
 """Views for project PDF generation."""
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
-from django.db.models import OuterRef, Subquery
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -20,7 +18,6 @@ from plana.apps.projects.serializers.project import (
     ProjectReviewSerializer,
     ProjectSerializer,
 )
-from plana.apps.users.models.user import User
 from plana.utils import generate_pdf
 
 
@@ -42,7 +39,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves a PDF file."""
         try:
-            project = self.queryset.get(id=kwargs["id"])
+            project = self.queryset.get(id=kwargs["pk"])
             data = project.__dict__
         except ObjectDoesNotExist:
             return response.Response(
@@ -92,9 +89,12 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 break
 
         data["documents"] = list(
-            DocumentUpload.objects.filter(project_id=data["id"]).values(
-                "name", "document__name"
-            )
+            DocumentUpload.objects.filter(
+                project_id=data["id"],
+                document_id__in=Document.objects.filter(
+                    process_type="DOCUMENT_PROJECT"
+                ),
+            ).values("name", "document__name")
         )
 
         return generate_pdf(data, "project_summary", request.build_absolute_uri("/"))
@@ -118,7 +118,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Retrieves a PDF file."""
         try:
-            project = self.queryset.get(id=kwargs["id"])
+            project = self.queryset.get(id=kwargs["pk"])
             data = project.__dict__
         except ObjectDoesNotExist:
             return response.Response(
@@ -168,9 +168,12 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 break
 
         data["documents"] = list(
-            DocumentUpload.objects.filter(project_id=data["id"]).values(
-                "name", "document__name"
-            )
+            DocumentUpload.objects.filter(
+                project_id=data["id"],
+                document_id__in=Document.objects.filter(
+                    process_type="DOCUMENT_PROJECT_REVIEW"
+                ),
+            ).values("name", "document__name")
         )
 
         return generate_pdf(

@@ -205,6 +205,33 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /associations/{id}/export:
+    get:
+      operationId: associations_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataRead'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /associations/{id}/status:
     patch:
       operationId: associations_status_partial_update
@@ -1078,60 +1105,6 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/export:
-    get:
-      operationId: projects_export_retrieve
-      description: Retrieves a PDF file.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
-        '404':
-          description: No response body
-  /projects/{id}/review/export:
-    get:
-      operationId: projects_review_export_retrieve
-      description: Retrieves a PDF file.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
-        '404':
-          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -1198,6 +1171,33 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{id}/export:
+    get:
+      operationId: projects_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}/review:
     get:
       operationId: projects_review_retrieve
@@ -1258,6 +1258,33 @@ paths:
           description: ''
         '400':
           description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /projects/{id}/review/export:
+    get:
+      operationId: projects_review_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
         '401':
           description: No response body
         '403':

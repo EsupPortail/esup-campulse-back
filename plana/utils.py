@@ -83,7 +83,9 @@ def to_bool(attr):
 
 def generate_pdf(dict_data, type_doc, base_url):
     template_path = ""
-    if type_doc == "project_summary":
+    if type_doc == "association_charter_summary":
+        template_path = "./pdf_exports/association_charter_summary.html"
+    elif type_doc == "project_summary":
         template_path = "./pdf_exports/project_summary.html"
     elif type_doc == "project_review_summary":
         template_path = "./pdf_exports/project_review_summary.html"

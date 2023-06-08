@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-07 15:37+0200\n"
+"POT-Creation-Date: 2023-06-08 09:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,7 +236,8 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:332
 #: plana/apps/associations/views/association.py:396
 #: plana/apps/associations/views/association.py:562
-#: plana/apps/associations/views/association.py:713
+#: plana/apps/associations/views/association.py:624
+#: plana/apps/associations/views/association.py:763
 #: plana/apps/documents/views/document_upload.py:167
 #: plana/apps/projects/views/project.py:248
 msgid "Association does not exist."
@@ -255,7 +256,7 @@ msgid "Association not public."
 msgstr "Association non publique."
 
 #: plana/apps/associations/views/association.py:417
-#: plana/apps/associations/views/association.py:725
+#: plana/apps/associations/views/association.py:775
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
@@ -283,12 +284,16 @@ msgstr "Une association activée ne peut être supprimée."
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:734
+#: plana/apps/associations/views/association.py:634
+msgid "Not allowed to retrieve this association."
+msgstr "Aucun droit de voir cette association."
+
+#: plana/apps/associations/views/association.py:784
 #: plana/apps/projects/views/project.py:735
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:755
+#: plana/apps/associations/views/association.py:805
 #: plana/apps/projects/views/project.py:799
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
@@ -565,7 +570,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project_comment.py:130
 #: plana/apps/projects/views/project_comment.py:190
 #: plana/apps/projects/views/project_commission_fund.py:243
-#: plana/apps/projects/views/project_export.py:49
+#: plana/apps/projects/views/project_export.py:46
 #: plana/apps/projects/views/project_export.py:125
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
@@ -880,7 +885,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
 #: plana/apps/projects/views/project.py:422
 #: plana/apps/projects/views/project.py:570
-#: plana/apps/projects/views/project_export.py:59
+#: plana/apps/projects/views/project_export.py:56
 #: plana/apps/projects/views/project_export.py:135
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."

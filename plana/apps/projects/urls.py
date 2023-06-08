@@ -89,12 +89,12 @@ urlpatterns = [
         name="project_review_retrieve_update",
     ),
     path(
-        "<int:id>/export",
+        "<int:pk>/export",
         ProjectDataExport.as_view(),
         name="project_data_export",
     ),
     path(
-        "<int:id>/review/export",
+        "<int:pk>/review/export",
         ProjectReviewDataExport.as_view(),
         name="project_review_data_export",
     ),
