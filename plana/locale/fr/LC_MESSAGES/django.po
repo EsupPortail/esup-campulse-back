@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-08 15:14+0200\n"
+"POT-Creation-Date: 2023-06-08 16:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -376,6 +376,12 @@ msgstr "Impossible de supprimer une commission passée."
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
+#: plana/apps/commissions/views/commission_fund.py:31
+#, fuzzy
+#| msgid "This project is already submitted to this commission fund."
+msgid "This commission is already linked to this fund."
+msgstr "Ce projet est déjà proposé à ce fonds de commission."
+
 #: plana/apps/consents/models/consent.py:9
 msgid "GDPR Consent title"
 msgstr "Titre du consentement RGPD"
@@ -581,7 +587,7 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project_comment.py:115
 #: plana/apps/projects/views/project_commission_fund.py:256
 #: plana/apps/projects/views/project_export.py:46
-#: plana/apps/projects/views/project_export.py:125
+#: plana/apps/projects/views/project_export.py:129
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -896,7 +902,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 #: plana/apps/projects/views/project.py:418
 #: plana/apps/projects/views/project.py:566
 #: plana/apps/projects/views/project_export.py:56
-#: plana/apps/projects/views/project_export.py:135
+#: plana/apps/projects/views/project_export.py:139
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 

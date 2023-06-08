@@ -40,13 +40,15 @@
         </section>
 
         <section>
-            <h2>Commissions sélectionnées : </h2>
-            <ul>
-                {% for commission in project_commission_funds %}
-                    <!-- TODO : change fund acronym to commission name -->
-                    <li>{{ commission.fund_data.acronym }} ({{ commission.commission_data.commission_date }})</li>
-                {% endfor %}
-            </ul>
+            <h2>Fonds sélectionnés : </h2>
+            <div>
+                <h3>{{ commission }}</h3>
+                <ul>
+                    {% for commission in project_commission_funds %}
+                        <li>{{ commission.fund_data.name }} ({{ commission.commission_data.commission_date }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </section>
 
         <section>
