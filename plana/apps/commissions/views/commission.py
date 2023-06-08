@@ -1,5 +1,6 @@
 """Views linked to commissions."""
 import datetime
+import unicodedata
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
@@ -185,6 +186,35 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if "name" not in request.data:
+            return response.Response(
+                {"error": _("Commission name not set.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Removes spaces, uppercase and accented characters to avoid similar association names.
+        new_commission_name = (
+            unicodedata.normalize(
+                "NFD", request.data["name"].strip().replace(" ", "").lower()
+            )
+            .encode("ascii", "ignore")
+            .decode("utf-8")
+        )
+        commissions = Commission.objects.all()
+        for commission in commissions:
+            existing_commission_name = (
+                unicodedata.normalize(
+                    "NFD", commission.name.strip().replace(" ", "").lower()
+                )
+                .encode("ascii", "ignore")
+                .decode("utf-8")
+            )
+            if new_commission_name == existing_commission_name:
+                return response.Response(
+                    {"error": _("Commission name already taken.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         if (
             "submission_date" in request.data
             and datetime.datetime.strptime(
@@ -286,9 +316,36 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Commission Date does not exist.")},
+                {"error": _("Commission does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+        if (
+            "name" in request.data
+            and request.data["name"] != ""
+            and request.data["name"] is not None
+        ):
+            new_commission_name = (
+                unicodedata.normalize(
+                    "NFD", request.data["name"].strip().replace(" ", "").lower()
+                )
+                .encode("ascii", "ignore")
+                .decode("utf-8")
+            )
+            commissions = Commission.objects.all()
+            for commission in commissions:
+                existing_commission_name = (
+                    unicodedata.normalize(
+                        "NFD", commission.name.strip().replace(" ", "").lower()
+                    )
+                    .encode("ascii", "ignore")
+                    .decode("utf-8")
+                )
+                if new_commission_name == existing_commission_name:
+                    return response.Response(
+                        {"error": _("Commission name already taken.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
         if (
             "submission_date" in request.data
