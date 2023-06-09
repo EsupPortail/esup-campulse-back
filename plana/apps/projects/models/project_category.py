@@ -14,7 +14,7 @@ class ProjectCategory(models.Model):
     category = models.ForeignKey(
         "Category",
         verbose_name=_("Project Category"),
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
     )
 
     def __str__(self):

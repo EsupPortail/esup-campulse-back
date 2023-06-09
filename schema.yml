@@ -1212,6 +1212,32 @@ paths:
           description: No response body
         '404':
           description: No response body
+    delete:
+      operationId: projects_destroy
+      description: /projects/{id} route
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /projects/{id}/export:
     get:
       operationId: projects_export_retrieve
@@ -4325,7 +4351,7 @@ components:
           items:
             $ref: '#/components/schemas/Category'
           readOnly: true
-        commission_dates:
+        commissions:
           type: array
           items:
             $ref: '#/components/schemas/Commission'
@@ -4383,7 +4409,7 @@ components:
           readOnly: true
       required:
       - categories
-      - commission_dates
+      - commissions
       - creation_date
       - edition_date
       - id
@@ -4589,7 +4615,7 @@ components:
         association_user:
           type: integer
           nullable: true
-        commission_dates:
+        commissions:
           type: array
           items:
             $ref: '#/components/schemas/Commission'
@@ -4635,7 +4661,7 @@ components:
           format: date-time
           readOnly: true
       required:
-      - commission_dates
+      - commissions
       - creation_date
       - edition_date
       - id
@@ -4647,7 +4673,7 @@ components:
         association_user:
           type: integer
           nullable: true
-        commission_dates:
+        commissions:
           type: array
           items:
             $ref: '#/components/schemas/Commission'
@@ -4684,7 +4710,7 @@ components:
         improvements:
           type: string
       required:
-      - commission_dates
+      - commissions
     ProjectStatus:
       type: object
       description: Serializer for status field.

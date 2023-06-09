@@ -1444,7 +1444,7 @@
     "pk": 181,
     "fields": {
       "group": 5,
-      "permission": 136
+      "permission": 135
     }
   },
   {
@@ -1452,7 +1452,7 @@
     "pk": 182,
     "fields": {
       "group": 5,
-      "permission": 143
+      "permission": 136
     }
   },
   {
@@ -1460,7 +1460,7 @@
     "pk": 183,
     "fields": {
       "group": 5,
-      "permission": 145
+      "permission": 143
     }
   },
   {
@@ -1468,7 +1468,7 @@
     "pk": 184,
     "fields": {
       "group": 5,
-      "permission": 146
+      "permission": 145
     }
   },
   {
@@ -1476,7 +1476,7 @@
     "pk": 185,
     "fields": {
       "group": 5,
-      "permission": 152
+      "permission": 146
     }
   },
   {
@@ -1484,7 +1484,7 @@
     "pk": 186,
     "fields": {
       "group": 5,
-      "permission": 125
+      "permission": 152
     }
   },
   {
@@ -1492,7 +1492,7 @@
     "pk": 187,
     "fields": {
       "group": 5,
-      "permission": 126
+      "permission": 125
     }
   },
   {
@@ -1500,7 +1500,7 @@
     "pk": 188,
     "fields": {
       "group": 5,
-      "permission": 129
+      "permission": 126
     }
   },
   {
@@ -1508,7 +1508,7 @@
     "pk": 189,
     "fields": {
       "group": 5,
-      "permission": 127
+      "permission": 129
     }
   },
   {
@@ -1516,7 +1516,7 @@
     "pk": 190,
     "fields": {
       "group": 5,
-      "permission": 128
+      "permission": 127
     }
   },
   {
@@ -1524,7 +1524,7 @@
     "pk": 191,
     "fields": {
       "group": 5,
-      "permission": 172
+      "permission": 128
     }
   },
   {
@@ -1532,7 +1532,7 @@
     "pk": 192,
     "fields": {
       "group": 5,
-      "permission": 156
+      "permission": 172
     }
   },
   {
@@ -1540,7 +1540,7 @@
     "pk": 193,
     "fields": {
       "group": 5,
-      "permission": 157
+      "permission": 156
     }
   },
   {
@@ -1548,7 +1548,7 @@
     "pk": 194,
     "fields": {
       "group": 5,
-      "permission": 158
+      "permission": 157
     }
   },
   {
@@ -1556,15 +1556,15 @@
     "pk": 195,
     "fields": {
       "group": 5,
-      "permission": 165
+      "permission": 158
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 196,
     "fields": {
-      "group": 6,
-      "permission": 106
+      "group": 5,
+      "permission": 165
     }
   },
   {
@@ -1572,7 +1572,7 @@
     "pk": 197,
     "fields": {
       "group": 6,
-      "permission": 108
+      "permission": 106
     }
   },
   {
@@ -1580,7 +1580,7 @@
     "pk": 198,
     "fields": {
       "group": 6,
-      "permission": 109
+      "permission": 108
     }
   },
   {
@@ -1588,7 +1588,7 @@
     "pk": 199,
     "fields": {
       "group": 6,
-      "permission": 133
+      "permission": 109
     }
   },
   {
@@ -1596,7 +1596,7 @@
     "pk": 200,
     "fields": {
       "group": 6,
-      "permission": 138
+      "permission": 133
     }
   },
   {
@@ -1604,7 +1604,7 @@
     "pk": 201,
     "fields": {
       "group": 6,
-      "permission": 134
+      "permission": 138
     }
   },
   {
@@ -1612,7 +1612,7 @@
     "pk": 202,
     "fields": {
       "group": 6,
-      "permission": 139
+      "permission": 134
     }
   },
   {
@@ -1620,7 +1620,7 @@
     "pk": 203,
     "fields": {
       "group": 6,
-      "permission": 136
+      "permission": 139
     }
   },
   {
@@ -1628,7 +1628,7 @@
     "pk": 204,
     "fields": {
       "group": 6,
-      "permission": 143
+      "permission": 135
     }
   },
   {
@@ -1636,7 +1636,7 @@
     "pk": 205,
     "fields": {
       "group": 6,
-      "permission": 145
+      "permission": 136
     }
   },
   {
@@ -1644,7 +1644,7 @@
     "pk": 206,
     "fields": {
       "group": 6,
-      "permission": 146
+      "permission": 143
     }
   },
   {
@@ -1652,7 +1652,7 @@
     "pk": 207,
     "fields": {
       "group": 6,
-      "permission": 152
+      "permission": 145
     }
   },
   {
@@ -1660,7 +1660,7 @@
     "pk": 208,
     "fields": {
       "group": 6,
-      "permission": 125
+      "permission": 146
     }
   },
   {
@@ -1668,7 +1668,7 @@
     "pk": 209,
     "fields": {
       "group": 6,
-      "permission": 126
+      "permission": 152
     }
   },
   {
@@ -1676,7 +1676,7 @@
     "pk": 210,
     "fields": {
       "group": 6,
-      "permission": 129
+      "permission": 125
     }
   },
   {
@@ -1684,7 +1684,7 @@
     "pk": 211,
     "fields": {
       "group": 6,
-      "permission": 127
+      "permission": 126
     }
   },
   {
@@ -1692,12 +1692,28 @@
     "pk": 212,
     "fields": {
       "group": 6,
-      "permission": 128
+      "permission": 129
     }
   },
   {
     "model": "auth.group_permissions",
     "pk": 213,
+    "fields": {
+      "group": 6,
+      "permission": 127
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 214,
+    "fields": {
+      "group": 6,
+      "permission": 128
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 215,
     "fields": {
       "group": 6,
       "permission": 165

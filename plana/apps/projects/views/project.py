@@ -384,7 +384,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
+class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route"""
 
     def get_permissions(self):
@@ -553,6 +553,40 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         request.data["edition_date"] = datetime.date.today()
         return self.partial_update(request, *args, **kwargs)
+
+    @extend_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: ProjectSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
+    def delete(self, request, *args, **kwargs):
+        try:
+            project = self.get_queryset().get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Project does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.can_access_project(project):
+            return response.Response(
+                {"error": _("Not allowed to delete this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            project.project_status
+            not in Project.ProjectStatus.get_deletable_project_statuses()
+        ):
+            return response.Response(
+                {"error": _("Cannot delete a non-draft project.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return self.destroy(request, *args, **kwargs)
 
 
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):

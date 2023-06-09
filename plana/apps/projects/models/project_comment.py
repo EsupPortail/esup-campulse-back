@@ -15,13 +15,13 @@ class ProjectComment(models.Model):
         "Project",
         verbose_name=_("Project"),
         related_name="projects",
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
         User,
         verbose_name=_("User"),
         related_name="users",
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
 

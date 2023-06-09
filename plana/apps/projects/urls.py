@@ -4,7 +4,7 @@ from django.urls import path
 from .views.category import CategoryList
 from .views.project import (
     ProjectListCreate,
-    ProjectRetrieveUpdate,
+    ProjectRetrieveUpdateDestroy,
     ProjectReviewRetrieveUpdate,
     ProjectStatusUpdate,
 )
@@ -27,7 +27,11 @@ from .views.project_export import ProjectDataExport, ProjectReviewDataExport
 
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
-    path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
+    path(
+        "<int:pk>",
+        ProjectRetrieveUpdateDestroy.as_view(),
+        name="project_retrieve_update_destroy",
+    ),
     path("<int:pk>/export", ProjectDataExport.as_view(), name="project_data_export"),
     path(
         "<int:pk>/review",

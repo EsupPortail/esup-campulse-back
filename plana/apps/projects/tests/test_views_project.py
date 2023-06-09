@@ -700,6 +700,61 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.summary, "new summary")
 
+    def test_delete_project_anonymous(self):
+        """
+        DELETE /projects/{id} .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.delete("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_delete_project_not_found(self):
+        """
+        DELETE /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Project must exist.
+        """
+        response = self.student_misc_client.delete("/projects/999")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_project_forbidden_student(self):
+        """
+        DELETE /projects/{id} .
+
+        - An student user not owning the project cannot execute this request.
+        """
+        response = self.student_offsite_client.delete("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_forbidden_user(self):
+        """
+        DELETE /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The project owner must be the authenticated user.
+        """
+        response = self.student_site_client.delete("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_user_success(self):
+        """
+        DELETE /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The project is correctly deleted in db.
+        """
+        project_id = 1
+        response = self.student_misc_client.delete(f"/projects/{project_id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(0, len(Project.visible_objects.filter(id=project_id)))
+
+        project_id = 3
+        response = self.student_misc_client.delete(f"/projects/{project_id}")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(1, len(Project.visible_objects.filter(id=project_id)))
+
     def test_get_project_review_by_id_anonymous(self):
         """
         GET /projects/{id}/review .
