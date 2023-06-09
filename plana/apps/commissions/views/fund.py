@@ -9,7 +9,7 @@ from plana.apps.commissions.serializers.fund import FundSerializer
 
 
 class FundList(generics.ListAPIView):
-    """/commissions/funds/ route"""
+    """/commissions/funds/names route"""
 
     permission_classes = [AllowAny]
     queryset = Fund.objects.all()
@@ -27,6 +27,7 @@ class FundList(generics.ListAPIView):
         responses={
             status.HTTP_200_OK: FundSerializer,
         },
+        tags=["commissions/funds"],
     )
     def get(self, request, *args, **kwargs):
         """Lists all fund types."""

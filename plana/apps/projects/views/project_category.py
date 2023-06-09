@@ -12,6 +12,7 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import CommissionFund
+from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -93,6 +94,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
+            status.HTTP_200_OK: None,
             status.HTTP_201_CREATED: ProjectCategorySerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -105,9 +107,10 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         """Creates a link between a category and a project."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
+            Category.objects.get(id=request.data["category"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project does not exist.")},
+                {"error": _("Project or category does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 

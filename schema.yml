@@ -402,6 +402,62 @@ paths:
           description: No response body
         '403':
           description: No response body
+  /commissions/{commission_id}/funds:
+    get:
+      operationId: commissions_funds_retrieve
+      description: Retrieves all funds linked to a commission.
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionFund'
+          description: ''
+        '404':
+          description: No response body
+  /commissions/{commission_id}/funds/{fund_id}:
+    delete:
+      operationId: commissions_funds_destroy
+      description: Destroys a link between commission and fund.
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: fund_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionFund'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /commissions/{id}:
     get:
       operationId: commissions_retrieve
@@ -491,12 +547,12 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /commissions/commission_funds/:
+  /commissions/funds:
     get:
-      operationId: commissions_commission_funds_list
-      description: Used to list and create links between commissions and funds
+      operationId: commissions_funds_list
+      description: Lists all links between commissions and funds.
       tags:
-      - commissions
+      - commissions/funds
       security:
       - jwtAuth: []
       - {}
@@ -510,10 +566,10 @@ paths:
                   $ref: '#/components/schemas/CommissionFund'
           description: ''
     post:
-      operationId: commissions_commission_funds_create
-      description: Used to list and create links between commissions and funds
+      operationId: commissions_funds_create
+      description: Creates a link between a commission and a fund.
       tags:
-      - commissions
+      - commissions/funds
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -529,32 +585,25 @@ paths:
       security:
       - jwtAuth: []
       responses:
+        '200':
+          description: No response body
         '201':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommissionFund'
           description: ''
-  /commissions/commission_funds/{id}:
-    delete:
-      operationId: commissions_commission_funds_destroy
-      description: Used to destroy links between commissions and funds
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - commissions
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
+        '400':
           description: No response body
-  /commissions/funds/:
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /commissions/funds/names:
     get:
-      operationId: commissions_funds_list
+      operationId: commissions_funds_names_list
       description: Lists all fund types.
       parameters:
       - in: query
@@ -563,7 +612,7 @@ paths:
           type: string
         description: Fund acronym.
       tags:
-      - commissions
+      - commissions/funds
       security:
       - jwtAuth: []
       - {}
@@ -1637,6 +1686,8 @@ paths:
       security:
       - jwtAuth: []
       responses:
+        '200':
+          description: No response body
         '201':
           content:
             application/json:

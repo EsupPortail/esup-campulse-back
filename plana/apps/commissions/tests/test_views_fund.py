@@ -22,7 +22,7 @@ class FundsViewsTests(TestCase):
 
     def test_get_funds_list(self):
         """
-        GET /commissions/funds .
+        GET /commissions/funds/names .
 
         - There's at least one fund in the funds list.
         - The route can be accessed by anyone.
@@ -33,7 +33,7 @@ class FundsViewsTests(TestCase):
         funds_cnt = Fund.objects.count()
         self.assertTrue(funds_cnt > 0)
 
-        response = self.client.get("/commissions/funds/")
+        response = self.client.get("/commissions/funds/names")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
@@ -43,9 +43,5 @@ class FundsViewsTests(TestCase):
         self.assertTrue(fund_1.get("name"))
 
         acronym = "FSDIE"
-        response = self.client.get(f"/commissions/funds/?acronym={acronym}")
+        response = self.client.get(f"/commissions/funds/names?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
-
-        response = self.client.get("/commissions/funds/?only_next=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), funds_cnt)

@@ -158,10 +158,10 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must exist.
         """
-        post_data = {
-            "project": 999,
-            "category": 1,
-        }
+        post_data = {"project": 999, "category": 1}
+        response = self.student_offsite_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        post_data = {"project": 1, "category": 999}
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -172,10 +172,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The owner of the project must be the authenticated user.
         """
-        post_data = {
-            "project": 1,
-            "category": 1,
-        }
+        post_data = {"project": 1, "category": 1}
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -189,10 +186,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - Project edition date is updated.
         - If the same ProjectCategory is attempted to be created, returns a HTTP 200 and is not created twice in db.
         """
-        post_data = {
-            "project": 2,
-            "category": 3,
-        }
+        post_data = {"project": 2, "category": 3}
         old_project_edition_date = Project.visible_objects.get(
             id=post_data["project"]
         ).edition_date
@@ -289,10 +283,17 @@ class ProjectCategoryLinksViewsTests(TestCase):
         DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by a student user.
-        - The project must exist.
+        - Project and category must exist.
         """
         project = 999
         category = 1
+        response = self.student_offsite_client.delete(
+            f"/projects/{project}/categories/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        project = 1
+        category = 999
         response = self.student_offsite_client.delete(
             f"/projects/{project}/categories/{category}"
         )
