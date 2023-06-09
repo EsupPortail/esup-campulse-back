@@ -68,7 +68,7 @@ class Project(models.Model):
         def get_review_needed_project_statuses():
             """Projects with those statuses need to submit a review."""
 
-            return ["PROJECT_VALIDATED", "PROJECT_REVIEW_DRAFT"]
+            return ["PROJECT_REVIEW_DRAFT"]
 
         @staticmethod
         def get_archived_project_statuses():
