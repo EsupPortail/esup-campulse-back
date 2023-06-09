@@ -585,8 +585,6 @@ paths:
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
         '201':
           content:
             application/json:
@@ -1686,8 +1684,6 @@ paths:
       security:
       - jwtAuth: []
       responses:
-        '200':
-          description: No response body
         '201':
           content:
             application/json:
@@ -2064,11 +2060,7 @@ paths:
       - jwtAuth: []
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssociationUserUpdate'
-          description: ''
+          description: No response body
         '400':
           description: No response body
         '401':

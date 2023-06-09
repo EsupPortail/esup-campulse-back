@@ -38,7 +38,6 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: None,
             status.HTTP_201_CREATED: CommissionFundSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -67,14 +66,17 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            CommissionFund.objects.get(
-                commission_id=request.data["commission"], fund_id=request.data["fund"]
+        commission_funds_count = CommissionFund.objects.filter(
+            commission_id=request.data["commission"],
+            fund_id=request.data["fund"],
+        ).count()
+        if commission_funds_count > 0:
+            return response.Response(
+                {"error": _("This commission is already linked to this fund.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
 
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().create(request, *args, **kwargs)
 
 
 class CommissionFundRetrieve(generics.RetrieveAPIView):

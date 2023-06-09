@@ -333,7 +333,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: AssociationUserUpdateSerializer,
+            status.HTTP_200_OK: None,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,

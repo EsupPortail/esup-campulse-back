@@ -28,15 +28,19 @@ from .views.project_export import ProjectDataExport, ProjectReviewDataExport
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
     path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
+    path("<int:pk>/export", ProjectDataExport.as_view(), name="project_data_export"),
     path(
-        "<int:pk>/status",
-        ProjectStatusUpdate.as_view(),
-        name="project_status_update",
+        "<int:pk>/review",
+        ProjectReviewRetrieveUpdate.as_view(),
+        name="project_review_retrieve_update",
     ),
     path(
-        "categories/names",
-        CategoryList.as_view(),
-        name="category_list",
+        "<int:pk>/review/export",
+        ProjectReviewDataExport.as_view(),
+        name="project_review_data_export",
+    ),
+    path(
+        "<int:pk>/status", ProjectStatusUpdate.as_view(), name="project_status_update"
     ),
     path(
         "categories",
@@ -53,6 +57,18 @@ urlpatterns = [
         ProjectCategoryDestroy.as_view(),
         name="project_category_destroy",
     ),
+    path("categories/names", CategoryList.as_view(), name="category_list"),
+    path("comments", ProjectCommentCreate.as_view(), name="project_comment_create"),
+    path(
+        "<int:project_id>/comments",
+        ProjectCommentRetrieve.as_view(),
+        name="project_comment_list_create",
+    ),
+    path(
+        "<int:project_id>/comments/<int:comment_id>",
+        ProjectCommentUpdateDestroy.as_view(),
+        name="project_comment_update_destroy",
+    ),
     path(
         "commission_funds",
         ProjectCommissionFundListCreate.as_view(),
@@ -67,35 +83,5 @@ urlpatterns = [
         "<int:project_id>/commission_funds/<int:commission_fund_id>",
         ProjectCommissionFundUpdateDestroy.as_view(),
         name="project_commission_fund_update_destroy",
-    ),
-    path(
-        "comments",
-        ProjectCommentCreate.as_view(),
-        name="project_comment_create",
-    ),
-    path(
-        "<int:project_id>/comments",
-        ProjectCommentRetrieve.as_view(),
-        name="project_comment_list_create",
-    ),
-    path(
-        "<int:project_id>/comments/<int:comment_id>",
-        ProjectCommentUpdateDestroy.as_view(),
-        name="project_comment_update_destroy",
-    ),
-    path(
-        "<int:pk>/review",
-        ProjectReviewRetrieveUpdate.as_view(),
-        name="project_review_retrieve_update",
-    ),
-    path(
-        "<int:pk>/export",
-        ProjectDataExport.as_view(),
-        name="project_data_export",
-    ),
-    path(
-        "<int:pk>/review/export",
-        ProjectReviewDataExport.as_view(),
-        name="project_review_data_export",
     ),
 ]

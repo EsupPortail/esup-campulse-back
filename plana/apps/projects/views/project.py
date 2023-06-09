@@ -545,7 +545,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
-        },
+        }
     )
     def get(self, request, *args, **kwargs):
         """Retrieves a project review with all its details."""

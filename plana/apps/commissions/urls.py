@@ -10,20 +10,14 @@ from .views.commission_fund import (
 from .views.fund import FundList
 
 urlpatterns = [
-    path(
-        "",
-        CommissionListCreate.as_view(),
-        name="commission_list_create",
-    ),
+    path("", CommissionListCreate.as_view(), name="commission_list_create"),
     path(
         "<int:pk>",
         CommissionRetrieveUpdateDestroy.as_view(),
         name="commission_retrieve_update_destroy",
     ),
     path(
-        "funds",
-        CommissionFundListCreate.as_view(),
-        name="commission_fund_list_create",
+        "funds", CommissionFundListCreate.as_view(), name="commission_fund_list_create"
     ),
     path(
         "<int:commission_id>/funds",
@@ -35,9 +29,5 @@ urlpatterns = [
         CommissionFundDestroy.as_view(),
         name="commission_fund_destroy",
     ),
-    path(
-        "funds/names",
-        FundList.as_view(),
-        name="fund_list",
-    ),
+    path("funds/names", FundList.as_view(), name="fund_list"),
 ]

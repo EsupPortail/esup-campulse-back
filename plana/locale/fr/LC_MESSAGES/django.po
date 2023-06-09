@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-09 09:30+0200\n"
+"POT-Creation-Date: 2023-06-09 10:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,7 +361,7 @@ msgstr "La date de commission n'existe pas."
 
 #: plana/apps/commissions/views/commission.py:315
 #: plana/apps/commissions/views/commission.py:429
-#: plana/apps/commissions/views/commission_fund.py:100
+#: plana/apps/commissions/views/commission_fund.py:102
 msgid "Commission does not exist."
 msgstr "La commission n'existe pas."
 
@@ -377,11 +377,15 @@ msgstr "Impossible de supprimer une commission passée."
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
-#: plana/apps/commissions/views/commission_fund.py:57
+#: plana/apps/commissions/views/commission_fund.py:56
 msgid "Commission or fund does not exist."
 msgstr "La commission ou le fonds n'existe pas."
 
-#: plana/apps/commissions/views/commission_fund.py:135
+#: plana/apps/commissions/views/commission_fund.py:75
+msgid "This commission is already linked to this fund."
+msgstr "Cette commission est déjà liée à ce fonds."
+
+#: plana/apps/commissions/views/commission_fund.py:137
 msgid "Link between commission and fund does not exist."
 msgstr "Le lien entre le fonds et la commission n'existe pas."
 
@@ -583,8 +587,8 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 #: plana/apps/projects/views/project.py:556
 #: plana/apps/projects/views/project.py:605
 #: plana/apps/projects/views/project.py:715
-#: plana/apps/projects/views/project_category.py:167
-#: plana/apps/projects/views/project_category.py:214
+#: plana/apps/projects/views/project_category.py:169
+#: plana/apps/projects/views/project_category.py:216
 #: plana/apps/projects/views/project_comment.py:54
 #: plana/apps/projects/views/project_comment.py:115
 #: plana/apps/projects/views/project_commission_fund.py:256
@@ -956,16 +960,20 @@ msgstr "Un projet ne peut revenir à un état précédent."
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
-#: plana/apps/projects/views/project_category.py:113
+#: plana/apps/projects/views/project_category.py:112
 msgid "Project or category does not exist."
 msgstr "Le projet ou la catégorie n'existe pas."
 
-#: plana/apps/projects/views/project_category.py:128
-#: plana/apps/projects/views/project_category.py:220
+#: plana/apps/projects/views/project_category.py:127
+#: plana/apps/projects/views/project_category.py:222
 msgid "Not allowed to update categories for this project."
 msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
-#: plana/apps/projects/views/project_category.py:179
+#: plana/apps/projects/views/project_category.py:137
+msgid "This project is already linked to this category."
+msgstr "Ce projet est déjà lié à cette catégorie."
+
+#: plana/apps/projects/views/project_category.py:181
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 

@@ -176,6 +176,16 @@ class ProjectCategoryLinksViewsTests(TestCase):
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_project_categories_already_exists(self):
+        """
+        POST /projects/categories .
+
+        - A project and a category cannot be linked together twice.
+        """
+        post_data = {"project": 2, "category": 1}
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_categories_association_success(self):
         """
         POST /projects/categories .
@@ -184,7 +194,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The authenticated user must be the president of the association owning the project.
         - The ProjectCategory link is created in db.
         - Project edition date is updated.
-        - If the same ProjectCategory is attempted to be created, returns a HTTP 200 and is not created twice in db.
         """
         post_data = {"project": 2, "category": 3}
         old_project_edition_date = Project.visible_objects.get(
@@ -204,17 +213,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
             ),
         )
         self.assertNotEqual(old_project_edition_date, new_project_edition_date)
-
-        response = self.student_president_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            1,
-            len(
-                ProjectCategory.objects.filter(
-                    project=post_data["project"], category=post_data["category"]
-                )
-            ),
-        )
 
     def test_get_project_categories_by_id_anonymous(self):
         """

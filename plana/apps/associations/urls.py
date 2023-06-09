@@ -32,9 +32,5 @@ urlpatterns = [
         AssociationActivityFieldList.as_view(),
         name="association_activity_field_list",
     ),
-    path(
-        "names",
-        AssociationNameList.as_view(),
-        name="association_name_list",
-    ),
+    path("names", AssociationNameList.as_view(), name="association_name_list"),
 ]

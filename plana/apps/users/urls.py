@@ -20,21 +20,8 @@ from .views.user import UserListCreate, UserRetrieveUpdateDestroy
 from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
 
 urlpatterns = [
-    path(
-        "associations/",
-        AssociationUserListCreate.as_view(),
-        name="association_user_list_create",
-    ),
-    path(
-        "<int:user_id>/associations/",
-        AssociationUserRetrieve.as_view(),
-        name="association_user_retrieve",
-    ),
-    path(
-        "<int:user_id>/associations/<int:association_id>",
-        AssociationUserUpdateDestroy.as_view(),
-        name="association_user_update_destroy",
-    ),
+    path("", UserListCreate.as_view(), name="user_list_create"),
+    path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
@@ -50,8 +37,21 @@ urlpatterns = [
         name="rest_verify_email",
     ),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("", UserListCreate.as_view(), name="user_list_create"),
-    path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
+    path(
+        "associations/",
+        AssociationUserListCreate.as_view(),
+        name="association_user_list_create",
+    ),
+    path(
+        "<int:user_id>/associations/",
+        AssociationUserRetrieve.as_view(),
+        name="association_user_retrieve",
+    ),
+    path(
+        "<int:user_id>/associations/<int:association_id>",
+        AssociationUserUpdateDestroy.as_view(),
+        name="association_user_update_destroy",
+    ),
     path(
         "groups/",
         GroupInstitutionFundUserListCreate.as_view(),
@@ -77,11 +77,7 @@ urlpatterns = [
         GroupInstitutionFundUserDestroyWithInstitution.as_view(),
         name="group_institution_fund_user_destroy_with_institution",
     ),
-    path(
-        "external/",
-        ExternalUserList.as_view(),
-        name="external_user_list",
-    ),
+    path("external/", ExternalUserList.as_view(), name="external_user_list"),
 ]
 
 if settings.DEBUG:  # pragma: no cover

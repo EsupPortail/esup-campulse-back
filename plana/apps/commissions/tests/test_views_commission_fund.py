@@ -102,29 +102,27 @@ class CommissionDatesViewsTests(TestCase):
         response = self.student_client.post("/commissions/funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_commission_fund_already_exists(self):
+        """
+        POST /commissions/funds .
+
+        - A commission and a fund cannot be linked together twice.
+        """
+        post_data = {"commission": 1, "fund": 1}
+        response = self.general_client.post("/commissions/funds", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_commission_fund_success(self):
         """
         POST /commissions/funds .
 
         - A user with proper permissions can execute this request.
-        - Link cannot be created twice.
         """
         post_data = {"commission": 3, "fund": 2}
         response = self.general_client.post("/commissions/funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         commission_fund = CommissionFund.objects.filter(commission_id=3, fund_id=2)
         self.assertEqual(commission_fund.count(), 1)
-
-        response = self.general_client.post("/commissions/funds", post_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            1,
-            len(
-                CommissionFund.objects.filter(
-                    commission=post_data["commission"], fund=post_data["fund"]
-                )
-            ),
-        )
 
     def test_get_commission_funds_by_id_404(self):
         """

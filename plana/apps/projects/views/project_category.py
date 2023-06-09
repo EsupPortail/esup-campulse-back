@@ -94,7 +94,6 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: None,
             status.HTTP_201_CREATED: ProjectCategorySerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -129,17 +128,20 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project_categories_count = ProjectCategory.objects.filter(
+            project_id=request.data["project"],
+            category_id=request.data["category"],
+        ).count()
+        if project_categories_count > 0:
+            return response.Response(
+                {"error": _("This project is already linked to this category.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         project.edition_date = datetime.date.today()
         project.save()
 
-        try:
-            ProjectCategory.objects.get(
-                project_id=request.data["project"], category_id=request.data["category"]
-            )
-        except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().create(request, *args, **kwargs)
 
 
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
