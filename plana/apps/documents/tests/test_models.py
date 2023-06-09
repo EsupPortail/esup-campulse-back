@@ -17,6 +17,7 @@ class DocumentsModelsTests(TestCase):
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_project.json",
+        "users_associationuser.json",
         "users_user.json",
     ]
 

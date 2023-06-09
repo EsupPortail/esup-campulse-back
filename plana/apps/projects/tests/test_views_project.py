@@ -382,6 +382,44 @@ class ProjectsViewsTests(TestCase):
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_project_wrong_association_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - A linked user from an association cannot be added to a user project.
+        """
+        project_data = {
+            "name": "Testing creation association",
+            "goals": "Goals",
+            "planned_location": "address",
+            "user": 9,
+            "association_user": 2,
+        }
+        response = self.student_misc_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_association_wrong_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - The linked user from the association must be set with an association.
+        - The linked user from the association must be correct.
+        """
+        project_data = {
+            "name": "Testing creation association",
+            "goals": "Goals",
+            "planned_location": "address",
+            "association_user": 2,
+        }
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        project_data["association"] = 2
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_post_project_association_success(self):
         """
         POST /projects/ .
@@ -596,6 +634,32 @@ class ProjectsViewsTests(TestCase):
             "/projects/2", project_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_wrong_association_user(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - A linked user from an association cannot be added to a user project.
+        """
+        project_data = {"association_user": 2}
+        response = self.student_misc_client.patch(
+            "/projects/1", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_association_wrong_user(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The linked user from the association must be correct.
+        """
+        project_data = {"association_user": 2}
+        response = self.student_president_client.patch(
+            "/projects/2", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_manager_success(self):
         """

@@ -20,12 +20,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             "planned_start_date",
             "planned_end_date",
             "planned_location",
-            "contact_first_name",
-            "contact_last_name",
-            "contact_email",
-            "contact_phone",
             "user",
             "association",
+            "association_user",
             "categories",
             "commission_dates",
             "budget_previous_edition",
@@ -58,12 +55,9 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
             "planned_start_date",
             "planned_end_date",
             "planned_location",
-            "contact_first_name",
-            "contact_last_name",
-            "contact_email",
-            "contact_phone",
             "user",
             "association",
+            "association_user",
             "commission_dates",
             "outcome",
             "income",
@@ -84,10 +78,6 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
     name = serializers.CharField(required=False, allow_blank=True)
-    contact_first_name = serializers.CharField(required=False, allow_blank=True)
-    contact_last_name = serializers.CharField(required=False, allow_blank=True)
-    contact_email = serializers.CharField(required=False, allow_blank=True)
-    contact_phone = serializers.CharField(required=False, allow_blank=True)
     categories = CategorySerializer(many=True, read_only=True)
     commission_dates = CommissionSerializer(many=True, read_only=True)
 
@@ -99,12 +89,9 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "planned_start_date",
             "planned_end_date",
             "planned_location",
-            "contact_first_name",
-            "contact_last_name",
-            "contact_email",
-            "contact_phone",
             "user",
             "association",
+            "association_user",
             "categories",
             "commission_dates",
             "budget_previous_edition",
@@ -135,19 +122,12 @@ class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
 class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
     """Main review serializer for update."""
 
-    contact_first_name = serializers.CharField(required=False, allow_blank=True)
-    contact_last_name = serializers.CharField(required=False, allow_blank=True)
-    contact_email = serializers.CharField(required=False, allow_blank=True)
-    contact_phone = serializers.CharField(required=False, allow_blank=True)
     commission_dates = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = [
-            "contact_first_name",
-            "contact_last_name",
-            "contact_email",
-            "contact_phone",
+            "association_user",
             "commission_dates",
             "outcome",
             "income",

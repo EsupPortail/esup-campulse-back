@@ -4103,32 +4103,14 @@ components:
         planned_location:
           type: string
           minLength: 1
-        contact_first_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        contact_last_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        contact_email:
-          type: string
-          format: email
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        contact_phone:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 32
         user:
           type: integer
           nullable: true
           title: Utilisateur
         association:
+          type: integer
+          nullable: true
+        association_user:
           type: integer
           nullable: true
         budget_previous_edition:
@@ -4183,14 +4165,9 @@ components:
       type: object
       description: Main review serializer for update.
       properties:
-        contact_first_name:
-          type: string
-        contact_last_name:
-          type: string
-        contact_email:
-          type: string
-        contact_phone:
-          type: string
+        association_user:
+          type: integer
+          nullable: true
         outcome:
           type: integer
           maximum: 2147483647
@@ -4333,28 +4310,14 @@ components:
           nullable: true
         planned_location:
           type: string
-        contact_first_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        contact_last_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        contact_email:
-          type: string
-          format: email
-          nullable: true
-          maxLength: 150
-        contact_phone:
-          type: string
-          nullable: true
-          maxLength: 32
         user:
           type: integer
           nullable: true
           title: Utilisateur
         association:
+          type: integer
+          nullable: true
+        association_user:
           type: integer
           nullable: true
         categories:
@@ -4616,28 +4579,14 @@ components:
           nullable: true
         planned_location:
           type: string
-        contact_first_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        contact_last_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        contact_email:
-          type: string
-          format: email
-          nullable: true
-          maxLength: 150
-        contact_phone:
-          type: string
-          nullable: true
-          maxLength: 32
         user:
           type: integer
           nullable: true
           title: Utilisateur
         association:
+          type: integer
+          nullable: true
+        association_user:
           type: integer
           nullable: true
         commission_dates:
@@ -4695,14 +4644,9 @@ components:
       type: object
       description: Main review serializer for update.
       properties:
-        contact_first_name:
-          type: string
-        contact_last_name:
-          type: string
-        contact_email:
-          type: string
-        contact_phone:
-          type: string
+        association_user:
+          type: integer
+          nullable: true
         commission_dates:
           type: array
           items:
@@ -4775,19 +4719,14 @@ components:
         planned_location:
           type: string
           minLength: 1
-        contact_first_name:
-          type: string
-        contact_last_name:
-          type: string
-        contact_email:
-          type: string
-        contact_phone:
-          type: string
         user:
           type: integer
           nullable: true
           title: Utilisateur
         association:
+          type: integer
+          nullable: true
+        association_user:
           type: integer
           nullable: true
         budget_previous_edition:

@@ -25,6 +25,7 @@ class CommissionDatesViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "projects_project.json",
         "projects_projectcommissionfund.json",
+        "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]

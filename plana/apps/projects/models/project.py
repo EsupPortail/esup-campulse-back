@@ -7,7 +7,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUser, User
 
 
 class Project(models.Model):
@@ -103,23 +103,17 @@ class Project(models.Model):
     planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
     planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
     planned_location = models.TextField(_("Planned location"), default="")
-    contact_first_name = models.CharField(
-        _("Contact first name"), max_length=150, default="", null=True
-    )
-    contact_last_name = models.CharField(
-        _("Contact last name"), max_length=150, default="", null=True
-    )
-    contact_email = models.EmailField(
-        _("Contact email"), max_length=150, default="", null=True
-    )
-    contact_phone = models.CharField(
-        _("Contact phone"), max_length=32, default="", null=True
-    )
     user = models.ForeignKey(
         User, verbose_name=_("User"), on_delete=models.CASCADE, null=True
     )
     association = models.ForeignKey(
         Association, verbose_name=_("Association"), on_delete=models.CASCADE, null=True
+    )
+    association_user = models.ForeignKey(
+        AssociationUser,
+        verbose_name=_("Association User"),
+        on_delete=models.CASCADE,
+        null=True,
     )
     budget_previous_edition = models.PositiveIntegerField(
         _("Budget on previous edition"), default=0

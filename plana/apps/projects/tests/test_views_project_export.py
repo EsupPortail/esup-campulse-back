@@ -8,6 +8,8 @@ from rest_framework import status
 
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.projects.models.project import Project
+from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicStorageFieldFile
 
 
@@ -161,6 +163,9 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 2
+        project = Project.objects.get(id=project_id)
+        project.association_user = AssociationUser.objects.get(id=3)
+        project.save()
         response = self.student_president_client.get(f"/projects/{project_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -203,6 +208,9 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 6
+        project = Project.objects.get(id=project_id)
+        project.association_user = AssociationUser.objects.get(id=3)
+        project.save()
         response = self.student_president_client.get(
             f"/projects/{project_id}/review/export"
         )

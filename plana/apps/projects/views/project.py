@@ -329,6 +329,25 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if ("user" in request.data and "association_user" in request.data) or (
+            not "association" in request.data and "association_user" in request.data
+        ):
+            return response.Response(
+                {"error": _("Cannot add a user from an association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if "association" in request.data and "association_user" in request.data:
+            association_user_count = AssociationUser.objects.filter(
+                id=request.data["association_user"],
+                association_id=request.data["association"],
+            ).count()
+            if association_user_count == 0:
+                return response.Response(
+                    {"error": _("Link between association and user does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
         if (
             "amount_students_audience" in request.data
             and "amount_all_audience" in request.data
@@ -472,6 +491,23 @@ class ProjectRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 {"error": _("Project is not a draft that can be edited.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
+
+        if "association_user" in request.data and project.user is not None:
+            return response.Response(
+                {"error": _("Cannot add a user from an association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if "association_user" in request.data:
+            association_user_count = AssociationUser.objects.filter(
+                id=request.data["association_user"],
+                association_id=project.association_id,
+            ).count()
+            if association_user_count == 0:
+                return response.Response(
+                    {"error": _("Link between association and user does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
 
         expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,

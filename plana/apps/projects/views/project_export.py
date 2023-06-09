@@ -18,6 +18,7 @@ from plana.apps.projects.serializers.project import (
     ProjectReviewSerializer,
     ProjectSerializer,
 )
+from plana.apps.users.models.user import AssociationUser, User
 from plana.utils import generate_pdf
 
 
@@ -61,6 +62,15 @@ class ProjectDataExport(generics.RetrieveAPIView):
             data["association"] = Association.objects.get(
                 id=data["association_id"]
             ).name
+            if data["association_user_id"] is not None:
+                data["user"] = User.objects.get(
+                    id=AssociationUser.objects.get(
+                        id=data["association_user_id"]
+                    ).user_id
+                )
+
+        if data["user_id"] is not None:
+            data["user"] = User.objects.get(id=data["user_id"])
 
         data["project_commission_funds"] = list(
             ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
@@ -144,6 +154,15 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             data["association"] = Association.objects.get(
                 id=data["association_id"]
             ).name
+            if data["association_user_id"] is not None:
+                data["user"] = User.objects.get(
+                    id=AssociationUser.objects.get(
+                        id=data["association_user_id"]
+                    ).user_id
+                )
+
+        if data["user_id"] is not None:
+            data["user"] = User.objects.get(id=data["user_id"])
 
         data["project_commission_funds"] = list(
             ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
