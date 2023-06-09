@@ -10,7 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commission_dates = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -24,7 +24,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "association",
             "association_user",
             "categories",
-            "commission_dates",
+            "commissions",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
@@ -45,7 +45,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectReviewSerializer(serializers.ModelSerializer):
     """Main review serializer."""
 
-    commission_dates = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -58,7 +58,7 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
             "user",
             "association",
             "association_user",
-            "commission_dates",
+            "commissions",
             "outcome",
             "income",
             "real_start_date",
@@ -79,7 +79,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
 
     name = serializers.CharField(required=False, allow_blank=True)
     categories = CategorySerializer(many=True, read_only=True)
-    commission_dates = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -93,7 +93,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "association",
             "association_user",
             "categories",
-            "commission_dates",
+            "commissions",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
@@ -122,13 +122,13 @@ class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
 class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
     """Main review serializer for update."""
 
-    commission_dates = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
         fields = [
             "association_user",
-            "commission_dates",
+            "commissions",
             "outcome",
             "income",
             "real_start_date",
