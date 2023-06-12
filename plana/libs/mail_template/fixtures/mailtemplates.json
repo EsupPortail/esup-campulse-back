@@ -599,5 +599,95 @@
         16
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 36,
+    "fields": {
+      "code": "PROJECT_NEEDS_CHANGES",
+      "label": "Project Needs Changes",
+      "description": "Message reçu par un étudiant si sa demande de subventions est refusée mais modifiable.",
+      "subject": "{{ site_name }} - Veuillez modifier votre demande de subventionnement avant de la resoumettre.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée, merci de la modifier avant de la resoumettre.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 37,
+    "fields": {
+      "code": "PROJECT_REJECTED",
+      "label": "Project Rejected",
+      "description": "Message reçu par un étudiant si sa demande de subventions est définitivement refusée.",
+      "subject": "{{ site_name }} - Votre demande de subventionnement a été rejetée.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée définitivement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 38,
+    "fields": {
+      "code": "PROJECT_VALIDATED",
+      "label": "Project Validated",
+      "description": "Message reçu par un étudiant si sa demande de subventions est acceptée.",
+      "subject": "{{ site_name }} - Votre demande de subventionnement a été validée.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 39,
+    "fields": {
+      "code": "PROJECT_NEEDS_REVIEW",
+      "label": "Project Needs Review",
+      "description": "Message reçu par un étudiant s'il doit (re-)soumettre le bilan de son projet.",
+      "subject": "{{ site_name }} - Veuillez envoyer ou modifier le bilan de votre projet.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme est en attente de bilan.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 40,
+    "fields": {
+      "code": "PROJECT_REVIEW_CANCELED",
+      "label": "Project Review Canceled",
+      "description": "Message reçu par un étudiant si le bilan de son projet n'a plus à être envoyé.",
+      "subject": "{{ site_name }} - Votre projet n'a plus besoin de bilan.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme ne nécessite plus d'envoi de bilan.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 41,
+    "fields": {
+      "code": "PROJECT_REVIEW_VALIDATED",
+      "label": "Project Review Validated",
+      "description": "Message reçu par un étudiant si le bilan de son projet a été accepté.",
+      "subject": "{{ site_name }} - Votre bilan de projet a été validé.",
+      "body": "Bonjour,<br/><br/>L'un de vos bilans de projet a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

@@ -59,12 +59,6 @@ class Project(models.Model):
             return ["PROJECT_DRAFT"]
 
         @staticmethod
-        def get_manageable_project_statuses():
-            """Statuses for projects that trigger a mail sending to a validator."""
-
-            return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
-
-        @staticmethod
         def get_commentable_project_statuses():
             """Statuses for projects where managing comments is allowed."""
 

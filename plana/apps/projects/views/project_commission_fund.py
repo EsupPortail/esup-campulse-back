@@ -310,7 +310,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: ProjectCommissionFundSerializer,
+            status.HTTP_200_OK: ProjectCommissionFundDataSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -355,8 +355,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "amount_asked_previous_edition",
             "amount_earned_previous_edition",
             "amount_asked",
-            "commission_fund_id",
-            "project_id",
         ]
         if not request.user.has_perm("project.change_projectcommissionfund_as_bearer"):
             for bearer_field in bearer_fields:
@@ -376,6 +374,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         validator_fields = [
             "amount_earned",
             "is_validated_by_admin",
+            "commission_fund_id",
+            "project_id",
         ]
         if not request.user.has_perm(
             "project.change_projectcommissionfund_as_validator"

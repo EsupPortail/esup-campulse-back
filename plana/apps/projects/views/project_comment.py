@@ -86,7 +86,8 @@ class ProjectCommentCreate(generics.CreateAPIView):
         template = MailTemplate.objects.get(code="NEW_PROJECT_COMMENT")
         email = None
         if project.association_id is not None:
-            email = Association.objects.get(id=project.association_id).email
+            # TODO What if email is not set ?
+            email = Association.objects.get(id=project.association_user_id).email
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
         send_mail(

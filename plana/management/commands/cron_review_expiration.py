@@ -43,6 +43,7 @@ class Command(BaseCommand):
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
+                        # TODO What if email is not set ?
                         to_=association.email,
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]

@@ -827,10 +827,13 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            new_project_status
-            in Project.ProjectStatus.get_manageable_project_statuses()
-        ):
+        template = None
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
+        if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
             document_process_type = ""
             association_email_template_code = ""
             user_email_template_code = ""
@@ -868,13 +871,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            template = None
             managers_emails = []
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
                 institution = Institution.objects.get(id=association.institution_id)
@@ -913,6 +910,34 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+        elif (
+            new_project_status in Project.ProjectStatus.get_validator_project_statuses()
+        ):
+            mail_templates_codes_by_status = {
+                "PROJECT_DRAFT": "PROJECT_NEEDS_CHANGES",
+                "PROJECT_REJECTED": "PROJECT_REJECTED",
+                "PROJECT_VALIDATED": "PROJECT_VALIDATED",
+                "PROJECT_REVIEW_DRAFT": "PROJECT_NEEDS_REVIEW",
+                "PROJECT_REVIEW_REJECTED": "PROJECT_REVIEW_CANCELED",
+                "PROJECT_REVIEW_VALIDATED": "PROJECT_REVIEW_VALIDATED",
+            }
+            template = MailTemplate.objects.get(
+                code=mail_templates_codes_by_status[new_project_status]
+            )
+            email = ""
+            if project.association_id is not None:
+                # TODO What if email is not set ?
+                email = Association.objects.get(id=project.association_id).email
+            elif project.user_id is not None:
+                email = User.objects.get(id=project.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
                 subject=template.subject.replace(
                     "{{ site_name }}", context["site_name"]
                 ),
