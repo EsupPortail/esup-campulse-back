@@ -19,6 +19,7 @@ unittest:
   tags:
     - python3.9
   script:
+    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
     - python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
