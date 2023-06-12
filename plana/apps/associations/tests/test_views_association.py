@@ -486,6 +486,7 @@ class AssociationsViewsTests(TestCase):
             "/associations/",
             {
                 "name": "Le plat phare du sud-ouest de la France c'est le CASsoulet.",
+                "email": "cassoulet@toulouse.fr",
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
@@ -503,7 +504,11 @@ class AssociationsViewsTests(TestCase):
         """
         response_general = self.general_client.post(
             "/associations/",
-            {"name": "Les Fans de Georges la Saucisse", "institution": 2},
+            {
+                "name": "Les Fans de Georges la Saucisse",
+                "email": "fan-2-georges@mail.tld",
+                "institution": 2,
+            },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
         non_site_association = json.loads(response_general.content.decode("utf-8"))
@@ -513,6 +518,7 @@ class AssociationsViewsTests(TestCase):
             "/associations/",
             {
                 "name": "Les gens qui savent imiter Bourvil",
+                "email": "ah-bah-mon-velo@mail.tld",
                 "institution": 2,
                 "is_site": True,
             },

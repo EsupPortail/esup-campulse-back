@@ -2870,6 +2870,11 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 256
         acronym:
           type: string
           title: Acronyme
@@ -2898,11 +2903,6 @@ components:
           type: string
           title: Téléphone
           maxLength: 32
-        email:
-          type: string
-          format: email
-          title: Courriel
-          maxLength: 256
         siret:
           type: string
           maxLength: 14
@@ -2968,6 +2968,7 @@ components:
       required:
       - activity_field
       - creation_date
+      - email
       - id
       - institution
       - institution_component
@@ -3088,6 +3089,11 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 256
         is_enabled:
           type: boolean
         is_public:
@@ -3100,6 +3106,7 @@ components:
           nullable: true
           title: Etablissement
       required:
+      - email
       - id
       - name
     AssociationMandatoryDataRequest:
@@ -3111,6 +3118,12 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 256
         is_enabled:
           type: boolean
         is_public:
@@ -3123,6 +3136,7 @@ components:
           nullable: true
           title: Etablissement
       required:
+      - email
       - name
     AssociationName:
       type: object
@@ -3197,6 +3211,7 @@ components:
           nullable: true
       required:
       - activity_field
+      - email
       - id
       - institution
       - institution_component

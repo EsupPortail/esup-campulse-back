@@ -513,7 +513,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    # TODO What if email is not set ?
                     to_=association.email,
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
@@ -593,7 +592,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             template = MailTemplate.objects.get(code="ASSOCIATION_DELETE")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                # TODO What if email is not set ?
                 to_=association.email,
                 subject=template.subject.replace(
                     "{{ site_name }}", context["site_name"]
@@ -846,7 +844,6 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_SENT")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                # TODO What if email is not set ?
                 to_=association.email,
                 subject=template.subject.replace(
                     "{{ site_name }}", context["site_name"]

@@ -39,6 +39,9 @@ class Association(models.Model):
     name = models.CharField(
         _("Name"), max_length=250, null=False, blank=False, unique=True
     )
+    email = models.EmailField(
+        _("Email"), max_length=256, null=False, blank=False, unique=True
+    )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
     path_logo = DynamicThumbnailImageField(
         _("Dynamic thumbnails for the logo"),
@@ -58,7 +61,6 @@ class Association(models.Model):
     city = models.CharField(_("City"), max_length=128, default="")
     country = models.CharField(_("Country"), max_length=128, default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
-    email = models.EmailField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
