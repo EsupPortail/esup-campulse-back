@@ -329,8 +329,14 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if ("user" in request.data and "association_user" in request.data) or (
-            not "association" in request.data and "association_user" in request.data
+        if (
+            ("user" in request.data and "association_user" in request.data)
+            or (
+                not "association" in request.data and "association_user" in request.data
+            )
+            or (
+                not "association_user" in request.data and "association" in request.data
+            )
         ):
             return response.Response(
                 {"error": _("Cannot add a user from an association.")},
@@ -931,8 +937,11 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             )
             email = ""
             if project.association_id is not None:
-                # TODO What if email is not set ?
-                email = Association.objects.get(id=project.association_id).email
+                email = User.objects.get(
+                    id=AssociationUser.objects.get(
+                        id=project.association_user_id
+                    ).values("user_id")
+                ).email
             elif project.user_id is not None:
                 email = User.objects.get(id=project.user_id).email
             send_mail(

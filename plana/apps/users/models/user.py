@@ -177,6 +177,7 @@ class User(AbstractUser):
             try:
                 AssociationUser.objects.get(
                     id=project_obj.association_user.id,
+                    user_id=self.pk,
                     association_id=project_obj.association,
                 )
             except ObjectDoesNotExist:

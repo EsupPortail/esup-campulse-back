@@ -433,6 +433,7 @@ class ProjectsViewsTests(TestCase):
             "goals": "Goals",
             "planned_location": "address",
             "association": 2,
+            "association_user": 5,
         }
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

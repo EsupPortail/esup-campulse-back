@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -38,13 +38,17 @@ class Command(BaseCommand):
                     association = Association.objects.get(
                         id=project_needing_review.association_id
                     )
+                    association_user_email = User.objects.get(
+                        id=AssociationUser.objects.get(
+                            id=project_needing_review.association_user_id
+                        ).user_id
+                    ).email
                     template = MailTemplate.objects.get(
                         code="PROJECT_NEEDS_REVIEW_STUDENT"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        # TODO What if email is not set ?
-                        to_=association.email,
+                        to_=association_user_email,
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),

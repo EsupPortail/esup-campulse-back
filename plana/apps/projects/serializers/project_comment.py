@@ -11,7 +11,6 @@ class ProjectCommentSerializer(serializers.ModelSerializer):
     """Main serializer"""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     user = UserNameSerializer()
 
     class Meta:

@@ -23,7 +23,7 @@ from plana.apps.projects.serializers.project_comment import (
     ProjectCommentSerializer,
     ProjectCommentTextSerializer,
 )
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -86,8 +86,9 @@ class ProjectCommentCreate(generics.CreateAPIView):
         template = MailTemplate.objects.get(code="NEW_PROJECT_COMMENT")
         email = None
         if project.association_id is not None:
-            # TODO What if email is not set ?
-            email = Association.objects.get(id=project.association_user_id).email
+            email = User.objects.get(
+                id=AssociationUser.objects.get(id=project.association_user_id).user_id
+            ).email
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
         send_mail(

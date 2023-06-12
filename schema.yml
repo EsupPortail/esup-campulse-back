@@ -1622,7 +1622,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionFund'
+                $ref: '#/components/schemas/ProjectCommissionFundData'
           description: ''
         '400':
           description: No response body
@@ -4523,6 +4523,41 @@ components:
       - commission_fund
       - id
       - project
+    ProjectCommissionFundData:
+      type: object
+      description: Fields that can be updated by project's bearer.
+      properties:
+        is_first_edition:
+          type: boolean
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount asked on previous edition
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Amount earned on previous edition
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        is_validated_by_admin:
+          type: boolean
+        commission_fund_id:
+          type: integer
+          readOnly: true
+        project_id:
+          type: integer
+          readOnly: true
+      required:
+      - commission_fund_id
+      - project_id
     ProjectCommissionFundRequest:
       type: object
       description: Main serializer.
