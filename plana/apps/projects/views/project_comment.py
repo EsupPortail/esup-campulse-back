@@ -65,6 +65,15 @@ class ProjectCommentCreate(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if (
+            project.project_status
+            not in Project.ProjectStatus.get_commentable_project_statuses()
+        ):
+            return response.Response(
+                {"error": _("Cannot manage comments on a validated project/review.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         request.data["creation_date"] = datetime.date.today()
         request.data["edition_date"] = datetime.date.today()
         request.data["user"] = request.user.pk
@@ -203,6 +212,15 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        if (
+            project.project_status
+            not in Project.ProjectStatus.get_commentable_project_statuses()
+        ):
+            return response.Response(
+                {"error": _("Cannot manage comments on a validated project/review.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         pc.edition_date = datetime.date.today()
         pc.text = request.data["text"]
         pc.save()
@@ -234,6 +252,15 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            project.project_status
+            not in Project.ProjectStatus.get_commentable_project_statuses()
+        ):
+            return response.Response(
+                {"error": _("Cannot manage comments on a validated project/review.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         pc.delete()

@@ -65,6 +65,17 @@ class Project(models.Model):
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
+        def get_commentable_project_statuses():
+            """Statuses for projects where managing comments is allowed."""
+
+            return [
+                "PROJECT_DRAFT",
+                "PROJECT_PROCESSING",
+                "PROJECT_REVIEW_DRAFT",
+                "PROJECT_REVIEW_PROCESSING",
+            ]
+
+        @staticmethod
         def get_review_needed_project_statuses():
             """Projects with those statuses need to submit a review."""
 

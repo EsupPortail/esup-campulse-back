@@ -4574,6 +4574,9 @@ components:
           type: integer
           nullable: true
           title: Utilisateur
+        association_user:
+          type: integer
+          nullable: true
         edition_date:
           type: string
           format: date-time

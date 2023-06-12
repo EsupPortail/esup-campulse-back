@@ -125,6 +125,25 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.student_offsite_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_project_comments_manager_wrong_status(self):
+        """
+        POST /projects/comments
+
+        - The route can be accessed by a manager.
+        - Validated projects cannot receive a comment.
+        """
+        project_id = 1
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_VALIDATED"
+        project.save()
+
+        post_data = {
+            "project": project_id,
+            "text": "Finalement non je veux pas aider ce projet.",
+        }
+        response = self.general_client.post("/projects/comments", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_comments_manager_success(self):
         """
         POST /projects/comments
@@ -282,6 +301,27 @@ class ProjectCommentLinksViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_project_comments_manager_wrong_status(self):
+        """
+        PATCH /projects/{project_id}/comments/{comment_id}
+
+        - The route can be accessed by a manager.
+        - Comments cannot be updated on validated projects.
+        """
+        comment_id = 1
+        project_id = 2
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_VALIDATED"
+        project.save()
+
+        patch_data = {"text": "Finalement non je veux pas aider ce projet."}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/comments/{comment_id}",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_comment_success(self):
         """
         PATCH /projects/{project_id}/comments/{comment_id}
@@ -337,6 +377,24 @@ class ProjectCommentLinksViewsTests(TestCase):
             f"/projects/{project}/comments/{comment}"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_comments_manager_wrong_status(self):
+        """
+        DELETE /projects/{project_id}/comments/{comment_id}
+
+        - The route can be accessed by a manager.
+        - Comments cannot be deleted on validated projects.
+        """
+        comment_id = 1
+        project_id = 2
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_VALIDATED"
+        project.save()
+
+        response = self.general_client.delete(
+            f"/projects/{project_id}/comments/{comment_id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_project_comments_success(self):
         """

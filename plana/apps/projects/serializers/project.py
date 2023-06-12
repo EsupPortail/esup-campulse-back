@@ -152,6 +152,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "name",
             "association",
             "user",
+            "association_user",
             "edition_date",
             "project_status",
         ]
