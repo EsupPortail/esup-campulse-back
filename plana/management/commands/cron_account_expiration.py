@@ -43,7 +43,7 @@ class Command(BaseCommand):
                     subject=template.subject.replace(
                         "{{ site_name }}", context["site_name"]
                     ),
-                    message=template.parse_vars(user, None),
+                    message=template.parse_vars(user, None, context),
                 )
 
             # Delete expired accounts (not connected since 1 year)

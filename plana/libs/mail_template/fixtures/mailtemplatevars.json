@@ -137,5 +137,14 @@
       "description": "Nom du projet.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 16,
+    "fields": {
+      "code": "{{ associations_goa_list }}",
+      "description": "Liste des dates de dernières Assemblées Générales Ordinaires des associations.",
+      "fake_vars": []
+    }
   }
 ]

@@ -33,7 +33,7 @@ class Command(BaseCommand):
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),
-                        message=template.parse_vars(association, None),
+                        message=template.parse_vars(None, None, context),
                     )
                 elif (
                     association.charter_date is not None

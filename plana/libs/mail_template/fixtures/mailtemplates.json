@@ -583,5 +583,21 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 35,
+    "fields": {
+      "code": "ASSOCIATION_GOA_EXPIRING",
+      "label": "Association GOA Expiring",
+      "description": "Message reçu avec la liste des associations dont la date d'assemblée générale a eu lieu presque un an plus tôt.",
+      "subject": "{{ site_name }} – Récapitulatif des associations dont le mandat arrive à terme.",
+      "body": "Bonjour,<br/><br/>Voici le récapitulatif de toutes les associations dont le mandat arrivera à terme dans les prochaines semaines :<br/><br/>{{ associations_goa_list }}<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        16
+      ]
+    }
   }
 ]

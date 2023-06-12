@@ -174,6 +174,39 @@ class CommissionExpirationCommandTest(TestCase):
         self.assertFalse(expired_commission.is_open_to_projects)
 
 
+class GOAExpirationCommandTest(TestCase):
+    """Test association_expiration command."""
+
+    fixtures = [
+        "associations_activityfield.json",
+        "associations_association.json",
+        "auth_group.json",
+        "commissions_fund.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
+        "users_groupinstitutionfunduser.json",
+        "users_user.json",
+    ]
+
+    def setUp(self):
+        """Cache all associations."""
+        self.associations = Association.objects.all()
+        self.today = datetime.date.today()
+
+    def test_no_goa_expiration(self):
+        """Nothing should change if no GOA date expires."""
+        self.associations.update(last_goa_date=(self.today))
+        call_command("cron_goa_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_goa_expiration(self):
+        """GOA date expires this month."""
+        call_command("cron_goa_expiration")
+        self.assertTrue(len(mail.outbox))
+
+
 class PasswordExpirationCommandTest(TestCase):
     """Test password_expiration command."""
 
