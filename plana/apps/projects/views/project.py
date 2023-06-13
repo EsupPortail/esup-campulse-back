@@ -483,7 +483,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_access_project(project):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -577,7 +577,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_access_project(project):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to delete this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -688,7 +688,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if not request.user.can_access_project(project):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -790,6 +790,12 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.can_edit_project(project):
+            return response.Response(
+                {"error": _("Not allowed to update this project.")},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         old_project_status = project.project_status

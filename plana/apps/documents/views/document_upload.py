@@ -149,7 +149,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             existing_document = existing_document.filter(project_id=project.id)
-            if not request.user.can_access_project(project):
+            if not request.user.can_edit_project(project):
                 return response.Response(
                     {"error": _("Not allowed to upload documents for this project.")},
                     status=status.HTTP_403_FORBIDDEN,
@@ -323,7 +323,7 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
         if not request.user.has_perm("documents.delete_documentupload_all") and (
             (
                 document_upload.project_id is not None
-                and not request.user.can_access_project(
+                and not request.user.can_edit_project(
                     Project.visible_objects.get(id=document_upload.project_id)
                 )
             )
