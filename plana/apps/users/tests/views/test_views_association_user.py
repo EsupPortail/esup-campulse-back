@@ -382,6 +382,24 @@ class AssociationUserViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_student_post_association_user_serializer_error(self):
+        """
+        POST /users/associations/ .
+
+        - An admin-validated student user can execute this request.
+        - Serializer fields must be valid.
+        """
+        response_student = self.student_client.post(
+            "/users/associations/",
+            data={
+                "user": self.student_user_name,
+                "association": 5,
+                "is_president": "test",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_student_post_association_user(self):
         """
         POST /users/associations/ .
@@ -648,6 +666,23 @@ class AssociationUserViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_president.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_patch_association_user_serializer_error(self):
+        """
+        PATCH /users/{user_id}/associations/{association_id} .
+
+        - A manager can execute this request.
+        - Serializer fields must be valid.
+        """
+        asso_user = AssociationUser.objects.get(
+            user_id=self.president_user_id, is_president=True
+        )
+        response = self.manager_client.patch(
+            f"/users/{self.president_user_id}/associations/{asso_user.association_id}",
+            {"is_president": "bad format"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_patch_association_user_update_president(self):
         """
