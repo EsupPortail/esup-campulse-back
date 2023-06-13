@@ -375,6 +375,7 @@ class AssociationsViewsTests(TestCase):
 
         - Name param is mandatory.
         - Institution param is mandatory.
+        - Email param is mandatory.
         """
         response_general = self.general_client.post(
             "/associations/",
@@ -387,6 +388,15 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {"institution": 2},
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {
+                "name": "Les Fans de Georges la Saucisse",
+                "institution": 2,
+            },
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -459,7 +469,11 @@ class AssociationsViewsTests(TestCase):
         """
         response_general = self.general_client.post(
             "/associations/",
-            {"name": "Les Fans de Georges la Saucisse", "institution": 2},
+            {
+                "name": "Les Fans de Georges la Saucisse",
+                "institution": 2,
+                "email": "mail@mail.tld",
+            },
         )
 
         similar_names = [
@@ -475,6 +489,20 @@ class AssociationsViewsTests(TestCase):
                 {"name": similar_name, "institution": 2},
             )
             self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_association_serializer_error(self):
+        """
+        POST /associations/ .
+
+        - A General Manager can add an association.
+        - Serializers fields must be valid.
+        """
+        response_general = self.general_client.post(
+            "/associations/",
+            data={"name": "Nom d'asso", "institution": 2, "email": False},
+            content_type="application/json",
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_association_success_manager_institution(self):
         """
