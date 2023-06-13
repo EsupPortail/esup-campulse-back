@@ -119,10 +119,14 @@ class CommissionDatesViewsTests(TestCase):
 
         - A user with proper permissions can execute this request.
         """
-        post_data = {"commission": 3, "fund": 2}
+        commission = 3
+        fund = 2
+        post_data = {"commission": commission, "fund": fund}
         response = self.general_client.post("/commissions/funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        commission_fund = CommissionFund.objects.filter(commission_id=3, fund_id=2)
+        commission_fund = CommissionFund.objects.filter(
+            commission_id=commission, fund_id=fund
+        )
         self.assertEqual(commission_fund.count(), 1)
 
     def test_get_commission_funds_by_id_404(self):
@@ -139,7 +143,7 @@ class CommissionDatesViewsTests(TestCase):
         GET /commissions/{commission_id}/funds .
 
         - The route can be accessed by everyone.
-        - Correct projects categories are returned.
+        - Correct commission funds are returned.
         """
         commission_id = 1
         commission_test_cnt = CommissionFund.objects.filter(
