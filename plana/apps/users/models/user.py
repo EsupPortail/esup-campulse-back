@@ -173,24 +173,15 @@ class User(AbstractUser):
                 return False
             return True
 
-        if project_obj.association_user is not None:
-            try:
-                AssociationUser.objects.get(
-                    id=project_obj.association_user.id,
-                    user_id=self.pk,
-                    association_id=project_obj.association,
-                )
-            except ObjectDoesNotExist:
-                return False
-            return True
-
         if project_obj.association is not None:
             try:
                 member = AssociationUser.objects.get(
                     user_id=self.pk, association_id=project_obj.association
                 )
-                if not member.is_president or not self.is_president_in_association(
-                    project_obj.association
+                if (
+                    not member.is_president
+                    and not self.is_president_in_association(project_obj.association)
+                    and project_obj.association_user != member.id
                 ):
                     return False
             except ObjectDoesNotExist:
