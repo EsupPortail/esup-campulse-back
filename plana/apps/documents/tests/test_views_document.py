@@ -302,7 +302,7 @@ class DocumentsViewsTests(TestCase):
 
     def test_patch_documents_serializer_error(self):
         """
-        POST /documents/ .
+        PATCH /documents/{id} .
 
         - A user with proper permissions can execute this request.
         - Serializers fields must be valid.
