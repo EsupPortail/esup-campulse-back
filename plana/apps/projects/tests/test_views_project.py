@@ -360,6 +360,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
+            "association_user": 5,
             "amount_students_audience": 1000,
             "amount_all_audience": 8,
         }
@@ -376,6 +377,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
+            "association_user": 5,
             "planned_start_date": "2099-12-25T14:00:00.000Z",
             "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
@@ -419,6 +421,25 @@ class ProjectsViewsTests(TestCase):
         project_data["association"] = 2
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_post_project_serializer_error(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - To create a project for an association, the authenticated user must be president.
+        - Serializer fields must be valid.
+        """
+        project_data = {
+            "name": "Testing bad serializer",
+            "goals": False,
+            "association": 2,
+            "association_user": 5,
+        }
+        response = self.student_president_client.post(
+            "/projects/", data=project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_association_success(self):
         """
@@ -661,6 +682,20 @@ class ProjectsViewsTests(TestCase):
             "/projects/2", project_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_serializer_error(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Serializer fields must be valid.
+        """
+        project_id = 1
+        patch_data = {"summary": False}
+        response = self.student_misc_client.patch(
+            f"/projects/{project_id}", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_manager_success(self):
         """
@@ -929,6 +964,19 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_patch_project_review_serializer_error(self):
+        """
+        PATCH /projects/{id}/review .
+
+        - The route can be accessed by a student user.
+        - Serializer fields must be valid.
+        """
+        patch_data = {"review": False}
+        response = self.student_misc_client.patch(
+            "/projects/5/review", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_review_user_success(self):
         """
         PATCH /projects/{id}/review .
@@ -970,6 +1018,18 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_project_status_forbidden(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - A student must have correct permissions to execute this request.
+        """
+        patch_data = {"project_status": "PROJECT_REJECTED"}
+        response = self.student_misc_client.patch(
+            "/projects/2/status", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_patch_project_status_not_found(self):
         """
         PATCH /projects/{id}/status .
@@ -981,6 +1041,19 @@ class ProjectsViewsTests(TestCase):
             "/projects/999/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_status_serializer_error(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - A student user can execute this request if status is allowed.
+        - Serializer fields must be valid.
+        """
+        patch_data = {"project_status": False}
+        response = self.student_misc_client.patch(
+            "/projects/1/status", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_status_student(self):
         """
