@@ -144,6 +144,19 @@ class DocumentsViewsTests(TestCase):
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_post_documents_serializer_error(self):
+        """
+        POST /documents/ .
+
+        - A user with proper permissions can execute this request.
+        - Serializers fields must be valid.
+        """
+        post_data = {"name": False}
+        response = self.general_client.post(
+            "/documents/", data=post_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_documents_success(self):
         """
         POST /documents/ .
@@ -286,6 +299,19 @@ class DocumentsViewsTests(TestCase):
             "/documents/9", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_documents_serializer_error(self):
+        """
+        PATCH /documents/{id} .
+
+        - A user with proper permissions can execute this request.
+        - Serializers fields must be valid.
+        """
+        patch_data = {"name": False}
+        response = self.general_client.patch(
+            "/documents/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_documents_success(self):
         """

@@ -144,6 +144,19 @@ class ProjectCommentLinksViewsTests(TestCase):
         response = self.general_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_project_comments_serializer_error(self):
+        """
+        POST /projects/comments
+
+        - The route can be accessed by a manager.
+        - Serializer fields must be valid.
+        """
+        post_data = {"project": 1, "text": False}
+        response = self.general_client.post(
+            "/projects/comments", data=post_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_project_comments_manager_success(self):
         """
         POST /projects/comments
@@ -319,6 +332,19 @@ class ProjectCommentLinksViewsTests(TestCase):
             f"/projects/{project_id}/comments/{comment_id}",
             data=patch_data,
             content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_comments_serializer_error(self):
+        """
+        PATCH /projects/{id}/comments/{id} .
+
+        - The route can be accessed by a manager.
+        - Serializer fields must be valid.
+        """
+        patch_data = {"text": False}
+        response = self.general_client.patch(
+            "/projects/1/comments/1", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
