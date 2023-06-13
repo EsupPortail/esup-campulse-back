@@ -1000,6 +1000,22 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_association_status_serializer_error(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - A manager user can execute this request.
+        - Serializer fields must be valid.
+        """
+        association_id = 2
+        patch_data = {"charter_status": False}
+        response = self.general_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_association_status_student(self):
         """
         PATCH /associations/{id}/status .
