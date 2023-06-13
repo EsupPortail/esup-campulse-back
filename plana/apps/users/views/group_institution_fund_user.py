@@ -63,7 +63,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
         try:
             group_id = request.data["group"]
             group = Group.objects.get(id=group_id)
-            user = User.objects.get(username=request.data["username"])
+            user = User.objects.get(username=request.data["user"])
             institution = None
             institution_id = None
             if (

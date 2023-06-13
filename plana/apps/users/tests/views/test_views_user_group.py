@@ -143,11 +143,11 @@ class AuthUserViewsTests(TestCase):
         POST /users/groups/ .
 
         - A non-existing user cannot be added in a group.
-        - username is a mandatory param
+        - user is a mandatory param
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": 9999, "group": 6},
+            {"user": 9999, "group": 6},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -163,7 +163,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "group": 9999},
+            {"user": self.student_user_name, "group": 9999},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -180,7 +180,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "group": 4},
+            {"user": self.student_user_name, "group": 4},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -192,7 +192,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 1},
+            {"user": self.unvalidated_user_name, "group": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -204,7 +204,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 6, "institution": 1},
+            {"user": self.unvalidated_user_name, "group": 6, "institution": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -216,7 +216,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 6, "fund": 1},
+            {"user": self.unvalidated_user_name, "group": 6, "fund": 1},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -228,7 +228,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_anonymous = self.anonymous_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 6},
+            {"user": self.unvalidated_user_name, "group": 6},
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
 
@@ -239,7 +239,7 @@ class AuthUserViewsTests(TestCase):
         - An admin-validated student user cannot execute this request.
         """
         response_student = self.student_client.post(
-            "/users/groups/", {"username": self.student_user_name, "group": 6}
+            "/users/groups/", {"user": self.student_user_name, "group": 6}
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -251,7 +251,7 @@ class AuthUserViewsTests(TestCase):
         """
         response_manager = self.manager_misc_client.post(
             "/users/groups/",
-            {"username": self.manager_general_user_name, "group": 4},
+            {"user": self.manager_general_user_name, "group": 4},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -264,13 +264,13 @@ class AuthUserViewsTests(TestCase):
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "group": 2, "institution": 1},
+            {"user": self.student_user_name, "group": 2, "institution": 1},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.manager_misc_user_name, "group": 6},
+            {"user": self.manager_misc_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -283,13 +283,13 @@ class AuthUserViewsTests(TestCase):
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.student_user_name, "group": 6},
+            {"user": self.student_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"username": self.unvalidated_user_name, "group": 6},
+            {"user": self.unvalidated_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
 
