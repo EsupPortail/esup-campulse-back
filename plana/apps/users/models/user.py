@@ -175,15 +175,9 @@ class User(AbstractUser):
 
         if project_obj.association is not None:
             try:
-                member = AssociationUser.objects.get(
+                AssociationUser.objects.get(
                     user_id=self.pk, association_id=project_obj.association
                 )
-                if (
-                    not member.is_president
-                    and not self.is_president_in_association(project_obj.association)
-                    and project_obj.association_user != member.id
-                ):
-                    return False
             except ObjectDoesNotExist:
                 return False
             return True
@@ -192,6 +186,32 @@ class User(AbstractUser):
             if project_obj.user != self:
                 return False
             return True
+
+    def can_edit_project(self, project_obj):
+        """Check if a user can edit a project as association president, misc user, fund member, or manager."""
+        if not self.can_access_project(project_obj):
+            return False
+
+        if (
+            project_obj.association_user is not None
+            and self.get_user_funds().count() == 0
+            and not self.is_staff
+        ):
+            try:
+                member = AssociationUser.objects.get(
+                    user_id=self.pk, association_id=project_obj.association
+                )
+                if (
+                    not member.is_president
+                    and not self.is_president_in_association(project_obj.association)
+                    and member.id != project_obj.association_user
+                ):
+                    return False
+            except ObjectDoesNotExist:
+                return False
+            return True
+
+        return True
 
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""

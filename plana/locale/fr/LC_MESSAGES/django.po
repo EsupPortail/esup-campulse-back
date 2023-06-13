@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 10:05+0200\n"
+"POT-Creation-Date: 2023-06-13 11:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,12 +294,12 @@ msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
 #: plana/apps/associations/views/association.py:796
-#: plana/apps/projects/views/project.py:807
+#: plana/apps/projects/views/project.py:813
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:817
-#: plana/apps/projects/views/project.py:874
+#: plana/apps/projects/views/project.py:880
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -512,7 +512,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:112
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:64
-#: plana/apps/users/models/user.py:346
+#: plana/apps/users/models/user.py:357
 msgid "User"
 msgstr "Utilisateur"
 
@@ -917,6 +917,7 @@ msgstr "Non autorisé à récupérer ce projet."
 
 #: plana/apps/projects/views/project.py:488
 #: plana/apps/projects/views/project.py:693
+#: plana/apps/projects/views/project.py:797
 #: plana/apps/projects/views/project_comment.py:213
 #: plana/apps/projects/views/project_comment.py:255
 #: plana/apps/projects/views/project_commission_fund.py:156
@@ -959,15 +960,15 @@ msgstr ""
 "Impossible de rédiger un bilan si des dates de commission liées ne sont pas "
 "passées."
 
-#: plana/apps/projects/views/project.py:814
+#: plana/apps/projects/views/project.py:820
 msgid "Cannot change this project status anymore."
 msgstr "Il n'est plus possible de changer le statut de ce projet."
 
-#: plana/apps/projects/views/project.py:823
+#: plana/apps/projects/views/project.py:829
 msgid "Cannot rollback to a previous status."
 msgstr "Un projet ne peut revenir à un état précédent."
 
-#: plana/apps/projects/views/project.py:832
+#: plana/apps/projects/views/project.py:838
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
@@ -1107,7 +1108,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:347
+#: plana/apps/users/models/user.py:358
 msgid "Users"
 msgstr "Utilisateurs"
 

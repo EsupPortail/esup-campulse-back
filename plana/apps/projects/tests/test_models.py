@@ -112,7 +112,7 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.visible_objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-site@mail.tld")
-        self.assertFalse(user.can_access_project(project))
+        self.assertFalse(user.can_edit_project(project))
 
     def test_can_access_project_success_commission(self):
         """

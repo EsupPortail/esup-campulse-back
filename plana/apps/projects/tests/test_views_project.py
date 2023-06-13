@@ -991,14 +991,14 @@ class ProjectsViewsTests(TestCase):
         """
         self.assertFalse(len(mail.outbox))
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_offsite_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(len(mail.outbox))
 
         patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_offsite_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
