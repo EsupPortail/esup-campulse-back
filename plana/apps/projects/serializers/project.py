@@ -145,6 +145,8 @@ class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     """Serializer for project list."""
 
+    commissions = CommissionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Project
         fields = [
@@ -153,6 +155,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "association",
             "user",
             "association_user",
+            "commissions",
             "edition_date",
             "project_status",
         ]
