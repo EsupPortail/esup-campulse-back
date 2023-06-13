@@ -385,7 +385,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
-            status.HTTP_500_INTERNAL_SERVER_ERROR: None,
         }
     )
     def patch(self, request, *args, **kwargs):
@@ -445,7 +444,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except Exception as ex:
             print(ex)
             return response.Response(
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                {"error": _("Error on social networks format.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if (

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 08:51+0200\n"
+"POT-Creation-Date: 2023-06-13 10:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,7 +235,7 @@ msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:334
-#: plana/apps/associations/views/association.py:398
+#: plana/apps/associations/views/association.py:397
 #: plana/apps/associations/views/association.py:564
 #: plana/apps/associations/views/association.py:626
 #: plana/apps/associations/views/association.py:775
@@ -256,18 +256,22 @@ msgstr "Association non activée."
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:419
+#: plana/apps/associations/views/association.py:418
 #: plana/apps/associations/views/association.py:787
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:437
+#: plana/apps/associations/views/association.py:436
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:442
+#: plana/apps/associations/views/association.py:441
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
+
+#: plana/apps/associations/views/association.py:447
+msgid "Error on social networks format."
+msgstr "Erreur de format de réseaux sociaux."
 
 #: plana/apps/associations/views/association.py:458
 msgid "Wrong media type for images."

@@ -177,8 +177,6 @@ paths:
           description: No response body
         '415':
           description: No response body
-        '500':
-          description: No response body
     delete:
       operationId: associations_destroy
       description: Destroys an entire association (manager only).
