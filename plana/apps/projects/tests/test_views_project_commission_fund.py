@@ -480,6 +480,21 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_project_cf_serializer_error(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by any authenticated user.
+        - The serializer fields must be correct.
+        """
+        patch_data = {"amount_asked": True}
+        response = self.student_misc_client.patch(
+            "/projects/1/commission_funds/3",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_cf_wrong_submission_date(self):
         """
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
