@@ -28,6 +28,8 @@ class ProjectCommissionFundViewsTests(TestCase):
         "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "projects_project.json",
         "projects_projectcommissionfund.json",
         "users_associationuser.json",
@@ -502,6 +504,7 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - The route can be accessed by any authenticated user.
         - ProjectCommissionFund object is correctly updated.
+        - Project status is updated if validation is set.
         """
         patch_data = {"amount_asked": 1333}
         response = self.student_misc_client.patch(
@@ -513,6 +516,19 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         pcf_data = ProjectCommissionFund.objects.get(project_id=1, commission_fund_id=3)
         self.assertEqual(pcf_data.amount_asked, patch_data["amount_asked"])
+
+        project = Project.objects.get(id=1)
+        project.project_status = "PROJECT_PROCESSING"
+        project.save()
+        patch_data = {"is_validated_by_admin": True}
+        response = self.general_client.patch(
+            "/projects/1/commission_funds/3",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(id=1)
+        self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 
     def test_delete_project_cf_anonymous(self):
         """

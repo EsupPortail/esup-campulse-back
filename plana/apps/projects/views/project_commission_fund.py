@@ -1,6 +1,8 @@
 """Views linked to project commission funds links."""
 import datetime
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -19,6 +21,9 @@ from plana.apps.projects.serializers.project_commission_fund import (
     ProjectCommissionFundDataSerializer,
     ProjectCommissionFundSerializer,
 )
+from plana.apps.users.models.user import AssociationUser, User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
@@ -330,7 +335,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         try:
-            pcd = ProjectCommissionFund.objects.get(
+            project = Project.objects.get(id=kwargs["project_id"])
+            project_commission_fund = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
                 commission_fund_id=kwargs["commission_fund_id"],
             )
@@ -344,7 +350,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_access_project(pcd.project):
+        if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -402,8 +408,46 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         for field in request.data:
-            setattr(pcd, field, request.data[field])
-        pcd.save()
+            setattr(project_commission_fund, field, request.data[field])
+        project_commission_fund.save()
+
+        unvalidated_project_commission_funds_count = (
+            ProjectCommissionFund.objects.filter(
+                project_id=project.id, is_validated_by_admin=False
+            ).count()
+        )
+        if (
+            "is_validated_by_admin" in request.data
+            and request.data["is_validated_by_admin"] is True
+            and project.project_status == "PROJECT_PROCESSING"
+            and unvalidated_project_commission_funds_count == 0
+        ):
+            project.project_status = "PROJECT_VALIDATED"
+            project.save()
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
+            email = ""
+            if project.association_id is not None:
+                email = User.objects.get(
+                    id=AssociationUser.objects.get(
+                        id=project.association_user_id
+                    ).values("user_id")
+                ).email
+            elif project.user_id is not None:
+                email = User.objects.get(id=project.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         return response.Response({}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -419,7 +463,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Destroys details of a project linked to a commission date."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            pcd = ProjectCommissionFund.objects.get(
+            project_commission_fund = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
                 commission_fund_id=kwargs["commission_fund_id"],
             )
@@ -433,7 +477,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_access_project(pcd.project):
+        if not request.user.can_access_project(project):
             return response.Response(
                 {"error": _("Not allowed to update this project.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -441,5 +485,5 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         project.edition_date = datetime.date.today()
         project.save()
-        pcd.delete()
+        project_commission_fund.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)
