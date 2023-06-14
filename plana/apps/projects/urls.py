@@ -5,7 +5,6 @@ from .views.category import CategoryList
 from .views.project import (
     ProjectListCreate,
     ProjectRetrieveUpdateDestroy,
-    ProjectReviewRetrieveUpdate,
     ProjectStatusUpdate,
 )
 from .views.project_category import (
@@ -24,6 +23,7 @@ from .views.project_commission_fund import (
     ProjectCommissionFundUpdateDestroy,
 )
 from .views.project_export import ProjectDataExport, ProjectReviewDataExport
+from .views.project_review import ProjectReviewRetrieveUpdate
 
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),

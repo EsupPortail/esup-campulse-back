@@ -14,10 +14,8 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.projects.serializers.project import (
-    ProjectReviewSerializer,
-    ProjectSerializer,
-)
+from plana.apps.projects.serializers.project import ProjectSerializer
+from plana.apps.projects.serializers.project_review import ProjectReviewSerializer
 from plana.apps.users.models.user import AssociationUser, User
 from plana.utils import generate_pdf
 
