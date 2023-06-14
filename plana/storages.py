@@ -86,7 +86,8 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         encryption_result = encrypt(file_content, [self.recipient])
         encrypted_file = InMemoryUploadedFile(
             BytesIO(encryption_result),
-            original_file.field_name,
+            # TODO Find a better way to handle field_name for large files.
+            original_file.field_name if hasattr(original_file, "field_name") else None,
             original_file.name,
             original_file.content_type,
             len(encryption_result),
