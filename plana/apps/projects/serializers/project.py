@@ -90,7 +90,7 @@ class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     """Serializer for project list."""
 
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commission = CommissionSerializer(many=False, read_only=True)
 
     class Meta:
         model = Project
@@ -100,7 +100,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "association",
             "user",
             "association_user",
-            "commissions",
+            "commission",
             "planned_start_date",
             "planned_end_date",
             "edition_date",

@@ -217,7 +217,6 @@ class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
-# TODO Optimize this route to avoid code duplication with other delete routes.
 class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
     """/users/{user_id}/groups/{group_id}"""
 

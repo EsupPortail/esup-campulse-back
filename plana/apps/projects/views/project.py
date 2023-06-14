@@ -216,6 +216,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
             else:
                 queryset = queryset.exclude(project_status__in=inactive_statuses)
 
+        for project in queryset:
+            pcf = project.projectcommissionfund_set.first()
+            if pcf is not None:
+                project.commission = Commission.objects.get(
+                    id=CommissionFund.objects.get(
+                        id=pcf.commission_fund_id
+                    ).commission_id
+                )
+            else:
+                project.commission = None
         serializer = self.get_serializer_class()(queryset, many=True)
         return response.Response(serializer.data)
 
