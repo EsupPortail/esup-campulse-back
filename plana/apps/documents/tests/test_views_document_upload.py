@@ -269,6 +269,26 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_post_document_upload_serializer_error(self):
+        """
+        POST /documents/uploads .
+
+        - The route can be accessed by any authenticated user.
+        - Serializer fields must be valid.
+        """
+        project_id = 1
+        document_id = 19
+        post_data = {
+            "path_file": False,
+            "project": project_id,
+            "document": document_id,
+            "user": self.student_misc_user_id,
+        }
+        response = self.student_misc_client.post(
+            "/documents/uploads", data=post_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_document_upload_forbidden_user(self):
         """
         POST /documents/uploads .

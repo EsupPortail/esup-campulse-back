@@ -193,18 +193,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        # TODO Re-enable serializer when fixtures for unit tests will be OK.
-        """
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        """
-
         if (
             "association" in request.data
             and request.data["association"] is not None
@@ -230,6 +218,15 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         ):
             return response.Response(
                 {"error": _("Missing affectation of the new document upload.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
