@@ -435,7 +435,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 email = User.objects.get(
                     id=AssociationUser.objects.get(
                         id=project.association_user_id
-                    ).values("user_id")
+                    ).user_id
                 ).email
             elif project.user_id is not None:
                 email = User.objects.get(id=project.user_id).email

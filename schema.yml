@@ -4630,6 +4630,14 @@ components:
           items:
             $ref: '#/components/schemas/Commission'
           readOnly: true
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
         edition_date:
           type: string
           format: date-time

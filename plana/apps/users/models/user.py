@@ -197,17 +197,14 @@ class User(AbstractUser):
             and self.get_user_funds().count() == 0
             and not self.is_staff
         ):
-            try:
-                member = AssociationUser.objects.get(
-                    user_id=self.pk, association_id=project_obj.association
-                )
-                if (
-                    not member.is_president
-                    and not self.is_president_in_association(project_obj.association)
-                    and member.id != project_obj.association_user
-                ):
-                    return False
-            except ObjectDoesNotExist:
+            member = AssociationUser.objects.get(
+                user_id=self.pk, association_id=project_obj.association
+            )
+            if (
+                not member.is_president
+                and not self.is_president_in_association(project_obj.association)
+                and member.id != project_obj.association_user
+            ):
                 return False
             return True
 
