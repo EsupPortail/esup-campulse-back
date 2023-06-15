@@ -92,15 +92,12 @@ def valid_date_format(date):
 
 
 def generate_pdf(dict_data, type_doc, base_url):
-    template_path = ""
-    if type_doc == "association_charter_summary":
-        template_path = "./pdf_exports/association_charter_summary.html"
-    elif type_doc == "project_summary":
-        template_path = "./pdf_exports/project_summary.html"
-    elif type_doc == "project_review_summary":
-        template_path = "./pdf_exports/project_review_summary.html"
-
-    html = render_to_string(template_path, dict_data)
+    types_and_templates = {
+        "association_charter_summary": "./pdf_exports/association_charter_summary.html",
+        "project_summary": "./pdf_exports/project_summary.html",
+        "project_review_summary": "./pdf_exports/project_review_summary.html",
+    }
+    html = render_to_string(types_and_templates[type_doc], dict_data)
     response = HttpResponse(content_type="application/pdf")
     # TODO : find a correct file name pattern
     response['Content-Disposition'] = (
