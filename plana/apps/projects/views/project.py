@@ -724,14 +724,25 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
             missing_documents_names = (
                 Document.objects.filter(
-                    process_type=document_process_type, is_required_in_process=True
+                    models.Q(process_type=document_process_type)
+                    & (
+                        models.Q(is_required_in_process=True, fund_id=None)
+                        | models.Q(
+                            is_required_in_process=True,
+                            fund_id__in=CommissionFund.objects.filter(
+                                id__in=ProjectCommissionFund.objects.filter(
+                                    project_id=project.id
+                                ).values_list("commission_fund_id")
+                            ).values_list("fund_id"),
+                        )
+                    )
                 )
                 .exclude(
                     id__in=DocumentUpload.objects.filter(
                         project_id=project.id,
                     ).values_list("document_id")
                 )
-                .values_list("name", flat=True)
+                .values_list("name")
             )
             if missing_documents_names.count() > 0:
                 missing_documents_names_string = ', '.join(
