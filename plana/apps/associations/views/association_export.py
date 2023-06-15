@@ -1,5 +1,7 @@
+"""Views directly linked to association exports."""
 import csv
 
+from django.db.models import Q
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -19,7 +21,27 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
     queryset = Association.objects.all()
     serializer_class = AssociationAllDataReadSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "associations",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="IDs of selected associations, separated by a coma.",
+            ),
+        ]
+    )
     def get(self, request, *args, **kwargs):
+        """Associations List CSV export."""
+        queryset = self.get_queryset()
+        associations = request.query_params.get("associations")
+
+        if associations is not None and associations != "":
+            association_ids = [
+                int(association) for association in associations.split(",")
+            ]
+            queryset = self.get_queryset().exclude(~Q(id__in=association_ids))
+
         http_response = HttpResponse(
             content_type="text/csv",
             headers={"Content-Disposition": 'attachment; filename="associations.csv"'},
@@ -36,7 +58,8 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
                 _("Email"),
             ]
         )
-        for association in self.get_queryset():
+
+        for association in queryset:
             institution_component = (
                 None
                 if association.institution_component_id is None
@@ -55,4 +78,5 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
                     association.email,
                 ]
             )
+
         return http_response
