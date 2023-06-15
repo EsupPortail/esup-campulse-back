@@ -238,5 +238,29 @@
       "document": 11,
       "association": 4
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 22,
+    "fields": {
+      "name": "charte-culture-actions.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 7,
+      "project": 1,
+      "user": 9
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 23,
+    "fields": {
+      "name": "rgpd-culture-actions.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 8,
+      "project": 1,
+      "user": 9
+    }
   }
 ]

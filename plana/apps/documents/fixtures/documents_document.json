@@ -114,9 +114,9 @@
       "description": "Charte Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "fund_id": 3,
-      "process_type": "CHARTER_PROJECT_FUND",
+      "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf"
       ]
@@ -131,9 +131,9 @@
       "description": "Charte RGPD Culture-ActionS",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "fund_id": 3,
-      "process_type": "CHARTER_PROJECT_FUND",
+      "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
