@@ -19,9 +19,11 @@ from plana.apps.documents.serializers.document_upload import (
     DocumentUploadCreateSerializer,
     DocumentUploadFileSerializer,
     DocumentUploadSerializer,
+    DocumentUploadUpdateSerializer,
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser
+from plana.utils import to_bool
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
@@ -63,6 +65,12 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 OpenApiParameter.QUERY,
                 description="Document process type.",
             ),
+            OpenApiParameter(
+                "is_validated_by_admin",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter for documents not validated by an admin",
+            ),
         ],
         responses={
             status.HTTP_200_OK: DocumentUploadSerializer,
@@ -76,6 +84,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         association = request.query_params.get("association_id")
         project = request.query_params.get("project_id")
         process_types = request.query_params.get("process_types")
+        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
 
         if not request.user.has_perm("documents.view_documentupload_all"):
             user_associations_ids = AssociationUser.objects.filter(
@@ -108,6 +117,12 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 document_id__in=Document.objects.filter(
                     process_type__in=process_types_codes
                 ).values_list("id")
+            )
+
+        if is_validated_by_admin is not None and is_validated_by_admin != "":
+            is_validated_by_admin = to_bool(is_validated_by_admin)
+            self.queryset = self.queryset.filter(
+                is_validated_by_admin=is_validated_by_admin,
             )
 
         return self.list(request, *args, **kwargs)
@@ -193,6 +208,14 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+        if "is_validated_by_admin" in request.data and not request.user.has_perm(
+            "documents.add_documentupload_all"
+        ):
+            return response.Response(
+                {"error": _("Not allowed to validate documents.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         if (
             "association" in request.data
             and request.data["association"] is not None
@@ -221,18 +244,18 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if not document.is_multiple and existing_document.count() > 0:
+            return response.Response(
+                {"error": _("Document cannot be submitted multiple times.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
         except ValidationError as error:
             return response.Response(
                 {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not document.is_multiple and existing_document.count() > 0:
-            return response.Response(
-                {"error": _("Document cannot be submitted multiple times.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -248,12 +271,18 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
+class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/uploads/{id} route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
-    serializer_class = DocumentUploadSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            self.serializer_class = DocumentUploadUpdateSerializer
+        else:
+            self.serializer_class = DocumentUploadSerializer
+        return super().get_serializer_class()
 
     @extend_schema(
         responses={
@@ -295,8 +324,67 @@ class DocumentUploadRetrieveDestroy(generics.RetrieveDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(self.queryset.get(id=kwargs["pk"]))
-        return response.Response(serializer.data)
+        return self.retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: DocumentUploadUpdateSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
+    def patch(self, request, *args, **kwargs):
+        """Updates document upload details."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            document_upload = self.queryset.get(id=kwargs["pk"])
+            document = Document.objects.get(id=document_upload.document_id)
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Document upload does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if (
+            document.institution is not None
+            and not request.user.has_perm("documents.change_document_any_institution")
+            and not request.user.is_staff_in_institution(document.institution)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to update a document for this institution.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            document.fund is not None
+            and not request.user.has_perm("documents.change_document_any_fund")
+            and not request.user.is_member_in_fund(document.fund)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to update a document for this fund.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return self.partial_update(request, *args, **kwargs)
 
     @extend_schema(
         responses={

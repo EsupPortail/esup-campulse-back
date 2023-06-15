@@ -262,6 +262,9 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The commission must be open.
         """
+        commission = Commission.objects.get(id=3)
+        commission.is_open_to_projects = False
+        commission.save()
         commission_fund_id = 5
         response = self.student_misc_client.post(
             "/projects/commission_funds",

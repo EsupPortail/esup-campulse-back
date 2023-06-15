@@ -831,6 +831,11 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
+        name: is_validated_by_admin
+        schema:
+          type: boolean
+        description: Filter for documents not validated by an admin
+      - in: query
         name: process_types
         schema:
           type: string
@@ -917,6 +922,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUpload'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: documents_uploads_partial_update
+      description: Updates document upload details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUploadUpdate'
+          description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -3605,6 +3649,8 @@ components:
           type: string
           format: date-time
           readOnly: true
+        is_validated_by_admin:
+          type: boolean
         document:
           type: integer
         user:
@@ -3642,6 +3688,8 @@ components:
           type: string
           format: uri
           title: Uploaded file
+        is_validated_by_admin:
+          type: boolean
         document:
           type: integer
         user:
@@ -3672,6 +3720,8 @@ components:
           type: string
           format: binary
           title: Uploaded file
+        is_validated_by_admin:
+          type: boolean
         document:
           type: integer
         user:
@@ -3701,6 +3751,12 @@ components:
           maxLength: 250
       required:
       - path_file
+    DocumentUploadUpdate:
+      type: object
+      description: Serializer to validate a document.
+      properties:
+        is_validated_by_admin:
+          type: boolean
     ExternalUser:
       type: object
       description: External user serializer.
@@ -4088,6 +4144,12 @@ components:
           format: binary
           nullable: true
           title: Example template file
+    PatchedDocumentUploadUpdateRequest:
+      type: object
+      description: Serializer to validate a document.
+      properties:
+        is_validated_by_admin:
+          type: boolean
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.
