@@ -1,4 +1,6 @@
 """List of tests done on association exports views."""
+import csv
+import io
 import json
 from unittest.mock import Mock
 
@@ -87,7 +89,7 @@ class AssociationExportsViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
-    def test_get_export_association_by_id_anonymous(self):
+    def test_get_pdf_export_association_by_id_anonymous(self):
         """
         GET /associations/{id}/export .
 
@@ -96,7 +98,7 @@ class AssociationExportsViewsTests(TestCase):
         response = self.client.get("/associations/2/export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_get_export_association_by_id_404(self):
+    def test_get_pdf_export_association_by_id_404(self):
         """
         GET /associations/{id}/export .
 
@@ -105,7 +107,7 @@ class AssociationExportsViewsTests(TestCase):
         response = self.general_client.get("/associations/99999/export")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_export_association_by_id_forbidden_student(self):
+    def test_get_pdf_export_association_by_id_forbidden_student(self):
         """
         GET /associations/{id}/export .
 
@@ -114,7 +116,7 @@ class AssociationExportsViewsTests(TestCase):
         response = self.member_client.get("/associations/2/export")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_export_association_by_id(self):
+    def test_get_pdf_export_association_by_id(self):
         """
         GET /associations/{id}/export .
 
@@ -126,3 +128,40 @@ class AssociationExportsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.president_client.get(f"/associations/{association_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_csv_export_associations_success_general_manager(self):
+        """
+        GET /associations/csv_export .
+
+        - The route can be accessed by a manager user.
+        - All associations from db are returned in the CSV.
+        """
+        response = self.general_client.get(f"/associations/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+        total = Association.objects.all().count()
+        # -1 because of CSV header
+        self.assertEqual(len(list(csv_reader)) - 1, total)
+
+    def test_get_csv_export_associations_filtered_general_manager(self):
+        """
+        GET /associations/csv_export .
+
+        - The route can be accessed by a manager user.
+        - All selected associations from db are returned in the CSV.
+        """
+        response = self.general_client.get(
+            f"/associations/csv_export?associations=1,2,3"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+        total = Association.objects.filter(id__in=[1, 2, 3]).count()
+        # -1 because of CSV header
+        self.assertEqual(len(list(csv_reader)) - 1, total)
+
+
+# TODO : unittests for permissions, institutions check in CSV export
