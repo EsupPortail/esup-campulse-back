@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
 
@@ -85,13 +86,13 @@ def to_bool(attr):
 def valid_date_format(date):
     date_format = "%Y-%m-%d"
     try:
-        date_object = datetime.datetime.strptime(date, date_format)
+        datetime.datetime.strptime(date, date_format)
     except ValueError:
         return False
     return True
 
 
-def generate_pdf(dict_data, type_doc, base_url):
+def generate_pdf(filename, dict_data, type_doc, base_url):
     types_and_templates = {
         "association_charter_summary": "./pdf_exports/association_charter_summary.html",
         "project_summary": "./pdf_exports/project_summary.html",
@@ -99,9 +100,8 @@ def generate_pdf(dict_data, type_doc, base_url):
     }
     html = render_to_string(types_and_templates[type_doc], dict_data)
     response = HttpResponse(content_type="application/pdf")
-    # TODO : find a correct file name pattern
-    response['Content-Disposition'] = (
-        'Content-Disposition: attachment; filename="export_%s.pdf"' % type_doc
-    )
+    response[
+        "Content-Disposition"
+    ] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
     return response

@@ -4625,10 +4625,9 @@ components:
         association_user:
           type: integer
           nullable: true
-        commissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Commission'
+        commission:
+          allOf:
+          - $ref: '#/components/schemas/Commission'
           readOnly: true
         planned_start_date:
           type: string
@@ -4645,7 +4644,7 @@ components:
         project_status:
           $ref: '#/components/schemas/ProjectStatusEnum'
       required:
-      - commissions
+      - commission
       - edition_date
       - id
       - name

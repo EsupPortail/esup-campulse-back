@@ -657,7 +657,10 @@ class AssociationDataExport(generics.RetrieveAPIView):
         )
 
         return generate_pdf(
-            data, "association_charter_summary", request.build_absolute_uri("/")
+            data["name"],
+            data,
+            "association_charter_summary",
+            request.build_absolute_uri("/"),
         )
 
 
