@@ -506,7 +506,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The commission submission date must not be over.
         """
         commission_fund_id = 3
-        commission = Commission.objects.get(id=commission_fund_id)
+        commission = Commission.objects.get(id=1)
         commission.submission_date = "1968-05-03"
         commission.save()
         response = self.student_misc_client.patch(
