@@ -48,7 +48,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 "is_site",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="Filter by is_site field.",
+                description="Filter to get commission by fund is_site setting.",
             ),
             OpenApiParameter(
                 "is_open_to_projects",
@@ -96,7 +96,11 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
         if is_site is not None and is_site != "":
             self.queryset = self.queryset.filter(
-                id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
+                id__in=CommissionFund.objects.filter(
+                    fund_id__in=Fund.objects.filter(
+                        is_site=to_bool(is_site)
+                    ).values_list("id")
+                ).values_list("commission_id")
             )
 
         if is_open_to_projects is not None and is_open_to_projects != "":

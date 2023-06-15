@@ -347,7 +347,7 @@ paths:
         name: is_site
         schema:
           type: boolean
-        description: Filter by is_site field.
+        description: Filter to get commission by fund is_site setting.
       - in: query
         name: managed_projects
         schema:
