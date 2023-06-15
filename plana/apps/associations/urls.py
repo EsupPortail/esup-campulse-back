@@ -3,13 +3,12 @@ from django.urls import path
 
 from .views.activity_field import AssociationActivityFieldList
 from .views.association import (
-    AssociationDataExport,
     AssociationListCreate,
     AssociationNameList,
     AssociationRetrieveUpdateDestroy,
     AssociationStatusUpdate,
 )
-from .views.association_export import AssociationsCSVExport
+from .views.association_export import AssociationDataExport, AssociationsCSVExport
 
 urlpatterns = [
     path("", AssociationListCreate.as_view(), name="association_list_create"),
