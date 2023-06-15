@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import filters, generics, response, status
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework import generics, response, status
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
@@ -18,6 +18,7 @@ from plana.apps.associations.serializers.association import (
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models import Institution, InstitutionComponent
+from plana.apps.users.models import GroupInstitutionFundUser
 from plana.utils import generate_pdf
 
 
@@ -85,7 +86,7 @@ class AssociationDataExport(generics.RetrieveAPIView):
 
 
 class AssociationsCSVExport(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
     serializer_class = AssociationAllDataReadSerializer
 
@@ -101,14 +102,29 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Associations List CSV export."""
-        queryset = self.get_queryset()
         associations = request.query_params.get("associations")
+
+        if request.user.has_perm("associations.change_association_any_institution"):
+            queryset = self.get_queryset()
+        else:
+            institutions = GroupInstitutionFundUser.objects.filter(
+                user_id=request.user.id
+            ).values_list("institution_id")
+            print(institutions)
+            print(len(institutions))
+            # strip none
+            if len(institutions) == 0:
+                return response.Response(
+                    {"error": _("Not allowed to export associations list CSV.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            queryset = self.get_queryset().exclude(~Q(institution_id__in=institutions))
 
         if associations is not None and associations != "":
             association_ids = [
                 int(association) for association in associations.split(",")
             ]
-            queryset = self.get_queryset().exclude(~Q(id__in=association_ids))
+            queryset = queryset.exclude(~Q(id__in=association_ids))
 
         http_response = HttpResponse(
             content_type="text/csv",

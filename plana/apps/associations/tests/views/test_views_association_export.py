@@ -16,7 +16,7 @@ from rest_framework import status
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 from plana.storages import DynamicThumbnailImageField
 
 
@@ -129,6 +129,24 @@ class AssociationExportsViewsTests(TestCase):
         response = self.president_client.get(f"/associations/{association_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_csv_export_associations_anonymous(self):
+        """
+        GET /associations/csv_export .
+
+        - The route cannot be accessed by an anonymous user.
+        """
+        response = self.client.get(f"/associations/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_csv_export_associations_forbidden(self):
+        """
+        GET /associations/csv_export .
+
+        - The route cannot be accessed by a user not linked to an institution.
+        """
+        response = self.member_client.get(f"/associations/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_get_csv_export_associations_success_general_manager(self):
         """
         GET /associations/csv_export .
@@ -142,6 +160,26 @@ class AssociationExportsViewsTests(TestCase):
         content = response.content.decode('utf-8')
         csv_reader = csv.reader(io.StringIO(content))
         total = Association.objects.all().count()
+        # -1 because of CSV header
+        self.assertEqual(len(list(csv_reader)) - 1, total)
+
+    def test_get_csv_export_associations_success_institution_manager(self):
+        """
+        GET /associations/csv_export .
+
+        - The route can be accessed by an institution manager user.
+        - All selected associations linked to the same institutions from db are returned in the CSV.
+        """
+        response = self.institution_client.get(f"/associations/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+        total = Association.objects.filter(
+            institution_id__in=GroupInstitutionFundUser.objects.filter(
+                user_id=self.manager_institution_user_id
+            ).values_list("institution_id")
+        ).count()
         # -1 because of CSV header
         self.assertEqual(len(list(csv_reader)) - 1, total)
 
@@ -162,6 +200,3 @@ class AssociationExportsViewsTests(TestCase):
         total = Association.objects.filter(id__in=[1, 2, 3]).count()
         # -1 because of CSV header
         self.assertEqual(len(list(csv_reader)) - 1, total)
-
-
-# TODO : unittests for permissions, institutions check in CSV export
