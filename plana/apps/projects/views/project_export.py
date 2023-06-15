@@ -109,7 +109,9 @@ class ProjectDataExport(generics.RetrieveAPIView):
             ).values("name", "document__name")
         )
 
-        return generate_pdf(data, "project_summary", request.build_absolute_uri("/"))
+        return generate_pdf(
+            data["name"], data, "project_summary", request.build_absolute_uri("/")
+        )
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -202,5 +204,8 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         )
 
         return generate_pdf(
-            data, "project_review_summary", request.build_absolute_uri('/')
+            data["name"],
+            data,
+            "project_review_summary",
+            request.build_absolute_uri('/'),
         )

@@ -25,7 +25,7 @@
     "fields": {
       "submission_date": "2099-10-07",
       "commission_date": "2099-10-21",
-      "is_open_to_projects": false,
+      "is_open_to_projects": true,
       "name": "Commission de rentrée d'octobre 2099"
     }
   },

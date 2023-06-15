@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 15:19+0200\n"
+"POT-Creation-Date: 2023-06-15 09:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -238,9 +238,9 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:397
 #: plana/apps/associations/views/association.py:564
 #: plana/apps/associations/views/association.py:626
-#: plana/apps/associations/views/association.py:775
+#: plana/apps/associations/views/association.py:778
 #: plana/apps/documents/views/document_upload.py:167
-#: plana/apps/projects/views/project.py:242
+#: plana/apps/projects/views/project.py:252
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
@@ -257,7 +257,7 @@ msgid "Association not public."
 msgstr "Association non publique."
 
 #: plana/apps/associations/views/association.py:418
-#: plana/apps/associations/views/association.py:787
+#: plana/apps/associations/views/association.py:790
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
@@ -293,13 +293,13 @@ msgstr "Non autorisé à supprimer une association pour cet établissement."
 msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
-#: plana/apps/associations/views/association.py:796
-#: plana/apps/projects/views/project.py:666
+#: plana/apps/associations/views/association.py:799
+#: plana/apps/projects/views/project.py:676
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:817
-#: plana/apps/projects/views/project.py:733
+#: plana/apps/associations/views/association.py:820
+#: plana/apps/projects/views/project.py:743
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -586,17 +586,17 @@ msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
 #: plana/apps/documents/views/document_upload.py:148
-#: plana/apps/projects/views/project.py:431
-#: plana/apps/projects/views/project.py:480
-#: plana/apps/projects/views/project.py:574
-#: plana/apps/projects/views/project.py:644
+#: plana/apps/projects/views/project.py:441
+#: plana/apps/projects/views/project.py:490
+#: plana/apps/projects/views/project.py:584
+#: plana/apps/projects/views/project.py:654
 #: plana/apps/projects/views/project_category.py:169
 #: plana/apps/projects/views/project_category.py:216
 #: plana/apps/projects/views/project_comment.py:54
 #: plana/apps/projects/views/project_comment.py:126
 #: plana/apps/projects/views/project_commission_fund.py:261
 #: plana/apps/projects/views/project_export.py:45
-#: plana/apps/projects/views/project_export.py:137
+#: plana/apps/projects/views/project_export.py:139
 #: plana/apps/projects/views/project_review.py:54
 #: plana/apps/projects/views/project_review.py:103
 msgid "Project does not exist."
@@ -860,42 +860,42 @@ msgstr "Fonds de Commission lié à un projet"
 msgid "Projects commissions funds"
 msgstr "Fonds de Commissions liés à des projets"
 
-#: plana/apps/projects/views/project.py:261
+#: plana/apps/projects/views/project.py:271
 msgid "User not allowed to create a new project for this association."
 msgstr "Utilisateur non autorisé à créer un projet pour cette association."
 
-#: plana/apps/projects/views/project.py:268
+#: plana/apps/projects/views/project.py:278
 msgid "User not allowed in this association."
 msgstr "Utilisateur non autorisé dans cette association."
 
-#: plana/apps/projects/views/project.py:273
+#: plana/apps/projects/views/project.py:283
 msgid "Association not allowed to create a new project."
 msgstr "Association non autorisée à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:289
+#: plana/apps/projects/views/project.py:299
 msgid "User not allowed to create a new project."
 msgstr "Utilisateur non autorisé à créer un nouveau projet."
 
-#: plana/apps/projects/views/project.py:312
+#: plana/apps/projects/views/project.py:322
 msgid "A project can only have one affectation."
 msgstr "Un projet ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/projects/views/project.py:326
+#: plana/apps/projects/views/project.py:336
 msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou association."
 
-#: plana/apps/projects/views/project.py:340
-#: plana/apps/projects/views/project.py:501
+#: plana/apps/projects/views/project.py:350
+#: plana/apps/projects/views/project.py:511
 msgid "Cannot add a user from an association."
 msgstr "Impossible d'ajouter un utilisateur d'association."
 
-#: plana/apps/projects/views/project.py:351
-#: plana/apps/projects/views/project.py:512
+#: plana/apps/projects/views/project.py:361
+#: plana/apps/projects/views/project.py:522
 msgid "Link between association and user does not exist."
 msgstr "Le lien entre l'utilisateur et l'association n'existe pas."
 
-#: plana/apps/projects/views/project.py:364
-#: plana/apps/projects/views/project.py:537
+#: plana/apps/projects/views/project.py:374
+#: plana/apps/projects/views/project.py:547
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
@@ -903,20 +903,20 @@ msgstr ""
 "Le nombre d'étudiants dans le public attendu ne peut être supérieur au "
 "nombre total de personnes attendues."
 
-#: plana/apps/projects/views/project.py:381
-#: plana/apps/projects/views/project.py:554
+#: plana/apps/projects/views/project.py:391
+#: plana/apps/projects/views/project.py:564
 msgid "Can't set planned start date after planned end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
-#: plana/apps/projects/views/project.py:441
+#: plana/apps/projects/views/project.py:451
 #: plana/apps/projects/views/project_export.py:55
-#: plana/apps/projects/views/project_export.py:147
+#: plana/apps/projects/views/project_export.py:149
 #: plana/apps/projects/views/project_review.py:64
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:486
-#: plana/apps/projects/views/project.py:650
+#: plana/apps/projects/views/project.py:496
+#: plana/apps/projects/views/project.py:660
 #: plana/apps/projects/views/project_comment.py:213
 #: plana/apps/projects/views/project_comment.py:255
 #: plana/apps/projects/views/project_commission_fund.py:156
@@ -926,31 +926,31 @@ msgstr "Non autorisé à récupérer ce projet."
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:495
+#: plana/apps/projects/views/project.py:505
 msgid "Project is not a draft that can be edited."
 msgstr "Le projet n'est pas un brouillon pouvant être modifié."
 
-#: plana/apps/projects/views/project.py:524
+#: plana/apps/projects/views/project.py:534
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:580
+#: plana/apps/projects/views/project.py:590
 msgid "Not allowed to delete this project."
 msgstr "Non autorisé à supprimer ce projet."
 
-#: plana/apps/projects/views/project.py:589
+#: plana/apps/projects/views/project.py:599
 msgid "Cannot delete a non-draft project."
 msgstr "Impossible de supprimer un projet non-brouillon."
 
-#: plana/apps/projects/views/project.py:673
+#: plana/apps/projects/views/project.py:683
 msgid "Cannot change this project status anymore."
 msgstr "Il n'est plus possible de changer le statut de ce projet."
 
-#: plana/apps/projects/views/project.py:682
+#: plana/apps/projects/views/project.py:692
 msgid "Cannot rollback to a previous status."
 msgstr "Un projet ne peut revenir à un état précédent."
 
-#: plana/apps/projects/views/project.py:691
+#: plana/apps/projects/views/project.py:701
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
@@ -1263,24 +1263,24 @@ msgstr "Ajouter un fond dans ce groupe n'est pas possible."
 msgid "Not allowed to get this link between group and user."
 msgstr "Non autorisé à récupérer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/group_institution_fund_user.py:251
-#: plana/apps/users/views/group_institution_fund_user.py:305
-#: plana/apps/users/views/group_institution_fund_user.py:360
+#: plana/apps/users/views/group_institution_fund_user.py:250
+#: plana/apps/users/views/group_institution_fund_user.py:304
+#: plana/apps/users/views/group_institution_fund_user.py:359
 msgid "User or link does not exist."
 msgstr "L'association ou le lien n'existe pas."
 
-#: plana/apps/users/views/group_institution_fund_user.py:261
+#: plana/apps/users/views/group_institution_fund_user.py:260
 msgid "User is still linked to an association."
 msgstr "L'utilisateur est encore membre d'une association."
 
-#: plana/apps/users/views/group_institution_fund_user.py:267
-#: plana/apps/users/views/group_institution_fund_user.py:322
-#: plana/apps/users/views/group_institution_fund_user.py:376
+#: plana/apps/users/views/group_institution_fund_user.py:266
+#: plana/apps/users/views/group_institution_fund_user.py:321
+#: plana/apps/users/views/group_institution_fund_user.py:375
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/apps/users/views/group_institution_fund_user.py:316
-#: plana/apps/users/views/group_institution_fund_user.py:370
+#: plana/apps/users/views/group_institution_fund_user.py:315
+#: plana/apps/users/views/group_institution_fund_user.py:369
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
@@ -1541,24 +1541,24 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/utils.py:21
+#: plana/utils.py:22
 #, python-brace-format
 msgid "Password too short (at least {min_length} chars)."
 msgstr "Mot de passe trop court (au moins {min_length} caractères)."
 
-#: plana/utils.py:24
+#: plana/utils.py:25
 msgid "Password should contain at least one lowercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
 
-#: plana/utils.py:27
+#: plana/utils.py:28
 msgid "Password should contain at least one uppercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
 
-#: plana/utils.py:30
+#: plana/utils.py:31
 msgid "Password should contain at least one digit."
 msgstr "Le mot de passe doit contenir au moins un chiffre."
 
-#: plana/utils.py:35
+#: plana/utils.py:36
 msgid ""
 "Password should contain at least one special char ( / * - + = . , ; : ! ? & "
 "\" ' ( ) _ [ ] { } @ % # $ < > )."
@@ -1566,7 +1566,7 @@ msgstr ""
 "Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
 "= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."
 
-#: plana/utils.py:41
+#: plana/utils.py:42
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
