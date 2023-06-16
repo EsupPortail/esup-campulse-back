@@ -709,22 +709,22 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             "site_name": current_site.name,
         }
         if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
-            document_process_type = ""
+            document_process_types = []
             association_email_template_code = ""
             user_email_template_code = ""
             if new_project_status == "PROJECT_PROCESSING":
-                document_process_type = "DOCUMENT_PROJECT"
+                document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
                 association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
                 user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
             elif new_project_status == "PROJECT_REVIEW_PROCESSING":
-                document_process_type = "DOCUMENT_PROJECT_REVIEW"
+                document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = (
                     "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
                 )
                 user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
             missing_documents_names = (
                 Document.objects.filter(
-                    models.Q(process_type=document_process_type)
+                    models.Q(process_type__in=document_process_types)
                     & (
                         models.Q(is_required_in_process=True, fund_id=None)
                         | models.Q(

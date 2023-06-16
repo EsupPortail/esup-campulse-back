@@ -262,5 +262,53 @@
       "project": 1,
       "user": 9
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 24,
+    "fields": {
+      "name": "charte-fsdie.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 3,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 25,
+    "fields": {
+      "name": "charte-idex.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 4,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 26,
+    "fields": {
+      "name": "rgpd-fsdie.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 5,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 27,
+    "fields": {
+      "name": "rgpd-idex.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 6,
+      "project": 2,
+      "association": 2
+    }
   }
 ]
