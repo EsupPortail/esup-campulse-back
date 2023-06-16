@@ -35,7 +35,7 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
             _("Student misc name"),
             _("Project start date"),
             _("Project end date"),
-            _("Reedition"),
+            _("First edition"),
             _("Categories"),
         ]
 
@@ -87,18 +87,18 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                 project_id=project.id
             )
 
-            is_first_edition = True
+            is_first_edition = _("Yes")
             for edition in project_commission_funds:
                 if not edition.is_first_edition:
-                    is_first_edition = False
+                    is_first_edition = _("No")
                     break
 
             fields = [
                 project.id,
                 association,
                 user,
-                project.planned_start_date,
-                project.planned_end_date,
+                project.planned_start_date.date(),
+                project.planned_end_date.date(),
                 is_first_edition,
                 categories,
             ]
