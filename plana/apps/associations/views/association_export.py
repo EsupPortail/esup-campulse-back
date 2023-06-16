@@ -108,11 +108,8 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
             queryset = self.get_queryset()
         else:
             institutions = GroupInstitutionFundUser.objects.filter(
-                user_id=request.user.id
+                user_id=request.user.id, institution_id__isnull=False
             ).values_list("institution_id")
-            print(institutions)
-            print(len(institutions))
-            # strip none
             if len(institutions) == 0:
                 return response.Response(
                     {"error": _("Not allowed to export associations list CSV.")},
