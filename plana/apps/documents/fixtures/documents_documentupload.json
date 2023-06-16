@@ -310,5 +310,17 @@
       "project": 2,
       "association": 2
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 28,
+    "fields": {
+      "name": "dossier-projet-asso.pdf",
+      "upload_date": "2023-03-14T15:30:00.000Z",
+      "path_file": "",
+      "document": 17,
+      "project": 2,
+      "association": 2
+    }
   }
 ]

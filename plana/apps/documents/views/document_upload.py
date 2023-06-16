@@ -265,6 +265,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             )
 
+        if document.process_type in Document.ProcessType.get_validated_documents():
+            pass
+
         # request.data["name"] = f"{slugify(document.name)}{'.'.join(Path(request.data["path_file"].name).suffixes)}"
         request.data["name"] = request.data["path_file"].name
 
