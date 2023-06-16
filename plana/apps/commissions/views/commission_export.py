@@ -1,6 +1,7 @@
 """Views directly linked to commission exports."""
 import csv
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics
@@ -28,27 +29,21 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         commission_id = kwargs["pk"]
 
-        funds = Fund.objects.all()
-        http_response = HttpResponse(content_type="application/csv")
-        http_response[
-            "Content-Disposition"
-        ] = f"Content-Disposition: attachment; filename='commission_{commission_id}_export.csv'"
+        fields = [
+            _("Project ID"),
+            _("Association name"),
+            _("Student misc name"),
+            _("Commission date"),
+            _("Start Date"),
+            _("End Date"),
+            _("Reedition"),
+            _("Categories"),
+        ]
 
-        writer = csv.writer(http_response)
-        # Write column titles for the CSV file
-        writer.writerow(
-            [
-                _("Project ID"),
-                _("Association name"),
-                _("Student misc name"),
-                _("Commission date"),
-                _("Start Date"),
-                _("End Date"),
-                _("Reedition"),
-                _("Categories"),
-            ]
-        )
-        # Add amount asked and earned for each fund
+        funds = Fund.objects.all().order_by("acronym")
+        for fund in funds:
+            fields.append(_(f"Amount asked {fund.acronym}"))
+            fields.append(_(f"Amount earned {fund.acronym}"))
 
         projects = queryset.filter(
             id__in=ProjectCommissionFund.objects.filter(
@@ -57,6 +52,16 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                 ).values("id")
             )
         ).order_by("id")
+
+        http_response = HttpResponse(content_type="application/csv")
+        http_response[
+            "Content-Disposition"
+        ] = f"Content-Disposition: attachment; filename='commission_{commission_id}_export.csv'"
+
+        writer = csv.writer(http_response)
+        # Write column titles for the CSV file
+        writer.writerow([field for field in fields])
+
         for project in projects:
             association = (
                 None
@@ -85,18 +90,31 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                     is_first_edition = False
                     break
 
+            fields = [
+                project.id,
+                association,
+                user,
+                commission,
+                project.planned_start_date,
+                project.planned_end_date,
+                is_first_edition,
+                categories,
+            ]
+            for fund in funds:
+                try:
+                    pcf = ProjectCommissionFund.objects.get(
+                        project_id=project.id,
+                        commission_fund_id=CommissionFund.objects.get(
+                            commission_id=commission_id, fund_id=fund.id
+                        ).id,
+                    )
+                    fields.append(pcf.amount_asked)
+                    fields.append(pcf.amount_earned)
+                except ObjectDoesNotExist:
+                    fields.append(0)
+                    fields.append(0)
+
             # Write CSV file content
-            writer.writerow(
-                [
-                    project.id,
-                    association,
-                    user,
-                    commission,
-                    project.planned_start_date,
-                    project.planned_end_date,
-                    is_first_edition,
-                    categories,
-                ]
-            )
+            writer.writerow([field for field in fields])
 
         return http_response
