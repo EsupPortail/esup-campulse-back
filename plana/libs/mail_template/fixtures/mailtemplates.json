@@ -734,5 +734,65 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 45,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_VALIDATED",
+      "label": "Association Charter Validated",
+      "description": "Message reçu par une association si sa charte est validée.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a bien été validée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 46,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_REJECTED",
+      "label": "Association Charter Rejected",
+      "description": "Message reçu par une association si sa charte est rejetée.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a été rejetée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a été rejetée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 47,
+    "fields": {
+      "code": "DOCUMENT_VALIDATED",
+      "label": "Document Validated",
+      "description": "Message reçu par une association ou un étudiant si l'un de ses documents est validé.",
+      "subject": "{{ site_name }} – L'un de vos documents a été validé.",
+      "body": "Bonjour,<br/><br/>L'un de vos documents a été validé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 48,
+    "fields": {
+      "code": "DOCUMENT_REJECTED",
+      "label": "Document Rejected",
+      "description": "Message reçu par une association ou un étudiant si l'un de ses documents est rejeté.",
+      "subject": "{{ site_name }} – L'un de vos documents a été rejeté.",
+      "body": "Bonjour,<br/><br/>L'un de vos documents a été rejeté.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

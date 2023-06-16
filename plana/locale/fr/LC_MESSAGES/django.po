@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 14:45+0200\n"
+"POT-Creation-Date: 2023-06-16 16:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -646,17 +646,17 @@ msgstr "Ce document ne peut être proposé plusieurs fois."
 
 #: plana/apps/documents/views/document_upload.py:344
 #: plana/apps/documents/views/document_upload.py:405
-#: plana/apps/documents/views/document_upload.py:447
-#: plana/apps/documents/views/document_upload.py:497
+#: plana/apps/documents/views/document_upload.py:471
+#: plana/apps/documents/views/document_upload.py:542
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document_upload.py:365
-#: plana/apps/documents/views/document_upload.py:518
+#: plana/apps/documents/views/document_upload.py:563
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:468
+#: plana/apps/documents/views/document_upload.py:492
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 

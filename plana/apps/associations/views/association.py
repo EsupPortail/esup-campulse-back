@@ -821,13 +821,12 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
         if request.data["charter_status"] == "CHARTER_PROCESSING":
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
-
             template = MailTemplate.objects.get(
                 code="NEW_ASSOCIATION_CHARTER_TO_PROCESS"
             )
@@ -844,7 +843,17 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
-            template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_SENT")
+            request.data["charter_date"] = datetime.date.today()
+
+        mail_templates_codes_by_status = {
+            "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_SENT",
+            "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_VALIDATED",
+            "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTED",
+        }
+        if request.data["charter_status"] in mail_templates_codes_by_status:
+            template = MailTemplate.objects.get(
+                code=mail_templates_codes_by_status[request.data["charter_status"]]
+            )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=association.email,
@@ -853,7 +862,5 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 ),
                 message=template.parse_vars(request.user, request, context),
             )
-
-            request.data["charter_date"] = datetime.date.today()
 
         return self.update(request, *args, **kwargs)

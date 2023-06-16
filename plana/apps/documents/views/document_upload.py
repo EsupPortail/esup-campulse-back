@@ -426,6 +426,30 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        if (
+            "validated_date" in request.data["validated_date"]
+            and request.data["validated_date"] != ""
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="DOCUMENT_VALIDATED")
+            email = ""
+            if document_upload.association_id is not None:
+                email = Association.objects.get(id=document_upload.association_id).email
+            if document_upload.user_id is not None:
+                email = User.objects.get(id=document_upload.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         return self.partial_update(request, *args, **kwargs)
 
     @extend_schema(
@@ -467,6 +491,27 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             return response.Response(
                 {"error": _("Not allowed to delete this uploaded document.")},
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if request.user.is_staff is True:
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="DOCUMENT_REJECTED")
+            email = ""
+            if document_upload.association_id is not None:
+                email = Association.objects.get(id=document_upload.association_id).email
+            if document_upload.user_id is not None:
+                email = User.objects.get(id=document_upload.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
             )
 
         return self.destroy(request, *args, **kwargs)
