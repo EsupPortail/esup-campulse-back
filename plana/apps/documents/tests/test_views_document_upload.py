@@ -197,8 +197,8 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.get(
             f"/documents/uploads?is_validated_by_admin=true"
         )
-        documents_cnt = DocumentUpload.objects.filter(
-            is_validated_by_admin=True
+        documents_cnt = DocumentUpload.objects.exclude(
+            validated_date__isnull=True
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
@@ -369,7 +369,7 @@ class DocumentsViewsTests(TestCase):
             "project": 1,
             "document": 19,
             "user": self.student_misc_user_id,
-            "is_validated_by_admin": True,
+            "validated_date": "2023-03-15",
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -469,7 +469,7 @@ class DocumentsViewsTests(TestCase):
 
         - An anonymous user can't execute this request.
         """
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -484,7 +484,7 @@ class DocumentsViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Document Upload must exist.
         """
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.general_client.patch(
             "/documents/uploads/999", data=patch_data, content_type="application/json"
         )
@@ -496,7 +496,7 @@ class DocumentsViewsTests(TestCase):
 
         - A user without proper permissions can't execute this request.
         """
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.student_site_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -513,7 +513,7 @@ class DocumentsViewsTests(TestCase):
         document = Document.objects.get(id=self.new_document.data["document"])
         document.institution_id = 7
         document.save()
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.institution_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -530,7 +530,7 @@ class DocumentsViewsTests(TestCase):
         document = Document.objects.get(id=self.new_document.data["document"])
         document.fund_id = 1
         document.save()
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.institution_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -545,7 +545,7 @@ class DocumentsViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Serializers fields must be valid.
         """
-        patch_data = {"is_validated_by_admin": "saucisse"}
+        patch_data = {"validated_date": "saucisse"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -560,7 +560,7 @@ class DocumentsViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Document object is successfully changed in db.
         """
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"validated_date": "2023-03-15"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -569,7 +569,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])
-        self.assertTrue(document_upload.is_validated_by_admin)
+        self.assertNotEqual(document_upload.validated_date, None)
 
     def test_delete_document_upload_anonymous(self):
         """

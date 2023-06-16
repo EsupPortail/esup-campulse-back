@@ -3649,8 +3649,10 @@ components:
           type: string
           format: date-time
           readOnly: true
-        is_validated_by_admin:
-          type: boolean
+        validated_date:
+          type: string
+          format: date
+          nullable: true
         document:
           type: integer
         user:
@@ -3688,8 +3690,10 @@ components:
           type: string
           format: uri
           title: Uploaded file
-        is_validated_by_admin:
-          type: boolean
+        validated_date:
+          type: string
+          format: date
+          nullable: true
         document:
           type: integer
         user:
@@ -3720,8 +3724,10 @@ components:
           type: string
           format: binary
           title: Uploaded file
-        is_validated_by_admin:
-          type: boolean
+        validated_date:
+          type: string
+          format: date
+          nullable: true
         document:
           type: integer
         user:
@@ -3755,8 +3761,10 @@ components:
       type: object
       description: Serializer to validate a document.
       properties:
-        is_validated_by_admin:
-          type: boolean
+        validated_date:
+          type: string
+          format: date
+          nullable: true
     ExternalUser:
       type: object
       description: External user serializer.
@@ -4148,8 +4156,10 @@ components:
       type: object
       description: Serializer to validate a document.
       properties:
-        is_validated_by_admin:
-          type: boolean
+        validated_date:
+          type: string
+          format: date
+          nullable: true
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.

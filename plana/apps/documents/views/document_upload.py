@@ -121,8 +121,8 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         if is_validated_by_admin is not None and is_validated_by_admin != "":
             is_validated_by_admin = to_bool(is_validated_by_admin)
-            self.queryset = self.queryset.filter(
-                is_validated_by_admin=is_validated_by_admin,
+            self.queryset = self.queryset.exclude(
+                validated_date__isnull=is_validated_by_admin,
             )
 
         return self.list(request, *args, **kwargs)
@@ -208,7 +208,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        if "is_validated_by_admin" in request.data and not request.user.has_perm(
+        if "validated_date" in request.data and not request.user.has_perm(
             "documents.add_documentupload_all"
         ):
             return response.Response(

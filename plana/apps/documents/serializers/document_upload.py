@@ -41,7 +41,7 @@ class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentUpload
-        fields = ["is_validated_by_admin"]
+        fields = ["validated_date"]
 
 
 class DocumentUploadFileSerializer(serializers.ModelSerializer):
