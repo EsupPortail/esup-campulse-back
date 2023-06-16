@@ -33,9 +33,8 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
             _("Project ID"),
             _("Association name"),
             _("Student misc name"),
-            _("Commission date"),
-            _("Start Date"),
-            _("End Date"),
+            _("Project start date"),
+            _("Project end date"),
             _("Reedition"),
             _("Categories"),
         ]
@@ -68,22 +67,26 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                 if project.association_id is None
                 else Association.objects.get(id=project.association_id).name
             )
-            user = (
-                None
-                if project.user_id is None
-                else User.objects.get(id=project.user_id).username
-            )
-            commission = Commission.objects.get(id=commission_id).name
+
+            if project.user_id is None:
+                user = None
+            else:
+                user = User.objects.get(id=project.user_id)
+                user = f"{user.last_name} {user.first_name}"
+
             categories = list(
                 Category.objects.filter(
                     id__in=ProjectCategory.objects.filter(
                         project_id=project.id
                     ).values_list("category_id")
-                ).values_list("name")
+                ).values_list("name", flat=True)
             )
+            categories = ', '.join(categories)
+
             project_commission_funds = ProjectCommissionFund.objects.filter(
                 project_id=project.id
             )
+
             is_first_edition = True
             for edition in project_commission_funds:
                 if not edition.is_first_edition:
@@ -94,12 +97,12 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                 project.id,
                 association,
                 user,
-                commission,
                 project.planned_start_date,
                 project.planned_end_date,
                 is_first_edition,
                 categories,
             ]
+
             for fund in funds:
                 try:
                     pcf = ProjectCommissionFund.objects.get(
