@@ -704,5 +704,35 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 43,
+    "fields": {
+      "code": "NEW_DOCUMENT_TO_PROCESS",
+      "label": "New Document To Process",
+      "description": "Message reçu par un gestionnaire au dépôt d'un nouveau document.",
+      "subject": "{{ site_name }} – Un document à valider vient d'être déposé",
+      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 44,
+    "fields": {
+      "code": "DOCUMENT_SENT",
+      "label": "Document Sent",
+      "description": "Message reçu par un étudiant ou une association au dépôt d'un nouveau document.",
+      "subject": "{{ site_name }} – Votre nouveau document a bien été déposé.",
+      "body": "Bonjour,<br/><br/>Votre nouveau document a bien été déposé. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

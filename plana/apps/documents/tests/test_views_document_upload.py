@@ -540,7 +540,7 @@ class DocumentsViewsTests(TestCase):
 
     def test_patch_documents_serializer_error(self):
         """
-        PATCH /documents/{id} .
+        PATCH /documents/uploads/{id} .
 
         - A user with proper permissions can execute this request.
         - Serializers fields must be valid.
@@ -555,7 +555,7 @@ class DocumentsViewsTests(TestCase):
 
     def test_patch_documents_success(self):
         """
-        PATCH /documents/{id} .
+        PATCH /documents/uploads/{id} .
 
         - A user with proper permissions can execute this request.
         - Document object is successfully changed in db.

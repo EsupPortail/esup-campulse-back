@@ -1,6 +1,8 @@
 """Views directly linked to document uploads."""
 from pathlib import Path
 
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import FileResponse
@@ -21,9 +23,11 @@ from plana.apps.documents.serializers.document_upload import (
     DocumentUploadSerializer,
     DocumentUploadUpdateSerializer,
 )
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import AssociationUser
-from plana.utils import to_bool
+from plana.apps.users.models.user import AssociationUser, User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail, to_bool
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
@@ -170,6 +174,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+        association = None
         if (
             "association" in request.data
             and request.data["association"] is not None
@@ -193,11 +198,19 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+        user = None
         if (
             "user" in request.data
             and request.data["user"] is not None
             and request.data["user"] != ""
         ):
+            try:
+                user = User.objects.get(id=request.data["user"])
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("User does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
             existing_document = existing_document.filter(user_id=request.user.pk)
             if (
                 not request.user.has_perm("documents.add_documentupload_all")
@@ -216,29 +229,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "association" in request.data
-            and request.data["association"] is not None
-            and request.data["association"] != ""
-        ) and (
-            "user" in request.data
-            and request.data["user"] is not None
-            and request.data["user"] != ""
-        ):
+        if association is not None and user is not None:
             return response.Response(
                 {"error": _("A document upload can only have one affectation.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            not "association" in request.data
-            or request.data["association"] is None
-            or request.data["association"] == ""
-        ) and (
-            not "user" in request.data
-            or request.data["user"] is None
-            or request.data["user"] == ""
-        ):
+        if association is None and user is None:
             return response.Response(
                 {"error": _("Missing affectation of the new document upload.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -266,7 +263,49 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             )
 
         if document.process_type in Document.ProcessType.get_validated_documents():
-            pass
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+
+            template = MailTemplate.objects.get(code="NEW_DOCUMENT_TO_PROCESS")
+            managers_emails = []
+            if association is not None:
+                managers_emails = (
+                    Institution.objects.get(id=association.institution_id)
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                )
+            if user is not None:
+                for user_to_check in User.objects.filter(
+                    is_superuser=False, is_staff=True
+                ):
+                    if user_to_check.has_perm("users.change_user_misc"):
+                        managers_emails.append(user_to_check.email)
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=managers_emails,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+            template = MailTemplate.objects.get(code="DOCUMENT_SENT")
+            email = ""
+            if association is not None:
+                email = association.email
+            if user is not None:
+                email = user.email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
 
         # request.data["name"] = f"{slugify(document.name)}{'.'.join(Path(request.data["path_file"].name).suffixes)}"
         request.data["name"] = request.data["path_file"].name
@@ -402,6 +441,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         """Destroys an uploaded document."""
         try:
             document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
+            document = Document.objects.get(id=document_upload.document_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},

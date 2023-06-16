@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 10:48+0200\n"
+"POT-Creation-Date: 2023-06-16 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: plana/apps/associations/models/association.py:40
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:12
-#: plana/apps/documents/models/document.py:58
+#: plana/apps/documents/models/document.py:64
 #: plana/apps/documents/models/document_upload.py:39
 #: plana/apps/institutions/models/institution.py:10
 #: plana/apps/institutions/models/institution_component.py:9
@@ -47,7 +47,7 @@ msgstr "Courriel"
 
 #: plana/apps/associations/models/association.py:45
 #: plana/apps/commissions/models/fund.py:13
-#: plana/apps/documents/models/document.py:59
+#: plana/apps/documents/models/document.py:65
 #: plana/apps/institutions/models/institution.py:11
 msgid "Acronym"
 msgstr "Acronyme"
@@ -183,7 +183,7 @@ msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:105
 #: plana/apps/commissions/models/fund.py:19
-#: plana/apps/documents/models/document.py:78
+#: plana/apps/documents/models/document.py:84
 #: plana/apps/institutions/models/institution.py:38
 #: plana/apps/institutions/models/institution_component.py:12
 msgid "Institution"
@@ -239,7 +239,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:564
 #: plana/apps/associations/views/association.py:626
 #: plana/apps/associations/views/association.py:778
-#: plana/apps/documents/views/document_upload.py:182
+#: plana/apps/documents/views/document_upload.py:187
 #: plana/apps/projects/views/project.py:252
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -327,7 +327,7 @@ msgstr "Commissions"
 
 #: plana/apps/commissions/models/commission_fund.py:16
 #: plana/apps/commissions/models/fund.py:27
-#: plana/apps/documents/models/document.py:84
+#: plana/apps/documents/models/document.py:90
 msgid "Fund"
 msgstr "Fonds"
 
@@ -469,42 +469,42 @@ msgstr "Document pour Bilan de Subvention"
 msgid "Document not linked to a process"
 msgstr "Document non lié à un processus"
 
-#: plana/apps/documents/models/document.py:60
+#: plana/apps/documents/models/document.py:66
 #: plana/libs/mail_template/models.py:12 plana/libs/mail_template/models.py:46
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/documents/models/document.py:61
+#: plana/apps/documents/models/document.py:67
 msgid "Contact address"
 msgstr "Adresse de contact"
 
-#: plana/apps/documents/models/document.py:62
+#: plana/apps/documents/models/document.py:68
 msgid "Is multiple"
 msgstr "Est multiple"
 
-#: plana/apps/documents/models/document.py:64
+#: plana/apps/documents/models/document.py:70
 msgid "Is required in process"
 msgstr "Est requis dans son processus"
 
-#: plana/apps/documents/models/document.py:67
+#: plana/apps/documents/models/document.py:73
 msgid "Days before document expiration"
 msgstr "Nombre de jours avant expiration du document"
 
-#: plana/apps/documents/models/document.py:70
+#: plana/apps/documents/models/document.py:76
 msgid "Example template file"
 msgstr "Template de fichier d'exemple"
 
-#: plana/apps/documents/models/document.py:89
+#: plana/apps/documents/models/document.py:95
 msgid "Document Status"
 msgstr "Statut du Document"
 
-#: plana/apps/documents/models/document.py:99
+#: plana/apps/documents/models/document.py:105
 #: plana/apps/documents/models/document_upload.py:42
 msgid "Document"
 msgstr "Document"
 
-#: plana/apps/documents/models/document.py:100
+#: plana/apps/documents/models/document.py:106
 msgid "Documents"
 msgstr "Documents"
 
@@ -555,18 +555,18 @@ msgstr "Non autorisé à créer un document pour ce fond."
 #: plana/apps/documents/views/document.py:149
 #: plana/apps/documents/views/document.py:188
 #: plana/apps/documents/views/document.py:248
-#: plana/apps/documents/views/document_upload.py:145
-#: plana/apps/documents/views/document_upload.py:153
+#: plana/apps/documents/views/document_upload.py:149
+#: plana/apps/documents/views/document_upload.py:157
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document.py:198
-#: plana/apps/documents/views/document_upload.py:373
+#: plana/apps/documents/views/document_upload.py:415
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:208
-#: plana/apps/documents/views/document_upload.py:383
+#: plana/apps/documents/views/document_upload.py:425
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fond."
 
@@ -575,7 +575,7 @@ msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
 #: plana/apps/documents/views/document.py:228
-#: plana/apps/documents/views/document_upload.py:264
+#: plana/apps/documents/views/document_upload.py:261
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
@@ -591,7 +591,7 @@ msgstr "Non autorisé à supprimer un document pour ce fond."
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
-#: plana/apps/documents/views/document_upload.py:163
+#: plana/apps/documents/views/document_upload.py:167
 #: plana/apps/projects/views/project.py:441
 #: plana/apps/projects/views/project.py:490
 #: plana/apps/projects/views/project.py:584
@@ -608,47 +608,55 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:169
+#: plana/apps/documents/views/document_upload.py:173
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
-#: plana/apps/documents/views/document_upload.py:192
+#: plana/apps/documents/views/document_upload.py:197
 msgid "Not allowed to post documents if not president."
 msgstr "Non autorisé à ajouter un document si non président."
 
-#: plana/apps/documents/views/document_upload.py:207
+#: plana/apps/documents/views/document_upload.py:211
+#: plana/apps/users/views/association_user.py:279
+#: plana/apps/users/views/group_institution_fund_user.py:204
+#: plana/apps/users/views/user.py:328 plana/apps/users/views/user.py:375
+#: plana/apps/users/views/user.py:502
+msgid "User does not exist."
+msgstr "Cet utilisateur n'existe pas."
+
+#: plana/apps/documents/views/document_upload.py:220
 msgid "Not allowed to upload documents with this user."
 msgstr "Non autorisé à ajouter un document avec cet utilisateur."
 
-#: plana/apps/documents/views/document_upload.py:215
+#: plana/apps/documents/views/document_upload.py:228
 msgid "Not allowed to validate documents."
 msgstr "Non autorisé à valider des documents."
 
-#: plana/apps/documents/views/document_upload.py:229
+#: plana/apps/documents/views/document_upload.py:234
 msgid "A document upload can only have one affectation."
 msgstr "Un document ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:243
+#: plana/apps/documents/views/document_upload.py:240
 msgid "Missing affectation of the new document upload."
 msgstr "Le document n'est affecté à aucune personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:249
+#: plana/apps/documents/views/document_upload.py:246
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:302
-#: plana/apps/documents/views/document_upload.py:363
-#: plana/apps/documents/views/document_upload.py:404
-#: plana/apps/documents/views/document_upload.py:454
+#: plana/apps/documents/views/document_upload.py:344
+#: plana/apps/documents/views/document_upload.py:405
+#: plana/apps/documents/views/document_upload.py:447
+#: plana/apps/documents/views/document_upload.py:497
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:323
-#: plana/apps/documents/views/document_upload.py:475
+#: plana/apps/documents/views/document_upload.py:365
+#: plana/apps/documents/views/document_upload.py:518
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:425
+#: plana/apps/documents/views/document_upload.py:468
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 
@@ -1193,13 +1201,6 @@ msgstr "L'utilisateur est déjà membre de l'association."
 #: plana/apps/users/views/association_user.py:220
 msgid "President already in association."
 msgstr "L'association a déjà un président."
-
-#: plana/apps/users/views/association_user.py:279
-#: plana/apps/users/views/group_institution_fund_user.py:204
-#: plana/apps/users/views/user.py:328 plana/apps/users/views/user.py:375
-#: plana/apps/users/views/user.py:502
-msgid "User does not exist."
-msgstr "Cet utilisateur n'existe pas."
 
 #: plana/apps/users/views/association_user.py:294
 msgid "Not allowed to get this link between association and user."
