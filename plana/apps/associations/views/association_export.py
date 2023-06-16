@@ -135,9 +135,9 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
                 _("Name"),
                 _("Acronym"),
                 _("Institution"),
-                _("Activity Field"),
-                _("Institution Component"),
-                _("Last GOA Date"),
+                _("Activity field"),
+                _("Institution component"),
+                _("Last GOA date"),
                 _("Email"),
             ]
         )
