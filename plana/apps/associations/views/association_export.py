@@ -123,10 +123,11 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
             ]
             queryset = queryset.exclude(~Q(id__in=association_ids))
 
-        http_response = HttpResponse(
-            content_type="text/csv",
-            headers={"Content-Disposition": 'attachment; filename="associations.csv"'},
-        )
+        http_response = HttpResponse(content_type="application/csv")
+        http_response[
+            "Content-Disposition"
+        ] = "Content-Disposition: attachment; filename='associations_export.csv'"
+
         writer = csv.writer(http_response)
         # Write column titles for the CSV file
         writer.writerow(
@@ -141,6 +142,7 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
             ]
         )
 
+        # Write CSV file content
         for association in queryset:
             institution_component = (
                 None
