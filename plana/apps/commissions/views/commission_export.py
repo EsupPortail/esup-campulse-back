@@ -5,10 +5,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
-from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.commissions.models import CommissionFund, Fund
 from plana.apps.projects.models import (
     Category,
     Project,
@@ -20,7 +20,7 @@ from plana.apps.users.models import User
 
 
 class CommissionProjectsCSVExport(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
@@ -102,7 +102,6 @@ class CommissionProjectsCSVExport(generics.RetrieveAPIView):
                 is_first_edition,
                 categories,
             ]
-
             for fund in funds:
                 try:
                     pcf = ProjectCommissionFund.objects.get(
