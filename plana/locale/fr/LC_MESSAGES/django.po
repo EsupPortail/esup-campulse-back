@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 10:05+0200\n"
+"POT-Creation-Date: 2023-06-16 15:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -394,6 +394,55 @@ msgstr "Impossible de supprimer une commission passée."
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
+#: plana/apps/commissions/views/commission_export.py:33
+msgid "Project ID"
+msgstr "Numéro de projet"
+
+#: plana/apps/commissions/views/commission_export.py:34
+msgid "Association name"
+msgstr "Nom de l'association"
+
+#: plana/apps/commissions/views/commission_export.py:35
+msgid "Student misc name"
+msgstr "Nom du porteur individuel"
+
+#: plana/apps/commissions/views/commission_export.py:36
+msgid "Project start date"
+msgstr "Date de début de projet"
+
+#: plana/apps/commissions/views/commission_export.py:37
+msgid "Project end date"
+msgstr "Date de fin de projet"
+
+#: plana/apps/commissions/views/commission_export.py:38
+msgid "First edition"
+msgstr "Est la première édition du projet"
+
+#: plana/apps/commissions/views/commission_export.py:39
+#: plana/apps/projects/models/category.py:16
+msgid "Categories"
+msgstr "Catégories"
+
+#: plana/apps/commissions/views/commission_export.py:44
+#, fuzzy, python-brace-format
+#| msgid "Amount asked"
+msgid "Amount asked {fund.acronym}"
+msgstr "Montant demandé"
+
+#: plana/apps/commissions/views/commission_export.py:45
+#, fuzzy, python-brace-format
+#| msgid "Amount earned"
+msgid "Amount earned {fund.acronym}"
+msgstr "Montant obtenu"
+
+#: plana/apps/commissions/views/commission_export.py:90
+msgid "Yes"
+msgstr ""
+
+#: plana/apps/commissions/views/commission_export.py:93
+msgid "No"
+msgstr ""
+
 #: plana/apps/commissions/views/commission_fund.py:56
 msgid "Commission or fund does not exist."
 msgstr "La commission ou le fonds n'existe pas."
@@ -678,10 +727,6 @@ msgstr "Composantes"
 #: plana/apps/projects/models/category.py:15
 msgid "Category"
 msgstr "Catégorie"
-
-#: plana/apps/projects/models/category.py:16
-msgid "Categories"
-msgstr "Catégories"
 
 #: plana/apps/projects/models/project.py:19
 msgid "Project Draft"
