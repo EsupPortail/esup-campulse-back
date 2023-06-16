@@ -298,7 +298,7 @@
       "description": "Dossier détaillé présentant le projet",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
