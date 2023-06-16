@@ -64,7 +64,7 @@ class Document(models.Model):
         _("Is required in process"), default=False
     )
     days_before_expiration = models.DurationField(
-        _("Days before document expiration"), default=datetime.timedelta(days=365)
+        _("Days before document expiration"), null=True
     )
     path_template = DynamicStorageFileField(
         _("Example template file"),

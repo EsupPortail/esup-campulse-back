@@ -3580,6 +3580,7 @@ components:
           type: boolean
         days_before_expiration:
           type: string
+          nullable: true
           title: Days before document expiration
         path_template:
           type: string

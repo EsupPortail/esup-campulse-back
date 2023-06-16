@@ -689,5 +689,20 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 42,
+    "fields": {
+      "code": "DOCUMENT_NEARLY_EXPIRED",
+      "label": "Association Fund Nearly Expired",
+      "description": "Message reçu par un étudiant ou une association si un de ses documents va bientôt expirer.",
+      "subject": "{{ site_name }} – Un de vos documents va bientôt expirer",
+      "body": "Bonjour,<br/><br/>L'un de vos documents va bientôt expirer, veuillez le mettre à jour dans votre espace.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]
