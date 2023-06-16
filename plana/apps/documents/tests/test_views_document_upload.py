@@ -50,6 +50,15 @@ class DocumentsViewsTests(TestCase):
         }
         cls.response = cls.general_client.post(url_login, data_general)
 
+        cls.manager_institution_user_id = 4
+        cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
+        cls.institution_client = Client()
+        data_institution = {
+            "username": cls.manager_institution_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.institution_client.post(url_login, data_institution)
+
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
         cls.student_misc_client = Client()
@@ -105,9 +114,7 @@ class DocumentsViewsTests(TestCase):
             "document": 21,
             "user": cls.student_misc_user_id,
         }
-        cls.new_document = cls.student_misc_client.post(
-            "/documents/uploads", post_data_1
-        )
+        cls.student_misc_client.post("/documents/uploads", post_data_1)
         cls.new_document = cls.student_misc_client.post(
             "/documents/uploads", post_data_2
         )
@@ -184,6 +191,15 @@ class DocumentsViewsTests(TestCase):
             f"/documents/uploads?process_types={','.join(str(x) for x in document_statuses)}"
         )
         documents_cnt = DocumentUpload.objects.filter(project_id=project_id).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), documents_cnt)
+
+        response = self.general_client.get(
+            f"/documents/uploads?is_validated_by_admin=true"
+        )
+        documents_cnt = DocumentUpload.objects.filter(
+            is_validated_by_admin=True
+        ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
@@ -331,26 +347,32 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is not created if field is not is_multiple.
         """
-        project_id = 1
-        document_id = 18
-        field = Mock()
-        field.storage = default_storage
-        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
-        file.storage = Mock()
         post_data = {
-            "path_file": file,
-            "project": project_id,
-            "document": document_id,
+            "path_file": "",
+            "project": 1,
+            "document": 18,
             "user": self.student_misc_user_id,
         }
-        document = Document.objects.get(id=document_id)
-        document.mime_types = [
-            "application/vnd.novadigm.ext",
-            "application/octet-stream",
-        ]
-        document.save()
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_document_upload_validated(self):
+        """
+        POST /documents/uploads .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be authorized to update the project.
+        - Object is not created if validation is set by a student.
+        """
+        post_data = {
+            "path_file": "",
+            "project": 1,
+            "document": 19,
+            "user": self.student_misc_user_id,
+            "is_validated_by_admin": True,
+        }
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_document_upload_project_success(self):
         """
@@ -429,43 +451,125 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_document_upload_file_by_id_anonymous(self):
+    def test_put_document_upload_by_id_405(self):
         """
-        GET /documents/uploads/{id}/file .
+        PUT /documents/uploads/{id} .
 
-        - An anonymous user cannot execute this request.
+        - The route returns a 405 everytime.
         """
-        response = self.client.get("/documents/uploads/2/file")
+        data = {"is_validated_by_admin": True}
+        response = self.general_client.put(
+            f"/documents/uploads/{self.new_document.data['id']}", data
+        )
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_patch_document_upload_anonymous(self):
+        """
+        PATCH /documents/uploads/{id} .
+
+        - An anonymous user can't execute this request.
+        """
+        patch_data = {"is_validated_by_admin": True}
+        response = self.client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_get_document_upload_file_by_id_404(self):
+    def test_patch_document_upload_404(self):
         """
-        GET /documents/uploads/{id}/file .
+        PATCH /documents/uploads/{id} .
 
-        - The route returns a 404 if a wrong document upload id is given.
+        - A user with proper permissions can execute this request.
+        - Document Upload must exist.
         """
-        response = self.general_client.get("/documents/uploads/99999/file")
+        patch_data = {"is_validated_by_admin": True}
+        response = self.general_client.patch(
+            "/documents/uploads/999", data=patch_data, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_document_upload_file_by_id_forbidden_student(self):
+    def test_patch_document_upload_forbidden(self):
         """
-        GET /documents/uploads/{id}/file .
+        PATCH /documents/uploads/{id} .
 
-        - An student user not owning the document cannot execute this request.
+        - A user without proper permissions can't execute this request.
         """
-        response = self.student_misc_client.get("/documents/uploads/6/file")
+        patch_data = {"is_validated_by_admin": True}
+        response = self.student_site_client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_document_upload_file_by_id(self):
+    def test_patch_document_upload_forbidden_institution(self):
         """
-        GET /documents/uploads/{id}/file .
+        PATCH /documents/uploads/{id} .
 
-        - The route can be accessed by a student user.
+        - A user without access to requested institution can't execute this request.
         """
-        response = self.student_misc_client.get(
-            f"/documents/uploads/{self.new_document.data['id']}/file"
+        document = Document.objects.get(id=self.new_document.data["document"])
+        document.institution_id = 7
+        document.save()
+        patch_data = {"is_validated_by_admin": True}
+        response = self.institution_client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_document_upload_forbidden_fund(self):
+        """
+        PATCH /documents/uploads/{id} .
+
+        - A user without access to requested fund can't execute this request.
+        """
+        document = Document.objects.get(id=self.new_document.data["document"])
+        document.fund_id = 1
+        document.save()
+        patch_data = {"is_validated_by_admin": True}
+        response = self.institution_client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_documents_serializer_error(self):
+        """
+        PATCH /documents/{id} .
+
+        - A user with proper permissions can execute this request.
+        - Serializers fields must be valid.
+        """
+        patch_data = {"is_validated_by_admin": "saucisse"}
+        response = self.general_client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_documents_success(self):
+        """
+        PATCH /documents/{id} .
+
+        - A user with proper permissions can execute this request.
+        - Document object is successfully changed in db.
+        """
+        patch_data = {"is_validated_by_admin": True}
+        response = self.general_client.patch(
+            f"/documents/uploads/{self.new_document.data['id']}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])
+        self.assertTrue(document_upload.is_validated_by_admin)
 
     def test_delete_document_upload_anonymous(self):
         """
@@ -522,3 +626,41 @@ class DocumentsViewsTests(TestCase):
             f"/documents/uploads/{document_upload_id}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_document_upload_file_by_id_anonymous(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/documents/uploads/2/file")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_document_upload_file_by_id_404(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - The route returns a 404 if a wrong document upload id is given.
+        """
+        response = self.general_client.get("/documents/uploads/99999/file")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_document_upload_file_by_id_forbidden_student(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - An student user not owning the document cannot execute this request.
+        """
+        response = self.student_misc_client.get("/documents/uploads/6/file")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_document_upload_file_by_id(self):
+        """
+        GET /documents/uploads/{id}/file .
+
+        - The route can be accessed by a student user.
+        """
+        response = self.student_misc_client.get(
+            f"/documents/uploads/{self.new_document.data['id']}/file"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

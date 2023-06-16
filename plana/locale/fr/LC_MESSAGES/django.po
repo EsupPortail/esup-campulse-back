@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-15 09:13+0200\n"
+"POT-Creation-Date: 2023-06-16 07:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,7 +239,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:564
 #: plana/apps/associations/views/association.py:626
 #: plana/apps/associations/views/association.py:778
-#: plana/apps/documents/views/document_upload.py:167
+#: plana/apps/documents/views/document_upload.py:182
 #: plana/apps/projects/views/project.py:252
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -299,7 +299,7 @@ msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:820
-#: plana/apps/projects/views/project.py:743
+#: plana/apps/projects/views/project.py:754
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -344,40 +344,40 @@ msgstr "Fonds liés à des Commissions"
 msgid "Funds"
 msgstr "Fonds"
 
-#: plana/apps/commissions/views/commission.py:210
-#: plana/apps/commissions/views/commission.py:342
+#: plana/apps/commissions/views/commission.py:214
+#: plana/apps/commissions/views/commission.py:346
 msgid "Commission name already taken."
 msgstr "Nom de commission déjà enregistré."
 
-#: plana/apps/commissions/views/commission.py:224
-#: plana/apps/commissions/views/commission.py:360
+#: plana/apps/commissions/views/commission.py:228
+#: plana/apps/commissions/views/commission.py:364
 msgid "Cannot create commission date taking place before today."
 msgstr "Impossible de créer une date de commission passée."
 
-#: plana/apps/commissions/views/commission.py:237
-#: plana/apps/commissions/views/commission.py:383
+#: plana/apps/commissions/views/commission.py:241
+#: plana/apps/commissions/views/commission.py:387
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission.py:276
+#: plana/apps/commissions/views/commission.py:280
 msgid "Commission Date does not exist."
 msgstr "La date de commission n'existe pas."
 
-#: plana/apps/commissions/views/commission.py:315
-#: plana/apps/commissions/views/commission.py:429
+#: plana/apps/commissions/views/commission.py:319
+#: plana/apps/commissions/views/commission.py:433
 #: plana/apps/commissions/views/commission_fund.py:102
 msgid "Commission does not exist."
 msgstr "La commission n'existe pas."
 
-#: plana/apps/commissions/views/commission.py:409
+#: plana/apps/commissions/views/commission.py:413
 msgid "Can't set commission date before submission date."
 msgstr "La date de commission ne peut avoir lieu avant la date de soumission."
 
-#: plana/apps/commissions/views/commission.py:435
+#: plana/apps/commissions/views/commission.py:439
 msgid "Cannot delete commission taking place before today."
 msgstr "Impossible de supprimer une commission passée."
 
-#: plana/apps/commissions/views/commission.py:449
+#: plana/apps/commissions/views/commission.py:453
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
@@ -532,11 +532,17 @@ msgstr "Date d'envoi"
 msgid "Uploaded file"
 msgstr "Fichier envoyé"
 
-#: plana/apps/documents/models/document_upload.py:73
+#: plana/apps/documents/models/document_upload.py:69
+#: plana/apps/projects/models/project_commission_fund.py:31
+#: plana/apps/users/models/user.py:31
+msgid "Is validated by admin"
+msgstr "Est validé par l'équipe d'administration"
+
+#: plana/apps/documents/models/document_upload.py:76
 msgid "Document from association or user"
 msgstr "Document d'une association ou d'un utilisateur"
 
-#: plana/apps/documents/models/document_upload.py:74
+#: plana/apps/documents/models/document_upload.py:77
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
@@ -551,16 +557,18 @@ msgstr "Non autorisé à créer un document pour ce fond."
 #: plana/apps/documents/views/document.py:149
 #: plana/apps/documents/views/document.py:188
 #: plana/apps/documents/views/document.py:248
-#: plana/apps/documents/views/document_upload.py:130
-#: plana/apps/documents/views/document_upload.py:138
+#: plana/apps/documents/views/document_upload.py:145
+#: plana/apps/documents/views/document_upload.py:153
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document.py:198
+#: plana/apps/documents/views/document_upload.py:373
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:208
+#: plana/apps/documents/views/document_upload.py:383
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fond."
 
@@ -569,7 +577,7 @@ msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
 #: plana/apps/documents/views/document.py:228
-#: plana/apps/documents/views/document_upload.py:241
+#: plana/apps/documents/views/document_upload.py:264
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
@@ -585,7 +593,7 @@ msgstr "Non autorisé à supprimer un document pour ce fond."
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
-#: plana/apps/documents/views/document_upload.py:148
+#: plana/apps/documents/views/document_upload.py:163
 #: plana/apps/projects/views/project.py:441
 #: plana/apps/projects/views/project.py:490
 #: plana/apps/projects/views/project.py:584
@@ -602,42 +610,47 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:154
+#: plana/apps/documents/views/document_upload.py:169
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
-#: plana/apps/documents/views/document_upload.py:177
+#: plana/apps/documents/views/document_upload.py:192
 msgid "Not allowed to post documents if not president."
 msgstr "Non autorisé à ajouter un document si non président."
 
-#: plana/apps/documents/views/document_upload.py:192
+#: plana/apps/documents/views/document_upload.py:207
 msgid "Not allowed to upload documents with this user."
 msgstr "Non autorisé à ajouter un document avec cet utilisateur."
 
-#: plana/apps/documents/views/document_upload.py:206
+#: plana/apps/documents/views/document_upload.py:215
+msgid "Not allowed to validate documents."
+msgstr "Non autorisé à valider des documents."
+
+#: plana/apps/documents/views/document_upload.py:229
 msgid "A document upload can only have one affectation."
 msgstr "Un document ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:220
+#: plana/apps/documents/views/document_upload.py:243
 msgid "Missing affectation of the new document upload."
 msgstr "Le document n'est affecté à aucune personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:235
+#: plana/apps/documents/views/document_upload.py:249
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:273
-#: plana/apps/documents/views/document_upload.py:316
-#: plana/apps/documents/views/document_upload.py:366
+#: plana/apps/documents/views/document_upload.py:302
+#: plana/apps/documents/views/document_upload.py:363
+#: plana/apps/documents/views/document_upload.py:404
+#: plana/apps/documents/views/document_upload.py:454
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:294
-#: plana/apps/documents/views/document_upload.py:387
+#: plana/apps/documents/views/document_upload.py:323
+#: plana/apps/documents/views/document_upload.py:475
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:337
+#: plana/apps/documents/views/document_upload.py:425
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 
@@ -847,11 +860,6 @@ msgstr "Montant demandé"
 msgid "Amount earned"
 msgstr "Montant obtenu"
 
-#: plana/apps/projects/models/project_commission_fund.py:31
-#: plana/apps/users/models/user.py:31
-msgid "Is validated by admin"
-msgstr "Est validé par l'équipe d'administration"
-
 #: plana/apps/projects/models/project_commission_fund.py:38
 msgid "Project commission fund"
 msgstr "Fonds de Commission lié à un projet"
@@ -920,8 +928,8 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_comment.py:213
 #: plana/apps/projects/views/project_comment.py:255
 #: plana/apps/projects/views/project_commission_fund.py:156
-#: plana/apps/projects/views/project_commission_fund.py:355
-#: plana/apps/projects/views/project_commission_fund.py:482
+#: plana/apps/projects/views/project_commission_fund.py:359
+#: plana/apps/projects/views/project_commission_fund.py:485
 #: plana/apps/projects/views/project_review.py:115
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1001,7 +1009,7 @@ msgid "Not allowed to submit a project to this commission."
 msgstr "Non autorisé à proposer un projet pour cette commission."
 
 #: plana/apps/projects/views/project_commission_fund.py:197
-#: plana/apps/projects/views/project_commission_fund.py:406
+#: plana/apps/projects/views/project_commission_fund.py:409
 msgid "Submission date for this commission is gone."
 msgstr "La date de soumission de projet pour cette commission est passée."
 
@@ -1023,17 +1031,17 @@ msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses fonds de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:347
-#: plana/apps/projects/views/project_commission_fund.py:474
+#: plana/apps/projects/views/project_commission_fund.py:351
+#: plana/apps/projects/views/project_commission_fund.py:477
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_fund.py:374
+#: plana/apps/projects/views/project_commission_fund.py:378
 msgid "Not allowed to update bearer fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du porteur pour cette commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:397
+#: plana/apps/projects/views/project_commission_fund.py:401
 msgid "Not allowed to update validator fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du validateur pour cette commission."

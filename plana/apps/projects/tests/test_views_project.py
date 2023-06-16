@@ -978,7 +978,6 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"

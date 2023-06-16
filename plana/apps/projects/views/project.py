@@ -709,29 +709,40 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             "site_name": current_site.name,
         }
         if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
-            document_process_type = ""
+            document_process_types = []
             association_email_template_code = ""
             user_email_template_code = ""
             if new_project_status == "PROJECT_PROCESSING":
-                document_process_type = "DOCUMENT_PROJECT"
+                document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
                 association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
                 user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
             elif new_project_status == "PROJECT_REVIEW_PROCESSING":
-                document_process_type = "DOCUMENT_PROJECT_REVIEW"
+                document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = (
                     "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
                 )
                 user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
             missing_documents_names = (
                 Document.objects.filter(
-                    process_type=document_process_type, is_required_in_process=True
+                    models.Q(process_type__in=document_process_types)
+                    & (
+                        models.Q(is_required_in_process=True, fund_id=None)
+                        | models.Q(
+                            is_required_in_process=True,
+                            fund_id__in=CommissionFund.objects.filter(
+                                id__in=ProjectCommissionFund.objects.filter(
+                                    project_id=project.id
+                                ).values_list("commission_fund_id")
+                            ).values_list("fund_id"),
+                        )
+                    )
                 )
                 .exclude(
                     id__in=DocumentUpload.objects.filter(
                         project_id=project.id,
                     ).values_list("document_id")
                 )
-                .values_list("name", flat=True)
+                .values_list("name")
             )
             if missing_documents_names.count() > 0:
                 missing_documents_names_string = ', '.join(

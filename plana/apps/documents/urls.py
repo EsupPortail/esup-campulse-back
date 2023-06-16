@@ -5,7 +5,7 @@ from .views.document import DocumentList, DocumentRetrieveUpdateDestroy
 from .views.document_upload import (
     DocumentUploadFileRetrieve,
     DocumentUploadListCreate,
-    DocumentUploadRetrieveDestroy,
+    DocumentUploadRetrieveUpdateDestroy,
 )
 
 urlpatterns = [
@@ -22,8 +22,8 @@ urlpatterns = [
     ),
     path(
         "uploads/<int:pk>",
-        DocumentUploadRetrieveDestroy.as_view(),
-        name="document_upload_retrieve_destroy",
+        DocumentUploadRetrieveUpdateDestroy.as_view(),
+        name="document_upload_retrieve_update_destroy",
     ),
     path(
         "uploads/<int:pk>/file",

@@ -745,7 +745,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                     association_id=association.id,
                 ).values_list("document_id")
             )
-            .values_list("name", flat=True)
+            .values_list("name")
         )
         if missing_documents_names.count() > 0:
             missing_documents_names_string = ', '.join(

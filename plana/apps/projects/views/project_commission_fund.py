@@ -340,6 +340,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 project_id=kwargs["project_id"],
                 commission_fund_id=kwargs["commission_fund_id"],
             )
+            commission_fund = CommissionFund.objects.get(
+                id=kwargs["commission_fund_id"]
+            )
+            commission = Commission.objects.get(id=commission_fund.commission_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {
@@ -400,8 +404,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        commission_fund = Commission.objects.get(id=kwargs["commission_fund_id"])
-        if commission_fund.submission_date < datetime.date.today():
+        if commission.submission_date < datetime.date.today():
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,

@@ -65,6 +65,9 @@ class DocumentUpload(models.Model):
         _("Uploaded file"),
         upload_to=get_file_path,
     )
+    is_validated_by_admin = models.BooleanField(
+        _("Is validated by admin"), default=False
+    )
 
     def __str__(self):
         return f"{self.document}"
