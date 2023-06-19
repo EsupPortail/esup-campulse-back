@@ -146,6 +146,7 @@ class Project(models.Model):
         _("Planned prevention and safety actions"), default=""
     )
     marketing_campaign = models.TextField(_("Marketing campaign"), default="")
+    sustainable_development = models.TextField(_("Sustainable development"), default="")
     project_status = models.CharField(
         _("Project Status"),
         max_length=32,

@@ -4433,6 +4433,9 @@ components:
           type: string
           minLength: 1
           title: Campagne de communication
+        sustainable_development:
+          type: string
+          minLength: 1
         project_status:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
@@ -4672,6 +4675,8 @@ components:
         marketing_campaign:
           type: string
           title: Campagne de communication
+        sustainable_development:
+          type: string
         project_status:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
@@ -5188,6 +5193,9 @@ components:
           type: string
           minLength: 1
           title: Campagne de communication
+        sustainable_development:
+          type: string
+          minLength: 1
     ResendEmailVerificationRequest:
       type: object
       properties:

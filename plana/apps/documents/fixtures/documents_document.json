@@ -120,7 +120,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 3,
-      "process_type": "DOCUMENT_PROJECT",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -137,7 +137,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "fund_id": 3,
-      "process_type": "DOCUMENT_PROJECT",
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",

@@ -37,6 +37,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "planned_activities",
             "prevention_safety",
             "marketing_campaign",
+            "sustainable_development",
             "project_status",
             "creation_date",
             "edition_date",
@@ -74,6 +75,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "planned_activities",
             "prevention_safety",
             "marketing_campaign",
+            "sustainable_development",
         ]
 
 
