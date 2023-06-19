@@ -1040,6 +1040,7 @@ class AssociationsViewsTests(TestCase):
         - A manager user can execute this request.
         """
         association_id = 2
+        self.assertFalse(len(mail.outbox))
         patch_data = {"charter_status": "CHARTER_REJECTED"}
         response = self.general_client.patch(
             f"/associations/{association_id}/status",
@@ -1049,6 +1050,19 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.charter_status, "CHARTER_REJECTED")
+        self.assertEqual(association.is_site, False)
+        self.assertTrue(len(mail.outbox))
+
+        patch_data = {"charter_status": "CHARTER_VALIDATED"}
+        response = self.general_client.patch(
+            f"/associations/{association_id}/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.charter_status, "CHARTER_VALIDATED")
+        self.assertEqual(association.is_site, True)
 
     def test_patch_association_status_missing_documents(self):
         """

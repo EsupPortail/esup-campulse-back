@@ -785,6 +785,12 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_VALIDATED",
             "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTED",
         }
+        if request.data["charter_status"] == "CHARTER_VALIDATED":
+            association.is_site = True
+            association.save()
+        elif request.data["charter_status"] == "CHARTER_REJECTED":
+            association.is_site = False
+            association.save()
         if request.data["charter_status"] in mail_templates_codes_by_status:
             template = MailTemplate.objects.get(
                 code=mail_templates_codes_by_status[request.data["charter_status"]]
