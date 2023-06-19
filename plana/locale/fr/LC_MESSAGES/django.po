@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 11:01+0200\n"
+"POT-Creation-Date: 2023-06-19 13:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,21 +421,19 @@ msgstr "Est la première édition du projet"
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/commissions/views/commission_export.py:105
-#, python-brace-format
-msgid "Amount asked {fund.acronym}"
-msgstr "Montant demandé {fund.acronym}"
-
 #: plana/apps/commissions/views/commission_export.py:106
-#, python-brace-format
-msgid "Amount earned {fund.acronym}"
-msgstr "Montant obtenu {fund.acronym}"
+msgid "Amount asked "
+msgstr "Montant demandé "
 
-#: plana/apps/commissions/views/commission_export.py:151
+#: plana/apps/commissions/views/commission_export.py:107
+msgid "Amount earned "
+msgstr "Montant obtenu "
+
+#: plana/apps/commissions/views/commission_export.py:152
 msgid "Yes"
 msgstr "Oui"
 
-#: plana/apps/commissions/views/commission_export.py:154
+#: plana/apps/commissions/views/commission_export.py:155
 msgid "No"
 msgstr "Non"
 

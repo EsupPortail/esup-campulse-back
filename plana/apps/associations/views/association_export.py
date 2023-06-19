@@ -133,7 +133,7 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
         http_response = HttpResponse(content_type="application/csv")
         http_response[
             "Content-Disposition"
-        ] = "Content-Disposition: attachment; filename='associations_export.csv'"
+        ] = "Content-Disposition: attachment; filename=associations_export.csv"
 
         writer = csv.writer(http_response)
         # Write column titles for the CSV file

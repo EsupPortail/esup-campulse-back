@@ -2957,7 +2957,7 @@ components:
           type: object
           additionalProperties: {}
           readOnly: true
-          description: URL for each thumbnail size
+          description: Lien pour chaque taille de miniature
         name:
           type: string
           title: Nom
@@ -2974,22 +2974,27 @@ components:
         alt_logo:
           type: string
           nullable: true
-          title: Logo description
+          title: Description du logo
         social_object:
           type: string
+          title: Objet social
         current_projects:
           type: string
+          title: Projets en cours
         address:
           type: string
           title: Adresse
         zipcode:
           type: string
+          title: Code postal
           maxLength: 32
         city:
           type: string
+          title: Ville
           maxLength: 128
         country:
           type: string
+          title: Pays
           maxLength: 128
         phone:
           type: string
@@ -3010,30 +3015,38 @@ components:
           title: Nombre d'étudiants
         president_names:
           type: string
+          title: Noms du président
           maxLength: 256
         president_phone:
           type: string
+          title: Numéro de téléphone du président
           maxLength: 32
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
         charter_date:
           type: string
           format: date
           nullable: true
+          title: Date de la charte
         creation_date:
           type: string
           format: date-time
@@ -3114,11 +3127,11 @@ components:
           type: string
           format: uri
           nullable: true
-          title: Dynamic thumbnails for the logo
+          title: Miniatures dynamiques pour le logo
         alt_logo:
           type: string
           nullable: true
-          title: Logo description
+          title: Description du logo
         student_count:
           type: integer
           maximum: 2147483647
@@ -3126,24 +3139,30 @@ components:
           title: Nombre d'étudiants
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
         charter_date:
           type: string
           format: date
           nullable: true
+          title: Date de la charte
         creation_date:
           type: string
           format: date-time
@@ -3188,15 +3207,17 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - email
       - id
@@ -3218,15 +3239,17 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - email
       - name
@@ -3247,7 +3270,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - has_president
       - id
@@ -3281,26 +3304,31 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         alt_logo:
           type: string
           nullable: true
-          title: Logo description
+          title: Description du logo
         path_logo:
           type: object
           additionalProperties: {}
           readOnly: true
-          description: URL for each thumbnail size
+          description: Lien pour chaque taille de miniature
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
         charter_date:
           type: string
           format: date
           nullable: true
+          title: Date de la charte
       required:
       - activity_field
       - email
@@ -3314,7 +3342,9 @@ components:
       description: Serializer for status field.
       properties:
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
     AssociationUser:
       type: object
       description: Main serializer.
@@ -3328,22 +3358,29 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - id
@@ -3358,14 +3395,19 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - user
@@ -3379,14 +3421,19 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - user
@@ -3396,22 +3443,29 @@ components:
       properties:
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
     CAS:
       type: object
       description: Main serializer.
@@ -3496,12 +3550,14 @@ components:
         submission_date:
           type: string
           format: date
-          title: Project submission limit date
+          title: Date de fin de soumission du projet
         commission_date:
           type: string
           format: date
+          title: Date de commission
         is_open_to_projects:
           type: boolean
+          title: Peut recevoir des projets
         name:
           type: string
           title: Nom
@@ -3521,6 +3577,7 @@ components:
           type: integer
         fund:
           type: integer
+          title: Fonds
       required:
       - commission
       - fund
@@ -3533,6 +3590,7 @@ components:
           type: integer
         fund:
           type: integer
+          title: Fonds
       required:
       - commission
       - fund
@@ -3543,12 +3601,14 @@ components:
         submission_date:
           type: string
           format: date
-          title: Project submission limit date
+          title: Date de fin de soumission du projet
         commission_date:
           type: string
           format: date
+          title: Date de commission
         is_open_to_projects:
           type: boolean
+          title: Peut recevoir des projets
         name:
           type: string
           minLength: 1
@@ -3572,10 +3632,13 @@ components:
           maxLength: 128
         header:
           type: string
+          title: En-tête
         body:
           type: string
+          title: Corps du message
         footer:
           type: string
+          title: Pied de page
       required:
       - body
       - code
@@ -3594,10 +3657,12 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         phone:
           type: string
@@ -3623,20 +3688,22 @@ components:
           type: string
         contact:
           type: string
-          title: Contact address
+          title: Adresse de contact
         is_multiple:
           type: boolean
+          title: Est multiple
         is_required_in_process:
           type: boolean
+          title: Est requis dans son processus
         days_before_expiration:
           type: string
           nullable: true
-          title: Days before document expiration
+          title: Nombre de jours avant expiration du document
         path_template:
           type: string
           format: uri
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
         mime_types:
           type: array
           items:
@@ -3645,14 +3712,15 @@ components:
         process_type:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: Document Status
+          title: Statut du Document
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
         fund:
           type: integer
           nullable: true
+          title: Fonds
       required:
       - id
     DocumentCreateRequest:
@@ -3671,14 +3739,15 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
         fund:
           type: integer
           nullable: true
+          title: Fonds
     DocumentUpload:
       type: object
       description: Main serializer.
@@ -3700,10 +3769,12 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date d'envoi
         validated_date:
           type: string
           format: date
           nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3716,6 +3787,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - id
@@ -3737,14 +3809,16 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date d'envoi
         path_file:
           type: string
           format: uri
-          title: Uploaded file
+          title: Fichier envoyé
         validated_date:
           type: string
           format: date
           nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3757,6 +3831,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - id
@@ -3774,11 +3849,12 @@ components:
         path_file:
           type: string
           format: binary
-          title: Uploaded file
+          title: Fichier envoyé
         validated_date:
           type: string
           format: date
           nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3791,6 +3867,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - path_file
@@ -3801,7 +3878,7 @@ components:
         path_file:
           type: string
           format: uri
-          title: Uploaded file
+          title: Fichier envoyé
         name:
           type: string
           title: Nom
@@ -3816,6 +3893,7 @@ components:
           type: string
           format: date
           nullable: true
+          title: Date de validation
     ExternalUser:
       type: object
       description: External user serializer.
@@ -3845,10 +3923,10 @@ components:
           maxLength: 30
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         institution:
           type: integer
-          title: Etablissement
+          title: Établissement
       required:
       - acronym
       - id
@@ -3965,7 +4043,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - id
       - name
@@ -4092,11 +4170,11 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Dynamic thumbnails for the logo
+          title: Miniatures dynamiques pour le logo
         alt_logo:
           type: string
           nullable: true
-          title: Logo description
+          title: Description du logo
         student_count:
           type: integer
           maximum: 2147483647
@@ -4104,24 +4182,30 @@ components:
           title: Nombre d'étudiants
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
         charter_date:
           type: string
           format: date
           nullable: true
+          title: Date de la charte
         approval_date:
           type: string
           format: date
@@ -4145,29 +4229,38 @@ components:
       description: Serializer for status field.
       properties:
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
     PatchedAssociationUserUpdateRequest:
       type: object
       description: Serializer for user-associations change.
       properties:
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
     PatchedCommissionUpdateRequest:
       type: object
       description: Update serializer.
@@ -4175,10 +4268,11 @@ components:
         submission_date:
           type: string
           format: date
-          title: Project submission limit date
+          title: Date de fin de soumission du projet
         commission_date:
           type: string
           format: date
+          title: Date de commission
         name:
           type: string
           minLength: 1
@@ -4186,6 +4280,7 @@ components:
           maxLength: 250
         is_open_to_projects:
           type: boolean
+          title: Peut recevoir des projets
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.
@@ -4202,7 +4297,7 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
     PatchedDocumentUploadUpdateRequest:
       type: object
       description: Serializer to validate a document.
@@ -4211,6 +4306,7 @@ components:
           type: string
           format: date
           nullable: true
+          title: Date de validation
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.
@@ -4225,26 +4321,30 @@ components:
       properties:
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
     PatchedProjectRequest:
       type: object
       description: Main serializer.
@@ -4258,13 +4358,16 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
           minLength: 1
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4275,37 +4378,40 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         budget_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
           minLength: 1
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
           minLength: 1
+          title: Objectifs
         summary:
           type: string
           minLength: 1
@@ -4313,16 +4419,19 @@ components:
         planned_activities:
           type: string
           minLength: 1
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
           minLength: 1
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
           minLength: 1
+          title: Campagne de communication
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     PatchedProjectReviewUpdateRequest:
       type: object
       description: Main review serializer for update.
@@ -4330,49 +4439,60 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         outcome:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Dépenses
         income:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Recettes
         real_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début réelle
         real_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin réelle
         real_location:
           type: string
           minLength: 1
+          title: Lieu réel
         review:
           type: string
           minLength: 1
-          title: Review (amount of students, partnerships, ...)
+          title: Bilan (nombre d'étudiants, partenariats, ...)
         impact_students:
           type: string
           minLength: 1
-          title: Impact on students
+          title: Impact sur les étudiants
         description:
           type: string
           minLength: 1
-          title: Description (activities done, changes from planning, ...)
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
         difficulties:
           type: string
           minLength: 1
+          title: Difficultés
         improvements:
           type: string
           minLength: 1
+          title: Améliorations
     PatchedProjectStatusRequest:
       type: object
       description: Serializer for status field.
       properties:
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -4388,10 +4508,12 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         email:
           type: string
@@ -4411,9 +4533,10 @@ components:
           type: string
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
     PatchedUserUpdateRequest:
       type: object
       description: Serializer to patch the user.
@@ -4438,9 +4561,10 @@ components:
           type: string
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
     ProcessTypeEnum:
       enum:
       - CHARTER_ASSOCIATION
@@ -4466,12 +4590,15 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4482,6 +4609,7 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         categories:
           type: array
           items:
@@ -4496,44 +4624,49 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
+          title: Objectifs
         summary:
           type: string
           title: Résumé
         planned_activities:
           type: string
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
+          title: Campagne de communication
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
         creation_date:
           type: string
           format: date-time
@@ -4543,6 +4676,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
       required:
       - categories
       - commissions
@@ -4599,6 +4733,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
       required:
       - creation_date
       - edition_date
@@ -4612,6 +4747,7 @@ components:
       properties:
         project:
           type: integer
+          title: Projet
         text:
           type: string
           minLength: 1
@@ -4635,26 +4771,30 @@ components:
           type: integer
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
       required:
       - commission_fund
       - id
@@ -4665,31 +4805,37 @@ components:
       properties:
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         commission_fund_id:
           type: integer
+          title: Fond lié à une Commission
           readOnly: true
         project_id:
           type: integer
+          title: Projet
           readOnly: true
       required:
       - commission_fund_id
@@ -4704,26 +4850,30 @@ components:
           type: integer
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
       required:
       - commission_fund
       - project
@@ -4748,6 +4898,7 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         commission:
           allOf:
           - $ref: '#/components/schemas/Commission'
@@ -4756,16 +4907,21 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         edition_date:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
       required:
       - commission
       - edition_date
@@ -4786,12 +4942,15 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4802,6 +4961,7 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         commissions:
           type: array
           items:
@@ -4811,33 +4971,41 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Dépenses
         income:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Recettes
         real_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début réelle
         real_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin réelle
         real_location:
           type: string
+          title: Lieu réel
         review:
           type: string
-          title: Review (amount of students, partnerships, ...)
+          title: Bilan (nombre d'étudiants, partenariats, ...)
         impact_students:
           type: string
-          title: Impact on students
+          title: Impact sur les étudiants
         description:
           type: string
-          title: Description (activities done, changes from planning, ...)
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
         difficulties:
           type: string
+          title: Difficultés
         improvements:
           type: string
+          title: Améliorations
         creation_date:
           type: string
           format: date-time
@@ -4847,6 +5015,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
       required:
       - commissions
       - creation_date
@@ -4860,6 +5029,7 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         commissions:
           type: array
           items:
@@ -4869,33 +5039,41 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Dépenses
         income:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Recettes
         real_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début réelle
         real_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin réelle
         real_location:
           type: string
+          title: Lieu réel
         review:
           type: string
-          title: Review (amount of students, partnerships, ...)
+          title: Bilan (nombre d'étudiants, partenariats, ...)
         impact_students:
           type: string
-          title: Impact on students
+          title: Impact sur les étudiants
         description:
           type: string
-          title: Description (activities done, changes from planning, ...)
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
         difficulties:
           type: string
+          title: Difficultés
         improvements:
           type: string
+          title: Améliorations
       required:
       - commissions
     ProjectStatus:
@@ -4903,7 +5081,9 @@ components:
       description: Serializer for status field.
       properties:
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT
@@ -4925,13 +5105,16 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
           minLength: 1
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4942,37 +5125,40 @@ components:
         association_user:
           type: integer
           nullable: true
+          title: Membre d'association
         budget_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
           minLength: 1
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
           minLength: 1
+          title: Objectifs
         summary:
           type: string
           minLength: 1
@@ -4980,14 +5166,15 @@ components:
         planned_activities:
           type: string
           minLength: 1
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
           minLength: 1
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
           minLength: 1
+          title: Campagne de communication
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -5047,9 +5234,11 @@ components:
           maxLength: 150
         first_name:
           type: string
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
+          title: Nom de famille
           maxLength: 150
         email:
           type: string
@@ -5074,9 +5263,10 @@ components:
           readOnly: true
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         associations:
           type: array
           items:
@@ -5110,9 +5300,11 @@ components:
           readOnly: true
         first_name:
           type: string
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
+          title: Nom de famille
           maxLength: 150
       required:
       - first_name
@@ -5133,17 +5325,19 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         is_cas:
           type: boolean
           default: false
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
       required:
       - first_name
       - last_name
@@ -5181,9 +5375,10 @@ components:
           readOnly: true
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         associations:
           type: array
           items:

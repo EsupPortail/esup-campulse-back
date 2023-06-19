@@ -102,8 +102,9 @@ class CommissionCSVExport(generics.RetrieveAPIView):
 
         funds = Fund.objects.all().order_by("acronym")
         for fund in funds:
-            fields.append(_(f"Amount asked {fund.acronym}"))
-            fields.append(_(f"Amount earned {fund.acronym}"))
+            acronym = fund.acronym
+            fields.append(_("Amount asked ") + acronym)
+            fields.append(_("Amount earned ") + acronym)
 
         projects = queryset.filter(
             id__in=ProjectCommissionFund.objects.filter(
@@ -116,7 +117,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
         http_response = HttpResponse(content_type="application/csv")
         http_response[
             "Content-Disposition"
-        ] = f"Content-Disposition: attachment; filename='commission_{commission_id}_export.csv'"
+        ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
 
         writer = csv.writer(http_response)
         # Write column titles for the CSV file
