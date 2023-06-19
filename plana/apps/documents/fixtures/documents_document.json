@@ -43,7 +43,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "days_before_expiration": "365 days",
+      "days_before_expiration": "550 days",
       "fund_id": 1,
       "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
@@ -61,7 +61,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "days_before_expiration": "365 days",
+      "days_before_expiration": "550 days",
       "fund_id": 2,
       "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
@@ -79,7 +79,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "days_before_expiration": "365 days",
+      "days_before_expiration": "550 days",
       "fund_id": 1,
       "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
@@ -99,7 +99,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "days_before_expiration": "365 days",
+      "days_before_expiration": "550 days",
       "fund_id": 2,
       "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
