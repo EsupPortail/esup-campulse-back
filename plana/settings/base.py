@@ -403,6 +403,7 @@ REST_FRAMEWORK = {
         "no_underscore_before_number": True,
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
 }
 
 
