@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 10:06+0200\n"
+"POT-Creation-Date: 2023-06-19 10:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:40
-#: plana/apps/associations/views/association_export.py:135
+#: plana/apps/associations/views/association_export.py:137
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:12
 #: plana/apps/documents/models/document.py:64
@@ -34,7 +34,7 @@ msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
 #: plana/apps/associations/models/association.py:119
-#: plana/apps/associations/views/association_export.py:138
+#: plana/apps/associations/views/association_export.py:140
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -43,13 +43,13 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:43
-#: plana/apps/associations/views/association_export.py:141
+#: plana/apps/associations/views/association_export.py:143
 #: plana/apps/users/models/user.py:103
 msgid "Email"
 msgstr "Courriel"
 
 #: plana/apps/associations/models/association.py:45
-#: plana/apps/associations/views/association_export.py:136
+#: plana/apps/associations/views/association_export.py:138
 #: plana/apps/commissions/models/fund.py:13
 #: plana/apps/documents/models/document.py:65
 #: plana/apps/institutions/models/institution.py:11
@@ -178,7 +178,7 @@ msgid "Approval date"
 msgstr "Date d'agrément"
 
 #: plana/apps/associations/models/association.py:97
-#: plana/apps/associations/views/association_export.py:140
+#: plana/apps/associations/views/association_export.py:142
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
@@ -187,7 +187,7 @@ msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:105
-#: plana/apps/associations/views/association_export.py:137
+#: plana/apps/associations/views/association_export.py:139
 #: plana/apps/commissions/models/fund.py:19
 #: plana/apps/documents/models/document.py:84
 #: plana/apps/institutions/models/institution.py:38
@@ -196,7 +196,7 @@ msgid "Institution"
 msgstr "Établissement"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/associations/views/association_export.py:139
+#: plana/apps/associations/views/association_export.py:141
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
@@ -311,7 +311,7 @@ msgstr "Documents manquants : {missing_documents_names_string}"
 msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
-#: plana/apps/associations/views/association_export.py:115
+#: plana/apps/associations/views/association_export.py:117
 msgid "Not allowed to export associations list CSV."
 msgstr ""
 "Vous n'avez pas la permission d'exporter la liste des associations au format "

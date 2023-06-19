@@ -32,14 +32,16 @@ urlpatterns = [
         ProjectRetrieveUpdateDestroy.as_view(),
         name="project_retrieve_update_destroy",
     ),
-    path("<int:pk>/export", ProjectDataExport.as_view(), name="project_data_export"),
+    path(
+        "<int:pk>/pdf_export", ProjectDataExport.as_view(), name="project_data_export"
+    ),
     path(
         "<int:pk>/review",
         ProjectReviewRetrieveUpdate.as_view(),
         name="project_review_retrieve_update",
     ),
     path(
-        "<int:pk>/review/export",
+        "<int:pk>/review/pdf_export",
         ProjectReviewDataExport.as_view(),
         name="project_review_data_export",
     ),

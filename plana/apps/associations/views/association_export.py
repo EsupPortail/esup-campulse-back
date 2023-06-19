@@ -23,7 +23,7 @@ from plana.utils import generate_pdf
 
 
 class AssociationDataExport(generics.RetrieveAPIView):
-    """/associations/{id}/export route"""
+    """/associations/{id}/pdf_export route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
@@ -86,6 +86,8 @@ class AssociationDataExport(generics.RetrieveAPIView):
 
 
 class AssociationsCSVExport(generics.RetrieveAPIView):
+    """/associations/csv_export route"""
+
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
     serializer_class = AssociationAllDataReadSerializer

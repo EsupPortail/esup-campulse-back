@@ -203,9 +203,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /associations/{id}/export:
+  /associations/{id}/pdf_export:
     get:
-      operationId: associations_export_retrieve
+      operationId: associations_pdf_export_retrieve
       description: Retrieves a PDF file.
       parameters:
       - in: path
@@ -1322,9 +1322,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/export:
+  /projects/{id}/pdf_export:
     get:
-      operationId: projects_export_retrieve
+      operationId: projects_pdf_export_retrieve
       description: Retrieves a PDF file.
       parameters:
       - in: path
@@ -1415,9 +1415,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/review/export:
+  /projects/{id}/review/pdf_export:
     get:
-      operationId: projects_review_export_retrieve
+      operationId: projects_review_pdf_export_retrieve
       description: Retrieves a PDF file.
       parameters:
       - in: path

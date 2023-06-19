@@ -18,7 +18,7 @@ urlpatterns = [
         name="association_retrieve_update_destroy",
     ),
     path(
-        "<int:pk>/export",
+        "<int:pk>/pdf_export",
         AssociationDataExport.as_view(),
         name="association_data_export",
     ),

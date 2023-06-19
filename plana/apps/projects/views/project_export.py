@@ -21,7 +21,7 @@ from plana.utils import generate_pdf
 
 
 class ProjectDataExport(generics.RetrieveAPIView):
-    """/projects/{id}/export route"""
+    """/projects/{id}/pdf_export route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.visible_objects.all()
@@ -115,7 +115,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
-    """/projects/{id}/review/export route"""
+    """/projects/{id}/review/pdf_export route"""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.visible_objects.all()

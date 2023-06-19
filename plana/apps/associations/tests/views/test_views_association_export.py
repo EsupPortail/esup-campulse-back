@@ -1,23 +1,13 @@
 """List of tests done on association exports views."""
 import csv
 import io
-import json
-from unittest.mock import Mock
 
-from django.conf import settings
-from django.core import mail
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.storage import default_storage
 from django.test import Client, TestCase
-from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
-from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
-from plana.storages import DynamicThumbnailImageField
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class AssociationExportsViewsTests(TestCase):
@@ -91,42 +81,44 @@ class AssociationExportsViewsTests(TestCase):
 
     def test_get_pdf_export_association_by_id_anonymous(self):
         """
-        GET /associations/{id}/export .
+        GET /associations/{id}/pdf_export .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/associations/2/export")
+        response = self.client.get("/associations/2/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_pdf_export_association_by_id_404(self):
         """
-        GET /associations/{id}/export .
+        GET /associations/{id}/pdf_export .
 
         - The route returns a 404 if a wrong association id is given.
         """
-        response = self.general_client.get("/associations/99999/export")
+        response = self.general_client.get("/associations/99999/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_pdf_export_association_by_id_forbidden_student(self):
         """
-        GET /associations/{id}/export .
+        GET /associations/{id}/pdf_export .
 
         - An student user not president cannot execute this request.
         """
-        response = self.member_client.get("/associations/2/export")
+        response = self.member_client.get("/associations/2/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_pdf_export_association_by_id(self):
         """
-        GET /associations/{id}/export .
+        GET /associations/{id}/pdf_export .
 
         - The route can be accessed by a manager user.
         - The route can be accessed by a president user.
         """
         association_id = 2
-        response = self.general_client.get(f"/associations/{association_id}/export")
+        response = self.general_client.get(f"/associations/{association_id}/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.president_client.get(f"/associations/{association_id}/export")
+        response = self.president_client.get(
+            f"/associations/{association_id}/pdf_export"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_csv_export_associations_anonymous(self):

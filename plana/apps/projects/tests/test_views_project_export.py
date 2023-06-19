@@ -124,86 +124,88 @@ class ProjectsViewsTests(TestCase):
 
     def test_get_export_project_by_id_anonymous(self):
         """
-        GET /projects/{id}/export .
+        GET /projects/{id}/pdf_export .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/projects/1/export")
+        response = self.client.get("/projects/1/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_export_project_by_id_404(self):
         """
-        GET /projects/{id}/export .
+        GET /projects/{id}/pdf_export .
 
         - The route returns a 404 if a wrong project id is given.
         """
-        response = self.general_client.get("/projects/99999/export")
+        response = self.general_client.get("/projects/99999/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_export_project_by_id_forbidden_student(self):
         """
-        GET /projects/{id}/export .
+        GET /projects/{id}/pdf_export .
 
         - An student user not owning the project cannot execute this request.
         """
-        response = self.student_offsite_client.get("/projects/1/export")
+        response = self.student_offsite_client.get("/projects/1/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_export_project_by_id(self):
         """
-        GET /projects/{id}/export .
+        GET /projects/{id}/pdf_export .
 
         - The route can be accessed by a manager user.
         - The route can be accessed by a student user.
         """
         project_id = 3
-        response = self.general_client.get(f"/projects/{project_id}/export")
+        response = self.general_client.get(f"/projects/{project_id}/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 2
-        response = self.student_president_client.get(f"/projects/{project_id}/export")
+        response = self.student_president_client.get(
+            f"/projects/{project_id}/pdf_export"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_export_project_review_by_id_anonymous(self):
         """
-        GET /projects/{id}/review/export .
+        GET /projects/{id}/review/pdf_export .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/projects/5/review/export")
+        response = self.client.get("/projects/5/review/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_export_project_review_by_id_404(self):
         """
-        GET /projects/{id}/review/export .
+        GET /projects/{id}/review/pdf_export .
 
         - The route returns a 404 if a wrong project id is given.
         """
-        response = self.general_client.get("/projects/99999/review/export")
+        response = self.general_client.get("/projects/99999/review/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_export_project_review_by_id_forbidden_student(self):
         """
-        GET /projects/{id}/review/export .
+        GET /projects/{id}/review/pdf_export .
 
         - An student user not owning the project cannot execute this request.
         """
-        response = self.student_offsite_client.get("/projects/5/review/export")
+        response = self.student_offsite_client.get("/projects/5/review/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_export_project_review_by_id(self):
         """
-        GET /projects/{id}/review/export .
+        GET /projects/{id}/review/pdf_export .
 
         - The route can be accessed by a manager user.
         - The route can be accessed by a student user.
         """
         project_id = 5
-        response = self.general_client.get(f"/projects/{project_id}/review/export")
+        response = self.general_client.get(f"/projects/{project_id}/review/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 6
         response = self.student_president_client.get(
-            f"/projects/{project_id}/review/export"
+            f"/projects/{project_id}/review/pdf_export"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
