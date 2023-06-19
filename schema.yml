@@ -288,6 +288,27 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
+  /associations/csv_export:
+    get:
+      operationId: associations_csv_export_retrieve
+      description: Associations List CSV export.
+      parameters:
+      - in: query
+        name: associations
+        schema:
+          type: string
+        description: IDs of selected associations, separated by a coma.
+      tags:
+      - associations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataRead'
+          description: ''
   /associations/names:
     get:
       operationId: associations_names_list
@@ -545,6 +566,27 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /commissions/{id}/csv_export:
+    get:
+      operationId: commissions_csv_export_retrieve
+      description: Projects presented to the commission CSV export.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
   /commissions/funds:
     get:
       operationId: commissions_funds_list

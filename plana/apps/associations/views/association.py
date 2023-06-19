@@ -13,7 +13,6 @@ from rest_framework import filters, generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
     AssociationAllDataReadSerializer,
@@ -26,10 +25,9 @@ from plana.apps.associations.serializers.association import (
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import generate_pdf, send_mail, to_bool
+from plana.utils import send_mail, to_bool
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
@@ -599,69 +597,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
         return self.destroy(request, *args, **kwargs)
-
-
-class AssociationDataExport(generics.RetrieveAPIView):
-    """/associations/{id}/export route"""
-
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Association.objects.all()
-    serializer_class = AssociationAllDataReadSerializer
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationAllDataReadSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieves a PDF file."""
-        try:
-            association = self.queryset.get(id=kwargs["pk"])
-            data = association.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if (
-            not request.user.has_perm("associations.view_association_not_enabled")
-            and not request.user.has_perm("associations.view_association_not_public")
-            and not request.user.is_president_in_association(association.id)
-        ):
-            return response.Response(
-                {"error": _("Not allowed to retrieve this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        data["institution"] = Institution.objects.get(
-            id=association.institution_id
-        ).name
-        data["institution_component"] = InstitutionComponent.objects.get(
-            id=association.institution_component_id
-        ).name
-        data["activity_field"] = ActivityField.objects.get(
-            id=association.activity_field_id
-        ).name
-
-        data["documents"] = list(
-            DocumentUpload.objects.filter(
-                association_id=data["id"],
-                document_id__in=Document.objects.filter(
-                    process_type__in=["CHARTER_ASSOCIATION", "DOCUMENT_ASSOCIATION"]
-                ),
-            ).values("name", "document__name")
-        )
-
-        return generate_pdf(
-            data["name"],
-            data,
-            "association_charter_summary",
-            request.build_absolute_uri("/"),
-        )
 
 
 class AssociationNameList(generics.ListAPIView):

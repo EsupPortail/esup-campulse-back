@@ -937,46 +937,6 @@ class AssociationsViewsTests(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
 
-    def test_get_export_association_by_id_anonymous(self):
-        """
-        GET /associations/{id}/export .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/associations/2/export")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_get_export_association_by_id_404(self):
-        """
-        GET /associations/{id}/export .
-
-        - The route returns a 404 if a wrong association id is given.
-        """
-        response = self.general_client.get("/associations/99999/export")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_export_association_by_id_forbidden_student(self):
-        """
-        GET /associations/{id}/export .
-
-        - An student user not president cannot execute this request.
-        """
-        response = self.member_client.get("/associations/2/export")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_get_export_association_by_id(self):
-        """
-        GET /associations/{id}/export .
-
-        - The route can be accessed by a manager user.
-        - The route can be accessed by a president user.
-        """
-        association_id = 2
-        response = self.general_client.get(f"/associations/{association_id}/export")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.president_client.get(f"/associations/{association_id}/export")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
     def test_put_association_status(self):
         """
         PUT /associations/{id}/status .

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 09:57+0200\n"
+"POT-Creation-Date: 2023-06-19 10:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:40
+#: plana/apps/associations/views/association_export.py:135
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:12
 #: plana/apps/documents/models/document.py:64
@@ -33,6 +34,7 @@ msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
 #: plana/apps/associations/models/association.py:119
+#: plana/apps/associations/views/association_export.py:138
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -41,11 +43,13 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:43
+#: plana/apps/associations/views/association_export.py:141
 #: plana/apps/users/models/user.py:103
 msgid "Email"
 msgstr "Courriel"
 
 #: plana/apps/associations/models/association.py:45
+#: plana/apps/associations/views/association_export.py:136
 #: plana/apps/commissions/models/fund.py:13
 #: plana/apps/documents/models/document.py:65
 #: plana/apps/institutions/models/institution.py:11
@@ -174,6 +178,7 @@ msgid "Approval date"
 msgstr "Date d'agrément"
 
 #: plana/apps/associations/models/association.py:97
+#: plana/apps/associations/views/association_export.py:140
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
@@ -182,6 +187,7 @@ msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:105
+#: plana/apps/associations/views/association_export.py:137
 #: plana/apps/commissions/models/fund.py:19
 #: plana/apps/documents/models/document.py:84
 #: plana/apps/institutions/models/institution.py:38
@@ -190,6 +196,7 @@ msgid "Institution"
 msgstr "Établissement"
 
 #: plana/apps/associations/models/association.py:112
+#: plana/apps/associations/views/association_export.py:139
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
@@ -210,99 +217,105 @@ msgstr "Associations"
 msgid "URL for each thumbnail size"
 msgstr "Lien pour chaque taille de miniature"
 
-#: plana/apps/associations/views/association.py:215
+#: plana/apps/associations/views/association.py:213
 msgid "Institution does not exist."
 msgstr "L'établissement n'existe pas."
 
-#: plana/apps/associations/views/association.py:228
+#: plana/apps/associations/views/association.py:226
 msgid "No institution given."
 msgstr "Pas d'établissement donné."
 
-#: plana/apps/associations/views/association.py:238
+#: plana/apps/associations/views/association.py:236
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:250
+#: plana/apps/associations/views/association.py:248
 msgid "No rights to set is_site on this association."
 msgstr "Aucun droit d'éditer le champ is_site de cette association."
 
-#: plana/apps/associations/views/association.py:256
+#: plana/apps/associations/views/association.py:254
 msgid "Association name not set."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:279
+#: plana/apps/associations/views/association.py:277
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:334
-#: plana/apps/associations/views/association.py:397
-#: plana/apps/associations/views/association.py:564
-#: plana/apps/associations/views/association.py:626
-#: plana/apps/associations/views/association.py:778
+#: plana/apps/associations/views/association.py:332
+#: plana/apps/associations/views/association.py:395
+#: plana/apps/associations/views/association.py:562
+#: plana/apps/associations/views/association.py:713
+#: plana/apps/associations/views/association_export.py:47
 #: plana/apps/documents/views/document_upload.py:184
 #: plana/apps/projects/views/project.py:252
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/associations/views/association.py:342
+#: plana/apps/associations/views/association.py:340
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:353
+#: plana/apps/associations/views/association.py:351
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:364
+#: plana/apps/associations/views/association.py:362
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:418
-#: plana/apps/associations/views/association.py:790
+#: plana/apps/associations/views/association.py:416
+#: plana/apps/associations/views/association.py:725
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:436
+#: plana/apps/associations/views/association.py:434
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:441
+#: plana/apps/associations/views/association.py:439
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:447
+#: plana/apps/associations/views/association.py:445
 msgid "Error on social networks format."
 msgstr "Erreur de format de réseaux sociaux."
 
-#: plana/apps/associations/views/association.py:458
+#: plana/apps/associations/views/association.py:456
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:480
+#: plana/apps/associations/views/association.py:478
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:570
+#: plana/apps/associations/views/association.py:568
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:580
+#: plana/apps/associations/views/association.py:578
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:636
-msgid "Not allowed to retrieve this association."
-msgstr "Aucun droit de voir cette association."
-
-#: plana/apps/associations/views/association.py:799
+#: plana/apps/associations/views/association.py:734
 #: plana/apps/projects/views/project.py:676
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:820
+#: plana/apps/associations/views/association.py:755
 #: plana/apps/projects/views/project.py:754
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
+
+#: plana/apps/associations/views/association_export.py:57
+msgid "Not allowed to retrieve this association."
+msgstr "Aucun droit de voir cette association."
+
+#: plana/apps/associations/views/association_export.py:115
+msgid "Not allowed to export associations list CSV."
+msgstr ""
+"Vous n'avez pas la permission d'exporter la liste des associations au format "
+"CSV."
 
 #: plana/apps/commissions/models/commission.py:9
 msgid "Project submission limit date"
@@ -380,6 +393,53 @@ msgstr "Impossible de supprimer une commission passée."
 #: plana/apps/commissions/views/commission.py:453
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
+
+#: plana/apps/commissions/views/commission_export.py:33
+msgid "Project ID"
+msgstr "Numéro de projet"
+
+#: plana/apps/commissions/views/commission_export.py:34
+msgid "Association name"
+msgstr "Nom de l'association"
+
+#: plana/apps/commissions/views/commission_export.py:35
+msgid "Student misc name"
+msgstr "Nom du porteur individuel"
+
+#: plana/apps/commissions/views/commission_export.py:36
+msgid "Project start date"
+msgstr "Date de début de projet"
+
+#: plana/apps/commissions/views/commission_export.py:37
+msgid "Project end date"
+msgstr "Date de fin de projet"
+
+#: plana/apps/commissions/views/commission_export.py:38
+msgid "First edition"
+msgstr "Est la première édition du projet"
+
+#: plana/apps/commissions/views/commission_export.py:39
+#: plana/apps/projects/models/category.py:16
+msgid "Categories"
+msgstr "Catégories"
+
+#: plana/apps/commissions/views/commission_export.py:44
+#, python-brace-format
+msgid "Amount asked {fund.acronym}"
+msgstr "Montant demandé {fund.acronym}"
+
+#: plana/apps/commissions/views/commission_export.py:45
+#, python-brace-format
+msgid "Amount earned {fund.acronym}"
+msgstr "Montant obtenu {fund.acronym}"
+
+#: plana/apps/commissions/views/commission_export.py:90
+msgid "Yes"
+msgstr "Oui"
+
+#: plana/apps/commissions/views/commission_export.py:93
+msgid "No"
+msgstr "Non"
 
 #: plana/apps/commissions/views/commission_fund.py:55
 msgid "Commission or fund does not exist."
@@ -671,10 +731,6 @@ msgstr "Composantes"
 #: plana/apps/projects/models/category.py:15
 msgid "Category"
 msgstr "Catégorie"
-
-#: plana/apps/projects/models/category.py:16
-msgid "Categories"
-msgstr "Catégories"
 
 #: plana/apps/projects/models/project.py:19
 msgid "Project Draft"
