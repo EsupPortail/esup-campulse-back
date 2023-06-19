@@ -2,6 +2,7 @@
 import json
 from unittest.mock import Mock
 
+from django.core import mail
 from django.core.files.storage import default_storage
 from django.db import models
 from django.test import Client, TestCase
@@ -29,6 +30,8 @@ class DocumentsViewsTests(TestCase):
         "documents_documentupload.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
         "projects_project.json",
         "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
@@ -265,6 +268,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - Document must have at least one affectation (user or association).
         - If linked to an association, the association must already exist.
+        - If linked to a user, the user must already exist.
         - Document cannot have multiple affectations.
         """
         document_data = {
@@ -275,6 +279,11 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         document_data["association"] = 9999
+        response = self.student_site_client.post("/documents/uploads", document_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        document_data.pop("association", None)
+        document_data["user"] = 9999
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -383,12 +392,13 @@ class DocumentsViewsTests(TestCase):
         - Returns 415 if MIME type is wrong.
         - Object is correctly created in db.
         """
-        project_id = 1
-        document_id = 19
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
+
+        project_id = 1
+        document_id = 19
         post_data = {
             "path_file": file,
             "project": project_id,
@@ -398,18 +408,49 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-        document = Document.objects.get(id=document_id)
-        document.mime_types = [
-            "application/vnd.novadigm.ext",
-            "application/octet-stream",
-        ]
-        document.save()
+        document = Document.objects.filter(id__in=[3, 19])
+        document.update(
+            mime_types=[
+                "application/vnd.novadigm.ext",
+                "application/octet-stream",
+            ]
+        )
+
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         du_cnt = len(
             DocumentUpload.objects.filter(
                 project_id=project_id, document_id=document_id
             )
+        )
+        self.assertEqual(du_cnt, 1)
+
+        self.assertFalse(len(mail.outbox))
+        post_data["document"] = 3
+        post_data.pop("project", None)
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        du_cnt = len(
+            DocumentUpload.objects.filter(
+                user_id=post_data["user"], document_id=post_data["document"]
+            ),
+        )
+        self.assertEqual(du_cnt, 1)
+        self.assertTrue(len(mail.outbox))
+
+        post_data["association"] = 2
+        document_upload = DocumentUpload.objects.get(
+            association_id=post_data["association"], document_id=post_data["document"]
+        )
+        document_upload.delete()
+        post_data.pop("user", None)
+        response = self.student_president_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        du_cnt = len(
+            DocumentUpload.objects.filter(
+                association_id=post_data["association"],
+                document_id=post_data["document"],
+            ),
         )
         self.assertEqual(du_cnt, 1)
 
@@ -560,6 +601,7 @@ class DocumentsViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Document object is successfully changed in db.
         """
+        self.assertFalse(len(mail.outbox))
         patch_data = {"validated_date": "2023-03-15"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
@@ -567,8 +609,19 @@ class DocumentsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
 
         document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])
+        self.assertNotEqual(document_upload.validated_date, None)
+
+        response = self.general_client.patch(
+            "/documents/uploads/6",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        document_upload = DocumentUpload.objects.get(id=6)
         self.assertNotEqual(document_upload.validated_date, None)
 
     def test_delete_document_upload_anonymous(self):
@@ -611,6 +664,7 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be the president of the association owning the document.
         - The DocumentUpload is deleted from db.
         - If the same DocumentUpload is attempted to be deleted, returns a HTTP 404.
+        - The route can be accessed by a manager user.
         """
         document_upload_id = 6
         response = self.student_president_client.delete(
@@ -626,6 +680,16 @@ class DocumentsViewsTests(TestCase):
             f"/documents/uploads/{document_upload_id}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        self.assertFalse(len(mail.outbox))
+        response = self.general_client.delete("/documents/uploads/7")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertTrue(len(mail.outbox))
+
+        response = self.general_client.delete(
+            f"/documents/uploads/{self.new_document.data['id']}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_get_document_upload_file_by_id_anonymous(self):
         """

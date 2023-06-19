@@ -1,5 +1,4 @@
 """List of tests done on projects views."""
-import datetime
 import json
 
 from django.core import mail

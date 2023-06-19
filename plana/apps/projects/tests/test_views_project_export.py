@@ -8,8 +8,6 @@ from rest_framework import status
 
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicStorageFieldFile
 
 

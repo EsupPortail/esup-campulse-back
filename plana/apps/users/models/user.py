@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import CommissionFund
-from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund

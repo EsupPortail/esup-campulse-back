@@ -1,12 +1,9 @@
 """Views directly linked to document uploads."""
-from pathlib import Path
-
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import FileResponse
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -307,7 +304,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
-        # request.data["name"] = f"{slugify(document.name)}{'.'.join(Path(request.data["path_file"].name).suffixes)}"
         request.data["name"] = request.data["path_file"].name
 
         return super().create(request, *args, **kwargs)
@@ -426,10 +422,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "validated_date" in request.data["validated_date"]
-            and request.data["validated_date"] != ""
-        ):
+        if "validated_date" in request.data and request.data["validated_date"] != "":
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,
@@ -465,7 +458,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         """Destroys an uploaded document."""
         try:
             document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
-            document = Document.objects.get(id=document_upload.document_id)
+            Document.objects.get(id=document_upload.document_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},

@@ -4,18 +4,12 @@ import datetime
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, CommissionFund, Fund
-from plana.apps.institutions.models import Institution
-from plana.apps.projects.models import ProjectCommissionFund
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
