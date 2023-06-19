@@ -206,7 +206,7 @@ class DocumentExpirationCommandTest(TestCase):
     def test_almost_document_upload_expiration(self):
         """An email is sent if document upload expires in 10 days."""
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(355)))
+            validated_date=(self.today - datetime.timedelta(days=(540)))
         )
         call_command("cron_document_expiration")
         self.assertTrue(len(mail.outbox))
@@ -214,7 +214,7 @@ class DocumentExpirationCommandTest(TestCase):
     def test_almost_document_upload_expiration_but_no_document_upload_expiration(self):
         """Nothing should change if document expires in 5 days."""
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(360)))
+            validated_date=(self.today - datetime.timedelta(days=(545)))
         )
         call_command("cron_document_expiration")
         self.assertFalse(len(mail.outbox))
@@ -223,7 +223,7 @@ class DocumentExpirationCommandTest(TestCase):
         """Document upload expires today."""
         initial_document_uploads_count = self.document_uploads.count()
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(365)))
+            validated_date=(self.today - datetime.timedelta(days=(550)))
         )
         call_command("cron_document_expiration")
         self.assertNotEqual(
