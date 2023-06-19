@@ -4354,6 +4354,11 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 8
         planned_start_date:
           type: string
           format: date-time
@@ -4586,6 +4591,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          maxLength: 8
         planned_start_date:
           type: string
           format: date-time
@@ -4888,6 +4897,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          maxLength: 8
         association:
           type: integer
           nullable: true

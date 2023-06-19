@@ -1,4 +1,5 @@
 """List of tests done on projects views."""
+import datetime
 import json
 
 from django.core import mail
@@ -912,7 +913,7 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REJECTED")
 
-        patch_data = {"project_status": "PROJECT_REJECTED"}
+        patch_data = {"project_status": "PROJECT_VALIDATED"}
         response = self.general_client.patch(
             f"/projects/4/status",
             patch_data,
@@ -920,7 +921,12 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=4)
-        self.assertEqual(project.project_status, "PROJECT_REJECTED")
+        self.assertEqual(project.project_status, "PROJECT_VALIDATED")
+        year = datetime.datetime.now().year
+        projects_year_count = Project.objects.filter(
+            manual_identifier__startswith=year
+        ).count()
+        self.assertEqual(project.manual_identifier, f"{year}{projects_year_count:04}")
 
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
         response = self.general_client.patch(

@@ -804,6 +804,14 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         elif (
             new_project_status in Project.ProjectStatus.get_validator_project_statuses()
         ):
+            if new_project_status == "PROJECT_VALIDATED":
+                year = datetime.datetime.now().year
+                projects_year_count = Project.objects.filter(
+                    manual_identifier__startswith=year
+                ).count()
+                project.manual_identifier = f"{year}{projects_year_count+1:04}"
+                project.save()
+
             mail_templates_codes_by_status = {
                 "PROJECT_DRAFT": "PROJECT_NEEDS_CHANGES",
                 "PROJECT_REJECTED": "PROJECT_REJECTED",

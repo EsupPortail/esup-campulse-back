@@ -17,6 +17,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "manual_identifier",
             "planned_start_date",
             "planned_end_date",
             "planned_location",
@@ -97,6 +98,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "manual_identifier",
             "association",
             "user",
             "association_user",

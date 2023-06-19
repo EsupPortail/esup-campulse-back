@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 13:54+0200\n"
+"POT-Creation-Date: 2023-06-19 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,7 +168,7 @@ msgid "Charter date"
 msgstr "Date de la charte"
 
 #: plana/apps/associations/models/association.py:94
-#: plana/apps/projects/models/project.py:152
+#: plana/apps/projects/models/project.py:155
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
@@ -203,7 +203,7 @@ msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:128
 #: plana/apps/documents/models/document_upload.py:53
-#: plana/apps/projects/models/project.py:115 plana/apps/users/models/user.py:24
+#: plana/apps/projects/models/project.py:118 plana/apps/users/models/user.py:24
 #: plana/apps/users/models/user.py:40
 msgid "Association"
 msgstr "Association"
@@ -565,7 +565,7 @@ msgid "Documents"
 msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:47
-#: plana/apps/projects/models/project.py:112
+#: plana/apps/projects/models/project.py:115
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:22 plana/apps/users/models/user.py:63
 #: plana/apps/users/models/user.py:353
@@ -573,7 +573,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:59
-#: plana/apps/projects/models/project.py:176
+#: plana/apps/projects/models/project.py:179
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:16
 #: plana/apps/projects/models/project_commission_fund.py:13
@@ -760,117 +760,121 @@ msgstr "Bilan de Projet Rejeté"
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:108
+#: plana/apps/projects/models/project.py:109
+msgid "Manual identifier"
+msgstr "Identifiant manuel"
+
+#: plana/apps/projects/models/project.py:111
 msgid "Planned start date"
 msgstr "Date de début prévue"
 
-#: plana/apps/projects/models/project.py:109
+#: plana/apps/projects/models/project.py:112
 msgid "Planned end date"
 msgstr "Date de fin prévue"
 
-#: plana/apps/projects/models/project.py:110
+#: plana/apps/projects/models/project.py:113
 msgid "Planned location"
 msgstr "Lieu prévu"
 
-#: plana/apps/projects/models/project.py:119
+#: plana/apps/projects/models/project.py:122
 msgid "Association User"
 msgstr "Membre d'association"
 
-#: plana/apps/projects/models/project.py:124
+#: plana/apps/projects/models/project.py:127
 msgid "Budget on previous edition"
 msgstr "Budget de l'édition précédente"
 
-#: plana/apps/projects/models/project.py:126
+#: plana/apps/projects/models/project.py:129
 msgid "Target audience"
 msgstr "Public visé"
 
-#: plana/apps/projects/models/project.py:128
+#: plana/apps/projects/models/project.py:131
 msgid "Amount of students in target audience"
 msgstr "Nombre d'étudiants dans le public visé"
 
-#: plana/apps/projects/models/project.py:131
+#: plana/apps/projects/models/project.py:134
 msgid "Amount of all people in target audience"
 msgstr "Nombre de personnes au total dans le public visé"
 
-#: plana/apps/projects/models/project.py:134
+#: plana/apps/projects/models/project.py:137
 msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
-#: plana/apps/projects/models/project.py:137
+#: plana/apps/projects/models/project.py:140
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:139
+#: plana/apps/projects/models/project.py:142
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:140
+#: plana/apps/projects/models/project.py:143
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:141
+#: plana/apps/projects/models/project.py:144
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:143
+#: plana/apps/projects/models/project.py:146
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:145
+#: plana/apps/projects/models/project.py:148
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:147
+#: plana/apps/projects/models/project.py:150
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:153
+#: plana/apps/projects/models/project.py:156
 #: plana/apps/projects/models/project_comment.py:13
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:154
+#: plana/apps/projects/models/project.py:157
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:155
+#: plana/apps/projects/models/project.py:158
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:156
+#: plana/apps/projects/models/project.py:159
 msgid "Real start date"
 msgstr "Date de début réelle"
 
-#: plana/apps/projects/models/project.py:157
+#: plana/apps/projects/models/project.py:160
 msgid "Real end date"
 msgstr "Date de fin réelle"
 
-#: plana/apps/projects/models/project.py:158
+#: plana/apps/projects/models/project.py:161
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:160
+#: plana/apps/projects/models/project.py:163
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:162
+#: plana/apps/projects/models/project.py:165
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:164
+#: plana/apps/projects/models/project.py:167
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:166
+#: plana/apps/projects/models/project.py:169
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:167
+#: plana/apps/projects/models/project.py:170
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:177
+#: plana/apps/projects/models/project.py:180
 msgid "Projects"
 msgstr "Projets"
 
