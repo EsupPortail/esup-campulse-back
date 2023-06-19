@@ -277,7 +277,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Commission Date does not exist.")},
+                {"error": _("Commission does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 

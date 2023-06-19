@@ -2,13 +2,16 @@
 import csv
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
 from plana.apps.commissions.models import CommissionFund, Fund
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models import (
     Category,
     Project,
@@ -19,15 +22,73 @@ from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
 
 
-class CommissionProjectsCSVExport(generics.RetrieveAPIView):
+class CommissionCSVExport(generics.RetrieveAPIView):
+    """/commissions/{id}/csv_export route"""
+
     permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: ProjectSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_404_NOT_FOUND: None,
+        },
+    )
     def get(self, request, *args, **kwargs):
         """Projects presented to the commission CSV export."""
+
         queryset = self.get_queryset()
         commission_id = kwargs["pk"]
+
+        try:
+            self.queryset.get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Commission does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if not request.user.has_perm("projects.view_project_any_fund"):
+            if request.user.is_staff:
+                user_funds_ids = request.user.get_user_managed_funds()
+            else:
+                user_funds_ids = request.user.get_user_funds()
+        else:
+            user_funds_ids = Fund.objects.all().values_list("id")
+
+        if not request.user.has_perm("projects.view_project_any_institution"):
+            user_institutions_ids = request.user.get_user_managed_institutions()
+        else:
+            user_institutions_ids = Institution.objects.all().values_list("id")
+
+        if not request.user.has_perm(
+            "projects.view_project_any_fund"
+        ) or not request.user.has_perm("projects.view_project_any_institution"):
+            user_associations_ids = request.user.get_user_associations()
+            user_projects_ids = Project.visible_objects.filter(
+                models.Q(user_id=request.user.pk)
+                | models.Q(association_id__in=user_associations_ids)
+            ).values_list("id")
+
+            queryset = queryset.filter(
+                models.Q(id__in=user_projects_ids)
+                | models.Q(
+                    id__in=(
+                        ProjectCommissionFund.objects.filter(
+                            commission_fund_id__in=CommissionFund.objects.filter(
+                                fund_id__in=user_funds_ids
+                            ).values_list("id")
+                        ).values_list("project_id")
+                    )
+                )
+                | models.Q(
+                    association_id__in=Association.objects.filter(
+                        institution_id__in=user_institutions_ids
+                    ).values_list("id")
+                )
+            )
 
         fields = [
             _("Project ID"),

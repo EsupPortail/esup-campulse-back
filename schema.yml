@@ -309,6 +309,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/AssociationAllDataRead'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
   /associations/names:
     get:
       operationId: associations_names_list
@@ -587,6 +591,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+        '401':
+          description: No response body
+        '404':
+          description: No response body
   /commissions/funds:
     get:
       operationId: commissions_funds_list

@@ -75,14 +75,67 @@ class CommissionExportsViewsTests(TestCase):
         response = self.client.get("/commissions/1/csv_export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_commission_projects_csv_export_unauthorized(self):
+        """
+        GET /commissions/{id}/csv_export .
+
+        - Commission must exist.
+        """
+        response = self.general_client.get("/commissions/9999/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_commission_projects_csv_export_not_found(self):
+        """
+        GET /commissions/{id}/csv_export .
+
+        - A student only sees own projects.
+        """
+        commission_id = 1
+
+        response = self.student_client.get(f"/commissions/{commission_id}/csv_export")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+
+        total = Project.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    commission_id=commission_id
+                ).values("id")
+            )
+        ).count()
+        # -1 because of CSV header
+        self.assertNotEqual(len(list(csv_reader)) - 1, total)
+
     def test_commission_projects_csv_export_success_general_manager(self):
         """
         GET /commissions/{id}/csv_export .
 
         - The route can be accessed by a manager user.
+        - Manager can only see linked fund commissions.
         - All projects linked to the selected commission from db are returned in the CSV.
         """
         commission_id = 1
+
+        response = self.institution_client.get(
+            f"/commissions/{commission_id}/csv_export"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = response.content.decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+
+        total = Project.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    commission_id=commission_id
+                ).values("id")
+            )
+        ).count()
+        # -1 because of CSV header
+        self.assertNotEqual(len(list(csv_reader)) - 1, total)
+
         response = self.general_client.get(f"/commissions/{commission_id}/csv_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

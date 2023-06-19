@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views.commission import CommissionListCreate, CommissionRetrieveUpdateDestroy
-from .views.commission_export import CommissionProjectsCSVExport
+from .views.commission_export import CommissionCSVExport
 from .views.commission_fund import (
     CommissionFundDestroy,
     CommissionFundListCreate,
@@ -19,8 +19,8 @@ urlpatterns = [
     ),
     path(
         "<int:pk>/csv_export",
-        CommissionProjectsCSVExport.as_view(),
-        name="commission_projects_csv_export",
+        CommissionCSVExport.as_view(),
+        name="commission_csv_export",
     ),
     path(
         "funds", CommissionFundListCreate.as_view(), name="commission_fund_list_create"

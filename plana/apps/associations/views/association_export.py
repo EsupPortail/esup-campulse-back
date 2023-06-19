@@ -100,7 +100,12 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
                 OpenApiParameter.QUERY,
                 description="IDs of selected associations, separated by a coma.",
             ),
-        ]
+        ],
+        responses={
+            status.HTTP_200_OK: AssociationAllDataReadSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+        },
     )
     def get(self, request, *args, **kwargs):
         """Associations List CSV export."""
