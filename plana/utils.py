@@ -17,7 +17,7 @@ def check_valid_password(password):
     """Check password standard rules and zxcvbn rules."""
 
     messages = []
-    min_length = 8
+    min_length = 12
     if len(password) < min_length:
         messages += [_(f"Password too short (at least {min_length} chars).")]
 

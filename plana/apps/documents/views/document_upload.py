@@ -486,7 +486,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if request.user.is_staff is True:
+        if request.user.has_perm("documents.delete_documentupload_all"):
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,

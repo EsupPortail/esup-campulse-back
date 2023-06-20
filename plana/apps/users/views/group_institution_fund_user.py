@@ -60,6 +60,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """Creates a new link between a non-validated user and a group."""
+        # TODO Remove multiple is_staff checks to use another helper.
         try:
             group_id = request.data["group"]
             group = Group.objects.get(id=group_id)

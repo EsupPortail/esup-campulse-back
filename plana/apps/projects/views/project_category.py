@@ -49,8 +49,9 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         user_funds_ids = []
         user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_commission"):
-            if request.user.is_staff:
-                user_funds_ids = request.user.get_user_managed_funds()
+            managed_funds = request.user.get_user_managed_funds()
+            if managed_funds.count() > 0:
+                user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):

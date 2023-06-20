@@ -51,8 +51,9 @@ class CommissionCSVExport(generics.RetrieveAPIView):
             )
 
         if not request.user.has_perm("projects.view_project_any_fund"):
-            if request.user.is_staff:
-                user_funds_ids = request.user.get_user_managed_funds()
+            managed_funds = request.user.get_user_managed_funds()
+            if managed_funds.count() > 0:
+                user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
         else:

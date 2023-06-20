@@ -146,6 +146,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        # TODO Remove is_staff check to use another helper.
         if (
             request.user.is_staff
             and not request.user.has_perm(
@@ -222,7 +223,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 )
 
         if not request.user.is_anonymous and user.is_validated_by_admin:
-            if request.user.is_staff:
+            if request.user.is_staff_for_association(association_id):
                 request.data["is_validated_by_admin"] = True
             else:
                 request.data["is_validated_by_admin"] = False
