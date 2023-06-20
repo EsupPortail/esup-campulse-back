@@ -13,7 +13,9 @@ class Command(BaseCommand):
                 [
                     "associations_activityfield",
                     "commissions_commission",
+                    "commissions_fund",
                     "contents_content",
+                    "django_site",
                     "documents_document",
                     "auth_group",
                     "auth_group_permissions",
@@ -28,5 +30,5 @@ class Command(BaseCommand):
 
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

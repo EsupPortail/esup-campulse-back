@@ -24,12 +24,10 @@ class Project(models.Model):
         PROJECT_REVIEW_PROCESSING = "PROJECT_REVIEW_PROCESSING", _(
             "Project Review Processing"
         )
-        PROJECT_REVIEW_REJECTED = "PROJECT_REVIEW_REJECTED", _(
-            "Project Review Rejected"
-        )
         PROJECT_REVIEW_VALIDATED = "PROJECT_REVIEW_VALIDATED", _(
             "Project Review Validated"
         )
+        PROJECT_CANCELED = "PROJECT_CANCELED", _("Project Canceled")
 
         @staticmethod
         def get_project_statuses_order():
@@ -42,8 +40,8 @@ class Project(models.Model):
                 "PROJECT_VALIDATED": 3,
                 "PROJECT_REVIEW_DRAFT": 4,
                 "PROJECT_REVIEW_PROCESSING": 5,
-                "PROJECT_REVIEW_REJECTED": 6,
                 "PROJECT_REVIEW_VALIDATED": 6,
+                "PROJECT_CANCELED": 6,
             }
 
         @staticmethod
@@ -81,8 +79,8 @@ class Project(models.Model):
 
             return [
                 "PROJECT_REJECTED",
-                "PROJECT_REVIEW_REJECTED",
                 "PROJECT_REVIEW_VALIDATED",
+                "PROJECT_CANCELED",
             ]
 
         @staticmethod
@@ -100,8 +98,8 @@ class Project(models.Model):
                 "PROJECT_REJECTED",
                 "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT",
-                "PROJECT_REVIEW_REJECTED",
                 "PROJECT_REVIEW_VALIDATED",
+                "PROJECT_CANCELED",
             ]
 
     name = models.CharField(_("Name"), max_length=250, blank=False)

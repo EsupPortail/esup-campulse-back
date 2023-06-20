@@ -7,7 +7,10 @@ from django.db.utils import ProgrammingError
 
 
 class VisibleProjectManager(models.Manager):
+    """visible_objects from Project."""
+
     def get_queryset(self):
+        """Override queryset to get project younger than defined amount of years."""
         queryset = super().get_queryset()
         invisible_projects_ids = []
         try:

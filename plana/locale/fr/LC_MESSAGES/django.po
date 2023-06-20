@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-20 10:03+0200\n"
+"POT-Creation-Date: 2023-06-20 13:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: plana/apps/institutions/models/institution.py:10
 #: plana/apps/institutions/models/institution_component.py:9
 #: plana/apps/projects/models/category.py:9
-#: plana/apps/projects/models/project.py:107
+#: plana/apps/projects/models/project.py:105
 msgid "Name"
 msgstr "Nom"
 
@@ -168,7 +168,7 @@ msgid "Charter date"
 msgstr "Date de la charte"
 
 #: plana/apps/associations/models/association.py:94
-#: plana/apps/projects/models/project.py:156
+#: plana/apps/projects/models/project.py:154
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
@@ -203,7 +203,7 @@ msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:128
 #: plana/apps/documents/models/document_upload.py:53
-#: plana/apps/projects/models/project.py:118 plana/apps/users/models/user.py:24
+#: plana/apps/projects/models/project.py:116 plana/apps/users/models/user.py:24
 #: plana/apps/users/models/user.py:40
 msgid "Association"
 msgstr "Association"
@@ -565,15 +565,15 @@ msgid "Documents"
 msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:47
-#: plana/apps/projects/models/project.py:115
+#: plana/apps/projects/models/project.py:113
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:22 plana/apps/users/models/user.py:63
-#: plana/apps/users/models/user.py:353
+#: plana/apps/users/models/user.py:355
 msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:59
-#: plana/apps/projects/models/project.py:180
+#: plana/apps/projects/models/project.py:178
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:16
 #: plana/apps/projects/models/project_commission_fund.py:13
@@ -753,134 +753,134 @@ msgid "Project Review Processing"
 msgstr "Bilan de Projet en Traitement"
 
 #: plana/apps/projects/models/project.py:28
-msgid "Project Review Rejected"
-msgstr "Bilan de Projet Rejeté"
-
-#: plana/apps/projects/models/project.py:31
 msgid "Project Review Validated"
 msgstr "Bilan de Projet validé"
 
-#: plana/apps/projects/models/project.py:109
+#: plana/apps/projects/models/project.py:30
+msgid "Project Canceled"
+msgstr "Projet Annulé"
+
+#: plana/apps/projects/models/project.py:107
 msgid "Manual identifier"
 msgstr "Identifiant manuel"
 
-#: plana/apps/projects/models/project.py:111
+#: plana/apps/projects/models/project.py:109
 msgid "Planned start date"
 msgstr "Date de début prévue"
 
-#: plana/apps/projects/models/project.py:112
+#: plana/apps/projects/models/project.py:110
 msgid "Planned end date"
 msgstr "Date de fin prévue"
 
-#: plana/apps/projects/models/project.py:113
+#: plana/apps/projects/models/project.py:111
 msgid "Planned location"
 msgstr "Lieu prévu"
 
-#: plana/apps/projects/models/project.py:122
+#: plana/apps/projects/models/project.py:120
 msgid "Association User"
 msgstr "Membre d'association"
 
-#: plana/apps/projects/models/project.py:127
+#: plana/apps/projects/models/project.py:125
 msgid "Budget on previous edition"
 msgstr "Budget de l'édition précédente"
 
-#: plana/apps/projects/models/project.py:129
+#: plana/apps/projects/models/project.py:127
 msgid "Target audience"
 msgstr "Public visé"
 
-#: plana/apps/projects/models/project.py:131
+#: plana/apps/projects/models/project.py:129
 msgid "Amount of students in target audience"
 msgstr "Nombre d'étudiants dans le public visé"
 
-#: plana/apps/projects/models/project.py:134
+#: plana/apps/projects/models/project.py:132
 msgid "Amount of all people in target audience"
 msgstr "Nombre de personnes au total dans le public visé"
 
-#: plana/apps/projects/models/project.py:137
+#: plana/apps/projects/models/project.py:135
 msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
-#: plana/apps/projects/models/project.py:140
+#: plana/apps/projects/models/project.py:138
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:142
+#: plana/apps/projects/models/project.py:140
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:143
+#: plana/apps/projects/models/project.py:141
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:144
+#: plana/apps/projects/models/project.py:142
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:146
+#: plana/apps/projects/models/project.py:144
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:148
+#: plana/apps/projects/models/project.py:146
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:149
+#: plana/apps/projects/models/project.py:147
 msgid "Sustainable development"
 msgstr ""
 "Actions en rapport avec la DDRS (Développement Durable et Responsabilité "
 "Sociétale)"
 
-#: plana/apps/projects/models/project.py:151
+#: plana/apps/projects/models/project.py:149
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:157
+#: plana/apps/projects/models/project.py:155
 #: plana/apps/projects/models/project_comment.py:13
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:158
+#: plana/apps/projects/models/project.py:156
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:159
+#: plana/apps/projects/models/project.py:157
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:160
+#: plana/apps/projects/models/project.py:158
 msgid "Real start date"
 msgstr "Date de début réelle"
 
-#: plana/apps/projects/models/project.py:161
+#: plana/apps/projects/models/project.py:159
 msgid "Real end date"
 msgstr "Date de fin réelle"
 
-#: plana/apps/projects/models/project.py:162
+#: plana/apps/projects/models/project.py:160
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:164
+#: plana/apps/projects/models/project.py:162
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:166
+#: plana/apps/projects/models/project.py:164
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:168
+#: plana/apps/projects/models/project.py:166
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:170
+#: plana/apps/projects/models/project.py:168
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:171
+#: plana/apps/projects/models/project.py:169
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:181
+#: plana/apps/projects/models/project.py:179
 msgid "Projects"
 msgstr "Projets"
 
@@ -1189,7 +1189,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:354
+#: plana/apps/users/models/user.py:356
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1216,7 +1216,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:227
+#: plana/apps/users/serializers/user.py:211
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -1486,26 +1486,26 @@ msgstr "Réinitialise le contenu d'un bucket S3."
 msgid "S3 bucket {bucket_name} content cleaned."
 msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
 
-#: plana/management/commands/createmanageruser.py:16
+#: plana/management/commands/createmanageruser.py:15
 msgid "Creates a new manager user."
 msgstr "Crée un utilisateur gestionnaire."
 
-#: plana/management/commands/createmanageruser.py:36
+#: plana/management/commands/createmanageruser.py:34
 msgid "Group codename."
 msgstr "Nom de code de groupe."
 
-#: plana/management/commands/createmanageruser.py:42
+#: plana/management/commands/createmanageruser.py:40
 msgid "Institution codename (all by default)."
 msgstr "Nom de code d'établissement (tous par défaut)."
 
-#: plana/management/commands/createmanageruser.py:101
+#: plana/management/commands/createmanageruser.py:78
 #, python-brace-format
 msgid "User created. Password : {password}"
 msgstr "Utilisateur crée. Mot de passe : {password}"
 
 #: plana/management/commands/cron_account_expiration.py:17
-msgid "Expired accounts policy"
-msgstr "Politique d'expiration des comptes"
+msgid "Expired accounts policy."
+msgstr "Politique d'expiration des comptes."
 
 #: plana/management/commands/cron_association_expiration.py:14
 msgid "Checks statuses of associations charters."
@@ -1529,8 +1529,8 @@ msgstr ""
 "Vérifie la date de dernière Assemblée Générale Ordinaire des associations."
 
 #: plana/management/commands/cron_password_expiration.py:18
-msgid "Expired password policy"
-msgstr "Politique d'expiration des mots de passe"
+msgid "Expired password policy."
+msgstr "Politique d'expiration des mots de passe."
 
 #: plana/management/commands/cron_project_expiration.py:12
 msgid "Deletes all Projects older than the given amount of years."
@@ -1544,55 +1544,55 @@ msgstr ""
 "Si un projet ayant reçu une aide financière d'une commission n'a pas soumis "
 "de bilan un mois après sa date de fin planifiée, on envoie un email."
 
-#: plana/management/commands/generate_age_keys.py:10
+#: plana/management/commands/generate_age_keys.py:11
 msgid "Generate pair of AGE private and public keys to encrypt file uploads."
 msgstr ""
 "Génère une paire de clés AGE publique et privée pour chiffrer les envois de "
 "documents."
 
-#: plana/management/commands/generate_age_keys.py:27
-#: plana/management/commands/generate_jwt_keys.py:29
+#: plana/management/commands/generate_age_keys.py:28
+#: plana/management/commands/generate_jwt_keys.py:30
 msgid "Don't remove existing key files if they exist"
 msgstr "Ne supprime pas les fichiers de clés existants"
 
-#: plana/management/commands/generate_age_keys.py:36
-#: plana/management/commands/generate_jwt_keys.py:37
+#: plana/management/commands/generate_age_keys.py:37
+#: plana/management/commands/generate_jwt_keys.py:38
 msgid "Keys not replaced"
 msgstr "Clés non remplacées"
 
-#: plana/management/commands/generate_age_keys.py:38
-#: plana/management/commands/generate_jwt_keys.py:39
+#: plana/management/commands/generate_age_keys.py:39
+#: plana/management/commands/generate_jwt_keys.py:40
 msgid "Replace key file {str(private_key)}?"
 msgstr "Remplacer la clé {str(private_key)} ?"
 
-#: plana/management/commands/generate_age_keys.py:42
-#: plana/management/commands/generate_jwt_keys.py:43
+#: plana/management/commands/generate_age_keys.py:43
+#: plana/management/commands/generate_jwt_keys.py:44
 msgid "Key already exists"
 msgstr "La clé existe déjà"
 
-#: plana/management/commands/generate_age_keys.py:47
-#: plana/management/commands/generate_jwt_keys.py:48
+#: plana/management/commands/generate_age_keys.py:48
+#: plana/management/commands/generate_jwt_keys.py:49
 msgid "Key {str(private_key)} created"
 msgstr "Clé {str(private_key)} créée"
 
-#: plana/management/commands/generate_age_keys.py:52
-#: plana/management/commands/generate_jwt_keys.py:53
+#: plana/management/commands/generate_age_keys.py:53
+#: plana/management/commands/generate_jwt_keys.py:54
 msgid "Key {str(public_key)} created"
 msgstr "Clé {str(public_key)} créée"
 
-#: plana/management/commands/generate_jwt_keys.py:11
+#: plana/management/commands/generate_jwt_keys.py:12
 msgid ""
 "Generate pair of RSA 256 private and public keys to sign and verify JWT "
-"tokens"
+"tokens."
 msgstr ""
 "Génère une paire de clés RSA 256 publique et privée pour signer et vérifier "
-"les jetons JWT"
+"les jetons JWT."
 
 #: plana/management/commands/initial_import.py:7
 msgid "Import application initial datas."
 msgstr "Importe les données initiales de l'application."
 
-#: plana/management/commands/initial_import.py:29
+#: plana/management/commands/initial_import.py:31
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 

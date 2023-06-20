@@ -915,7 +915,7 @@ class ProjectsViewsTests(TestCase):
 
         patch_data = {"project_status": "PROJECT_VALIDATED"}
         response = self.general_client.patch(
-            f"/projects/4/status",
+            "/projects/4/status",
             patch_data,
             content_type="application/json",
         )

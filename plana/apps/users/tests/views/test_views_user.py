@@ -1,3 +1,4 @@
+"""List of tests done on user views."""
 import json
 
 from allauth.socialaccount.models import SocialAccount
@@ -15,6 +16,8 @@ from plana.apps.users.provider import CASProvider
 
 
 class UserViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",

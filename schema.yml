@@ -5110,8 +5110,8 @@ components:
       - PROJECT_VALIDATED
       - PROJECT_REVIEW_DRAFT
       - PROJECT_REVIEW_PROCESSING
-      - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_VALIDATED
+      - PROJECT_CANCELED
       type: string
     ProjectUpdateRequest:
       type: object

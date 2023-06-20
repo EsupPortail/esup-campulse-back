@@ -23,5 +23,5 @@ class Command(BaseCommand):
                 self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned."))
             )
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

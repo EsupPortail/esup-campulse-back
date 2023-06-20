@@ -684,7 +684,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 {"error": _("Cannot change this project status anymore.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        elif (
+        if (
             statuses_order[new_project_status] == statuses_order[old_project_status] - 1
             and old_project_status
             not in Project.ProjectStatus.get_rollbackable_project_statuses()
@@ -693,7 +693,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 {"error": _("Cannot rollback to a previous status.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        elif (
+        if (
             statuses_order[new_project_status] != statuses_order[old_project_status] + 1
             and statuses_order[new_project_status]
             != statuses_order[old_project_status] - 1
@@ -818,8 +818,8 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 "PROJECT_REJECTED": "PROJECT_REJECTED",
                 "PROJECT_VALIDATED": "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT": "PROJECT_NEEDS_REVIEW",
-                "PROJECT_REVIEW_REJECTED": "PROJECT_REVIEW_CANCELED",
                 "PROJECT_REVIEW_VALIDATED": "PROJECT_REVIEW_VALIDATED",
+                "PROJECT_CANCELED": "PROJECT_CANCELED",
             }
             template = MailTemplate.objects.get(
                 code=mail_templates_codes_by_status[new_project_status]

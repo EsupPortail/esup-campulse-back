@@ -1,3 +1,4 @@
+"""Test commands in management folder."""
 import datetime
 
 from django.contrib.auth import get_user_model
@@ -16,6 +17,8 @@ User = get_user_model()
 
 
 class AccountExpirationCommandTest(TestCase):
+    """Test account_expiration command."""
+
     fixtures = ['auth_group', 'mailtemplatevars', 'mailtemplates']
 
     def setUp(self):

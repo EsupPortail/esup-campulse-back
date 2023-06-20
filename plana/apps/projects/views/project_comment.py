@@ -193,7 +193,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            pc = ProjectComment.objects.get(
+            project_comment = ProjectComment.objects.get(
                 project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
         except ObjectDoesNotExist:
@@ -217,9 +217,9 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        pc.edition_date = datetime.date.today()
-        pc.text = request.data["text"]
-        pc.save()
+        project_comment.edition_date = datetime.date.today()
+        project_comment.text = request.data["text"]
+        project_comment.save()
         return response.Response({}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -235,7 +235,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Destroys comments of a project"""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            pc = ProjectComment.objects.get(
+            project_comment = ProjectComment.objects.get(
                 project_id=kwargs["project_id"], id=kwargs["comment_id"]
             )
         except ObjectDoesNotExist:
@@ -259,5 +259,5 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        pc.delete()
+        project_comment.delete()
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

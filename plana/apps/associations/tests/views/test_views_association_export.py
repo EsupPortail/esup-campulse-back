@@ -127,7 +127,7 @@ class AssociationExportsViewsTests(TestCase):
 
         - The route cannot be accessed by an anonymous user.
         """
-        response = self.client.get(f"/associations/csv_export")
+        response = self.client.get("/associations/csv_export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_csv_export_associations_forbidden(self):
@@ -136,7 +136,7 @@ class AssociationExportsViewsTests(TestCase):
 
         - The route cannot be accessed by a user not linked to an institution.
         """
-        response = self.member_client.get(f"/associations/csv_export")
+        response = self.member_client.get("/associations/csv_export")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_csv_export_associations_success_general_manager(self):
@@ -146,7 +146,7 @@ class AssociationExportsViewsTests(TestCase):
         - The route can be accessed by a manager user.
         - All associations from db are returned in the CSV.
         """
-        response = self.general_client.get(f"/associations/csv_export")
+        response = self.general_client.get("/associations/csv_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -162,7 +162,7 @@ class AssociationExportsViewsTests(TestCase):
         - The route can be accessed by an institution manager user.
         - All selected associations linked to the same institutions from db are returned in the CSV.
         """
-        response = self.institution_client.get(f"/associations/csv_export")
+        response = self.institution_client.get("/associations/csv_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -183,7 +183,7 @@ class AssociationExportsViewsTests(TestCase):
         - All selected associations from db are returned in the CSV.
         """
         response = self.general_client.get(
-            f"/associations/csv_export?associations=1,2,3"
+            "/associations/csv_export?associations=1,2,3"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

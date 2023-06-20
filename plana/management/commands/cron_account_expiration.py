@@ -14,7 +14,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = _('Expired accounts policy')
+    help = _("Expired accounts policy.")
 
     def handle(self, *args, **options):
         try:
@@ -35,8 +35,8 @@ class Command(BaseCommand):
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
             for user in mail_sending_queryset:
-                context['first_name'] = user.first_name
-                context['last_name'] = user.last_name
+                context["first_name"] = user.first_name
+                context["last_name"] = user.last_name
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=user.email,
@@ -54,5 +54,5 @@ class Command(BaseCommand):
             )
             deletion_queryset.delete()
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

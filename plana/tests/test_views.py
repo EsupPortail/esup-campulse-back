@@ -17,6 +17,7 @@ class RootViewsTests(TestCase):
 
     def test_forbidden(self):
         """403"""
+        # TODO Simulate generic 403 request.
         """
         response = self.client.get("/admin")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

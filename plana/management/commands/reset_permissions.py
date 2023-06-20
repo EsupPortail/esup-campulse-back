@@ -60,5 +60,5 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS(_("Updated all group permissions.")))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

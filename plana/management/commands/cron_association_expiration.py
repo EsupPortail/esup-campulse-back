@@ -43,5 +43,5 @@ class Command(BaseCommand):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.save()
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

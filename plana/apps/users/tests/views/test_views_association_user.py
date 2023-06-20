@@ -1,3 +1,4 @@
+"""List of tests done on association_user views."""
 import datetime
 import json
 
@@ -12,6 +13,8 @@ from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUs
 
 
 class AssociationUserViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",

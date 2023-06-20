@@ -104,5 +104,5 @@ class Command(BaseCommand):
                         message=template.parse_vars(None, None, context),
                     )
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

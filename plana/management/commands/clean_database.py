@@ -22,5 +22,5 @@ class Command(BaseCommand):
             call_command("loaddata", *libs_fixtures)
             self.stdout.write(self.style.SUCCESS(_("Database regenerated.")))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

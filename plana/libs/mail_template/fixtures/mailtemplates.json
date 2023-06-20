@@ -664,11 +664,11 @@
     "model": "mail_template.MailTemplate",
     "pk": 40,
     "fields": {
-      "code": "PROJECT_REVIEW_CANCELED",
-      "label": "Project Review Canceled",
-      "description": "Message reçu par un étudiant si le bilan de son projet n'a plus à être envoyé.",
-      "subject": "{{ site_name }} - Votre projet n'a plus besoin de bilan.",
-      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme ne nécessite plus d'envoi de bilan.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "code": "PROJECT_CANCELED",
+      "label": "Project Canceled",
+      "description": "Message reçu par un étudiant si son projet est annulé.",
+      "subject": "{{ site_name }} - Votre projet est annulé.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme a été annulé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2

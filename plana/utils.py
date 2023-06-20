@@ -81,9 +81,12 @@ def to_bool(attr):
         return attr
     if isinstance(attr, str):
         return ast.literal_eval(attr.capitalize())
+    return None
 
 
 def valid_date_format(date):
+    """Checks date format without time."""
+
     date_format = "%Y-%m-%d"
     try:
         datetime.datetime.strptime(date, date_format)
@@ -93,6 +96,8 @@ def valid_date_format(date):
 
 
 def generate_pdf(filename, dict_data, type_doc, base_url):
+    """Generate a PDF file depending on the process."""
+
     types_and_templates = {
         "association_charter_summary": "./pdf_exports/association_charter_summary.html",
         "project_summary": "./pdf_exports/project_summary.html",

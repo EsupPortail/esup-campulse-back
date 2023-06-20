@@ -201,22 +201,6 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
     phone = serializers.CharField(required=False, allow_blank=True)
 
-    """
-    def get_validation_exclusions(self):
-        exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
-        return exclusions + ["phone"]
-    """
-
-    """
-    def validate_email(self, value):
-        ModelClass = self.Meta.model
-        if ModelClass.objects.filter(email=value).exists():
-            raise serializers.ValidationError(
-                _("This email address is already in use.")
-            )
-        return value
-    """
-
     def save(self, request):
         self.cleaned_data = request.data
         if self.cleaned_data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:

@@ -57,5 +57,5 @@ class Command(BaseCommand):
                 ):
                     document_upload.delete()
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

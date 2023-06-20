@@ -186,6 +186,8 @@ class User(AbstractUser):
                 return False
             return True
 
+        return False
+
     def can_edit_project(self, project_obj):
         """Check if a user can edit a project as association president, misc user, fund member, or manager."""
         if not self.can_access_project(project_obj):

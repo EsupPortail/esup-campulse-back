@@ -1,3 +1,4 @@
+"""List of tests done on user_group views."""
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -5,7 +6,9 @@ from rest_framework import status
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
-class AuthUserViewsTests(TestCase):
+class UserGroupViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",

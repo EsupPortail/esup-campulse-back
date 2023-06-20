@@ -15,7 +15,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = _("Expired password policy")
+    help = _("Expired password policy.")
 
     def handle(self, *args, **options):
         try:
@@ -47,8 +47,8 @@ class Command(BaseCommand):
                 user.save()
                 self.send_password_mail(user, context, template)
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))
 
     def send_password_mail(self, user, context, template):
         """Generic function to send an email."""

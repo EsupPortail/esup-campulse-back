@@ -198,7 +198,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(len(content), documents_cnt)
 
         response = self.general_client.get(
-            f"/documents/uploads?is_validated_by_admin=true"
+            "/documents/uploads?is_validated_by_admin=true"
         )
         documents_cnt = DocumentUpload.objects.exclude(
             validated_date__isnull=True

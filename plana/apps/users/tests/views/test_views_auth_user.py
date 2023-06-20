@@ -1,3 +1,4 @@
+"""List of tests done on user views related to auth."""
 import json
 
 from allauth.account.forms import default_token_generator
@@ -13,6 +14,8 @@ from plana.apps.users.models.user import AssociationUser, User
 
 
 class AuthUserViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",
