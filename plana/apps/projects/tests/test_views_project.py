@@ -183,6 +183,19 @@ class ProjectsViewsTests(TestCase):
             response = self.general_client.get(f"/projects/?name={similar_name}")
             self.assertEqual(response.data[0]["name"], similar_names[0])
 
+        similar_identifiers = [
+            "20890001",
+            "2089 0001",
+            "2089",
+        ]
+        for similar_identifier in similar_identifiers:
+            response = self.general_client.get(
+                f"/projects/?manual_identifier={similar_identifier}"
+            )
+            self.assertEqual(
+                response.data[0]["manual_identifier"], similar_identifiers[0]
+            )
+
         year = 2099
         response = self.general_client.get(f"/projects/?year={year}")
         projects_cnt = Project.visible_objects.filter(creation_date__year=year).count()

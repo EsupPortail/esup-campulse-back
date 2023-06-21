@@ -40,6 +40,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
     search_fields = [
         "name__nospaces__unaccent",
         "creation_date__year",
+        "manual_identifier",
         "user_id",
         "association_id",
         "commission_dates",
@@ -68,6 +69,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 OpenApiTypes.INT,
                 OpenApiParameter.QUERY,
                 description="Filter by creation_date year.",
+            ),
+            OpenApiParameter(
+                "manual_identifier",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by manual identifier.",
             ),
             OpenApiParameter(
                 "user_id",
@@ -118,6 +125,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         name = request.query_params.get("name")
         year = request.query_params.get("year")
+        manual_identifier = request.query_params.get("manual_identifier")
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
         commission = request.query_params.get("commission_id")
@@ -133,6 +141,14 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if year is not None and year != "":
             queryset = queryset.filter(creation_date__year=year)
+
+        if manual_identifier is not None and manual_identifier != "":
+            manual_identifier = str(manual_identifier).strip()
+            queryset = queryset.filter(
+                manual_identifier__nospaces__unaccent__icontains=manual_identifier.replace(
+                    " ", ""
+                )
+            )
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
