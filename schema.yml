@@ -1158,6 +1158,11 @@ paths:
           type: string
         description: Filter by Commission ID linked to a project.
       - in: query
+        name: manual_identifier
+        schema:
+          type: string
+        description: Filter by manual identifier.
+      - in: query
         name: name
         schema:
           type: string
@@ -3699,6 +3704,11 @@ components:
           type: string
           nullable: true
           title: Nombre de jours avant expiration du document
+        expiration_day:
+          type: string
+          nullable: true
+          title: Document expiration day of the year in %m-%d format
+          maxLength: 5
         path_template:
           type: string
           format: uri

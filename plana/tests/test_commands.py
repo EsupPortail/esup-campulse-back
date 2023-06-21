@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund
+from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -198,7 +199,12 @@ class DocumentExpirationCommandTest(TestCase):
 
     def setUp(self):
         """Cache all document uploads."""
-        self.document_uploads = DocumentUpload.objects.all()
+        self.days_before_expiration = 365
+        self.document_uploads = DocumentUpload.objects.filter(
+            document_id__in=Document.objects.filter(
+                days_before_expiration=f"{self.days_before_expiration} days"
+            )
+        )
         self.today = datetime.date.today()
 
     def test_no_document_upload_expiration(self):
@@ -209,7 +215,9 @@ class DocumentExpirationCommandTest(TestCase):
     def test_almost_document_upload_expiration(self):
         """An email is sent if document upload expires in 10 days."""
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(540)))
+            validated_date=(
+                self.today - datetime.timedelta(days=(self.days_before_expiration - 10))
+            )
         )
         call_command("cron_document_expiration")
         self.assertTrue(len(mail.outbox))
@@ -217,7 +225,9 @@ class DocumentExpirationCommandTest(TestCase):
     def test_almost_document_upload_expiration_but_no_document_upload_expiration(self):
         """Nothing should change if document expires in 5 days."""
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(545)))
+            validated_date=(
+                self.today - datetime.timedelta(days=(self.days_before_expiration - 5))
+            )
         )
         call_command("cron_document_expiration")
         self.assertFalse(len(mail.outbox))
@@ -226,7 +236,9 @@ class DocumentExpirationCommandTest(TestCase):
         """Document upload expires today."""
         initial_document_uploads_count = self.document_uploads.count()
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(550)))
+            validated_date=(
+                self.today - datetime.timedelta(days=(self.days_before_expiration))
+            )
         )
         call_command("cron_document_expiration")
         self.assertNotEqual(

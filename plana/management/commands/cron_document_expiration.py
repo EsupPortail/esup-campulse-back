@@ -27,9 +27,18 @@ class Command(BaseCommand):
                 document = Document.objects.get(id=document_upload.document_id)
                 if (
                     document_upload.validated_date is not None
+                    and document.days_before_expiration is not None
                     and datetime.date.today()
                     == document_upload.validated_date
                     + document.days_before_expiration
+                    - datetime.timedelta(days=10)
+                ) or (
+                    document_upload.validated_date is not None
+                    and document.expiration_day is not None
+                    and datetime.date.today()
+                    == datetime.datetime.strptime(
+                        document.expiration_day, "%m-%d"
+                    ).date()
                     - datetime.timedelta(days=10)
                 ):
                     template = MailTemplate.objects.get(code="DOCUMENT_NEARLY_EXPIRED")
@@ -52,8 +61,14 @@ class Command(BaseCommand):
                     )
                 elif (
                     document_upload.validated_date is not None
+                    and document.days_before_expiration is not None
                     and datetime.date.today()
                     == document_upload.validated_date + document.days_before_expiration
+                ) or (
+                    document_upload.validated_date is not None
+                    and document.expiration_day is not None
+                    and datetime.date.today().strftime("%m-%d")
+                    == document.expiration_day
                 ):
                     document_upload.delete()
 

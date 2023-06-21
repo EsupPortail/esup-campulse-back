@@ -72,6 +72,11 @@ class Document(models.Model):
     days_before_expiration = models.DurationField(
         _("Days before document expiration"), null=True
     )
+    expiration_day = models.CharField(
+        _("Document expiration day of the year in %m-%d format"),
+        max_length=5,
+        null=True,
+    )
     path_template = DynamicStorageFileField(
         _("Example template file"),
         null=True,
