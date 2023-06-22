@@ -16,5 +16,3 @@ Elle est paramétrable via le fichier `docker-compose.yml` situé à la racine d
 Après avoir activé l'environnement virtuel :
 - Exécuter `$ python manage.py migrate` pour initialiser la structure de la base de données.
 - Exécuter `$ python manage.py initial_import` pour ajouter le jeu de données initial minimal au bon fonctionnement de l'application.
-- Exécuter `$ python manage.py loaddata plana/apps/*/fixtures/*.json` pour ajouter les jeux de données de test.
-- Exécuter `$ python manage.py loaddata plana/libs/*/fixtures/*.json` pour ajouter uniquement les jeux de données liées aux templates de mails.

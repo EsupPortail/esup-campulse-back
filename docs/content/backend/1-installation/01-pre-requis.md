@@ -13,5 +13,11 @@ weight: 101
 
 - [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) (gestion de l'environnement virtuel)
 - [Docker](https://www.docker.com/) (déploiement de l'application)
-- [Poetry](https://python-poetry.org/) (gestionnaire de dépendances)
 - [age](https://github.com/FiloSottile/age) (chiffrement des documents privés)
+
+## Technologies de développement
+
+- [Poetry](https://python-poetry.org/) (gestionnaire de dépendances)
+- [isort](https://github.com/pycqa/isort) (tri des imports)
+- [Black](https://github.com/psf/black) (linter général)
+- [Pylint](https://github.com/pylint-dev/pylint) (linter avancé)

@@ -15,7 +15,7 @@ Fichier de configuration `plana/settings/*.py` utilisé :
 
 ```
 # Fichier de configuration `plana/settings/*.py` utilisé.
-export DJANGO_SETTINGS_MODULE=plana.settings.dev 
+export DJANGO_SETTINGS_MODULE=plana.settings.[ENVIRONNEMENT] 
 
 # Upload d'images et de documents sur le stockage S3.
 export AWS_ACCESS_KEY_ID=AccESSkeyId
