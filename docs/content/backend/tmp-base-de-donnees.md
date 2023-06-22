@@ -1,7 +1,6 @@
 ---
-title: Base de données
-weight: 24
-pre: "<b>4. </b>"
+title: (WIP) Base de données
+weight: 999
 ---
 
 ## Ajout d'extensions PostgreSQL

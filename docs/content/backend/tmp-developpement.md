@@ -1,7 +1,6 @@
 ---
-title: Développement
-weight: 23
-pre: "<b>3. </b>"
+title: (WIP) Développement
+weight: 999
 ---
 
 ## Commandes
@@ -113,4 +112,10 @@ Commande pour voir de façon graphique le coverage des tests unitaires :
 
 ```
 $ firefox htmlcov/index.html
+```
+
+```
+$ poetry lock
+$ poetry install --sync
+$ ./generate_requirements.sh
 ```

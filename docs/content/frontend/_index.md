@@ -1,6 +1,6 @@
 ---
 title: Documentation du Frontend
-weight: 10
+weight: 200
 ---
 
 ## Version de Vue

@@ -1,7 +1,6 @@
 ---
-title: Droits
-weight: 25
-pre: "<b>5. </b>"
+title: (WIP) Droits
+weight: 999
 ---
 
 ## Créer un utilisateur gestionnaire
