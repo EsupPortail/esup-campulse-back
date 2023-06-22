@@ -730,6 +730,11 @@ paths:
           type: string
         description: Document acronym.
       - in: query
+        name: fund_ids
+        schema:
+          type: integer
+        description: Document fund IDs.
+      - in: query
         name: process_types
         schema:
           type: string

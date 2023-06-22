@@ -33,22 +33,22 @@ unittest:
 include:
   - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
   
-pages:
-  stage: deploy
-  image: registry.gitlab.com/pages/hugo:latest
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
-  script:
-    - cd docs
-    - hugo
-    - cp -r public ..
-  tags:
-    - cluster
-  artifacts:
-    paths:
-    - public
-  only:
-    - develop
-    - main
-  except:
-    - schedules
+#pages:
+#  stage: deploy
+#  image: registry.gitlab.com/pages/hugo:latest
+#  variables:
+#    GIT_SUBMODULE_STRATEGY: recursive
+#  script:
+#    - cd docs
+#    - hugo
+#    - cp -r public ..
+#  tags:
+#    - cluster
+#  artifacts:
+#    paths:
+#    - public
+#  only:
+#    - develop
+#    - main
+#  except:
+#    - schedules

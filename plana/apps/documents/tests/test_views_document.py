@@ -94,6 +94,13 @@ class DocumentsViewsTests(TestCase):
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
 
+        fund_ids = [1]
+        response = self.client.get(
+            f"/documents/?fund_ids={','.join(str(x) for x in fund_ids)}"
+        )
+        for document in response.data:
+            self.assertEqual(document["fund"], fund_ids[0])
+
         process_types = ["DOCUMENT_PROJECT", "NO_PROCESS"]
         response = self.general_client.get(
             f"/documents/?process_types={','.join(str(x) for x in process_types)}"

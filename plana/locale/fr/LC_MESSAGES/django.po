@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-21 09:58+0200\n"
+"POT-Creation-Date: 2023-06-22 10:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -604,50 +604,50 @@ msgstr "Document d'une association ou d'un utilisateur"
 msgid "Documents from associations or users"
 msgstr "Documents d'associations ou d'utilisateurs"
 
-#: plana/apps/documents/views/document.py:101
+#: plana/apps/documents/views/document.py:111
 msgid "Not allowed to create a document for this institution."
 msgstr "Non autorisé à créer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:111
+#: plana/apps/documents/views/document.py:121
 msgid "Not allowed to create a document for this fund."
 msgstr "Non autorisé à créer un document pour ce fond."
 
-#: plana/apps/documents/views/document.py:149
-#: plana/apps/documents/views/document.py:188
-#: plana/apps/documents/views/document.py:248
+#: plana/apps/documents/views/document.py:159
+#: plana/apps/documents/views/document.py:198
+#: plana/apps/documents/views/document.py:258
 #: plana/apps/documents/views/document_upload.py:146
 #: plana/apps/documents/views/document_upload.py:154
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document.py:198
+#: plana/apps/documents/views/document.py:208
 #: plana/apps/documents/views/document_upload.py:411
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:208
+#: plana/apps/documents/views/document.py:218
 #: plana/apps/documents/views/document_upload.py:421
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fond."
 
-#: plana/apps/documents/views/document.py:216
+#: plana/apps/documents/views/document.py:226
 msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
-#: plana/apps/documents/views/document.py:228
+#: plana/apps/documents/views/document.py:238
 #: plana/apps/documents/views/document_upload.py:258
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
-#: plana/apps/documents/views/document.py:258
+#: plana/apps/documents/views/document.py:268
 msgid "Not allowed to delete a document for this institution."
 msgstr "Non autorisé à supprimer un document pour cet établissement."
 
-#: plana/apps/documents/views/document.py:268
+#: plana/apps/documents/views/document.py:278
 msgid "Not allowed to delete a document for this fund."
 msgstr "Non autorisé à supprimer un document pour ce fond."
 
-#: plana/apps/documents/views/document.py:274
+#: plana/apps/documents/views/document.py:284
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 

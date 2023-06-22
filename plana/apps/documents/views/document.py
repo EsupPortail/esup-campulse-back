@@ -43,6 +43,12 @@ class DocumentList(generics.ListCreateAPIView):
                 description="Document acronym.",
             ),
             OpenApiParameter(
+                "fund_ids",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Document fund IDs.",
+            ),
+            OpenApiParameter(
                 "process_types",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
@@ -56,10 +62,14 @@ class DocumentList(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""
         acronym = request.query_params.get("acronym")
+        fund_ids = request.query_params.get("fund_ids")
         process_types = request.query_params.get("process_types")
 
         if acronym is not None and acronym != "":
             self.queryset = self.queryset.filter(acronym=acronym)
+
+        if fund_ids is not None and fund_ids != "":
+            self.queryset = self.queryset.filter(fund_id__in=fund_ids.split(","))
 
         if process_types is not None and process_types != "":
             all_process_types = [c[0] for c in Document.process_type.field.choices]
