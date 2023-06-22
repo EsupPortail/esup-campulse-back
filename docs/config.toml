@@ -1,0 +1,5 @@
+baseURL = 'https://di.pages.unistra.fr/plana'
+languageCode = 'fr-FR'
+defaultContentLanguage = "fr"
+title = 'PlanA - Documentation'
+theme = 'hugo-theme-learn'
