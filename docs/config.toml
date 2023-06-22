@@ -3,3 +3,6 @@ languageCode = 'fr-FR'
 defaultContentLanguage = "fr"
 title = 'PlanA - Documentation'
 theme = 'hugo-theme-learn'
+
+[params]
+  disableLandingPageButton = true
