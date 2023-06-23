@@ -11,7 +11,6 @@ weight: 102
 ## Variables d'environnement nécessaires
 
 Modifier le fichier `bin/postactivate` de l'environnement virtuel dédié à l'application pour y intégrer les variables requises.
-Fichier de configuration `plana/settings/*.py` utilisé :
 
 ```
 # Fichier de configuration `plana/settings/*.py` utilisé.

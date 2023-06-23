@@ -16,7 +16,7 @@ Plusieurs variables permettent d'intégrer le serveur CAS pour authentifier des 
 Le stockage des fichiers est optimisé pour un serveur S3 découpé en trois buckets :
 - `S3_LOGO_FILEPATH` : nom du bucket pour stocker les logos des associations (voir modèle `Association`).
 - `S3_TEMPLATES_FILEPATH` : nom du bucket pour stocker les modèles de documents publics (voir modèle `Document`).
-- `S3_DOCUMENTS_FILEPATH` : nom du cucket pour stocker les documents des étudiantes et étudiants de manière chiffrée (voir modèle `DocumentUpload`).
+- `S3_DOCUMENTS_FILEPATH` : nom du bucket pour stocker les documents des étudiantes et étudiants de manière chiffrée (voir modèle `DocumentUpload`).
 
 ## Logos des associations
 
@@ -25,7 +25,7 @@ Les logos des associations sont convertis en miniatures de différentes tailles 
 - `THUMBNAILS.SIZES` : liste des tailles proposées :
   - `list` : taille réduite pour la page de la liste des associations.
   - `detail` : taille plus élevée pour la page de détail d'une association.
-  - `base` : taille maximale du fichier.
+  - `base` : taille maximale du fichier (le fichier original n'est pas conservé mais stocké avec cette taille).
 
 ## Variables intégrées dans les templates de mails
 
@@ -43,8 +43,8 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 ## Autres variables
 
 - `DEFAULT_FROM_EMAIL` : adresse mail "noreply" par défaut renseignée dans les emails envoyés par l'appli.
-- `RESTRICTED_DOMAINS` = domaines d'adresses mail non autorisés à créer des comptes locaux (généralement, les domaines utilisés par les comptes CAS).
-- `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une association.
-- `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités côté association (utilisé pour la Charte Site Alsace par exemple), laisser à `True` pour désactiver la vérification.
-- `AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY` : nombre d'années durant lesquelles un projet est visible dans l'application (avant d'être réservé à l'interface d'administration).
+- `RESTRICTED_DOMAINS` : domaines d'adresses mail non autorisés pour les comptes locaux (généralement, les domaines utilisés par les comptes se connectant via le CAS paramétré).
+- `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
+- `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités de l'application côté association (utilisé pour définir si une association a signé la Charte Site Alsace de l'Université de Strasbourg par exemple), laisser à `True` pour désactiver la validation.
+- `AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY` : nombre d'années durant lesquelles un projet est visible dans l'application (avant d'être uniquement visible sur l'interface d'administration de Django).
 - `AMOUNT_YEARS_BEFORE_PROJECT_DELETION` : nombre d'années durant lesquelles un projet est stocké dans l'application (avant d'être supprimé).

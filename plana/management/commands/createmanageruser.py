@@ -40,6 +40,11 @@ class Command(BaseCommand):
             help=_("Institution codename (all by default)."),
             choices=institution_choices,
         )
+        parser.add_argument(
+            "--superuser",
+            help=_("Set without value if user should be a superuser."),
+            action="store_true",
+        )
 
     def handle(self, *args, **options):
         try:
@@ -57,6 +62,8 @@ class Command(BaseCommand):
             user.is_active = True
             user.is_staff = True
             user.is_validated_by_admin = True
+            if options["superuser"] is True:
+                user.is_superuser = True
             user.save()
             EmailAddress.objects.create(
                 email=user.email, verified=True, primary=True, user_id=user.id
