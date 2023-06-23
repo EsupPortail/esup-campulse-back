@@ -1,6 +1,6 @@
 ---
 title: Comptes de tests
-weight: 114
+weight: 115
 ---
 
 Plusieurs comptes de tests sont présents dans le jeu de données initial. Il s'agit de comptes locaux (pas d'identification via CAS), disposant tous d'un mot de passe commun `motdepasse` (excepté pour `compte-non-valide@mail.tld` qui est un compte de test inactif), et de groupes différents.

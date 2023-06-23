@@ -1,6 +1,6 @@
 ---
 title: Droits d'accès et permissions
-weight: 113
+weight: 114
 ---
 
 Le projet est initialisé avec un ensemble de groupes et de permissions nivelant l'accès des différentes fonctionnalités à différents types d'utilisateurs et d'utilisatrices.
