@@ -21,3 +21,5 @@ weight: 101
 - [isort](https://github.com/pycqa/isort) (tri des imports)
 - [Black](https://github.com/psf/black) (linter général)
 - [Pylint](https://github.com/pylint-dev/pylint) (linter avancé)
+- [tox](https://github.com/tox-dev/tox) (tests unitaires)
+- [Hugo](https://github.com/gohugoio/hugo) (documentation)
