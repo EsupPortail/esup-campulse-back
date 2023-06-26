@@ -1,6 +1,7 @@
 """Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
 import datetime
+import os
 import re
 
 import weasyprint
@@ -102,6 +103,7 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
         "association_charter_summary": "./pdf_exports/association_charter_summary.html",
         "project_summary": "./pdf_exports/project_summary.html",
         "project_review_summary": "./pdf_exports/project_review_summary.html",
+        "notification": "./notifications/FSDIE/decision_attribution.html",
     }
     html = render_to_string(types_and_templates[type_doc], dict_data)
     response = HttpResponse(content_type="application/pdf")

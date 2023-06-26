@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Décision de subvention</title>
+
+    <link rel="stylesheet" href="{% static 'css/unistrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/notifications/FSDIE.css' %}" type="text/css"/>
+</head>
+<header>Insérer du texte ici</header>
+<body>
+<div style="background-color: #3e5871">
+    <div class="side-text">
+        <p><b>Marine TRUC</b></p>
+        <p>Vice-présidente Vie universitaire</p>
+    </div>
+    <div class="content">
+        <h1>Décision de subvention</h1>
+        <p>Strasbourg, {$DATE_LITTERAL}</p>
+
+        <div class="container">
+            <h2>ARTICLE 1</h2>
+            <p class="text-justify">Une subvention de {$MONTANT_ACCORDE_FSDIE} € est attribuée à l'association universitaire dite {$NOM_ASSO} dans le cadre de l'opération {$NOM_PROJET}.</p>
+        </div>
+        <div class="container">
+            <h2>ARTICLE 2</h2>
+            <p class="text-justify">Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, domaine fonctionnel D202.</p>
+        </div>
+        <div class="container">
+            <h2>ARTICLE 3</h2>
+            <p class="text-justify">L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>
+        </div>
+    </div>
+    <div>
+</body>
+</html>
