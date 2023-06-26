@@ -39,3 +39,74 @@ weight: 211
 - [vite](https://www.npmjs.com/package/vite) : bundler.
 - [vitest](https://www.npmjs.com/package/vitest) : tests unitaires.
 - [vue-tsc](https://www.npmjs.com/package/vue-tsc) : vérification des types.
+
+## Notes sur les dépendances
+
+### Vue
+
+Framework général de l'application, en version 3. L'application utilise l'[API de composition](https://vuejs.org/guide/introduction.html#api-styles) et [`script setup`](https://vuejs.org/api/sfc-script-setup.html).
+
+### vue-unistra/cas-authentication
+
+Plugin d'authentification avec CAS pour une application frontend en Vue, développé à l'Unistra.
+Permet notamment de gérer le refresh automatique des tokens d'authentification expirés.
+
+[Accéder au dépôt](https://git.unistra.fr/vue-unistra/cas-authentication)
+
+### Axios
+
+Gère les requêtes vers l'API. Deux instances d'Axios sont en place dans `@/composables/useAxios.ts` :
+
+- `axiosPublic` pour gérer les requêtes publiques, sans authentification.
+- `axiosAuthenticated` pour gérer les requêtes privées, avec authentification et `vue-unistra/cas-authentication`.
+
+Attention à bien utiliser la bonne instance. Une requête publique effectuée avec l'instance privée peut générer une erreur. 
+
+### Bootstrap Icons
+
+[Bootstrap Icons](https://icons.getbootstrap.com/) est une librairie d'icônes.
+
+Elles sont intégrées sous forme d'icônes avec l'élement `<i>`.
+
+### Pinia
+
+[Pinia](https://pinia.vuejs.org/) permet de gérer des stores avec Vue.
+
+### Quasar
+
+Librairie de composants pour Vue. Divers composants sont utilisés à travers l'application, notamment les éléments de formulaire et les tableaux (QTable).
+
+2 API Quasar spécifiques sont également utilisées :
+- Notify.
+- Loading.
+
+[Consulter la documentation](https://quasar.dev/docs)
+
+#### Notify
+
+L'[API Notify](https://quasar.dev/quasar-plugins/notify#notify-api) est un plugin de Quasar qui permet d'afficher des messages animés flottant au bas de l'écran pour informer les utilisateurs sous forme de notification. Notify s'utilise comme suit : 
+
+```js
+notify({
+    type: 'positive',
+    message: 'You are successfully logged in!'
+})
+```
+
+#### Loading
+
+L'[API Loading](https://quasar.dev/quasar-plugins/loading#loading-api) de Quasar est une fonctionnalité qui permet d'afficher un overlay grisé sur l'écran indiquant à l'utilisateur qu'une tâche est en train de s'effectuer en arrière plan et qu'il doit patienter. Loading s'utilise comme suit sur l'ensemble des fonctions asynchrones : 
+
+```js
+loading.show()
+await yourAsyncFunction()
+loading.hide()
+```
+
+### Vue I18n
+
+[Vue I18n](https://vue-i18n.intlify.dev/) est un plugin d'internationalisation pour Vue.
+
+### Vue Router
+
+[Vue Router](https://router.vuejs.org/) permet de naviguer entre les différentes vues de l'application.
