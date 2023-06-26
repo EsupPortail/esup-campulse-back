@@ -939,6 +939,7 @@ paths:
         required: true
       security:
       - jwtAuth: []
+      - {}
       responses:
         '201':
           content:
@@ -947,8 +948,6 @@ paths:
                 $ref: '#/components/schemas/DocumentUploadCreate'
           description: ''
         '400':
-          description: No response body
-        '401':
           description: No response body
         '403':
           description: No response body
@@ -993,7 +992,7 @@ paths:
           type: integer
         required: true
       tags:
-      - documents
+      - documents/uploads
       requestBody:
         content:
           application/x-www-form-urlencoded:
