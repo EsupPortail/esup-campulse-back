@@ -4556,6 +4556,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -4584,6 +4586,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -5299,6 +5303,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -5411,6 +5417,8 @@ components:
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets

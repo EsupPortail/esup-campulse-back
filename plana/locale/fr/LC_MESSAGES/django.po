@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-26 11:52+0200\n"
+"POT-Creation-Date: 2023-06-26 14:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:129
-#: plana/apps/users/models/user.py:41 plana/apps/users/models/user.py:119
+#: plana/apps/users/models/user.py:41 plana/apps/users/models/user.py:120
 msgid "Associations"
 msgstr "Associations"
 
@@ -572,7 +572,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:113
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:22 plana/apps/users/models/user.py:63
-#: plana/apps/users/models/user.py:355
+#: plana/apps/users/models/user.py:356
 msgid "User"
 msgstr "Utilisateur"
 
@@ -686,7 +686,7 @@ msgstr "Non autorisé à ajouter un document si non président."
 #: plana/apps/users/views/association_user.py:280
 #: plana/apps/users/views/group_institution_fund_user.py:205
 #: plana/apps/users/views/user.py:328 plana/apps/users/views/user.py:375
-#: plana/apps/users/views/user.py:502
+#: plana/apps/users/views/user.py:503
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
@@ -1195,11 +1195,15 @@ msgstr "Date de dernier changement du mot de passe"
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:123
+#: plana/apps/users/models/user.py:118
+msgid "Is student"
+msgstr "Est étudiant"
+
+#: plana/apps/users/models/user.py:124
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:356
+#: plana/apps/users/models/user.py:357
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1226,7 +1230,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:211
+#: plana/apps/users/serializers/user.py:213
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -1368,7 +1372,7 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:226 plana/apps/users/views/user.py:399
+#: plana/apps/users/views/user.py:226 plana/apps/users/views/user.py:400
 #: plana/apps/users/views/user_auth.py:104
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
@@ -1381,7 +1385,7 @@ msgstr "Non autorisé à récupérer cet utilisateur."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:508
+#: plana/apps/users/views/user.py:509
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 

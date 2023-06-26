@@ -389,6 +389,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "email",
                 "first_name",
                 "last_name",
+                "is_student",
             ]:
                 request.data.pop(restricted_field, False)
         elif "email" in request.data:

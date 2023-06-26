@@ -115,6 +115,7 @@ class User(AbstractUser):
     is_validated_by_admin = models.BooleanField(
         _("Is validated by administrator"), default=False
     )
+    is_student = models.BooleanField(_("Is student"), default=False)
     associations = models.ManyToManyField(
         Association, verbose_name=_("Associations"), through="AssociationUser"
     )
@@ -301,6 +302,10 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
+    def is_member_in_fund(self, fund_id):
+        """Check if a user is linked as member to a fund."""
+        return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
+
     def is_president_in_association(self, association_id):
         """Check if a user can write in an association."""
         try:
@@ -346,10 +351,6 @@ class User(AbstractUser):
                 user_id=self.pk, institution_id=institution_id
             )
         return False
-
-    def is_member_in_fund(self, fund_id):
-        """Check if a user is linked as member to a fund."""
-        return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
 
     class Meta:
         verbose_name = _("User")
