@@ -537,7 +537,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by a manager user.
-        - The new commission fund ID must me correct.
+        - Fund ID must be correct.
         """
         commission_fund_id = 3
         response = self.general_client.patch(
@@ -552,7 +552,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by a manager user.
-        - The new commission fund ID must me correct.
+        - Commission must not be older.
         """
         commission_fund_id = 3
         response = self.general_client.patch(
@@ -567,7 +567,6 @@ class ProjectCommissionFundViewsTests(TestCase):
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by a manager user.
-        - The new commission fund ID must me correct.
         """
         project_id = 1
         commission_fund_id = 3
@@ -583,6 +582,40 @@ class ProjectCommissionFundViewsTests(TestCase):
         ).count()
         self.assertEqual(project_commission_fund_count, 0)
         self.assertTrue(len(mail.outbox))
+
+    def test_patch_project_cf_amount_earned(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by a manager user.
+        - Project status changes if all funds are given.
+        """
+        project_id = 2
+        project = Project.objects.get(id=project_id)
+        project.project_status = "PROJECT_VALIDATED"
+        project.save()
+
+        self.assertFalse(len(mail.outbox))
+        commission_fund_id = 1
+        response = self.general_client.patch(
+            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
+            {"amount_earned": 0},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox))
+        project = Project.objects.get(id=project_id)
+        self.assertEqual(project.project_status, "PROJECT_VALIDATED")
+
+        commission_fund_id = 2
+        response = self.general_client.patch(
+            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
+            {"amount_earned": 10},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.objects.get(id=project_id)
+        self.assertEqual(project.project_status, "PROJECT_REVIEW_DRAFT")
 
     def test_patch_project_cf_success(self):
         """

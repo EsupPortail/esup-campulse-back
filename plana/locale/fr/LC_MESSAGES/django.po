@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 11:48+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -934,20 +934,20 @@ msgstr "Montant obtenu à l'édition précédente"
 msgid "Amount asked"
 msgstr "Montant demandé"
 
-#: plana/apps/projects/models/project_commission_fund.py:29
+#: plana/apps/projects/models/project_commission_fund.py:30
 msgid "Amount earned"
 msgstr "Montant obtenu"
 
-#: plana/apps/projects/models/project_commission_fund.py:31
+#: plana/apps/projects/models/project_commission_fund.py:33
 #: plana/apps/users/models/user.py:31
 msgid "Is validated by admin"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/projects/models/project_commission_fund.py:38
+#: plana/apps/projects/models/project_commission_fund.py:40
 msgid "Project commission fund"
 msgstr "Fonds de Commission lié à un projet"
 
-#: plana/apps/projects/models/project_commission_fund.py:39
+#: plana/apps/projects/models/project_commission_fund.py:41
 msgid "Projects commissions funds"
 msgstr "Fonds de Commissions liés à des projets"
 
@@ -1012,8 +1012,8 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_comment.py:207
 #: plana/apps/projects/views/project_comment.py:249
 #: plana/apps/projects/views/project_commission_fund.py:157
-#: plana/apps/projects/views/project_commission_fund.py:360
-#: plana/apps/projects/views/project_commission_fund.py:486
+#: plana/apps/projects/views/project_commission_fund.py:368
+#: plana/apps/projects/views/project_commission_fund.py:563
 #: plana/apps/projects/views/project_review.py:115
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1093,7 +1093,7 @@ msgid "Not allowed to submit a project to this commission."
 msgstr "Non autorisé à proposer un projet pour cette commission."
 
 #: plana/apps/projects/views/project_commission_fund.py:198
-#: plana/apps/projects/views/project_commission_fund.py:410
+#: plana/apps/projects/views/project_commission_fund.py:418
 msgid "Submission date for this commission is gone."
 msgstr "La date de soumission de projet pour cette commission est passée."
 
@@ -1115,20 +1115,36 @@ msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses fonds de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:352
-#: plana/apps/projects/views/project_commission_fund.py:478
+#: plana/apps/projects/views/project_commission_fund.py:360
+#: plana/apps/projects/views/project_commission_fund.py:555
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_fund.py:379
+#: plana/apps/projects/views/project_commission_fund.py:387
 msgid "Not allowed to update bearer fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du porteur pour cette commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:402
+#: plana/apps/projects/views/project_commission_fund.py:410
 msgid "Not allowed to update validator fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du validateur pour cette commission."
+
+#: plana/apps/projects/views/project_commission_fund.py:442
+msgid "New Commission Fund does not exist."
+msgstr "La nouvelle liaison entre commission et fonds n'existe pas."
+
+#: plana/apps/projects/views/project_commission_fund.py:450
+msgid "New Commission Fund is not linked to the same fund that the old one."
+msgstr ""
+"La nouvelle liaison entre commission et fonds n'est pas liée au même fonds "
+"que la précédente."
+
+#: plana/apps/projects/views/project_commission_fund.py:463
+msgid "New Commission Fund is linked to an older commission that the old one."
+msgstr ""
+"La nouvelle liaison entre commission et fonds est liée à une plus vieille "
+"commission que la précédente."
 
 #: plana/apps/projects/views/project_review.py:109
 msgid "Not allowed to update bearer fields for this project."
