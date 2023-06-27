@@ -766,8 +766,10 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 code="NEW_ASSOCIATION_CHARTER_TO_PROCESS"
             )
             institution = Institution.objects.get(id=association.institution_id)
-            managers_emails = institution.default_institution_managers().values_list(
-                "email", flat=True
+            managers_emails = list(
+                institution.default_institution_managers().values_list(
+                    "email", flat=True
+                )
             )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,

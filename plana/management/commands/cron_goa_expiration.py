@@ -39,7 +39,11 @@ class Command(BaseCommand):
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=institution.default_institution_managers(),
+                        to_=list(
+                            institution.default_institution_managers().values_list(
+                                "email", flat=True
+                            )
+                        ),
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),
