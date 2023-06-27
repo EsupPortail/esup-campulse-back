@@ -473,6 +473,20 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
+        if "amount_earned" in request.data:
+            if request.data["amount_earned"] == 0:
+                template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
+            else:
+                template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         for field in request.data:
             setattr(project_commission_fund, field, request.data[field])
         project_commission_fund.save()

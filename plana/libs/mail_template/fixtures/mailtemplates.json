@@ -801,9 +801,39 @@
     "fields": {
       "code": "PROJECT_REPORTED",
       "label": "Project Reported",
-      "description": "Message reçu par un étudiant si une commission liée à son projet est reportée.",
+      "description": "Message reçu par une association si une commission liée à son projet est reportée.",
       "subject": "{{ site_name }} - Votre demande de subventions est reportée.",
       "body": "Bonjour,<br/><br/>L'une des dates de commissions pour l'un de vos projets a été déplacée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 50,
+    "fields": {
+      "code": "PROJECT_FUND_ATTRIBUTED",
+      "label": "Project Fund Attributed",
+      "description": "Message reçu par une association si un fonds a été alloué à son projet.",
+      "subject": "{{ site_name }} - L'un de vos projets aura une subvention.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets a obtenu un financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 51,
+    "fields": {
+      "code": "PROJECT_FUND_REFUSED",
+      "label": "Project Fund Refused",
+      "description": "Message reçu par une association si un fonds a été refusé pour son projet.",
+      "subject": "{{ site_name }} - L'un de vos projets n'aura pas de subvention.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets n'a pas obtenu de financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2
