@@ -80,10 +80,15 @@ def send_mail(
             mail.attach(att.filename, content, att.mimetype)
 
     # Attachments for generated documents
+    # TODO : multiple attachments custom ?
     if attach_custom is not None:
         mail.attach(
             attach_custom["filename"],
-            create_pdf(attach_custom["context_attach"], attach_custom["request"]),
+            create_pdf(
+                attach_custom["context_attach"],
+                attach_custom["request"],
+                attach_custom["template_name"],
+            ),
             attach_custom["mimetype"],
         )
 
@@ -128,8 +133,7 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
 
 
 # TODO : condition for which template to use and which contents to add into
-def create_pdf(context, request):
-    template_name = "./notifications/FSDIE/decision_attribution.html"
+def create_pdf(context, request, template_name):
     template = get_template(template_name)
     html = template.render(context)
     pdf_binary = weasyprint.HTML(

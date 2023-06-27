@@ -682,3 +682,13 @@ GROUPS_STRUCTURE = {
         "ASSOCIATIONS_POSSIBLE": False,
     },
 }
+
+# Notifications pdf templates used as mail attachments
+# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY)
+TEMPLATES_NOTIFICATIONS = {
+    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
+    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": "./notifications/FSDIE/decision_attribution.html",
+
+    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
+    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
+}

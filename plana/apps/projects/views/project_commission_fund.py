@@ -14,6 +14,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.contents.models import Content
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -353,6 +354,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 id=kwargs["commission_fund_id"]
             )
             commission = Commission.objects.get(id=commission_fund.commission_id)
+            fund = Fund.objects.get(id=commission_fund.fund_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {
@@ -473,15 +475,23 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
+        # TODO : add other templates and contexts
         if "amount_earned" in request.data:
             if request.data["amount_earned"] == 0:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
             else:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+                # Creating context for notifications attachments
+                attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                    f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
+                ]
                 context_attach = {
                     "amount_earned": request.data["amount_earned"],
                     "project_name": project.name,
                     "date": datetime.datetime.now(),
+                    "content": Content.objects.get(
+                        code=f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
+                    ),
                 }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -495,6 +505,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "context_attach": context_attach,
                     "mimetype": "application/pdf",
                     "request": request,
+                    "template_name": attach_template_name,
                 },
             )
 
