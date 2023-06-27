@@ -491,6 +491,13 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             setattr(project_commission_fund, field, request.data[field])
         project_commission_fund.save()
 
+        remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            project_id=project.id, amount_earned__isnull=True
+        ).count()
+        if remaining_project_commission_funds_count == 0:
+            project.project_status = "PROJECT_REVIEW_DRAFT"
+            project.save()
+
         unvalidated_project_commission_funds_count = (
             ProjectCommissionFund.objects.filter(
                 project_id=project.id, is_validated_by_admin=False
