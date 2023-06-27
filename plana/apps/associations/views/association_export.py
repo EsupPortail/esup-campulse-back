@@ -77,12 +77,6 @@ class AssociationDataExport(generics.RetrieveAPIView):
             ).values("name", "document__name")
         )
 
-        #        return generate_pdf(
-        #            data["name"],
-        #            data,
-        #            "notification",
-        #            request.build_absolute_uri("/"),
-        #        )
         return generate_pdf(
             data["name"],
             data,

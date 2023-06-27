@@ -23,7 +23,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import create_pdf, send_mail
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
@@ -478,6 +478,11 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
             else:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+                context_attach = {
+                    "amount_earned": request.data["amount_earned"],
+                    "project_name": project.name,
+                    "date": datetime.datetime.now(),
+                }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -485,6 +490,12 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
+                attach_custom={
+                    "filename": "test.pdf",
+                    "context_attach": context_attach,
+                    "mimetype": "application/pdf",
+                    "request": request,
+                },
             )
 
         for field in request.data:
