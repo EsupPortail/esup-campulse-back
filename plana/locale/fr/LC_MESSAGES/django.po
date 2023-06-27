@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-23 09:42+0200\n"
+"POT-Creation-Date: 2023-06-26 14:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:129
-#: plana/apps/users/models/user.py:41 plana/apps/users/models/user.py:119
+#: plana/apps/users/models/user.py:41 plana/apps/users/models/user.py:120
 msgid "Associations"
 msgstr "Associations"
 
@@ -246,7 +246,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:562
 #: plana/apps/associations/views/association.py:713
 #: plana/apps/associations/views/association_export.py:47
-#: plana/apps/documents/views/document_upload.py:184
+#: plana/apps/documents/views/document_upload.py:203
 #: plana/apps/projects/views/project.py:269
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -572,7 +572,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:113
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:22 plana/apps/users/models/user.py:63
-#: plana/apps/users/models/user.py:355
+#: plana/apps/users/models/user.py:356
 msgid "User"
 msgstr "Utilisateur"
 
@@ -615,18 +615,18 @@ msgstr "Non autorisé à créer un document pour ce fond."
 #: plana/apps/documents/views/document.py:159
 #: plana/apps/documents/views/document.py:198
 #: plana/apps/documents/views/document.py:258
-#: plana/apps/documents/views/document_upload.py:146
-#: plana/apps/documents/views/document_upload.py:154
+#: plana/apps/documents/views/document_upload.py:152
+#: plana/apps/documents/views/document_upload.py:160
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document.py:208
-#: plana/apps/documents/views/document_upload.py:411
+#: plana/apps/documents/views/document_upload.py:433
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:218
-#: plana/apps/documents/views/document_upload.py:421
+#: plana/apps/documents/views/document_upload.py:443
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fond."
 
@@ -635,7 +635,7 @@ msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
 #: plana/apps/documents/views/document.py:238
-#: plana/apps/documents/views/document_upload.py:258
+#: plana/apps/documents/views/document_upload.py:279
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
@@ -651,7 +651,13 @@ msgstr "Non autorisé à supprimer un document pour ce fond."
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
-#: plana/apps/documents/views/document_upload.py:164
+#: plana/apps/documents/views/document_upload.py:172
+msgid "Cannot upload documents not related to user as anonymous."
+msgstr ""
+"Impossible d'ajouter des documents non relatifs à l'utilisateur en tant "
+"qu'anonyme."
+
+#: plana/apps/documents/views/document_upload.py:183
 #: plana/apps/projects/views/project.py:458
 #: plana/apps/projects/views/project.py:507
 #: plana/apps/projects/views/project.py:601
@@ -668,55 +674,55 @@ msgstr "Non autorisé à supprimer un document avec ce type de processus."
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:170
+#: plana/apps/documents/views/document_upload.py:189
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
-#: plana/apps/documents/views/document_upload.py:194
+#: plana/apps/documents/views/document_upload.py:213
 msgid "Not allowed to post documents if not president."
 msgstr "Non autorisé à ajouter un document si non président."
 
-#: plana/apps/documents/views/document_upload.py:208
+#: plana/apps/documents/views/document_upload.py:227
 #: plana/apps/users/views/association_user.py:280
 #: plana/apps/users/views/group_institution_fund_user.py:205
 #: plana/apps/users/views/user.py:328 plana/apps/users/views/user.py:375
-#: plana/apps/users/views/user.py:502
+#: plana/apps/users/views/user.py:503
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:217
+#: plana/apps/documents/views/document_upload.py:237
 msgid "Not allowed to upload documents with this user."
 msgstr "Non autorisé à ajouter un document avec cet utilisateur."
 
-#: plana/apps/documents/views/document_upload.py:225
+#: plana/apps/documents/views/document_upload.py:246
 msgid "Not allowed to validate documents."
 msgstr "Non autorisé à valider des documents."
 
-#: plana/apps/documents/views/document_upload.py:231
+#: plana/apps/documents/views/document_upload.py:252
 msgid "A document upload can only have one affectation."
 msgstr "Un document ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:237
+#: plana/apps/documents/views/document_upload.py:258
 msgid "Missing affectation of the new document upload."
 msgstr "Le document n'est affecté à aucune personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:243
+#: plana/apps/documents/views/document_upload.py:264
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:340
-#: plana/apps/documents/views/document_upload.py:401
-#: plana/apps/documents/views/document_upload.py:464
-#: plana/apps/documents/views/document_upload.py:535
+#: plana/apps/documents/views/document_upload.py:361
+#: plana/apps/documents/views/document_upload.py:423
+#: plana/apps/documents/views/document_upload.py:486
+#: plana/apps/documents/views/document_upload.py:557
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:361
-#: plana/apps/documents/views/document_upload.py:556
+#: plana/apps/documents/views/document_upload.py:382
+#: plana/apps/documents/views/document_upload.py:578
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:485
+#: plana/apps/documents/views/document_upload.py:507
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 
@@ -1189,11 +1195,15 @@ msgstr "Date de dernier changement du mot de passe"
 msgid "Is validated by administrator"
 msgstr "Est validé par l'équipe d'administration"
 
-#: plana/apps/users/models/user.py:123
+#: plana/apps/users/models/user.py:118
+msgid "Is student"
+msgstr "Est étudiant"
+
+#: plana/apps/users/models/user.py:124
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:356
+#: plana/apps/users/models/user.py:357
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1220,7 +1230,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:211
+#: plana/apps/users/serializers/user.py:213
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -1362,7 +1372,7 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:226 plana/apps/users/views/user.py:399
+#: plana/apps/users/views/user.py:226 plana/apps/users/views/user.py:400
 #: plana/apps/users/views/user_auth.py:104
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
@@ -1375,7 +1385,7 @@ msgstr "Non autorisé à récupérer cet utilisateur."
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:508
+#: plana/apps/users/views/user.py:509
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 

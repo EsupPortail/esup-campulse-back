@@ -35,7 +35,7 @@ include:
   - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
   
 pages:
-  stage: test
+  stage: deploy
   image: registry.gitlab.com/pages/hugo:latest
   variables:
     GIT_SUBMODULE_STRATEGY: recursive

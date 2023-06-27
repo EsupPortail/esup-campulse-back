@@ -44,6 +44,9 @@ class DocumentsViewsTests(TestCase):
         cls.client = Client()
         url_login = reverse("rest_login")
 
+        cls.unvalidated_user_id = 2
+        cls.unvalidated_user_name = "compte-non-valide@mail.tld"
+
         cls.manager_general_user_id = 3
         cls.manager_general_user_name = "gestionnaire-svu@mail.tld"
         cls.general_client = Client()
@@ -209,15 +212,44 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_project_anonymous(self):
         """
         POST /documents/uploads .
-        - An anonymous user cannot execute this request.
+        - An anonymous user can execute this request.
+        - project and association cannot be specified.
+        - Document must have a DOCUMENT_USER process type.
         """
         post_data = {
             "path_file": "",
-            "project": 9999,
+            "project": 1,
             "document": 16,
         }
         response = self.client.post("/documents/uploads", post_data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        post_data = {
+            "path_file": "",
+            "user": self.unvalidated_user_id,
+            "document": 16,
+        }
+        response = self.client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        document_id = 14
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        document = Document.objects.get(id=document_id)
+        document.mime_types = [
+            "application/vnd.novadigm.ext",
+            "application/octet-stream",
+        ]
+        document.save()
+        post_data = {
+            "path_file": file,
+            "user": self.unvalidated_user_id,
+            "document": document_id,
+        }
+        response = self.client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_post_document_upload_project_not_found(self):
         """

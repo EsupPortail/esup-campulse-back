@@ -9,7 +9,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.documents.models.document import Document
@@ -32,6 +32,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -132,7 +139,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         responses={
             status.HTTP_201_CREATED: DocumentUploadCreateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
@@ -155,6 +161,19 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         existing_document = DocumentUpload.objects.filter(document_id=document.id)
+
+        if request.user.is_anonymous and (
+            ("association" in request.data or "project" in request.data)
+            or document.process_type != "DOCUMENT_USER"
+        ):
+            return response.Response(
+                {
+                    "error": _(
+                        "Cannot upload documents not related to user as anonymous."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         if "project" in request.data:
             try:
@@ -209,8 +228,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             existing_document = existing_document.filter(user_id=request.user.pk)
-            if (
-                not request.user.has_perm("documents.add_documentupload_all")
+            if (request.user.is_anonymous and user.is_validated_by_admin is True) or (
+                not request.user.is_anonymous
+                and not request.user.has_perm("documents.add_documentupload_all")
                 and int(request.data["user"]) != request.user.pk
             ):
                 return response.Response(
@@ -218,8 +238,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        if "validated_date" in request.data and not request.user.has_perm(
-            "documents.add_documentupload_all"
+        if "validated_date" in request.data and (
+            request.user.is_anonymous
+            or not request.user.has_perm("documents.add_documentupload_all")
         ):
             return response.Response(
                 {"error": _("Not allowed to validate documents.")},
@@ -380,7 +401,8 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
-        }
+        },
+        tags=["documents/uploads"],
     )
     def patch(self, request, *args, **kwargs):
         """Updates document upload details."""
