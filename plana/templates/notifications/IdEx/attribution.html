@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Notification d'attribution IdEx</title>
+
+    <link rel="stylesheet" href="{% static 'css/unistrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/notifications/FSDIE.css' %}" type="text/css"/>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 20mm 10mm 20mm 10mm
+        }
+    </style>
+</head>
+
+<header>
+    <div class="head-float-left">
+        <img src="{% static 'img/unistra_logo.png' %}">
+    </div>
+    <div class="head-float-right border text-sm unistra-a align-right">
+        <p>{$ASSOCIATION_NAME}</p>
+        <p>{$ASSOCIATION_POSTAL_ADDRESS}</p>
+    </div>
+</header>
+
+<body>
+<div class="float-left border text-sm unistra-a">
+    <p>
+        <b>Prénom NOM</b><br>
+        Vice-présidente Vie universitaire
+    </p>
+    <p><b>Affaire suivie par</b><br>
+        Nom Gestionnaire<br>
+        Tél: 01.02.03.04.05<br>
+        Mail: nom.gestionnaire@unistra.fr
+    </p>
+    <p>Service de la vie universitaire | SVU<br>
+        Mission vie étudiante<br>
+        Bâtiment | Le Patio<br>
+        22 rue René Descartes<br>
+        67084 Strasbourg Cedex<br>
+        www.unistra.fr
+    </p>
+</div>
+<div class="float-right unistra-a">
+    <h1>Notification d'attribution</h1>
+    <p>Strasbourg, {$DATE_LITTERAL}</p>
+
+    <p class="text-justify">Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {$PROJECT_NAME}.</p>
+    <p class="text-justify">Cette subvention d'un montant de {$AMOUNT_EARNED_IDEX}€ ({$AMOUNT_EARNED_IDEX_LITTERAL} euros) au titre de l'année {$YEAR}, est mise en oeuvre dans le cadre du levier "Culture, sciences et société - Programme Creative Thinkers" de l'IdEx, programme dédié aux projets étudiants.<p>
+    <p class="text-justify">Elle vous sera versée dans les prochaines semaines par les services financiers de l'Université de Strasbourg.</p>
+    <p class="text-justify">Conformément au règlement financier de l’Agence Nationale de la Recherche (ANR), vous êtes tenu de faire état de ce soutien financier accordé dans le cadre du Programme Investissements d’Avenir (PIA), dans toute action de communication interne ou externe. Cette mention au financement du PIA pourra notamment être réalisée à travers l’apposition du logotype «Investissements d’Avenir» sur les documents produits.</p>
+    <p class="text-justify"><b>Il est impératif de nous faire parvenir un bilan moral ainsi qu’un bilan financier de l’opération dans un délai de 2 mois maximum après la date de l’opération.</b></p>
+    <p class="text-justify">Le Service de la vie universitaire et la Mission Investissements d’avenir de l’Université de Strasbourg restent à votre disposition pour la bonne exécution de votre projet.</p>
+    <p>Je vous prie d’agréer l’expression de mes salutations distinguées.</p>
+</div>
+
+</body>
+
+<footer>
+    <div class="float-right border unistra-a align-right">
+        <p><b>Prénom NOM</b></p>
+        <p>Vice présidente Vie universitaire</p>
+    </div>
+</footer>
+
+</html>
