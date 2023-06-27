@@ -1,9 +1,49 @@
-.side-text {
+.float-left {
     float: left;
     width: 30%;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 0;
 }
 
-.content {
+.float-right {
   float: right;
-  width: 70%;
+  width: 68%;
+  margin-top: 20px;
+}
+
+.head-float-left {
+    float: left;
+    width: 40%;
+}
+
+.head-float-right {
+    float: right;
+    width: 60%;
+}
+
+.text-sm {
+    font-size: 15px;
+}
+
+.unistra-d {
+    font-family: "Unistra D", Arial, sans-serif;
+}
+
+.unistra-a {
+    font-family: "Unistra A", Arial, sans-serif;
+}
+
+.align-right {
+    text-align: right;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+.border {
+    border-color: #000000;
+    border-width: 1px;
+    border-style: solid;
 }
