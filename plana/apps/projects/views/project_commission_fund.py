@@ -315,6 +315,14 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "new_commission_fund_id",
+                OpenApiTypes.NUMBER,
+                OpenApiParameter.QUERY,
+                description="New Commission Fund ID.",
+            ),
+        ],
         responses={
             status.HTTP_200_OK: ProjectCommissionFundDataSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -410,6 +418,37 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if "new_commission_fund_id" in request.data:
+            try:
+                new_commission_fund = CommissionFund.objects.get(
+                    id=request.data["new_commission_fund_id"]
+                )
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("New Commission Fund does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if commission_fund.fund_id != new_commission_fund.fund_id:
+                return response.Response(
+                    {
+                        "error": _(
+                            "New Commission Fund is not linked to the same fund that the old one."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if commission_fund.commission_date >= new_commission_fund.commission_date:
+                return response.Response(
+                    {
+                        "error": _(
+                            "New Commission Fund is linked to an older commission that the old one."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         for field in request.data:
             setattr(project_commission_fund, field, request.data[field])
