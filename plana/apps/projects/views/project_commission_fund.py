@@ -419,6 +419,19 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
+        email = ""
+        if project.association_id is not None:
+            email = User.objects.get(
+                id=AssociationUser.objects.get(id=project.association_user_id).user_id
+            ).email
+        elif project.user_id is not None:
+            email = User.objects.get(id=project.user_id).email
+
         if "new_commission_fund_id" in request.data:
             try:
                 new_commission_fund = CommissionFund.objects.get(
@@ -450,6 +463,16 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            template = MailTemplate.objects.get(code="PROJECT_REPORTED")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         for field in request.data:
             setattr(project_commission_fund, field, request.data[field])
         project_commission_fund.save()
@@ -467,21 +490,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             project.project_status = "PROJECT_VALIDATED"
             project.save()
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
             template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
-            email = ""
-            if project.association_id is not None:
-                email = User.objects.get(
-                    id=AssociationUser.objects.get(
-                        id=project.association_user_id
-                    ).user_id
-                ).email
-            elif project.user_id is not None:
-                email = User.objects.get(id=project.user_id).email
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,

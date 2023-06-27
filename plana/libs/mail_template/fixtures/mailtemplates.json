@@ -794,5 +794,20 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 49,
+    "fields": {
+      "code": "PROJECT_REPORTED",
+      "label": "Project Reported",
+      "description": "Message reçu par un étudiant si une commission liée à son projet est reportée.",
+      "subject": "{{ site_name }} - Votre demande de subventions est reportée.",
+      "body": "Bonjour,<br/><br/>L'une des dates de commissions pour l'un de vos projets a été déplacée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]
