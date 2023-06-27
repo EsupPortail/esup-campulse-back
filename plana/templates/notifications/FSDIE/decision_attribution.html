@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Décision de subvention</title>
+    <title>Décision de subvention FSDIE</title>
 
     <link rel="stylesheet" href="{% static 'css/unistrap.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/notifications/FSDIE.css' %}" type="text/css"/>
@@ -14,6 +15,7 @@
         }
     </style>
 </head>
+
 <header>
     <div class="head-float-left">
         <img src="{% static 'img/FSDIE_logo.png' %}">
@@ -26,6 +28,7 @@
         <p>VU la décision du Conseil d’Administration de l’Université de Strasbourg du 20 octobre 2009 portant délégation de signature au Vice-président Vie universitaire</p>
     </div>
 </header>
+
 <body>
     <div class="float-left border text-sm unistra-a">
         <p>
@@ -57,9 +60,13 @@
             <p class="text-justify">L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>
     </div>
 </body>
-    <footer>
-        <div class="float-right unistra-a align-right">
-            <p>Fait à Strasbourg, le {$DATE_LITTERAL}</p>
-        </div>
-    </footer>
+
+<footer>
+    <div class="float-right unistra-a align-right">
+        <p>Fait à Strasbourg, le {$DATE_LITTERAL}</p>
+        <p>Prénom NOM</p>
+        <p>Vice-présidente Vie universitaire</p>
+    </div>
+</footer>
+
 </html>
