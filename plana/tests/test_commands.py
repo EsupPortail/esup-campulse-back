@@ -1,6 +1,7 @@
 """Test commands in management folder."""
 import datetime
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
@@ -45,14 +46,18 @@ class AccountExpirationCommandTest(TestCase):
         self.assertTrue(User.objects.filter(pk=self.superuser.pk).exists())
 
     def test_account_without_connection_expiration_mail(self):
-        self.user.date_joined = timezone.now() - datetime.timedelta(days=(365 - 31))
+        self.user.date_joined = timezone.now() - datetime.timedelta(
+            days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+        )
         self.user.save()
         call_command('cron_account_expiration')
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
 
     def test_account_without_recent_connection_expiration_mail(self):
-        self.user.last_login = timezone.now() - datetime.timedelta(days=(365 - 31))
+        self.user.last_login = timezone.now() - datetime.timedelta(
+            days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+        )
         self.user.save()
         call_command('cron_account_expiration')
         self.assertEqual(len(mail.outbox), 1)
@@ -89,17 +94,27 @@ class AssociationExpirationCommandTest(TestCase):
         self.assertFalse(len(mail.outbox))
 
     def test_almost_association_expiration(self):
-        """An email is sent if charter expires in 10 days."""
+        """An email is sent if charter expires in WARNING days."""
         self.associations.update(
-            charter_date=(self.today - datetime.timedelta(days=(355)))
+            charter_date=(
+                self.today
+                - datetime.timedelta(
+                    days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING
+                )
+            )
         )
         call_command("cron_association_expiration")
         self.assertTrue(len(mail.outbox))
 
     def test_almost_association_expiration_but_no_association_expiration(self):
-        """Nothing should change if charter expires in 5 days."""
+        """Nothing should change if charter expires in WARNING - 1 days."""
         self.associations.update(
-            charter_date=(self.today - datetime.timedelta(days=(360)))
+            charter_date=(
+                self.today
+                - datetime.timedelta(
+                    days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING - 1
+                )
+            )
         )
         call_command("cron_association_expiration")
         self.assertFalse(len(mail.outbox))
@@ -108,7 +123,12 @@ class AssociationExpirationCommandTest(TestCase):
         """Association charter status expires today."""
         self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
         self.associations.update(
-            charter_date=(self.today - datetime.timedelta(days=(365)))
+            charter_date=(
+                self.today
+                - datetime.timedelta(
+                    days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION
+                )
+            )
         )
         call_command("cron_association_expiration")
         self.assertEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
@@ -213,20 +233,33 @@ class DocumentExpirationCommandTest(TestCase):
         self.assertFalse(len(mail.outbox))
 
     def test_almost_document_upload_expiration(self):
-        """An email is sent if document upload expires in 10 days."""
+        """An email is sent if document upload expires in WARNING days."""
         self.document_uploads.update(
             validated_date=(
-                self.today - datetime.timedelta(days=(self.days_before_expiration - 10))
+                self.today
+                - datetime.timedelta(
+                    days=(
+                        self.days_before_expiration
+                        - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
+                    )
+                )
             )
         )
         call_command("cron_document_expiration")
         self.assertTrue(len(mail.outbox))
 
     def test_almost_document_upload_expiration_but_no_document_upload_expiration(self):
-        """Nothing should change if document expires in 5 days."""
+        """Nothing should change if document expires in WARNING - 1 days."""
         self.document_uploads.update(
             validated_date=(
-                self.today - datetime.timedelta(days=(self.days_before_expiration - 5))
+                self.today
+                - datetime.timedelta(
+                    days=(
+                        self.days_before_expiration
+                        - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
+                        - 1
+                    )
+                )
             )
         )
         call_command("cron_document_expiration")
@@ -300,25 +333,38 @@ class PasswordExpirationCommandTest(TestCase):
         self.assertFalse(len(mail.outbox))
 
     def test_almost_password_reset(self):
-        """An email is sent if password is 11 months old."""
+        """An email is sent if password is WARNING months old."""
         self.users.update(
-            password_last_change_date=(self.today - datetime.timedelta(days=(365 - 31)))
+            password_last_change_date=(
+                self.today
+                - datetime.timedelta(
+                    days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING
+                )
+            )
         )
         call_command("cron_password_expiration")
         self.assertTrue(len(mail.outbox))
 
     def test_almost_password_reset_but_no_password_reset(self):
-        """Nothing should change if password is 11.5 months old."""
+        """Nothing should change if password is WARNING + 1 months old."""
         self.users.update(
-            password_last_change_date=(self.today - datetime.timedelta(days=(365 - 45)))
+            password_last_change_date=(
+                self.today
+                - datetime.timedelta(
+                    days=(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING + 1)
+                )
+            )
         )
         call_command("cron_password_expiration")
         self.assertFalse(len(mail.outbox))
 
     def test_password_reset(self):
-        """An email is sent if password is 12 months old."""
+        """An email is sent if password is EXPIRATION months old."""
         self.users.update(
-            password_last_change_date=(self.today - datetime.timedelta(days=365))
+            password_last_change_date=(
+                self.today
+                - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION)
+            )
         )
         call_command("cron_password_expiration")
         self.assertTrue(len(mail.outbox))
@@ -399,7 +445,11 @@ class ReviewExpirationCommandTest(TestCase):
         today = datetime.date.today()
         mail_sending_due_date = timezone.make_aware(
             datetime.datetime.combine(
-                today - datetime.timedelta(days=30), datetime.datetime.min.time()
+                today
+                - datetime.timedelta(
+                    days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION
+                ),
+                datetime.datetime.min.time(),
             )
         )
         projects_needing_review = Project.visible_objects.filter(id__in=[1, 2])

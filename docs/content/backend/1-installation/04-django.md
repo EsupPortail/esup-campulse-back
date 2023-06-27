@@ -30,7 +30,6 @@ Les logos des associations sont convertis en miniatures de différentes tailles 
 ## Variables intégrées dans les templates de mails
 
 Certains emails renvoyés par l'API intègrent des liens menant à des pages du frontend. Leurs chemins peuvent être personnalisés.
-
 - `MIGRATION_SITE_DOMAIN` : domaine de base du frontend (utilisé dans la table `django_site`).
 - `MIGRATION_SITE_NAME` : nom de l'application (utilisé dans la table `django_site`).
 - `EMAIL_TEMPLATE_FRONTEND_URL` : URL de base du frontend.
@@ -39,6 +38,18 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 - `EMAIL_TEMPLATE_PASSWORD_CHANGE_URL` : chemin menant à la page de changement du mot de passe pour une personne connectée.
 - `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation des comptes pour un gestionnaire connecté.
 - `APP_DOCUMENTATION_URL` : URL menant vers la documentation utilisateur.
+
+## Nombre de jours attendus dans les tâches CRON.
+
+Les tâches CRON envoient de multiples emails dont des relances dépendant de nombres de jours.
+- `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING` : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression future de ce compte.
+- `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION` :  : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression de ce compte.
+- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING` : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration future de cette charte.
+- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION ` : : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration de cette charte.
+- `CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING` : nombre de jours avant la date d'expiration d'un document après lequel un mail est envoyé pour prévenir de l'expiration future de ce document.
+- `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration future de ce mot de passe.
+- `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration de ce mot de passe.
+- `CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION` : nombre de jours avant la date d'expiration d'un bilan après lequel un mail est envoyé pour prévenir de l'expiration future de ce bilan.
 
 ## Autres variables
 

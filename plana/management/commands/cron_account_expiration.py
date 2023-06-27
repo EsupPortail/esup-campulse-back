@@ -25,7 +25,9 @@ class Command(BaseCommand):
             queryset = User.objects.filter(is_staff=False)
 
             # Send emails to nearly expired accounts (not connected since 11 months)
-            mail_sending_due_date = today - datetime.timedelta(days=(365 - 31))
+            mail_sending_due_date = today - datetime.timedelta(
+                days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+            )
             mail_sending_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date=mail_sending_due_date)
                 | Q(last_login__isnull=False, last_login__date=mail_sending_due_date)
@@ -47,7 +49,9 @@ class Command(BaseCommand):
                 )
 
             # Delete expired accounts (not connected since 1 year)
-            deletion_due_date = today - datetime.timedelta(days=365)
+            deletion_due_date = today - datetime.timedelta(
+                days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION
+            )
             deletion_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date__lte=deletion_due_date)
                 | Q(last_login__isnull=False, last_login__date__lte=deletion_due_date)
