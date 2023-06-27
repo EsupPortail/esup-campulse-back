@@ -202,7 +202,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
                                 ).values_list("id")
                             ).values_list("project_id")
                         ),
-                        project_status__in=Project.ProjectStatus.get_real_project_statuses(),
                     )
                     | models.Q(
                         association_id__in=Association.objects.filter(
