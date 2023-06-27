@@ -71,6 +71,15 @@ class ProjectsViewsTests(TestCase):
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
 
+        cls.fund_user_id = 6
+        cls.fund_user_name = "membre-fsdie-idex@mail.tld"
+        cls.fund_client = Client()
+        data_fund = {
+            "username": cls.fund_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.fund_client.post(url_login, data_fund)
+
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
         cls.student_misc_client = Client()
@@ -135,6 +144,27 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), user_projects_cnt)
+
+    def test_get_project_fund_member(self):
+        """
+        GET /projects/ .
+
+        - A fund member gets only validated projects.
+        """
+        response = self.fund_client.get("/projects/")
+        fund_projects_cnt = Project.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    fund_id__in=GroupInstitutionFundUser.objects.filter(
+                        user_id=self.fund_user_id
+                    ).values_list("fund_id")
+                ).values_list("id")
+            ).values_list("project_id"),
+            project_status__in=Project.ProjectStatus.get_real_project_statuses(),
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), fund_projects_cnt)
 
     def test_get_project_institution(self):
         """
@@ -520,6 +550,19 @@ class ProjectsViewsTests(TestCase):
         - An student user not owning the project cannot execute this request.
         """
         response = self.student_offsite_client.get("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_project_by_id_forbidden_fund_member(self):
+        """
+        GET /projects/{id} .
+
+        - An fund member cannot see a project not linked to the fund.
+        - An fund member cannot see an unvalidated project.
+        """
+        response = self.fund_client.get("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.fund_client.get("/projects/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_project_by_id(self):

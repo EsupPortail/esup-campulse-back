@@ -315,6 +315,14 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "new_commission_fund_id",
+                OpenApiTypes.NUMBER,
+                OpenApiParameter.QUERY,
+                description="New Commission Fund ID.",
+            ),
+        ],
         responses={
             status.HTTP_200_OK: ProjectCommissionFundDataSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -411,9 +419,84 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
+        email = ""
+        if project.association_id is not None:
+            email = User.objects.get(
+                id=AssociationUser.objects.get(id=project.association_user_id).user_id
+            ).email
+        elif project.user_id is not None:
+            email = User.objects.get(id=project.user_id).email
+
+        if "new_commission_fund_id" in request.data:
+            try:
+                new_commission_fund = CommissionFund.objects.get(
+                    id=request.data["new_commission_fund_id"]
+                )
+            except ObjectDoesNotExist:
+                return response.Response(
+                    {"error": _("New Commission Fund does not exist.")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if commission_fund.fund_id != new_commission_fund.fund_id:
+                return response.Response(
+                    {
+                        "error": _(
+                            "New Commission Fund is not linked to the same fund that the old one."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if commission_fund.commission_date >= new_commission_fund.commission_date:
+                return response.Response(
+                    {
+                        "error": _(
+                            "New Commission Fund is linked to an older commission that the old one."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            template = MailTemplate.objects.get(code="PROJECT_REPORTED")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+        if "amount_earned" in request.data:
+            if request.data["amount_earned"] == 0:
+                template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
+            else:
+                template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
         for field in request.data:
             setattr(project_commission_fund, field, request.data[field])
         project_commission_fund.save()
+
+        remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            project_id=project.id, amount_earned__isnull=True
+        ).count()
+        if remaining_project_commission_funds_count == 0:
+            project.project_status = "PROJECT_REVIEW_DRAFT"
+            project.save()
 
         unvalidated_project_commission_funds_count = (
             ProjectCommissionFund.objects.filter(
@@ -428,21 +511,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         ):
             project.project_status = "PROJECT_VALIDATED"
             project.save()
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
             template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
-            email = ""
-            if project.association_id is not None:
-                email = User.objects.get(
-                    id=AssociationUser.objects.get(
-                        id=project.association_user_id
-                    ).user_id
-                ).email
-            elif project.user_id is not None:
-                email = User.objects.get(id=project.user_id).email
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,

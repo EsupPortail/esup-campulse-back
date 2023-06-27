@@ -26,7 +26,9 @@ class ProjectCommissionFund(models.Model):
         _("Amount earned on previous edition"), default=0
     )
     amount_asked = models.PositiveIntegerField(_("Amount asked"), default=0)
-    amount_earned = models.PositiveIntegerField(_("Amount earned"), default=0)
+    amount_earned = models.PositiveIntegerField(
+        _("Amount earned"), default=None, null=True
+    )
     is_validated_by_admin = models.BooleanField(
         _("Is validated by admin"), default=False
     )

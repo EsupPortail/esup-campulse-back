@@ -31,7 +31,9 @@ class Command(BaseCommand):
                     and datetime.date.today()
                     == document_upload.validated_date
                     + document.days_before_expiration
-                    - datetime.timedelta(days=10)
+                    - datetime.timedelta(
+                        days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
+                    )
                 ) or (
                     document_upload.validated_date is not None
                     and document.expiration_day is not None
@@ -39,7 +41,9 @@ class Command(BaseCommand):
                     == datetime.datetime.strptime(
                         document.expiration_day, "%m-%d"
                     ).date()
-                    - datetime.timedelta(days=10)
+                    - datetime.timedelta(
+                        days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
+                    )
                 ):
                     template = MailTemplate.objects.get(code="DOCUMENT_NEARLY_EXPIRED")
                     current_site = get_current_site(None)

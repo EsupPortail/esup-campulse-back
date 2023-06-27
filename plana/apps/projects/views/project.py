@@ -172,24 +172,43 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 models.Q(user_id=request.user.pk)
                 | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
-
-            queryset = queryset.filter(
-                models.Q(id__in=user_projects_ids)
-                | models.Q(
-                    id__in=(
-                        ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=CommissionFund.objects.filter(
-                                fund_id__in=user_funds_ids
-                            ).values_list("id")
-                        ).values_list("project_id")
+            if not request.user.has_perm("projects.view_project_any_status"):
+                queryset = queryset.filter(
+                    models.Q(id__in=user_projects_ids)
+                    | models.Q(
+                        id__in=(
+                            ProjectCommissionFund.objects.filter(
+                                commission_fund_id__in=CommissionFund.objects.filter(
+                                    fund_id__in=user_funds_ids
+                                ).values_list("id")
+                            ).values_list("project_id")
+                        ),
+                        project_status__in=Project.ProjectStatus.get_real_project_statuses(),
+                    )
+                    | models.Q(
+                        association_id__in=Association.objects.filter(
+                            institution_id__in=user_institutions_ids
+                        ).values_list("id")
                     )
                 )
-                | models.Q(
-                    association_id__in=Association.objects.filter(
-                        institution_id__in=user_institutions_ids
-                    ).values_list("id")
+            else:
+                queryset = queryset.filter(
+                    models.Q(id__in=user_projects_ids)
+                    | models.Q(
+                        id__in=(
+                            ProjectCommissionFund.objects.filter(
+                                commission_fund_id__in=CommissionFund.objects.filter(
+                                    fund_id__in=user_funds_ids
+                                ).values_list("id")
+                            ).values_list("project_id")
+                        ),
+                    )
+                    | models.Q(
+                        association_id__in=Association.objects.filter(
+                            institution_id__in=user_institutions_ids
+                        ).values_list("id")
+                    )
                 )
-            )
 
         if user is not None and user != "":
             queryset = queryset.filter(user_id=user)
@@ -243,6 +262,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 )
             else:
                 project.commission = None
+
         serializer = self.get_serializer_class()(queryset, many=True)
         return response.Response(serializer.data)
 
@@ -463,6 +483,23 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             not request.user.has_perm("projects.view_project_any_fund")
             and not request.user.has_perm("projects.view_project_any_institution")
             and not request.user.can_access_project(project)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to retrieve this project.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            not request.user.has_perm("projects.view_project_any_status")
+            and (
+                (
+                    project.association is not None
+                    and not request.user.is_in_association(project.association)
+                )
+                or (project.user is not None and request.user.pk != project.user)
+            )
+            and project.project_status
+            not in Project.ProjectStatus.get_real_project_statuses()
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},

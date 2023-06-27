@@ -20,7 +20,10 @@ class Command(BaseCommand):
                 if (
                     association.charter_date is not None
                     and datetime.date.today()
-                    == association.charter_date + datetime.timedelta(days=355)
+                    == association.charter_date
+                    + datetime.timedelta(
+                        days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING
+                    )
                 ):
                     template = MailTemplate.objects.get(
                         code="ASSOCIATION_CHARTER_NEARLY_EXPIRED"
@@ -38,7 +41,10 @@ class Command(BaseCommand):
                 elif (
                     association.charter_date is not None
                     and datetime.date.today()
-                    == association.charter_date + datetime.timedelta(days=365)
+                    == association.charter_date
+                    + datetime.timedelta(
+                        days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION
+                    )
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.save()

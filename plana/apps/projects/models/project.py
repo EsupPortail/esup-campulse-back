@@ -68,6 +68,16 @@ class Project(models.Model):
             ]
 
         @staticmethod
+        def get_real_project_statuses():
+            """Projects with those statuses are validated but without a review."""
+
+            return [
+                "PROJECT_VALIDATED",
+                "PROJECT_REVIEW_DRAFT",
+                "PROJECT_REVIEW_PROCESSING",
+            ]
+
+        @staticmethod
         def get_review_needed_project_statuses():
             """Projects with those statuses need to submit a review."""
 
@@ -201,5 +211,9 @@ class Project(models.Model):
             (
                 "view_project_any_institution",
                 "Can view all projects for an institution.",
+            ),
+            (
+                "view_project_any_status",
+                "Can view all projects without status limit.",
             ),
         ]

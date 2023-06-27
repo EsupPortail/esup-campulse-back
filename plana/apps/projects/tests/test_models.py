@@ -119,7 +119,7 @@ class ProjectsModelsTests(TestCase):
         Testing can_access_project Project helper
         - The authenticated user must be linked to a fund linked to a project.
         """
-        project = Project.visible_objects.get(id=1)
+        project = Project.visible_objects.get(id=5)
         user = User.objects.get(username="membre-culture-actions@mail.tld")
         self.assertTrue(user.can_access_project(project))
 
