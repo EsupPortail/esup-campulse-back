@@ -1,6 +1,7 @@
 """List of tests done on links between projects and commission funds views."""
 import json
 
+from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -515,6 +516,73 @@ class ProjectCommissionFundViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_cf_new_commission_date_not_found(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by a manager user.
+        - The new commission fund ID must me correct.
+        """
+        commission_fund_id = 3
+        response = self.general_client.patch(
+            f"/projects/1/commission_funds/{commission_fund_id}",
+            {"new_commission_fund_id": 1333},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_cf_new_commission_date_wrong_fund(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by a manager user.
+        - The new commission fund ID must me correct.
+        """
+        commission_fund_id = 3
+        response = self.general_client.patch(
+            f"/projects/1/commission_funds/{commission_fund_id}",
+            {"new_commission_fund_id": 4},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_cf_new_commission_date_old_date(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by a manager user.
+        - The new commission fund ID must me correct.
+        """
+        commission_fund_id = 3
+        response = self.general_client.patch(
+            f"/projects/1/commission_funds/{commission_fund_id}",
+            {"new_commission_fund_id": 6},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_cf_new_commission_date_success(self):
+        """
+        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
+
+        - The route can be accessed by a manager user.
+        - The new commission fund ID must me correct.
+        """
+        project_id = 1
+        commission_fund_id = 3
+        self.assertFalse(len(mail.outbox))
+        response = self.general_client.patch(
+            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
+            {"new_commission_fund_id": 5},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project_commission_fund_count = ProjectCommissionFund.objects.filter(
+            project_id=project_id, commission_fund_id=commission_fund_id
+        ).count()
+        self.assertEqual(project_commission_fund_count, 0)
+        self.assertTrue(len(mail.outbox))
 
     def test_patch_project_cf_success(self):
         """

@@ -453,7 +453,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if commission_fund.commission_date >= new_commission_fund.commission_date:
+            if (
+                commission_fund.commission.commission_date
+                >= new_commission_fund.commission.commission_date
+            ):
                 return response.Response(
                     {
                         "error": _(
@@ -463,6 +466,11 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            setattr(
+                project_commission_fund,
+                "commission_fund_id",
+                request.data["new_commission_fund_id"],
+            )
             template = MailTemplate.objects.get(code="PROJECT_REPORTED")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
