@@ -71,6 +71,15 @@ class ProjectsViewsTests(TestCase):
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
 
+        cls.fund_user_id = 6
+        cls.fund_user_name = "membre-fsdie-idex@mail.tld"
+        cls.fund_client = Client()
+        data_fund = {
+            "username": cls.fund_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.fund_client.post(url_login, data_fund)
+
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
         cls.student_misc_client = Client()
