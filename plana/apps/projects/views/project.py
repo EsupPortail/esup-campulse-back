@@ -490,12 +490,17 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if not request.user.has_perm("projects.view_project_any_status") and (
-            (
-                project.association is not None
-                and not request.user.is_in_association(project.association)
+        if (
+            not request.user.has_perm("projects.view_project_any_status")
+            and (
+                (
+                    project.association is not None
+                    and not request.user.is_in_association(project.association)
+                )
+                or (project.user is not None and request.user.pk != project.user)
             )
-            or (project.user is not None and request.user.pk != project.user)
+            and project.project_status
+            not in Project.ProjectStatus.get_real_project_statuses()
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},
