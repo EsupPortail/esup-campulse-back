@@ -694,4 +694,7 @@ TEMPLATES_NOTIFICATIONS = {
 
     "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
     "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
+
+    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": "./notifications/FSDIE/postpone.html",
+    "NOTIFICATION_IDEX_PROJECT_POSTPONED": "./notifications/IdEx/postpone.html",
 }

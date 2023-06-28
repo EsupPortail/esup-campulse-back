@@ -169,5 +169,29 @@
       "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
       "sidebar": "<p><b>Prénom NOM</b><br>Vice-présidente Vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
+  },
+  {
+    "model": "contents.content",
+    "pk": 16,
+    "fields": {
+      "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
+      "label": "Pdf de notification de report de subventionnement FSDIE.",
+      "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p>",
+      "footer": "<p><b>Prénom NOM</b></p><p>Chef de Service</p>",
+      "sidebar": "<p><b>Prénom NOM</b><br>Chef de Service de la vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 17,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
+      "label": "Pdf de notification de report de subventionnement IdEx.",
+      "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
+      "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
+      "sidebar": "<p><b>Prénom NOM</b><br>Vice-présidente Vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+    }
   }
 ]
