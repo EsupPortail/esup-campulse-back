@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load resolve %}
 <html>
 
 <head>
@@ -46,7 +47,7 @@
     </p>
 </div>
 <div class="float-right unistra-a">
-    <h1>Notification d'attribution</h1>
+    <!--<h1>Notification d'attribution</h1>
     <p>Strasbourg, le {{ date }}</p>
 
     <p class="text-justify">Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {{ project_name }}.</p>
@@ -56,6 +57,7 @@
     <p class="text-justify"><b>Il est impératif de nous faire parvenir un bilan moral ainsi qu’un bilan financier de l’opération dans un délai de 2 mois maximum après la date de l’opération.</b></p>
     <p class="text-justify">Le Service de la vie universitaire et la Mission Investissements d’avenir de l’Université de Strasbourg restent à votre disposition pour la bonne exécution de votre projet.</p>
     <p>Je vous prie d’agréer l’expression de mes salutations distinguées.</p>
+    -->{% resolve %}{{ content.body|safe}}{% endresolve %}
 </div>
 
 </body>
