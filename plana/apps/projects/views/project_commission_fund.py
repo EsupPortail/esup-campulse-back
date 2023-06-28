@@ -479,7 +479,20 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            template = MailTemplate.objects.get(code="PROJECT_REPORTED")
+            template = MailTemplate.objects.get(code="PROJECT_POSTPONED")
+            # Creating context for notifications attachments
+            attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
+            ]
+            context_attach = {
+                "project_name": project.name,
+                "date": datetime.date.today(),
+                "date_commission": commission.commission_date,
+                "owner": owner,
+                "content": Content.objects.get(
+                    code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
+                ),
+            }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -487,6 +500,13 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
+                attach_custom={
+                    "filename": "notification_report.pdf",
+                    "context_attach": context_attach,
+                    "mimetype": "application/pdf",
+                    "request": request,
+                    "template_name": attach_template_name,
+                },
             )
 
         # TODO : add other templates and contexts
