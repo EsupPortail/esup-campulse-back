@@ -11,8 +11,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
 
-# Remove S3 dependency in test environment.
-if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+if settings.USE_S3 is False:
     DynamicStorageFileField = models.FileField
 
 
@@ -22,8 +21,8 @@ def get_template_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_TEMPLATES_FILEPATH
-            if hasattr(settings, 'S3_TEMPLATES_FILEPATH')
+            settings.TEMPLATES_FILEPATH
+            if hasattr(settings, 'TEMPLATES_FILEPATH')
             else '',
             year,
             f'{file_basename}{extension}',

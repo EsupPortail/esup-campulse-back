@@ -11,11 +11,8 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
-# TODO : Remove S3 dependency in test environment.
-"""
-if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+if settings.USE_S3 is False:
     DynamicThumbnailImageField = ImageField
-"""
 
 
 def get_logo_path(instance, filename):
@@ -24,7 +21,7 @@ def get_logo_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_LOGO_FILEPATH if hasattr(settings, 'S3_LOGO_FILEPATH') else '',
+            settings.LOGO_FILEPATH if hasattr(settings, 'LOGO_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
