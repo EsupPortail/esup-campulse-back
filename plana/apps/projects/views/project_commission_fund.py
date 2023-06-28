@@ -491,8 +491,23 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         # TODO : add other templates and contexts
         if "amount_earned" in request.data:
-            if request.data["amount_earned"] == 0:
+            if int(request.data["amount_earned"]) == 0:
+                # TODO : add comment var in context for the rejection
                 template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
+                # Creating context for notifications attachments
+                attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                    f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
+                ]
+                context_attach = {
+                    "project_name": project.name,
+                    "date": datetime.date.today(),
+                    "date_commission": commission.commission_date,
+                    "owner": owner,
+                    "content": Content.objects.get(
+                        code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
+                    ),
+                }
+                filename = "notification_rejection.pdf"
             else:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
                 # Creating context for notifications attachments
@@ -512,6 +527,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         code=f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
                     ),
                 }
+                filename = "notification_attribution.pdf"
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -520,7 +536,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ),
                 message=template.parse_vars(request.user, request, context),
                 attach_custom={
-                    "filename": "notification_attribution.pdf",
+                    "filename": filename,
                     "context_attach": context_attach,
                     "mimetype": "application/pdf",
                     "request": request,
