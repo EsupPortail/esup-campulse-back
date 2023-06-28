@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load resolve %}
 <html>
 
 <head>
@@ -21,51 +22,22 @@
         <img src="{% static 'img/svu_logo.png' %}">
     </div>
     <div class="head-float-right border text-sm unistra-d">
-        <p>Le Président de l'Université de Strasbourg</p>
-        <p>VU le code de l’éducation</p>
-        <p>VU le Décret n°94-39 du 14.1.1994</p>
-        <p>VU la décision du Président de l'Université de Strasbourg portant délégation de signature au Chef du Service de la vie universitaire</p>
-        <p>VU la décision du Conseil d’Administration de l’Université de Strasbourg du 20 octobre 2009 portant délégation de signature au Vice-président Vie universitaire</p>
+        {% resolve %}{{ content.header|safe }}{% endresolve %}
     </div>
 </header>
 
 <body>
     <div class="float-left border text-sm unistra-a">
-        <p>
-            <b>Prénom NOM</b><br>
-            Vice-présidente Vie universitaire
-        </p>
-        <p><b>Affaire suivie par</b><br>
-            Nom Gestionnaire<br>
-            Tél: 01.02.03.04.05<br>
-            Mail: nom.gestionnaire@unistra.fr
-        </p>
-        <p>Service de la vie universitaire | SVU<br>
-            Mission vie étudiante<br>
-            Bâtiment | Le Patio<br>
-            22 rue René Descartes<br>
-            67084 Strasbourg Cedex<br>
-            www.unistra.fr
-        </p>
+        {% resolve %}{{ content.sidebar|safe }}{% endresolve %}
     </div>
-    <div class="float-right unistra-a">
-        <h1>Décision de subvention</h1>
-        <p>Strasbourg, {$DATE_LITTERAL}</p>
-
-            <h2>ARTICLE 1</h2>
-            <p class="text-justify">Une subvention de {$MONTANT_ACCORDE_FSDIE} € est attribuée à l'association universitaire dite {$NOM_ASSO} dans le cadre de l'opération {$NOM_PROJET}.</p>
-            <h2>ARTICLE 2</h2>
-            <p class="text-justify">Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, domaine fonctionnel D202.</p>
-            <h2>ARTICLE 3</h2>
-            <p class="text-justify">L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>
+    <div class="float-right unistra-a text-justify">
+        {% resolve %}{{ content.body|safe }}{% endresolve %}
     </div>
 </body>
 
 <footer>
     <div class="float-right unistra-a align-right">
-        <p>Fait à Strasbourg, le {$DATE_LITTERAL}</p>
-        <p>Prénom NOM</p>
-        <p>Vice-présidente Vie universitaire</p>
+        {% resolve %}{{ content.footer|safe }}{% endresolve %}
     </div>
 </footer>
 

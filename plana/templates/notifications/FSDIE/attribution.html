@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{%  load resolve %}
 <html>
 
 <head>
@@ -21,52 +22,23 @@
         <img src="{% static 'img/svu_logo.png' %}">
     </div>
     <div class="head-float-right border text-sm unistra-a align-right">
-        <p>{{ owner.name }}</p>
-        <p>{{ owner.address }}</p>
+        {% resolve %}{{ content.header|safe }}{% endresolve %}
     </div>
 </header>
 
 <body>
     <div class="float-left border text-sm unistra-a">
-        <p>
-            <b>Prénom NOM</b><br>
-            Chef de Service de la vie universitaire
-        </p>
-        <p><b>Affaire suivie par</b><br>
-            Nom Gestionnaire<br>
-            Tél: 01.02.03.04.05<br>
-            Mail: nom.gestionnaire@unistra.fr
-        </p>
-        <p>Service de la vie universitaire | SVU<br>
-            Mission vie étudiante<br>
-            Bâtiment | Le Patio<br>
-            22 rue René Descartes<br>
-            67084 Strasbourg Cedex<br>
-            www.unistra.fr
-        </p>
+        {% resolve %}{{ content.sidebar|safe }}{% endresolve %}
     </div>
-    <div class="float-right unistra-a">
-        <h1>Notification d'attribution</h1>
-        <p>Strasbourg, le {{ date }}</p>
-
-        <p class="text-justify">Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p>
-        <p class="text-justify">La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de {{ amount_earned }}€ ($AMOUNT_EARNED_FSDIE_LITTERAL} euros) vous a été attribué.</p>
-        <p class="text-justify">Cette subvention vous sera versée dans les prochaines semaines pas les services financiers de l'Université de Strasbourg.</p>
-        <p class="text-justify">
-            <b>
-                Rappels:<br>
-                - Le logo de l'Université de Strasbourg devra obligatoirement être présent sur tous les documents de communication du projet tels que tracts, affiches... (le logo est disponible sur simple demande au SVU).<br>
-                - Il est impératif de nous faire parvenir un bilan moral ainsi qu'un bilan financier de l'opération dans un délai de 2 mois maximum après la date de l'opération.
-            </b>
-        </p>
+    <div class="float-right unistra-a text-justify">
+        {% resolve %}{{ content.body|safe }}{% endresolve %}
     </div>
 
 </body>
 
 <footer>
     <div class="float-right border unistra-a align-right">
-        <p>Prénom NOM</p>
-        <p>Chef de Service</p>
+        {% resolve %}{{ content.footer|safe }}{% endresolve %}
     </div>
 </footer>
 
