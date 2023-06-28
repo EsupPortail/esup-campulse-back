@@ -691,4 +691,7 @@ TEMPLATES_NOTIFICATIONS = {
 
     "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
     "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
+
+    "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
+    "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
 }
