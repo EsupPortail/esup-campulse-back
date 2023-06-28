@@ -118,7 +118,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         if (
             not request.user.has_perm("projects.change_project_as_validator")
-            and project.project_status != "PROJECT_REVIEW_DRAFT"
+            and project.project_status
+            not in Project.ProjectStatus.get_review_needed_project_statuses()
         ):
             return response.Response(
                 {"error": _("Project review is not a draft that can be edited.")},

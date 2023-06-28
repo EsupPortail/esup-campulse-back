@@ -445,7 +445,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 commission_id=commission.id
             ),
             project_id__in=Project.visible_objects.exclude(
-                project_status__in=Project.ProjectStatus.get_deletable_project_statuses()
+                project_status__in=Project.ProjectStatus.get_unfinished_project_statuses()
             ),
         ).count()
         if projects_commission_fund_count > 0:

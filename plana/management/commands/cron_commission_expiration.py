@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
             ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
-                    project_status="PROJECT_DRAFT"
+                    project_status=Project.ProjectStatus.get_unfinished_project_statuses()
                 ),
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id__in=expired_commissions.values_list("id"),

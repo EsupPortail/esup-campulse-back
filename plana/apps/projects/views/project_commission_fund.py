@@ -514,7 +514,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "is_validated_by_admin" in request.data
             and request.data["is_validated_by_admin"] is True
-            and project.project_status == "PROJECT_PROCESSING"
+            and project.project_status
+            in Project.ProjectStatus.get_validated_fund_project_statuses()
             and unvalidated_project_commission_funds_count == 0
         ):
             project.project_status = "PROJECT_VALIDATED"

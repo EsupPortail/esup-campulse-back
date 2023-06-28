@@ -160,7 +160,7 @@ class ProjectsViewsTests(TestCase):
                     ).values_list("fund_id")
                 ).values_list("id")
             ).values_list("project_id"),
-            project_status__in=Project.ProjectStatus.get_real_project_statuses(),
+            project_status__in=Project.ProjectStatus.get_commissionnable_project_statuses(),
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -724,6 +724,7 @@ class ProjectsViewsTests(TestCase):
         response = self.student_misc_client.patch(
             "/projects/1", project_data, content_type="application/json"
         )
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_association_wrong_user(self):
@@ -979,10 +980,13 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=4)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
         year = datetime.datetime.now().year
+        # TODO Manual identifier is disabled.
+        """
         projects_year_count = Project.objects.filter(
             manual_identifier__startswith=year
         ).count()
         self.assertEqual(project.manual_identifier, f"{year}{projects_year_count:04}")
+        """
 
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
         response = self.general_client.patch(
