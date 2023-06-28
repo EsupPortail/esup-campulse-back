@@ -406,13 +406,14 @@ REST_FRAMEWORK = {
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
 }
 
+
 ##################
 # Storage config #
 ##################
 
-# DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
-USE_S3 = True  # WIP
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+# DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
+USE_S3 = False  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
