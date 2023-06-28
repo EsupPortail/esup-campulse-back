@@ -406,6 +406,25 @@ REST_FRAMEWORK = {
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
 }
 
+##################
+# Storage config #
+##################
+
+# DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
+USE_S3 = True  # WIP
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
+LOGO_FILEPATH = "associations_logos"
+TEMPLATES_FILEPATH = "associations_documents_templates"
+DOCUMENTS_FILEPATH = "associations_documents"
+AGE_PUBLIC_KEY = load_key("age-public-key.key")
+AGE_PRIVATE_KEY = load_key("age-private-key.key")
+
 
 #####################
 # DJANGO THUMBNAILS #
@@ -416,7 +435,7 @@ THUMBNAILS = {
         "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
     },
     "STORAGE": {
-        "BACKEND": "plana.storages.MediaStorage",
+        "BACKEND": DEFAULT_FILE_STORAGE,
     },
     "SIZES": {
         "list": {
@@ -452,25 +471,6 @@ THUMBNAILS = {
         },
     },
 }
-
-
-#####################
-# S3 storage config #
-#####################
-
-DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
-USE_S3 = True  # WIP
-AWS_S3_FILE_OVERWRITE = True
-AWS_DEFAULT_ACL = None
-AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
-AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
-AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
-AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
-LOGO_FILEPATH = "associations_logos"
-TEMPLATES_FILEPATH = "associations_documents_templates"
-DOCUMENTS_FILEPATH = "associations_documents"
-AGE_PUBLIC_KEY = load_key("age-public-key.key")
-AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 ##################
 # AUTHENTICATION #

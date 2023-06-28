@@ -103,7 +103,7 @@
     "pk": 9,
     "fields": {
       "project": 8,
-      "commission_fund": 6,
+      "commission_fund": 7,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
