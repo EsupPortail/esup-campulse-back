@@ -68,6 +68,7 @@ pyrage = "^1.0.3"
 urllib3 = ">=1.26,<2" # needed to avoid dependency problems when updating boto3 and botocore
 weasyprint = "^58.1"
 zxcvbn = "^4.4.28"
+num2words = "^0.5.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"

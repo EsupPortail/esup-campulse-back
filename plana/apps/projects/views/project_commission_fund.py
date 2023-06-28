@@ -1,6 +1,8 @@
 """Views linked to project commission funds links."""
 import datetime
+import locale
 
+import num2words
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -499,6 +501,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ]
                 context_attach = {
                     "amount_earned": request.data["amount_earned"],
+                    "amount_earned_litteral": num2words.num2words(
+                        request.data["amount_earned"], lang=locale.getlocale()[0]
+                    ),
                     "project_name": project.name,
                     "date": datetime.date.today(),
                     "date_commission": commission.commission_date,
