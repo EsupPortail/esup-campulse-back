@@ -431,8 +431,20 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             email = User.objects.get(
                 id=AssociationUser.objects.get(id=project.association_user_id).user_id
             ).email
+            owner = Association.objects.get(id=project.association_id)
+            # TODO : helper to get full address in association model ?
+            owner = {
+                "name": owner.name,
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+            }
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
+            owner = User.objects.get(id=project.user_id)
+            # TODO : helper to get full address in user model ?
+            owner = {
+                "name": f"{owner.first_name} {owner.last_name}",
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+            }
 
         if "new_commission_fund_id" in request.data:
             try:
@@ -488,7 +500,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 context_attach = {
                     "amount_earned": request.data["amount_earned"],
                     "project_name": project.name,
-                    "date": datetime.datetime.now(),
+                    "date": datetime.date.today(),
+                    "date_commission": commission.commission_date,
+                    "owner": owner,
                     "content": Content.objects.get(
                         code=f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
                     ),

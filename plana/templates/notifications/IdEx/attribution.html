@@ -21,8 +21,8 @@
         <img src="{% static 'img/unistra_logo.png' %}">
     </div>
     <div class="head-float-right border text-sm unistra-a align-right">
-        <p>{$ASSOCIATION_NAME}</p>
-        <p>{$ASSOCIATION_POSTAL_ADDRESS}</p>
+        <p>{{ owner.name }}</p>
+        <p>{{ owner.address }}</p>
     </div>
 </header>
 
@@ -47,10 +47,10 @@
 </div>
 <div class="float-right unistra-a">
     <h1>Notification d'attribution</h1>
-    <p>Strasbourg, {$DATE_LITTERAL}</p>
+    <p>Strasbourg, le {{ date }}</p>
 
-    <p class="text-justify">Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {$PROJECT_NAME}.</p>
-    <p class="text-justify">Cette subvention d'un montant de {$AMOUNT_EARNED_IDEX}€ ({$AMOUNT_EARNED_IDEX_LITTERAL} euros) au titre de l'année {$YEAR}, est mise en oeuvre dans le cadre du levier "Culture, sciences et société - Programme Creative Thinkers" de l'IdEx, programme dédié aux projets étudiants.<p>
+    <p class="text-justify">Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {{ project_name }}.</p>
+    <p class="text-justify">Cette subvention d'un montant de {{ amount_earned }}€ ({$AMOUNT_EARNED_IDEX_LITTERAL} euros) au titre de l'année {$YEAR}, est mise en oeuvre dans le cadre du levier "Culture, sciences et société - Programme Creative Thinkers" de l'IdEx, programme dédié aux projets étudiants.<p>
     <p class="text-justify">Elle vous sera versée dans les prochaines semaines par les services financiers de l'Université de Strasbourg.</p>
     <p class="text-justify">Conformément au règlement financier de l’Agence Nationale de la Recherche (ANR), vous êtes tenu de faire état de ce soutien financier accordé dans le cadre du Programme Investissements d’Avenir (PIA), dans toute action de communication interne ou externe. Cette mention au financement du PIA pourra notamment être réalisée à travers l’apposition du logotype «Investissements d’Avenir» sur les documents produits.</p>
     <p class="text-justify"><b>Il est impératif de nous faire parvenir un bilan moral ainsi qu’un bilan financier de l’opération dans un délai de 2 mois maximum après la date de l’opération.</b></p>
