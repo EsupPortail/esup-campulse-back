@@ -153,7 +153,7 @@
       "code": "NOTIFICATION_FSDIE_REJECTION",
       "label": "Pdf de notification de refus de subventionnement FSDIE.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_REJECTION}</b></p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Chef de Service</p>",
       "sidebar": "<p><b>Prénom NOM</b><br>Chef de Service de la vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
@@ -165,7 +165,7 @@
       "code": "NOTIFICATION_IDEX_REJECTION",
       "label": "Pdf de notification de refus de subventionnement IdEx.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_REJECTION}</b></p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
       "sidebar": "<p><b>Prénom NOM</b><br>Vice-présidente Vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
@@ -177,7 +177,7 @@
       "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
       "label": "Pdf de notification de report de subventionnement FSDIE.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Chef de Service</p>",
       "sidebar": "<p><b>Prénom NOM</b><br>Chef de Service de la vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
@@ -189,7 +189,7 @@
       "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
       "label": "Pdf de notification de report de subventionnement IdEx.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
       "sidebar": "<p><b>Prénom NOM</b><br>Vice-présidente Vie universitaire</p><p><b>Affaire suivie par</b><br>Nom Gestionnaire<br>Tél: 01.02.03.04.05<br>Mail: nom.gestionnaire@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
@@ -225,7 +225,7 @@
       "code": "NOTIFICATION_CULTURE-ACTIONS_REJECTION",
       "label": "Pdf de notification de refus de subventionnement Culture-ActionS.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de refus</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants vous informe qu'elle refuse votre demande sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
+      "body": "<h1>Notification de refus</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants vous informe qu'elle refuse votre demande sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
       "sidebar": "<p>Complementary informations if necessary.</p>"
     }
@@ -237,7 +237,7 @@
       "code": "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED",
       "label": "Pdf de notification de report de subventionnement Culture-ActionS.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de report</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{$COMMENT_POSTPONED}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
+      "body": "<h1>Notification de report</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
       "sidebar": "<p>Complementary informations if necessary.</p>"
     }

@@ -18,6 +18,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.contents.models import Content
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects.models import ProjectComment
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_commission_fund import (
@@ -487,6 +488,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "content": Content.objects.get(
                     code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
                 ),
+                "comment": ProjectComment.objects.filter(project=project.id)
+                .latest("creation_date")
+                .text,
             }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -520,6 +524,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "content": Content.objects.get(
                         code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
                     ),
+                    "comment": ProjectComment.objects.filter(project=project.id)
+                    .latest("creation_date")
+                    .text,
                 }
                 filename = "notification_rejection.pdf"
             else:
