@@ -290,7 +290,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             template = MailTemplate.objects.get(code="NEW_DOCUMENT_TO_PROCESS")
             managers_emails = []
             if association is not None:
-                managers_emails = (
+                managers_emails = list(
                     Institution.objects.get(id=association.institution_id)
                     .default_institution_managers()
                     .values_list("email", flat=True)

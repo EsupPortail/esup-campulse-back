@@ -46,5 +46,13 @@
       "commission_id": 4,
       "fund_id": 3
     }
+  },
+  {
+    "model": "commissions.commissionfund",
+    "pk": 7,
+    "fields": {
+      "commission_id": 5,
+      "fund_id": 3
+    }
   }
 ]

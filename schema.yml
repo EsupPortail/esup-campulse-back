@@ -4360,6 +4360,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
@@ -4828,6 +4829,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
@@ -4862,6 +4864,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
@@ -4907,6 +4910,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
@@ -5128,6 +5132,7 @@ components:
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT
+      - PROJECT_DRAFT_PROCESSED
       - PROJECT_PROCESSING
       - PROJECT_REJECTED
       - PROJECT_VALIDATED

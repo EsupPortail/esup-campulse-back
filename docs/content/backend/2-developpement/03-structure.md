@@ -39,7 +39,8 @@ Le dossier `plana/apps` du backend est découpé en huit sous-applications compr
 
 - `projects`
   - `project` : demandes de subventionnements et bilans de projets, les process suivants sont disponibles :
-    - `PROJECT_DRAFT` : brouillon de demande entamée, ou demande en cours nécessitant des modifications.
+    - `PROJECT_DRAFT` : brouillon de demande entamée.
+    - `PROJECT_DRAFT_PROCESSED` : demande en cours nécessitant des modifications.
     - `PROJECT_PROCESSING` : demande en cours d'étude par les gestionnaires concernés.
     - `PROJECT_REJECTED` : demande refusée définitivement par un gestionnaire concerné.
     - `PROJECT_VALIDATED` : demande validée par l'ensemble des gestionnaires concernés.

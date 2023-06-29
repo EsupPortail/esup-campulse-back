@@ -33,10 +33,20 @@
     "model": "commissions.commission",
     "pk": 4,
     "fields": {
+      "submission_date": "2000-01-01",
+      "commission_date": "2000-01-30",
+      "is_open_to_projects": false,
+      "name": "Commission du passé"
+    }
+  },
+  {
+    "model": "commissions.commission",
+    "pk": 5,
+    "fields": {
       "submission_date": "1990-01-01",
       "commission_date": "1990-01-30",
       "is_open_to_projects": false,
-      "name": "Commission du passé"
+      "name": "Commission archivée"
     }
   }
 ]

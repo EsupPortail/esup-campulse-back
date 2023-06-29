@@ -183,7 +183,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                                 ).values_list("id")
                             ).values_list("project_id")
                         ),
-                        project_status__in=Project.ProjectStatus.get_real_project_statuses(),
+                        project_status__in=Project.ProjectStatus.get_commissionnable_project_statuses(),
                     )
                     | models.Q(
                         association_id__in=Association.objects.filter(
@@ -499,7 +499,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 or (project.user is not None and request.user.pk != project.user)
             )
             and project.project_status
-            not in Project.ProjectStatus.get_real_project_statuses()
+            not in Project.ProjectStatus.get_commissionnable_project_statuses()
         ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this project.")},
@@ -553,7 +553,8 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.has_perm("projects.change_project_as_validator")
-            and project.project_status != "PROJECT_DRAFT"
+            and project.project_status
+            not in Project.ProjectStatus.get_unfinished_project_statuses()
         ):
             return response.Response(
                 {"error": _("Project is not a draft that can be edited.")},
@@ -647,7 +648,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             project.project_status
-            not in Project.ProjectStatus.get_deletable_project_statuses()
+            not in Project.ProjectStatus.get_unfinished_project_statuses()
         ):
             return response.Response(
                 {"error": _("Cannot delete a non-draft project.")},
@@ -766,11 +767,17 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             document_process_types = []
             association_email_template_code = ""
             user_email_template_code = ""
-            if new_project_status == "PROJECT_PROCESSING":
+            if (
+                new_project_status
+                in Project.ProjectStatus.get_email_project_processing_project_statuses()
+            ):
                 document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
                 association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
                 user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
-            elif new_project_status == "PROJECT_REVIEW_PROCESSING":
+            elif (
+                new_project_status
+                in Project.ProjectStatus.get_email_review_processing_project_statuses()
+            ):
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = (
                     "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
@@ -858,13 +865,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         elif (
             new_project_status in Project.ProjectStatus.get_validator_project_statuses()
         ):
-            if new_project_status == "PROJECT_VALIDATED":
-                year = datetime.datetime.now().year
-                projects_year_count = Project.objects.filter(
-                    manual_identifier__startswith=year
-                ).count()
-                project.manual_identifier = f"{year}{projects_year_count+1:04}"
-                project.save()
+            # TODO Manual identifier for projects, don't know where to put it.
+            """
+            year = datetime.datetime.now().year
+            projects_year_count = Project.objects.filter(
+                manual_identifier__startswith=year
+            ).count()
+            project.manual_identifier = f"{year}{projects_year_count+1:04}"
+            project.save()
+            """
 
             mail_templates_codes_by_status = {
                 "PROJECT_DRAFT": "PROJECT_NEEDS_CHANGES",

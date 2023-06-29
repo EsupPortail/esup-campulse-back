@@ -26,7 +26,7 @@ class CASProvider(AllAuthCASProvider):
             "email": extra.get("mail", ""),
             "first_name": extra.get("first_name", ""),
             "last_name": extra.get("last_name", ""),
-            "is_student": True if extra.get("affiliation") == "student" else False,
+            "is_student": True if extra.get("affiliation", "") == "employee" else False,
         }
         return fields
 

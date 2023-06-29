@@ -17,6 +17,9 @@ class Project(models.Model):
         """List of statuses a project can have (for itself or reviews)."""
 
         PROJECT_DRAFT = "PROJECT_DRAFT", _("Project Draft")
+        PROJECT_DRAFT_PROCESSED = "PROJECT_DRAFT_PROCESSED", _(
+            "Project Draft Processed"
+        )
         PROJECT_PROCESSING = "PROJECT_PROCESSING", _("Project Processing")
         PROJECT_REJECTED = "PROJECT_REJECTED", _("Project Rejected")
         PROJECT_VALIDATED = "PROJECT_VALIDATED", _("Project Validated")
@@ -35,6 +38,7 @@ class Project(models.Model):
 
             return {
                 "PROJECT_DRAFT": 1,
+                "PROJECT_DRAFT_PROCESSED": 1,
                 "PROJECT_PROCESSING": 2,
                 "PROJECT_REJECTED": 3,
                 "PROJECT_VALIDATED": 3,
@@ -51,7 +55,7 @@ class Project(models.Model):
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
-        def get_deletable_project_statuses():
+        def get_unfinished_project_statuses():
             """Commission dates with projects having these statuses can be deleted."""
 
             return ["PROJECT_DRAFT"]
@@ -62,13 +66,26 @@ class Project(models.Model):
 
             return [
                 "PROJECT_DRAFT",
+                "PROJECT_DRAFT_PROCESSED",
                 "PROJECT_PROCESSING",
                 "PROJECT_REVIEW_DRAFT",
                 "PROJECT_REVIEW_PROCESSING",
             ]
 
         @staticmethod
-        def get_real_project_statuses():
+        def get_email_project_processing_project_statuses():
+            """If project has one of these statuses, send an email to warn managers."""
+
+            return ["PROJECT_PROCESSING"]
+
+        @staticmethod
+        def get_validated_fund_project_statuses():
+            """If funds are validated for a project with these statuses, validate the project."""
+
+            return ["PROJECT_PROCESSING"]
+
+        @staticmethod
+        def get_commissionnable_project_statuses():
             """Projects with those statuses are validated but without a review."""
 
             return [
@@ -82,6 +99,12 @@ class Project(models.Model):
             """Projects with those statuses need to submit a review."""
 
             return ["PROJECT_REVIEW_DRAFT"]
+
+        @staticmethod
+        def get_email_review_processing_project_statuses():
+            """If project has one of these statuses, send an email to warn managers."""
+
+            return ["PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
         def get_archived_project_statuses():
@@ -105,6 +128,7 @@ class Project(models.Model):
 
             return [
                 "PROJECT_DRAFT",
+                "PROJECT_DRAFT_PROCESSED",
                 "PROJECT_REJECTED",
                 "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT",

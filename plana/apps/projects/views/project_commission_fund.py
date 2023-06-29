@@ -469,7 +469,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if commission_fund.commission_date >= new_commission_fund.commission_date:
+            if (
+                commission_fund.commission.commission_date
+                >= new_commission_fund.commission.commission_date
+            ):
                 return response.Response(
                     {
                         "error": _(
@@ -479,6 +482,11 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            setattr(
+                project_commission_fund,
+                "commission_fund_id",
+                request.data["new_commission_fund_id"],
+            )
             template = MailTemplate.objects.get(code="PROJECT_POSTPONED")
             # Creating context for notifications attachments
             attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
@@ -583,7 +591,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "is_validated_by_admin" in request.data
             and request.data["is_validated_by_admin"] is True
-            and project.project_status == "PROJECT_PROCESSING"
+            and project.project_status
+            in Project.ProjectStatus.get_validated_fund_project_statuses()
             and unvalidated_project_commission_funds_count == 0
         ):
             project.project_status = "PROJECT_VALIDATED"
