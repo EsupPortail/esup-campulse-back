@@ -332,3 +332,10 @@ def set_up():
 def custom_manage_cmd(cmd):
     """Execute custom command in manage.py"""
     execute(pydiploy.django.custom_manage_command, cmd)
+
+
+@roles("web")
+@task
+def update_python_version():
+    """Update python version"""
+    execute(pydiploy.django.update_python_version)
