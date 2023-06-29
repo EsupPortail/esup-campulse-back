@@ -496,7 +496,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 ),
                 message=template.parse_vars(request.user, request, context),
                 attach_custom={
-                    "filename": "notification_report.pdf",
+                    "filename": "notification_postponed.pdf",
                     "context_attach": context_attach,
                     "mimetype": "application/pdf",
                     "request": request,
