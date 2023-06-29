@@ -30,6 +30,10 @@ L'en-tête de réponse HTTP Content-Security-Policy permet de contrôler les res
 add_header Content-Security-Policy "upgrade-insecure-requests; default-src 'none'; base-uri 'self'; child-src 'none'; connect-src 'self' https://plana-api-test.app.unistra.fr https://sentry.app.unistra.fr; font-src 'self'; frame-ancestors 'none'; frame-src 'none'; img-src 'self' data: https://s3.unistra.fr; manifest-src 'self'; media-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self';";
 ```
 
+#### Unsafe-eval
+
+Vue et Vue-i18n sont chargés en version `runtime.esm-bundler` afin d'éviter le chargement des scripts via la fonction `eval` (Vue-i18n nécessite également un plugin). La configuration de ces changements a été faite dans le fichier `vite.config.ts`.
+
 ### Autres directives
 
 ```nginx
@@ -40,10 +44,6 @@ add_header X-Content-Type-Options "nosniff"; # L'application appelle des fichier
 add_header X-Frame-Options "DENY"; # N'autorise pas l'application à être embarquée dans une `<iframe>`.
 ```
 
-### Unsafe-eval
-
-Des lignes ont été ajoutées dans le fichier `vite.config.ts` pour désactiver des scripts s'exécutant avec des unsafe-eval.
-
 ## ESLint
 
 Quelques règles de lint mises en place dans le fichier `.eslintrc.json` :
@@ -51,7 +51,7 @@ Quelques règles de lint mises en place dans le fichier `.eslintrc.json` :
 - pas d'espace entre les `{}`
 - quotes simples
 - pas de `;`
-- indentation à 4
+- indentation à 4 espaces
 - `ts-ignore` doit faire l'objet d'un commentaire
 - les attributs des éléments HTML doivent aller à la ligne avec indentation
 

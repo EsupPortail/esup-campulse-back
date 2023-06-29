@@ -28,7 +28,7 @@ weight: 215
 - `useAssociationStore` : gestion du state pour les associations et leurs données associées (établissements, composantes, domaines d'activités, membres, etc.)
 - `useContentStore` : gestion du state pour les contenus récupérés via l'API
 - `useProjectStore` : gestion du state pour les projets, les bilans et leurs données associées (catégories, fonds, documents, etc.)
-- `useUserManagerStore` : gestion du state pour les utilisateurs gérés par les gestionnaires
+- `useUserManagerStore` : gestion du state pour les utilisateurs du côté des gestionnaires
 - `useUserStore` : gestion du state pour les données de l'utilisateur connecté (logIn, logOut, etc.)
 
 ## Composables
@@ -40,7 +40,7 @@ Les composables regroupent des fonctions plus complexes que les stores pour des 
 - `useAssociations.ts` : gestion des associations
 - `useAxios.ts` : configuration d'Axios (plugin pour les appels API)
 - `useCharters.ts` : gestion des chartes
-- `useColorVariants` : gestion du style en fonction des vues
+- `useColorVariants.ts` : gestion du style en fonction des vues
 - `useCommissions.ts` : gestion des commissions
 - `useDirectory.ts` : gestion de l'annuaire des associations
 - `useDocumentUploads.ts` : upload de documents
@@ -86,12 +86,12 @@ try {
 #### useColorVariants.ts
 
 Application du style en fonction de la route.
-Plus d'information sur les pages "Router" et "Layouts et styles".
+Plus d'informations sur les pages "Router" et "Layouts et styles".
 
 #### useSecurity.ts
 
 - `hasPerm` : vérifie si l'utilisateur a la permission passée en argument. Se base sur les permissions renvoyées par l'API avec les données de l'utilisateur.
-- `checkPasswordStrength` : vérifie la force d'un mot de passe. Se base sur la librairie zxcvb.
+- `checkPasswordStrength` : vérifie la force d'un mot de passe. Se base sur la librairie zxcvbn.
 
 #### useUserGroups.ts
 

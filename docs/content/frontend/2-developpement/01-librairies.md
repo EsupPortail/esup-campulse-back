@@ -5,7 +5,7 @@ weight: 211
 
 ## Librairies et frameworks
 
-- [vue](https://www.npmjs.com/package/vue) : framework général (en version 3).
+- [vue](https://www.npmjs.com/package/vue) : framework général.
 - [@sentry/vue](https://www.npmjs.com/package/@sentry/vue) : bug reporting.
 - [axios](https://www.npmjs.com/package/axios) : requêtes vers l'API.
 - [bootstrap-icons](https://www.npmjs.com/package/bootstrap-icons) : icônes.
@@ -32,7 +32,7 @@ weight: 211
 - [@vue/tsconfig](https://www.npmjs.com/package/@vue/tsconfig) : optimisation de TypeScript pour le framework.
 - [eslint](https://www.npmjs.com/package/eslint) : linter.
 - [eslint-plugin-vue](https://www.npmjs.com/package/eslint-plugin-vue) : optimisation du linter pour le framework.
-- [jsdom](https://www.npmjs.com/package/jsdom) : Javascript.
+- [jsdom](https://www.npmjs.com/package/jsdom) : DOM Javascript.
 - [sass](https://www.npmjs.com/package/sass) : Sass.
 - [typescript](https://www.npmjs.com/package/typescript) : TypeScript.
 - [vite](https://www.npmjs.com/package/vite) : bundler.
@@ -67,7 +67,7 @@ Plus d'informations sur la configuration d'Axios sont disponibles sur la page "S
 
 Librairie de composants pour Vue. Divers composants sont utilisés à travers l'application, notamment les éléments de formulaire et les tableaux (QTable).
 
-Les composants Quasar sont configurés pour être importés et fonctionner en Pascal case (`vite.config.ts`).
+Les composants Quasar sont configurés pour être importés et fonctionner en PascalCase (`vite.config.ts`).
 
 2 API Quasar spécifiques sont également utilisées :
 - Notify.
@@ -88,7 +88,7 @@ notify({
 
 #### Loading
 
-L'[API Loading](https://quasar.dev/quasar-plugins/loading#loading-api) de Quasar est une fonctionnalité qui permet d'afficher un overlay grisé sur l'écran indiquant à l'utilisateur qu'une tâche est en train de s'effectuer en arrière plan et qu'il doit patienter. Loading s'utilise comme suit sur l'ensemble des fonctions asynchrones : 
+L'[API Loading](https://quasar.dev/quasar-plugins/loading#loading-api) de Quasar est une fonctionnalité qui permet d'afficher un overlay grisé sur l'écran indiquant à l'utilisateur qu'une tâche est en train de s'effectuer en arrière-plan et qu'il doit patienter. Loading s'utilise comme suit sur l'ensemble des fonctions asynchrones : 
 
 ```js
 loading.show()
