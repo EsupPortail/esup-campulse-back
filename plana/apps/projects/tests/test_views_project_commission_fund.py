@@ -33,6 +33,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "projects_project.json",
+        "projects_projectcomment.json",
         "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
