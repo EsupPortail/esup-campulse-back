@@ -315,14 +315,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "new_commission_fund_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="New Commission Fund ID.",
-            ),
-        ],
         responses={
             status.HTTP_200_OK: ProjectCommissionFundDataSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -334,15 +326,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Updates details of a project linked to a commission fund object."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+        new_commission_fund = None
         try:
             project = Project.objects.get(id=kwargs["project_id"])
             project_commission_fund = ProjectCommissionFund.objects.get(
@@ -353,6 +337,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 id=kwargs["commission_fund_id"]
             )
             commission = Commission.objects.get(id=commission_fund.commission_id)
+            if "new_commission_fund_id" in request.data:
+                new_commission_fund = CommissionFund.objects.get(
+                    id=request.data["new_commission_fund_id"]
+                )
         except ObjectDoesNotExist:
             return response.Response(
                 {
@@ -361,6 +349,15 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
                 },
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if not request.user.can_edit_project(project):
@@ -393,7 +390,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         validator_fields = [
             "amount_earned",
             "is_validated_by_admin",
-            "commission_fund_id",
+            "new_commission_fund_id",
             "project_id",
         ]
         if not request.user.has_perm(
@@ -432,17 +429,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
 
-        if "new_commission_fund_id" in request.data:
-            try:
-                new_commission_fund = CommissionFund.objects.get(
-                    id=request.data["new_commission_fund_id"]
-                )
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("New Commission Fund does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
+        if new_commission_fund is not None:
             if commission_fund.fund_id != new_commission_fund.fund_id:
                 return response.Response(
                     {
