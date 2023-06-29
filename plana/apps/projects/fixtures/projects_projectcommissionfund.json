@@ -103,12 +103,25 @@
     "pk": 9,
     "fields": {
       "project": 8,
-      "commission_fund": 7,
+      "commission_fund": 6,
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
       "amount_asked": 200,
       "amount_earned": 1000
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 10,
+    "fields": {
+      "project": 9,
+      "commission_fund": 7,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 2,
+      "amount_earned": 1
     }
   }
 ]
