@@ -27,11 +27,13 @@ class ProjectCommissionFundViewsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_content.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "projects_project.json",
+        "projects_projectcomment.json",
         "projects_projectcommissionfund.json",
         "users_associationuser.json",
         "users_groupinstitutionfunduser.json",
@@ -581,7 +583,8 @@ class ProjectCommissionFundViewsTests(TestCase):
             project_id=project_id, commission_fund_id=commission_fund_id
         ).count()
         self.assertEqual(project_commission_fund_count, 0)
-        self.assertTrue(len(mail.outbox))
+        self.assertTrue(len(mail.outbox), 1)
+        self.assertTrue(len(mail.outbox[0].attachments), 1)
 
     def test_patch_project_cf_amount_earned(self):
         """
@@ -604,6 +607,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(mail.outbox))
+        self.assertTrue(len(mail.outbox[0].attachments), 1)
         project = Project.objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 

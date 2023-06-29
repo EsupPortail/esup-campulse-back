@@ -9,5 +9,16 @@
       "project": 2,
       "user": 3
     }
+  },
+  {
+    "model": "projects.projectcomment",
+    "pk": 2,
+    "fields": {
+      "text": "Peut mieux faire.",
+      "creation_date": "2023-06-14T15:30:00.000Z",
+      "edition_date": "2023-06-14T15:30:00.000Z",
+      "project": 1,
+      "user": 3
+    }
   }
 ]

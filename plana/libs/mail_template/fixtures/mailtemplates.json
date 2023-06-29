@@ -799,7 +799,7 @@
     "model": "mail_template.MailTemplate",
     "pk": 49,
     "fields": {
-      "code": "PROJECT_REPORTED",
+      "code": "PROJECT_POSTPONED",
       "label": "Project Reported",
       "description": "Message reçu par une association si une commission liée à son projet est reportée.",
       "subject": "{{ site_name }} - Votre demande de subventions est reportée.",

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+{% load resolve %}
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Décision de subvention IdEx</title>
+
+    <link rel="stylesheet" href="{% static 'css/unistrap.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/notifications/FSDIE_IdEx.css' %}" type="text/css"/>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 20mm 10mm 20mm 10mm
+        }
+    </style>
+</head>
+
+<header>
+    <div class="head-float-left">
+        <img src="{% static 'img/svu_logo.png' %}">
+    </div>
+    <div class="head-float-right border text-sm unistra-a">
+        {% resolve %}{{ content.header|safe }}{% endresolve %}
+    </div>
+</header>
+
+<body>
+    <div class="float-left border text-sm unistra-a">
+        {% resolve %}{{ content.sidebar|safe }}{% endresolve %}
+    </div>
+    <div class="float-right unistra-a">
+        {% resolve %}{{ content.body|safe }}{% endresolve %}
+    </div>
+
+</body>
+
+<footer>
+    <div class="float-right unistra-a align-right">
+        {% resolve %}{{ content.footer|safe }}{% endresolve %}
+    </div>
+</footer>
+
+</html>

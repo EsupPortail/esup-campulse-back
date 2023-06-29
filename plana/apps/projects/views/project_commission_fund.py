@@ -1,6 +1,8 @@
 """Views linked to project commission funds links."""
 import datetime
+import locale
 
+import num2words
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,7 +16,9 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.contents.models import Content
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects.models import ProjectComment
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_commission_fund import (
@@ -23,7 +27,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import create_pdf, send_mail
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
@@ -337,6 +341,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 id=kwargs["commission_fund_id"]
             )
             commission = Commission.objects.get(id=commission_fund.commission_id)
+            fund = Fund.objects.get(id=commission_fund.fund_id)
             if "new_commission_fund_id" in request.data:
                 new_commission_fund = CommissionFund.objects.get(
                     id=request.data["new_commission_fund_id"]
@@ -426,8 +431,20 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             email = User.objects.get(
                 id=AssociationUser.objects.get(id=project.association_user_id).user_id
             ).email
+            owner = Association.objects.get(id=project.association_id)
+            # TODO : helper to get full address in association model ?
+            owner = {
+                "name": owner.name,
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+            }
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
+            owner = User.objects.get(id=project.user_id)
+            # TODO : helper to get full address in user model ?
+            owner = {
+                "name": f"{owner.first_name} {owner.last_name}",
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+            }
 
         if new_commission_fund is not None:
             if commission_fund.fund_id != new_commission_fund.fund_id:
@@ -458,7 +475,23 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "commission_fund_id",
                 request.data["new_commission_fund_id"],
             )
-            template = MailTemplate.objects.get(code="PROJECT_REPORTED")
+            template = MailTemplate.objects.get(code="PROJECT_POSTPONED")
+            # Creating context for notifications attachments
+            attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
+            ]
+            context_attach = {
+                "project_name": project.name,
+                "date": datetime.date.today(),
+                "date_commission": commission.commission_date,
+                "owner": owner,
+                "content": Content.objects.get(
+                    code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
+                ),
+                "comment": ProjectComment.objects.filter(project=project.id)
+                .latest("creation_date")
+                .text,
+            }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -466,13 +499,56 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
+                attach_custom={
+                    "filename": "notification_postponed.pdf",
+                    "context_attach": context_attach,
+                    "mimetype": "application/pdf",
+                    "request": request,
+                    "template_name": attach_template_name,
+                },
             )
 
         if "amount_earned" in request.data:
-            if request.data["amount_earned"] == 0:
+            if int(request.data["amount_earned"]) == 0:
+                # TODO : add comment var in context for the rejection
                 template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
+                # Creating context for notifications attachments
+                attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                    f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
+                ]
+                context_attach = {
+                    "project_name": project.name,
+                    "date": datetime.date.today(),
+                    "date_commission": commission.commission_date,
+                    "owner": owner,
+                    "content": Content.objects.get(
+                        code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
+                    ),
+                    "comment": ProjectComment.objects.filter(project=project.id)
+                    .latest("creation_date")
+                    .text,
+                }
+                filename = "notification_rejection.pdf"
             else:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+                # Creating context for notifications attachments
+                attach_template_name = settings.TEMPLATES_NOTIFICATIONS[
+                    f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
+                ]
+                context_attach = {
+                    "amount_earned": request.data["amount_earned"],
+                    "amount_earned_litteral": num2words.num2words(
+                        request.data["amount_earned"], lang=locale.getlocale()[0]
+                    ),
+                    "project_name": project.name,
+                    "date": datetime.date.today(),
+                    "date_commission": commission.commission_date,
+                    "owner": owner,
+                    "content": Content.objects.get(
+                        code=f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
+                    ),
+                }
+                filename = "notification_attribution.pdf"
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -480,6 +556,13 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
+                attach_custom={
+                    "filename": filename,
+                    "context_attach": context_attach,
+                    "mimetype": "application/pdf",
+                    "request": request,
+                    "template_name": attach_template_name,
+                },
             )
 
         for field in request.data:

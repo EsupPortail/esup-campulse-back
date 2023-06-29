@@ -1,13 +1,14 @@
 """Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
 import datetime
+import os
 import re
 
 import weasyprint
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
-from django.template.loader import render_to_string
+from django.template.loader import get_template, render_to_string
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
@@ -54,7 +55,14 @@ def _listify(x):
 
 
 def send_mail(
-    to_, subject, message, from_='', attachments=None, has_html=True, **kwargs
+    to_,
+    subject,
+    message,
+    from_='',
+    attachments=None,
+    attach_custom=None,
+    has_html=True,
+    **kwargs,
 ):
     # Listify recipient address
     to_ = _listify(to_)
@@ -70,6 +78,19 @@ def send_mail(
         with att.storage.open(f'{att.filepath}/{att.filename}', 'rb') as file:
             content = file.read()
             mail.attach(att.filename, content, att.mimetype)
+
+    # Attachments for generated documents
+    # TODO : multiple attachments custom ?
+    if attach_custom is not None:
+        mail.attach(
+            attach_custom["filename"],
+            create_pdf(
+                attach_custom["context_attach"],
+                attach_custom["request"],
+                attach_custom["template_name"],
+            ),
+            attach_custom["mimetype"],
+        )
 
     mail.send()
 
@@ -110,3 +131,12 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
     ] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
     return response
+
+
+def create_pdf(context, request, template_name):
+    template = get_template(template_name)
+    html = template.render(context)
+    pdf_binary = weasyprint.HTML(
+        string=html, base_url=request.build_absolute_uri('/')
+    ).write_pdf()
+    return pdf_binary
