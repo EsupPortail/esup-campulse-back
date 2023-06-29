@@ -688,15 +688,19 @@ GROUPS_STRUCTURE = {
 # Notifications pdf templates used as mail attachments
 # Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY)
 TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
     "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": "./notifications/FSDIE/decision_attribution.html",
-
-    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
     "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": "./notifications/example/example.html",
+
+    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
+    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": "./notifications/example/example.html",
 
     "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
     "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
+    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": "./notifications/example/example.html",
 
     "NOTIFICATION_FSDIE_PROJECT_POSTPONED": "./notifications/FSDIE/postpone.html",
     "NOTIFICATION_IDEX_PROJECT_POSTPONED": "./notifications/IdEx/postpone.html",
+    "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": "./notifications/example/example.html",
 }
