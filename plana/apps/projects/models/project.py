@@ -68,6 +68,7 @@ class Project(models.Model):
                 "PROJECT_DRAFT",
                 "PROJECT_DRAFT_PROCESSED",
                 "PROJECT_PROCESSING",
+                "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT",
                 "PROJECT_REVIEW_PROCESSING",
             ]
