@@ -131,7 +131,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         project_id = 1
         project = Project.objects.get(id=project_id)
-        project.project_status = "PROJECT_VALIDATED"
+        project.project_status = "PROJECT_REJECTED"
         project.save()
 
         post_data = {
@@ -321,7 +321,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         comment_id = 1
         project_id = 2
         project = Project.objects.get(id=project_id)
-        project.project_status = "PROJECT_VALIDATED"
+        project.project_status = "PROJECT_REJECTED"
         project.save()
 
         patch_data = {"text": "Finalement non je veux pas aider ce projet."}
@@ -411,7 +411,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         comment_id = 1
         project_id = 2
         project = Project.objects.get(id=project_id)
-        project.project_status = "PROJECT_VALIDATED"
+        project.project_status = "PROJECT_REJECTED"
         project.save()
 
         response = self.general_client.delete(

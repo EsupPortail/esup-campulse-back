@@ -22,6 +22,10 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
 class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
     """Fields that can be updated by project's bearer."""
 
+    new_commission_fund_id = serializers.PrimaryKeyRelatedField(
+        queryset=CommissionFund.objects.all(), required=False
+    )
+
     class Meta:
         model = ProjectCommissionFund
         fields = [
@@ -32,5 +36,6 @@ class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
             "amount_earned",
             "is_validated_by_admin",
             "commission_fund_id",
+            "new_commission_fund_id",
             "project_id",
         ]
