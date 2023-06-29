@@ -133,7 +133,6 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
     return response
 
 
-# TODO : condition for which template to use and which contents to add into
 def create_pdf(context, request, template_name):
     template = get_template(template_name)
     html = template.render(context)
