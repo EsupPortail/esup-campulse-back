@@ -1,84 +1,9 @@
 ---
-title: Structure
-weight: 212
+title: Configuration
+weight: 213
 ---
 
-## Typage avec TypeScript
-
-Le projet utilise le typage de [TypeScript](https://typescriptlang.org). L'ensemble des types et interfaces est défini dans des fichiers de types du dossier `types`.
-
-## Gestion des erreurs HTTP
-
-Par défaut, les erreurs HTTP sont gérées de la manière suivante :
-
-```js
-try {
-    // some code
-} catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-        notify({
-            type: 'negative',
-            message: t(`notifications.negative.${catchHTTPError(error.response.status)}`)
-        })
-    }
-}
-```
-La fonction `catchHTTPError` attrape les erreurs et notifie l'utilisateur selon le code d'erreur. Elle se trouve dans le composable `src/composables/useErrors.ts`.
-
-## Router
-
-Le router est utilisé pour naviguer entre les pages. On s'en sert également pour spécifier des paramètres par route, notamment :
-- Titres.
-- Intitulés des breadcrumbs.
-- Classes CSS.
-- Autorisations.
-
-### Gestion des layouts
-
-L'application utilise 2 layouts :
-- `LayoutDefault.vue`, utilisé sur la quasi-totalité des pages.
-- `LayoutMinimalHeader.vue`, utilisé sur certaines pages uniquement comme `Login` et `404`.
-
-L'utilisation de ces layouts est définie dans le router.
-
-### Gestion des couleurs par espace
-
-Chaque grande section de l'application se démarque par une couleur distincte. Ces grandes parties sont les suivantes :
-- Annuaire des associations.
-- Espace CAPE.
-- Espace chartes.
-- Tableaux de bord.
-
-Au niveau du router, le paramètre `colorVariant` défini dans `meta` permet d'appliquer la bonne classe CSS.
-
-### Règles de redirection
-
-Par défaut, les requêtes n'aboutisssant pas ou étant interdites (`403`) sont redirigées vers la page `404`. Les requêtes en mode non connecté nécessitant cependant une connexion sont redirigées vers la page `Login`. L'ensemble des règles mises en place sont visibles dans le fichier `@/router/index.ts`.
-
-## Tests
-
-L'application utilise [Vitest](https://vitest.dev/).
-
-### Fixtures
-
-Des fixtures sont disponibles dans le dossier `tests/fixtures`.
-
-## Gérer les textes
-
-Les textes sont à remplir dans le fichier `src/locales/fr.json`, dans l'ordre alphabétique. Ils peuvent être appelés comme suit : 
-
-```vue
-<script lang="ts" setup>
-    import {useI18n} from 'vue-i18n'
-    const {t} = useI18n()
-</script>
-
-<template>
-    <p>{{ t('hello-world') }}</p>
-</template>
-```
-
-## Configuration NGINX
+## Nginx
 
 Une configuration de sécurité basique est mise en place au niveau du serveur Nginx. 
 
@@ -96,7 +21,7 @@ L'en-tête de réponse HTTP Content-Security-Policy permet de contrôler les res
 - `img-src 'self' data: https://s3.unistra.fr` : autorise uniquement le chargement des images de l'application elle-même, en base64, et en provenance de S3 (logos des associations).
 - `manifest-src 'self'` : autorise le manifeste de PWA à se charger.
 - `media-src 'self'` : autorise uniquement le chargement de médias de l'application elle-même.
-- `object-src 'self'` : autorise uniquement les ressources intégrées sous la forme d'un élement `<object>` de l'application elle-même.
+- `object-src 'self'` : autorise uniquement les ressources intégrées sous la forme d'un élément `<object>` de l'application elle-même.
 - `script-src 'self'` : autorise uniquement l'exécution des scripts de l'application elle-même.
 - `style-src 'self'` : autorise uniquement le chargement des styles de l'application elle-même.
 - `worker-src 'self'` : autorise uniquement l'exécution des workers de l'application elle-même.
@@ -114,3 +39,24 @@ add_header Strict-Transport-Security "max-age=63072000"; # Autorise uniquement l
 add_header X-Content-Type-Options "nosniff"; # L'application appelle des fichiers de script et de style en vérifiant leur MIME-type. Cela permet d'éviter de détecter des scripts qui n'en sont pas.
 add_header X-Frame-Options "DENY"; # N'autorise pas l'application à être embarquée dans une `<iframe>`.
 ```
+
+### Unsafe-eval
+
+Des lignes ont été ajoutées dans le fichier `vite.config.ts` pour désactiver des scripts s'exécutant avec des unsafe-eval.
+
+## ESLint
+
+Quelques règles de lint mises en place dans le fichier `.eslintrc.json` :
+
+- pas d'espace entre les `{}`
+- quotes simples
+- pas de `;`
+- indentation à 4
+- `ts-ignore` doit faire l'objet d'un commentaire
+- les attributs des éléments HTML doivent aller à la ligne avec indentation
+
+## Raccourcis
+
+- `@` : redirige vers le dossier `./src`
+- `#` : redirige vers le dossier `./types`
+- `~` : redirige vers le dossier `./tests`

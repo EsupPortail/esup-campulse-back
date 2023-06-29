@@ -14,7 +14,6 @@ weight: 211
 - [vue-i18n](https://www.npmjs.com/package/vue-i18n) : traduction.
 - [vue-router](https://www.npmjs.com/package/vue-router) : routing.
 - [zxcvbn](https://www.npmjs.com/package/zxcvbn) : estimation de la force d'un mot de passe.
-
 - [@vue-unistra/cas-authentication](https://git.unistra.fr/vue-unistra/cas-authentication) : plugin d'authentification vers CAS.
 
 ## Utilitaires de développement
@@ -44,7 +43,8 @@ weight: 211
 
 ### Vue
 
-Framework général de l'application, en version 3. L'application utilise l'[API de composition](https://vuejs.org/guide/introduction.html#api-styles) et [`script setup`](https://vuejs.org/api/sfc-script-setup.html).
+Framework général de l'application, en version 3. 
+L'application utilise l'[API de composition](https://vuejs.org/guide/introduction.html#api-styles) et [`script setup`](https://vuejs.org/api/sfc-script-setup.html).
 
 ### vue-unistra/cas-authentication
 
@@ -55,18 +55,9 @@ Permet notamment de gérer le refresh automatique des tokens d'authentification 
 
 ### Axios
 
-Gère les requêtes vers l'API. Deux instances d'Axios sont en place dans `@/composables/useAxios.ts` :
+Gère les requêtes vers l'API. 
 
-- `axiosPublic` pour gérer les requêtes publiques, sans authentification.
-- `axiosAuthenticated` pour gérer les requêtes privées, avec authentification et `vue-unistra/cas-authentication`.
-
-Attention à bien utiliser la bonne instance. Une requête publique effectuée avec l'instance privée peut générer une erreur. 
-
-### Bootstrap Icons
-
-[Bootstrap Icons](https://icons.getbootstrap.com/) est une librairie d'icônes.
-
-Elles sont intégrées sous forme d'icônes avec l'élement `<i>`.
+Plus d'informations sur la configuration d'Axios sont disponibles sur la page "Structure".
 
 ### Pinia
 
@@ -75,6 +66,8 @@ Elles sont intégrées sous forme d'icônes avec l'élement `<i>`.
 ### Quasar
 
 Librairie de composants pour Vue. Divers composants sont utilisés à travers l'application, notamment les éléments de formulaire et les tableaux (QTable).
+
+Les composants Quasar sont configurés pour être importés et fonctionner en Pascal case (`vite.config.ts`).
 
 2 API Quasar spécifiques sont également utilisées :
 - Notify.
@@ -107,6 +100,16 @@ loading.hide()
 
 [Vue I18n](https://vue-i18n.intlify.dev/) est un plugin d'internationalisation pour Vue.
 
+Plus d'informations sur la configuration d'Axios sont disponibles sur la page "I18n".
+
 ### Vue Router
 
 [Vue Router](https://router.vuejs.org/) permet de naviguer entre les différentes vues de l'application.
+
+Plus d'informations sur la configuration d'Axios sont disponibles sur la page "Router".
+
+### Bootstrap Icons
+
+[Bootstrap Icons](https://icons.getbootstrap.com/) est une librairie d'icônes.
+
+Elles sont intégrées sous forme d'icônes avec l'élément `<i>` ou dans des éléments Quasar le permettant avec un attribut `icon`.
