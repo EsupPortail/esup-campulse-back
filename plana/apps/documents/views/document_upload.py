@@ -175,7 +175,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "project" in request.data:
+        if "project" in request.data and request.data["project"] != "":
             try:
                 project = Project.visible_objects.get(id=request.data["project"])
             except ObjectDoesNotExist:
