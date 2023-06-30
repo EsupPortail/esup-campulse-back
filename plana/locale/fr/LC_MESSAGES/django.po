@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-29 10:20+0200\n"
+"POT-Creation-Date: 2023-06-30 10:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -485,11 +485,15 @@ msgstr "Corps du message"
 msgid "Footer"
 msgstr "Pied de page"
 
-#: plana/apps/contents/models/content.py:23
+#: plana/apps/contents/models/content.py:18
+msgid "Sidebar"
+msgstr "Barre annexe"
+
+#: plana/apps/contents/models/content.py:24
 msgid "Content"
 msgstr "Contenu"
 
-#: plana/apps/contents/models/content.py:24
+#: plana/apps/contents/models/content.py:25
 msgid "Contents"
 msgstr "Contenus"
 
@@ -666,7 +670,7 @@ msgstr ""
 #: plana/apps/projects/views/project_category.py:217
 #: plana/apps/projects/views/project_comment.py:48
 #: plana/apps/projects/views/project_comment.py:120
-#: plana/apps/projects/views/project_commission_fund.py:262
+#: plana/apps/projects/views/project_commission_fund.py:266
 #: plana/apps/projects/views/project_export.py:45
 #: plana/apps/projects/views/project_export.py:139
 #: plana/apps/projects/views/project_review.py:54
@@ -1015,9 +1019,9 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project.py:715
 #: plana/apps/projects/views/project_comment.py:207
 #: plana/apps/projects/views/project_comment.py:249
-#: plana/apps/projects/views/project_commission_fund.py:157
-#: plana/apps/projects/views/project_commission_fund.py:365
-#: plana/apps/projects/views/project_commission_fund.py:551
+#: plana/apps/projects/views/project_commission_fund.py:161
+#: plana/apps/projects/views/project_commission_fund.py:370
+#: plana/apps/projects/views/project_commission_fund.py:634
 #: plana/apps/projects/views/project_review.py:115
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1081,66 +1085,66 @@ msgstr "Non autorisé à récupérer les commentaires de ce projet."
 msgid "Link between this comment and project does not exist."
 msgstr "Ce commentaire de projet n'existe pas."
 
-#: plana/apps/projects/views/project_commission_fund.py:142
+#: plana/apps/projects/views/project_commission_fund.py:146
 msgid "Project or commission date does not exist."
 msgstr "Le projet ou la date de commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_fund.py:176
+#: plana/apps/projects/views/project_commission_fund.py:180
 msgid ""
 "Not allowed to update validator fields for this project's commission fund."
 msgstr ""
 "Non autorisé à mettre à jour les champs du validateur pour ce projet lié à "
 "une commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:190
+#: plana/apps/projects/views/project_commission_fund.py:194
 msgid "Not allowed to submit a project to this commission."
 msgstr "Non autorisé à proposer un projet pour cette commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:198
-#: plana/apps/projects/views/project_commission_fund.py:415
+#: plana/apps/projects/views/project_commission_fund.py:202
+#: plana/apps/projects/views/project_commission_fund.py:420
 msgid "Submission date for this commission is gone."
 msgstr "La date de soumission de projet pour cette commission est passée."
 
-#: plana/apps/projects/views/project_commission_fund.py:204
+#: plana/apps/projects/views/project_commission_fund.py:208
 msgid "This commission is not accepting submissions for now."
 msgstr "Cette commission n'accepte pas de projet pour le moment."
 
-#: plana/apps/projects/views/project_commission_fund.py:216
+#: plana/apps/projects/views/project_commission_fund.py:220
 msgid "This project is already submitted to this commission fund."
 msgstr "Ce projet est déjà proposé à ce fonds de commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:230
+#: plana/apps/projects/views/project_commission_fund.py:234
 msgid "Cannot submit a project to multiple commissions."
 msgstr "Non autorisé à proposer un projet pour plusieurs commissions."
 
-#: plana/apps/projects/views/project_commission_fund.py:276
+#: plana/apps/projects/views/project_commission_fund.py:280
 msgid "Not allowed to retrieve this project commission funds."
 msgstr ""
 "Non autorisé à récupérer les liens entre ce projet et ses fonds de "
 "commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:348
-#: plana/apps/projects/views/project_commission_fund.py:543
+#: plana/apps/projects/views/project_commission_fund.py:353
+#: plana/apps/projects/views/project_commission_fund.py:626
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
-#: plana/apps/projects/views/project_commission_fund.py:384
+#: plana/apps/projects/views/project_commission_fund.py:389
 msgid "Not allowed to update bearer fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du porteur pour cette commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:407
+#: plana/apps/projects/views/project_commission_fund.py:412
 msgid "Not allowed to update validator fields for this project's commission."
 msgstr ""
 "Non autorisé à mettre à jour les champs du validateur pour cette commission."
 
-#: plana/apps/projects/views/project_commission_fund.py:437
+#: plana/apps/projects/views/project_commission_fund.py:454
 msgid "New Commission Fund is not linked to the same fund that the old one."
 msgstr ""
 "La nouvelle liaison entre commission et fonds n'est pas liée au même fonds "
 "que la précédente."
 
-#: plana/apps/projects/views/project_commission_fund.py:450
+#: plana/apps/projects/views/project_commission_fund.py:467
 msgid "New Commission Fund is linked to an older commission that the old one."
 msgstr ""
 "La nouvelle liaison entre commission et fonds est liée à une plus vieille "
@@ -1655,24 +1659,24 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/utils.py:22
+#: plana/utils.py:23
 #, python-brace-format
 msgid "Password too short (at least {min_length} chars)."
 msgstr "Mot de passe trop court (au moins {min_length} caractères)."
 
-#: plana/utils.py:25
+#: plana/utils.py:26
 msgid "Password should contain at least one lowercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
 
-#: plana/utils.py:28
+#: plana/utils.py:29
 msgid "Password should contain at least one uppercase character."
 msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
 
-#: plana/utils.py:31
+#: plana/utils.py:32
 msgid "Password should contain at least one digit."
 msgstr "Le mot de passe doit contenir au moins un chiffre."
 
-#: plana/utils.py:36
+#: plana/utils.py:37
 msgid ""
 "Password should contain at least one special char ( / * - + = . , ; : ! ? & "
 "\" ' ( ) _ [ ] { } @ % # $ < > )."
@@ -1680,7 +1684,7 @@ msgstr ""
 "Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
 "= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."
 
-#: plana/utils.py:42
+#: plana/utils.py:43
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
