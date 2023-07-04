@@ -594,7 +594,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - Project status changes if all funds are given.
         """
         project_id = 2
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_VALIDATED"
         project.save()
 
@@ -608,7 +608,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(mail.outbox))
         self.assertTrue(len(mail.outbox[0].attachments), 1)
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 
         commission_fund_id = 2
@@ -618,7 +618,7 @@ class ProjectCommissionFundViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REVIEW_DRAFT")
 
     def test_patch_project_cf_success(self):
@@ -640,7 +640,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         pcf_data = ProjectCommissionFund.objects.get(project_id=1, commission_fund_id=3)
         self.assertEqual(pcf_data.amount_asked, patch_data["amount_asked"])
 
-        project = Project.objects.get(id=1)
+        project = Project.visible_objects.get(id=1)
         project.project_status = "PROJECT_PROCESSING"
         project.save()
         patch_data = {"is_validated_by_admin": True}
@@ -650,10 +650,10 @@ class ProjectCommissionFundViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(id=1)
+        project = Project.visible_objects.get(id=1)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 
-        project = Project.objects.get(id=2)
+        project = Project.visible_objects.get(id=2)
         project.project_status = "PROJECT_PROCESSING"
         project.save()
         patch_data = {"is_validated_by_admin": True}
@@ -663,7 +663,7 @@ class ProjectCommissionFundViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(id=2)
+        project = Project.visible_objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
 
         response = self.general_client.patch(
@@ -672,7 +672,7 @@ class ProjectCommissionFundViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.objects.get(id=2)
+        project = Project.visible_objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 
     def test_delete_project_cf_anonymous(self):

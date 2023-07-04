@@ -26,7 +26,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
     """/commissions/{id}/csv_export route"""
 
     permission_classes = [IsAuthenticated]
-    queryset = Project.objects.all()
+    queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
     @extend_schema(

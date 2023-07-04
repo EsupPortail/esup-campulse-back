@@ -130,7 +130,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         - Validated projects cannot receive a comment.
         """
         project_id = 1
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_REJECTED"
         project.save()
 
@@ -320,7 +320,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         comment_id = 1
         project_id = 2
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_REJECTED"
         project.save()
 
@@ -410,7 +410,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         comment_id = 1
         project_id = 2
-        project = Project.objects.get(id=project_id)
+        project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_REJECTED"
         project.save()
 

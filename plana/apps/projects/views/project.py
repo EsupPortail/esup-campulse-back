@@ -868,7 +868,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             # TODO Manual identifier for projects, don't know where to put it.
             """
             year = datetime.datetime.now().year
-            projects_year_count = Project.objects.filter(
+            projects_year_count = Project.visible_objects.filter(
                 manual_identifier__startswith=year
             ).count()
             project.manual_identifier = f"{year}{projects_year_count+1:04}"

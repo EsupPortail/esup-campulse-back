@@ -98,7 +98,7 @@ class CommissionExportsViewsTests(TestCase):
         content = response.content.decode('utf-8')
         csv_reader = csv.reader(io.StringIO(content))
 
-        total = Project.objects.filter(
+        total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
@@ -126,7 +126,7 @@ class CommissionExportsViewsTests(TestCase):
         content = response.content.decode('utf-8')
         csv_reader = csv.reader(io.StringIO(content))
 
-        total = Project.objects.filter(
+        total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
@@ -142,7 +142,7 @@ class CommissionExportsViewsTests(TestCase):
         content = response.content.decode('utf-8')
         csv_reader = csv.reader(io.StringIO(content))
 
-        total = Project.objects.filter(
+        total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id

@@ -152,7 +152,7 @@ class ProjectsViewsTests(TestCase):
         - A fund member gets only validated projects.
         """
         response = self.fund_client.get("/projects/")
-        fund_projects_cnt = Project.objects.filter(
+        fund_projects_cnt = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(
                     fund_id__in=GroupInstitutionFundUser.objects.filter(
@@ -982,7 +982,7 @@ class ProjectsViewsTests(TestCase):
         year = datetime.datetime.now().year
         # TODO Manual identifier is disabled.
         """
-        projects_year_count = Project.objects.filter(
+        projects_year_count = Project.visible_objects.filter(
             manual_identifier__startswith=year
         ).count()
         self.assertEqual(project.manual_identifier, f"{year}{projects_year_count:04}")

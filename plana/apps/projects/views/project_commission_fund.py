@@ -332,7 +332,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Updates details of a project linked to a commission fund object."""
         new_commission_fund = None
         try:
-            project = Project.objects.get(id=kwargs["project_id"])
+            project = Project.visible_objects.get(id=kwargs["project_id"])
             project_commission_fund = ProjectCommissionFund.objects.get(
                 project_id=kwargs["project_id"],
                 commission_fund_id=kwargs["commission_fund_id"],

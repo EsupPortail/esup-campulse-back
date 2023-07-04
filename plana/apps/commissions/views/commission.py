@@ -114,15 +114,19 @@ class CommissionListCreate(generics.ListCreateAPIView):
             )
             if to_bool(active_projects) is False:
                 self.queryset = self.queryset.filter(
-                    id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=inactive_projects
-                    ).values_list("commission_fund_id")
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
+                            project_id__in=inactive_projects
+                        ).values_list("commission_fund_id")
+                    ).values_list("commission_id")
                 )
             else:
                 self.queryset = self.queryset.exclude(
-                    id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=inactive_projects
-                    ).values_list("commission_fund_id")
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
+                            project_id__in=inactive_projects
+                        ).values_list("commission_fund_id")
+                    ).values_list("commission_id")
                 )
 
         if (
