@@ -1,6 +1,6 @@
 ---
 title: Tâches CRON
-weight: 107
+weight: 108
 ---
 
 Les différentes commandes exécutables via des tâches CRON se trouvent dans le répertoire `plana/management/commands` du dépôt, avec les commandes personnalisées d'aide au développement :
