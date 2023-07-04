@@ -724,7 +724,6 @@ class ProjectsViewsTests(TestCase):
         response = self.student_misc_client.patch(
             "/projects/1", project_data, content_type="application/json"
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_association_wrong_user(self):
