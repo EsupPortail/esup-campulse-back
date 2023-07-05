@@ -103,7 +103,7 @@
     "pk": 10,
     "fields": {
       "code": "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION",
-      "label": "Pdf de notification de décision de subventionnement FSDIE.",
+      "label": "PDF de notification de décision de subventionnement FSDIE.",
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU le Décret n°94-39 du 14.1.1994</p><p>VU la décision du Président de l'Université de Strasbourg portant délégation de signature au Chef du Service de la vie universitaire</p><p>VU la décision du Conseil d’Administration de l’Université de Strasbourg du 20 octobre 2009 portant délégation de signature au Vice-président Vie universitaire</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de {{ amount_earned }}€ est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre de l'opération {{ project_name }}.</p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, domaine fonctionnel D202.</p><h2>ARTICLE 3</h2><p>L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
       "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p>Prénom NOM</p><p>Vice-présidente Vie universitaire</p>",
@@ -115,7 +115,7 @@
     "pk": 11,
     "fields": {
       "code": "NOTIFICATION_FSDIE_ATTRIBUTION",
-      "label": "Pdf de notification de subventionnement FSDIE.",
+      "label": "PDF de notification de subventionnement FSDIE.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission}}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) vous a été attribué.</p><p>Cette subvention vous sera versée dans les prochaines semaines pas les services financiers de l'Université de Strasbourg.</p><p><b>Rappels:<br>- Le logo de l'Université de Strasbourg devra obligatoirement être présent sur tous les documents de communication du projet tels que tracts, affiches... (le logo est disponible sur simple demande au SVU).<br>- Il est impératif de nous faire parvenir un bilan moral ainsi qu'un bilan financier de l'opération dans un délai de 2 mois maximum après la date de l'opération.</b></p>",
       "footer": "<p>Prénom NOM</p><p>Chef de Service</p>",
@@ -127,7 +127,7 @@
     "pk": 12,
     "fields": {
       "code": "NOTIFICATION_IDEX_DECISION_ATTRIBUTION",
-      "label": "Pdf de notification de décision de subventionnement IdEx.",
+      "label": "PDF de notification de décision de subventionnement IdEx.",
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU la circulaire n° 2011-1021 du 3-11-2011 sur le développement de la vie associative et des initiatives étudiantes</p><p>VU la délibération du Conseil d’Administration du 12 mai 2009 établissant la Commission d’aide aux projets étudiants (CAPE) et adoptant la charte de subventionnement</p><p>VU la décision du Conseil d’Administration du 16 décembre 2014 validant le programme IdEx «Creative Thinkers» permettant de soutenir des projets portés par des associations étudiantes Unistra</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre du programme IdEx «Creative Thinkers» pour l'organisation de l'opération : {{ project_name }}.</p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, E-OTP W17SVU06ETUDX.</p><h2>ARTICLE 3</h2><p>L'agent Comptable de l'Université et le Chef du Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
       "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
@@ -139,7 +139,7 @@
     "pk": 13,
     "fields": {
       "code": "NOTIFICATION_IDEX_ATTRIBUTION",
-      "label": "Pdf de notification de subventionnement IdEx.",
+      "label": "PDF de notification de subventionnement IdEx.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {{ project_name }}.</p><p>Cette subvention d'un montant de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) est mise en oeuvre dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx, programme dédié aux projets étudiants.<p><p>Elle vous sera versée dans les prochaines semaines par les services financiers de l'Université de Strasbourg.</p><p>Conformément au règlement financier de l’Agence Nationale de la Recherche (ANR), vous êtes tenu de faire état de ce soutien financier accordé dans le cadre du Programme Investissements d’Avenir (PIA), dans toute action de communication interne ou externe. Cette mention au financement du PIA pourra notamment être réalisée à travers l’apposition du logotype «Investissements d’Avenir» sur les documents produits.</p><p><b>Il est impératif de nous faire parvenir un bilan moral ainsi qu’un bilan financier de l’opération dans un délai de 2 mois maximum après la date de l’opération.</b></p><p>Le Service de la vie universitaire et la Mission Investissements d’avenir de l’Université de Strasbourg restent à votre disposition pour la bonne exécution de votre projet.</p><p>Je vous prie d’agréer l’expression de mes salutations distinguées.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Vice présidente Vie universitaire</p>",
@@ -151,7 +151,7 @@
     "pk": 14,
     "fields": {
       "code": "NOTIFICATION_FSDIE_REJECTION",
-      "label": "Pdf de notification de refus de subventionnement FSDIE.",
+      "label": "PDF de notification de refus de subventionnement FSDIE.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Chef de Service</p>",
@@ -163,7 +163,7 @@
     "pk": 15,
     "fields": {
       "code": "NOTIFICATION_IDEX_REJECTION",
-      "label": "Pdf de notification de refus de subventionnement IdEx.",
+      "label": "PDF de notification de refus de subventionnement IdEx.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
@@ -175,7 +175,7 @@
     "pk": 16,
     "fields": {
       "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
-      "label": "Pdf de notification de report de subventionnement FSDIE.",
+      "label": "PDF de notification de report de subventionnement FSDIE.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Chef de Service</p>",
@@ -187,7 +187,7 @@
     "pk": 17,
     "fields": {
       "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
-      "label": "Pdf de notification de report de subventionnement IdEx.",
+      "label": "PDF de notification de report de subventionnement IdEx.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme Creative Thinkers» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Vice-présidente Vie universitaire</p>",
@@ -199,7 +199,7 @@
     "pk": 18,
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION",
-      "label": "Pdf de notification de décision d'attribution de subventionnement Culture-ActionS.",
+      "label": "PDF de notification de décision d'attribution de subventionnement Culture-ActionS.",
       "header": "<p>Mention Légale</p>",
       "body": "<h1>Décision de subventionnement</h1><p>{{ date }}</p><p>L'association {{ owner.name }} a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La demande a été acceptée.</p><h2>Articles légaux nécessaires</h2><p>Je suis une condition du contrat</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
@@ -211,7 +211,7 @@
     "pk": 19,
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION",
-      "label": "Pdf de notification d'attribution de subventionnement Culture-ActionS.",
+      "label": "PDF de notification d'attribution de subventionnement Culture-ActionS.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La demande a été acceptée pour le montant {{ amount_earned }}€ ({{ amount_earned_litteral }} euros).</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
@@ -223,7 +223,7 @@
     "pk": 20,
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_REJECTION",
-      "label": "Pdf de notification de refus de subventionnement Culture-ActionS.",
+      "label": "PDF de notification de refus de subventionnement Culture-ActionS.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants vous informe qu'elle refuse votre demande sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
@@ -235,11 +235,119 @@
     "pk": 21,
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED",
-      "label": "Pdf de notification de report de subventionnement Culture-ActionS.",
+      "label": "PDF de notification de report de subventionnement Culture-ActionS.",
       "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
       "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
       "sidebar": "<p>Complementary informations if necessary.</p>"
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 22,
+    "fields": {
+      "code": "ASSOCIATION_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation de l'annuaire des associations.",
+      "header": "Toutes les associations du Site Alsace sont ici !",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 23,
+    "fields": {
+      "code": "CHARTER_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation du module des chartes.",
+      "header": "Charte du Site Alsace",
+      "body": "<p>Pour les associations du Site Alsace</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 24,
+    "fields": {
+      "code": "CHARTER_HOME_SECOND_BLOCK",
+      "label": "Deuxième paragraphe de la page de présentation du module des chartes.",
+      "header": "Chartes FSDIE/IdEx",
+      "body": "<p>Pour les demandes d'agrément</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 25,
+    "fields": {
+      "code": "CHARTER_HOME_FIRST_FOOTER",
+      "label": "Premier bloc de pied de page de la page de présentation du module des chartes.",
+      "header": "",
+      "body": "<p>Lorem ipsum</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 26,
+    "fields": {
+      "code": "CHARTER_HOME_SECOND_FOOTER",
+      "label": "Deuxième bloc de pied de page de la page de présentation du module des chartes.",
+      "header": "",
+      "body": "<p>Lorem ipsum</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 27,
+    "fields": {
+      "code": "COMMISSION_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
+      "header": "CAPE",
+      "body": "<p>Pour les associations du Site Alsace</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 28,
+    "fields": {
+      "code": "COMMISSION_HOME_SECOND_BLOCK",
+      "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
+      "header": "CAPE",
+      "body": "<p>Pour les porteurs individuels de projet</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 29,
+    "fields": {
+      "code": "COMMISSION_HOME_FIRST_FOOTER",
+      "label": "Premier bloc de pied de page de la page de présentation des demandes de subventionnement.",
+      "header": "",
+      "body": "<p>Lorem ipsum</p>",
+      "footer": "",
+      "sidebar": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 30,
+    "fields": {
+      "code": "COMMISSION_HOME_SECOND_FOOTER",
+      "label": "Deuxième bloc de pied de page de la page de présentation des demandes de subventionnement.",
+      "header": "",
+      "body": "<p>Lorem ipsum</p>",
+      "footer": "",
+      "sidebar": ""
     }
   }
 ]
