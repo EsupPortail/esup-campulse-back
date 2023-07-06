@@ -48,9 +48,6 @@ class Association(models.Model):
         pregenerated_sizes=["list", "detail"],
         upload_to=get_logo_path,
     )
-    alt_logo = models.TextField(
-        _("Logo description"), default="", null=True, blank=True
-    )
     social_object = models.TextField(_("Social object"), default="")
     current_projects = models.TextField(_("Current projects"), default="")
     address = models.TextField(_("Address"), default="")

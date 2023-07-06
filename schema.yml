@@ -2980,10 +2980,6 @@ components:
           type: string
           title: Acronyme
           maxLength: 30
-        alt_logo:
-          type: string
-          nullable: true
-          title: Description du logo
         social_object:
           type: string
           title: Objet social
@@ -3137,10 +3133,6 @@ components:
           format: uri
           nullable: true
           title: Miniatures dynamiques pour le logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Description du logo
         student_count:
           type: integer
           maximum: 2147483647
@@ -3320,10 +3312,6 @@ components:
         is_site:
           type: boolean
           title: Est site
-        alt_logo:
-          type: string
-          nullable: true
-          title: Description du logo
         path_logo:
           type: object
           additionalProperties: {}
@@ -4188,10 +4176,6 @@ components:
           format: binary
           nullable: true
           title: Miniatures dynamiques pour le logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Description du logo
         student_count:
           type: integer
           maximum: 2147483647
