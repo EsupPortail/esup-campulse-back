@@ -3648,8 +3648,9 @@ components:
         footer:
           type: string
           title: Pied de page
-        sidebar:
+        aside:
           type: string
+          title: Sidebar
       required:
       - body
       - code

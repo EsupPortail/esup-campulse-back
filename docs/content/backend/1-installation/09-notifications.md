@@ -73,4 +73,4 @@ Les contenus sont par défaut sous format texte, cependant il est recommandé d'
 
 Pour utiliser les varriables ci-dessus, il suffit de les intégrer au texte de contenu sous le format `{{ var_name }}`. Elles seront alors reconnues et interprétées par le système de templating Django.
 
-Pour chaque type de notification il n'y a qu'un seul objet Content lié, composé lui-même d'un `header`, d'un `body`, d'un `footer`, et d'une `sidebar` qui peuvent être utilisés pour ajouter du contenu supplémentaire au document.
+Pour chaque type de notification il n'y a qu'un seul objet Content lié, composé lui-même d'un `header`, d'un `body`, d'un `footer`, et d'un `aside` qui peuvent être utilisés pour ajouter du contenu supplémentaire au document.

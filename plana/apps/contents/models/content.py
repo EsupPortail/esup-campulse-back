@@ -15,7 +15,7 @@ class Content(models.Model):
     header = models.TextField(_("Header"), default="")
     body = models.TextField(_("Body"), blank=False, null=False)
     footer = models.TextField(_("Footer"), default="")
-    sidebar = models.TextField(_("Sidebar"), default="")
+    aside = models.TextField(_("Sidebar"), default="")
 
     def __str__(self):
         return f"{self.code} : {self.label}"
