@@ -12,6 +12,7 @@ class Content(models.Model):
     label = models.CharField(
         _("Label"), max_length=128, blank=False, null=False, unique=True
     )
+    title = models.CharField(_("Title"), max_length=512, default="")
     header = models.TextField(_("Header"), default="")
     body = models.TextField(_("Body"), blank=False, null=False)
     footer = models.TextField(_("Footer"), default="")

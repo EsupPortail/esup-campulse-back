@@ -1,15 +1,19 @@
+h2 {
+    font-weight: bold;
+}
+
 .float-left {
+    bottom: 0;
     float: left;
-    width: 30%;
     margin-top: 20px;
     position: absolute;
-    bottom: 0;
+    width: 30%;
 }
 
 .float-right {
-  float: right;
-  width: 68%;
-  margin-top: 20px;
+    float: right;
+    width: 68%;
+    margin-top: 20px;
 }
 
 .head-float-left {
@@ -22,28 +26,24 @@
     width: 60%;
 }
 
-.text-sm {
-    font-size: 15px;
+.align-right {
+    text-align: right;
 }
 
-.unistra-d {
-    font-family: "Unistra D", Arial, sans-serif;
+.text-sm {
+    font-size: 15px;
 }
 
 .unistra-a {
     font-family: "Unistra A", Arial, sans-serif;
 }
 
-.align-right {
-    text-align: right;
-}
-
-h2 {
-    font-weight: bold;
+.unistra-d {
+    font-family: "Unistra D", Arial, sans-serif;
 }
 
 .border {
     border-color: #000000;
-    border-width: 1px;
     border-style: solid;
+    border-width: 1px;
 }

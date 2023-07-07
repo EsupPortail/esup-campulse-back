@@ -3627,6 +3627,9 @@ components:
         label:
           type: string
           maxLength: 128
+        title:
+          type: string
+          maxLength: 512
         header:
           type: string
           title: En-tête

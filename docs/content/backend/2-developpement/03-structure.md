@@ -16,7 +16,7 @@ Le dossier `plana/apps` du backend est découpé en huit sous-applications compr
   - `commission_fund` : fonds de subventionnement représentés aux différentes dates de commissions.
 
 - `contents`
-  - `content` : contenus divers affichés sur le frontend (page d'accueil, contact, ...).
+  - `content` : contenus divers affichés sur le frontend (page d'accueil, contact, ...) et templates de PDF.
   - Le module comprend également le set de données définissant le nom initial de l'application dans la table `django_site`.
 
 - `documents`

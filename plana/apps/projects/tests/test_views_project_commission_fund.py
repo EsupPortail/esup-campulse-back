@@ -570,12 +570,12 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - The route can be accessed by a manager user.
         """
-        project_id = 1
-        commission_fund_id = 3
+        project_id = 2
+        commission_fund_id = 1
         self.assertFalse(len(mail.outbox))
         response = self.general_client.patch(
             f"/projects/{project_id}/commission_funds/{commission_fund_id}",
-            {"new_commission_fund_id": 5},
+            {"new_commission_fund_id": 4},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
