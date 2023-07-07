@@ -1,8 +1,6 @@
 """Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
 import datetime
-import os
-import re
 
 import weasyprint
 from django.conf import settings
@@ -18,25 +16,6 @@ def check_valid_password(password):
     """Check password standard rules and zxcvbn rules."""
 
     messages = []
-    min_length = 12
-    if len(password) < min_length:
-        messages += [_(f"Password too short (at least {min_length} chars).")]
-
-    if not re.search("[a-z]+", password):
-        messages += [_("Password should contain at least one lowercase character.")]
-
-    if not re.search("[A-Z]+", password):
-        messages += [_("Password should contain at least one uppercase character.")]
-
-    if not re.search("[0-9]+", password):
-        messages += [_("Password should contain at least one digit.")]
-
-    if not re.search("[!-/:-@[-`{-~]", password):
-        messages += [
-            _(
-                "Password should contain at least one special char ( / * - + = . , ; : ! ? & \" \' ( ) _ [ ] { } @ % # $ < > )."
-            )
-        ]
 
     password_result = zxcvbn(password)
     if password_result["score"] < 4 and len(messages) == 0:
