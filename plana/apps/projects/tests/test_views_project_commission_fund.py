@@ -621,6 +621,15 @@ class ProjectCommissionFundViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REVIEW_DRAFT")
 
+        project_id = 1
+        commission_fund_id = 3
+        response = self.general_client.patch(
+            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
+            {"amount_earned": 20},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_patch_project_cf_success(self):
         """
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
