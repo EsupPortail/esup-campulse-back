@@ -170,11 +170,11 @@
       "real_start_date": "2089-04-23T15:30:00.000Z",
       "real_end_date": "2089-04-27T19:00:00.000Z",
       "real_location": "16 rue René Descartes, 67000 Strasbourg, FRANCE",
-      "review": "Je pense que ça c'est bien passé.",
-      "impact_students": "Les gens avaient l'air contents.",
-      "description": "On a fait des jeux tout l'après-midi.",
-      "difficulties": "J'ai souvent perdu aux jeux en question.",
-      "improvements": "Proposer des jeux dans lesquels je gagne."
+      "review": "Bilan.",
+      "impact_students": "Impact étudiant.",
+      "description": "Description.",
+      "difficulties": "Difficultés.",
+      "improvements": "Améliorations."
     }
   },
   {
@@ -207,11 +207,11 @@
       "real_start_date": "2089-01-28T12:30:00.000Z",
       "real_end_date": "2089-01-28T17:00:00.000Z",
       "real_location": "Mulhouse",
-      "review": "Bof",
-      "impact_students": "On en a pas vu.",
-      "description": "On avait prévu des trucs, mais on a rien fait finalement.",
-      "difficulties": "Finalement on a tout reporté au dernier moment alors personne n'est venu.",
-      "improvements": "Ne pas tout reporter au dernier moment."
+      "review": "Bilan.",
+      "impact_students": "Impact étudiant.",
+      "description": "Description.",
+      "difficulties": "Difficultés.",
+      "improvements": "Améliorations."
     }
   },
   {
@@ -243,11 +243,11 @@
       "real_start_date": "2089-04-23T15:30:00.000Z",
       "real_end_date": "2089-04-27T19:00:00.000Z",
       "real_location": "16 rue René Descartes, 67000 Strasbourg, FRANCE",
-      "review": "Je pense que ça c'est bien passé.",
-      "impact_students": "Les gens avaient l'air contents.",
-      "description": "On a fait des jeux tout l'après-midi.",
-      "difficulties": "J'ai souvent perdu aux jeux en question.",
-      "improvements": "Proposer des jeux dans lesquels je gagne."
+      "review": "Bilan.",
+      "impact_students": "Impact étudiant.",
+      "description": "Description.",
+      "difficulties": "Difficultés.",
+      "improvements": "Améliorations."
     }
   },
   {
@@ -280,11 +280,11 @@
       "real_start_date": "2089-01-28T12:30:00.000Z",
       "real_end_date": "2089-01-28T17:00:00.000Z",
       "real_location": "Mulhouse",
-      "review": "Bof",
-      "impact_students": "On en a pas vu.",
-      "description": "On avait prévu des trucs, mais on a rien fait finalement.",
-      "difficulties": "Finalement on a tout reporté au dernier moment alors personne n'est venu.",
-      "improvements": "Ne pas tout reporter au dernier moment."
+      "review": "Bilan.",
+      "impact_students": "Impact étudiant.",
+      "description": "Description.",
+      "difficulties": "Difficultés.",
+      "improvements": "Améliorations."
     }
   },
   {
@@ -304,11 +304,11 @@
       "amount_all_audience": 2,
       "ticket_price": 0,
       "individual_cost": 2,
-      "goals": "Tester Arpanet.",
-      "summary": "Après-midi de tests sur Arpanet.",
-      "planned_activities": "Casser des ordinateurs.",
-      "prevention_safety": "Des extincteurs.",
-      "marketing_campaign": "Surtout pas, c'est confidentiel.",
+      "goals": "Ceci sont les objectifs de notre projet en tant qu'association. Par exemple rassembler les étudiants autour d'une cause commune et passer un bon moment.",
+      "summary": "Récapitulatif simple du projet.",
+      "planned_activities": "Rassemblement autour du thème de notre association, stands de nourriture payants, vente de t-shirts, échange et interactions avec les participants.",
+      "prevention_safety": "Actions de sécurité et de prévention (vérifications préalables du matériel par exemple).",
+      "marketing_campaign": "Des posts sur les réseaux sociaux de l'association et de ses membres, des affiches et quelques tracts.",
       "project_status": "PROJECT_REVIEW_VALIDATED",
       "creation_date": "1970-01-01T00:00:00.000Z",
       "edition_date": "1970-01-01T00:00:00.000Z",
@@ -316,12 +316,12 @@
       "income": 0,
       "real_start_date": "1970-01-02T00:00:00.000Z",
       "real_end_date": "1970-01-02T00:00:00.000Z",
-      "real_location": "Sur Arpanet",
-      "review": "Et bien ça a à peu près marché.",
-      "impact_students": "Y'en avait pas.",
-      "description": "On a fait tous les tests qu'on voulait.",
-      "difficulties": "Une machine a pris feu.",
-      "improvements": "Plus d'extincteurs."
+      "real_location": "Mulhouse",
+      "review": "Bilan.",
+      "impact_students": "Impact étudiant.",
+      "description": "Description.",
+      "difficulties": "Difficultés.",
+      "improvements": "Améliorations."
     }
   }
 ]
