@@ -506,69 +506,98 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
-                attach_custom=attachment,
+                temp_attachments=[attachment],
             )
 
         if "amount_earned" in request.data:
-            attachment = None
+            attachments = []
+            managers_emails = []
             if int(request.data["amount_earned"]) == 0:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
                 templates_name = f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
                 if templates_name in settings.TEMPLATES_NOTIFICATIONS:
                     # Creating context for notifications attachments
                     content = Content.objects.get(code=templates_name)
-                    attachment = {
-                        "template_name": settings.TEMPLATES_NOTIFICATIONS[
-                            templates_name
-                        ],
-                        "filename": f"{slugify(content.title)}.pdf",
-                        "context_attach": {
-                            "project_name": project.name,
-                            "date": datetime.date.today(),
-                            "date_commission": commission.commission_date,
-                            "owner": owner,
-                            "content": content,
-                            "comment": ProjectComment.objects.filter(project=project.id)
-                            .latest("creation_date")
-                            .text,
-                        },
-                        "mimetype": "application/pdf",
-                        "request": request,
-                    }
+                    attachments.append(
+                        {
+                            "template_name": settings.TEMPLATES_NOTIFICATIONS[
+                                templates_name
+                            ],
+                            "filename": f"{slugify(content.title)}.pdf",
+                            "context_attach": {
+                                "project_name": project.name,
+                                "date": datetime.date.today(),
+                                "date_commission": commission.commission_date,
+                                "owner": owner,
+                                "content": content,
+                                "comment": ProjectComment.objects.filter(
+                                    project=project.id
+                                )
+                                .latest("creation_date")
+                                .text,
+                            },
+                            "mimetype": "application/pdf",
+                            "request": request,
+                        }
+                    )
             else:
                 template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
-                templates_name = f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION"
-                if templates_name in settings.TEMPLATES_NOTIFICATIONS:
-                    # Creating context for notifications attachments
-                    content = Content.objects.get(code=templates_name)
-                    attachment = {
-                        "template_name": settings.TEMPLATES_NOTIFICATIONS[
+                for templates_name in [
+                    f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION",
+                    f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION",
+                ]:
+                    if templates_name in settings.TEMPLATES_NOTIFICATIONS:
+                        # Creating context for notifications attachments
+                        content = Content.objects.get(code=templates_name)
+                        attachments.append(
+                            {
+                                "template_name": settings.TEMPLATES_NOTIFICATIONS[
+                                    templates_name
+                                ],
+                                "filename": f"{slugify(content.title)}.pdf",
+                                "context_attach": {
+                                    "amount_earned": request.data["amount_earned"],
+                                    "amount_earned_litteral": num2words.num2words(
+                                        request.data["amount_earned"],
+                                        lang=locale.getlocale()[0],
+                                    ),
+                                    "project_name": project.name,
+                                    "date": datetime.date.today(),
+                                    "date_commission": commission.commission_date,
+                                    "owner": owner,
+                                    "content": content,
+                                },
+                                "mimetype": "application/pdf",
+                                "request": request,
+                            }
+                        )
+                        if (
                             templates_name
-                        ],
-                        "filename": f"{slugify(content.title)}.pdf",
-                        "context_attach": {
-                            "amount_earned": request.data["amount_earned"],
-                            "amount_earned_litteral": num2words.num2words(
-                                request.data["amount_earned"],
-                                lang=locale.getlocale()[0],
-                            ),
-                            "project_name": project.name,
-                            "date": datetime.date.today(),
-                            "date_commission": commission.commission_date,
-                            "owner": owner,
-                            "content": content,
-                        },
-                        "mimetype": "application/pdf",
-                        "request": request,
-                    }
+                            == f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION"
+                        ):
+                            if project.association is not None:
+                                managers_emails = list(
+                                    Institution.objects.get(
+                                        id=project.association.institution_id
+                                    )
+                                    .default_institution_managers()
+                                    .values_list("email", flat=True)
+                                )
+                            if project.user is not None:
+                                for user_to_check in User.objects.filter(
+                                    is_superuser=False, is_staff=True
+                                ):
+                                    if user_to_check.has_perm("users.change_user_misc"):
+                                        managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
+                cc_=managers_emails,
                 subject=template.subject.replace(
                     "{{ site_name }}", context["site_name"]
                 ),
                 message=template.parse_vars(request.user, request, context),
-                attach_custom=attachment,
+                temp_attachments=attachments,
             )
 
         for field in request.data:

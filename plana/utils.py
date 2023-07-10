@@ -38,8 +38,10 @@ def send_mail(
     subject,
     message,
     from_='',
+    cc_='',
+    bcc_='',
     attachments=None,
-    attach_custom=None,
+    temp_attachments=None,
     has_html=True,
     **kwargs,
 ):
@@ -47,29 +49,31 @@ def send_mail(
     to_ = _listify(to_)
     from_ = from_ or settings.DEFAULT_FROM_EMAIL
 
-    mail = EmailMultiAlternatives(subject, message, from_, to_, **kwargs)
+    mail = EmailMultiAlternatives(
+        subject, message, from_, to_, cc=cc_, bcc=bcc_, **kwargs
+    )
     if has_html:
         mail.attach_alternative(message, "text/html")
 
-    # Attachments
+    # Attachments for existing files
     attachments = attachments or ()
     for att in attachments:
         with att.storage.open(f'{att.filepath}/{att.filename}', 'rb') as file:
             content = file.read()
             mail.attach(att.filename, content, att.mimetype)
 
-    # Attachments for generated documents
-    # TODO : multiple attachments custom ?
-    if attach_custom is not None:
-        mail.attach(
-            attach_custom["filename"],
-            create_pdf(
-                attach_custom["context_attach"],
-                attach_custom["request"],
-                attach_custom["template_name"],
-            ),
-            attach_custom["mimetype"],
-        )
+    # Attachments for generated files
+    if temp_attachments is not None:
+        for temp_attachment in temp_attachments:
+            mail.attach(
+                temp_attachment["filename"],
+                create_pdf(
+                    temp_attachment["context_attach"],
+                    temp_attachment["request"],
+                    temp_attachment["template_name"],
+                ),
+                temp_attachment["mimetype"],
+            )
 
     mail.send()
 

@@ -3629,6 +3629,7 @@ components:
           maxLength: 128
         title:
           type: string
+          title: Titre
           maxLength: 512
         header:
           type: string
@@ -3641,7 +3642,7 @@ components:
           title: Pied de page
         aside:
           type: string
-          title: Sidebar
+          title: Barre annexe
       required:
       - body
       - code
@@ -3705,7 +3706,7 @@ components:
         expiration_day:
           type: string
           nullable: true
-          title: Document expiration day of the year in %m-%d format
+          title: Jour d'expiration du document au format %m-%d
           maxLength: 5
         path_template:
           type: string
@@ -4365,6 +4366,7 @@ components:
           type: string
           nullable: true
           minLength: 1
+          title: Identifiant manuel
           maxLength: 8
         planned_start_date:
           type: string
@@ -4443,6 +4445,8 @@ components:
         sustainable_development:
           type: string
           minLength: 1
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
         project_status:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
@@ -4551,6 +4555,7 @@ components:
           title: Est validé par l'équipe d'administration
         is_student:
           type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -4581,6 +4586,7 @@ components:
           title: Est validé par l'équipe d'administration
         is_student:
           type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -4608,6 +4614,7 @@ components:
         manual_identifier:
           type: string
           nullable: true
+          title: Identifiant manuel
           maxLength: 8
         planned_start_date:
           type: string
@@ -4688,6 +4695,8 @@ components:
           title: Campagne de communication
         sustainable_development:
           type: string
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
         project_status:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
@@ -4921,6 +4930,7 @@ components:
         manual_identifier:
           type: string
           nullable: true
+          title: Identifiant manuel
           maxLength: 8
         association:
           type: integer
@@ -5213,6 +5223,8 @@ components:
         sustainable_development:
           type: string
           minLength: 1
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -5304,6 +5316,7 @@ components:
           title: Est validé par l'équipe d'administration
         is_student:
           type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
@@ -5418,6 +5431,7 @@ components:
           title: Est validé par l'équipe d'administration
         is_student:
           type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
           title: Peut soumettre des projets
