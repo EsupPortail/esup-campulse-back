@@ -763,6 +763,22 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             "site_domain": current_site.domain,
             "site_name": current_site.name,
         }
+
+        if (
+            new_project_status
+            in Project.ProjectStatus.get_identifier_project_statuses()
+        ):
+            now = datetime.datetime.now()
+            if now.month > 8:
+                year = now.year
+            else:
+                year = now.year - 1
+            projects_year_count = Project.visible_objects.filter(
+                manual_identifier__startswith=year
+            ).count()
+            project.manual_identifier = f"{year}{projects_year_count+1:04}"
+            project.save()
+
         if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
             document_process_types = []
             association_email_template_code = ""
@@ -865,16 +881,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         elif (
             new_project_status in Project.ProjectStatus.get_validator_project_statuses()
         ):
-            # TODO Manual identifier for projects, don't know where to put it.
-            """
-            year = datetime.datetime.now().year
-            projects_year_count = Project.visible_objects.filter(
-                manual_identifier__startswith=year
-            ).count()
-            project.manual_identifier = f"{year}{projects_year_count+1:04}"
-            project.save()
-            """
-
             mail_templates_codes_by_status = {
                 "PROJECT_DRAFT": "PROJECT_NEEDS_CHANGES",
                 "PROJECT_REJECTED": "PROJECT_REJECTED",

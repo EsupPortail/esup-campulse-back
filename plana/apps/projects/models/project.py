@@ -74,6 +74,12 @@ class Project(models.Model):
             ]
 
         @staticmethod
+        def get_identifier_project_statuses():
+            """If project has one of these statuses, create manual identifier for it."""
+
+            return ["PROJECT_PROCESSING"]
+
+        @staticmethod
         def get_email_project_processing_project_statuses():
             """If project has one of these statuses, send an email to warn managers."""
 

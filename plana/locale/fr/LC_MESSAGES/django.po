@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 11:06+0200\n"
+"POT-Creation-Date: 2023-07-10 13:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: plana/apps/institutions/models/institution.py:10
 #: plana/apps/institutions/models/institution_component.py:9
 #: plana/apps/projects/models/category.py:9
-#: plana/apps/projects/models/project.py:140
+#: plana/apps/projects/models/project.py:146
 msgid "Name"
 msgstr "Nom"
 
@@ -164,7 +164,7 @@ msgid "Charter date"
 msgstr "Date de la charte"
 
 #: plana/apps/associations/models/association.py:88
-#: plana/apps/projects/models/project.py:189
+#: plana/apps/projects/models/project.py:195
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
@@ -199,7 +199,7 @@ msgstr "Composante"
 
 #: plana/apps/associations/models/association.py:122
 #: plana/apps/documents/models/document_upload.py:52
-#: plana/apps/projects/models/project.py:151 plana/apps/users/models/user.py:25
+#: plana/apps/projects/models/project.py:157 plana/apps/users/models/user.py:25
 #: plana/apps/users/models/user.py:41
 msgid "Association"
 msgstr "Association"
@@ -298,7 +298,7 @@ msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:755
-#: plana/apps/projects/views/project.py:815
+#: plana/apps/projects/views/project.py:831
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -393,43 +393,48 @@ msgid "Project ID"
 msgstr "Numéro de projet"
 
 #: plana/apps/commissions/views/commission_export.py:96
+#: plana/apps/projects/models/project.py:148
+msgid "Manual identifier"
+msgstr "Identifiant manuel"
+
+#: plana/apps/commissions/views/commission_export.py:97
 msgid "Association name"
 msgstr "Nom de l'association"
 
-#: plana/apps/commissions/views/commission_export.py:97
+#: plana/apps/commissions/views/commission_export.py:98
 msgid "Student misc name"
 msgstr "Nom du porteur individuel"
 
-#: plana/apps/commissions/views/commission_export.py:98
+#: plana/apps/commissions/views/commission_export.py:99
 msgid "Project start date"
 msgstr "Date de début de projet"
 
-#: plana/apps/commissions/views/commission_export.py:99
+#: plana/apps/commissions/views/commission_export.py:100
 msgid "Project end date"
 msgstr "Date de fin de projet"
 
-#: plana/apps/commissions/views/commission_export.py:100
+#: plana/apps/commissions/views/commission_export.py:101
 msgid "First edition"
 msgstr "Est la première édition du projet"
 
-#: plana/apps/commissions/views/commission_export.py:101
+#: plana/apps/commissions/views/commission_export.py:102
 #: plana/apps/projects/models/category.py:16
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/commissions/views/commission_export.py:107
+#: plana/apps/commissions/views/commission_export.py:108
 msgid "Amount asked "
 msgstr "Montant demandé "
 
-#: plana/apps/commissions/views/commission_export.py:108
+#: plana/apps/commissions/views/commission_export.py:109
 msgid "Amount earned "
 msgstr "Montant obtenu "
 
-#: plana/apps/commissions/views/commission_export.py:153
+#: plana/apps/commissions/views/commission_export.py:154
 msgid "Yes"
 msgstr "Oui"
 
-#: plana/apps/commissions/views/commission_export.py:156
+#: plana/apps/commissions/views/commission_export.py:157
 msgid "No"
 msgstr "Non"
 
@@ -573,7 +578,7 @@ msgid "Documents"
 msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:46
-#: plana/apps/projects/models/project.py:148
+#: plana/apps/projects/models/project.py:154
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:64
 #: plana/apps/users/models/user.py:357
@@ -581,7 +586,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:58
-#: plana/apps/projects/models/project.py:213
+#: plana/apps/projects/models/project.py:219
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:16
 #: plana/apps/projects/models/project_commission_fund.py:13
@@ -778,127 +783,123 @@ msgstr "Bilan de Projet validé"
 msgid "Project Canceled"
 msgstr "Projet Annulé"
 
-#: plana/apps/projects/models/project.py:142
-msgid "Manual identifier"
-msgstr "Identifiant manuel"
-
-#: plana/apps/projects/models/project.py:144
+#: plana/apps/projects/models/project.py:150
 msgid "Planned start date"
 msgstr "Date de début prévue"
 
-#: plana/apps/projects/models/project.py:145
+#: plana/apps/projects/models/project.py:151
 msgid "Planned end date"
 msgstr "Date de fin prévue"
 
-#: plana/apps/projects/models/project.py:146
+#: plana/apps/projects/models/project.py:152
 msgid "Planned location"
 msgstr "Lieu prévu"
 
-#: plana/apps/projects/models/project.py:155
+#: plana/apps/projects/models/project.py:161
 msgid "Association User"
 msgstr "Membre d'association"
 
-#: plana/apps/projects/models/project.py:160
+#: plana/apps/projects/models/project.py:166
 msgid "Budget on previous edition"
 msgstr "Budget de l'édition précédente"
 
-#: plana/apps/projects/models/project.py:162
+#: plana/apps/projects/models/project.py:168
 msgid "Target audience"
 msgstr "Public visé"
 
-#: plana/apps/projects/models/project.py:164
+#: plana/apps/projects/models/project.py:170
 msgid "Amount of students in target audience"
 msgstr "Nombre d'étudiants dans le public visé"
 
-#: plana/apps/projects/models/project.py:167
+#: plana/apps/projects/models/project.py:173
 msgid "Amount of all people in target audience"
 msgstr "Nombre de personnes au total dans le public visé"
 
-#: plana/apps/projects/models/project.py:170
+#: plana/apps/projects/models/project.py:176
 msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
-#: plana/apps/projects/models/project.py:173
+#: plana/apps/projects/models/project.py:179
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:175
+#: plana/apps/projects/models/project.py:181
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:176
+#: plana/apps/projects/models/project.py:182
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:177
+#: plana/apps/projects/models/project.py:183
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:179
+#: plana/apps/projects/models/project.py:185
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:181
+#: plana/apps/projects/models/project.py:187
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:182
+#: plana/apps/projects/models/project.py:188
 msgid "Sustainable development"
 msgstr ""
 "Actions en rapport avec la DDRS (Développement Durable et Responsabilité "
 "Sociétale)"
 
-#: plana/apps/projects/models/project.py:184
+#: plana/apps/projects/models/project.py:190
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:190
+#: plana/apps/projects/models/project.py:196
 #: plana/apps/projects/models/project_comment.py:13
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/projects/models/project.py:191
+#: plana/apps/projects/models/project.py:197
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:192
+#: plana/apps/projects/models/project.py:198
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:193
+#: plana/apps/projects/models/project.py:199
 msgid "Real start date"
 msgstr "Date de début réelle"
 
-#: plana/apps/projects/models/project.py:194
+#: plana/apps/projects/models/project.py:200
 msgid "Real end date"
 msgstr "Date de fin réelle"
 
-#: plana/apps/projects/models/project.py:195
+#: plana/apps/projects/models/project.py:201
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:197
+#: plana/apps/projects/models/project.py:203
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:199
+#: plana/apps/projects/models/project.py:205
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:201
+#: plana/apps/projects/models/project.py:207
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:203
+#: plana/apps/projects/models/project.py:209
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:204
+#: plana/apps/projects/models/project.py:210
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:214
+#: plana/apps/projects/models/project.py:220
 msgid "Projects"
 msgstr "Projets"
 
@@ -1659,32 +1660,7 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/utils.py:23
-#, python-brace-format
-msgid "Password too short (at least {min_length} chars)."
-msgstr "Mot de passe trop court (au moins {min_length} caractères)."
-
-#: plana/utils.py:26
-msgid "Password should contain at least one lowercase character."
-msgstr "Le mot de passe doit contenir au moins un caractère miniscule."
-
-#: plana/utils.py:29
-msgid "Password should contain at least one uppercase character."
-msgstr "Le mot de passe doit contenir au moins un caractère majuscule."
-
-#: plana/utils.py:32
-msgid "Password should contain at least one digit."
-msgstr "Le mot de passe doit contenir au moins un chiffre."
-
-#: plana/utils.py:37
-msgid ""
-"Password should contain at least one special char ( / * - + = . , ; : ! ? & "
-"\" ' ( ) _ [ ] { } @ % # $ < > )."
-msgstr ""
-"Le mot de passe doit contenir au moins un caractère spécial ( / * - + "
-"= . , ; : ! ? & \" ' ( ) _ [ ] { } @ % # $ < > )."
-
-#: plana/utils.py:43
+#: plana/utils.py:22
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "

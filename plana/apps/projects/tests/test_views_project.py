@@ -978,14 +978,6 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=4)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
-        year = datetime.datetime.now().year
-        # TODO Manual identifier is disabled.
-        """
-        projects_year_count = Project.visible_objects.filter(
-            manual_identifier__startswith=year
-        ).count()
-        self.assertEqual(project.manual_identifier, f"{year}{projects_year_count:04}")
-        """
 
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
         response = self.general_client.patch(
