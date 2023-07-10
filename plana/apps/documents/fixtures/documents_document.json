@@ -210,7 +210,7 @@
       "description": "Certificat envoyé par le Tribunal Judiciaire",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -361,9 +361,9 @@
     "model": "documents.document",
     "pk": 21,
     "fields": {
-      "name": "Bilan",
+      "name": "Bilan Financier",
       "acronym": "BILAN",
-      "description": "Bilan",
+      "description": "Bilan Financier",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,
