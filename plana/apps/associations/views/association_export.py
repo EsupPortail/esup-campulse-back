@@ -135,7 +135,7 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
             "Content-Disposition"
         ] = "Content-Disposition: attachment; filename=associations_export.csv"
 
-        writer = csv.writer(http_response)
+        writer = csv.writer(http_response, delimiter=";")
         # Write column titles for the CSV file
         writer.writerow(
             [

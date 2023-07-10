@@ -120,7 +120,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
             "Content-Disposition"
         ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
 
-        writer = csv.writer(http_response)
+        writer = csv.writer(http_response, delimiter=";")
         # Write column titles for the CSV file
         writer.writerow([field for field in fields])
 
