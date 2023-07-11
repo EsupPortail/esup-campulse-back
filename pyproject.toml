@@ -63,6 +63,7 @@ djangorestframework-simplejwt = "^5.2.0"
 dj-rest-auth = "^2.2.0"
 drf-spectacular = "^0.24.0"
 britney = "^0.5.1"
+pillow = "^9.5.0" # needed because ANTIALIAS is deprecated in v10.
 psycopg2-binary = "2.8.6"
 pyrage = "^1.0.3"
 urllib3 = ">=1.26,<2" # needed to avoid dependency problems when updating boto3 and botocore
