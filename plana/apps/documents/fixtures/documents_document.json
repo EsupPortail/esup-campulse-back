@@ -362,7 +362,7 @@
     "pk": 21,
     "fields": {
       "name": "Bilan Financier",
-      "acronym": "BILAN",
+      "acronym": "BILAN_FINANCIER",
       "description": "Bilan Financier",
       "contact": "???",
       "is_multiple": false,

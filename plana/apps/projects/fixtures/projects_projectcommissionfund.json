@@ -123,5 +123,17 @@
       "amount_asked": 2,
       "amount_earned": 1
     }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 11,
+    "fields": {
+      "project": 10,
+      "commission_fund": 3,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200
+    }
   }
 ]

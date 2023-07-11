@@ -94,5 +94,21 @@
       "category": 8,
       "project": 8
     }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 10,
+    "fields": {
+      "category": 7,
+      "project": 10
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 11,
+    "fields": {
+      "category": 8,
+      "project": 10
+    }
   }
 ]

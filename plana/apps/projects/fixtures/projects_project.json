@@ -323,5 +323,41 @@
       "difficulties": "Difficultés.",
       "improvements": "Améliorations."
     }
+  },
+  {
+    "model": "projects.project",
+    "pk": 10,
+    "fields": {
+      "name": "Projet validé porté par une association",
+      "planned_start_date": "2089-01-26T12:30:00.000Z",
+      "planned_end_date": "2089-01-26T17:00:00.000Z",
+      "planned_location": "16 rue René Descartes, 67000 Strasbourg, FRANCE",
+      "association": 2,
+      "association_user": 5,
+      "budget_previous_edition": 0,
+      "target_audience": "Les étudiants de l'association et ceux qui veulent nous rejoindre.",
+      "amount_students_audience": 50,
+      "amount_all_audience": 70,
+      "ticket_price": 10,
+      "individual_cost": 9,
+      "goals": "Ceci sont les objectifs de notre projet en tant qu'association. Par exemple rassembler les étudiants autour d'une cause commune et passer un bon moment. Saviez-vous que le projet est en cours de validation ?",
+      "summary": "Récapitulatif simple du projet en cours de validation.",
+      "planned_activities": "Rassemblement autour du thème de notre association, stands de nourriture payants, vente de t-shirts, échange et interactions avec les participants.",
+      "prevention_safety": "Actions de sécurité et de prévention (vérifications préalables du matériel par exemple).",
+      "marketing_campaign": "Des posts sur les réseaux sociaux de l'association et de ses membres, des affiches et quelques tracts.",
+      "project_status": "PROJECT_VALIDATED",
+      "creation_date": "2089-04-12T09:32:14.000Z",
+      "edition_date": "2089-05-03T10:18:47.000Z",
+      "outcome": 0,
+      "income": 0,
+      "real_start_date": null,
+      "real_end_date": null,
+      "real_location": "",
+      "review": "",
+      "impact_students": "",
+      "description": "",
+      "difficulties": "",
+      "improvements": ""
+    }
   }
 ]
