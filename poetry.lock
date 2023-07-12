@@ -659,14 +659,14 @@ test = ["flake8", "isort", "pytest"]
 
 [[package]]
 name = "da-vinci"
-version = "0.3.0"
+version = "0.4.0"
 description = "A simple image manipulation library aiming to make common image tasks easy."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "da-vinci-0.3.0.tar.gz", hash = "sha256:294f2aed5b41fe92d313b575f8221d2c457ed8007ef84b5960f5f74b45cdba8c"},
-    {file = "da_vinci-0.3.0-py3-none-any.whl", hash = "sha256:aded66359f49a39ea4d62986988072a2e97ef09d0a27a55369f7ebc40d088e46"},
+    {file = "da-vinci-0.4.0.tar.gz", hash = "sha256:130bc0dd7ff69294917eec867ef0d55a19d6006afa63b2b9101570153372dd33"},
+    {file = "da_vinci-0.4.0-py3-none-any.whl", hash = "sha256:2039c67fa8e2338f8457362a0a8d672a4e19c970a41a86fc87240f6702ead762"},
 ]
 
 [[package]]
@@ -1205,14 +1205,14 @@ files = [
 
 [[package]]
 name = "jsonschema"
-version = "4.18.0"
+version = "4.18.1"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jsonschema-4.18.0-py3-none-any.whl", hash = "sha256:b508dd6142bd03f4c3670534c80af68cd7bbff9ea830b9cf2625d4a3c49ddf60"},
-    {file = "jsonschema-4.18.0.tar.gz", hash = "sha256:8caf5b57a990a98e9b39832ef3cb35c176fe331414252b6e1b26fd5866f891a4"},
+    {file = "jsonschema-4.18.1-py3-none-any.whl", hash = "sha256:e5fde3cb78f3be8cf49150390ee4efbb8e73c46ea467d42cd4ec16e364495eb3"},
+    {file = "jsonschema-4.18.1.tar.gz", hash = "sha256:b5896514b46cc9283e9951bfebf51cc72fa3eab229919c0469f94e11b4387776"},
 ]
 
 [package.dependencies]
