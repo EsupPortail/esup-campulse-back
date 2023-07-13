@@ -127,6 +127,24 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
+    def test_get_commissions_list_filter_funds(self):
+        """
+        GET /commissions/ .
+
+        - funds filters by Fund linked to Commission through CommissionFund.
+        """
+        fund_ids = [1, 3]
+        response = self.client.get(
+            f"/commissions/?funds={','.join(str(x) for x in fund_ids)}"
+        )
+        commissions_cnt = Commission.objects.filter(
+            id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list(
+                "commission_id"
+            )
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commissions_cnt)
+
     def test_get_commissions_list_filter_open_to_projects(self):
         """
         GET /commissions/ .

@@ -364,6 +364,11 @@ paths:
           type: string
         description: Filter by commission_date field (multiple).
       - in: query
+        name: funds
+        schema:
+          type: string
+        description: Filter by linked funds.
+      - in: query
         name: is_open_to_projects
         schema:
           type: boolean

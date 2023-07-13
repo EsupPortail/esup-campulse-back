@@ -57,6 +57,12 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 description="Filter to get only commissions with open projects submissions.",
             ),
             OpenApiParameter(
+                "funds",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by linked funds.",
+            ),
+            OpenApiParameter(
                 "active_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
@@ -78,6 +84,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         dates = request.query_params.get("dates")
         is_site = request.query_params.get("is_site")
         is_open_to_projects = request.query_params.get("is_open_to_projects")
+        funds = request.query_params.get("funds")
         active_projects = request.query_params.get("active_projects")
         managed_projects = request.query_params.get("managed_projects")
 
@@ -106,6 +113,13 @@ class CommissionListCreate(generics.ListCreateAPIView):
         if is_open_to_projects is not None and is_open_to_projects != "":
             self.queryset = self.queryset.filter(
                 is_open_to_projects=to_bool(is_open_to_projects)
+            )
+
+        if funds is not None and funds != "":
+            self.queryset = self.queryset.filter(
+                id__in=CommissionFund.objects.filter(
+                    fund_id__in=funds.split(",")
+                ).values_list("commission_id")
             )
 
         if active_projects is not None and active_projects != "":
