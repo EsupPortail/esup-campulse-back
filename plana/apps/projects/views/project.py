@@ -769,7 +769,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             in Project.ProjectStatus.get_identifier_project_statuses()
         ):
             now = datetime.datetime.now()
-            if now.month > 8:
+            if now.month >= settings.NEW_YEAR_MONTH_INDEX:
                 year = now.year
             else:
                 year = now.year - 1

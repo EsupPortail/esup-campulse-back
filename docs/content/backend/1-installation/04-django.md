@@ -57,5 +57,6 @@ Les tâches CRON envoient de multiples emails dont des relances dépendant de no
 - `RESTRICTED_DOMAINS` : domaines d'adresses mail non autorisés pour les comptes locaux (généralement, les domaines utilisés par les comptes se connectant via le CAS paramétré).
 - `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
 - `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités de l'application côté association (utilisé pour définir si une association a signé la Charte Site Alsace de l'Université de Strasbourg par exemple), laisser à `True` pour désactiver la validation.
+- `NEW_YEAR_MONTH_INDEX` : index du mois auquel une année scolaire débute (9 pour Septembre).
 - `AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY` : nombre d'années durant lesquelles un projet est visible dans l'application (avant d'être uniquement visible sur l'interface d'administration de Django).
 - `AMOUNT_YEARS_BEFORE_PROJECT_DELETION` : nombre d'années durant lesquelles un projet est stocké dans l'application (avant d'être supprimé).

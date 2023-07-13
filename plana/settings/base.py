@@ -631,6 +631,9 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 # Default amount of users allowed in an association (None if no limit).
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 
+# Index of the month when scholar year is resetted.
+NEW_YEAR_MONTH_INDEX = 9
+
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 

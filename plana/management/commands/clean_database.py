@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            call_command("flush")
+            call_command("flush", "--no-input")
             call_command("migrate")
             apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
             # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
