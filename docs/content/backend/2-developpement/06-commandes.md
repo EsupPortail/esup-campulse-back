@@ -28,7 +28,7 @@ weight: 116
 
 ## Tests unitaires
 
-- `$ tox` ou `$ DEFAULT_DB_TEST_HOST=localhost tox` : lancer les tests unitaires (le fichier `htmlcov/index.html` permet de consulter le coverage).
+- `$ tox` ou `$ DEFAULT_DB_TEST_HOST=localhost PYTHONWARNINGS=always tox` : lancer les tests unitaires (le fichier `htmlcov/index.html` permet de consulter le coverage).
 
 ## Autres commandes
 

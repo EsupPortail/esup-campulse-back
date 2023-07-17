@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-13 14:54+0200\n"
+"POT-Creation-Date: 2023-07-17 11:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -293,12 +293,12 @@ msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #: plana/apps/associations/views/association.py:734
-#: plana/apps/projects/views/project.py:731
+#: plana/apps/projects/views/project.py:732
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:755
-#: plana/apps/projects/views/project.py:831
+#: plana/apps/projects/views/project.py:832
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -667,14 +667,14 @@ msgstr ""
 "qu'anonyme."
 
 #: plana/apps/documents/views/document_upload.py:183
-#: plana/apps/projects/views/project.py:478
-#: plana/apps/projects/views/project.py:544
-#: plana/apps/projects/views/project.py:639
-#: plana/apps/projects/views/project.py:709
+#: plana/apps/projects/views/project.py:479
+#: plana/apps/projects/views/project.py:545
+#: plana/apps/projects/views/project.py:640
+#: plana/apps/projects/views/project.py:710
 #: plana/apps/projects/views/project_category.py:170
 #: plana/apps/projects/views/project_category.py:217
 #: plana/apps/projects/views/project_comment.py:48
-#: plana/apps/projects/views/project_comment.py:120
+#: plana/apps/projects/views/project_comment.py:121
 #: plana/apps/projects/views/project_commission_fund.py:267
 #: plana/apps/projects/views/project_export.py:45
 #: plana/apps/projects/views/project_export.py:139
@@ -985,17 +985,17 @@ msgid "Missing affectation of the new project."
 msgstr "Le projet n'est affecté à aucune personne ou association."
 
 #: plana/apps/projects/views/project.py:387
-#: plana/apps/projects/views/project.py:566
+#: plana/apps/projects/views/project.py:567
 msgid "Cannot add a user from an association."
 msgstr "Impossible d'ajouter un utilisateur d'association."
 
 #: plana/apps/projects/views/project.py:398
-#: plana/apps/projects/views/project.py:577
+#: plana/apps/projects/views/project.py:578
 msgid "Link between association and user does not exist."
 msgstr "Le lien entre l'utilisateur et l'association n'existe pas."
 
 #: plana/apps/projects/views/project.py:411
-#: plana/apps/projects/views/project.py:602
+#: plana/apps/projects/views/project.py:603
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
@@ -1004,22 +1004,22 @@ msgstr ""
 "nombre total de personnes attendues."
 
 #: plana/apps/projects/views/project.py:428
-#: plana/apps/projects/views/project.py:619
+#: plana/apps/projects/views/project.py:620
 msgid "Can't set planned start date after planned end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
-#: plana/apps/projects/views/project.py:488
-#: plana/apps/projects/views/project.py:505
+#: plana/apps/projects/views/project.py:489
+#: plana/apps/projects/views/project.py:506
 #: plana/apps/projects/views/project_export.py:55
 #: plana/apps/projects/views/project_export.py:149
 #: plana/apps/projects/views/project_review.py:64
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
-#: plana/apps/projects/views/project.py:550
-#: plana/apps/projects/views/project.py:715
-#: plana/apps/projects/views/project_comment.py:207
-#: plana/apps/projects/views/project_comment.py:249
+#: plana/apps/projects/views/project.py:551
+#: plana/apps/projects/views/project.py:716
+#: plana/apps/projects/views/project_comment.py:208
+#: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:162
 #: plana/apps/projects/views/project_commission_fund.py:371
 #: plana/apps/projects/views/project_commission_fund.py:669
@@ -1027,31 +1027,31 @@ msgstr "Non autorisé à récupérer ce projet."
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
-#: plana/apps/projects/views/project.py:560
+#: plana/apps/projects/views/project.py:561
 msgid "Project is not a draft that can be edited."
 msgstr "Le projet n'est pas un brouillon pouvant être modifié."
 
-#: plana/apps/projects/views/project.py:589
+#: plana/apps/projects/views/project.py:590
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:645
+#: plana/apps/projects/views/project.py:646
 msgid "Not allowed to delete this project."
 msgstr "Non autorisé à supprimer ce projet."
 
-#: plana/apps/projects/views/project.py:654
+#: plana/apps/projects/views/project.py:655
 msgid "Cannot delete a non-draft project."
 msgstr "Impossible de supprimer un projet non-brouillon."
 
-#: plana/apps/projects/views/project.py:738
+#: plana/apps/projects/views/project.py:739
 msgid "Cannot change this project status anymore."
 msgstr "Il n'est plus possible de changer le statut de ce projet."
 
-#: plana/apps/projects/views/project.py:747
+#: plana/apps/projects/views/project.py:748
 msgid "Cannot rollback to a previous status."
 msgstr "Un projet ne peut revenir à un état précédent."
 
-#: plana/apps/projects/views/project.py:756
+#: plana/apps/projects/views/project.py:757
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
@@ -1073,16 +1073,16 @@ msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
 #: plana/apps/projects/views/project_comment.py:67
-#: plana/apps/projects/views/project_comment.py:216
-#: plana/apps/projects/views/project_comment.py:258
+#: plana/apps/projects/views/project_comment.py:217
+#: plana/apps/projects/views/project_comment.py:259
 msgid "Cannot manage comments on a validated project/review."
 msgstr "Impossible de gérer les commentaires d'un projet/bilan validé."
 
-#: plana/apps/projects/views/project_comment.py:132
+#: plana/apps/projects/views/project_comment.py:133
 msgid "Not allowed to retrieve these project comments."
 msgstr "Non autorisé à récupérer les commentaires de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:201
+#: plana/apps/projects/views/project_comment.py:202
 msgid "Link between this comment and project does not exist."
 msgstr "Ce commentaire de projet n'existe pas."
 

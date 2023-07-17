@@ -779,8 +779,8 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 ),
                 message=template.parse_vars(request.user, request, context),
             )
-
-            request.data["charter_date"] = datetime.date.today()
+            association.charter_date = datetime.date.today()
+            association.save()
 
         mail_templates_codes_by_status = {
             "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_SENT",

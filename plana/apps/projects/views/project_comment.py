@@ -68,8 +68,9 @@ class ProjectCommentCreate(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data["creation_date"] = datetime.date.today()
-        request.data["edition_date"] = datetime.date.today()
+        today = datetime.date.today()
+        request.data["creation_date"] = today
+        request.data["edition_date"] = today
         request.data["user"] = request.user.pk
 
         current_site = get_current_site(request)
