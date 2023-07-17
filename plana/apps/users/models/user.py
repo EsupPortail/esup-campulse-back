@@ -148,6 +148,25 @@ class User(AbstractUser):
 
     def can_access_project(self, project_obj):
         """Check if a user can access a project as association president, misc user, fund member, or manager."""
+        if (
+            self.get_user_funds().count() != 0
+            or self.get_user_managed_funds().count() != 0
+        ):
+            user_funds_ids = self.get_user_funds().values_list("id")
+            user_managed_funds_ids = self.get_user_managed_funds().values_list("id")
+            project_funds_ids = CommissionFund.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
+                    project_id=project_obj.id
+                ).values_list("commission_fund_id")
+            ).values_list("fund_id")
+            if (
+                len(set(project_funds_ids).intersection(user_funds_ids)) == 0
+                and len(set(project_funds_ids).intersection(user_managed_funds_ids))
+                == 0
+            ):
+                return False
+            return True
+
         if self.is_staff:
             if project_obj.association_id is not None:
                 institution_id = Institution.objects.get(
@@ -160,17 +179,6 @@ class User(AbstractUser):
             if project_obj.user is not None and not self.has_perm(
                 "users.change_user_misc"
             ):
-                return False
-            return True
-
-        if self.get_user_funds().count() != 0:
-            user_funds_ids = self.get_user_funds().values_list("id")
-            project_funds_ids = CommissionFund.objects.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    project_id=project_obj.id
-                ).values_list("commission_fund_id")
-            ).values_list("fund_id")
-            if len(set(project_funds_ids).intersection(user_funds_ids)) == 0:
                 return False
             return True
 
