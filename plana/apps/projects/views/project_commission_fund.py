@@ -611,30 +611,47 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project.project_status = "PROJECT_REVIEW_DRAFT"
             project.save()
 
-        unvalidated_project_commission_funds_count = (
-            ProjectCommissionFund.objects.filter(
-                models.Q(project_id=project.id, is_validated_by_admin=False)
-                | models.Q(project_id=project.id, is_validated_by_admin__isnull=True)
-            ).count()
+        unvalidated_project_commission_funds = ProjectCommissionFund.objects.filter(
+            models.Q(project_id=project.id, is_validated_by_admin=False)
+            | models.Q(project_id=project.id, is_validated_by_admin__isnull=True)
         )
         if (
             "is_validated_by_admin" in request.data
-            and request.data["is_validated_by_admin"] is True
             and project.project_status
             in Project.ProjectStatus.get_validated_fund_project_statuses()
-            and unvalidated_project_commission_funds_count == 0
         ):
-            project.project_status = "PROJECT_VALIDATED"
-            project.save()
-            template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
-                message=template.parse_vars(request.user, request, context),
-            )
+            if (
+                request.data["is_validated_by_admin"] is True
+                and unvalidated_project_commission_funds.count() == 0
+            ):
+                project.project_status = "PROJECT_VALIDATED"
+                project.save()
+                template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
+            elif (
+                request.data["is_validated_by_admin"] is False
+                and unvalidated_project_commission_funds.count() == 1
+                and unvalidated_project_commission_funds.first()
+                == project_commission_fund
+            ):
+                project.project_status = "PROJECT_REJECTED"
+                project.save()
+                template = MailTemplate.objects.get(code="PROJECT_REJECTED")
+                send_mail(
+                    from_=settings.DEFAULT_FROM_EMAIL,
+                    to_=email,
+                    subject=template.subject.replace(
+                        "{{ site_name }}", context["site_name"]
+                    ),
+                    message=template.parse_vars(request.user, request, context),
+                )
 
         return response.Response({}, status=status.HTTP_200_OK)
 

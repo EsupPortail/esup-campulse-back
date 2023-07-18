@@ -652,7 +652,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         project = Project.visible_objects.get(id=1)
         project.project_status = "PROJECT_PROCESSING"
         project.save()
-        patch_data = {"is_validated_by_admin": True}
+        patch_data = {"is_validated_by_admin": False}
         response = self.general_client.patch(
             "/projects/1/commission_funds/3",
             patch_data,
@@ -660,7 +660,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=1)
-        self.assertEqual(project.project_status, "PROJECT_VALIDATED")
+        self.assertEqual(project.project_status, "PROJECT_REJECTED")
 
         project = Project.visible_objects.get(id=2)
         project.project_status = "PROJECT_PROCESSING"
