@@ -135,5 +135,30 @@
       "amount_earned_previous_edition": 0,
       "amount_asked": 200
     }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 12,
+    "fields": {
+      "project": 4,
+      "commission_fund": 4,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 13,
+    "fields": {
+      "project": 6,
+      "commission_fund": 4,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200,
+      "amount_earned": 1000
+    }
   }
 ]
