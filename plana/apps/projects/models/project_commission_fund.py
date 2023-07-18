@@ -30,7 +30,7 @@ class ProjectCommissionFund(models.Model):
         _("Amount earned"), default=None, null=True
     )
     is_validated_by_admin = models.BooleanField(
-        _("Is validated by admin"), default=False
+        _("Is validated by admin"), default=None, null=True
     )
 
     def __str__(self):

@@ -4355,6 +4355,7 @@ components:
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
           title: Est validé par l'équipe d'administration
         new_commission_fund_id:
           type: integer
@@ -4834,6 +4835,7 @@ components:
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
           title: Est validé par l'équipe d'administration
       required:
       - commission_fund
@@ -4869,6 +4871,7 @@ components:
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
           title: Est validé par l'équipe d'administration
         commission_fund_id:
           type: integer
@@ -4917,6 +4920,7 @@ components:
           title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
           title: Est validé par l'équipe d'administration
       required:
       - commission_fund

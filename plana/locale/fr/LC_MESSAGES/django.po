@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-17 11:59+0200\n"
+"POT-Creation-Date: 2023-07-18 11:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -581,7 +581,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:154
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:64
-#: plana/apps/users/models/user.py:357
+#: plana/apps/users/models/user.py:365
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1022,7 +1022,7 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:162
 #: plana/apps/projects/views/project_commission_fund.py:371
-#: plana/apps/projects/views/project_commission_fund.py:669
+#: plana/apps/projects/views/project_commission_fund.py:670
 #: plana/apps/projects/views/project_review.py:115
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1125,7 +1125,7 @@ msgstr ""
 "commission."
 
 #: plana/apps/projects/views/project_commission_fund.py:354
-#: plana/apps/projects/views/project_commission_fund.py:661
+#: plana/apps/projects/views/project_commission_fund.py:662
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
@@ -1225,7 +1225,7 @@ msgstr "Est étudiant"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:358
+#: plana/apps/users/models/user.py:366
 msgid "Users"
 msgstr "Utilisateurs"
 

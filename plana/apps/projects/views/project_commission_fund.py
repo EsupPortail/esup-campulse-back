@@ -613,7 +613,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         unvalidated_project_commission_funds_count = (
             ProjectCommissionFund.objects.filter(
-                project_id=project.id, is_validated_by_admin=False
+                models.Q(project_id=project.id, is_validated_by_admin=False)
+                | models.Q(project_id=project.id, is_validated_by_admin__isnull=True)
             ).count()
         )
         if (
