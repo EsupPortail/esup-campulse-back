@@ -191,6 +191,10 @@ PERMISSIONS_GROUPS = {
         # projects
         "view_project",
         "view_projectcategory",
+        "add_projectcomment",
+        "change_projectcomment",
+        "delete_projectcomment",
+        "view_projectcomment",
         "view_projectcommissionfund",
         # users
         "view_user",
