@@ -772,10 +772,8 @@ description = "CAS support for django-allauth."
 category = "main"
 optional = false
 python-versions = "*"
-files = [
-    {file = "django-allauth-cas-1.0.0.tar.gz", hash = "sha256:405185259c60f09b1b7dcb54acb2893dc900815e22eb5295c55cacc4cfa40250"},
-    {file = "django_allauth_cas-1.0.0-py2.py3-none-any.whl", hash = "sha256:d8d62b050133526a7df03f254c481eb09fc673eb8947b6d35be2739af6cc6479"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 django-allauth = "*"
@@ -785,6 +783,12 @@ six = "*"
 [package.extras]
 docs = ["sphinx"]
 tests = ["tox"]
+
+[package.source]
+type = "git"
+url = "https://github.com/thejoeejoee/django-allauth-cas"
+reference = "master"
+resolved_reference = "5db34b546eb32524a3a1a4b90f411e370ac7ad9b"
 
 [[package]]
 name = "django-cleanup"
@@ -2726,4 +2730,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "039be1c5b34b7d2f063841b4e33dfb1363406e19d089770aeb2728c8df35257a"
+content-hash = "ed2c96fd850725da78d54df6b03b4da098d4aacf152c55bc4631e9ab3078bca6"

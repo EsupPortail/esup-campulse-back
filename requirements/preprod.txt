@@ -312,9 +312,7 @@ defusedxml==0.7.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
 dj-rest-auth==2.2.8 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:9fb3492888185ede8b2064ad6803120c7b0b83ab08e2347a02e9b44282374242
-django-allauth-cas==1.0.0 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:405185259c60f09b1b7dcb54acb2893dc900815e22eb5295c55cacc4cfa40250 \
-    --hash=sha256:d8d62b050133526a7df03f254c481eb09fc673eb8947b6d35be2739af6cc6479
+django-allauth-cas @ git+https://github.com/thejoeejoee/django-allauth-cas@master ; python_version >= "3.8" and python_version < "3.11"
 django-allauth==0.51.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:ca1622733b6faa591580ccd3984042f12d8c79ade93438212de249b7ffb6f91f
 django-cleanup==6.0.0 ; python_version >= "3.8" and python_version < "3.11" \

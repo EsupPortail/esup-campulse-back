@@ -23,8 +23,9 @@ weight: 116
 ## Mise à jour des dépendances avec Poetry
 
 - `$ poetry lock` : mise à jour de la liste des dépendances en cache.
-- `$ poetry install --sync` : installation des dépendances.
+- `$ poetry install --sync` : synchronisation des dépendances.
 - `$ ./generate_requirements.sh` : régénération des fichiers du dossier `requirements` avec les dépendances mises à jour.
+- `$ pip install -r requirements/dev.txt` : installation des dépendances.
 
 ## Tests unitaires
 

@@ -50,7 +50,7 @@ license = "GPL-3.0-or-later"
 python = ">=3.8,<3.11"
 django = "<4.0"
 django-allauth = "^0.51.0"
-django-allauth-cas = "^1.0.0"
+django-allauth-cas = { git = "https://github.com/thejoeejoee/django-allauth-cas", branch = "master" }
 django-cleanup = "^6.0.0"
 django-cors-headers = "^3.13.0"
 django-extensions = "^3.2.0"
