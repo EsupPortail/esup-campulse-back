@@ -5,7 +5,7 @@ weight: 112
 
 ## Librairies et frameworks
 
-- [Django](https://pypi.org/project/Django/) : framework général (en version 4).
+- [Django](https://pypi.org/project/Django/) : framework général (en version 3).
 - [django-allauth](https://pypi.org/project/django-allauth/) : gestion des moyens d'authentification externes.
 - [django-allauth-cas](https://pypi.org/project/django-allauth-cas/) : intégration de CAS aux moyens d'authentification externes.
 - [django-cleanup](https://pypi.org/project/django-cleanup/) : suppression automatique des fichiers liés à des champs en cours de suppression en base de données.
