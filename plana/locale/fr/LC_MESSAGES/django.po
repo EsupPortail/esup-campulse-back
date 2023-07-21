@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-18 15:04+0200\n"
+"POT-Creation-Date: 2023-07-21 15:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -694,8 +694,8 @@ msgstr "Non autorisé à ajouter un document si non président."
 #: plana/apps/documents/views/document_upload.py:227
 #: plana/apps/users/views/association_user.py:280
 #: plana/apps/users/views/group_institution_fund_user.py:205
-#: plana/apps/users/views/user.py:328 plana/apps/users/views/user.py:375
-#: plana/apps/users/views/user.py:503
+#: plana/apps/users/views/user.py:333 plana/apps/users/views/user.py:380
+#: plana/apps/users/views/user.py:508
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
@@ -1394,20 +1394,20 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:226 plana/apps/users/views/user.py:400
+#: plana/apps/users/views/user.py:228 plana/apps/users/views/user.py:405
 #: plana/apps/users/views/user_auth.py:104
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:336
+#: plana/apps/users/views/user.py:341
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:383
+#: plana/apps/users/views/user.py:388
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:509
+#: plana/apps/users/views/user.py:514
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
@@ -1523,23 +1523,23 @@ msgstr ""
 msgid "S3 bucket {bucket_name} content cleaned."
 msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
 
-#: plana/management/commands/createmanageruser.py:15
+#: plana/management/commands/createmanageruser.py:17
 msgid "Creates a new manager user."
 msgstr "Crée un utilisateur gestionnaire."
 
-#: plana/management/commands/createmanageruser.py:34
+#: plana/management/commands/createmanageruser.py:36
 msgid "Group codename."
 msgstr "Nom de code de groupe."
 
-#: plana/management/commands/createmanageruser.py:40
+#: plana/management/commands/createmanageruser.py:42
 msgid "Institution codename (all by default)."
 msgstr "Nom de code d'établissement (tous par défaut)."
 
-#: plana/management/commands/createmanageruser.py:45
+#: plana/management/commands/createmanageruser.py:47
 msgid "Set without value if user should be a superuser."
 msgstr "Spécifier sans valeur si l'utilisateur doit être un superutilisateur."
 
-#: plana/management/commands/createmanageruser.py:85
+#: plana/management/commands/createmanageruser.py:90
 #, python-brace-format
 msgid "User created. Password : {password}"
 msgstr "Utilisateur crée. Mot de passe : {password}"
@@ -1569,7 +1569,7 @@ msgid "Checks last General Ordinary Assembly date of associations."
 msgstr ""
 "Vérifie la date de dernière Assemblée Générale Ordinaire des associations."
 
-#: plana/management/commands/cron_password_expiration.py:18
+#: plana/management/commands/cron_password_expiration.py:20
 msgid "Expired password policy."
 msgstr "Politique d'expiration des mots de passe."
 

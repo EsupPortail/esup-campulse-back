@@ -1,5 +1,7 @@
 """Views directly linked to users and their links with other models."""
 import datetime
+import secrets
+import string
 
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress
@@ -259,7 +261,10 @@ class UserListCreate(generics.ListCreateAPIView):
 
         template = None
         if not is_cas:
-            password = User.objects.make_random_password(length=15)
+            password = "".join(
+                secrets.choice(string.ascii_letters + string.digits)
+                for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+            )
             user.set_password(password)
             user.password_last_change_date = datetime.datetime.today()
             user.save(update_fields=["password", "password_last_change_date"])

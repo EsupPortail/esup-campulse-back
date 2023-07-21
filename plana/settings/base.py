@@ -100,7 +100,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+# USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -412,7 +412,15 @@ REST_FRAMEWORK = {
 ##################
 
 # DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
+# DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "plana.storages.MediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 USE_S3 = True  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
@@ -436,7 +444,7 @@ THUMBNAILS = {
         "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
     },
     "STORAGE": {
-        "BACKEND": DEFAULT_FILE_STORAGE,
+        "BACKEND": STORAGES["default"]["BACKEND"],
     },
     "SIZES": {
         "list": {
@@ -624,6 +632,9 @@ MIGRATION_SITE_NAME = "Opaline"
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
+
+# Random password are generated with this length.
+DEFAULT_PASSWORD_LENGTH = 16
 
 # Default value for is_site setting.
 ASSOCIATION_IS_SITE_DEFAULT = False

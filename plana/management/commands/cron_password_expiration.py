@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 
 from allauth.account.forms import default_token_generator
 from allauth.account.utils import user_pk_to_url_str
@@ -46,7 +48,10 @@ class Command(BaseCommand):
 
             template = MailTemplate.objects.get(code="PASSWORD_RESET_MANDATORY")
             for user in change_password_queryset:
-                password = User.objects.make_random_password(length=15)
+                password = "".join(
+                    secrets.choice(string.ascii_letters + string.digits)
+                    for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                )
                 user.set_password(password)
                 user.save()
                 self.send_password_mail(user, context, template)

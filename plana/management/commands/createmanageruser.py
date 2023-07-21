@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 
 from allauth.account.models import EmailAddress
 from django.conf import settings
@@ -52,7 +54,10 @@ class Command(BaseCommand):
                 username=options["email"], email=options["email"]
             )
             if options["password"] is None:
-                password = get_user_model().objects.make_random_password(length=15)
+                password = "".join(
+                    secrets.choice(string.ascii_letters + string.digits)
+                    for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                )
             else:
                 password = options["password"]
             user.set_password(password)

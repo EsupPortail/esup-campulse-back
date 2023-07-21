@@ -53,6 +53,7 @@ Les tâches CRON envoient de multiples emails dont des relances dépendant de no
 
 ## Autres variables
 
+- `DEFAULT_PASSWORD_LENGTH` : taille des mots de passe générés.
 - `DEFAULT_FROM_EMAIL` : adresse mail "noreply" par défaut renseignée dans les emails envoyés par l'appli.
 - `RESTRICTED_DOMAINS` : domaines d'adresses mail non autorisés pour les comptes locaux (généralement, les domaines utilisés par les comptes se connectant via le CAS paramétré).
 - `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
