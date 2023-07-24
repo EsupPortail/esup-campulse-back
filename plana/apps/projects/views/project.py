@@ -883,7 +883,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             new_project_status in Project.ProjectStatus.get_validator_project_statuses()
         ):
             mail_templates_codes_by_status = {
-                "PROJECT_DRAFT": "PROJECT_NEEDS_CHANGES",
+                "PROJECT_DRAFT_PROCESSED": "PROJECT_NEEDS_CHANGES",
                 "PROJECT_REJECTED": "PROJECT_REJECTED",
                 "PROJECT_VALIDATED": "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT": "PROJECT_NEEDS_REVIEW",
