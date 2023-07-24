@@ -18,7 +18,7 @@ from plana.apps.documents.serializers.document import (
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route"""
 
-    queryset = Document.objects.all()
+    queryset = Document.objects.all().order_by("name")
 
     def get_permissions(self):
         if self.request.method == "GET":

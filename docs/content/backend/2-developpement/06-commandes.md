@@ -9,7 +9,6 @@ weight: 116
 - `$ python manage.py makemigrations` : créer de nouvelles migrations de l'application après modification de la structure de la BDD dans les fichiers des dossiers `models` (puis exécuter `$ python manage.py migrate` ensuite).
 - `$ python manage.py makemessages -l fr --extension html,txt,py` : régénérer les fichiers de traductions du dossier `plana/locale`.
 - `$ python manage.py spectacular --file schema.yml` : régénérer le fichier OpenAPI `schema.yml`.
-- `$ python manage.py clean_storages` : réinitialiser le contenu du bucket S3 de l'environnement courant.
 - `$ python manage.py reset_permissions [--flush]` : régénère les fixtures de permissions du dossier `plana/apps/groups/fixtures` d'après le fichier `plana/settings/permissions.py` (avec une option `--flush` pour réinitialiser les identifiants).
 
 ## Régénérer la base de données
@@ -18,7 +17,9 @@ weight: 116
 - `$ python manage.py migrate` : mettre à jour la structure de la base de données (à précéder de `$ python manage.py makemigrations` pour créer les fichiers de migrations au besoin).
 - `$ python manage.py loaddata plana/apps/*/fixtures/*.json` : ajouter les jeux de données de test (utilisateurs, associations, projets, ...).
 - `$ python manage.py loaddata plana/libs/*/fixtures/*.json` : ajouter les jeux de données liées aux templates de mails.
-- `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata` en une seule commande.
+- `$ python manage.py flush_storages` : vide le contenu du bucket S3 de l'environnement courant.
+- `$ python manage.py loaddata_storages` : ajoute de premiers documents au bucket S3 de l'environnement courant.
+- `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata` (et `flush_storages`, `loaddata_storages` si `--storages` est spécifié) en une seule commande.
 
 ## Mise à jour des dépendances avec Poetry
 

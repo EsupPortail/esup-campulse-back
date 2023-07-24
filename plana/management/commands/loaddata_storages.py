@@ -1,4 +1,6 @@
+import datetime
 import os
+import pathlib
 import shutil
 
 import boto3
@@ -6,9 +8,11 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
+from plana.apps.documents.models.document import Document
+
 
 class Command(BaseCommand):
-    help = _("Resets storages and S3 bucket content.")
+    help = _("Loads S3 bucket initial content.")
 
     def handle(self, *args, **options):
         try:
@@ -21,10 +25,22 @@ class Command(BaseCommand):
                     endpoint_url=settings.AWS_S3_ENDPOINT_URL,
                 )
                 bucket = resource.Bucket(bucket_name)
-                bucket.objects.all().delete()
+                for file in pathlib.Path().glob(
+                    "plana/apps/documents/fixtures/files/documents/*.*"
+                ):
+                    with file.open(mode="rb") as document_file:
+                        bucket_object = bucket.put_object(
+                            Key=f"{settings.TEMPLATES_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
+                            Body=document_file,
+                        )
+                        document_object = Document.objects.get(
+                            id=int(file.name.split("_")[0])
+                        )
+                        document_object.path_template = bucket_object.key
+                        document_object.save()
 
                 self.stdout.write(
-                    self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned."))
+                    self.style.SUCCESS(_(f"S3 bucket {bucket_name} content loaded."))
                 )
             else:
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-24 13:58+0200\n"
+"POT-Creation-Date: 2023-07-24 15:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1509,19 +1509,15 @@ msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 msgid "Resets database structure and content."
 msgstr "Régénère la structure et le contenu de la base de données."
 
-#: plana/management/commands/clean_database.py:23
+#: plana/management/commands/clean_database.py:14
+#, fuzzy
+#| msgid "Set without value if database should be flushed before."
+msgid "Set without value if storages should be flushed."
+msgstr "Spécifier sans valeur si la base de données doit être vidée avant."
+
+#: plana/management/commands/clean_database.py:35
 msgid "Database regenerated."
 msgstr "Base de données régénérée."
-
-#: plana/management/commands/clean_storages.py:11
-msgid "Resets storages and S3 bucket content."
-msgstr ""
-"Réinitialise le contenu d'un bucket S3 et d'autres dossiers de stockages."
-
-#: plana/management/commands/clean_storages.py:27
-#, python-brace-format
-msgid "S3 bucket {bucket_name} content cleaned."
-msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
 
 #: plana/management/commands/createmanageruser.py:17
 msgid "Creates a new manager user."
@@ -1585,6 +1581,15 @@ msgstr ""
 "Si un projet ayant reçu une aide financière d'une commission n'a pas soumis "
 "de bilan un mois après sa date de fin planifiée, on envoie un email."
 
+#: plana/management/commands/flush_storages.py:11
+msgid "Removes S3 bucket content."
+msgstr "Vide le contenu d'un bucket S3."
+
+#: plana/management/commands/flush_storages.py:27
+#, python-brace-format
+msgid "S3 bucket {bucket_name} content cleaned."
+msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."
+
 #: plana/management/commands/generate_age_keys.py:11
 msgid "Generate pair of AGE private and public keys to encrypt file uploads."
 msgstr ""
@@ -1636,6 +1641,15 @@ msgstr "Importe les données initiales de l'application."
 #: plana/management/commands/initial_import.py:31
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
+
+#: plana/management/commands/loaddata_storages.py:15
+msgid "Loads S3 bucket initial content."
+msgstr "Ajoute de premiers fichiers à un bucket S3."
+
+#: plana/management/commands/loaddata_storages.py:43
+#, python-brace-format
+msgid "S3 bucket {bucket_name} content loaded."
+msgstr "Le contenu du bucket S3 {bucket_name} a été chargé."
 
 #: plana/management/commands/reset_permissions.py:14
 msgid ""
