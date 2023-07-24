@@ -47,3 +47,7 @@ h2 {
     border-style: solid;
     border-width: 1px;
 }
+
+img {
+    max-width: 300px;
+}
