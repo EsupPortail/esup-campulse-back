@@ -123,25 +123,28 @@ class CommissionListCreate(generics.ListCreateAPIView):
             )
 
         if active_projects is not None and active_projects != "":
-            inactive_projects = Project.visible_objects.filter(
-                project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-            )
+            commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
+                    project_id__in=Project.visible_objects.filter(
+                        project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+                    )
+                ).values_list("commission_fund_id")
+            ).values_list("commission_id")
+            commissions_ids_with_active_projects = CommissionFund.objects.filter(
+                id__in=ProjectCommissionFund.objects.filter(
+                    project_id__in=Project.visible_objects.filter(
+                        project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+                    )
+                ).values_list("commission_fund_id")
+            ).values_list("commission_id")
             if to_bool(active_projects) is False:
                 self.queryset = self.queryset.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_fund_id")
-                    ).values_list("commission_id")
-                )
+                    id__in=commissions_ids_with_inactive_projects
+                ).exclude(id__in=commissions_ids_with_active_projects)
             else:
                 self.queryset = self.queryset.exclude(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_fund_id")
-                    ).values_list("commission_id")
-                )
+                    id__in=commissions_ids_with_inactive_projects
+                ).filter(id__in=commissions_ids_with_active_projects)
 
         if (
             managed_projects is not None
