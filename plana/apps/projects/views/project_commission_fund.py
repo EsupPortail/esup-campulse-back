@@ -526,6 +526,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             "filename": f"{slugify(content.title)}.pdf",
                             "context_attach": {
                                 "project_name": project.name,
+                                "project_manual_identifier": project.manual_identifier,
                                 "date": datetime.date.today(),
                                 "date_commission": commission.commission_date,
                                 "owner": owner,
@@ -562,6 +563,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                         lang=locale.getlocale()[0],
                                     ),
                                     "project_name": project.name,
+                                    "project_manual_identifier": project.manual_identifier,
                                     "date": datetime.date.today(),
                                     "date_commission": commission.commission_date,
                                     "owner": owner,

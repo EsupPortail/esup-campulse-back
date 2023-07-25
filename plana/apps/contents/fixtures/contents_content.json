@@ -228,11 +228,12 @@
     "pk": 19,
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION",
-      "label": "PDF de notification d'attribution de subventionnement Culture-ActionS.",
-      "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification d'attribution</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La demande a été acceptée pour le montant {{ amount_earned }}€ ({{ amount_earned_litteral }} euros).</p>",
-      "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
-      "aside": "<p>Complementary informations if necessary.</p>"
+      "label": "PDF de notification de subventionnement Culture-ActionS.",
+      "title": "Notification d'attribution Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1>Project n°{{ project_manual_identifier }} : {{ project_name }}<br>{{ owner.name }}</h1><p>Objet : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le plaisir de vous informer qu'après délibération, la Commission Culture-ActionS du Crous a décidé de vous attribuer une <strong>aide financière de {{ amount_earned }}€</strong></p><p>L'octroi de cette aide est subordonné à la <strong>mention du Crous sur tous les documents de communication</strong>. Le logo du Crous est disponible sous différents formats sur simple demande à : culture@crous-strasbourg.fr<br>Il ne doit pas être modifié, ni en sa forme ni en sa couleur.</p><p>Pour le versement de cette aide, il conviendra de nous adresser <strong>le bilan moral et financier de votre action</strong> dans les deux mois suivant la réalisation de votre projet.</p><p>Le Crous de Strasbourg reste à votre disposition pour vous accompagner dans la mise en œuvre de votre projet.</p>",
+      "footer": "<p>La Directrice générale</p><p>Prénom NOM</p>",
+      "aside": "<p><b>Affaire suivie par<br>Nom Gestionnaire</b><br>Chargée d'action culturelle<br>Tél. 01.02.03.04.05<br>nom.gestionnaire@crous-strasbourg.fr</p><p>Crous de Strasbourg<br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br>www.crous-strasbourg.fr</p>"
     }
   },
   {
@@ -241,10 +242,11 @@
     "fields": {
       "code": "NOTIFICATION_CULTURE-ACTIONS_REJECTION",
       "label": "PDF de notification de refus de subventionnement Culture-ActionS.",
-      "header": "<p>{{ owner.name }}</p><p>{{ owner.address }}</p>",
-      "body": "<h1>Notification de refus</h1><p>{{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission d'Aide aux Projets Etudiants vous informe qu'elle refuse votre demande sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><b>{{ comment }}</b></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p>",
-      "footer": "<p><b>Prénom NOM</b></p><p>Fonction</p>",
-      "aside": "<p>Complementary informations if necessary.</p>"
+      "title": "Notification de refus Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1>Project n°{{ project_manual_identifier }} : {{ project_name }}<br>{{ owner.name }}</h1><p>Objet : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le regret de vous informer que la Commission Culture-ActionS, après examen de votre dossier, ne peut répondre favorablement à votre demande d’aide financière.</p><p>Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p>",
+      "footer": "<p>La Directrice générale</p><p>Prénom NOM</p>",
+      "aside": "<p><b>Affaire suivie par<br>Nom Gestionnaire</b><br>Chargée d'action culturelle<br>Tél. 01.02.03.04.05<br>nom.gestionnaire@crous-strasbourg.fr</p><p>Crous de Strasbourg<br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br>www.crous-strasbourg.fr</p>"
     }
   },
   {

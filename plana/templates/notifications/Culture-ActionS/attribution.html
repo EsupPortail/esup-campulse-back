@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% resolve %}{{ content.title }}{% endresolve %}</title>
-        <link rel="stylesheet" href="{% static 'css/notifications/FSDIE_IdEx.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'css/notifications/Culture-ActionS.css' %}" type="text/css"/>
         <style>
             @page {
                 margin: 20mm 10mm 20mm 10mm;
@@ -16,22 +16,22 @@
     <body>
         <header>
             <div class="head-float-left">
-                <img src="{% static 'img/svu_logo.png' %}">
+                <img src="{% static 'img/crous_logo.png' %}">
             </div>
-            <div class="head-float-right border text-sm unistra-a align-right">
+            <div class="head-float-right border text-sm align-right">
                 {% resolve %}{{ content.header|safe }}{% endresolve %}
             </div>
         </header>
         <main>
-            <div class="float-left border text-sm unistra-a">
+            <div class="float-left border text-sm">
                 {% resolve %}{{ content.aside|safe }}{% endresolve %}
             </div>
-            <div class="float-right unistra-a">
+            <div class="float-right">
                 {% resolve %}{{ content.body|safe }}{% endresolve %}
             </div>
         </main>
         <footer>
-            <div class="float-right border unistra-a align-right">
+            <div class="float-right border align-right">
                 {% resolve %}{{ content.footer|safe }}{% endresolve %}
             </div>
         </footer>

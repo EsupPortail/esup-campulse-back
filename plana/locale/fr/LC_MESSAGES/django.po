@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-24 15:07+0200\n"
+"POT-Creation-Date: 2023-07-25 10:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1022,7 +1022,7 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:162
 #: plana/apps/projects/views/project_commission_fund.py:371
-#: plana/apps/projects/views/project_commission_fund.py:687
+#: plana/apps/projects/views/project_commission_fund.py:689
 #: plana/apps/projects/views/project_review.py:115
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1125,7 +1125,7 @@ msgstr ""
 "commission."
 
 #: plana/apps/projects/views/project_commission_fund.py:354
-#: plana/apps/projects/views/project_commission_fund.py:679
+#: plana/apps/projects/views/project_commission_fund.py:681
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
@@ -1510,10 +1510,8 @@ msgid "Resets database structure and content."
 msgstr "Régénère la structure et le contenu de la base de données."
 
 #: plana/management/commands/clean_database.py:14
-#, fuzzy
-#| msgid "Set without value if database should be flushed before."
 msgid "Set without value if storages should be flushed."
-msgstr "Spécifier sans valeur si la base de données doit être vidée avant."
+msgstr "Spécifier sans valeur si les contenus doivent être supprimés."
 
 #: plana/management/commands/clean_database.py:35
 msgid "Database regenerated."
