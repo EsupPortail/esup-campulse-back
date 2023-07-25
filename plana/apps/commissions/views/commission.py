@@ -63,10 +63,16 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 description="Filter by linked funds.",
             ),
             OpenApiParameter(
-                "active_projects",
+                "with_active_projects",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="Filter to get commission_dates where projects reviews are still pending.",
+                description="Filter to get commission_dates where projects reviews are still pending or not.",
+            ),
+            OpenApiParameter(
+                "only_with_active_projects",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Filter to get commission_dates where projects reviews are still pending exclusively.",
             ),
             OpenApiParameter(
                 "managed_projects",
@@ -85,7 +91,10 @@ class CommissionListCreate(generics.ListCreateAPIView):
         is_site = request.query_params.get("is_site")
         is_open_to_projects = request.query_params.get("is_open_to_projects")
         funds = request.query_params.get("funds")
-        active_projects = request.query_params.get("active_projects")
+        with_active_projects = request.query_params.get("with_active_projects")
+        only_with_active_projects = request.query_params.get(
+            "only_with_active_projects"
+        )
         managed_projects = request.query_params.get("managed_projects")
 
         if dates is not None and dates != "":
@@ -122,7 +131,28 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 ).values_list("commission_id")
             )
 
-        if active_projects is not None and active_projects != "":
+        if with_active_projects is not None and with_active_projects != "":
+            inactive_projects = Project.visible_objects.filter(
+                project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+            )
+            if to_bool(with_active_projects) is False:
+                self.queryset = self.queryset.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
+                            project_id__in=inactive_projects
+                        ).values_list("commission_fund_id")
+                    ).values_list("commission_id")
+                )
+            else:
+                self.queryset = self.queryset.exclude(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(
+                            project_id__in=inactive_projects
+                        ).values_list("commission_fund_id")
+                    ).values_list("commission_id")
+                )
+
+        if only_with_active_projects is not None and only_with_active_projects != "":
             commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
                 id__in=ProjectCommissionFund.objects.filter(
                     project_id__in=Project.visible_objects.filter(
@@ -137,7 +167,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
                     )
                 ).values_list("commission_fund_id")
             ).values_list("commission_id")
-            if to_bool(active_projects) is False:
+            if to_bool(only_with_active_projects) is False:
                 self.queryset = self.queryset.filter(
                     id__in=commissions_ids_with_inactive_projects
                 ).exclude(id__in=commissions_ids_with_active_projects)

@@ -353,12 +353,6 @@ paths:
       description: Lists all commissions.
       parameters:
       - in: query
-        name: active_projects
-        schema:
-          type: boolean
-        description: Filter to get commission_dates where projects reviews are still
-          pending.
-      - in: query
         name: dates
         schema:
           type: string
@@ -384,6 +378,18 @@ paths:
           type: boolean
         description: Filter to get commissions with projects managed by the current
           user.
+      - in: query
+        name: only_with_active_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates where projects reviews are still
+          pending exclusively.
+      - in: query
+        name: with_active_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates where projects reviews are still
+          pending or not.
       tags:
       - commissions
       security:
