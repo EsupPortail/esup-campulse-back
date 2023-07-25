@@ -1,0 +1,127 @@
+@font-face {
+    font-family: 'Unistra A';
+    src: url('UnistraA-Regular.woff2') format('woff2'),
+         url('UnistraA-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra A';
+    src: url('UnistraA-Bold.woff2') format('woff2'),
+         url('UnistraA-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra A';
+    src: url('UnistraA-Italic.woff2') format('woff2'),
+         url('UnistraA-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra A';
+    src: url('UnistraA-BoldItalic.woff2') format('woff2'),
+         url('UnistraA-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra B';
+    src: url('UnistraB-Regular.woff2') format('woff2'),
+         url('UnistraB-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra B';
+    src: url('UnistraB-Bold.woff2') format('woff2'),
+         url('UnistraB-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra B';
+    src: url('UnistraB-Italic.woff2') format('woff2'),
+         url('UnistraB-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra B';
+    src: url('UnistraB-BoldItalic.woff2') format('woff2'),
+         url('UnistraB-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra C';
+    src: url('UnistraC-Regular.woff2') format('woff2'),
+         url('UnistraC-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra C';
+    src: url('UnistraC-Bold.woff2') format('woff2'),
+         url('UnistraC-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra C';
+    src: url('UnistraC-Italic.woff2') format('woff2'),
+         url('UnistraC-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra C';
+    src: url('UnistraC-BoldItalic.woff2') format('woff2'),
+         url('UnistraC-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra D';
+    src: url('UnistraD-Regular.woff2') format('woff2'),
+         url('UnistraD-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra D';
+    src: url('UnistraD-Bold.woff2') format('woff2'),
+         url('UnistraD-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Unistra D';
+    src: url('UnistraD-Italic.woff2') format('woff2'),
+         url('UnistraD-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Unistra D';
+    src: url('UnistraD-BoldItalic.woff2') format('woff2'),
+         url('UnistraD-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+}

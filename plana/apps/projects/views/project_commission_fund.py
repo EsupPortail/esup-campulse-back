@@ -527,8 +527,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             "context_attach": {
                                 "project_name": project.name,
                                 "project_manual_identifier": project.manual_identifier,
-                                "date": datetime.date.today(),
-                                "date_commission": commission.commission_date,
+                                "date": datetime.date.today().strftime('%d %B %Y'),
+                                "date_commission": commission.commission_date.strftime(
+                                    '%d %B %Y'
+                                ),
                                 "owner": owner,
                                 "content": content,
                                 "comment": ProjectComment.objects.filter(
@@ -564,8 +566,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                     ),
                                     "project_name": project.name,
                                     "project_manual_identifier": project.manual_identifier,
-                                    "date": datetime.date.today(),
-                                    "date_commission": commission.commission_date,
+                                    "date": datetime.date.today().strftime('%d %B %Y'),
+                                    "date_commission": commission.commission_date.strftime(
+                                        '%d %B %Y'
+                                    ),
                                     "owner": owner,
                                     "content": content,
                                 },
