@@ -6,6 +6,7 @@ weight: 211
 ## Librairies et frameworks
 
 - [vue](https://www.npmjs.com/package/vue) : framework général.
+- [@quasar/extras](https://www.npmjs.com/package/@quasar/extras) : icônes.
 - [@sentry/vue](https://www.npmjs.com/package/@sentry/vue) : bug reporting.
 - [axios](https://www.npmjs.com/package/axios) : requêtes vers l'API.
 - [bootstrap-icons](https://www.npmjs.com/package/bootstrap-icons) : icônes.
