@@ -257,6 +257,24 @@
   },
   {
     "model": "documents.document",
+    "pk": 15,
+    "fields": {
+      "name": "Carte Étudiante",
+      "acronym": "CARTE_ETUDIANTE",
+      "description": "Carte Étudiante",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_USER",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
     "pk": 16,
     "fields": {
       "name": "Budget Prévisionnel",
