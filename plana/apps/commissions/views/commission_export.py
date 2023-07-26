@@ -93,6 +93,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
 
         fields = [
             _("Project ID"),
+            _("Project name"),
             _("Manual identifier"),
             _("Association name"),
             _("Student misc name"),
@@ -159,6 +160,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
 
             fields = [
                 project.id,
+                project.name,
                 project.manual_identifier,
                 association,
                 user,

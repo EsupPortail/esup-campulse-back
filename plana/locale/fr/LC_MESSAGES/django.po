@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 15:18+0200\n"
+"POT-Creation-Date: 2023-07-26 10:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -393,48 +393,52 @@ msgid "Project ID"
 msgstr "Numéro de projet"
 
 #: plana/apps/commissions/views/commission_export.py:96
+msgid "Project name"
+msgstr "Nom du projet"
+
+#: plana/apps/commissions/views/commission_export.py:97
 #: plana/apps/projects/models/project.py:148
 msgid "Manual identifier"
 msgstr "Identifiant manuel"
 
-#: plana/apps/commissions/views/commission_export.py:97
+#: plana/apps/commissions/views/commission_export.py:98
 msgid "Association name"
 msgstr "Nom de l'association"
 
-#: plana/apps/commissions/views/commission_export.py:98
+#: plana/apps/commissions/views/commission_export.py:99
 msgid "Student misc name"
 msgstr "Nom du porteur individuel"
 
-#: plana/apps/commissions/views/commission_export.py:99
+#: plana/apps/commissions/views/commission_export.py:100
 msgid "Project start date"
 msgstr "Date de début de projet"
 
-#: plana/apps/commissions/views/commission_export.py:100
+#: plana/apps/commissions/views/commission_export.py:101
 msgid "Project end date"
 msgstr "Date de fin de projet"
 
-#: plana/apps/commissions/views/commission_export.py:101
+#: plana/apps/commissions/views/commission_export.py:102
 msgid "First edition"
 msgstr "Est la première édition du projet"
 
-#: plana/apps/commissions/views/commission_export.py:102
+#: plana/apps/commissions/views/commission_export.py:103
 #: plana/apps/projects/models/category.py:16
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/commissions/views/commission_export.py:108
+#: plana/apps/commissions/views/commission_export.py:109
 msgid "Amount asked "
 msgstr "Montant demandé "
 
-#: plana/apps/commissions/views/commission_export.py:109
+#: plana/apps/commissions/views/commission_export.py:110
 msgid "Amount earned "
 msgstr "Montant obtenu "
 
-#: plana/apps/commissions/views/commission_export.py:154
+#: plana/apps/commissions/views/commission_export.py:155
 msgid "Yes"
 msgstr "Oui"
 
-#: plana/apps/commissions/views/commission_export.py:157
+#: plana/apps/commissions/views/commission_export.py:158
 msgid "No"
 msgstr "Non"
 
