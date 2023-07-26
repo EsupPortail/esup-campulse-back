@@ -11,11 +11,8 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
-# TODO : Remove S3 dependency in test environment.
-"""
-if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+if settings.USE_S3 is False:
     DynamicThumbnailImageField = ImageField
-"""
 
 
 def get_logo_path(instance, filename):
@@ -24,7 +21,7 @@ def get_logo_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_LOGO_FILEPATH if hasattr(settings, 'S3_LOGO_FILEPATH') else '',
+            settings.LOGO_FILEPATH if hasattr(settings, 'LOGO_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
@@ -39,6 +36,9 @@ class Association(models.Model):
     name = models.CharField(
         _("Name"), max_length=250, null=False, blank=False, unique=True
     )
+    email = models.EmailField(
+        _("Email"), max_length=256, null=False, blank=False, unique=True
+    )
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
     path_logo = DynamicThumbnailImageField(
         _("Dynamic thumbnails for the logo"),
@@ -48,9 +48,6 @@ class Association(models.Model):
         pregenerated_sizes=["list", "detail"],
         upload_to=get_logo_path,
     )
-    alt_logo = models.TextField(
-        _("Logo description"), default="", null=True, blank=True
-    )
     social_object = models.TextField(_("Social object"), default="")
     current_projects = models.TextField(_("Current projects"), default="")
     address = models.TextField(_("Address"), default="")
@@ -58,7 +55,6 @@ class Association(models.Model):
     city = models.CharField(_("City"), max_length=128, default="")
     country = models.CharField(_("Country"), max_length=128, default="")
     phone = models.CharField(_("Phone"), default="", max_length=32)
-    email = models.EmailField(_("Email"), default="", max_length=256)
     siret = models.CharField(_("SIRET"), default="", max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
@@ -86,6 +82,9 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
+    charter_date = models.DateField(
+        _("Charter date"), null=True
+    )  # date de dernier dépôt de charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateField(_("Approval date"), null=True)  # date d'agrément
     last_goa_date = models.DateField(

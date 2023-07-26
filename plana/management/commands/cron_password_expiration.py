@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 
 from allauth.account.forms import default_token_generator
 from allauth.account.utils import user_pk_to_url_str
@@ -15,7 +17,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = _("Expired password policy")
+    help = _("Expired password policy.")
 
     def handle(self, *args, **options):
         try:
@@ -23,7 +25,9 @@ class Command(BaseCommand):
             queryset = User.objects.all()
 
             # Send emails to accounts with nearly expired password (not changed in 11 months)
-            mail_sending_due_date = today - datetime.timedelta(days=(365 - 31))
+            mail_sending_due_date = today - datetime.timedelta(
+                days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING
+            )
             mail_sending_queryset = queryset.filter(
                 password_last_change_date=mail_sending_due_date
             )
@@ -35,20 +39,25 @@ class Command(BaseCommand):
                 self.send_password_mail(user, context, template)
 
             # Invalidate expired passwords (not changed in 12 months)
-            change_due_date = today - datetime.timedelta(days=365)
+            change_due_date = today - datetime.timedelta(
+                days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION
+            )
             change_password_queryset = queryset.filter(
                 password_last_change_date=change_due_date
             )
 
             template = MailTemplate.objects.get(code="PASSWORD_RESET_MANDATORY")
             for user in change_password_queryset:
-                password = User.objects.make_random_password()
+                password = "".join(
+                    secrets.choice(string.ascii_letters + string.digits)
+                    for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                )
                 user.set_password(password)
                 user.save()
                 self.send_password_mail(user, context, template)
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))
 
     def send_password_mail(self, user, context, template):
         """Generic function to send an email."""

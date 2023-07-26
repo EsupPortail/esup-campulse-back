@@ -1,0 +1,157 @@
+[
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "commission_fund": 3,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 1000
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "commission_fund": 1,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 1000
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 3,
+    "fields": {
+      "project": 2,
+      "commission_fund": 2,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 1000
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 4,
+    "fields": {
+      "project": 3,
+      "commission_fund": 3,
+      "is_first_edition": false,
+      "amount_asked_previous_edition": 1000,
+      "amount_earned_previous_edition": 800,
+      "amount_asked": 900
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 5,
+    "fields": {
+      "project": 4,
+      "commission_fund": 3,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 6,
+    "fields": {
+      "project": 5,
+      "commission_fund": 6,
+      "is_first_edition": false,
+      "amount_asked_previous_edition": 1000,
+      "amount_earned_previous_edition": 800,
+      "amount_asked": 900,
+      "amount_earned": 2,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 7,
+    "fields": {
+      "project": 6,
+      "commission_fund": 6,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200,
+      "amount_earned": 1000,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 8,
+    "fields": {
+      "project": 7,
+      "commission_fund": 6,
+      "is_first_edition": false,
+      "amount_asked_previous_edition": 1000,
+      "amount_earned_previous_edition": 800,
+      "amount_asked": 900,
+      "amount_earned": 2,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 9,
+    "fields": {
+      "project": 8,
+      "commission_fund": 6,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200,
+      "amount_earned": 1000,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 10,
+    "fields": {
+      "project": 9,
+      "commission_fund": 7,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 2,
+      "amount_earned": 1,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 11,
+    "fields": {
+      "project": 10,
+      "commission_fund": 3,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200,
+      "is_validated_by_admin": true
+    }
+  },
+  {
+    "model": "projects.projectcommissionfund",
+    "pk": 12,
+    "fields": {
+      "project": 4,
+      "commission_fund": 1,
+      "is_first_edition": true,
+      "amount_asked_previous_edition": 0,
+      "amount_earned_previous_edition": 0,
+      "amount_asked": 200
+    }
+  }
+]

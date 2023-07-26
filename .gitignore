@@ -19,10 +19,8 @@ develop-eggs
 lib
 lib64
 
-# Sphinx
-_build
-_static
-_template
+# Hugo
+docs/public
 
 # Installer logs
 pip-log.txt

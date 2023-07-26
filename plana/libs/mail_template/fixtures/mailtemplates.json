@@ -538,5 +538,306 @@
         2
       ]
     }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 32,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_NEARLY_EXPIRED",
+      "label": "Association Charter Nearly Expired",
+      "description": "Message reçu par une association si sa charte va bientôt expirer.",
+      "subject": "{{ site_name }} – La charte de votre association va bientôt expirer",
+      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 33,
+    "fields": {
+      "code": "NEW_ASSOCIATION_CHARTER_TO_PROCESS",
+      "label": "New Association Charter To Process",
+      "description": "Message reçu par un gestionnaire au dépôt d'une nouvelle charte par une association.",
+      "subject": "{{ site_name }} – Une association vient de déposer une charte",
+      "body": "Bonjour,<br/><br/>Une association vient de déposer une nouvelle charte, vous pouvez la vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 34,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_SENT",
+      "label": "Association Charter Sent",
+      "description": "Message reçu par une association au dépôt d'une nouvelle charte.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a bien été déposée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été déposée. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 35,
+    "fields": {
+      "code": "ASSOCIATION_GOA_EXPIRING",
+      "label": "Association GOA Expiring",
+      "description": "Message reçu avec la liste des associations dont la date d'assemblée générale a eu lieu presque un an plus tôt.",
+      "subject": "{{ site_name }} – Récapitulatif des associations dont le mandat arrive à terme.",
+      "body": "Bonjour,<br/><br/>Voici le récapitulatif de toutes les associations dont le mandat arrivera à terme dans les prochaines semaines :<br/><br/>{{ associations_goa_list }}<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        16
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 36,
+    "fields": {
+      "code": "PROJECT_NEEDS_CHANGES",
+      "label": "Project Needs Changes",
+      "description": "Message reçu par un étudiant si sa demande de subventions est refusée mais modifiable.",
+      "subject": "{{ site_name }} - Veuillez modifier votre demande de subventionnement avant de la resoumettre.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée, merci de la modifier avant de la resoumettre.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 37,
+    "fields": {
+      "code": "PROJECT_REJECTED",
+      "label": "Project Rejected",
+      "description": "Message reçu par un étudiant si sa demande de subventions est définitivement refusée.",
+      "subject": "{{ site_name }} - Votre demande de subventionnement a été rejetée.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée définitivement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 38,
+    "fields": {
+      "code": "PROJECT_VALIDATED",
+      "label": "Project Validated",
+      "description": "Message reçu par un étudiant si sa demande de subventions est acceptée.",
+      "subject": "{{ site_name }} - Votre demande de subventionnement a été validée.",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 39,
+    "fields": {
+      "code": "PROJECT_NEEDS_REVIEW",
+      "label": "Project Needs Review",
+      "description": "Message reçu par un étudiant s'il doit (re-)soumettre le bilan de son projet.",
+      "subject": "{{ site_name }} - Veuillez envoyer ou modifier le bilan de votre projet.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme est en attente de bilan.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 40,
+    "fields": {
+      "code": "PROJECT_CANCELED",
+      "label": "Project Canceled",
+      "description": "Message reçu par un étudiant si son projet est annulé.",
+      "subject": "{{ site_name }} - Votre projet est annulé.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme a été annulé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 41,
+    "fields": {
+      "code": "PROJECT_REVIEW_VALIDATED",
+      "label": "Project Review Validated",
+      "description": "Message reçu par un étudiant si le bilan de son projet a été accepté.",
+      "subject": "{{ site_name }} - Votre bilan de projet a été validé.",
+      "body": "Bonjour,<br/><br/>L'un de vos bilans de projet a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 42,
+    "fields": {
+      "code": "DOCUMENT_NEARLY_EXPIRED",
+      "label": "Association Fund Nearly Expired",
+      "description": "Message reçu par un étudiant ou une association si un de ses documents va bientôt expirer.",
+      "subject": "{{ site_name }} – Un de vos documents va bientôt expirer",
+      "body": "Bonjour,<br/><br/>L'un de vos documents va bientôt expirer, veuillez le mettre à jour dans votre espace.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 43,
+    "fields": {
+      "code": "NEW_DOCUMENT_TO_PROCESS",
+      "label": "New Document To Process",
+      "description": "Message reçu par un gestionnaire au dépôt d'un nouveau document.",
+      "subject": "{{ site_name }} – Un document à valider vient d'être déposé",
+      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 44,
+    "fields": {
+      "code": "DOCUMENT_SENT",
+      "label": "Document Sent",
+      "description": "Message reçu par un étudiant ou une association au dépôt d'un nouveau document.",
+      "subject": "{{ site_name }} – Votre nouveau document a bien été déposé.",
+      "body": "Bonjour,<br/><br/>Votre nouveau document a bien été déposé. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 45,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_VALIDATED",
+      "label": "Association Charter Validated",
+      "description": "Message reçu par une association si sa charte est validée.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a bien été validée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 46,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_REJECTED",
+      "label": "Association Charter Rejected",
+      "description": "Message reçu par une association si sa charte est rejetée.",
+      "subject": "{{ site_name }} – Votre nouvelle charte a été rejetée.",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a été rejetée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 47,
+    "fields": {
+      "code": "DOCUMENT_VALIDATED",
+      "label": "Document Validated",
+      "description": "Message reçu par une association ou un étudiant si l'un de ses documents est validé.",
+      "subject": "{{ site_name }} – L'un de vos documents a été validé.",
+      "body": "Bonjour,<br/><br/>L'un de vos documents a été validé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 48,
+    "fields": {
+      "code": "DOCUMENT_REJECTED",
+      "label": "Document Rejected",
+      "description": "Message reçu par une association ou un étudiant si l'un de ses documents est rejeté.",
+      "subject": "{{ site_name }} – L'un de vos documents a été rejeté.",
+      "body": "Bonjour,<br/><br/>L'un de vos documents a été rejeté.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 49,
+    "fields": {
+      "code": "PROJECT_POSTPONED",
+      "label": "Project Reported",
+      "description": "Message reçu par une association si une commission liée à son projet est reportée.",
+      "subject": "{{ site_name }} - Votre demande de subventions est reportée.",
+      "body": "Bonjour,<br/><br/>L'une des dates de commissions pour l'un de vos projets a été déplacée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 50,
+    "fields": {
+      "code": "PROJECT_FUND_ATTRIBUTED",
+      "label": "Project Fund Attributed",
+      "description": "Message reçu par une association si un fonds a été alloué à son projet.",
+      "subject": "{{ site_name }} - L'un de vos projets aura une subvention.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets a obtenu un financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 51,
+    "fields": {
+      "code": "PROJECT_FUND_REFUSED",
+      "label": "Project Fund Refused",
+      "description": "Message reçu par une association si un fonds a été refusé pour son projet.",
+      "subject": "{{ site_name }} - L'un de vos projets n'aura pas de subvention.",
+      "body": "Bonjour,<br/><br/>L'un de vos projets n'a pas obtenu de financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2
+      ]
+    }
   }
 ]

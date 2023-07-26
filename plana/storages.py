@@ -24,6 +24,8 @@ PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 
 class MediaStorage(S3Boto3Storage):
+    """Default storage."""
+
     location = "media"
 
     def url(self, name, parameters=None, expire=None, http_method=None):
@@ -40,12 +42,16 @@ class UpdateACLStorage(S3Boto3Storage):
 
 
 class PublicFileStorage(UpdateACLStorage):
+    """Storage used for public files."""
+
     default_acl = PUBLIC_ACL
     file_overwrite = False
     querystring_auth = False
 
 
 class PrivateFileStorage(UpdateACLStorage):
+    """Storage used for private files."""
+
     default_acl = PRIVATE_ACL
     file_overwrite = False
     custom_domain = False
@@ -53,6 +59,8 @@ class PrivateFileStorage(UpdateACLStorage):
 
 
 class EncryptedPrivateFileStorage(PrivateFileStorage):
+    """Storage used for encrypted files."""
+
     def __init__(self):
         super().__init__()
         self.age_public_key = settings.AGE_PUBLIC_KEY
@@ -62,31 +70,32 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
             self.identity = x25519.Identity.from_str(
                 self.age_private_key.decode("utf-8").strip()
             )
-        except Exception as e:
-            raise ImproperlyConfigured(f"AGE private key not found : {e}")
+        except Exception as error:
+            raise ImproperlyConfigured(f"AGE private key not found : {error}")
 
         try:
             self.recipient = x25519.Recipient.from_str(
                 self.age_public_key.decode("utf-8").strip()
             )
-        except Exception as e:
-            raise ImproperlyConfigured(f"AGE public key not found : {e}")
+        except Exception as error:
+            raise ImproperlyConfigured(f"AGE public key not found : {error}")
 
     def _open(self, name, mode="rb"):
         file = super()._open(name, mode)
         decrypted_file = self._decrypt(file)
         return decrypted_file
 
-    def _save(self, path, file):
-        encrypted_file = self._encrypt(file)
-        return super()._save(path, encrypted_file)
+    def _save(self, name, content):
+        encrypted_file = self._encrypt(content)
+        return super()._save(name, encrypted_file)
 
     def _encrypt(self, original_file):
         file_content = original_file.file.read()
         encryption_result = encrypt(file_content, [self.recipient])
         encrypted_file = InMemoryUploadedFile(
             BytesIO(encryption_result),
-            original_file.field_name,
+            # TODO Find a better way to handle field_name for large files.
+            original_file.field_name if hasattr(original_file, "field_name") else None,
             original_file.name,
             original_file.content_type,
             len(encryption_result),

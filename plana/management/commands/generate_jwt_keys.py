@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import PosixPath
 
 from django.conf import settings
@@ -8,7 +9,7 @@ from django.utils.translation import gettext as _
 
 class Command(BaseCommand):
     help = _(
-        "Generate pair of RSA 256 private and public keys to sign and verify JWT tokens"
+        "Generate pair of RSA 256 private and public keys to sign and verify JWT tokens."
     )
 
     @staticmethod
@@ -35,7 +36,7 @@ class Command(BaseCommand):
         if private_key.exists() and private_key.is_file():
             if options.get("keep_keys", False):
                 self.stdout.write(self.style.NOTICE(_("Keys not replaced")))
-                exit()
+                sys.exit()
             if self.get_confirmation(_(f"Replace key file {str(private_key)}?")):
                 private_key.unlink(missing_ok=True)
                 public_key.unlink(missing_ok=True)

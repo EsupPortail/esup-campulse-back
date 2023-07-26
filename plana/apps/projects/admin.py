@@ -5,11 +5,11 @@ from .models import (
     Project,
     ProjectCategory,
     ProjectComment,
-    ProjectCommissionDate,
+    ProjectCommissionFund,
 )
 
 admin.site.register(Category)
 admin.site.register(Project)
 admin.site.register(ProjectCategory)
 admin.site.register(ProjectComment)
-admin.site.register(ProjectCommissionDate)
+admin.site.register(ProjectCommissionFund)

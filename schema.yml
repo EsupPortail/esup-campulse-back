@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA / Opaline API
-  version: 0.1.0
+  version: 0.2.0
   description: API for PlanA / Opaline
 paths:
   /associations/:
@@ -177,8 +177,6 @@ paths:
           description: No response body
         '415':
           description: No response body
-        '500':
-          description: No response body
     delete:
       operationId: associations_destroy
       description: Destroys an entire association (manager only).
@@ -205,6 +203,73 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /associations/{id}/pdf_export:
+    get:
+      operationId: associations_pdf_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataRead'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /associations/{id}/status:
+    patch:
+      operationId: associations_status_partial_update
+      description: Updates association charter status.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - associations
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssociationStatusRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationStatus'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /associations/activity_fields:
     get:
       operationId: associations_activity_fields_list
@@ -223,6 +288,31 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
+  /associations/csv_export:
+    get:
+      operationId: associations_csv_export_retrieve
+      description: Associations List CSV export.
+      parameters:
+      - in: query
+        name: associations
+        schema:
+          type: string
+        description: IDs of selected associations, separated by a coma.
+      tags:
+      - associations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociationAllDataRead'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
   /associations/names:
     get:
       operationId: associations_names_list
@@ -260,13 +350,46 @@ paths:
   /commissions/:
     get:
       operationId: commissions_list
-      description: Lists all commission types.
+      description: Lists all commissions.
       parameters:
       - in: query
-        name: acronym
+        name: dates
         schema:
           type: string
-        description: Commission acronym.
+        description: Filter by commission_date field (multiple).
+      - in: query
+        name: funds
+        schema:
+          type: string
+        description: Filter by linked funds.
+      - in: query
+        name: is_open_to_projects
+        schema:
+          type: boolean
+        description: Filter to get only commissions with open projects submissions.
+      - in: query
+        name: is_site
+        schema:
+          type: boolean
+        description: Filter to get commission by fund is_site setting.
+      - in: query
+        name: managed_projects
+        schema:
+          type: boolean
+        description: Filter to get commissions with projects managed by the current
+          user.
+      - in: query
+        name: only_with_active_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates where projects reviews are still
+          pending exclusively.
+      - in: query
+        name: with_active_projects
+        schema:
+          type: boolean
+        description: Filter to get commission_dates where projects reviews are still
+          pending or not.
       tags:
       - commissions
       security:
@@ -281,73 +404,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/Commission'
           description: ''
-  /commissions/commission_dates:
-    get:
-      operationId: commissions_commission_dates_list
-      description: Lists all commission dates.
-      parameters:
-      - in: query
-        name: active_projects
-        schema:
-          type: boolean
-        description: Filter to get commission_dates where projects reviews are still
-          pending.
-      - in: query
-        name: commission_dates
-        schema:
-          type: string
-        description: Filter by commission_date field (multiple).
-      - in: query
-        name: is_site
-        schema:
-          type: boolean
-        description: Filter by is_site field.
-      - in: query
-        name: managed_commissions
-        schema:
-          type: boolean
-        description: Filter to get commission_dates managed by the current user.
-      - in: query
-        name: managed_projects
-        schema:
-          type: boolean
-        description: Filter to get commission_dates with projects managed by the current
-          user.
-      - in: query
-        name: only_next
-        schema:
-          type: boolean
-        description: Filter to get only chronologically first commission of each type
-      tags:
-      - commissions
-      security:
-      - jwtAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CommissionDate'
-          description: ''
     post:
-      operationId: commissions_commission_dates_create
-      description: Creates a new commission date (manager only).
+      operationId: commissions_create
+      description: Creates a new commission (manager only).
       tags:
       - commissions
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/CommissionDateRequest'
+              $ref: '#/components/schemas/CommissionRequest'
         required: true
       security:
       - jwtAuth: []
@@ -356,7 +428,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '400':
           description: No response body
@@ -364,9 +436,65 @@ paths:
           description: No response body
         '403':
           description: No response body
-  /commissions/commission_dates/{id}:
+  /commissions/{commission_id}/funds:
     get:
-      operationId: commissions_commission_dates_retrieve
+      operationId: commissions_funds_retrieve
+      description: Retrieves all funds linked to a commission.
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionFund'
+          description: ''
+        '404':
+          description: No response body
+  /commissions/{commission_id}/funds/{fund_id}:
+    delete:
+      operationId: commissions_funds_destroy
+      description: Destroys a link between commission and fund.
+      parameters:
+      - in: path
+        name: commission_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: fund_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionFund'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /commissions/{id}:
+    get:
+      operationId: commissions_retrieve
       description: Retrieves a commission date with all its details.
       parameters:
       - in: path
@@ -384,12 +512,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '404':
           description: No response body
     patch:
-      operationId: commissions_commission_dates_partial_update
+      operationId: commissions_partial_update
       description: Updates commission date details.
       parameters:
       - in: path
@@ -403,13 +531,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedCommissionDateUpdateRequest'
+              $ref: '#/components/schemas/PatchedCommissionUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -417,7 +545,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '400':
           description: No response body
@@ -428,8 +556,8 @@ paths:
         '404':
           description: No response body
     delete:
-      operationId: commissions_commission_dates_destroy
-      description: Destroys an entire commission date (manager only).
+      operationId: commissions_destroy
+      description: Destroys an entire commission (manager only).
       parameters:
       - in: path
         name: id
@@ -445,7 +573,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommissionDate'
+                $ref: '#/components/schemas/Commission'
           description: ''
         '401':
           description: No response body
@@ -453,6 +581,107 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /commissions/{id}/csv_export:
+    get:
+      operationId: commissions_csv_export_retrieve
+      description: Projects presented to the commission CSV export.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - commissions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '404':
+          description: No response body
+  /commissions/funds:
+    get:
+      operationId: commissions_funds_list
+      description: Lists all links between commissions and funds.
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommissionFund'
+          description: ''
+    post:
+      operationId: commissions_funds_create
+      description: Creates a link between a commission and a fund.
+      tags:
+      - commissions/funds
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommissionFundRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommissionFundRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionFundRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommissionFund'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /commissions/funds/names:
+    get:
+      operationId: commissions_funds_names_list
+      description: Lists all fund types.
+      parameters:
+      - in: query
+        name: acronym
+        schema:
+          type: string
+        description: Fund acronym.
+      tags:
+      - commissions/funds
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fund'
+          description: ''
   /contents/:
     get:
       operationId: contents_list
@@ -511,6 +740,11 @@ paths:
         schema:
           type: string
         description: Document acronym.
+      - in: query
+        name: fund_ids
+        schema:
+          type: integer
+        description: Document fund IDs.
       - in: query
         name: process_types
         schema:
@@ -663,6 +897,16 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
+        name: is_validated_by_admin
+        schema:
+          type: boolean
+        description: Filter for documents not validated by an admin
+      - in: query
+        name: process_types
+        schema:
+          type: string
+        description: Document process type.
+      - in: query
         name: project_id
         schema:
           type: integer
@@ -706,6 +950,7 @@ paths:
         required: true
       security:
       - jwtAuth: []
+      - {}
       responses:
         '201':
           content:
@@ -714,8 +959,6 @@ paths:
                 $ref: '#/components/schemas/DocumentUploadCreate'
           description: ''
         '400':
-          description: No response body
-        '401':
           description: No response body
         '403':
           description: No response body
@@ -744,6 +987,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentUpload'
           description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: documents_uploads_partial_update
+      description: Updates document upload details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - documents/uploads
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentUploadUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUploadUpdate'
+          description: ''
+        '400':
+          description: No response body
         '401':
           description: No response body
         '403':
@@ -886,10 +1168,15 @@ paths:
           type: integer
         description: Filter by Association ID.
       - in: query
-        name: commission_dates
+        name: commission_id
         schema:
           type: string
-        description: Filter by Commission Dates linked to a project.
+        description: Filter by Commission ID linked to a project.
+      - in: query
+        name: manual_identifier
+        schema:
+          type: string
+        description: Filter by manual identifier.
       - in: query
         name: name
         schema:
@@ -971,60 +1258,6 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/export:
-    get:
-      operationId: projects_export_retrieve
-      description: Retrieves a PDF file.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
-        '404':
-          description: No response body
-  /projects/{id}/review/export:
-    get:
-      operationId: projects_review_export_retrieve
-      description: Retrieves a PDF file.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - projects
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
-        '404':
-          description: No response body
   /projects/{id}:
     get:
       operationId: projects_retrieve
@@ -1091,10 +1324,36 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{id}/review:
+    delete:
+      operationId: projects_destroy
+      description: /projects/{id} route
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /projects/{id}/pdf_export:
     get:
-      operationId: projects_review_retrieve
-      description: Retrieves a project review with all its details.
+      operationId: projects_pdf_export_retrieve
+      description: Retrieves a PDF file.
       parameters:
       - in: path
         name: id
@@ -1118,9 +1377,36 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /projects/{id}/review:
+    get:
+      operationId: projects_review_retrieve
+      description: Retrieves a project review with all its details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectReview'
+          description: ''
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
     patch:
       operationId: projects_review_partial_update
-      description: Updates project details.
+      description: Updates project review details.
       parameters:
       - in: path
         name: id
@@ -1147,10 +1433,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectReviewUpdate'
           description: ''
         '400':
           description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
+  /projects/{id}/review/pdf_export:
+    get:
+      operationId: projects_review_pdf_export_retrieve
+      description: Retrieves a PDF file.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - projects
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
         '401':
           description: No response body
         '403':
@@ -1359,9 +1672,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{project_id}/commission_dates:
+  /projects/{project_id}/commission_funds:
     get:
-      operationId: projects_commission_dates_retrieve
+      operationId: projects_commission_funds_retrieve
       description: Retrieves all commission dates linked to a project.
       parameters:
       - in: path
@@ -1370,7 +1683,7 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1378,7 +1691,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
@@ -1386,13 +1699,13 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/{project_id}/commission_dates/{commission_date_id}:
+  /projects/{project_id}/commission_funds/{commission_fund_id}:
     patch:
-      operationId: projects_commission_dates_partial_update
-      description: Updates details of a project linked to a commission date.
+      operationId: projects_commission_funds_partial_update
+      description: Updates details of a project linked to a commission fund object.
       parameters:
       - in: path
-        name: commission_date_id
+        name: commission_fund_id
         schema:
           type: integer
         required: true
@@ -1402,18 +1715,18 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommissionDateDataRequest'
+              $ref: '#/components/schemas/PatchedProjectCommissionFundDataRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1421,7 +1734,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFundData'
           description: ''
         '400':
           description: No response body
@@ -1432,11 +1745,11 @@ paths:
         '404':
           description: No response body
     delete:
-      operationId: projects_commission_dates_destroy
+      operationId: projects_commission_funds_destroy
       description: Destroys details of a project linked to a commission date.
       parameters:
       - in: path
-        name: commission_date_id
+        name: commission_fund_id
         schema:
           type: integer
         required: true
@@ -1446,7 +1759,7 @@ paths:
           type: integer
         required: true
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1454,7 +1767,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
@@ -1542,32 +1855,6 @@ paths:
                   $ref: '#/components/schemas/Category'
           description: ''
   /projects/comments:
-    get:
-      operationId: projects_comments_list
-      description: Lists all links between projects and comments
-      parameters:
-      - in: query
-        name: project_id
-        schema:
-          type: number
-        description: Project id.
-      tags:
-      - projects/comments
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectComment'
-          description: ''
-        '401':
-          description: No response body
-        '403':
-          description: No response body
     post:
       operationId: projects_comments_create
       description: Create a link between a comment and a project
@@ -1602,10 +1889,10 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /projects/commission_dates:
+  /projects/commission_funds:
     get:
-      operationId: projects_commission_dates_list
-      description: Lists all commission dates that can be linked to a project.
+      operationId: projects_commission_funds_list
+      description: Lists all commission funds that can be linked to a project.
       parameters:
       - in: query
         name: commission_id
@@ -1618,7 +1905,7 @@ paths:
           type: number
         description: Project id.
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       security:
       - jwtAuth: []
       responses:
@@ -1628,28 +1915,28 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProjectCommissionDate'
+                  $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '401':
           description: No response body
         '403':
           description: No response body
     post:
-      operationId: projects_commission_dates_create
-      description: Creates a link between a project and a commission date.
+      operationId: projects_commission_funds_create
+      description: Creates a link between a project and a commission fund object.
       tags:
-      - projects/commission_dates
+      - projects/commission_funds
       requestBody:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/ProjectCommissionDateRequest'
+              $ref: '#/components/schemas/ProjectCommissionFundRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1658,7 +1945,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectCommissionDate'
+                $ref: '#/components/schemas/ProjectCommissionFund'
           description: ''
         '400':
           description: No response body
@@ -1911,11 +2198,7 @@ paths:
       - jwtAuth: []
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssociationUserUpdate'
-          description: ''
+          description: No response body
         '400':
           description: No response body
         '401':
@@ -1974,7 +2257,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2006,7 +2289,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2014,13 +2297,13 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /users/{user_id}/groups/{group_id}/commissions/{commission_id}:
+  /users/{user_id}/groups/{group_id}/funds/{fund_id}:
     delete:
-      operationId: users_groups_destroy_with_commission
-      description: Destroys a group linked to a user with commission argument (manager).
+      operationId: users_groups_destroy_with_fund
+      description: Destroys a group linked to a user with fund argument (manager).
       parameters:
       - in: path
-        name: commission_id
+        name: fund_id
         schema:
           type: integer
         required: true
@@ -2043,7 +2326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2080,7 +2363,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUser'
+                $ref: '#/components/schemas/GroupInstitutionFundUser'
           description: ''
         '401':
           description: No response body
@@ -2622,7 +2905,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
+                  $ref: '#/components/schemas/GroupInstitutionFundUserCreate'
           description: ''
         '401':
           description: No response body
@@ -2637,13 +2920,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupInstitutionCommissionUserCreateRequest'
+              $ref: '#/components/schemas/GroupInstitutionFundUserCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -2653,7 +2936,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupInstitutionCommissionUserCreate'
+                $ref: '#/components/schemas/GroupInstitutionFundUserCreate'
           description: ''
         '400':
           description: No response body
@@ -2694,44 +2977,45 @@ components:
           type: object
           additionalProperties: {}
           readOnly: true
-          description: URL for each thumbnail size
+          description: Lien pour chaque taille de miniature
         name:
           type: string
           title: Nom
           maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
-        social_object:
-          type: string
-        current_projects:
-          type: string
-        address:
-          type: string
-          title: Adresse
-        zipcode:
-          type: string
-          maxLength: 32
-        city:
-          type: string
-          maxLength: 128
-        country:
-          type: string
-          maxLength: 128
-        phone:
-          type: string
-          title: Téléphone
-          maxLength: 32
         email:
           type: string
           format: email
           title: Courriel
           maxLength: 256
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        social_object:
+          type: string
+          title: Objet social
+        current_projects:
+          type: string
+          title: Projets en cours
+        address:
+          type: string
+          title: Adresse
+        zipcode:
+          type: string
+          title: Code postal
+          maxLength: 32
+        city:
+          type: string
+          title: Ville
+          maxLength: 128
+        country:
+          type: string
+          title: Pays
+          maxLength: 128
+        phone:
+          type: string
+          title: Téléphone
+          maxLength: 32
         siret:
           type: string
           maxLength: 14
@@ -2747,26 +3031,38 @@ components:
           title: Nombre d'étudiants
         president_names:
           type: string
+          title: Noms du président
           maxLength: 256
         president_phone:
           type: string
+          title: Numéro de téléphone du président
           maxLength: 32
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
+        charter_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de la charte
         creation_date:
           type: string
           format: date-time
@@ -2793,6 +3089,7 @@ components:
       required:
       - activity_field
       - creation_date
+      - email
       - id
       - institution
       - institution_component
@@ -2846,11 +3143,7 @@ components:
           type: string
           format: uri
           nullable: true
-          title: Dynamic thumbnails for the logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
+          title: Miniatures dynamiques pour le logo
         student_count:
           type: integer
           maximum: 2147483647
@@ -2858,20 +3151,30 @@ components:
           title: Nombre d'étudiants
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
+        charter_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de la charte
         creation_date:
           type: string
           format: date-time
@@ -2909,18 +3212,26 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        email:
+          type: string
+          format: email
+          title: Courriel
+          maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
+      - email
       - id
       - name
     AssociationMandatoryDataRequest:
@@ -2932,18 +3243,27 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
+      - email
       - name
     AssociationName:
       type: object
@@ -2962,7 +3282,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - has_president
       - id
@@ -2996,27 +3316,43 @@ components:
           maxLength: 256
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
+          title: Est site
         path_logo:
           type: object
           additionalProperties: {}
           readOnly: true
-          description: URL for each thumbnail size
+          description: Lien pour chaque taille de miniature
+        charter_status:
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
+        charter_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de la charte
       required:
       - activity_field
+      - email
       - id
       - institution
       - institution_component
       - name
       - path_logo
+    AssociationStatus:
+      type: object
+      description: Serializer for status field.
+      properties:
+        charter_status:
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
     AssociationUser:
       type: object
       description: Main serializer.
@@ -3030,22 +3366,29 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - id
@@ -3060,14 +3403,19 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - user
@@ -3081,14 +3429,19 @@ components:
           type: integer
         is_president:
           type: boolean
+          title: Dirige l'association
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
       required:
       - association
       - user
@@ -3098,22 +3451,29 @@ components:
       properties:
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
+          title: Est trésorier
     CAS:
       type: object
       description: Main serializer.
@@ -3195,61 +3555,74 @@ components:
         id:
           type: integer
           readOnly: true
+        submission_date:
+          type: string
+          format: date
+          title: Date de fin de soumission du projet
+        commission_date:
+          type: string
+          format: date
+          title: Date de commission
+        is_open_to_projects:
+          type: boolean
+          title: Peut recevoir des projets
         name:
           type: string
           title: Nom
           maxLength: 250
-        acronym:
-          type: string
-          title: Acronyme
-          maxLength: 30
-        is_site:
-          type: boolean
-          title: Site ?
-        institution:
-          type: integer
-          title: Etablissement
       required:
-      - acronym
+      - commission_date
       - id
-      - institution
-      - name
-    CommissionDate:
+      - submission_date
+    CommissionFund:
       type: object
       description: Main serializer.
       properties:
         id:
           type: integer
           readOnly: true
-        submission_date:
-          type: string
-          format: date
-          title: Project submission limit date
-        commission_date:
-          type: string
-          format: date
         commission:
           type: integer
+        fund:
+          type: integer
+          title: Fonds
       required:
       - commission
-      - commission_date
+      - fund
       - id
-      - submission_date
-    CommissionDateRequest:
+    CommissionFundRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        commission:
+          type: integer
+        fund:
+          type: integer
+          title: Fonds
+      required:
+      - commission
+      - fund
+    CommissionRequest:
       type: object
       description: Main serializer.
       properties:
         submission_date:
           type: string
           format: date
-          title: Project submission limit date
+          title: Date de fin de soumission du projet
         commission_date:
           type: string
           format: date
-        commission:
-          type: integer
+          title: Date de commission
+        is_open_to_projects:
+          type: boolean
+          title: Peut recevoir des projets
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
       required:
-      - commission
       - commission_date
       - submission_date
     Content:
@@ -3265,12 +3638,22 @@ components:
         label:
           type: string
           maxLength: 128
+        title:
+          type: string
+          title: Titre
+          maxLength: 512
         header:
           type: string
+          title: En-tête
         body:
           type: string
+          title: Corps du message
         footer:
           type: string
+          title: Pied de page
+        aside:
+          type: string
+          title: Barre annexe
       required:
       - body
       - code
@@ -3289,10 +3672,12 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         phone:
           type: string
@@ -3318,19 +3703,27 @@ components:
           type: string
         contact:
           type: string
-          title: Contact address
+          title: Adresse de contact
         is_multiple:
           type: boolean
+          title: Est multiple
         is_required_in_process:
           type: boolean
+          title: Est requis dans son processus
         days_before_expiration:
           type: string
-          title: Days before document expiration
+          nullable: true
+          title: Nombre de jours avant expiration du document
+        expiration_day:
+          type: string
+          nullable: true
+          title: Jour d'expiration du document au format %m-%d
+          maxLength: 5
         path_template:
           type: string
           format: uri
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
         mime_types:
           type: array
           items:
@@ -3339,14 +3732,15 @@ components:
         process_type:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
-          title: Document Status
+          title: Statut du Document
         institution:
           type: integer
           nullable: true
-          title: Etablissement
-        commission:
+          title: Établissement
+        fund:
           type: integer
           nullable: true
+          title: Fonds
       required:
       - id
     DocumentCreateRequest:
@@ -3365,14 +3759,15 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
         institution:
           type: integer
           nullable: true
-          title: Etablissement
-        commission:
+          title: Établissement
+        fund:
           type: integer
           nullable: true
+          title: Fonds
     DocumentUpload:
       type: object
       description: Main serializer.
@@ -3394,6 +3789,12 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date d'envoi
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3406,6 +3807,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - id
@@ -3427,10 +3829,16 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date d'envoi
         path_file:
           type: string
           format: uri
-          title: Uploaded file
+          title: Fichier envoyé
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3443,6 +3851,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - id
@@ -3460,7 +3869,12 @@ components:
         path_file:
           type: string
           format: binary
-          title: Uploaded file
+          title: Fichier envoyé
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
         document:
           type: integer
         user:
@@ -3473,6 +3887,7 @@ components:
         project:
           type: integer
           nullable: true
+          title: Projet
       required:
       - document
       - path_file
@@ -3483,13 +3898,22 @@ components:
         path_file:
           type: string
           format: uri
-          title: Uploaded file
+          title: Fichier envoyé
         name:
           type: string
           title: Nom
           maxLength: 250
       required:
       - path_file
+    DocumentUploadUpdate:
+      type: object
+      description: Serializer to validate a document.
+      properties:
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
     ExternalUser:
       type: object
       description: External user serializer.
@@ -3502,6 +3926,32 @@ components:
           type: string
         username:
           type: string
+    Fund:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
+        is_site:
+          type: boolean
+          title: Est site
+        institution:
+          type: integer
+          title: Établissement
+      required:
+      - acronym
+      - id
+      - institution
+      - name
     Group:
       type: object
       description: Main serializer.
@@ -3525,7 +3975,7 @@ components:
       - is_public
       - name
       - permissions
-    GroupInstitutionCommissionUser:
+    GroupInstitutionFundUser:
       type: object
       description: Main serializer.
       properties:
@@ -3539,14 +3989,14 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
       - group
       - id
       - user
-    GroupInstitutionCommissionUserCreate:
+    GroupInstitutionFundUserCreate:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:
@@ -3557,13 +4007,13 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
       - group
       - user
-    GroupInstitutionCommissionUserCreateRequest:
+    GroupInstitutionFundUserCreateRequest:
       type: object
       description: Serializer for user-groups creation (with username instead of id).
       properties:
@@ -3574,7 +4024,7 @@ components:
         institution:
           type: integer
           nullable: true
-        commission:
+        fund:
           type: integer
           nullable: true
       required:
@@ -3613,7 +4063,7 @@ components:
         institution:
           type: integer
           nullable: true
-          title: Etablissement
+          title: Établissement
       required:
       - id
       - name
@@ -3740,11 +4190,7 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Dynamic thumbnails for the logo
-        alt_logo:
-          type: string
-          nullable: true
-          title: Logo description
+          title: Miniatures dynamiques pour le logo
         student_count:
           type: integer
           maximum: 2147483647
@@ -3752,20 +4198,30 @@ components:
           title: Nombre d'étudiants
         is_enabled:
           type: boolean
+          title: Est active
         is_public:
           type: boolean
+          title: Est publique
         is_site:
           type: boolean
-          title: Site ?
+          title: Est site
         amount_members_allowed:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of members allowed
+          title: Nombre de membres autorisés
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         charter_status:
-          $ref: '#/components/schemas/CharterStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
+        charter_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de la charte
         approval_date:
           type: string
           format: date
@@ -3784,39 +4240,63 @@ components:
         social_networks:
           type: object
           additionalProperties: {}
+    PatchedAssociationStatusRequest:
+      type: object
+      description: Serializer for status field.
+      properties:
+        charter_status:
+          allOf:
+          - $ref: '#/components/schemas/CharterStatusEnum'
+          title: Statut de la charte
     PatchedAssociationUserUpdateRequest:
       type: object
       description: Serializer for user-associations change.
       properties:
         is_president:
           type: boolean
+          title: Dirige l'association
         can_be_president_from:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association de
         can_be_president_to:
           type: string
           format: date
           nullable: true
+          title: Peut diriger l'association à
         is_validated_by_admin:
           type: boolean
+          title: Est validé par l'équipe d'administration
         is_vice_president:
           type: boolean
+          title: Est vice-président
         is_secretary:
           type: boolean
+          title: Est secrétaire
         is_treasurer:
           type: boolean
-    PatchedCommissionDateUpdateRequest:
+          title: Est trésorier
+    PatchedCommissionUpdateRequest:
       type: object
       description: Update serializer.
       properties:
         submission_date:
           type: string
           format: date
-          title: Project submission limit date
+          title: Date de fin de soumission du projet
         commission_date:
           type: string
           format: date
+          title: Date de commission
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
+        is_open_to_projects:
+          type: boolean
+          title: Peut recevoir des projets
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.
@@ -3833,7 +4313,16 @@ components:
           type: string
           format: binary
           nullable: true
-          title: Example template file
+          title: Template de fichier d'exemple
+    PatchedDocumentUploadUpdateRequest:
+      type: object
+      description: Serializer to validate a document.
+      properties:
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.
@@ -3842,32 +4331,40 @@ components:
           type: string
           minLength: 1
           title: Texte
-    PatchedProjectCommissionDateDataRequest:
+    PatchedProjectCommissionFundDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
       properties:
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
+          title: Est validé par l'équipe d'administration
+        new_commission_fund_id:
+          type: integer
     PatchedProjectRequest:
       type: object
       description: Main serializer.
@@ -3877,38 +4374,26 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Identifiant manuel
+          maxLength: 8
         planned_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
           minLength: 1
-        other_first_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        other_last_name:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        other_email:
-          type: string
-          format: email
-          nullable: true
-          minLength: 1
-          maxLength: 150
-        other_phone:
-          type: string
-          nullable: true
-          minLength: 1
-          maxLength: 32
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -3916,37 +4401,43 @@ components:
         association:
           type: integer
           nullable: true
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
         budget_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
           minLength: 1
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
           minLength: 1
+          title: Objectifs
         summary:
           type: string
           minLength: 1
@@ -3954,71 +4445,85 @@ components:
         planned_activities:
           type: string
           minLength: 1
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
           minLength: 1
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
           minLength: 1
+          title: Campagne de communication
+        sustainable_development:
+          type: string
+          minLength: 1
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     PatchedProjectReviewUpdateRequest:
       type: object
       description: Main review serializer for update.
       properties:
-        other_first_name:
-          type: string
-        other_last_name:
-          type: string
-        other_email:
-          type: string
-        other_phone:
-          type: string
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
         outcome:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Dépenses
         income:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Recettes
         real_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début réelle
         real_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin réelle
         real_location:
           type: string
           minLength: 1
+          title: Lieu réel
         review:
           type: string
           minLength: 1
-          title: Review (amount of students, partnerships, ...)
+          title: Bilan (nombre d'étudiants, partenariats, ...)
         impact_students:
           type: string
           minLength: 1
-          title: Impact on students
+          title: Impact sur les étudiants
         description:
           type: string
           minLength: 1
-          title: Description (activities done, changes from planning, ...)
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
         difficulties:
           type: string
           minLength: 1
+          title: Difficultés
         improvements:
           type: string
           minLength: 1
+          title: Améliorations
     PatchedProjectStatusRequest:
       type: object
       description: Serializer for status field.
       properties:
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -4034,10 +4539,12 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         email:
           type: string
@@ -4057,9 +4564,13 @@ components:
           type: string
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
     PatchedUserUpdateRequest:
       type: object
       description: Serializer to patch the user.
@@ -4084,13 +4595,17 @@ components:
           type: string
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
     ProcessTypeEnum:
       enum:
       - CHARTER_ASSOCIATION
-      - CHARTER_PROJECT_COMMISSION
+      - CHARTER_PROJECT_FUND
       - DOCUMENT_ASSOCIATION
       - DOCUMENT_USER
       - DOCUMENT_PROJECT
@@ -4108,33 +4623,24 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          title: Identifiant manuel
+          maxLength: 8
         planned_start_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
-        other_first_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        other_last_name:
-          type: string
-          nullable: true
-          maxLength: 150
-        other_email:
-          type: string
-          format: email
-          nullable: true
-          maxLength: 150
-        other_phone:
-          type: string
-          nullable: true
-          maxLength: 32
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4142,58 +4648,71 @@ components:
         association:
           type: integer
           nullable: true
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
         categories:
           type: array
           items:
             $ref: '#/components/schemas/Category'
           readOnly: true
-        commission_dates:
+        commissions:
           type: array
           items:
-            $ref: '#/components/schemas/CommissionDate'
+            $ref: '#/components/schemas/Commission'
           readOnly: true
         budget_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
+          title: Objectifs
         summary:
           type: string
           title: Résumé
         planned_activities:
           type: string
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
+          title: Campagne de communication
+        sustainable_development:
+          type: string
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
         creation_date:
           type: string
           format: date-time
@@ -4203,9 +4722,10 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
       required:
       - categories
-      - commission_dates
+      - commissions
       - creation_date
       - edition_date
       - id
@@ -4246,7 +4766,7 @@ components:
         project:
           type: integer
         user:
-          type: integer
+          $ref: '#/components/schemas/UserName'
         text:
           type: string
           title: Texte
@@ -4259,6 +4779,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
       required:
       - creation_date
       - edition_date
@@ -4272,14 +4793,18 @@ components:
       properties:
         project:
           type: integer
+          title: Projet
         text:
           type: string
           minLength: 1
           title: Texte
+        user:
+          type: integer
       required:
       - project
       - text
-    ProjectCommissionDate:
+      - user
+    ProjectCommissionFund:
       type: object
       description: Main serializer.
       properties:
@@ -4288,66 +4813,123 @@ components:
           readOnly: true
         project:
           type: integer
-        commission_date:
+        commission_fund:
           type: integer
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
+          title: Est validé par l'équipe d'administration
       required:
-      - commission_date
+      - commission_fund
       - id
       - project
-    ProjectCommissionDateRequest:
+    ProjectCommissionFundData:
+      type: object
+      description: Fields that can be updated by project's bearer.
+      properties:
+        is_first_edition:
+          type: boolean
+          title: Est la première édition
+        amount_asked_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Montant demandé à l'édition précédente
+        amount_earned_previous_edition:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Montant obtenu à l'édition précédente
+        amount_asked:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Montant demandé
+        amount_earned:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: Montant obtenu
+        is_validated_by_admin:
+          type: boolean
+          nullable: true
+          title: Est validé par l'équipe d'administration
+        commission_fund_id:
+          type: integer
+          title: Fond lié à une Commission
+          readOnly: true
+        new_commission_fund_id:
+          type: integer
+        project_id:
+          type: integer
+          title: Projet
+          readOnly: true
+      required:
+      - commission_fund_id
+      - project_id
+    ProjectCommissionFundRequest:
       type: object
       description: Main serializer.
       properties:
         project:
           type: integer
-        commission_date:
+        commission_fund:
           type: integer
         is_first_edition:
           type: boolean
+          title: Est la première édition
         amount_asked_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount asked on previous edition
+          title: Montant demandé à l'édition précédente
         amount_earned_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount earned on previous edition
+          title: Montant obtenu à l'édition précédente
         amount_asked:
           type: integer
           maximum: 2147483647
           minimum: 0
+          title: Montant demandé
         amount_earned:
           type: integer
           maximum: 2147483647
           minimum: 0
+          nullable: true
+          title: Montant obtenu
         is_validated_by_admin:
           type: boolean
+          nullable: true
+          title: Est validé par l'équipe d'administration
       required:
-      - commission_date
+      - commission_fund
       - project
     ProjectPartialData:
       type: object
@@ -4360,6 +4942,11 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        manual_identifier:
+          type: string
+          nullable: true
+          title: Identifiant manuel
+          maxLength: 8
         association:
           type: integer
           nullable: true
@@ -4367,32 +4954,206 @@ components:
           type: integer
           nullable: true
           title: Utilisateur
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
+        commission:
+          allOf:
+          - $ref: '#/components/schemas/Commission'
+          readOnly: true
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de début prévue
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de fin prévue
         edition_date:
           type: string
           format: date-time
           readOnly: true
+          title: Date de dernière mise à jour
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
       required:
+      - commission
       - edition_date
       - id
       - name
+    ProjectReview:
+      type: object
+      description: Main review serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        planned_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de début prévue
+        planned_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de fin prévue
+        planned_location:
+          type: string
+          title: Lieu prévu
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
+        commissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Commission'
+          readOnly: true
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Dépenses
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Recettes
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de début réelle
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de fin réelle
+        real_location:
+          type: string
+          title: Lieu réel
+        review:
+          type: string
+          title: Bilan (nombre d'étudiants, partenariats, ...)
+        impact_students:
+          type: string
+          title: Impact sur les étudiants
+        description:
+          type: string
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
+        difficulties:
+          type: string
+          title: Difficultés
+        improvements:
+          type: string
+          title: Améliorations
+        creation_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de dernière mise à jour
+      required:
+      - commissions
+      - creation_date
+      - edition_date
+      - id
+      - name
+    ProjectReviewUpdate:
+      type: object
+      description: Main review serializer for update.
+      properties:
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
+        commissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Commission'
+          readOnly: true
+        outcome:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Dépenses
+        income:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Recettes
+        real_start_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de début réelle
+        real_end_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de fin réelle
+        real_location:
+          type: string
+          title: Lieu réel
+        review:
+          type: string
+          title: Bilan (nombre d'étudiants, partenariats, ...)
+        impact_students:
+          type: string
+          title: Impact sur les étudiants
+        description:
+          type: string
+          title: Description (activités réalisées, changements par rapport au planning,
+            ...)
+        difficulties:
+          type: string
+          title: Difficultés
+        improvements:
+          type: string
+          title: Améliorations
+      required:
+      - commissions
     ProjectStatus:
       type: object
       description: Serializer for status field.
       properties:
         project_status:
-          $ref: '#/components/schemas/ProjectStatusEnum'
+          allOf:
+          - $ref: '#/components/schemas/ProjectStatusEnum'
+          title: Statut du Projet
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT
+      - PROJECT_DRAFT_PROCESSED
       - PROJECT_PROCESSING
       - PROJECT_REJECTED
       - PROJECT_VALIDATED
       - PROJECT_REVIEW_DRAFT
       - PROJECT_REVIEW_PROCESSING
-      - PROJECT_REVIEW_REJECTED
       - PROJECT_REVIEW_VALIDATED
+      - PROJECT_CANCELED
       type: string
     ProjectUpdateRequest:
       type: object
@@ -4404,21 +5165,16 @@ components:
           type: string
           format: date-time
           nullable: true
+          title: Date de début prévue
         planned_end_date:
           type: string
           format: date-time
           nullable: true
+          title: Date de fin prévue
         planned_location:
           type: string
           minLength: 1
-        other_first_name:
-          type: string
-        other_last_name:
-          type: string
-        other_email:
-          type: string
-        other_phone:
-          type: string
+          title: Lieu prévu
         user:
           type: integer
           nullable: true
@@ -4426,37 +5182,43 @@ components:
         association:
           type: integer
           nullable: true
+        association_user:
+          type: integer
+          nullable: true
+          title: Membre d'association
         budget_previous_edition:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Budget on previous edition
+          title: Budget de l'édition précédente
         target_audience:
           type: string
           minLength: 1
+          title: Public visé
         amount_students_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of students in target audience
+          title: Nombre d'étudiants dans le public visé
         amount_all_audience:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of all people in target audience
+          title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money asked for each person
+          title: Quantité d'argent demandée par personne
         individual_cost:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Amount of money needed by person
+          title: Quantité d'argent nécessaire par personne
         goals:
           type: string
           minLength: 1
+          title: Objectifs
         summary:
           type: string
           minLength: 1
@@ -4464,14 +5226,20 @@ components:
         planned_activities:
           type: string
           minLength: 1
-          title: Planned activites
+          title: Activités prévues
         prevention_safety:
           type: string
           minLength: 1
-          title: Planned prevention and safety actions
+          title: Actions de prévention et de sécurité prévues
         marketing_campaign:
           type: string
           minLength: 1
+          title: Campagne de communication
+        sustainable_development:
+          type: string
+          minLength: 1
+          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+            Sociétale)
     ResendEmailVerificationRequest:
       type: object
       properties:
@@ -4531,9 +5299,11 @@ components:
           maxLength: 150
         first_name:
           type: string
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
+          title: Nom de famille
           maxLength: 150
         email:
           type: string
@@ -4558,9 +5328,13 @@ components:
           readOnly: true
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         associations:
           type: array
           items:
@@ -4585,6 +5359,25 @@ components:
       - last_name
       - permissions
       - username
+    UserName:
+      type: object
+      description: Used to get data from another student in the same associations.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 150
+        last_name:
+          type: string
+          title: Nom de famille
+          maxLength: 150
+      required:
+      - first_name
+      - id
+      - last_name
     UserPartialDataRequest:
       type: object
       description: Used to get data from another student in the same associations.
@@ -4600,17 +5393,19 @@ components:
         first_name:
           type: string
           minLength: 1
+          title: Prénom
           maxLength: 150
         last_name:
           type: string
           minLength: 1
+          title: Nom de famille
           maxLength: 150
         is_cas:
           type: boolean
           default: false
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
       required:
       - first_name
       - last_name
@@ -4648,9 +5443,13 @@ components:
           readOnly: true
         is_validated_by_admin:
           type: boolean
-          title: Is validated by administrator
+          title: Est validé par l'équipe d'administration
+        is_student:
+          type: boolean
+          title: Est étudiant
         can_submit_projects:
           type: boolean
+          title: Peut soumettre des projets
         associations:
           type: array
           items:

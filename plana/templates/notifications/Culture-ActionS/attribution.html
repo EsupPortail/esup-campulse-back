@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+{% load resolve %}
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% resolve %}{{ content.title }}{% endresolve %}</title>
+        <link rel="stylesheet" href="{% static 'css/notifications/Culture-ActionS.css' %}" type="text/css"/>
+        <style>
+            @page {
+                margin: 20mm 10mm 20mm 10mm;
+                size: A4 portrait;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="head-float-left">
+                <img src="{% static 'img/crous_logo.png' %}">
+            </div>
+            <div class="head-float-right text-sm align-right">
+                {% resolve %}{{ content.header|safe }}{% endresolve %}
+            </div>
+        </header>
+        <main>
+            <div class="float-left text-sm">
+                {% resolve %}{{ content.aside|safe }}{% endresolve %}
+            </div>
+            <div class="float-right">
+                {% resolve %}{{ content.body|safe }}{% endresolve %}
+            </div>
+        </main>
+        <footer>
+            <div class="float-right align-right">
+                {% resolve %}{{ content.footer|safe }}{% endresolve %}
+            </div>
+        </footer>
+    </body>
+</html>

@@ -3,30 +3,50 @@
     "model": "commissions.commission",
     "pk": 1,
     "fields": {
-      "name": "Fonds de Solidarité et de Développement des Initiatives Étudiantes",
-      "acronym": "FSDIE",
-      "is_site": true,
-      "institution_id": 2
+      "submission_date": "2099-10-06",
+      "commission_date": "2099-10-20",
+      "is_open_to_projects": true,
+      "name": "Commission numéro 1"
     }
   },
   {
     "model": "commissions.commission",
     "pk": 2,
     "fields": {
-      "name": "Initiative d'Excellence « Creative Thinkers »",
-      "acronym": "IdEx",
-      "is_site": true,
-      "institution_id": 2
+      "submission_date": "2099-10-08",
+      "commission_date": "2099-10-22",
+      "is_open_to_projects": true,
+      "name": "Une autre commission de rentrée d'octobre 2099"
     }
   },
   {
     "model": "commissions.commission",
     "pk": 3,
     "fields": {
-      "name": "Culture-ActionS",
-      "acronym": "Culture-ActionS",
-      "is_site": false,
-      "institution_id": 1
+      "submission_date": "2099-10-07",
+      "commission_date": "2099-10-21",
+      "is_open_to_projects": true,
+      "name": "Commission de rentrée d'octobre 2099"
+    }
+  },
+  {
+    "model": "commissions.commission",
+    "pk": 4,
+    "fields": {
+      "submission_date": "2000-01-01",
+      "commission_date": "2000-01-30",
+      "is_open_to_projects": false,
+      "name": "Commission du passé"
+    }
+  },
+  {
+    "model": "commissions.commission",
+    "pk": 5,
+    "fields": {
+      "submission_date": "1990-01-01",
+      "commission_date": "1990-01-30",
+      "is_open_to_projects": false,
+      "name": "Commission archivée"
     }
   }
 ]

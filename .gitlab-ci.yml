@@ -1,5 +1,6 @@
 stages:
   - test
+  - deploy
 
 services:
   - postgres
@@ -9,6 +10,7 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
+  PYTHON_VERSION: "3.9"
 
 before_script:
   - apt-get update && apt-get install -y age
@@ -18,6 +20,7 @@ unittest:
   tags:
     - python3.9
   script:
+    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
     - python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
@@ -28,3 +31,25 @@ unittest:
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
+include:
+  - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
+  
+pages:
+  stage: deploy
+  image: registry.gitlab.com/pages/hugo:latest
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - cd docs
+    - hugo
+    - cp -r public ..
+  tags:
+    - cluster
+  artifacts:
+    paths:
+    - public
+  only:
+    - develop
+    - main
+  except:
+    - schedules

@@ -1,3 +1,4 @@
+"""List of tests done on association_user views."""
 import datetime
 import json
 
@@ -8,10 +9,12 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
 class AssociationUserViewsTests(TestCase):
+    """Main tests class."""
+
     fixtures = [
         "account_emailaddress.json",
         "associations_activityfield.json",
@@ -19,13 +22,13 @@ class AssociationUserViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_commission.json",
+        "commissions_fund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -327,7 +330,7 @@ class AssociationUserViewsTests(TestCase):
 
         - Link cannot be added to a user without a group where associations can be linked.
         """
-        GroupInstitutionCommissionUser.objects.filter(
+        GroupInstitutionFundUser.objects.filter(
             user_id=self.unvalidated_user_id, group_id=5
         ).delete()
         response_anonymous = self.anonymous_client.post(
@@ -381,6 +384,24 @@ class AssociationUserViewsTests(TestCase):
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_post_association_user_serializer_error(self):
+        """
+        POST /users/associations/ .
+
+        - An admin-validated student user can execute this request.
+        - Serializer fields must be valid.
+        """
+        response_student = self.student_client.post(
+            "/users/associations/",
+            data={
+                "user": self.student_user_name,
+                "association": 5,
+                "is_president": "test",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_student_post_association_user(self):
         """
@@ -648,6 +669,23 @@ class AssociationUserViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_president.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_manager_patch_association_user_serializer_error(self):
+        """
+        PATCH /users/{user_id}/associations/{association_id} .
+
+        - A manager can execute this request.
+        - Serializer fields must be valid.
+        """
+        asso_user = AssociationUser.objects.get(
+            user_id=self.president_user_id, is_president=True
+        )
+        response = self.manager_client.patch(
+            f"/users/{self.president_user_id}/associations/{asso_user.association_id}",
+            {"is_president": "bad format"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_patch_association_user_update_president(self):
         """

@@ -9,6 +9,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
+      "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
         "application/pdf"
@@ -25,6 +26,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
+      "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
         "application/pdf",
@@ -43,8 +45,9 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 1,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "expiration_day": "08-31",
+      "fund_id": 1,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -60,8 +63,9 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 2,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "expiration_day": "08-31",
+      "fund_id": 2,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -77,8 +81,9 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 1,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "expiration_day": "08-31",
+      "fund_id": 1,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -96,8 +101,9 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 2,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "expiration_day": "08-31",
+      "fund_id": 2,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -115,8 +121,8 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 3,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "fund_id": 3,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf"
       ]
@@ -132,8 +138,8 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
-      "commission_id": 3,
-      "process_type": "CHARTER_PROJECT_COMMISSION",
+      "fund_id": 3,
+      "process_type": "CHARTER_PROJECT_FUND",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -237,10 +243,10 @@
     "fields": {
       "name": "Certificat de scolarité du porteur individuel",
       "acronym": "CERTIFICAT_SCOLARITE_USER",
-      "description": "Certificats de scolarité du porteur individuel",
+      "description": "Certificat de scolarité du porteur individuel",
       "contact": "???",
-      "is_multiple": true,
-      "is_required_in_process": true,
+      "is_multiple": false,
+      "is_required_in_process": false,
       "process_type": "DOCUMENT_USER",
       "mime_types": [
         "application/pdf",
@@ -258,7 +264,7 @@
       "description": "Carte Étudiante",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": true,
+      "is_required_in_process": false,
       "process_type": "DOCUMENT_USER",
       "mime_types": [
         "application/pdf",
@@ -294,7 +300,7 @@
       "description": "Dossier détaillé présentant le projet",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
       "mime_types": [
         "application/pdf",
@@ -373,9 +379,9 @@
     "model": "documents.document",
     "pk": 21,
     "fields": {
-      "name": "Bilan",
-      "acronym": "BILAN",
-      "description": "Bilan",
+      "name": "Bilan Financier",
+      "acronym": "BILAN_FINANCIER",
+      "description": "Bilan Financier",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,

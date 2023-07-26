@@ -9,13 +9,14 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionCommissionUser
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
 class ProjectsViewsTests(TestCase):
@@ -28,8 +29,9 @@ class ProjectsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
@@ -39,9 +41,9 @@ class ProjectsViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -68,6 +70,15 @@ class ProjectsViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
+
+        cls.fund_user_id = 6
+        cls.fund_user_name = "membre-fsdie-idex@mail.tld"
+        cls.fund_client = Client()
+        data_fund = {
+            "username": cls.fund_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.fund_client.post(url_login, data_fund)
 
         cls.student_misc_user_id = 9
         cls.student_misc_user_name = "etudiant-porteur@mail.tld"
@@ -134,6 +145,27 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), user_projects_cnt)
 
+    def test_get_project_fund_member(self):
+        """
+        GET /projects/ .
+
+        - A fund member gets only validated projects.
+        """
+        response = self.fund_client.get("/projects/")
+        fund_projects_cnt = Project.visible_objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    fund_id__in=GroupInstitutionFundUser.objects.filter(
+                        user_id=self.fund_user_id
+                    ).values_list("fund_id")
+                ).values_list("id")
+            ).values_list("project_id"),
+            project_status__in=Project.ProjectStatus.get_commissionnable_project_statuses(),
+        ).count()
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(content), fund_projects_cnt)
+
     def test_get_project_institution(self):
         """
         GET /projects/ .
@@ -142,7 +174,7 @@ class ProjectsViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )
@@ -181,6 +213,19 @@ class ProjectsViewsTests(TestCase):
             response = self.general_client.get(f"/projects/?name={similar_name}")
             self.assertEqual(response.data[0]["name"], similar_names[0])
 
+        similar_identifiers = [
+            "20890001",
+            "2089 0001",
+            "2089",
+        ]
+        for similar_identifier in similar_identifiers:
+            response = self.general_client.get(
+                f"/projects/?manual_identifier={similar_identifier}"
+            )
+            self.assertEqual(
+                response.data[0]["manual_identifier"], similar_identifiers[0]
+            )
+
         year = 2099
         response = self.general_client.get(f"/projects/?year={year}")
         projects_cnt = Project.visible_objects.filter(creation_date__year=year).count()
@@ -216,13 +261,13 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        commission_dates = [2, 4]
-        response = self.general_client.get(
-            f"/projects/?commission_dates={','.join(str(x) for x in commission_dates)}"
-        )
+        commission = 2
+        response = self.general_client.get(f"/projects/?commission_id={commission}")
         projects_cnt = Project.visible_objects.filter(
-            id__in=ProjectCommissionDate.objects.filter(
-                commission_date_id__in=commission_dates
+            id__in=ProjectCommissionFund.objects.filter(
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    commission_id=commission
+                ).values_list("id")
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -284,7 +329,7 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
-        GroupInstitutionCommissionUser.objects.create(
+        GroupInstitutionFundUser.objects.create(
             user_id=self.student_president_user_id, group_id=6
         )
         response = self.student_president_client.post("/projects/", project_data)
@@ -358,6 +403,7 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
+            "association_user": 5,
             "amount_students_audience": 1000,
             "amount_all_audience": 8,
         }
@@ -374,10 +420,68 @@ class ProjectsViewsTests(TestCase):
         project_data = {
             "name": "Testing creation",
             "association": 2,
+            "association_user": 5,
             "planned_start_date": "2099-12-25T14:00:00.000Z",
             "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
         response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_wrong_association_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - A linked user from an association cannot be added to a user project.
+        """
+        project_data = {
+            "name": "Testing creation association",
+            "goals": "Goals",
+            "planned_location": "address",
+            "user": 9,
+            "association_user": 2,
+        }
+        response = self.student_misc_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_association_wrong_user(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - The linked user from the association must be set with an association.
+        - The linked user from the association must be correct.
+        """
+        project_data = {
+            "name": "Testing creation association",
+            "goals": "Goals",
+            "planned_location": "address",
+            "association_user": 2,
+        }
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        project_data["association"] = 2
+        response = self.student_president_client.post("/projects/", project_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_post_project_serializer_error(self):
+        """
+        POST /projects/ .
+
+        - The route can be accessed by a student user.
+        - To create a project for an association, the authenticated user must be president.
+        - Serializer fields must be valid.
+        """
+        project_data = {
+            "name": "Testing bad serializer",
+            "goals": False,
+            "association": 2,
+            "association_user": 5,
+        }
+        response = self.student_president_client.post(
+            "/projects/", data=project_data, content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_association_success(self):
@@ -393,6 +497,7 @@ class ProjectsViewsTests(TestCase):
             "goals": "Goals",
             "planned_location": "address",
             "association": 2,
+            "association_user": 5,
         }
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -445,6 +550,19 @@ class ProjectsViewsTests(TestCase):
         - An student user not owning the project cannot execute this request.
         """
         response = self.student_offsite_client.get("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_project_by_id_forbidden_fund_member(self):
+        """
+        GET /projects/{id} .
+
+        - An fund member cannot see a project not linked to the fund.
+        - An fund member cannot see an unvalidated project.
+        """
+        response = self.fund_client.get("/projects/1")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.fund_client.get("/projects/2")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_project_by_id(self):
@@ -533,6 +651,20 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch_project_user_wrong_status(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Status must be draft.
+        """
+        project_id = 3
+        patch_data = {"summary": "new summary"}
+        response = self.student_misc_client.patch(
+            f"/projects/{project_id}", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_patch_project_expired_commission(self):
         """
         PATCH /projects/{id} .
@@ -540,7 +672,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must be linked to non expired commission dates.
         """
-        expired_commission_date = CommissionDate.objects.get(id=3)
+        expired_commission_date = Commission.objects.get(id=3)
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}
@@ -578,6 +710,46 @@ class ProjectsViewsTests(TestCase):
         }
         response = self.student_president_client.patch(
             "/projects/2", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_wrong_association_user(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - A linked user from an association cannot be added to a user project.
+        """
+        project_data = {"association_user": 2}
+        response = self.student_misc_client.patch(
+            "/projects/1", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_association_wrong_user(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - The linked user from the association must be correct.
+        """
+        project_data = {"association_user": 2}
+        response = self.student_president_client.patch(
+            "/projects/2", project_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_project_serializer_error(self):
+        """
+        PATCH /projects/{id} .
+
+        - The route can be accessed by a student user.
+        - Serializer fields must be valid.
+        """
+        project_id = 1
+        patch_data = {"summary": False}
+        response = self.student_misc_client.patch(
+            f"/projects/{project_id}", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -620,182 +792,60 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.summary, "new summary")
 
-    def test_get_project_review_by_id_anonymous(self):
+    def test_delete_project_anonymous(self):
         """
-        GET /projects/{id}/review .
+        DELETE /projects/{id} .
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.get("/projects/1/review")
+        response = self.client.delete("/projects/1")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_get_project_review_by_id_404(self):
+    def test_delete_project_not_found(self):
         """
-        GET /projects/{id}/review .
-
-        - The route returns a 404 if a wrong project id is given.
-        """
-        response = self.general_client.get("/projects/99999/review")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_project_review_by_id_forbidden_student(self):
-        """
-        GET /projects/{id}/review .
-
-        - An student user not owning the project cannot execute this request.
-        """
-        response = self.student_offsite_client.get("/projects/1/review")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_get_project_review_by_id(self):
-        """
-        GET /projects/{id}/review .
-
-        - The route can be accessed by a manager user.
-        - The route can be accessed by a student user.
-        - Correct projects details are returned (test the "name" attribute).
-        """
-        project_id = 1
-        project_test = Project.visible_objects.get(id=project_id)
-        response = self.general_client.get(f"/projects/{project_id}/review")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["name"], project_test.name)
-
-        project_id = 2
-        project_test = Project.visible_objects.get(id=project_id)
-        response = self.student_president_client.get(f"/projects/{project_id}/review")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content["name"], project_test.name)
-
-    def test_put_project_review(self):
-        """
-        PUT /projects/{id}/review .
-
-        - Always returns a 405.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_patch_project_review_anonymous(self):
-        """
-        PATCH /projects/{id}/review .
-
-        - An anonymous user cannot execute this request.
-        """
-        patch_data = {"review": "C'était bien"}
-        response = self.client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_patch_project_review_not_found(self):
-        """
-        PATCH /projects/{id}/review .
+        DELETE /projects/{id} .
 
         - The route can be accessed by a student user.
         - Project must exist.
         """
-        patch_data = {"review": "C'était pas ouf"}
-        response = self.student_misc_client.patch(
-            "/projects/999/review", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.delete("/projects/999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_project_review_forbidden_student(self):
+    def test_delete_project_forbidden_student(self):
         """
-        PATCH /projects/{id}/review .
+        DELETE /projects/{id} .
 
         - An student user not owning the project cannot execute this request.
         """
-        patch_data = {"review": "C'était moyen"}
-        response = self.student_offsite_client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
+        response = self.student_offsite_client.delete("/projects/1")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_review_forbidden_user(self):
+    def test_delete_project_forbidden_user(self):
         """
-        PATCH /projects/{id}/review .
+        DELETE /projects/{id} .
 
         - The route can be accessed by a student user.
         - The project owner must be the authenticated user.
         """
-        patch_data = {"review": "Du pur génie, 9 sélec sur Gamekult"}
-        response = self.student_site_client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
+        response = self.student_site_client.delete("/projects/1")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_project_review_manager_error(self):
+    def test_delete_project_user_success(self):
         """
-        PATCH /projects/{id}/review .
-
-        - The route cannot be accessed by a manager user.
-        """
-        patch_data = {"review": "Mon chien aurait fait mieux"}
-        response = self.general_client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_project_review_association_wrong_dates(self):
-        """
-        PATCH /projects/{id}/review .
+        DELETE /projects/{id} .
 
         - The route can be accessed by a student user.
-        - Real start date cannot be set after real end date.
+        - The project is correctly deleted in db.
         """
-        project_data = {
-            "real_start_date": "2099-12-25T14:00:00.000Z",
-            "real_end_date": "2099-11-30T18:00:00.000Z",
-        }
-        response = self.student_president_client.patch(
-            "/projects/2/review", project_data, content_type="application/json"
-        )
+        project_id = 1
+        response = self.student_misc_client.delete(f"/projects/{project_id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(0, len(Project.visible_objects.filter(id=project_id)))
+
+        project_id = 3
+        response = self.student_misc_client.delete(f"/projects/{project_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_project_review_not_ended(self):
-        """
-        PATCH /projects/{id}/review .
-
-        - A review can't be submitted if commission dates are still pending.
-        """
-        patch_data = {
-            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
-        }
-        response = self.student_misc_client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_project_review_user_success(self):
-        """
-        PATCH /projects/{id}/review .
-
-        - The route can be accessed by a student user.
-        - The project is correctly updated in db.
-        """
-        commission_date = CommissionDate.objects.get(id=3)
-        commission_date.commission_date = datetime.datetime.strptime(
-            "1993-12-25", "%Y-%m-%d"
-        ).date()
-        commission_date.save()
-        patch_data = {
-            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
-        }
-        response = self.student_misc_client.patch(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.visible_objects.get(id=1)
-        self.assertEqual(project.review, patch_data["review"])
+        self.assertEqual(1, len(Project.visible_objects.filter(id=project_id)))
 
     def test_put_project_status(self):
         """
@@ -805,7 +855,7 @@ class ProjectsViewsTests(TestCase):
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.put(
-            "/projects/1/status", patch_data, content_type="application/json"
+            "/projects/5/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -821,6 +871,18 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_patch_project_status_forbidden(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - A student must have correct permissions to execute this request.
+        """
+        patch_data = {"project_status": "PROJECT_REJECTED"}
+        response = self.student_misc_client.patch(
+            "/projects/2/status", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_patch_project_status_not_found(self):
         """
         PATCH /projects/{id}/status .
@@ -833,6 +895,19 @@ class ProjectsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_patch_project_status_serializer_error(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - A student user can execute this request if status is allowed.
+        - Serializer fields must be valid.
+        """
+        patch_data = {"project_status": False}
+        response = self.student_misc_client.patch(
+            "/projects/1/status", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_project_status_student(self):
         """
         PATCH /projects/{id}/status .
@@ -842,14 +917,14 @@ class ProjectsViewsTests(TestCase):
         """
         self.assertFalse(len(mail.outbox))
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_offsite_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(len(mail.outbox))
 
         patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_offsite_client.patch(
+        response = self.student_misc_client.patch(
             "/projects/1/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -894,6 +969,16 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REJECTED")
 
+        patch_data = {"project_status": "PROJECT_VALIDATED"}
+        response = self.general_client.patch(
+            "/projects/4/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.visible_objects.get(id=4)
+        self.assertEqual(project.project_status, "PROJECT_VALIDATED")
+
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
         response = self.general_client.patch(
             f"/projects/{project_id}/status",
@@ -932,7 +1017,7 @@ class ProjectsViewsTests(TestCase):
         - Project cannot be updated if documents are missing.
         """
         DocumentUpload.objects.get(document=18, project_id=2).delete()
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
+        ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -949,7 +1034,6 @@ class ProjectsViewsTests(TestCase):
         - The project is correctly updated in db.
         """
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(project_id=2, commission_date_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(
             "/projects/2/status", patch_data, content_type="application/json"
@@ -972,8 +1056,8 @@ class ProjectsViewsTests(TestCase):
         project.save()
 
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionDate.objects.create(
-            project_id=project_id, commission_date_id=3
+        ProjectCommissionFund.objects.create(
+            project_id=project_id, commission_fund_id=3
         )
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.student_president_client.patch(

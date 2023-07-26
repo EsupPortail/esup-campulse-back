@@ -9,7 +9,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class ProjectCategoryLinksViewsTests(TestCase):
@@ -22,16 +22,17 @@ class ProjectCategoryLinksViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -105,7 +106,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/categories")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
                 user_id=self.manager_institution_user_id
             ).values_list("institution_id")
         )
@@ -157,10 +158,10 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must exist.
         """
-        post_data = {
-            "project": 999,
-            "category": 1,
-        }
+        post_data = {"project": 999, "category": 1}
+        response = self.student_offsite_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        post_data = {"project": 1, "category": 999}
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -171,12 +172,19 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The owner of the project must be the authenticated user.
         """
-        post_data = {
-            "project": 1,
-            "category": 1,
-        }
+        post_data = {"project": 1, "category": 1}
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_categories_already_exists(self):
+        """
+        POST /projects/categories .
+
+        - A project and a category cannot be linked together twice.
+        """
+        post_data = {"project": 2, "category": 1}
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_categories_association_success(self):
         """
@@ -186,12 +194,8 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The authenticated user must be the president of the association owning the project.
         - The ProjectCategory link is created in db.
         - Project edition date is updated.
-        - If the same ProjectCategory is attempted to be created, returns a HTTP 200 and is not created twice in db.
         """
-        post_data = {
-            "project": 2,
-            "category": 3,
-        }
+        post_data = {"project": 2, "category": 3}
         old_project_edition_date = Project.visible_objects.get(
             id=post_data["project"]
         ).edition_date
@@ -209,17 +213,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
             ),
         )
         self.assertNotEqual(old_project_edition_date, new_project_edition_date)
-
-        response = self.student_president_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            1,
-            len(
-                ProjectCategory.objects.filter(
-                    project=post_data["project"], category=post_data["category"]
-                )
-            ),
-        )
 
     def test_get_project_categories_by_id_anonymous(self):
         """
@@ -288,10 +281,17 @@ class ProjectCategoryLinksViewsTests(TestCase):
         DELETE /projects/{project_id}/categories/{category_id} .
 
         - The route can be accessed by a student user.
-        - The project must exist.
+        - Project and category must exist.
         """
         project = 999
         category = 1
+        response = self.student_offsite_client.delete(
+            f"/projects/{project}/categories/{category}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        project = 1
+        category = 999
         response = self.student_offsite_client.delete(
             f"/projects/{project}/categories/{category}"
         )

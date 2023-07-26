@@ -11,6 +11,7 @@
             <div>
                 <h3>Le projet : </h3>
                 <ul>
+                    <li>Identifiant du projet : {{ manual_identifier }}</li>
                     <li>Nom du projet : {{ name }}</li>
                     <li>Date prévue de début du projet : {{ planned_start_date }}</li>
                     <li>Date prévue de fin du projet : {{ planned_end_date }}</li>
@@ -26,23 +27,26 @@
             {% endif %}
 
             <div>
-                <h3>La personne portant le projet : </h3>
+                <h3>La personne référente du projet : </h3>
                 <ul>
-                    <li>Prénom de la personne portant le projet : {{ other_first_name }}</li>
-                    <li>Nom de famille de la personne portant le projet : {{ other_last_name }}</li>
-                    <li>Adresse e-mail de la personne portant le projet : {{ other_email }}</li>
-                    <li>Numéro de téléphone de la personne portant le projet : {{ other_phone }}</li>
+                    <li>Prénom de la personne référente du projet : {{ user.first_name }}</li>
+                    <li>Nom de famille de la personne référente du projet : {{ user.last_name }}</li>
+                    <li>Adresse e-mail de la personne référente du projet : {{ user.email }}</li>
+                    <li>Numéro de téléphone de la personne référente du projet : {{ user.phone }}</li>
                 </ul>
             </div>
         </section>
 
         <section>
-            <h2>Commissions sélectionnées : </h2>
-            <ul>
-                {% for commission in project_commission_dates %}
-                    <li>{{ commission.commission_acronym }} ({{ commission.commission_date }})</li>
-                {% endfor %}
-            </ul>
+            <h2>Fonds sélectionnés : </h2>
+            <div>
+                <h3>{{ commission }}</h3>
+                <ul>
+                    {% for commission in project_commission_funds %}
+                        <li>{{ commission.fund_data.name }} ({{ commission.commission_data.commission_date }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </section>
 
         <section>
@@ -61,14 +65,14 @@
                     <h3>Edition Précedente : </h3>
                     <h4>Subvention(s) demandée(s) pour l'édition précédente : </h4>
                     <ul>
-                        {% for commission in project_commission_dates %}
-                            <li>{{ commission.commission_acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
+                        {% for commission in project_commission_funds %}
+                            <li>{{ commission.fund_data.acronym }} : {{ commission.amount_asked_previous_edition }} €</li>
                         {% endfor %}
                     </ul>
                     <h4>Montant(s) obtenu(s) pour l'édition précédente : </h4>
                     <ul>
-                        {% for commission in project_commission_dates %}
-                            <li>{{ commission.commission_acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
+                        {% for commission in project_commission_funds %}
+                            <li>{{ commission.fund_data.acronym }} : {{ commission.amount_earned_previous_edition }} €</li>
                         {% endfor %}
                     </ul>
                     <h4>Budget réel du projet (dépenses) pour l'édition précédente : </h4>
@@ -77,10 +81,10 @@
             </div>
 
             <div>
-                <h3>Montant(s) demandé(s) par commission sélectionnée : </h3>
+                <h3>Montant(s) demandé(s) par fonds sélectionné : </h3>
                 <ul>
-                    {% for commission in project_commission_dates %}
-                        <li>{{ commission.commission_acronym }} ({{ commission.commission_date }}) : {{ commission.amount_asked }} €</li>
+                    {% for commission in project_commission_funds %}
+                        <li>{{ commission.fund_data.acronym }} : {{ commission.amount_asked }} €</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -107,6 +111,10 @@
             <div>
                 <h3>Campagne de communication</h3>
                 <p>{{ marketing_campaign }}</p>
+            </div>
+            <div>
+                <h3>Actions en rapport avec la DDRS (Développement Durable et Responsabilité Sociétale)</h3>
+                <p>{{ sustainable_development }}</p>
             </div>
         </section>
 

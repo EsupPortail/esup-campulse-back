@@ -106,5 +106,221 @@
       "project": 6,
       "association": 2
     }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 10,
+    "fields": {
+      "name": "charte-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 1,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 11,
+    "fields": {
+      "name": "rgpd-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 12,
+    "fields": {
+      "name": "copie-des-statuts.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 9,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 13,
+    "fields": {
+      "name": "pv-ag-constitutive.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 10,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 14,
+    "fields": {
+      "name": "certificat-scolarite.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 11,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 15,
+    "fields": {
+      "name": "certificat-tribunal-judiciaire.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 12,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 16,
+    "fields": {
+      "name": "extrait-registre-associations.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 13,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 17,
+    "fields": {
+      "name": "charte-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 1,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 18,
+    "fields": {
+      "name": "rgpd-site-alsace.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 2,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 19,
+    "fields": {
+      "name": "copie-des-statuts.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 9,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 20,
+    "fields": {
+      "name": "pv-ag-constitutive.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 10,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 21,
+    "fields": {
+      "name": "certificat-scolarite.pdf",
+      "upload_date": "2023-03-12T15:30:00.000Z",
+      "path_file": "",
+      "document": 11,
+      "association": 4
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 22,
+    "fields": {
+      "name": "charte-culture-actions.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 7,
+      "project": 1,
+      "user": 9
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 23,
+    "fields": {
+      "name": "rgpd-culture-actions.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 8,
+      "project": 1,
+      "user": 9
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 24,
+    "fields": {
+      "name": "charte-fsdie.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 3,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 25,
+    "fields": {
+      "name": "charte-idex.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 4,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 26,
+    "fields": {
+      "name": "rgpd-fsdie.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 5,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 27,
+    "fields": {
+      "name": "rgpd-idex.pdf",
+      "upload_date": "2023-03-15T10:18:47.000Z",
+      "path_file": "",
+      "document": 6,
+      "project": 2,
+      "association": 2
+    }
+  },
+  {
+    "model": "documents.documentupload",
+    "pk": 28,
+    "fields": {
+      "name": "dossier-projet-asso.pdf",
+      "upload_date": "2023-03-14T15:30:00.000Z",
+      "path_file": "",
+      "document": 17,
+      "project": 2,
+      "association": 2
+    }
   }
 ]

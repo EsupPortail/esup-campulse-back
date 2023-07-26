@@ -36,6 +36,14 @@ class DocumentUploadCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
+    """Serializer to validate a document."""
+
+    class Meta:
+        model = DocumentUpload
+        fields = ["validated_date"]
+
+
 class DocumentUploadFileSerializer(serializers.ModelSerializer):
     """Retrieve only the file itself."""
 

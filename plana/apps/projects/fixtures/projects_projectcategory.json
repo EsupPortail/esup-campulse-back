@@ -70,5 +70,45 @@
       "category": 8,
       "project": 6
     }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 7,
+    "fields": {
+      "category": 4,
+      "project": 7
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 8,
+    "fields": {
+      "category": 7,
+      "project": 8
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 9,
+    "fields": {
+      "category": 8,
+      "project": 8
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 10,
+    "fields": {
+      "category": 7,
+      "project": 10
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 11,
+    "fields": {
+      "category": 8,
+      "project": 10
+    }
   }
 ]

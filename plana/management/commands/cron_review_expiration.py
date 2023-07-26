@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -21,7 +21,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = datetime.date.today()
-            mail_sending_due_date = today - datetime.timedelta(days=30)
+            mail_sending_due_date = today - datetime.timedelta(
+                days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION
+            )
             projects_needing_reviews = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_review_needed_project_statuses(),
                 planned_end_date__year=mail_sending_due_date.year,
@@ -38,12 +40,17 @@ class Command(BaseCommand):
                     association = Association.objects.get(
                         id=project_needing_review.association_id
                     )
+                    association_user_email = User.objects.get(
+                        id=AssociationUser.objects.get(
+                            id=project_needing_review.association_user_id
+                        ).user_id
+                    ).email
                     template = MailTemplate.objects.get(
                         code="PROJECT_NEEDS_REVIEW_STUDENT"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=association.email,
+                        to_=association_user_email,
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),
@@ -99,5 +106,5 @@ class Command(BaseCommand):
                         message=template.parse_vars(None, None, context),
                     )
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

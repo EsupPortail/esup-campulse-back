@@ -1,4 +1,5 @@
 """Views directly linked to associations."""
+import datetime
 import json
 import unicodedata
 
@@ -19,7 +20,10 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
     AssociationNameSerializer,
     AssociationPartialDataSerializer,
+    AssociationStatusSerializer,
 )
+from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
@@ -379,7 +383,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
-            status.HTTP_500_INTERNAL_SERVER_ERROR: None,
         }
     )
     def patch(self, request, *args, **kwargs):
@@ -439,7 +442,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except Exception as ex:
             print(ex)
             return response.Response(
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                {"error": _("Error on social networks format.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if (
@@ -658,3 +662,148 @@ class AssociationNameList(generics.ListAPIView):
             else:
                 self.queryset = self.queryset.filter(id__in=assos_ids_with_all_members)
         return self.list(request, *args, **kwargs)
+
+
+class AssociationStatusUpdate(generics.UpdateAPIView):
+    """/associations/{id}/status route"""
+
+    queryset = Association.objects.all()
+    serializer_class = AssociationStatusSerializer
+
+    def get_permissions(self):
+        if self.request.method == "PUT":
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        return super().get_permissions()
+
+    @extend_schema(
+        exclude=True,
+        responses={
+            status.HTTP_405_METHOD_NOT_ALLOWED: None,
+        },
+    )
+    def put(self, request, *args, **kwargs):
+        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: AssociationStatusSerializer,
+            status.HTTP_400_BAD_REQUEST: None,
+            status.HTTP_401_UNAUTHORIZED: None,
+            status.HTTP_403_FORBIDDEN: None,
+            status.HTTP_404_NOT_FOUND: None,
+        }
+    )
+    def patch(self, request, *args, **kwargs):
+        """Updates association charter status."""
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as error:
+            return response.Response(
+                {"error": error.detail},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            association = self.get_queryset().get(id=kwargs["pk"])
+        except ObjectDoesNotExist:
+            return response.Response(
+                {"error": _("Association does not exist.")},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if (
+            not request.user.is_president_in_association(association.id)
+            and not request.user.has_perm(
+                "associations.change_association_any_institution"
+            )
+            and not request.user.is_staff_in_institution(association.institution_id)
+        ):
+            return response.Response(
+                {"error": _("Not allowed to edit this association.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if (
+            not request.user.has_perm("associations.change_association_all_fields")
+            and request.data["charter_status"] != "CHARTER_PROCESSING"
+        ):
+            return response.Response(
+                {"error": _("Choosing this status is not allowed.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        document_process_type = "DOCUMENT_ASSOCIATION"
+        missing_documents_names = (
+            Document.objects.filter(
+                process_type=document_process_type, is_required_in_process=True
+            )
+            .exclude(
+                id__in=DocumentUpload.objects.filter(
+                    association_id=association.id,
+                ).values_list("document_id")
+            )
+            .values_list("name")
+        )
+        if missing_documents_names.count() > 0:
+            missing_documents_names_string = ', '.join(
+                str(item) for item in missing_documents_names
+            )
+            return response.Response(
+                {"error": _(f"Missing documents : {missing_documents_names_string}.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
+        if request.data["charter_status"] == "CHARTER_PROCESSING":
+            template = MailTemplate.objects.get(
+                code="NEW_ASSOCIATION_CHARTER_TO_PROCESS"
+            )
+            institution = Institution.objects.get(id=association.institution_id)
+            managers_emails = list(
+                institution.default_institution_managers().values_list(
+                    "email", flat=True
+                )
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=managers_emails,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+            association.charter_date = datetime.date.today()
+            association.save()
+
+        mail_templates_codes_by_status = {
+            "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_SENT",
+            "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_VALIDATED",
+            "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTED",
+        }
+        if request.data["charter_status"] == "CHARTER_VALIDATED":
+            association.is_site = True
+            association.save()
+        elif request.data["charter_status"] == "CHARTER_REJECTED":
+            association.is_site = False
+            association.save()
+        if request.data["charter_status"] in mail_templates_codes_by_status:
+            template = MailTemplate.objects.get(
+                code=mail_templates_codes_by_status[request.data["charter_status"]]
+            )
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=association.email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
+
+        return self.update(request, *args, **kwargs)

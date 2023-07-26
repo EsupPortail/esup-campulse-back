@@ -18,7 +18,7 @@ from plana.apps.documents.serializers.document import (
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route"""
 
-    queryset = Document.objects.all()
+    queryset = Document.objects.all().order_by("name")
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -43,6 +43,12 @@ class DocumentList(generics.ListCreateAPIView):
                 description="Document acronym.",
             ),
             OpenApiParameter(
+                "fund_ids",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Document fund IDs.",
+            ),
+            OpenApiParameter(
                 "process_types",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
@@ -56,10 +62,14 @@ class DocumentList(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         """Lists all documents types."""
         acronym = request.query_params.get("acronym")
+        fund_ids = request.query_params.get("fund_ids")
         process_types = request.query_params.get("process_types")
 
         if acronym is not None and acronym != "":
             self.queryset = self.queryset.filter(acronym=acronym)
+
+        if fund_ids is not None and fund_ids != "":
+            self.queryset = self.queryset.filter(fund_id__in=fund_ids.split(","))
 
         if process_types is not None and process_types != "":
             all_process_types = [c[0] for c in Document.process_type.field.choices]
@@ -103,12 +113,12 @@ class DocumentList(generics.ListCreateAPIView):
             )
 
         if (
-            "commission" in request.data
-            and not request.user.has_perm("documents.add_document_any_commission")
-            and not request.user.is_member_in_commission(request.data["commission"])
+            "fund" in request.data
+            and not request.user.has_perm("documents.add_document_any_fund")
+            and not request.user.is_member_in_fund(request.data["fund"])
         ):
             return response.Response(
-                {"error": _("Not allowed to create a document for this commission.")},
+                {"error": _("Not allowed to create a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -200,12 +210,12 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.commission is not None
-            and not request.user.has_perm("documents.change_document_any_commission")
-            and not request.user.is_member_in_commission(document.commission)
+            document.fund is not None
+            and not request.user.has_perm("documents.change_document_any_fund")
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
-                {"error": _("Not allowed to update a document for this commission.")},
+                {"error": _("Not allowed to update a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -260,12 +270,12 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.commission is not None
-            and not request.user.has_perm("documents.delete_document_any_commission")
-            and not request.user.is_member_in_commission(document.commission)
+            document.fund is not None
+            and not request.user.has_perm("documents.delete_document_any_fund")
+            and not request.user.is_member_in_fund(document.fund)
         ):
             return response.Response(
-                {"error": _("Not allowed to delete a document for this commission.")},
+                {"error": _("Not allowed to delete a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

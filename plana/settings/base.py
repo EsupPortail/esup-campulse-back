@@ -100,7 +100,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+# USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -225,6 +225,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -402,7 +403,36 @@ REST_FRAMEWORK = {
         "no_underscore_before_number": True,
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
 }
+
+
+##################
+# Storage config #
+##################
+
+# DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+# DEFAULT_FILE_STORAGE = "plana.storages.MediaStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "plana.storages.MediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+USE_S3 = True  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
+LOGO_FILEPATH = "associations_logos"
+TEMPLATES_FILEPATH = "associations_documents_templates"
+DOCUMENTS_FILEPATH = "associations_documents"
+AGE_PUBLIC_KEY = load_key("age-public-key.key")
+AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 
 #####################
@@ -414,7 +444,7 @@ THUMBNAILS = {
         "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
     },
     "STORAGE": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": STORAGES["default"]["BACKEND"],
     },
     "SIZES": {
         "list": {
@@ -450,24 +480,6 @@ THUMBNAILS = {
         },
     },
 }
-
-
-#####################
-# S3 storage config #
-#####################
-
-DEFAULT_FILE_STORAGE = 'plana.storages.MediaStorage'
-AWS_S3_FILE_OVERWRITE = True
-AWS_DEFAULT_ACL = None
-AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY', '')
-AWS_STORAGE_BUCKET_NAME = environ.get('AWS_STORAGE_BUCKET_NAME', '')
-AWS_S3_ENDPOINT_URL = environ.get('AWS_S3_ENDPOINT_URL', '')
-S3_LOGO_FILEPATH = 'associations_logos'
-S3_TEMPLATES_FILEPATH = 'associations_documents_templates'
-S3_DOCUMENTS_FILEPATH = 'associations_documents'
-AGE_PUBLIC_KEY = load_key("age-public-key.key")
-AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 ##################
 # AUTHENTICATION #
@@ -558,7 +570,7 @@ def sentry_init(environment):
 SPECTACULAR_SETTINGS = {
     "TITLE": "PlanA / Opaline API",
     "DESCRIPTION": "API for PlanA / Opaline",
-    "VERSION": "0.1.0",
+    "VERSION": "0.2.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
@@ -588,6 +600,20 @@ EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-
 
 
 ########
+# CRON #
+########
+
+CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = 335
+CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = 365
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = 355
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = 365
+CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING = 10
+CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = 335
+CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
+CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION = 30
+
+
+########
 # Misc #
 ########
 
@@ -607,11 +633,17 @@ MIGRATION_SITE_NAME = "Opaline"
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
 
+# Random password are generated with this length.
+DEFAULT_PASSWORD_LENGTH = 16
+
 # Default value for is_site setting.
 ASSOCIATION_IS_SITE_DEFAULT = False
 
 # Default amount of users allowed in an association (None if no limit).
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
+
+# Index of the month when scholar year is resetted.
+NEW_YEAR_MONTH_INDEX = 9
 
 # Avoid registration with following email domains.
 RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
@@ -632,37 +664,54 @@ GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "MANAGER_INSTITUTION": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "MANAGER_MISC": {
         "REGISTRATION_ALLOWED": False,
         "INSTITUTION_ID_POSSIBLE": True,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
-    "COMMISSION": {
+    "MEMBER_FUND": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": True,
+        "FUND_ID_POSSIBLE": True,
         "ASSOCIATIONS_POSSIBLE": False,
     },
     "STUDENT_INSTITUTION": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": True,
     },
     "STUDENT_MISC": {
         "REGISTRATION_ALLOWED": True,
         "INSTITUTION_ID_POSSIBLE": False,
-        "COMMISSION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
+}
+
+# Notifications pdf templates used as mail attachments
+# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY)
+TEMPLATES_NOTIFICATIONS = {
+    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": "./notifications/FSDIE/decision_attribution.html",
+    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": "./notifications/Culture-ActionS/decision_attribution.html",
+    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
+    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": "./notifications/Culture-ActionS/attribution.html",
+    "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
+    "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
+    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": "./notifications/Culture-ActionS/rejection.html",
+    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": "./notifications/FSDIE/postpone.html",
+    "NOTIFICATION_IDEX_PROJECT_POSTPONED": "./notifications/IdEx/postpone.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": "./notifications/Culture-ActionS/postpone.html",
 }

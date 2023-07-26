@@ -1,0 +1,8 @@
+baseURL = 'https://di.pages.unistra.fr/plan_a/plana'
+languageCode = 'fr-FR'
+defaultContentLanguage = "fr"
+title = 'PlanA - Documentation'
+theme = 'hugo-theme-learn'
+
+[params]
+  disableLandingPageButton = true

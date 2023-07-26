@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+{% load resolve %}
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% resolve %}{{ content.title }}{% endresolve %}</title>
+        <style>
+            @page {
+                margin: 20mm 10mm 20mm 10mm;
+                size: A4 portrait;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div>
+                {% resolve %}{{ content.header|safe }}{% endresolve %}
+            </div>
+        </header>
+        <div>
+            {% resolve %}{{ content.aside|safe }}{% endresolve %}
+        </div>
+        <div>
+            {% resolve %}{{ content.body|safe }}{% endresolve %}
+        </div>
+        <footer>
+            <div>
+                {% resolve %}{{ content.footer|safe }}{% endresolve %}
+            </div>
+        </footer>
+    </body>
+</html>

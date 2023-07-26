@@ -4,8 +4,7 @@ from django.urls import path
 from .views.category import CategoryList
 from .views.project import (
     ProjectListCreate,
-    ProjectRetrieveUpdate,
-    ProjectReviewRetrieveUpdate,
+    ProjectRetrieveUpdateDestroy,
     ProjectStatusUpdate,
 )
 from .views.project_category import (
@@ -14,29 +13,40 @@ from .views.project_category import (
     ProjectCategoryRetrieve,
 )
 from .views.project_comment import (
-    ProjectCommentListCreate,
+    ProjectCommentCreate,
     ProjectCommentRetrieve,
     ProjectCommentUpdateDestroy,
 )
-from .views.project_commission_date import (
-    ProjectCommissionDateListCreate,
-    ProjectCommissionDateRetrieve,
-    ProjectCommissionDateUpdateDestroy,
+from .views.project_commission_fund import (
+    ProjectCommissionFundListCreate,
+    ProjectCommissionFundRetrieve,
+    ProjectCommissionFundUpdateDestroy,
 )
 from .views.project_export import ProjectDataExport, ProjectReviewDataExport
+from .views.project_review import ProjectReviewRetrieveUpdate
 
 urlpatterns = [
     path("", ProjectListCreate.as_view(), name="project_list_create"),
-    path("<int:pk>", ProjectRetrieveUpdate.as_view(), name="project_retrieve_update"),
     path(
-        "<int:pk>/status",
-        ProjectStatusUpdate.as_view(),
-        name="project_status_update",
+        "<int:pk>",
+        ProjectRetrieveUpdateDestroy.as_view(),
+        name="project_retrieve_update_destroy",
     ),
     path(
-        "categories/names",
-        CategoryList.as_view(),
-        name="category_list",
+        "<int:pk>/pdf_export", ProjectDataExport.as_view(), name="project_data_export"
+    ),
+    path(
+        "<int:pk>/review",
+        ProjectReviewRetrieveUpdate.as_view(),
+        name="project_review_retrieve_update",
+    ),
+    path(
+        "<int:pk>/review/pdf_export",
+        ProjectReviewDataExport.as_view(),
+        name="project_review_data_export",
+    ),
+    path(
+        "<int:pk>/status", ProjectStatusUpdate.as_view(), name="project_status_update"
     ),
     path(
         "categories",
@@ -53,26 +63,8 @@ urlpatterns = [
         ProjectCategoryDestroy.as_view(),
         name="project_category_destroy",
     ),
-    path(
-        "commission_dates",
-        ProjectCommissionDateListCreate.as_view(),
-        name="project_commission_date_list_create",
-    ),
-    path(
-        "<int:project_id>/commission_dates",
-        ProjectCommissionDateRetrieve.as_view(),
-        name="project_commission_date_retrieve",
-    ),
-    path(
-        "<int:project_id>/commission_dates/<int:commission_date_id>",
-        ProjectCommissionDateUpdateDestroy.as_view(),
-        name="project_commission_date_update_destroy",
-    ),
-    path(
-        "comments",
-        ProjectCommentListCreate.as_view(),
-        name="project_comment_list_create",
-    ),
+    path("categories/names", CategoryList.as_view(), name="category_list"),
+    path("comments", ProjectCommentCreate.as_view(), name="project_comment_create"),
     path(
         "<int:project_id>/comments",
         ProjectCommentRetrieve.as_view(),
@@ -84,18 +76,18 @@ urlpatterns = [
         name="project_comment_update_destroy",
     ),
     path(
-        "<int:pk>/review",
-        ProjectReviewRetrieveUpdate.as_view(),
-        name="project_review_retrieve_update",
+        "commission_funds",
+        ProjectCommissionFundListCreate.as_view(),
+        name="project_commission_fund_list_create",
     ),
     path(
-        "<int:id>/export",
-        ProjectDataExport.as_view(),
-        name="project_data_export",
+        "<int:project_id>/commission_funds",
+        ProjectCommissionFundRetrieve.as_view(),
+        name="project_commission_fund_retrieve",
     ),
     path(
-        "<int:id>/review/export",
-        ProjectReviewDataExport.as_view(),
-        name="project_review_data_export",
+        "<int:project_id>/commission_funds/<int:commission_fund_id>",
+        ProjectCommissionFundUpdateDestroy.as_view(),
+        name="project_commission_fund_update_destroy",
     ),
 ]

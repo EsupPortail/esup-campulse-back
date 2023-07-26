@@ -8,9 +8,16 @@ from django.utils.translation import gettext as _
 class Command(BaseCommand):
     help = _("Resets database structure and content.")
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--storages",
+            help=_("Set without value if storages should be flushed."),
+            action="store_true",
+        )
+
     def handle(self, *args, **options):
         try:
-            call_command("flush")
+            call_command("flush", "--no-input")
             call_command("migrate")
             apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
             # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
@@ -20,7 +27,12 @@ class Command(BaseCommand):
             call_command("loaddata", *apps_fixtures)
             libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
             call_command("loaddata", *libs_fixtures)
+
+            if options["storages"] is True:
+                call_command("flush_storages")
+                call_command("loaddata_storages")
+
             self.stdout.write(self.style.SUCCESS(_("Database regenerated.")))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

@@ -11,8 +11,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import User
 from plana.storages import DynamicStorageFileField
 
-# Remove S3 dependency in test environment.
-if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+if settings.USE_S3 is False:
     DynamicStorageFileField = models.FileField
 
 
@@ -22,8 +21,8 @@ def get_file_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_DOCUMENTS_FILEPATH
-            if hasattr(settings, 'S3_DOCUMENTS_FILEPATH')
+            settings.DOCUMENTS_FILEPATH
+            if hasattr(settings, 'DOCUMENTS_FILEPATH')
             else '',
             year,
             f'{file_basename}{extension}',
@@ -40,24 +39,24 @@ class DocumentUpload(models.Model):
     document = models.ForeignKey(
         "Document",
         verbose_name=_("Document"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
         User,
         verbose_name=_("User"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     association = models.ForeignKey(
         Association,
         verbose_name=_("Association"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     project = models.ForeignKey(
         Project,
         verbose_name=_("Project"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     upload_date = models.DateTimeField(_("Upload date"), auto_now_add=True)
@@ -65,6 +64,7 @@ class DocumentUpload(models.Model):
         _("Uploaded file"),
         upload_to=get_file_path,
     )
+    validated_date = models.DateField(_("Validated date"), null=True)
 
     def __str__(self):
         return f"{self.document}"

@@ -2,15 +2,15 @@
 from django.test import Client, TestCase
 
 from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.commission_date import CommissionDate
+from plana.apps.commissions.models.fund import Fund
 
 
 class CommissionsModelsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
         "institutions_institution.json",
     ]
 
@@ -18,15 +18,15 @@ class CommissionsModelsTests(TestCase):
         """Start a default client used on all tests."""
         self.client = Client()
 
+    def test_fund_model(self):
+        """There's at least one fund in the database."""
+        fund = Fund.objects.first()
+        self.assertEqual(str(fund), f"{fund.name} ({fund.acronym})")
+
     def test_commission_model(self):
         """There's at least one commission in the database."""
         commission = Commission.objects.first()
-        self.assertEqual(str(commission), f"{commission.name} ({commission.acronym})")
-
-    def test_commission_date_model(self):
-        """There's at least one commission date in the database."""
-        commission_date = CommissionDate.objects.first()
         self.assertEqual(
-            str(commission_date),
-            f"{commission_date.submission_date}, {commission_date.commission_date}",
+            str(commission),
+            f"{commission.name} : {commission.submission_date}, {commission.commission_date}, {commission.is_open_to_projects}",
         )

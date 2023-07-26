@@ -24,7 +24,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             if options["flush"] is True:
-                call_command("flush")
+                call_command("flush", "--no-input")
                 permission_fixtures_files = [
                     "plana/apps/groups/fixtures/auth_permission.json",
                     "plana/apps/groups/fixtures/auth_group_permissions.json",
@@ -60,5 +60,5 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS(_("Updated all group permissions.")))
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

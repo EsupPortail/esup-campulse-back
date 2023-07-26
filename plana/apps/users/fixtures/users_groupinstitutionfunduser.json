@@ -1,0 +1,315 @@
+[
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 1,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 2,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 2
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 3,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 4,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 4
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 5,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 6,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 7,
+    "fields": {
+      "user_id": 1,
+      "group_id": 1,
+      "institution_id": 7
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 8,
+    "fields": {
+      "user_id": 2,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 9,
+    "fields": {
+      "user_id": 2,
+      "group_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 10,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 11,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 2
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 12,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 13,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 4
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 14,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 15,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 16,
+    "fields": {
+      "user_id": 3,
+      "group_id": 1,
+      "institution_id": 7
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 17,
+    "fields": {
+      "user_id": 4,
+      "group_id": 2,
+      "institution_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 18,
+    "fields": {
+      "user_id": 5,
+      "group_id": 3,
+      "institution_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 19,
+    "fields": {
+      "user_id": 6,
+      "group_id": 4,
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 20,
+    "fields": {
+      "user_id": 6,
+      "group_id": 4,
+      "fund_id": 2
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 21,
+    "fields": {
+      "user_id": 7,
+      "group_id": 4,
+      "fund_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 22,
+    "fields": {
+      "user_id": 8,
+      "group_id": 4,
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 23,
+    "fields": {
+      "user_id": 8,
+      "group_id": 4,
+      "fund_id": 2
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 24,
+    "fields": {
+      "user_id": 8,
+      "group_id": 4,
+      "fund_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 25,
+    "fields": {
+      "user_id": 8,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 26,
+    "fields": {
+      "user_id": 9,
+      "group_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 27,
+    "fields": {
+      "user_id": 10,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 28,
+    "fields": {
+      "user_id": 11,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 29,
+    "fields": {
+      "user_id": 12,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 30,
+    "fields": {
+      "user_id": 13,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 31,
+    "fields": {
+      "user_id": 14,
+      "group_id": 4,
+      "fund_id": 1
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 32,
+    "fields": {
+      "user_id": 14,
+      "group_id": 4,
+      "fund_id": 2
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 33,
+    "fields": {
+      "user_id": 14,
+      "group_id": 4,
+      "fund_id": 3
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 34,
+    "fields": {
+      "user_id": 14,
+      "group_id": 5
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 35,
+    "fields": {
+      "user_id": 14,
+      "group_id": 6
+    }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 36,
+    "fields": {
+      "user_id": 15,
+      "group_id": 6
+    }
+  }
+]

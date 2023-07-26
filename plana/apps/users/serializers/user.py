@@ -12,7 +12,7 @@ from rest_framework import exceptions, serializers
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
-from plana.apps.users.models.user import GroupInstitutionCommissionUser, User
+from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,9 +34,9 @@ class UserSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=user.id
-            ).values_list("group_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
+                "group_id"
+            )
         )
         for group in groups:
             permissions = [
@@ -49,7 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
+        return GroupInstitutionFundUser.objects.filter(user_id=user.id).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
@@ -82,6 +82,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_cas",
             "has_validated_email",
             "is_validated_by_admin",
+            "is_student",
             "can_submit_projects",
             "associations",
             "groups",
@@ -112,9 +113,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=user.id
-            ).values_list("group_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
+                "group_id"
+            )
         )
         for group in groups:
             permissions = [
@@ -127,7 +128,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionCommissionUser.objects.filter(user_id=user.id).values()
+        return GroupInstitutionFundUser.objects.filter(user_id=user.id).values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
@@ -160,6 +161,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "is_cas",
             "has_validated_email",
             "is_validated_by_admin",
+            "is_student",
             "can_submit_projects",
             "associations",
             "groups",
@@ -184,26 +186,22 @@ class UserPartialDataSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserNameSerializer(serializers.ModelSerializer):
+    """Used to get data from another student in the same associations."""
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+        ]
+
+
 class CustomRegisterSerializer(serializers.ModelSerializer):
     """Used for the user registration form (to parse the phone field)."""
 
     phone = serializers.CharField(required=False, allow_blank=True)
-
-    """
-    def get_validation_exclusions(self):
-        exclusions = super(CustomRegisterSerializer, self).get_validation_exclusions()
-        return exclusions + ["phone"]
-    """
-
-    """
-    def validate_email(self, value):
-        ModelClass = self.Meta.model
-        if ModelClass.objects.filter(email=value).exists():
-            raise serializers.ValidationError(
-                _("This email address is already in use.")
-            )
-        return value
-    """
 
     def save(self, request):
         self.cleaned_data = request.data

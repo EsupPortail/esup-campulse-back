@@ -11,11 +11,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.commission_date import CommissionDate
-from plana.apps.institutions.models.institution import Institution
+from plana.apps.commissions.models import CommissionFund
+from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
@@ -46,13 +46,14 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         """Lists all links between categories and projects."""
         project_id = request.query_params.get("project_id")
 
-        user_commissions_ids = []
+        user_funds_ids = []
         user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_commission"):
-            if request.user.is_staff:
-                user_commissions_ids = request.user.get_user_managed_commissions()
+            managed_funds = request.user.get_user_managed_funds()
+            if managed_funds.count() > 0:
+                user_funds_ids = managed_funds
             else:
-                user_commissions_ids = request.user.get_user_commissions()
+                user_funds_ids = request.user.get_user_funds()
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
 
@@ -69,9 +70,9 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
                     project_id__in=(
-                        ProjectCommissionDate.objects.filter(
-                            commission_date_id__in=CommissionDate.objects.filter(
-                                commission_id__in=user_commissions_ids
+                        ProjectCommissionFund.objects.filter(
+                            commission_fund_id__in=CommissionFund.objects.filter(
+                                fund_id__in=user_funds_ids
                             ).values_list("id")
                         ).values_list("project_id")
                     )
@@ -106,9 +107,10 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         """Creates a link between a category and a project."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
+            Category.objects.get(id=request.data["category"])
         except ObjectDoesNotExist:
             return response.Response(
-                {"error": _("Project does not exist.")},
+                {"error": _("Project or category does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -121,23 +123,26 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not request.user.can_access_project(project):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update categories for this project.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project_categories_count = ProjectCategory.objects.filter(
+            project_id=request.data["project"],
+            category_id=request.data["category"],
+        ).count()
+        if project_categories_count > 0:
+            return response.Response(
+                {"error": _("This project is already linked to this category.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         project.edition_date = datetime.date.today()
         project.save()
 
-        try:
-            ProjectCategory.objects.get(
-                project_id=request.data["project"], category_id=request.data["category"]
-            )
-        except ObjectDoesNotExist:
-            return super().create(request, *args, **kwargs)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().create(request, *args, **kwargs)
 
 
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
@@ -213,7 +218,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.can_access_project(project):
+        if not request.user.can_edit_project(project):
             return response.Response(
                 {"error": _("Not allowed to update categories for this project.")},
                 status=status.HTTP_403_FORBIDDEN,

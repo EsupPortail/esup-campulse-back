@@ -6,11 +6,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.associations.models.association import Association
-from plana.apps.institutions.models import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.users.models import GroupInstitutionCommissionUser
 
 
 class ProjectCommentLinksViewsTests(TestCase):
@@ -23,8 +20,9 @@ class ProjectCommentLinksViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
@@ -32,9 +30,9 @@ class ProjectCommentLinksViewsTests(TestCase):
         "projects_category.json",
         "projects_project.json",
         "projects_projectcomment.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -91,67 +89,6 @@ class ProjectCommentLinksViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
-    def test_get_project_comments_anonymous(self):
-        """
-        GET /projects/comments .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/comments")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_get_project_comments_student(self):
-        """
-        GET /projects/comments
-
-        - A student user gets comments where projects rights are OK.
-        """
-        response = self.student_offsite_client.get("/projects/comments")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_project_comments_institution_manager(self):
-        """
-        GET /projects/comments
-
-        - An institution manager user gets project comments for correct projects.
-        """
-        response = self.institution_client.get("/projects/comments")
-        user_institution_ids = Institution.objects.filter(
-            id__in=GroupInstitutionCommissionUser.objects.filter(
-                user_id=self.manager_institution_user_id
-            ).values_list("institution_id")
-        )
-        project_comments_cnt = ProjectComment.objects.filter(
-            project_id__in=Project.visible_objects.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=user_institution_ids
-                ).values_list("id")
-            )
-        ).count()
-
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), project_comments_cnt)
-
-    def test_get_project_comments_manager(self):
-        """
-        GET /projects/comments .
-
-        - A general manager user gets all project comments.
-        - project_id argument filters by Project ID.
-        """
-        response = self.general_client.get("/projects/comments")
-        projects_categories_cnt = ProjectComment.objects.all().count()
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), projects_categories_cnt)
-
-        response = self.general_client.get("/projects/comments?project_id=2")
-        projects_categories_cnt = ProjectComment.objects.filter(project_id=2).count()
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(content), projects_categories_cnt)
-
     def test_post_project_comments_anonymous(self):
         """
         POST /projects/comments
@@ -184,6 +121,38 @@ class ProjectCommentLinksViewsTests(TestCase):
         post_data = {"project": 1, "text": "Le chiffre 6 c'est comme saucisse"}
         response = self.student_offsite_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_project_comments_manager_wrong_status(self):
+        """
+        POST /projects/comments
+
+        - The route can be accessed by a manager.
+        - Validated projects cannot receive a comment.
+        """
+        project_id = 1
+        project = Project.visible_objects.get(id=project_id)
+        project.project_status = "PROJECT_REJECTED"
+        project.save()
+
+        post_data = {
+            "project": project_id,
+            "text": "Finalement non je veux pas aider ce projet.",
+        }
+        response = self.general_client.post("/projects/comments", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_project_comments_serializer_error(self):
+        """
+        POST /projects/comments
+
+        - The route can be accessed by a manager.
+        - Serializer fields must be valid.
+        """
+        post_data = {"project": 1, "text": False}
+        response = self.general_client.post(
+            "/projects/comments", data=post_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_comments_manager_success(self):
         """
@@ -241,14 +210,16 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - A student user not owning the project cannot execute this request.
         """
-        response = self.student_offsite_client.get("/projects/2/comments")
+        project_id = 2
+        response = self.student_offsite_client.get(f"/projects/{project_id}/comments")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_project_comments_by_id(self):
+    def test_get_project_comments_by_id_success(self):
         """
         GET /projects/{project_id}/comments
 
-        - The route can be accessed by a manager user and by a student user.
+        - The route can be accessed by a manager user.
+        - The route can be accessed by a student user.
         - Correct projects comments are returned.
         """
         project_id = 2
@@ -306,9 +277,13 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - Comment must exist.
         """
+        comment = 2
+        project = 2
         patch_data = {"text": "Commentaire not found"}
         response = self.general_client.patch(
-            "/projects/2/comments/2", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -319,26 +294,71 @@ class ProjectCommentLinksViewsTests(TestCase):
         - A user without proper permissions cannot execute this command.
         - Manager must be from the correct institution.
         """
+        comment = 1
+        project = 2
         patch_data = {"text": "Commentaire forbidden"}
         response = self.student_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         response = self.institution_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_project_comments_manager_wrong_status(self):
+        """
+        PATCH /projects/{project_id}/comments/{comment_id}
+
+        - The route can be accessed by a manager.
+        - Comments cannot be updated on validated projects.
+        """
+        comment_id = 1
+        project_id = 2
+        project = Project.visible_objects.get(id=project_id)
+        project.project_status = "PROJECT_REJECTED"
+        project.save()
+
+        patch_data = {"text": "Finalement non je veux pas aider ce projet."}
+        response = self.general_client.patch(
+            f"/projects/{project_id}/comments/{comment_id}",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_project_comments_serializer_error(self):
+        """
+        PATCH /projects/{id}/comments/{id} .
+
+        - The route can be accessed by a manager.
+        - Serializer fields must be valid.
+        """
+        patch_data = {"text": False}
+        response = self.general_client.patch(
+            "/projects/1/comments/1", data=patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_comment_success(self):
         """
         PATCH /projects/{project_id}/comments/{comment_id}
 
-        - A user with proper permissions can execute this command.
+        - A user with proper permissions can execute this request.
+        - TOOD : The comment is correctly updated in db.
         """
+        comment = 1
+        project = 2
         patch_data = {"text": "Commentaire sent with success"}
         response = self.general_client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
+            f"/projects/{project}/comments/{comment}",
+            data=patch_data,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -380,6 +400,24 @@ class ProjectCommentLinksViewsTests(TestCase):
             f"/projects/{project}/comments/{comment}"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_project_comments_manager_wrong_status(self):
+        """
+        DELETE /projects/{project_id}/comments/{comment_id}
+
+        - The route can be accessed by a manager.
+        - Comments cannot be deleted on validated projects.
+        """
+        comment_id = 1
+        project_id = 2
+        project = Project.visible_objects.get(id=project_id)
+        project.project_status = "PROJECT_REJECTED"
+        project.save()
+
+        response = self.general_client.delete(
+            f"/projects/{project_id}/comments/{comment_id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_project_comments_success(self):
         """

@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 
 from allauth.account.models import EmailAddress
 from django.conf import settings
@@ -7,9 +9,8 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-# from plana.apps.commissions.models.commission import Commission
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import GroupInstitutionCommissionUser
+from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class Command(BaseCommand):
@@ -26,7 +27,6 @@ class Command(BaseCommand):
         institution_choices = Institution.objects.all().values_list(
             "acronym", flat=True
         )
-        # commission_choices = Commission.objects.all().values_list("acronym", flat=True)
         parser.add_argument("--email", help="Email address.", required=True)
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
@@ -42,13 +42,11 @@ class Command(BaseCommand):
             help=_("Institution codename (all by default)."),
             choices=institution_choices,
         )
-        """
         parser.add_argument(
-            "--commission",
-            help=_("Commission codename (all by default)."),
-            choices=commission_choices,
+            "--superuser",
+            help=_("Set without value if user should be a superuser."),
+            action="store_true",
         )
-        """
 
     def handle(self, *args, **options):
         try:
@@ -56,7 +54,10 @@ class Command(BaseCommand):
                 username=options["email"], email=options["email"]
             )
             if options["password"] is None:
-                password = get_user_model().objects.make_random_password()
+                password = "".join(
+                    secrets.choice(string.ascii_letters + string.digits)
+                    for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                )
             else:
                 password = options["password"]
             user.set_password(password)
@@ -66,6 +67,8 @@ class Command(BaseCommand):
             user.is_active = True
             user.is_staff = True
             user.is_validated_by_admin = True
+            if options["superuser"] is True:
+                user.is_superuser = True
             user.save()
             EmailAddress.objects.create(
                 email=user.email, verified=True, primary=True, user_id=user.id
@@ -73,33 +76,19 @@ class Command(BaseCommand):
             group = Group.objects.get(name=options["group"])
             if options["institution"] is not None:
                 institution = Institution.objects.get(acronym=options["institution"])
-                GroupInstitutionCommissionUser.objects.create(
+                GroupInstitutionFundUser.objects.create(
                     user_id=user.id, group_id=group.id, institution_id=institution.id
                 )
             else:
                 for institution_id in Institution.objects.values_list("id", flat=True):
-                    GroupInstitutionCommissionUser.objects.create(
+                    GroupInstitutionFundUser.objects.create(
                         user_id=user.id,
                         group_id=group.id,
                         institution_id=institution_id,
                     )
-            """
-            if options["commission"] is not None:
-                commission = Commission.objects.get(acronym=options["commission"])
-                GroupInstitutionCommissionUser.objects.create(
-                    user_id=user.id, group_id=group.id, commission_id=commission.id
-                )
-            else:
-                for commission_id in Commission.objects.values_list("id", flat=True):
-                    GroupInstitutionCommissionUser.objects.create(
-                        user_id=user.id,
-                        group_id=group.id,
-                        commission_id=commission_id,
-                    )
-            """
             self.stdout.write(
                 self.style.SUCCESS(_(f"User created. Password : {password}"))
             )
 
-        except Exception as e:
-            self.stdout.write(self.style.ERROR("Error : %s" % e))
+        except Exception as error:
+            self.stdout.write(self.style.ERROR(f"Error : {error}"))

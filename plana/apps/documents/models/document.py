@@ -7,12 +7,11 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
 
-# Remove S3 dependency in test environment.
-if os.environ["DJANGO_SETTINGS_MODULE"] == "plana.settings.unittest":
+if settings.USE_S3 is False:
     DynamicStorageFileField = models.FileField
 
 
@@ -22,8 +21,8 @@ def get_template_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_TEMPLATES_FILEPATH
-            if hasattr(settings, 'S3_TEMPLATES_FILEPATH')
+            settings.TEMPLATES_FILEPATH
+            if hasattr(settings, 'TEMPLATES_FILEPATH')
             else '',
             year,
             f'{file_basename}{extension}',
@@ -40,9 +39,7 @@ class Document(models.Model):
         """List of processes a document can be linked to."""
 
         CHARTER_ASSOCIATION = "CHARTER_ASSOCIATION", _("Charter for Association")
-        CHARTER_PROJECT_COMMISSION = "CHARTER_PROJECT_COMMISSION", _(
-            "Charter for Project Commission"
-        )
+        CHARTER_PROJECT_FUND = "CHARTER_PROJECT_FUND", _("Charter for Project Fund")
         DOCUMENT_ASSOCIATION = "DOCUMENT_ASSOCIATION", _("Document for Association")
         DOCUMENT_USER = "DOCUMENT_USER", _("Document for User")
         DOCUMENT_PROJECT = "DOCUMENT_PROJECT", _("Document for Project")
@@ -55,7 +52,13 @@ class Document(models.Model):
         def get_updatable_documents():
             """Documents with those processes can be replaced by a manager."""
 
-            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_COMMISSION"]
+            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
+
+        @staticmethod
+        def get_validated_documents():
+            """Documents with those processes have to be validated to be used."""
+
+            return ["CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
 
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
@@ -66,7 +69,12 @@ class Document(models.Model):
         _("Is required in process"), default=False
     )
     days_before_expiration = models.DurationField(
-        _("Days before document expiration"), default=datetime.timedelta(days=365)
+        _("Days before document expiration"), null=True
+    )
+    expiration_day = models.CharField(
+        _("Document expiration day of the year in %m-%d format"),
+        max_length=5,
+        null=True,
     )
     path_template = DynamicStorageFileField(
         _("Example template file"),
@@ -81,9 +89,9 @@ class Document(models.Model):
         on_delete=models.RESTRICT,
         null=True,
     )
-    commission = models.ForeignKey(
-        Commission,
-        verbose_name=_("Commission"),
+    fund = models.ForeignKey(
+        Fund,
+        verbose_name=_("Fund"),
         on_delete=models.RESTRICT,
         null=True,
     )
@@ -102,24 +110,24 @@ class Document(models.Model):
         verbose_name_plural = _("Documents")
         permissions = [
             (
-                "add_document_any_commission",
-                "Can add documents linked to any commission.",
+                "add_document_any_fund",
+                "Can add documents linked to any fund.",
             ),
             (
                 "add_document_any_institution",
                 "Can add documents linked to any institution.",
             ),
             (
-                "change_document_any_commission",
-                "Can change documents linked to any commission.",
+                "change_document_any_fund",
+                "Can change documents linked to any fund.",
             ),
             (
                 "change_document_any_institution",
                 "Can change documents linked to any institution.",
             ),
             (
-                "delete_document_any_commission",
-                "Can delete documents linked to any commission.",
+                "delete_document_any_fund",
+                "Can delete documents linked to any fund.",
             ),
             (
                 "delete_document_any_institution",

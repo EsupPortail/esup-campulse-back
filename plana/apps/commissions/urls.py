@@ -1,22 +1,39 @@
 """List of URLs directly linked to operations that can be done on commissions."""
 from django.urls import path
 
-from .views.commission import CommissionList
-from .views.commission_date import (
-    CommissionDateListCreate,
-    CommissionDateRetrieveUpdateDestroy,
+from .views.commission import CommissionListCreate, CommissionRetrieveUpdateDestroy
+from .views.commission_export import CommissionCSVExport
+from .views.commission_fund import (
+    CommissionFundDestroy,
+    CommissionFundListCreate,
+    CommissionFundRetrieve,
 )
+from .views.fund import FundList
 
 urlpatterns = [
-    path("", CommissionList.as_view(), name="commission_list"),
+    path("", CommissionListCreate.as_view(), name="commission_list_create"),
     path(
-        "commission_dates",
-        CommissionDateListCreate.as_view(),
-        name="commission_date_list_create",
+        "<int:pk>",
+        CommissionRetrieveUpdateDestroy.as_view(),
+        name="commission_retrieve_update_destroy",
     ),
     path(
-        "commission_dates/<int:pk>",
-        CommissionDateRetrieveUpdateDestroy.as_view(),
-        name="commission_date_retrieve_update_destroy",
+        "<int:pk>/csv_export",
+        CommissionCSVExport.as_view(),
+        name="commission_csv_export",
     ),
+    path(
+        "funds", CommissionFundListCreate.as_view(), name="commission_fund_list_create"
+    ),
+    path(
+        "<int:commission_id>/funds",
+        CommissionFundRetrieve.as_view(),
+        name="commission_fund_retrieve",
+    ),
+    path(
+        "<int:commission_id>/funds/<int:fund_id>",
+        CommissionFundDestroy.as_view(),
+        name="commission_fund_destroy",
+    ),
+    path("funds/names", FundList.as_view(), name="fund_list"),
 ]

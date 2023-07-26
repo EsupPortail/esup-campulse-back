@@ -41,19 +41,20 @@ multi_line_output = 3
 
 [tool.poetry]
 name = "plana"
-version = "0.2"
+version = "0.9"
 description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
+license = "GPL-3.0-or-later"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
 django = "<4.0"
 django-allauth = "^0.51.0"
 django-allauth-cas = "^1.0.0"
+# django-allauth-cas = { git = "https://github.com/thejoeejoee/django-allauth-cas", branch = "master" }
 django-cleanup = "^6.0.0"
 django-cors-headers = "^3.13.0"
 django-extensions = "^3.2.0"
-django-filter = "^22.1"
 django-storages = {extras = ["boto3"], version = "^1.13.2"}
 django-summernote = "<0.9"
 django-thumbnails = "^0.7.0"
@@ -63,12 +64,13 @@ djangorestframework-simplejwt = "^5.2.0"
 dj-rest-auth = "^2.2.0"
 drf-spectacular = "^0.24.0"
 britney = "^0.5.1"
-cryptography = "38.0.3"
-pillow = "^9.3.0"
+pillow = "^9.5.0" # needed because ANTIALIAS is deprecated in v10.
 psycopg2-binary = "2.8.6"
 pyrage = "^1.0.3"
-zxcvbn = "^4.4.28"
+urllib3 = ">=1.26,<2" # needed to avoid dependency problems when updating boto3 and botocore
 weasyprint = "^58.1"
+zxcvbn = "^4.4.28"
+num2words = "^0.5.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
@@ -80,7 +82,6 @@ pylint = "^2.15.0"
 pylint-django = "^2.5.0"
 safety = "^2.3.5"
 sentry-sdk = "^1.9.0"
-sphinx = "^5.3.0"
 tox = "^3.26.0"
 
 [tool.poetry.group.prod.dependencies]

@@ -19,7 +19,7 @@ def is_ajax_request(view_func):
 
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return view_func(request, *args, **kwargs)
         return HttpResponseForbidden(
             "<h1>Forbidden</h1>You do not have \
@@ -75,7 +75,6 @@ class ParserFaker:
         request=None,
         **kwargs,
     ) -> str:
-
         context = cls.get_context(
             request, available_vars=available_vars, extra_variables=context_params
         )

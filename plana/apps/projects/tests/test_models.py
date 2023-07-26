@@ -5,7 +5,7 @@ from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_comment import ProjectComment
-from plana.apps.projects.models.project_commission_date import ProjectCommissionDate
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.users.models.user import User
 
 
@@ -18,17 +18,18 @@ class ProjectsModelsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
+        "commissions_fund.json",
         "commissions_commission.json",
-        "commissions_commissiondate.json",
+        "commissions_commissionfund.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",
         "projects_project.json",
         "projects_projectcategory.json",
         "projects_projectcomment.json",
-        "projects_projectcommissiondate.json",
+        "projects_projectcommissionfund.json",
         "users_associationuser.json",
-        "users_groupinstitutioncommissionuser.json",
+        "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]
 
@@ -61,11 +62,11 @@ class ProjectsModelsTests(TestCase):
             f"{project_comm.user} {project_comm.project} : {project_comm.text}",
         )
 
-    def test_project_commission_date_model(self):
-        """There's at least one project commission date link in the database."""
-        project_cd = ProjectCommissionDate.objects.first()
+    def test_project_commission_fund_model(self):
+        """There's at least one project commission fund link in the database."""
+        project_cd = ProjectCommissionFund.objects.first()
         self.assertEqual(
-            str(project_cd), f"{project_cd.project} {project_cd.commission_date}"
+            str(project_cd), f"{project_cd.project} {project_cd.commission_fund}"
         )
 
     def test_can_access_project_success_user(self):
@@ -111,21 +112,21 @@ class ProjectsModelsTests(TestCase):
         """
         project = Project.visible_objects.get(id=2)
         user = User.objects.get(username="etudiant-asso-site@mail.tld")
-        self.assertFalse(user.can_access_project(project))
+        self.assertFalse(user.can_edit_project(project))
 
     def test_can_access_project_success_commission(self):
         """
         Testing can_access_project Project helper
-        - The authenticated user must be linked to a commission linked to a project.
+        - The authenticated user must be linked to a fund linked to a project.
         """
-        project = Project.visible_objects.get(id=1)
+        project = Project.visible_objects.get(id=5)
         user = User.objects.get(username="membre-culture-actions@mail.tld")
         self.assertTrue(user.can_access_project(project))
 
     def test_can_access_project_forbidden_commission(self):
         """
         Testing can_access_project Project helper
-        - The authenticated user must be linked to a commission linked to a project.
+        - The authenticated user must be linked to a fund linked to a project.
         """
         project = Project.visible_objects.get(id=1)
         user = User.objects.get(username="membre-fsdie-idex@mail.tld")

@@ -750,926 +750,971 @@
     "model": "auth.permission",
     "pk": 84,
     "fields": {
-      "name": "Can add Commission Date",
+      "name": "Can add Commission Fund",
       "content_type": 20,
-      "codename": "add_commissiondate"
+      "codename": "add_commissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 85,
     "fields": {
-      "name": "Can change Commission Date",
+      "name": "Can change Commission Fund",
       "content_type": 20,
-      "codename": "change_commissiondate"
+      "codename": "change_commissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 86,
     "fields": {
-      "name": "Can delete Commission Date",
+      "name": "Can delete Commission Fund",
       "content_type": 20,
-      "codename": "delete_commissiondate"
+      "codename": "delete_commissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 87,
     "fields": {
-      "name": "Can view Commission Date",
+      "name": "Can view Commission Fund",
       "content_type": 20,
-      "codename": "view_commissiondate"
+      "codename": "view_commissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 88,
     "fields": {
-      "name": "Can add GDPR Consent",
+      "name": "Can add Fund",
       "content_type": 21,
-      "codename": "add_gdprconsent"
+      "codename": "add_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 89,
     "fields": {
-      "name": "Can change GDPR Consent",
+      "name": "Can change Fund",
       "content_type": 21,
-      "codename": "change_gdprconsent"
+      "codename": "change_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 90,
     "fields": {
-      "name": "Can delete GDPR Consent",
+      "name": "Can delete Fund",
       "content_type": 21,
-      "codename": "delete_gdprconsent"
+      "codename": "delete_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 91,
     "fields": {
-      "name": "Can view GDPR Consent",
+      "name": "Can view Fund",
       "content_type": 21,
-      "codename": "view_gdprconsent"
+      "codename": "view_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 92,
     "fields": {
-      "name": "Can add Document",
+      "name": "Can add GDPR Consent",
       "content_type": 22,
-      "codename": "add_document"
+      "codename": "add_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 93,
     "fields": {
-      "name": "Can change Document",
+      "name": "Can change GDPR Consent",
       "content_type": 22,
-      "codename": "change_document"
+      "codename": "change_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 94,
     "fields": {
-      "name": "Can delete Document",
+      "name": "Can delete GDPR Consent",
       "content_type": 22,
-      "codename": "delete_document"
+      "codename": "delete_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 95,
     "fields": {
-      "name": "Can view Document",
+      "name": "Can view GDPR Consent",
       "content_type": 22,
-      "codename": "view_document"
+      "codename": "view_gdprconsent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 96,
     "fields": {
-      "name": "Can add documents linked to any commission.",
-      "content_type": 22,
-      "codename": "add_document_any_commission"
+      "name": "Can add Document",
+      "content_type": 23,
+      "codename": "add_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 97,
     "fields": {
-      "name": "Can add documents linked to any institution.",
-      "content_type": 22,
-      "codename": "add_document_any_institution"
+      "name": "Can change Document",
+      "content_type": 23,
+      "codename": "change_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 98,
     "fields": {
-      "name": "Can change documents linked to any commission.",
-      "content_type": 22,
-      "codename": "change_document_any_commission"
+      "name": "Can delete Document",
+      "content_type": 23,
+      "codename": "delete_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 99,
     "fields": {
-      "name": "Can change documents linked to any institution.",
-      "content_type": 22,
-      "codename": "change_document_any_institution"
+      "name": "Can view Document",
+      "content_type": 23,
+      "codename": "view_document"
     }
   },
   {
     "model": "auth.permission",
     "pk": 100,
     "fields": {
-      "name": "Can delete documents linked to any commission.",
-      "content_type": 22,
-      "codename": "delete_document_any_commission"
+      "name": "Can add documents linked to any fund.",
+      "content_type": 23,
+      "codename": "add_document_any_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 101,
     "fields": {
-      "name": "Can delete documents linked to any institution.",
-      "content_type": 22,
-      "codename": "delete_document_any_institution"
+      "name": "Can add documents linked to any institution.",
+      "content_type": 23,
+      "codename": "add_document_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 102,
     "fields": {
-      "name": "Can add Document from association or user",
+      "name": "Can change documents linked to any fund.",
       "content_type": 23,
-      "codename": "add_documentupload"
+      "codename": "change_document_any_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 103,
     "fields": {
-      "name": "Can change Document from association or user",
+      "name": "Can change documents linked to any institution.",
       "content_type": 23,
-      "codename": "change_documentupload"
+      "codename": "change_document_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 104,
     "fields": {
-      "name": "Can delete Document from association or user",
+      "name": "Can delete documents linked to any fund.",
       "content_type": 23,
-      "codename": "delete_documentupload"
+      "codename": "delete_document_any_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 105,
     "fields": {
-      "name": "Can view Document from association or user",
+      "name": "Can delete documents linked to any institution.",
       "content_type": 23,
-      "codename": "view_documentupload"
+      "codename": "delete_document_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 106,
     "fields": {
-      "name": "Can add a link from any document to any project or anu association.",
-      "content_type": 23,
-      "codename": "add_documentupload_all"
+      "name": "Can add Document from association or user",
+      "content_type": 24,
+      "codename": "add_documentupload"
     }
   },
   {
     "model": "auth.permission",
     "pk": 107,
     "fields": {
-      "name": "Can remove a link from a document to any project or any association.",
-      "content_type": 23,
-      "codename": "delete_documentupload_all"
+      "name": "Can change Document from association or user",
+      "content_type": 24,
+      "codename": "change_documentupload"
     }
   },
   {
     "model": "auth.permission",
     "pk": 108,
     "fields": {
-      "name": "Can view all documents linked to any project or any association.",
-      "content_type": 23,
-      "codename": "view_documentupload_all"
+      "name": "Can delete Document from association or user",
+      "content_type": 24,
+      "codename": "delete_documentupload"
     }
   },
   {
     "model": "auth.permission",
     "pk": 109,
     "fields": {
-      "name": "Can add Institution",
+      "name": "Can view Document from association or user",
       "content_type": 24,
-      "codename": "add_institution"
+      "codename": "view_documentupload"
     }
   },
   {
     "model": "auth.permission",
     "pk": 110,
     "fields": {
-      "name": "Can change Institution",
+      "name": "Can add a link from any document to any project or anu association.",
       "content_type": 24,
-      "codename": "change_institution"
+      "codename": "add_documentupload_all"
     }
   },
   {
     "model": "auth.permission",
     "pk": 111,
     "fields": {
-      "name": "Can delete Institution",
+      "name": "Can remove a link from a document to any project or any association.",
       "content_type": 24,
-      "codename": "delete_institution"
+      "codename": "delete_documentupload_all"
     }
   },
   {
     "model": "auth.permission",
     "pk": 112,
     "fields": {
-      "name": "Can view Institution",
+      "name": "Can view all documents linked to any project or any association.",
       "content_type": 24,
-      "codename": "view_institution"
+      "codename": "view_documentupload_all"
     }
   },
   {
     "model": "auth.permission",
     "pk": 113,
     "fields": {
-      "name": "Can add Institution component",
+      "name": "Can add Institution",
       "content_type": 25,
-      "codename": "add_institutioncomponent"
+      "codename": "add_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 114,
     "fields": {
-      "name": "Can change Institution component",
+      "name": "Can change Institution",
       "content_type": 25,
-      "codename": "change_institutioncomponent"
+      "codename": "change_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 115,
     "fields": {
-      "name": "Can delete Institution component",
+      "name": "Can delete Institution",
       "content_type": 25,
-      "codename": "delete_institutioncomponent"
+      "codename": "delete_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 116,
     "fields": {
-      "name": "Can view Institution component",
+      "name": "Can view Institution",
       "content_type": 25,
-      "codename": "view_institutioncomponent"
+      "codename": "view_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 117,
     "fields": {
-      "name": "Can add Category",
+      "name": "Can add Institution component",
       "content_type": 26,
-      "codename": "add_category"
+      "codename": "add_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 118,
     "fields": {
-      "name": "Can change Category",
+      "name": "Can change Institution component",
       "content_type": 26,
-      "codename": "change_category"
+      "codename": "change_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 119,
     "fields": {
-      "name": "Can delete Category",
+      "name": "Can delete Institution component",
       "content_type": 26,
-      "codename": "delete_category"
+      "codename": "delete_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 120,
     "fields": {
-      "name": "Can view Category",
+      "name": "Can view Institution component",
       "content_type": 26,
-      "codename": "view_category"
+      "codename": "view_institutioncomponent"
     }
   },
   {
     "model": "auth.permission",
     "pk": 121,
     "fields": {
-      "name": "Can add Project",
+      "name": "Can add Category",
       "content_type": 27,
-      "codename": "add_project"
+      "codename": "add_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 122,
     "fields": {
-      "name": "Can change Project",
+      "name": "Can change Category",
       "content_type": 27,
-      "codename": "change_project"
+      "codename": "change_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 123,
     "fields": {
-      "name": "Can delete Project",
+      "name": "Can delete Category",
       "content_type": 27,
-      "codename": "delete_project"
+      "codename": "delete_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 124,
     "fields": {
-      "name": "Can view Project",
+      "name": "Can view Category",
       "content_type": 27,
-      "codename": "view_project"
+      "codename": "view_category"
     }
   },
   {
     "model": "auth.permission",
     "pk": 125,
     "fields": {
-      "name": "Can add a project as an association.",
-      "content_type": 27,
-      "codename": "add_project_association"
+      "name": "Can add Project commission fund",
+      "content_type": 28,
+      "codename": "add_projectcommissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 126,
     "fields": {
-      "name": "Can add a project as a user.",
-      "content_type": 27,
-      "codename": "add_project_user"
+      "name": "Can change Project commission fund",
+      "content_type": 28,
+      "codename": "change_projectcommissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 127,
     "fields": {
-      "name": "Can update project fields filled by bearer (student).",
-      "content_type": 27,
-      "codename": "change_project_as_bearer"
+      "name": "Can delete Project commission fund",
+      "content_type": 28,
+      "codename": "delete_projectcommissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 128,
     "fields": {
-      "name": "Can update project fields filled by validator (manager).",
-      "content_type": 27,
-      "codename": "change_project_as_validator"
+      "name": "Can view Project commission fund",
+      "content_type": 28,
+      "codename": "view_projectcommissionfund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 129,
     "fields": {
-      "name": "Can view all projects for a commission.",
-      "content_type": 27,
-      "codename": "view_project_any_commission"
+      "name": "Can update bearer fields (amount asked) between a project and a commission fund.",
+      "content_type": 28,
+      "codename": "change_projectcommissionfund_as_bearer"
     }
   },
   {
     "model": "auth.permission",
     "pk": 130,
     "fields": {
-      "name": "Can view all projects for an institution.",
-      "content_type": 27,
-      "codename": "view_project_any_institution"
+      "name": "Can update validator fields (amount earned) between a project and a commission fund.",
+      "content_type": 28,
+      "codename": "change_projectcommissionfund_as_validator"
     }
   },
   {
     "model": "auth.permission",
     "pk": 131,
     "fields": {
-      "name": "Can add Project category",
+      "name": "Can view all commission funds linked to all projects for a commission.",
       "content_type": 28,
-      "codename": "add_projectcategory"
+      "codename": "view_projectcommissionfund_any_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 132,
     "fields": {
-      "name": "Can change Project category",
+      "name": "Can view all commission funds linked to all projects for an institution.",
       "content_type": 28,
-      "codename": "change_projectcategory"
+      "codename": "view_projectcommissionfund_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 133,
     "fields": {
-      "name": "Can delete Project category",
-      "content_type": 28,
-      "codename": "delete_projectcategory"
+      "name": "Can add Project",
+      "content_type": 29,
+      "codename": "add_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 134,
     "fields": {
-      "name": "Can view Project category",
-      "content_type": 28,
-      "codename": "view_projectcategory"
+      "name": "Can change Project",
+      "content_type": 29,
+      "codename": "change_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 135,
     "fields": {
-      "name": "Can view all categories linked to all projects for a commission.",
-      "content_type": 28,
-      "codename": "view_projectcategory_any_commission"
+      "name": "Can delete Project",
+      "content_type": 29,
+      "codename": "delete_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 136,
     "fields": {
-      "name": "Can view all categories linked to all projects for an institution.",
-      "content_type": 28,
-      "codename": "view_projectcategory_any_institution"
+      "name": "Can view Project",
+      "content_type": 29,
+      "codename": "view_project"
     }
   },
   {
     "model": "auth.permission",
     "pk": 137,
     "fields": {
-      "name": "Can add Project comment",
+      "name": "Can add a project as an association.",
       "content_type": 29,
-      "codename": "add_projectcomment"
+      "codename": "add_project_association"
     }
   },
   {
     "model": "auth.permission",
     "pk": 138,
     "fields": {
-      "name": "Can change Project comment",
+      "name": "Can add a project as a user.",
       "content_type": 29,
-      "codename": "change_projectcomment"
+      "codename": "add_project_user"
     }
   },
   {
     "model": "auth.permission",
     "pk": 139,
     "fields": {
-      "name": "Can delete Project comment",
+      "name": "Can update project fields filled by bearer (student).",
       "content_type": 29,
-      "codename": "delete_projectcomment"
+      "codename": "change_project_as_bearer"
     }
   },
   {
     "model": "auth.permission",
     "pk": 140,
     "fields": {
-      "name": "Can view Project comment",
+      "name": "Can update project fields filled by validator (manager).",
       "content_type": 29,
-      "codename": "view_projectcomment"
+      "codename": "change_project_as_validator"
     }
   },
   {
     "model": "auth.permission",
     "pk": 141,
     "fields": {
-      "name": "Can view all comments linked to all projects for a commission.",
+      "name": "Can view all projects for a fund.",
       "content_type": 29,
-      "codename": "view_projectcomment_any_commission"
+      "codename": "view_project_any_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 142,
     "fields": {
-      "name": "Can view all comments linked to all projects for an institution.",
+      "name": "Can view all projects for an institution.",
       "content_type": 29,
-      "codename": "view_projectcomment_any_institution"
+      "codename": "view_project_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 143,
     "fields": {
-      "name": "Can add Project commission date",
-      "content_type": 30,
-      "codename": "add_projectcommissiondate"
+      "name": "Can view all projects without status limit.",
+      "content_type": 29,
+      "codename": "view_project_any_status"
     }
   },
   {
     "model": "auth.permission",
     "pk": 144,
     "fields": {
-      "name": "Can change Project commission date",
+      "name": "Can add Project category",
       "content_type": 30,
-      "codename": "change_projectcommissiondate"
+      "codename": "add_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 145,
     "fields": {
-      "name": "Can delete Project commission date",
+      "name": "Can change Project category",
       "content_type": 30,
-      "codename": "delete_projectcommissiondate"
+      "codename": "change_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 146,
     "fields": {
-      "name": "Can view Project commission date",
+      "name": "Can delete Project category",
       "content_type": 30,
-      "codename": "view_projectcommissiondate"
+      "codename": "delete_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 147,
     "fields": {
-      "name": "Can update bearer fields (amount asked) between a project and a commission date.",
+      "name": "Can view Project category",
       "content_type": 30,
-      "codename": "change_projectcommissiondate_as_bearer"
+      "codename": "view_projectcategory"
     }
   },
   {
     "model": "auth.permission",
     "pk": 148,
     "fields": {
-      "name": "Can update validator fields (amount earned) between a project and a commission date.",
+      "name": "Can view all categories linked to all projects for a commission.",
       "content_type": 30,
-      "codename": "change_projectcommissiondate_as_validator"
+      "codename": "view_projectcategory_any_commission"
     }
   },
   {
     "model": "auth.permission",
     "pk": 149,
     "fields": {
-      "name": "Can view all commission dates linked to all projects for a commission.",
+      "name": "Can view all categories linked to all projects for an institution.",
       "content_type": 30,
-      "codename": "view_projectcommissiondate_any_commission"
+      "codename": "view_projectcategory_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 150,
     "fields": {
-      "name": "Can view all commission dates linked to all projects for an institution.",
-      "content_type": 30,
-      "codename": "view_projectcommissiondate_any_institution"
+      "name": "Can add Project comment",
+      "content_type": 31,
+      "codename": "add_projectcomment"
     }
   },
   {
     "model": "auth.permission",
     "pk": 151,
     "fields": {
-      "name": "Can add Association",
+      "name": "Can change Project comment",
       "content_type": 31,
-      "codename": "add_associationuser"
+      "codename": "change_projectcomment"
     }
   },
   {
     "model": "auth.permission",
     "pk": 152,
     "fields": {
-      "name": "Can change Association",
+      "name": "Can delete Project comment",
       "content_type": 31,
-      "codename": "change_associationuser"
+      "codename": "delete_projectcomment"
     }
   },
   {
     "model": "auth.permission",
     "pk": 153,
     "fields": {
-      "name": "Can delete Association",
+      "name": "Can view Project comment",
       "content_type": 31,
-      "codename": "delete_associationuser"
+      "codename": "view_projectcomment"
     }
   },
   {
     "model": "auth.permission",
     "pk": 154,
     "fields": {
-      "name": "Can view Association",
+      "name": "Can view all comments linked to all projects for a fund.",
       "content_type": 31,
-      "codename": "view_associationuser"
+      "codename": "view_projectcomment_any_fund"
     }
   },
   {
     "model": "auth.permission",
     "pk": 155,
     "fields": {
-      "name": "Can change associations for all users.",
+      "name": "Can view all comments linked to all projects for an institution.",
       "content_type": 31,
-      "codename": "change_associationuser_any_institution"
+      "codename": "view_projectcomment_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 156,
     "fields": {
-      "name": "Can delete associations for all users.",
-      "content_type": 31,
-      "codename": "delete_associationuser_any_institution"
+      "name": "Can add Association",
+      "content_type": 32,
+      "codename": "add_associationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 157,
     "fields": {
-      "name": "Can view all associations for a user.",
-      "content_type": 31,
-      "codename": "view_associationuser_anyone"
+      "name": "Can change Association",
+      "content_type": 32,
+      "codename": "change_associationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 158,
     "fields": {
-      "name": "Can add User Institution Commission Groups",
+      "name": "Can delete Association",
       "content_type": 32,
-      "codename": "add_groupinstitutioncommissionuser"
+      "codename": "delete_associationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 159,
     "fields": {
-      "name": "Can change User Institution Commission Groups",
+      "name": "Can view Association",
       "content_type": 32,
-      "codename": "change_groupinstitutioncommissionuser"
+      "codename": "view_associationuser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 160,
     "fields": {
-      "name": "Can delete User Institution Commission Groups",
+      "name": "Can change associations for all users.",
       "content_type": 32,
-      "codename": "delete_groupinstitutioncommissionuser"
+      "codename": "change_associationuser_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 161,
     "fields": {
-      "name": "Can view User Institution Commission Groups",
+      "name": "Can delete associations for all users.",
       "content_type": 32,
-      "codename": "view_groupinstitutioncommissionuser"
+      "codename": "delete_associationuser_any_institution"
     }
   },
   {
     "model": "auth.permission",
     "pk": 162,
     "fields": {
-      "name": "Can add restricted groups to a user.",
+      "name": "Can view all associations for a user.",
       "content_type": 32,
-      "codename": "add_groupinstitutioncommissionuser_any_group"
+      "codename": "view_associationuser_anyone"
     }
   },
   {
     "model": "auth.permission",
     "pk": 163,
     "fields": {
-      "name": "Can delete restricted groups to a user.",
-      "content_type": 32,
-      "codename": "delete_groupinstitutioncommissionuser_any_group"
+      "name": "Can add User Institution Fund Groups",
+      "content_type": 33,
+      "codename": "add_groupinstitutionfunduser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 164,
     "fields": {
-      "name": "Can view all groups for a user.",
-      "content_type": 32,
-      "codename": "view_groupinstitutioncommissionuser_any_group"
+      "name": "Can change User Institution Fund Groups",
+      "content_type": 33,
+      "codename": "change_groupinstitutionfunduser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 165,
     "fields": {
-      "name": "Can add User",
+      "name": "Can delete User Institution Fund Groups",
       "content_type": 33,
-      "codename": "add_user"
+      "codename": "delete_groupinstitutionfunduser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 166,
     "fields": {
-      "name": "Can change User",
+      "name": "Can view User Institution Fund Groups",
       "content_type": 33,
-      "codename": "change_user"
+      "codename": "view_groupinstitutionfunduser"
     }
   },
   {
     "model": "auth.permission",
     "pk": 167,
     "fields": {
-      "name": "Can delete User",
+      "name": "Can add restricted groups to a user.",
       "content_type": 33,
-      "codename": "delete_user"
+      "codename": "add_groupinstitutionfunduser_any_group"
     }
   },
   {
     "model": "auth.permission",
     "pk": 168,
     "fields": {
-      "name": "Can view User",
+      "name": "Can delete restricted groups to a user.",
       "content_type": 33,
-      "codename": "view_user"
+      "codename": "delete_groupinstitutionfunduser_any_group"
     }
   },
   {
     "model": "auth.permission",
     "pk": 169,
     "fields": {
-      "name": "Can add a user with no association linked.",
+      "name": "Can view all groups for a user.",
       "content_type": 33,
-      "codename": "add_user_misc"
+      "codename": "view_groupinstitutionfunduser_any_group"
     }
   },
   {
     "model": "auth.permission",
     "pk": 170,
     "fields": {
-      "name": "Can change a user with no association linked.",
-      "content_type": 33,
-      "codename": "change_user_misc"
+      "name": "Can add User",
+      "content_type": 34,
+      "codename": "add_user"
     }
   },
   {
     "model": "auth.permission",
     "pk": 171,
     "fields": {
-      "name": "Can change can_submit_projects on a user.",
-      "content_type": 33,
-      "codename": "change_user_all_fields"
+      "name": "Can change User",
+      "content_type": 34,
+      "codename": "change_user"
     }
   },
   {
     "model": "auth.permission",
     "pk": 172,
     "fields": {
-      "name": "Can delete a user with no association linked.",
-      "content_type": 33,
-      "codename": "delete_user_misc"
+      "name": "Can delete User",
+      "content_type": 34,
+      "codename": "delete_user"
     }
   },
   {
     "model": "auth.permission",
     "pk": 173,
     "fields": {
-      "name": "Can view a user with no association linked.",
-      "content_type": 33,
-      "codename": "view_user_misc"
+      "name": "Can view User",
+      "content_type": 34,
+      "codename": "view_user"
     }
   },
   {
     "model": "auth.permission",
     "pk": 174,
     "fields": {
-      "name": "Can view all users.",
-      "content_type": 33,
-      "codename": "view_user_anyone"
+      "name": "Can add a user with no association linked.",
+      "content_type": 34,
+      "codename": "add_user_misc"
     }
   },
   {
     "model": "auth.permission",
     "pk": 175,
     "fields": {
-      "name": "Can add Content",
+      "name": "Can change a user with no association linked.",
       "content_type": 34,
-      "codename": "add_content"
+      "codename": "change_user_misc"
     }
   },
   {
     "model": "auth.permission",
     "pk": 176,
     "fields": {
-      "name": "Can change Content",
+      "name": "Can change can_submit_projects on a user.",
       "content_type": 34,
-      "codename": "change_content"
+      "codename": "change_user_all_fields"
     }
   },
   {
     "model": "auth.permission",
     "pk": 177,
     "fields": {
-      "name": "Can delete Content",
+      "name": "Can delete a user with no association linked.",
       "content_type": 34,
-      "codename": "delete_content"
+      "codename": "delete_user_misc"
     }
   },
   {
     "model": "auth.permission",
     "pk": 178,
     "fields": {
-      "name": "Can view Content",
+      "name": "Can view a user with no association linked.",
       "content_type": 34,
-      "codename": "view_content"
+      "codename": "view_user_misc"
     }
   },
   {
     "model": "auth.permission",
     "pk": 179,
     "fields": {
-      "name": "Can add Template variable",
-      "content_type": 35,
-      "codename": "add_mailtemplatevar"
+      "name": "Can view all users.",
+      "content_type": 34,
+      "codename": "view_user_anyone"
     }
   },
   {
     "model": "auth.permission",
     "pk": 180,
     "fields": {
-      "name": "Can change Template variable",
+      "name": "Can add Content",
       "content_type": 35,
-      "codename": "change_mailtemplatevar"
+      "codename": "add_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 181,
     "fields": {
-      "name": "Can delete Template variable",
+      "name": "Can change Content",
       "content_type": 35,
-      "codename": "delete_mailtemplatevar"
+      "codename": "change_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 182,
     "fields": {
-      "name": "Can view Template variable",
+      "name": "Can delete Content",
       "content_type": 35,
-      "codename": "view_mailtemplatevar"
+      "codename": "delete_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 183,
     "fields": {
-      "name": "Can add Mail template",
-      "content_type": 36,
-      "codename": "add_mailtemplate"
+      "name": "Can view Content",
+      "content_type": 35,
+      "codename": "view_content"
     }
   },
   {
     "model": "auth.permission",
     "pk": 184,
     "fields": {
-      "name": "Can change Mail template",
+      "name": "Can add Template variable",
       "content_type": 36,
-      "codename": "change_mailtemplate"
+      "codename": "add_mailtemplatevar"
     }
   },
   {
     "model": "auth.permission",
     "pk": 185,
     "fields": {
-      "name": "Can delete Mail template",
+      "name": "Can change Template variable",
       "content_type": 36,
-      "codename": "delete_mailtemplate"
+      "codename": "change_mailtemplatevar"
     }
   },
   {
     "model": "auth.permission",
     "pk": 186,
     "fields": {
-      "name": "Can view Mail template",
+      "name": "Can delete Template variable",
       "content_type": 36,
+      "codename": "delete_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 187,
+    "fields": {
+      "name": "Can view Template variable",
+      "content_type": 36,
+      "codename": "view_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 188,
+    "fields": {
+      "name": "Can add Mail template",
+      "content_type": 37,
+      "codename": "add_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 189,
+    "fields": {
+      "name": "Can change Mail template",
+      "content_type": 37,
+      "codename": "change_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 190,
+    "fields": {
+      "name": "Can delete Mail template",
+      "content_type": 37,
+      "codename": "delete_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 191,
+    "fields": {
+      "name": "Can view Mail template",
+      "content_type": 37,
       "codename": "view_mailtemplate"
     }
   }

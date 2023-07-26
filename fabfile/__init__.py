@@ -67,7 +67,7 @@ env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You ne
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
-    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; frame-ancestors \'none\';"',
+    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; connect-src \'self\'; font-src \'self\' https://stackpath.bootstrapcdn.com; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://code.jquery.com https://stackpath.bootstrapcdn.com; style-src \'self\' \'unsafe-inline\' https://stackpath.bootstrapcdn.com;"',
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
@@ -155,6 +155,10 @@ def preprod():
         'default_db_user': 'DATABASES["default"]["USER"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
+        's3_access_key': "AWS_ACCESS_KEY_ID",
+        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
+        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
+        's3_endpoint': "AWS_S3_ENDPOINT_URL",
         'secret_key': 'SECRET_KEY',
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
@@ -332,3 +336,10 @@ def set_up():
 def custom_manage_cmd(cmd):
     """Execute custom command in manage.py"""
     execute(pydiploy.django.custom_manage_command, cmd)
+
+
+@roles("web")
+@task
+def update_python_version():
+    """Update python version"""
+    execute(pydiploy.django.update_python_version)
