@@ -33,7 +33,15 @@ class DocumentUploadCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentUpload
-        fields = "__all__"
+        fields = [
+            "id",
+            "document",
+            "user",
+            "association",
+            "project",
+            "validated_date",
+            "path_file",
+        ]
 
 
 class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
@@ -41,7 +49,7 @@ class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentUpload
-        fields = ["validated_date"]
+        fields = ["validated_date", "comment"]
 
 
 class DocumentUploadFileSerializer(serializers.ModelSerializer):

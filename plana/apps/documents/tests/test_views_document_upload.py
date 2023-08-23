@@ -634,13 +634,14 @@ class DocumentsViewsTests(TestCase):
         - Document object is successfully changed in db.
         """
         self.assertFalse(len(mail.outbox))
-        patch_data = {"validated_date": "2023-03-15"}
+        patch_data = {"validated_date": "2023-03-15", "comment": "Cuisse de poulet"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["comment"], "Cuisse de poulet")
         self.assertTrue(len(mail.outbox))
 
         document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])

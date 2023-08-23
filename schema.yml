@@ -297,7 +297,7 @@ paths:
         name: associations
         schema:
           type: string
-        description: IDs of selected associations, separated by a coma.
+        description: IDs of selected associations, separated by a comma.
       tags:
       - associations
       security:
@@ -3795,6 +3795,10 @@ components:
           format: date
           nullable: true
           title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Texte
         document:
           type: integer
         user:
@@ -3821,60 +3825,36 @@ components:
         id:
           type: integer
           readOnly: true
-        name:
+        document:
+          type: integer
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        project:
+          type: integer
+          nullable: true
+          title: Projet
+        validated_date:
           type: string
-          title: Nom
-          maxLength: 250
-        upload_date:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Date d'envoi
+          format: date
+          nullable: true
+          title: Date de validation
         path_file:
           type: string
           format: uri
           title: Fichier envoyé
-        validated_date:
-          type: string
-          format: date
-          nullable: true
-          title: Date de validation
-        document:
-          type: integer
-        user:
-          type: integer
-          nullable: true
-          title: Utilisateur
-        association:
-          type: integer
-          nullable: true
-        project:
-          type: integer
-          nullable: true
-          title: Projet
       required:
       - document
       - id
       - path_file
-      - upload_date
     DocumentUploadCreateRequest:
       type: object
       description: Main serializer not overriding path_file.
       properties:
-        name:
-          type: string
-          minLength: 1
-          title: Nom
-          maxLength: 250
-        path_file:
-          type: string
-          format: binary
-          title: Fichier envoyé
-        validated_date:
-          type: string
-          format: date
-          nullable: true
-          title: Date de validation
         document:
           type: integer
         user:
@@ -3888,6 +3868,15 @@ components:
           type: integer
           nullable: true
           title: Projet
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
+        path_file:
+          type: string
+          format: binary
+          title: Fichier envoyé
       required:
       - document
       - path_file
@@ -3914,6 +3903,10 @@ components:
           format: date
           nullable: true
           title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Texte
     ExternalUser:
       type: object
       description: External user serializer.
@@ -4323,6 +4316,11 @@ components:
           format: date
           nullable: true
           title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Texte
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.

@@ -98,7 +98,7 @@ class AssociationsCSVExport(generics.RetrieveAPIView):
                 "associations",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
-                description="IDs of selected associations, separated by a coma.",
+                description="IDs of selected associations, separated by a comma.",
             ),
         ],
         responses={
