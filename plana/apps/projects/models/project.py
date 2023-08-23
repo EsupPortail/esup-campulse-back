@@ -162,6 +162,7 @@ class Project(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
+    partner_association = models.TextField(_("Partner association"), default="")
     budget_previous_edition = models.PositiveIntegerField(
         _("Budget on previous edition"), default=0
     )

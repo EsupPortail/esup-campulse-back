@@ -65,7 +65,7 @@ class DocumentUpload(models.Model):
         upload_to=get_file_path,
     )
     validated_date = models.DateField(_("Validated date"), null=True)
-    comment = models.TextField(_("Text"), null=True)
+    comment = models.TextField(_("Comment"), null=True)
 
     def __str__(self):
         return f"{self.document}"

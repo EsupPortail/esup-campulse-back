@@ -3798,7 +3798,6 @@ components:
         comment:
           type: string
           nullable: true
-          title: Texte
         document:
           type: integer
         user:
@@ -3906,7 +3905,6 @@ components:
         comment:
           type: string
           nullable: true
-          title: Texte
     ExternalUser:
       type: object
       description: External user serializer.
@@ -4320,7 +4318,6 @@ components:
           type: string
           nullable: true
           minLength: 1
-          title: Texte
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.
@@ -4403,6 +4400,9 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
+          minLength: 1
         budget_previous_edition:
           type: integer
           maximum: 2147483647
@@ -4650,6 +4650,8 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
         categories:
           type: array
           items:
@@ -5184,6 +5186,9 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
+          minLength: 1
         budget_previous_edition:
           type: integer
           maximum: 2147483647
