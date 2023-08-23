@@ -89,9 +89,9 @@
     "fields": {
       "code": "CONTACT_INFO",
       "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
-      "header": "<p>Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement.</p>",
-      "body": "<p>Si vous êtes une association hors-site ou un porteur individuel, veuillez contacter le gestionnaire Crous.</p>",
-      "footer": "<p>Attention : si vous êtes Porteur Individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire Crous.</p>",
+      "header": "<p>Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement !</p>",
+      "body": "<p>Attention : si vous êtes porteur individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire Crous.</p>",
+      "footer": "",
       "aside": ""
     }
   },
@@ -101,8 +101,8 @@
     "fields": {
       "code": "CONTACT_LIST",
       "label": "Paragraphe de la page contact listant les contacts des gestionnaires établissements.",
-      "header": "",
-      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+      "header": "Gestionnaires d'établissement",
+      "body": "<ul><li><a href=\"mailto:gestionnaire-uha@mail.tld\">Gestionnaire UHA - Jeanne Dupont</a></li><li><a href=\"mailto:gestionnaire-crous@mail.tld\">Gestionnaire Crous - Clara Lebigre</a></li></ul>",
       "footer": "",
       "aside": ""
     }
