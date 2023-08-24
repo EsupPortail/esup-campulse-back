@@ -8,7 +8,7 @@
       "description": "Charte signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
@@ -25,7 +25,7 @@
       "description": "Charte RGPD signée par le président d'une association Site Alsace",
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
-      "is_required_in_process": false,
+      "is_required_in_process": true,
       "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
       "mime_types": [
