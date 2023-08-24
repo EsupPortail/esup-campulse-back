@@ -494,10 +494,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             not request.user.has_perm("projects.view_project_any_status")
             and (
                 (
-                    project.association is not None
-                    and not request.user.is_in_association(project.association)
+                    project.association_id is not None
+                    and not request.user.is_in_association(project.association_id)
                 )
-                or (project.user is not None and request.user.pk != project.user)
+                or (project.user_id is not None and request.user.pk != project.user_id)
             )
             and project.project_status
             not in Project.ProjectStatus.get_commissionnable_project_statuses()
@@ -562,7 +562,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "association_user" in request.data and project.user is not None:
+        if "association_user" in request.data and project.user_id is not None:
             return response.Response(
                 {"error": _("Cannot add a user from an association.")},
                 status=status.HTTP_400_BAD_REQUEST,

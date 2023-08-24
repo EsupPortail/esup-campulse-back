@@ -581,7 +581,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             templates_name
                             == f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION"
                         ):
-                            if project.association is not None:
+                            if project.association_id is not None:
                                 managers_emails = list(
                                     Institution.objects.get(
                                         id=project.association.institution_id
@@ -589,7 +589,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                     .default_institution_managers()
                                     .values_list("email", flat=True)
                                 )
-                            if project.user is not None:
+                            if project.user_id is not None:
                                 for user_to_check in User.objects.filter(
                                     is_superuser=False, is_staff=True
                                 ):
