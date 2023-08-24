@@ -613,6 +613,41 @@ CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
 CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION = 30
 
 
+#####################
+# Templates folders #
+#####################
+
+# Names of the folders where templates are stored (used to store multiple templates, like themes).
+TEMPLATES_FOLDER = "default"
+TEMPLATES_FOLDER_PDF = "pdf_exports"
+TEMPLATES_FOLDER_NOTIFICATIONS = "notifications"
+
+# Generic PDF templates.
+TEMPLATES_PDF = {
+    "association_charter_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/association_charter_summary.html",
+    "commission_projects_list": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/commission_projects_list.html",
+    "project_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/project_summary.html",
+    "project_review_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/project_review_summary.html",
+}
+
+# Notifications pdf templates used as mail attachments.
+# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
+TEMPLATES_NOTIFICATIONS = {
+    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/decision_attribution.html",
+    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/decision_attribution.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/decision_attribution.html",
+    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/attribution.html",
+    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/attribution.html",
+    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/rejection.html",
+    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/rejection.html",
+    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/rejection.html",
+    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/postpone.html",
+    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/postpone.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/postpone.html",
+}
+
+
 ########
 # Misc #
 ########
@@ -697,21 +732,4 @@ GROUPS_STRUCTURE = {
         "FUND_ID_POSSIBLE": False,
         "ASSOCIATIONS_POSSIBLE": False,
     },
-}
-
-# Notifications pdf templates used as mail attachments
-# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY)
-TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": "./notifications/FSDIE/decision_attribution.html",
-    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": "./notifications/Culture-ActionS/decision_attribution.html",
-    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
-    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
-    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": "./notifications/Culture-ActionS/attribution.html",
-    "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
-    "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
-    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": "./notifications/Culture-ActionS/rejection.html",
-    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": "./notifications/FSDIE/postpone.html",
-    "NOTIFICATION_IDEX_PROJECT_POSTPONED": "./notifications/IdEx/postpone.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": "./notifications/Culture-ActionS/postpone.html",
 }

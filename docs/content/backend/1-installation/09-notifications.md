@@ -9,18 +9,18 @@ Les notifications de subventions sont des fichiers pdf présents en pièces join
 
 Ces notifications sont reliées intrinsèquement aux différents organismes de fonds qui vont traiter les demandes de subventionnement.
 
-Nous avons ainsi 4 types de notifications, formattés comme suit :
+Nous avons ainsi 4 types de notifications, formatés comme suit :
 - `NOTIFICATION_{FUND_ACRONYM}_DECISION_ATTRIBUTION` : Document présentant l'aspect légal de l'attribution de la subvention par le fonds désigné.
 - `NOTIIFICATION_{FUND_ACRONYM}_ATTRIBUTION` : Document visant à prévenir les concernés que leur demande de subventionnement a été acceptée par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_REJECTION` : Document informant les concernés que leur demande de subventionnement a été refusée par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_PROJECT_POSTPONED` : Document informant les concernés que leur demande de subventionnement a été reportée à une commission future pour leur projet par le fonds désigné.
 
-Ces différents types de notifications sont configurables dans le fichier `settings/base.py` du projet afin d'en personnaliser les intitulés en fonction des différents fonds gérés par l'application.
+Ces différents types de notifications sont configurables dans les paramètres du projet afin d'en personnaliser les intitulés en fonction des différents fonds gérés par l'application.
 L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l'acronyme en base de données du fonds concerné en majuscules.
 
 ## Lien entres les types de notifications et les templates PDF
 
-Aperçu du fichier `settings/base.py` : 
+Aperçu de la variable des fichiers de configuration : 
 ```python
 TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_EXAMPLE_DECISION_ATTRIBUTION": "./notifications/example/decision_attribution.html",
@@ -36,7 +36,7 @@ TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_TEST_PROJECT_POSTPONED": "./notifications/test/example.html",
 }
 ```
-C'est à cet endroit que les noms de notifications sont reliés aux templates HTML présents dans le répertoire `templates` du projet. Ces templates servent au formattage des données sur le document final, et permettent une personnalisation totale avec du CSS et quelques variables par défaut.
+C'est à cet endroit que les noms de notifications sont reliés aux templates HTML présents dans le répertoire `templates` du projet. Ces templates servent au formatage des données sur le document final, et permettent une personnalisation totale avec du CSS et quelques variables par défaut.
 
 ## Spécificités des templates PDF
 
@@ -71,6 +71,6 @@ Variables spécifiques à certains contenus uniquement :
 
 Les contenus sont par défaut sous format texte, cependant il est recommandé d'y ajouter des balises HTML inline (comme des `<h1>`, des `<p>` etc). A contrario, il n'est pas recommandé d'utiliser des balises block (comme des `<div>`) et de privilégier leur utilisation directement dans le template HTML au besoin.
 
-Pour utiliser les varriables ci-dessus, il suffit de les intégrer au texte de contenu sous le format `{{ var_name }}`. Elles seront alors reconnues et interprétées par le système de templating Django.
+Pour utiliser les variables ci-dessus, il suffit de les intégrer au texte de contenu sous le format `{{ var_name }}`. Elles seront alors reconnues et interprétées par le système de templating Django.
 
 Pour chaque type de notification il n'y a qu'un seul objet Content lié, composé lui-même d'un `header`, d'un `body`, d'un `footer`, et d'un `aside` qui peuvent être utilisés pour ajouter du contenu supplémentaire au document.

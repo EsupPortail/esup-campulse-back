@@ -21,7 +21,7 @@ Ces types de groupes doivent également être liés aux établissements concern�
 
 ### Groupes comportant des droits basiques
 
-Ces types de groupes peuvent être choisis à l'inscription depuis l'application. La liste des groupes faisant partie de cette catégorie est paramétrable depuis les entrées `REGISTRATION_ALLOWED` de la variable `GROUPS_STRUCTURE` définie dans le fichier `plana/settings/base.py`.
+Ces types de groupes peuvent être choisis à l'inscription depuis l'application. La liste des groupes faisant partie de cette catégorie est paramétrable depuis les entrées `REGISTRATION_ALLOWED` de la variable `GROUPS_STRUCTURE` définie dans les fichiers de paramètres.
 
 - `MEMBER_FUND` : membre de fonds (auquel lier un ou plusieurs fonds de subventionnement).
 - `STUDENT_INSTITUTION` : étudiant membre d'une association en tant que président ou non (pour des raisons d'architecture, il peut être temporairement possible d'avoir ce rôle mais de n'être lié à aucune association).
