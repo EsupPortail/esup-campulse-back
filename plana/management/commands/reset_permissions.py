@@ -1,17 +1,16 @@
 import os
 import pathlib
 
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from plana.settings.permissions import PERMISSIONS_GROUPS
-
 
 class Command(BaseCommand):
     help = _(
-        "Applies permissions to groups according to the settings/permissions.py file."
+        "Applies permissions to groups according to the PERMISSIONS_GROUPS variable."
     )
 
     def add_arguments(self, parser):
@@ -42,7 +41,7 @@ class Command(BaseCommand):
 
             for group in Group.objects.all():
                 group.permissions.clear()
-                for new_group_permission in PERMISSIONS_GROUPS[group.name]:
+                for new_group_permission in settings.PERMISSIONS_GROUPS[group.name]:
                     group.permissions.add(
                         Permission.objects.get(codename=new_group_permission)
                     )

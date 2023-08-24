@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-24 11:20+0200\n"
+"POT-Creation-Date: 2023-08-24 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1661,18 +1661,18 @@ msgstr "Ajoute de premiers fichiers à un bucket S3."
 msgid "S3 bucket {bucket_name} content loaded."
 msgstr "Le contenu du bucket S3 {bucket_name} a été chargé."
 
-#: plana/management/commands/reset_permissions.py:14
+#: plana/management/commands/reset_permissions.py:13
 msgid ""
-"Applies permissions to groups according to the settings/permissions.py file."
+"Applies permissions to groups according to the PERMISSIONS_GROUPS variable."
 msgstr ""
-"Applique les permissions aux groupes indiquées dans le fichier settings/"
-"permissions.py ."
+"Applique les permissions aux groupes indiquées dans la variable "
+"PERMISSIONS_GROUPS."
 
-#: plana/management/commands/reset_permissions.py:20
+#: plana/management/commands/reset_permissions.py:19
 msgid "Set without value if database should be flushed before."
 msgstr "Spécifier sans valeur si la base de données doit être vidée avant."
 
-#: plana/management/commands/reset_permissions.py:61
+#: plana/management/commands/reset_permissions.py:60
 msgid "Updated all group permissions."
 msgstr "Permissions de groupes mises à jour."
 

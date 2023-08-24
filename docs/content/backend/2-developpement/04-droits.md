@@ -43,5 +43,5 @@ Les permissions sont à affecter uniquement à des groupes d'utilisateurs et non
 Le développement de l'application peut régulièrement amener à créer de nouvelles permissions ou à modifier leurs affectations aux groupes, amenant à son tour à devoir modifier les données injectées par les fixtures et les dizaines d'identifiants en découlant.
 
 Une procédure a été mise en place pour simplifier la régénération de ces fixtures en particulier (après une possible migration de la base de données), évitant ainsi d'en modifier manuellement les identifiants :
-- Modifier les liens initiaux entre groupes et permissions définis dans le fichier `plana/settings/permissions.py` pour ajouter/modifier/retirer les liens concernés.
+- Modifier les liens initiaux entre groupes et permissions définis dans le fichier de configuration pour ajouter/modifier/retirer les liens concernés.
 - Exécuter la commande `python manage.py reset_permissions` pour supprimer tous les anciens liens entre permissions et groupes, les remplacer par les nouveaux en base de données, et régénérer les fichiers de fixtures concernés (l'argument `--flush` est également disponible pour vider la base de données et remettre les identifiants à zéro au préalable).
