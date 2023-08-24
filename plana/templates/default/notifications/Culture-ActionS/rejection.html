@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% resolve %}{{ content.title }}{% endresolve %}</title>
-        <link rel="stylesheet" href="{% static 'css/notifications/Culture-ActionS.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'default/css/notifications/Culture-ActionS.css' %}" type="text/css"/>
         <style>
             @page {
                 margin: 20mm 10mm 20mm 10mm;
@@ -16,7 +16,7 @@
     <body>
         <header>
             <div class="head-float-left">
-                <img src="{% static 'img/crous_logo.png' %}">
+                <img src="{% static 'default/img/crous_logo.png' %}">
             </div>
             <div class="head-float-right text-sm align-right">
                 {% resolve %}{{ content.header|safe }}{% endresolve %}

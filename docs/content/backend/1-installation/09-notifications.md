@@ -20,23 +20,7 @@ L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l
 
 ## Lien entres les types de notifications et les templates PDF
 
-Aperçu de la variable des fichiers de configuration : 
-```python
-TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_EXAMPLE_DECISION_ATTRIBUTION": "./notifications/example/decision_attribution.html",
-    "NOTIFICATION_TEST_DECISION_ATTRIBUTION": "./notifications/test/example.html",
-
-    "NOTIFICATION_EXAMPLE_ATTRIBUTION": "./notifications/example/attribution.html",
-    "NOTIFICATION_TEST_ATTRIBUTION": "./notifications/test/example.html",
-
-    "NOTIFICATION_EXAMPLE_REJECTION": "./notifications/example/rejection.html",
-    "NOTIFICATION_TEST_REJECTION": "./notifications/test/example.html",
-
-    "NOTIFICATION_EXAMPLE_PROJECT_POSTPONED": "./notifications/example/postpone.html",
-    "NOTIFICATION_TEST_PROJECT_POSTPONED": "./notifications/test/example.html",
-}
-```
-C'est à cet endroit que les noms de notifications sont reliés aux templates HTML présents dans le répertoire `templates` du projet. Ces templates servent au formatage des données sur le document final, et permettent une personnalisation totale avec du CSS et quelques variables par défaut.
+La variable `TEMPLATES_NOTIFICATIONS` contient les noms de notifications reliés aux templates HTML présents dans le répertoire `templates` du projet. Ces templates servent au formatage des données sur le document final, et permettent une personnalisation totale avec du CSS et quelques variables par défaut.
 
 ## Spécificités des templates PDF
 
