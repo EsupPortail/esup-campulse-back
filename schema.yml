@@ -3849,6 +3849,10 @@ components:
         id:
           type: integer
           readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
         document:
           type: integer
         user:
@@ -3879,6 +3883,11 @@ components:
       type: object
       description: Main serializer not overriding path_file.
       properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
         document:
           type: integer
         user:
