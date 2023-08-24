@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Liste des projets de la commission : {{ name }}</title>
+        <style>
+            @page {
+                size: landscape;
+            }
+            table {
+                border: 1px solid #000;
+                border-collapse: collapse;
+                font-size: 12px;
+                table-layout: fixed;
+            }
+            td, th {
+                border: 1px solid #000;
+                padding: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Liste des projets de la commission : {{ name }}</h1>
+        <section>
+            <table>
+                <tr>
+                    {% for field in fields %}
+                        <th>
+                            <strong>{{ field }}</strong>
+                        </th>
+                    {% endfor %}
+                </tr>
+                {% for project in projects %}
+                    <tr>
+                        {% for value in project %}
+                            <td>
+                                {% if value is not none %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </body>
+</html>

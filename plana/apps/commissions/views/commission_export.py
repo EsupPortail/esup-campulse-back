@@ -11,7 +11,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
-from plana.apps.commissions.models import CommissionFund, Fund
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models import (
     Category,
@@ -21,6 +21,7 @@ from plana.apps.projects.models import (
 )
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
+from plana.utils import generate_pdf
 
 
 class CommissionExport(generics.RetrieveAPIView):
@@ -53,7 +54,7 @@ class CommissionExport(generics.RetrieveAPIView):
         commission_id = kwargs["pk"]
 
         try:
-            self.queryset.get(id=kwargs["pk"])
+            commission = Commission.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Commission does not exist.")},
@@ -129,6 +130,7 @@ class CommissionExport(generics.RetrieveAPIView):
 
         http_response = None
         writer = None
+        data = {"projects": []}
         if mode is None or mode == "csv":
             http_response = HttpResponse(content_type="application/csv")
             http_response[
@@ -138,6 +140,9 @@ class CommissionExport(generics.RetrieveAPIView):
             writer = csv.writer(http_response, delimiter=";")
             # Write column titles for the CSV file
             writer.writerow([field for field in fields])
+        elif mode == "pdf":
+            data["name"] = commission.name
+            data["fields"] = fields
 
         for project in projects:
             association = (
@@ -199,5 +204,15 @@ class CommissionExport(generics.RetrieveAPIView):
             if mode is None or mode == "csv":
                 # Write CSV file content
                 writer.writerow([field for field in fields])
+            elif mode == "pdf":
+                data["projects"].append(fields)
 
-        return http_response
+        if mode is None or mode == "csv":
+            return http_response
+        elif mode == "pdf":
+            return generate_pdf(
+                data["name"],
+                data,
+                "commission_projects_list",
+                request.build_absolute_uri("/"),
+            )

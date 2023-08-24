@@ -92,6 +92,11 @@ class CommissionExportsViewsTests(TestCase):
         """
         commission_id = 1
 
+        response = self.student_client.get(
+            f"/commissions/{commission_id}/export?mode=pdf"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         response = self.student_client.get(f"/commissions/{commission_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

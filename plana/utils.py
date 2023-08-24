@@ -104,6 +104,7 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
 
     types_and_templates = {
         "association_charter_summary": "./pdf_exports/association_charter_summary.html",
+        "commission_projects_list": "./pdf_exports/commission_projects_list.html",
         "project_summary": "./pdf_exports/project_summary.html",
         "project_review_summary": "./pdf_exports/project_review_summary.html",
     }
