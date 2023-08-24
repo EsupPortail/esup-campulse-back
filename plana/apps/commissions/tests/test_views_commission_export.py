@@ -66,33 +66,33 @@ class CommissionExportsViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
-    def test_commission_projects_csv_export_anonymous(self):
+    def test_commission_projects_export_anonymous(self):
         """
-        GET /commissions/{id}/csv_export .
+        GET /commissions/{id}/export .
 
         - An anonymous user can't execute this request.
         """
-        response = self.client.get("/commissions/1/csv_export")
+        response = self.client.get("/commissions/1/export")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_commission_projects_csv_export_unauthorized(self):
+    def test_commission_projects_export_unauthorized(self):
         """
-        GET /commissions/{id}/csv_export .
+        GET /commissions/{id}/export .
 
         - Commission must exist.
         """
-        response = self.general_client.get("/commissions/9999/csv_export")
+        response = self.general_client.get("/commissions/9999/export")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_commission_projects_csv_export_not_found(self):
+    def test_commission_projects_export_not_found(self):
         """
-        GET /commissions/{id}/csv_export .
+        GET /commissions/{id}/export .
 
         - A student only sees own projects.
         """
         commission_id = 1
 
-        response = self.student_client.get(f"/commissions/{commission_id}/csv_export")
+        response = self.student_client.get(f"/commissions/{commission_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -108,9 +108,9 @@ class CommissionExportsViewsTests(TestCase):
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
 
-    def test_commission_projects_csv_export_success_general_manager(self):
+    def test_commission_projects_export_success_general_manager(self):
         """
-        GET /commissions/{id}/csv_export .
+        GET /commissions/{id}/export .
 
         - The route can be accessed by a manager user.
         - Manager can only see linked fund commissions.
@@ -118,9 +118,7 @@ class CommissionExportsViewsTests(TestCase):
         """
         commission_id = 1
 
-        response = self.institution_client.get(
-            f"/commissions/{commission_id}/csv_export"
-        )
+        response = self.institution_client.get(f"/commissions/{commission_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -136,7 +134,7 @@ class CommissionExportsViewsTests(TestCase):
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
 
-        response = self.general_client.get(f"/commissions/{commission_id}/csv_export")
+        response = self.general_client.get(f"/commissions/{commission_id}/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')

@@ -581,16 +581,21 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /commissions/{id}/csv_export:
+  /commissions/{id}/export:
     get:
-      operationId: commissions_csv_export_retrieve
-      description: Projects presented to the commission CSV export.
+      operationId: commissions_export_retrieve
+      description: Projects presented to the commission export.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
         required: true
+      - in: query
+        name: mode
+        schema:
+          type: string
+        description: Export mode (csv or pdf, csv by default).
       tags:
       - commissions
       security:
