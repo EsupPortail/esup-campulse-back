@@ -35,6 +35,7 @@ class DocumentUploadCreateSerializer(serializers.ModelSerializer):
         model = DocumentUpload
         fields = [
             "id",
+            "name",
             "document",
             "user",
             "association",

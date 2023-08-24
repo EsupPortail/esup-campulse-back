@@ -581,16 +581,21 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /commissions/{id}/csv_export:
+  /commissions/{id}/export:
     get:
-      operationId: commissions_csv_export_retrieve
-      description: Projects presented to the commission CSV export.
+      operationId: commissions_export_retrieve
+      description: Projects presented to the commission export.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
         required: true
+      - in: query
+        name: mode
+        schema:
+          type: string
+        description: Export mode (csv or pdf, csv by default).
       tags:
       - commissions
       security:
@@ -1084,6 +1089,31 @@ paths:
         '403':
           description: No response body
         '404':
+          description: No response body
+  /documents/uploads/file:
+    get:
+      operationId: documents_uploads_file_list
+      description: Retrieves all uploaded documents.
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: integer
+        description: Filter by Project ID.
+      tags:
+      - documents/uploads
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentUploadFile'
+          description: ''
+        '401':
           description: No response body
   /groups/:
     get:
@@ -3824,6 +3854,10 @@ components:
         id:
           type: integer
           readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
         document:
           type: integer
         user:
@@ -3854,6 +3888,11 @@ components:
       type: object
       description: Main serializer not overriding path_file.
       properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom
+          maxLength: 250
         document:
           type: integer
         user:

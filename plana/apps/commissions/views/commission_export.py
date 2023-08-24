@@ -5,7 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
@@ -22,14 +23,22 @@ from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
 
 
-class CommissionCSVExport(generics.RetrieveAPIView):
-    """/commissions/{id}/csv_export route"""
+class CommissionExport(generics.RetrieveAPIView):
+    """/commissions/{id}/export route"""
 
     permission_classes = [IsAuthenticated]
     queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "mode",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Export mode (csv or pdf, csv by default).",
+            ),
+        ],
         responses={
             status.HTTP_200_OK: ProjectSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -37,7 +46,8 @@ class CommissionCSVExport(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Projects presented to the commission CSV export."""
+        """Projects presented to the commission export."""
+        mode = request.query_params.get("mode")
 
         queryset = self.get_queryset()
         commission_id = kwargs["pk"]
@@ -117,14 +127,17 @@ class CommissionCSVExport(generics.RetrieveAPIView):
             )
         ).order_by("id")
 
-        http_response = HttpResponse(content_type="application/csv")
-        http_response[
-            "Content-Disposition"
-        ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
+        http_response = None
+        writer = None
+        if mode is None or mode == "csv":
+            http_response = HttpResponse(content_type="application/csv")
+            http_response[
+                "Content-Disposition"
+            ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
 
-        writer = csv.writer(http_response, delimiter=";")
-        # Write column titles for the CSV file
-        writer.writerow([field for field in fields])
+            writer = csv.writer(http_response, delimiter=";")
+            # Write column titles for the CSV file
+            writer.writerow([field for field in fields])
 
         for project in projects:
             association = (
@@ -183,7 +196,8 @@ class CommissionCSVExport(generics.RetrieveAPIView):
                     fields.append(0)
                     fields.append(0)
 
-            # Write CSV file content
-            writer.writerow([field for field in fields])
+            if mode is None or mode == "csv":
+                # Write CSV file content
+                writer.writerow([field for field in fields])
 
         return http_response
