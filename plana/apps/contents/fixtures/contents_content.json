@@ -301,10 +301,10 @@
     "model": "contents.content",
     "pk": 25,
     "fields": {
-      "code": "CHARTER_HOME_FIRST_FOOTER",
-      "label": "Premier bloc de pied de page de la page de présentation du module des chartes.",
-      "header": "",
-      "body": "<p>Lorem ipsum</p>",
+      "code": "CHARTER_HOME_ACTION_VALIDATE_CHARTERS",
+      "label": "Bloc action la page de présentation du module des chartes (validation des chartes par les gestionnaires).",
+      "header": "Valider les signatures de chartes",
+      "body": "<p>Validez les chartes des associations.</p>",
       "footer": "",
       "aside": ""
     }
@@ -313,10 +313,10 @@
     "model": "contents.content",
     "pk": 26,
     "fields": {
-      "code": "CHARTER_HOME_SECOND_FOOTER",
-      "label": "Deuxième bloc de pied de page de la page de présentation du module des chartes.",
-      "header": "",
-      "body": "<p>Lorem ipsum</p>",
+      "code": "CHARTER_HOME_ACTION_MANAGE_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des chartes (gestion des documents types par les gestionnaires).",
+      "header": "Gérer la bibliothèque de documents",
+      "body": "<p>Gérez les documents types à télécharger.</p>",
       "footer": "",
       "aside": ""
     }
@@ -324,6 +324,30 @@
   {
     "model": "contents.content",
     "pk": 27,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_SIGN_CHARTERS",
+      "label": "Bloc action la page de présentation du module des chartes (signature des chartes par les étudiants).",
+      "header": "Signer les chartes",
+      "body": "<p>Signez et gérez les chartes de vos associations.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 28,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_DOWNLOAD_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des chartes (téléchargement des documents pour les étudiants).",
+      "header": "Télécharger les documents types",
+      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 29,
     "fields": {
       "code": "COMMISSION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
@@ -335,7 +359,7 @@
   },
   {
     "model": "contents.content",
-    "pk": 28,
+    "pk": 30,
     "fields": {
       "code": "COMMISSION_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
@@ -347,31 +371,67 @@
   },
   {
     "model": "contents.content",
-    "pk": 29,
-    "fields": {
-      "code": "COMMISSION_HOME_FIRST_FOOTER",
-      "label": "Premier bloc de pied de page de la page de présentation des demandes de subventionnement.",
-      "header": "",
-      "body": "<p>Lorem ipsum</p>",
-      "footer": "",
-      "aside": ""
-    }
-  },
-  {
-    "model": "contents.content",
-    "pk": 30,
-    "fields": {
-      "code": "COMMISSION_HOME_SECOND_FOOTER",
-      "label": "Deuxième bloc de pied de page de la page de présentation des demandes de subventionnement.",
-      "header": "",
-      "body": "<p>Lorem ipsum</p>",
-      "footer": "",
-      "aside": ""
-    }
-  },
-  {
-    "model": "contents.content",
     "pk": 31,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_PROJECTS",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des subventions par les gestionnaires).",
+      "header": "Gérer les subventions",
+      "body": "<p>Gérez les dossiers de demande de subventionnements.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 32,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_ARCHIVE",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des archives par les gestionnaires).",
+      "header": "Consulter les archives",
+      "body": "<p>Consultez les archives des commissions passées.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 33,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_COMMISSIONS",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des commissions par les gestionnaires).",
+      "header": "Gérer les commissions",
+      "body": "<p>Créez des commissions à venir et gérez les commissions en cours.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 34,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_SUBMIT_PROJECT",
+      "label": "Bloc action la page de présentation du module des commissions (soumission de projets par les étudiants).",
+      "header": "Gérer et déposer des projets",
+      "body": "<p>Gérez vos projets en cours ou créez un nouveau projet.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 35,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_DOWNLOAD_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des commissions (téléchargement des documents pour les étudiants).",
+      "header": "Télécharger les documents types",
+      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 36,
     "fields": {
       "code": "SITE_FOOTER",
       "label": "Footer général du site.",
