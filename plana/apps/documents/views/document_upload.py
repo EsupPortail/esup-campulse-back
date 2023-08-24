@@ -1,9 +1,13 @@
 """Views directly linked to document uploads."""
+import io
+import os
+import zipfile
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -532,6 +536,76 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         return self.destroy(request, *args, **kwargs)
 
 
+class DocumentUploadFileList(generics.ListAPIView):
+    """/documents/uploads/file route"""
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = DocumentUpload.objects.all()
+    serializer_class = DocumentUploadFileSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "project_id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                description="Filter by Project ID.",
+            ),
+        ],
+        responses={
+            status.HTTP_200_OK: DocumentUploadFileSerializer,
+            status.HTTP_401_UNAUTHORIZED: None,
+        },
+        tags=["documents/uploads"],
+    )
+    def get(self, request, *args, **kwargs):
+        """Retrieves all uploaded documents."""
+        project = request.query_params.get("project_id")
+
+        if project is not None and project != "":
+            self.queryset = self.queryset.filter(project_id=project)
+
+        filtered_uploads_ids = []
+        for document_upload in self.get_queryset():
+            if not request.user.has_perm("documents.view_documentupload_all") and (
+                (
+                    document_upload.project_id is not None
+                    and not request.user.can_access_project(
+                        Project.visible_objects.get(id=document_upload.project_id)
+                    )
+                )
+                or (
+                    document_upload.user_id is not None
+                    and request.user.pk != document_upload.user_id
+                )
+                or (
+                    document_upload.association_id is not None
+                    and not request.user.is_in_association(
+                        document_upload.association_id
+                    )
+                )
+            ):
+                filtered_uploads_ids.append(document_upload.id)
+        self.queryset = self.queryset.exclude(id__in=filtered_uploads_ids)
+
+        buffer = io.BytesIO()
+        archive = zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED)
+        for document_upload in self.get_queryset():
+            file = document_upload.path_file
+            archive.writestr(
+                os.path.basename(document_upload.path_file.name),
+                bytes(file.open().read()),
+            )
+        archive.close()
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue())
+        response['Content-Type'] = "application/x-zip-compressed"
+        response['Content-Disposition'] = "attachment; filename=documents.zip"
+
+        return response
+
+
 class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     """/documents/uploads/{id}/file route"""
 
@@ -579,7 +653,7 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        file = document_upload.path_file.open(mode="r+b")
+        file = document_upload.path_file
         return FileResponse(
             file.open(),
             as_attachment=False,

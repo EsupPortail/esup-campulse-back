@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 10:07+0200\n"
+"POT-Creation-Date: 2023-08-24 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,7 +242,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:562
 #: plana/apps/associations/views/association.py:713
 #: plana/apps/associations/views/association_export.py:47
-#: plana/apps/documents/views/document_upload.py:203
+#: plana/apps/documents/views/document_upload.py:207
 #: plana/apps/projects/views/project.py:289
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
@@ -632,18 +632,18 @@ msgstr "Non autorisé à créer un document pour ce fond."
 #: plana/apps/documents/views/document.py:159
 #: plana/apps/documents/views/document.py:198
 #: plana/apps/documents/views/document.py:258
-#: plana/apps/documents/views/document_upload.py:152
-#: plana/apps/documents/views/document_upload.py:160
+#: plana/apps/documents/views/document_upload.py:156
+#: plana/apps/documents/views/document_upload.py:164
 msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document.py:208
-#: plana/apps/documents/views/document_upload.py:433
+#: plana/apps/documents/views/document_upload.py:437
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:218
-#: plana/apps/documents/views/document_upload.py:443
+#: plana/apps/documents/views/document_upload.py:447
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fond."
 
@@ -652,7 +652,7 @@ msgid "Not allowed to update a document with this process type."
 msgstr "Non autorisé à modifier un document avec ce type de processus."
 
 #: plana/apps/documents/views/document.py:238
-#: plana/apps/documents/views/document_upload.py:279
+#: plana/apps/documents/views/document_upload.py:283
 msgid "Wrong media type for this document."
 msgstr "Mauvais format de document."
 
@@ -668,13 +668,13 @@ msgstr "Non autorisé à supprimer un document pour ce fond."
 msgid "Not allowed to delete a document with a process type."
 msgstr "Non autorisé à supprimer un document avec ce type de processus."
 
-#: plana/apps/documents/views/document_upload.py:172
+#: plana/apps/documents/views/document_upload.py:176
 msgid "Cannot upload documents not related to user as anonymous."
 msgstr ""
 "Impossible d'ajouter des documents non relatifs à l'utilisateur en tant "
 "qu'anonyme."
 
-#: plana/apps/documents/views/document_upload.py:183
+#: plana/apps/documents/views/document_upload.py:187
 #: plana/apps/projects/views/project.py:479
 #: plana/apps/projects/views/project.py:545
 #: plana/apps/projects/views/project.py:640
@@ -691,15 +691,15 @@ msgstr ""
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:189
+#: plana/apps/documents/views/document_upload.py:193
 msgid "Not allowed to upload documents for this project."
 msgstr "Non autorisé à ajouter un document pour ce projet."
 
-#: plana/apps/documents/views/document_upload.py:213
+#: plana/apps/documents/views/document_upload.py:217
 msgid "Not allowed to post documents if not president."
 msgstr "Non autorisé à ajouter un document si non président."
 
-#: plana/apps/documents/views/document_upload.py:227
+#: plana/apps/documents/views/document_upload.py:231
 #: plana/apps/users/views/association_user.py:280
 #: plana/apps/users/views/group_institution_fund_user.py:205
 #: plana/apps/users/views/user.py:333 plana/apps/users/views/user.py:380
@@ -707,39 +707,39 @@ msgstr "Non autorisé à ajouter un document si non président."
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:237
+#: plana/apps/documents/views/document_upload.py:241
 msgid "Not allowed to upload documents with this user."
 msgstr "Non autorisé à ajouter un document avec cet utilisateur."
 
-#: plana/apps/documents/views/document_upload.py:246
+#: plana/apps/documents/views/document_upload.py:250
 msgid "Not allowed to validate documents."
 msgstr "Non autorisé à valider des documents."
 
-#: plana/apps/documents/views/document_upload.py:252
+#: plana/apps/documents/views/document_upload.py:256
 msgid "A document upload can only have one affectation."
 msgstr "Un document ne peut être affecté qu'à une personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:258
+#: plana/apps/documents/views/document_upload.py:262
 msgid "Missing affectation of the new document upload."
 msgstr "Le document n'est affecté à aucune personne ou association."
 
-#: plana/apps/documents/views/document_upload.py:264
+#: plana/apps/documents/views/document_upload.py:268
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:361
-#: plana/apps/documents/views/document_upload.py:423
-#: plana/apps/documents/views/document_upload.py:486
-#: plana/apps/documents/views/document_upload.py:557
+#: plana/apps/documents/views/document_upload.py:365
+#: plana/apps/documents/views/document_upload.py:427
+#: plana/apps/documents/views/document_upload.py:490
+#: plana/apps/documents/views/document_upload.py:631
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:382
-#: plana/apps/documents/views/document_upload.py:578
+#: plana/apps/documents/views/document_upload.py:386
+#: plana/apps/documents/views/document_upload.py:652
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:507
+#: plana/apps/documents/views/document_upload.py:511
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 

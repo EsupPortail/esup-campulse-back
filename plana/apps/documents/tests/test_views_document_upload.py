@@ -724,6 +724,29 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    def test_get_document_upload_file_anonymous(self):
+        """
+        GET /documents/uploads/file .
+
+        - An anonymous user cannot execute this request.
+        """
+        response = self.client.get("/documents/uploads/file")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_document_upload_file(self):
+        """
+        GET /documents/uploads/file .
+
+        - The route can be accessed by a student user.
+        - project filter is available.
+        """
+        # TODO Write better tests once document_upload fixtures are available.
+        response = self.student_misc_client.get("/documents/uploads/file")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.student_misc_client.get("/documents/uploads/file?project=1")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_get_document_upload_file_by_id_anonymous(self):
         """
         GET /documents/uploads/{id}/file .

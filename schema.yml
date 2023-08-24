@@ -1085,6 +1085,31 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /documents/uploads/file:
+    get:
+      operationId: documents_uploads_file_list
+      description: Retrieves all uploaded documents.
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: integer
+        description: Filter by Project ID.
+      tags:
+      - documents/uploads
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentUploadFile'
+          description: ''
+        '401':
+          description: No response body
   /groups/:
     get:
       operationId: groups_list
