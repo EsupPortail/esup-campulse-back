@@ -21,7 +21,10 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.INT)
     def get_size(self, document):
         """Return file size."""
-        return document.path_file.size
+        if document.path_file:
+            return document.path_file.size
+        else:
+            return 0
 
     class Meta:
         model = DocumentUpload

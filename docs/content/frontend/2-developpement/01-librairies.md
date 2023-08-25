@@ -19,6 +19,7 @@ weight: 211
 
 ## Utilitaires de développement
 
+- [@intlify/eslint-plugin-vue-i18n](https://www.npmjs.com/package/@intlify/eslint-plugin-vue-i18n) : optimisation du linter pour les traductions.
 - [@intlify/unplugin-vue-i18n](https://www.npmjs.com/package/@intlify/unplugin-vue-i18n) : optimisation du plugin de traductions pour le bundler.
 - [@pinia/testing](https://www.npmjs.com/package/@pinia/testing) : suite de tests pour le store de données.
 - [@quasar/vite-plugin](https://www.npmjs.com/package/@quasar/vite-plugin) : optimisation du framework de composants pour le bundler.
