@@ -19,7 +19,7 @@ from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
 PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
 
-PUBLIC_CLASSES_NAMES = ["Association", "Document"]
+PUBLIC_CLASSES_NAMES = ["Logo", "Association", "Document"]
 PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-24 15:38+0200\n"
+"POT-Creation-Date: 2023-08-25 14:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: plana/apps/associations/models/activity_field.py:9
-#: plana/apps/associations/models/association.py:37
+#: plana/apps/associations/models/association.py:39
 #: plana/apps/associations/views/association_export.py:142
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:12
@@ -33,7 +33,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
-#: plana/apps/associations/models/association.py:113
+#: plana/apps/associations/models/association.py:115
 #: plana/apps/associations/views/association_export.py:145
 msgid "Activity field"
 msgstr "Domaine d'activité"
@@ -42,147 +42,149 @@ msgstr "Domaine d'activité"
 msgid "Activity fields"
 msgstr "Domaines d'activités"
 
-#: plana/apps/associations/models/association.py:40
+#: plana/apps/associations/models/association.py:42
 #: plana/apps/associations/views/association_export.py:148
 #: plana/apps/users/models/user.py:104
 msgid "Email"
 msgstr "Courriel"
 
-#: plana/apps/associations/models/association.py:42
+#: plana/apps/associations/models/association.py:44
 #: plana/apps/associations/views/association_export.py:143
 #: plana/apps/commissions/models/fund.py:13
+#: plana/apps/contents/models/logo.py:33
 #: plana/apps/documents/models/document.py:64
 #: plana/apps/institutions/models/institution.py:11
 msgid "Acronym"
 msgstr "Acronyme"
 
-#: plana/apps/associations/models/association.py:44
+#: plana/apps/associations/models/association.py:46
+#: plana/apps/contents/models/logo.py:37
 msgid "Dynamic thumbnails for the logo"
 msgstr "Miniatures dynamiques pour le logo"
 
-#: plana/apps/associations/models/association.py:51
+#: plana/apps/associations/models/association.py:53
 msgid "Social object"
 msgstr "Objet social"
 
-#: plana/apps/associations/models/association.py:52
+#: plana/apps/associations/models/association.py:54
 msgid "Current projects"
 msgstr "Projets en cours"
 
-#: plana/apps/associations/models/association.py:53
+#: plana/apps/associations/models/association.py:55
 #: plana/apps/users/models/user.py:107
 msgid "Address"
 msgstr "Adresse"
 
-#: plana/apps/associations/models/association.py:54
+#: plana/apps/associations/models/association.py:56
 #: plana/apps/users/models/user.py:108
 msgid "Zipcode"
 msgstr "Code postal"
 
-#: plana/apps/associations/models/association.py:55
+#: plana/apps/associations/models/association.py:57
 #: plana/apps/users/models/user.py:109
 msgid "City"
 msgstr "Ville"
 
-#: plana/apps/associations/models/association.py:56
+#: plana/apps/associations/models/association.py:58
 #: plana/apps/users/models/user.py:110
 msgid "Country"
 msgstr "Pays"
 
-#: plana/apps/associations/models/association.py:57
+#: plana/apps/associations/models/association.py:59
 #: plana/apps/users/models/user.py:111
 msgid "Phone"
 msgstr "Téléphone"
 
-#: plana/apps/associations/models/association.py:58
+#: plana/apps/associations/models/association.py:60
 msgid "SIRET"
 msgstr "SIRET"
 
-#: plana/apps/associations/models/association.py:59
+#: plana/apps/associations/models/association.py:61
 msgid "Website"
 msgstr "Site"
 
-#: plana/apps/associations/models/association.py:60
+#: plana/apps/associations/models/association.py:62
 msgid "Student count"
 msgstr "Nombre d'étudiants"
 
-#: plana/apps/associations/models/association.py:61
+#: plana/apps/associations/models/association.py:63
 msgid "President names"
 msgstr "Noms du président"
 
-#: plana/apps/associations/models/association.py:62
+#: plana/apps/associations/models/association.py:64
 msgid "President phone"
 msgstr "Numéro de téléphone du président"
 
-#: plana/apps/associations/models/association.py:63
+#: plana/apps/associations/models/association.py:65
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:64
+#: plana/apps/associations/models/association.py:66
 msgid "Is public"
 msgstr "Est publique"
 
-#: plana/apps/associations/models/association.py:66
+#: plana/apps/associations/models/association.py:68
 #: plana/apps/commissions/models/fund.py:15
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:69
+#: plana/apps/associations/models/association.py:71
 msgid "Amount of members allowed"
 msgstr "Nombre de membres autorisés"
 
-#: plana/apps/associations/models/association.py:72
+#: plana/apps/associations/models/association.py:74
 #: plana/apps/users/models/user.py:112
 msgid "Can submit projects"
 msgstr "Peut soumettre des projets"
 
-#: plana/apps/associations/models/association.py:74
+#: plana/apps/associations/models/association.py:76
 msgid "Charter status"
 msgstr "Statut de la charte"
 
-#: plana/apps/associations/models/association.py:77
+#: plana/apps/associations/models/association.py:79
 msgid "Charter Draft"
 msgstr "Charte en Brouillon"
 
-#: plana/apps/associations/models/association.py:78
+#: plana/apps/associations/models/association.py:80
 msgid "Charter Rejected"
 msgstr "Charte Rejetée"
 
-#: plana/apps/associations/models/association.py:79
+#: plana/apps/associations/models/association.py:81
 msgid "Charter Processing"
 msgstr "Charte en Traitement"
 
-#: plana/apps/associations/models/association.py:80
+#: plana/apps/associations/models/association.py:82
 msgid "Charter Validated"
 msgstr "Charte Validée"
 
-#: plana/apps/associations/models/association.py:81
+#: plana/apps/associations/models/association.py:83
 msgid "Charter Expired"
 msgstr "Charte Expirée"
 
-#: plana/apps/associations/models/association.py:86
+#: plana/apps/associations/models/association.py:88
 msgid "Charter date"
 msgstr "Date de la charte"
 
-#: plana/apps/associations/models/association.py:88
+#: plana/apps/associations/models/association.py:90
 #: plana/apps/projects/models/project.py:196
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:89
+#: plana/apps/associations/models/association.py:91
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:91
+#: plana/apps/associations/models/association.py:93
 #: plana/apps/associations/views/association_export.py:147
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:93
+#: plana/apps/associations/models/association.py:95
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:99
+#: plana/apps/associations/models/association.py:101
 #: plana/apps/associations/views/association_export.py:144
 #: plana/apps/commissions/models/fund.py:19
 #: plana/apps/documents/models/document.py:88
@@ -191,20 +193,20 @@ msgstr "Date de dernière AG constitutive"
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:106
+#: plana/apps/associations/models/association.py:108
 #: plana/apps/associations/views/association_export.py:146
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:122
+#: plana/apps/associations/models/association.py:124
 #: plana/apps/documents/models/document_upload.py:52
 #: plana/apps/projects/models/project.py:157 plana/apps/users/models/user.py:25
 #: plana/apps/users/models/user.py:41
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:123
+#: plana/apps/associations/models/association.py:125
 #: plana/apps/users/models/user.py:42 plana/apps/users/models/user.py:121
 msgid "Associations"
 msgstr "Associations"
@@ -505,6 +507,26 @@ msgstr "Contenu"
 #: plana/apps/contents/models/content.py:26
 msgid "Contents"
 msgstr "Contenus"
+
+#: plana/apps/contents/models/logo.py:34
+msgid "Logo alt"
+msgstr "Alt du logo"
+
+#: plana/apps/contents/models/logo.py:35
+msgid "Site URL"
+msgstr "URL du site"
+
+#: plana/apps/contents/models/logo.py:42
+msgid "Is visible"
+msgstr "Est visible"
+
+#: plana/apps/contents/models/logo.py:48
+msgid "Logo"
+msgstr "Logo"
+
+#: plana/apps/contents/models/logo.py:49
+msgid "Logos"
+msgstr "Logos"
 
 #: plana/apps/contents/views/content.py:63
 msgid "Content does not exist."
@@ -1652,11 +1674,11 @@ msgstr "Importe les données initiales de l'application."
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 
-#: plana/management/commands/loaddata_storages.py:15
+#: plana/management/commands/loaddata_storages.py:16
 msgid "Loads S3 bucket initial content."
 msgstr "Ajoute de premiers fichiers à un bucket S3."
 
-#: plana/management/commands/loaddata_storages.py:43
+#: plana/management/commands/loaddata_storages.py:55
 #, python-brace-format
 msgid "S3 bucket {bucket_name} content loaded."
 msgstr "Le contenu du bucket S3 {bucket_name} a été chargé."

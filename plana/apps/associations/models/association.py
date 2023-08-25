@@ -21,7 +21,9 @@ def get_logo_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.LOGO_FILEPATH if hasattr(settings, 'LOGO_FILEPATH') else '',
+            settings.ASSOCIATIONS_LOGOS_FILEPATH
+            if hasattr(settings, 'ASSOCIATIONS_LOGOS_FILEPATH')
+            else '',
             year,
             f'{file_basename}{extension}',
         )

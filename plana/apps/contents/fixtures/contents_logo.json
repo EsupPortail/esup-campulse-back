@@ -1,0 +1,102 @@
+[
+  {
+    "model": "contents.logo",
+    "pk": 1,
+    "fields": {
+      "acronym": "crous",
+      "title": "Le Centre régional des œuvres universitaires et scolaires",
+      "url": "https://www.crous-strasbourg.fr/",
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 2,
+    "fields": {
+      "acronym": "unistra",
+      "title": "L'Université de Strasbourg",
+      "url": "https://www.unistra.fr/",
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 3,
+    "fields": {
+      "acronym": "uha",
+      "title": "L'Université de Haute-Alsace",
+      "url": "https://www.uha.fr/",
+      "visible": false
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 4,
+    "fields": {
+      "acronym": "insa",
+      "title": "L'Institut National des Sciences Appliquées Strasbourg",
+      "url": "https://www.insa-strasbourg.fr/",
+      "visible": false
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 5,
+    "fields": {
+      "acronym": "hear",
+      "title": "La Haute École des Arts du Rhin",
+      "url": "https://www.hear.fr/",
+      "visible": false
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 6,
+    "fields": {
+      "acronym": "engees",
+      "title": "L'École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
+      "url": "https://engees.unistra.fr/",
+      "visible": false
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 7,
+    "fields": {
+      "acronym": "ensas",
+      "title": "L'École Nationale Supérieure d'Architecture de Strasbourg",
+      "url": "https://www.strasbourg.archi.fr/",
+      "visible": false
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 8,
+    "fields": {
+      "acronym": "cvec",
+      "title": "La Contribution Vie Étudiante et de Campus",
+      "url": "https://cvec.etudiant.gouv.fr/",
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 9,
+    "fields": {
+      "acronym": "france-relance",
+      "title": "France Relance",
+      "url": "https://www.economie.gouv.fr/plan-de-relance",
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 10,
+    "fields": {
+      "acronym": "esr",
+      "title": "Le Ministère de l'Enseignement Supérieur et de la Recherche",
+      "url": "https://www.enseignementsup-recherche.gouv.fr/",
+      "visible": true
+    }
+  }
+]

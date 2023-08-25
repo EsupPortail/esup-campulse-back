@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
+from plana.apps.contents.models.logo import Logo
 from plana.apps.documents.models.document import Document
 
 
@@ -25,6 +26,17 @@ class Command(BaseCommand):
                     endpoint_url=settings.AWS_S3_ENDPOINT_URL,
                 )
                 bucket = resource.Bucket(bucket_name)
+                for file in pathlib.Path().glob(
+                    "plana/apps/contents/fixtures/files/logos/*.*"
+                ):
+                    with file.open(mode="rb") as logo_file:
+                        bucket_object = bucket.put_object(
+                            Key=f"{settings.LOGOS_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
+                            Body=logo_file,
+                        )
+                        logo_object = Logo.objects.get(id=int(file.name.split("_")[0]))
+                        logo_object.path_logo = bucket_object.key
+                        logo_object.save()
                 for file in pathlib.Path().glob(
                     "plana/apps/documents/fixtures/files/documents/*.*"
                 ):

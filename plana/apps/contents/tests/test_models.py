@@ -2,6 +2,7 @@
 from django.test import Client, TestCase
 
 from plana.apps.contents.models.content import Content
+from plana.apps.contents.models.logo import Logo
 
 
 class ContentsModelsTests(TestCase):
@@ -9,6 +10,7 @@ class ContentsModelsTests(TestCase):
 
     fixtures = [
         "contents_content.json",
+        "contents_logo.json",
     ]
 
     def setUp(self):
@@ -19,3 +21,8 @@ class ContentsModelsTests(TestCase):
         """There's at least one content in the database."""
         content = Content.objects.first()
         self.assertEqual(str(content), f"{content.code} : {content.label}")
+
+    def test_logo_model(self):
+        """There's at least one logo in the database."""
+        logo = Logo.objects.first()
+        self.assertEqual(str(logo), f"{logo.title} : {logo.acronym}")

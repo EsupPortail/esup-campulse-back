@@ -735,6 +735,24 @@ paths:
           description: ''
         '404':
           description: No response body
+  /contents/logos:
+    get:
+      operationId: contents_logos_list
+      description: Lists all logos.
+      tags:
+      - contents
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Logo'
+          description: ''
   /documents/:
     get:
       operationId: documents_list
@@ -4124,6 +4142,32 @@ components:
           minLength: 1
       required:
       - password
+    Logo:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        acronym:
+          type: string
+          title: Acronyme
+        title:
+          type: string
+          title: Logo alt
+        url:
+          type: string
+          title: Site URL
+        path_logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Miniatures dynamiques pour le logo
+        visible:
+          type: boolean
+          title: Is visible
+      required:
+      - id
     PasswordChangeRequest:
       type: object
       description: Overrided PasswordChangeSerializer to prevent CAS users to change
