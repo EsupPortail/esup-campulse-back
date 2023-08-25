@@ -12,7 +12,7 @@ class LogoList(generics.ListAPIView):
     """/contents/logos route"""
 
     permission_classes = [AllowAny]
-    queryset = Logo.objects.all()
+    queryset = Logo.objects.all().order_by("id")
     serializer_class = LogoSerializer
 
     @extend_schema(
