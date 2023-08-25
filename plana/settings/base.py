@@ -616,33 +616,119 @@ CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION = 30
 #####################
 
 # Names of the folders where templates are stored (used to store multiple templates, like themes).
-TEMPLATES_FOLDER = "default"
-TEMPLATES_FOLDER_PDF = "pdf_exports"
-TEMPLATES_FOLDER_NOTIFICATIONS = "notifications"
+TEMPLATES_PDF_FOLDER = "pdf_exports"
+TEMPLATES_NOTIFICATIONS_FOLDER = "notifications"
 
 # Generic PDF templates.
 TEMPLATES_PDF = {
-    "association_charter_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/association_charter_summary.html",
-    "commission_projects_list": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/commission_projects_list.html",
-    "project_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/project_summary.html",
-    "project_review_summary": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_PDF}/project_review_summary.html",
+    "association_charter_summary": f"./{TEMPLATES_PDF_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"./{TEMPLATES_PDF_FOLDER}/commission_projects_list.html",
+    "project_summary": f"./{TEMPLATES_PDF_FOLDER}/project_summary.html",
+    "project_review_summary": f"./{TEMPLATES_PDF_FOLDER}/project_review_summary.html",
 }
 
 # Notifications pdf templates used as mail attachments.
 # Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
 TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/decision_attribution.html",
-    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/decision_attribution.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/decision_attribution.html",
-    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/attribution.html",
-    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/attribution.html",
-    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/attribution.html",
-    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/rejection.html",
-    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/rejection.html",
-    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/rejection.html",
-    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/FSDIE/postpone.html",
-    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/IdEx/postpone.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": f"./{TEMPLATES_FOLDER}/{TEMPLATES_FOLDER_NOTIFICATIONS}/Culture-ActionS/postpone.html",
+    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
+    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/decision_attribution.html",
+    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
+    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
+    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/rejection.html",
+    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/rejection.html",
+    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
+    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
+    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
+    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": f"./{TEMPLATES__NOTIFICATIONS_FOLDER}/Culture-ActionS/postpone.html",
+}
+
+
+########
+# Misc #
+########
+
+# Defining default format for database identifiers.
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# Extending the abstract User class.
+AUTH_USER_MODEL = "users.User"
+
+# Avoid errors while testing the API with cURL.
+APPEND_SLASH = False
+
+# Site name as set in migration in contents module.
+MIGRATION_SITE_DOMAIN = "localhost:3000"
+MIGRATION_SITE_NAME = "Opaline"
+
+# Documentation URL sent in emails.
+APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
+
+# Random password are generated with this length.
+DEFAULT_PASSWORD_LENGTH = 16
+
+# Default value for is_site setting.
+ASSOCIATION_IS_SITE_DEFAULT = False
+
+# Default amount of users allowed in an association (None if no limit).
+ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
+
+# Index of the month when scholar year is resetted.
+NEW_YEAR_MONTH_INDEX = 9
+
+# Avoid registration with following email domains.
+RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
+
+# External APIs.
+ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
+ACCOUNTS_API_CONF = {}
+
+# MIME types allowed for image uploads.
+ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
+
+# Amount of years before an archived project is hidden, then deleted.
+AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = 5
+AMOUNT_YEARS_BEFORE_PROJECT_DELETION = 10
+
+# Special permissions for user_groups links.
+GROUPS_STRUCTURE = {
+    "MANAGER_GENERAL": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "FUND_ID_POSSIBLE": False,
+        "ASSOCIATIONS_POSSIBLE": False,
+    },
+    "MANAGER_INSTITUTION": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "FUND_ID_POSSIBLE": False,
+        "ASSOCIATIONS_POSSIBLE": False,
+    },
+    "MANAGER_MISC": {
+        "REGISTRATION_ALLOWED": False,
+        "INSTITUTION_ID_POSSIBLE": True,
+        "FUND_ID_POSSIBLE": False,
+        "ASSOCIATIONS_POSSIBLE": False,
+    },
+    "MEMBER_FUND": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": True,
+        "ASSOCIATIONS_POSSIBLE": False,
+    },
+    "STUDENT_INSTITUTION": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
+        "ASSOCIATIONS_POSSIBLE": True,
+    },
+    "STUDENT_MISC": {
+        "REGISTRATION_ALLOWED": True,
+        "INSTITUTION_ID_POSSIBLE": False,
+        "FUND_ID_POSSIBLE": False,
+        "ASSOCIATIONS_POSSIBLE": False,
+    },
 }
 
 
@@ -905,91 +991,4 @@ PERMISSIONS_GROUPS = {
         # users
         "view_groupinstitutionfunduser",
     ],
-}
-
-
-########
-# Misc #
-########
-
-# Defining default format for database identifiers.
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-
-# Extending the abstract User class.
-AUTH_USER_MODEL = "users.User"
-
-# Avoid errors while testing the API with cURL.
-APPEND_SLASH = False
-
-# Site name as set in migration in contents module.
-MIGRATION_SITE_DOMAIN = "localhost:3000"
-MIGRATION_SITE_NAME = "Opaline"
-
-# Documentation URL sent in emails.
-APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
-
-# Random password are generated with this length.
-DEFAULT_PASSWORD_LENGTH = 16
-
-# Default value for is_site setting.
-ASSOCIATION_IS_SITE_DEFAULT = False
-
-# Default amount of users allowed in an association (None if no limit).
-ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
-
-# Index of the month when scholar year is resetted.
-NEW_YEAR_MONTH_INDEX = 9
-
-# Avoid registration with following email domains.
-RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
-
-# External APIs.
-ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
-ACCOUNTS_API_CONF = {}
-
-# MIME types allowed for image uploads.
-ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
-
-# Amount of years before an archived project is hidden, then deleted.
-AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = 5
-AMOUNT_YEARS_BEFORE_PROJECT_DELETION = 10
-
-# Special permissions for user_groups links.
-GROUPS_STRUCTURE = {
-    "MANAGER_GENERAL": {
-        "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_POSSIBLE": True,
-        "FUND_ID_POSSIBLE": False,
-        "ASSOCIATIONS_POSSIBLE": False,
-    },
-    "MANAGER_INSTITUTION": {
-        "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_POSSIBLE": True,
-        "FUND_ID_POSSIBLE": False,
-        "ASSOCIATIONS_POSSIBLE": False,
-    },
-    "MANAGER_MISC": {
-        "REGISTRATION_ALLOWED": False,
-        "INSTITUTION_ID_POSSIBLE": True,
-        "FUND_ID_POSSIBLE": False,
-        "ASSOCIATIONS_POSSIBLE": False,
-    },
-    "MEMBER_FUND": {
-        "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_POSSIBLE": False,
-        "FUND_ID_POSSIBLE": True,
-        "ASSOCIATIONS_POSSIBLE": False,
-    },
-    "STUDENT_INSTITUTION": {
-        "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_POSSIBLE": False,
-        "FUND_ID_POSSIBLE": False,
-        "ASSOCIATIONS_POSSIBLE": True,
-    },
-    "STUDENT_MISC": {
-        "REGISTRATION_ALLOWED": True,
-        "INSTITUTION_ID_POSSIBLE": False,
-        "FUND_ID_POSSIBLE": False,
-        "ASSOCIATIONS_POSSIBLE": False,
-    },
 }

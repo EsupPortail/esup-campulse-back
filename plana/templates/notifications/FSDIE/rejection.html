@@ -5,8 +5,8 @@
     <head>
         <meta charset="UTF-8">
         <title>{% resolve %}{{ content.title }}{% endresolve %}</title>
-        <link rel="stylesheet" href="{% static 'default/fonts/Unistra_2.0/Unistra.css' %}" type="text/css"/>
-        <link rel="stylesheet" href="{% static 'default/css/notifications/FSDIE_IdEx.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'fonts/Unistra_2.0/Unistra.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'css/notifications/FSDIE_IdEx.css' %}" type="text/css"/>
         <style>
             @page {
                 margin: 20mm 10mm 20mm 10mm;
@@ -17,7 +17,7 @@
     <body>
         <header>
             <div class="head-float-left">
-                <img src="{% static 'default/img/svu_logo.png' %}">
+                <img src="{% static 'img/svu_logo.png' %}">
             </div>
             <div class="head-float-right border text-sm unistra-a align-right">
                 {% resolve %}{{ content.header|safe }}{% endresolve %}
