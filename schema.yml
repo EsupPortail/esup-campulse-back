@@ -3740,6 +3740,9 @@ components:
         id:
           type: integer
           readOnly: true
+        size:
+          type: integer
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -3791,6 +3794,7 @@ components:
           title: Fonds
       required:
       - id
+      - size
     DocumentCreateRequest:
       type: object
       description: Serializer for document create.
