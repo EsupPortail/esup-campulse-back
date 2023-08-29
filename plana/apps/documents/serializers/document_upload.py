@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.users.models.user import User
 
 
 class DocumentUploadSerializer(serializers.ModelSerializer):
@@ -33,6 +34,10 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
 
 class DocumentUploadCreateSerializer(serializers.ModelSerializer):
     """Main serializer not overriding path_file."""
+
+    user = serializers.SlugRelatedField(
+        slug_field="username", queryset=User.objects.all(), required=False
+    )
 
     class Meta:
         model = DocumentUpload

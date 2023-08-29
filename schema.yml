@@ -3883,9 +3883,7 @@ components:
         document:
           type: integer
         user:
-          type: integer
-          nullable: true
-          title: Utilisateur
+          type: string
         association:
           type: integer
           nullable: true
@@ -3918,9 +3916,7 @@ components:
         document:
           type: integer
         user:
-          type: integer
-          nullable: true
-          title: Utilisateur
+          type: string
         association:
           type: integer
           nullable: true

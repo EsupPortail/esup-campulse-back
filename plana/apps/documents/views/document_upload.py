@@ -225,7 +225,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["user"] != ""
         ):
             try:
-                user = User.objects.get(id=request.data["user"])
+                user = User.objects.get(username=request.data["user"])
             except ObjectDoesNotExist:
                 return response.Response(
                     {"error": _("User does not exist.")},
@@ -235,7 +235,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             if (request.user.is_anonymous and user.is_validated_by_admin is True) or (
                 not request.user.is_anonymous
                 and not request.user.has_perm("documents.add_documentupload_all")
-                and int(request.data["user"]) != request.user.pk
+                and user.id != request.user.pk
             ):
                 return response.Response(
                     {"error": _("Not allowed to upload documents with this user.")},

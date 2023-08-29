@@ -112,13 +112,13 @@ class DocumentsViewsTests(TestCase):
             "path_file": file,
             "project": 1,
             "document": 18,
-            "user": cls.student_misc_user_id,
+            "user": cls.student_misc_user_name,
         }
         post_data_2 = {
             "path_file": file,
             "project": 5,
             "document": 21,
-            "user": cls.student_misc_user_id,
+            "user": cls.student_misc_user_name,
         }
         cls.student_misc_client.post("/documents/uploads", post_data_1)
         cls.new_document = cls.student_misc_client.post(
@@ -226,7 +226,7 @@ class DocumentsViewsTests(TestCase):
 
         post_data = {
             "path_file": "",
-            "user": self.unvalidated_user_id,
+            "user": self.unvalidated_user_name,
             "document": 16,
         }
         response = self.client.post("/documents/uploads", post_data)
@@ -245,7 +245,7 @@ class DocumentsViewsTests(TestCase):
         document.save()
         post_data = {
             "path_file": file,
-            "user": self.unvalidated_user_id,
+            "user": self.unvalidated_user_name,
             "document": document_id,
         }
         response = self.client.post("/documents/uploads", post_data)
@@ -315,12 +315,12 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         document_data.pop("association", None)
-        document_data["user"] = 9999
+        document_data["user"] = "bernard-mortadelle@miam.tld"
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         document_data["association"] = 2
-        document_data["user"] = self.student_president_user_id
+        document_data["user"] = self.student_president_user_name
         response = self.student_president_client.post(
             "/documents/uploads", document_data
         )
@@ -339,7 +339,7 @@ class DocumentsViewsTests(TestCase):
             "path_file": False,
             "project": project_id,
             "document": document_id,
-            "user": self.student_misc_user_id,
+            "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post(
             "/documents/uploads", data=post_data, content_type="application/json"
@@ -353,7 +353,11 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - User in the request must be the authenticated user.
         """
-        document_data = {"path_file": "", "document": 16, "user": 2}
+        document_data = {
+            "path_file": "",
+            "document": 16,
+            "user": "compte-non-valide@mail.tld",
+        }
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -376,7 +380,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - Document must be set.
         """
-        document_data = {"path_file": "", "user": self.student_misc_user_id}
+        document_data = {"path_file": "", "user": self.student_misc_user_name}
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -392,7 +396,7 @@ class DocumentsViewsTests(TestCase):
             "path_file": "",
             "project": 1,
             "document": 18,
-            "user": self.student_misc_user_id,
+            "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -409,7 +413,7 @@ class DocumentsViewsTests(TestCase):
             "path_file": "",
             "project": 1,
             "document": 19,
-            "user": self.student_misc_user_id,
+            "user": self.student_misc_user_name,
             "validated_date": "2023-03-15",
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
@@ -435,7 +439,7 @@ class DocumentsViewsTests(TestCase):
             "path_file": file,
             "project": project_id,
             "document": document_id,
-            "user": self.student_misc_user_id,
+            "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
@@ -464,7 +468,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         du_cnt = len(
             DocumentUpload.objects.filter(
-                user_id=post_data["user"], document_id=post_data["document"]
+                user_id=self.student_misc_user_id, document_id=post_data["document"]
             ),
         )
         self.assertEqual(du_cnt, 1)
