@@ -30,6 +30,7 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = [
+            "id",
             "name",
             "description",
             "path_template",

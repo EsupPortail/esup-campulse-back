@@ -68,6 +68,16 @@ class DocumentsViewsTests(TestCase):
         )
         cls.institution_document_id = document.id
 
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        post_data = {
+            "name": "Document test",
+            "path_template": file,
+        }
+        cls.new_document = cls.general_client.post("/documents/", post_data)
+
     def test_get_documents_list(self):
         """
         GET /documents/ .
@@ -200,6 +210,9 @@ class DocumentsViewsTests(TestCase):
         - An anonymous user can execute this request.
         """
         response = self.client.get("/documents/1")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get(f"/documents/{self.new_document.data['id']}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_document_by_id(self):

@@ -524,6 +524,9 @@ class DocumentsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response = self.general_client.get("/documents/uploads/6")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_put_document_upload_by_id_405(self):
         """
         PUT /documents/uploads/{id} .
@@ -744,7 +747,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.get("/documents/uploads/file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.student_misc_client.get("/documents/uploads/file?project=1")
+        response = self.student_misc_client.get("/documents/uploads/file?project_id=1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_document_upload_file_by_id_anonymous(self):
