@@ -27,7 +27,7 @@ weight: 211
 - [@types/node](https://www.npmjs.com/package/@types/node) : types pour Node.
 - [@types/zxcvbn](https://www.npmjs.com/package/@types/zxcvbn) : types pour zxcvbn.
 - [@vitejs/plugin-vue](https://www.npmjs.com/package/@vitejs/plugin-vue) : optimisation du framework pour le bundler.
-- [@vitest/coverage-c8](https://www.npmjs.com/package/@vitest/coverage-c8) : couverture des tests.
+- [@vitest/coverage-v8](https://www.npmjs.com/package/@vitest/coverage-v8) : couverture des tests.
 - [@vitest/ui](https://www.npmjs.com/package/@vitest/ui) : interface graphique de la suite de tests.
 - [@vue/eslint-config-typescript](https://www.npmjs.com/package/@vue/eslint-config-typescript) : optimisation du linter pour TypeScript.
 - [@vue/test-utils](https://www.npmjs.com/package/@vue/test-utils) : suite de tests pour le framework.
