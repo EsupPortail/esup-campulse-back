@@ -39,6 +39,12 @@ class CommissionExport(generics.RetrieveAPIView):
                 OpenApiParameter.QUERY,
                 description="Export mode (csv or pdf, csv by default).",
             ),
+            OpenApiParameter(
+                "project_ids",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Projects IDs.",
+            ),
         ],
         responses={
             status.HTTP_200_OK: ProjectSerializer,
@@ -49,6 +55,7 @@ class CommissionExport(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         """Projects presented to the commission export."""
         mode = request.query_params.get("mode")
+        project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
         commission_id = kwargs["pk"]
@@ -127,6 +134,9 @@ class CommissionExport(generics.RetrieveAPIView):
                 ).values("id")
             )
         ).order_by("id")
+
+        if project_ids is not None and project_ids != "":
+            projects = projects.filter(id__in=project_ids.split(","))
 
         http_response = None
         writer = None

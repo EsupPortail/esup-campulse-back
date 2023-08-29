@@ -120,6 +120,7 @@ class CommissionExportsViewsTests(TestCase):
         - The route can be accessed by a manager user.
         - Manager can only see linked fund commissions.
         - All projects linked to the selected commission from db are returned in the CSV.
+        - project_ids argument filters by Project IDs.
         """
         commission_id = 1
 
@@ -139,7 +140,9 @@ class CommissionExportsViewsTests(TestCase):
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
 
-        response = self.general_client.get(f"/commissions/{commission_id}/export")
+        response = self.general_client.get(
+            f"/commissions/{commission_id}/export?project_ids=4,10"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -151,6 +154,7 @@ class CommissionExportsViewsTests(TestCase):
                     commission_id=commission_id
                 ).values("id")
             )
-        ).count()
+        )
+        total = total.filter(id__in=[4, 10]).count()
         # -1 because of CSV header
         self.assertEqual(len(list(csv_reader)) - 1, total)

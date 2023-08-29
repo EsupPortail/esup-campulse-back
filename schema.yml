@@ -596,6 +596,11 @@ paths:
         schema:
           type: string
         description: Export mode (csv or pdf, csv by default).
+      - in: query
+        name: project_ids
+        schema:
+          type: string
+        description: Filter by Projects IDs.
       tags:
       - commissions
       security:
