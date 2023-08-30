@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-29 15:54+0200\n"
+"POT-Creation-Date: 2023-08-30 11:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1670,7 +1670,11 @@ msgstr ""
 msgid "Import application initial datas."
 msgstr "Importe les données initiales de l'application."
 
-#: plana/management/commands/initial_import.py:31
+#: plana/management/commands/initial_import.py:12
+msgid "Set without value if storages should be added."
+msgstr "Spécifier sans valeur si les contenus doivent être ajoutés."
+
+#: plana/management/commands/initial_import.py:41
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 

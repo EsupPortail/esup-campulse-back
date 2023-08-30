@@ -6,6 +6,13 @@ from django.utils.translation import gettext as _
 class Command(BaseCommand):
     help = _("Import application initial datas.")
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--storages",
+            help=_("Set without value if storages should be added."),
+            action="store_true",
+        )
+
     def handle(self, *args, **options):
         try:
             call_command(
@@ -27,6 +34,9 @@ class Command(BaseCommand):
                     "mailtemplatevars",
                 ],
             )
+
+            if options["storages"] is True:
+                call_command("loaddata_storages")
 
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 
