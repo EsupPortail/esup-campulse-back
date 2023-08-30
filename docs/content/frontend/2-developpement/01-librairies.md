@@ -13,6 +13,7 @@ weight: 211
 - [pinia](https://www.npmjs.com/package/pinia) : store de données.
 - [quasar](https://www.npmjs.com/package/quasar) : framework de composants.
 - [vue-i18n](https://www.npmjs.com/package/vue-i18n) : traduction.
+- [vue-matomo](https://www.npmjs.com/package/vue-matomo) : tracking.
 - [vue-router](https://www.npmjs.com/package/vue-router) : routing.
 - [zxcvbn](https://www.npmjs.com/package/zxcvbn) : estimation de la force d'un mot de passe.
 - [@vue-unistra/cas-authentication](https://git.unistra.fr/vue-unistra/cas-authentication) : plugin d'authentification vers CAS.

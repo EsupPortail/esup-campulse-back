@@ -132,7 +132,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
                 ).values("id")
-            )
+            ).values("project_id")
         ).order_by("id")
 
         if project_ids is not None and project_ids != "":

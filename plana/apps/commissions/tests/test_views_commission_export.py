@@ -108,7 +108,7 @@ class CommissionExportsViewsTests(TestCase):
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
                 ).values("id")
-            )
+            ).values("project_id")
         ).count()
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
@@ -135,7 +135,7 @@ class CommissionExportsViewsTests(TestCase):
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
                 ).values("id")
-            )
+            ).values("project_id")
         ).count()
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
@@ -153,7 +153,7 @@ class CommissionExportsViewsTests(TestCase):
                 commission_fund_id__in=CommissionFund.objects.filter(
                     commission_id=commission_id
                 ).values("id")
-            )
+            ).values("project_id")
         )
         total = total.filter(id__in=[4, 10]).count()
         # -1 because of CSV header
