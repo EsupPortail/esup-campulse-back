@@ -94,7 +94,7 @@ class DocumentsViewsTests(TestCase):
             url_login, data_student_president
         )
 
-        documents = Document.objects.filter(id__in=[18, 21])
+        documents = Document.objects.filter(acronym__in=["RIB", "BILAN_FINANCIER"])
         documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",
@@ -111,13 +111,13 @@ class DocumentsViewsTests(TestCase):
         post_data_1 = {
             "path_file": file,
             "project": 1,
-            "document": 18,
+            "document": documents[0].id,
             "user": cls.student_misc_user_name,
         }
         post_data_2 = {
             "path_file": file,
             "project": 5,
-            "document": 21,
+            "document": documents[1].id,
             "user": cls.student_misc_user_name,
         }
         cls.student_misc_client.post("/documents/uploads", post_data_1)
@@ -216,10 +216,11 @@ class DocumentsViewsTests(TestCase):
         - project and association cannot be specified.
         - Document must have a DOCUMENT_USER process type.
         """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
         post_data = {
             "path_file": "",
             "project": 1,
-            "document": 16,
+            "document": document.id,
         }
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -227,17 +228,17 @@ class DocumentsViewsTests(TestCase):
         post_data = {
             "path_file": "",
             "user": self.unvalidated_user_name,
-            "document": 16,
+            "document": document.id,
         }
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        document_id = 14
+        document = Document.objects.get(acronym="CERTIFICAT_SCOLARITE_USER")
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
-        document = Document.objects.get(id=document_id)
+        document = Document.objects.get(id=document.id)
         document.mime_types = [
             "application/vnd.novadigm.ext",
             "application/octet-stream",
@@ -246,7 +247,7 @@ class DocumentsViewsTests(TestCase):
         post_data = {
             "path_file": file,
             "user": self.unvalidated_user_name,
-            "document": document_id,
+            "document": document.id,
         }
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -257,10 +258,11 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - The project edited must exist.
         """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
         post_data = {
             "path_file": "",
             "project": 9999,
-            "document": 16,
+            "document": document.id,
         }
         response = self.general_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -285,10 +287,11 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
         """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
         post_data = {
             "path_file": "",
             "project": 1,
-            "document": 16,
+            "document": document.id,
         }
         response = self.student_site_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -303,9 +306,10 @@ class DocumentsViewsTests(TestCase):
         - If linked to a user, the user must already exist.
         - Document cannot have multiple affectations.
         """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
         document_data = {
             "path_file": "",
-            "document": 16,
+            "document": document.id,
         }
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -333,12 +337,12 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - Serializer fields must be valid.
         """
+        document = Document.objects.get(acronym="DOCUMENT_EDITE")
         project_id = 1
-        document_id = 19
         post_data = {
             "path_file": False,
             "project": project_id,
-            "document": document_id,
+            "document": document.id,
             "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post(
@@ -353,9 +357,10 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - User in the request must be the authenticated user.
         """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
         document_data = {
             "path_file": "",
-            "document": 16,
+            "document": document.id,
             "user": "compte-non-valide@mail.tld",
         }
         response = self.student_site_client.post("/documents/uploads", document_data)
@@ -369,7 +374,8 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be a member of the association to post documents related to it.
         - User must be president or delegated president of its association to post documents.
         """
-        document_data = {"path_file": "", "document": 16, "association": 2}
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
+        document_data = {"path_file": "", "document": document.id, "association": 2}
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -392,10 +398,11 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is not created if field is not is_multiple.
         """
+        document = Document.objects.get(acronym="RIB")
         post_data = {
             "path_file": "",
             "project": 1,
-            "document": 18,
+            "document": document.id,
             "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
@@ -409,10 +416,11 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is not created if validation is set by a student.
         """
+        document = Document.objects.get(acronym="DOCUMENT_EDITE")
         post_data = {
             "path_file": "",
             "project": 1,
-            "document": 19,
+            "document": document.id,
             "user": self.student_misc_user_name,
             "validated_date": "2023-03-15",
         }
@@ -433,19 +441,21 @@ class DocumentsViewsTests(TestCase):
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
 
+        document = Document.objects.get(acronym="DOCUMENT_EDITE")
         project_id = 1
-        document_id = 19
         post_data = {
             "path_file": file,
             "project": project_id,
-            "document": document_id,
+            "document": document.id,
             "user": self.student_misc_user_name,
         }
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-        document = Document.objects.filter(id__in=[3, 19])
-        document.update(
+        documents = Document.objects.filter(
+            acronym__in=["CHARTE_FSDIE", "DOCUMENT_EDITE"]
+        )
+        documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",
                 "application/octet-stream",
@@ -456,13 +466,13 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         du_cnt = len(
             DocumentUpload.objects.filter(
-                project_id=project_id, document_id=document_id
+                project_id=project_id, document_id=document.id
             )
         )
         self.assertEqual(du_cnt, 1)
 
         self.assertFalse(len(mail.outbox))
-        post_data["document"] = 3
+        post_data["document"] = documents[0].id
         post_data.pop("project", None)
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

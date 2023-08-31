@@ -11,6 +11,7 @@ from rest_framework import status
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
+from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
@@ -1016,7 +1017,8 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student president.
         - Project cannot be updated if documents are missing.
         """
-        DocumentUpload.objects.get(document=18, project_id=2).delete()
+        document = Document.objects.get(acronym="RIB")
+        DocumentUpload.objects.get(document=document.id, project_id=2).delete()
         ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}
         response = self.student_president_client.patch(

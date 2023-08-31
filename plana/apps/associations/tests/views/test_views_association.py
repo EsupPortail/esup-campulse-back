@@ -13,6 +13,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicThumbnailImageField
@@ -1071,8 +1072,9 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by a student president.
         - Association cannot be updated if documents are missing.
         """
+        document = Document.objects.get(acronym="COPIE_STATUTS_ASSOCIATION")
         association_id = 2
-        DocumentUpload.objects.get(document_id=9, association_id=2).delete()
+        DocumentUpload.objects.get(document_id=document.id, association_id=2).delete()
         patch_data = {"charter_status": "CHARTER_PROCESSING"}
         response = self.president_client.patch(
             f"/associations/{association_id}/status",

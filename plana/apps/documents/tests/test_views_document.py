@@ -395,8 +395,9 @@ class DocumentsViewsTests(TestCase):
 
         - A document linked to an institution cannot be deleted by a user who's not linked to the same institution.
         """
-        document_id = 25
-        response = self.institution_client.delete(f"/documents/{document_id}")
+        response = self.institution_client.delete(
+            f"/documents/{self.institution_document_id}"
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_document_by_id_forbidden_fund(self):
