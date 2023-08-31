@@ -617,19 +617,19 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project.project_status = "PROJECT_REVIEW_DRAFT"
             project.save()
 
-        unvalidated_project_commission_funds = ProjectCommissionFund.objects.filter(
-            models.Q(project_id=project.id, is_validated_by_admin=False)
-            | models.Q(project_id=project.id, is_validated_by_admin__isnull=True)
+        unchecked_project_commission_funds = ProjectCommissionFund.objects.filter(
+            project_id=project.id, is_validated_by_admin__isnull=True
+        )
+        validated_project_commission_funds = ProjectCommissionFund.objects.filter(
+            project_id=project.id, is_validated_by_admin=True
         )
         if (
             "is_validated_by_admin" in request.data
             and project.project_status
             in Project.ProjectStatus.get_validated_fund_project_statuses()
+            and unchecked_project_commission_funds.count() == 0
         ):
-            if (
-                request.data["is_validated_by_admin"] is True
-                and unvalidated_project_commission_funds.count() == 0
-            ):
+            if validated_project_commission_funds.count() > 0:
                 project.project_status = "PROJECT_VALIDATED"
                 project.save()
                 template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
@@ -641,12 +641,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     ),
                     message=template.parse_vars(request.user, request, context),
                 )
-            elif (
-                request.data["is_validated_by_admin"] is False
-                and unvalidated_project_commission_funds.count() == 1
-                and unvalidated_project_commission_funds.first()
-                == project_commission_fund
-            ):
+            else:
                 project.project_status = "PROJECT_REJECTED"
                 project.save()
                 template = MailTemplate.objects.get(code="PROJECT_REJECTED")
