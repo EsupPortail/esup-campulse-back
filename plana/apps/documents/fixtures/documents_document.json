@@ -241,9 +241,9 @@
     "model": "documents.document",
     "pk": 14,
     "fields": {
-      "name": "Certificat de scolarité du porteur individuel",
+      "name": "Certificat de scolarité",
       "acronym": "CERTIFICAT_SCOLARITE_USER",
-      "description": "Certificat de scolarité du porteur individuel",
+      "description": "Certificat de scolarité",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
