@@ -132,22 +132,22 @@ class CommissionListCreate(generics.ListCreateAPIView):
             )
 
         if with_active_projects is not None and with_active_projects != "":
-            inactive_projects = Project.visible_objects.filter(
+            active_projects = Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_archived_project_statuses()
             )
             if to_bool(with_active_projects) is False:
-                self.queryset = self.queryset.filter(
+                self.queryset = self.queryset.exclude(
                     id__in=CommissionFund.objects.filter(
                         id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
+                            project_id__in=active_projects
                         ).values_list("commission_fund_id")
                     ).values_list("commission_id")
                 )
             else:
-                self.queryset = self.queryset.exclude(
+                self.queryset = self.queryset.filter(
                     id__in=CommissionFund.objects.filter(
                         id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
+                            project_id__in=active_projects
                         ).values_list("commission_fund_id")
                     ).values_list("commission_id")
                 )
