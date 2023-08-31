@@ -19,7 +19,7 @@ weight: 116
 - `$ python manage.py loaddata plana/libs/*/fixtures/*.json` : ajouter les jeux de données liées aux templates de mails.
 - `$ python manage.py flush_storages` : vide le contenu du bucket S3 de l'environnement courant.
 - `$ python manage.py loaddata_storages` : ajoute de premiers documents au bucket S3 de l'environnement courant.
-- `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata` (et `flush_storages`, `loaddata_storages` si `--storages` est spécifié) en une seule commande.
+- `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata`, `flush_storages`, `loaddata_storages` en une seule commande.
 
 ## Mise à jour des dépendances avec Poetry
 

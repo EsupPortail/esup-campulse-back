@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-30 11:40+0200\n"
+"POT-Creation-Date: 2023-08-31 09:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1543,11 +1543,7 @@ msgstr "Une erreur de syntaxe est survenur dans le template #%s"
 msgid "Resets database structure and content."
 msgstr "Régénère la structure et le contenu de la base de données."
 
-#: plana/management/commands/clean_database.py:14
-msgid "Set without value if storages should be flushed."
-msgstr "Spécifier sans valeur si les contenus doivent être supprimés."
-
-#: plana/management/commands/clean_database.py:35
+#: plana/management/commands/clean_database.py:26
 msgid "Database regenerated."
 msgstr "Base de données régénérée."
 
