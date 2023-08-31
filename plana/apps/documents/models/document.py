@@ -101,6 +101,7 @@ class Document(models.Model):
         choices=ProcessType.choices,
         default="NO_PROCESS",
     )
+    edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
 
     def __str__(self):
         return f"{self.name}"

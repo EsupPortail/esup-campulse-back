@@ -11,6 +11,7 @@
       "is_required_in_process": true,
       "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf"
       ]
@@ -28,6 +29,7 @@
       "is_required_in_process": true,
       "days_before_expiration": "365 days",
       "process_type": "CHARTER_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -48,6 +50,7 @@
       "expiration_day": "08-31",
       "fund_id": 1,
       "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf"
       ]
@@ -66,6 +69,7 @@
       "expiration_day": "08-31",
       "fund_id": 2,
       "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf"
       ]
@@ -84,6 +88,7 @@
       "expiration_day": "08-31",
       "fund_id": 1,
       "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -104,6 +109,7 @@
       "expiration_day": "08-31",
       "fund_id": 2,
       "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -123,6 +129,7 @@
       "is_required_in_process": true,
       "fund_id": 3,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf"
       ]
@@ -140,6 +147,7 @@
       "is_required_in_process": true,
       "fund_id": 3,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -159,6 +167,7 @@
       "is_required_in_process": true,
       "fund_id": 2,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "application/msword",
@@ -178,6 +187,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -196,6 +206,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -214,6 +225,7 @@
       "is_multiple": true,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -232,6 +244,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -250,6 +263,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -268,6 +282,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_USER",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -286,6 +301,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_USER",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -304,6 +320,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/vnd.ms-excel",
         "application/vnd.oasis.opendocument.spreadsheet",
@@ -322,6 +339,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "application/msword",
@@ -341,6 +359,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -359,6 +378,7 @@
       "is_multiple": true,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "application/msword",
@@ -388,6 +408,7 @@
       "is_multiple": true,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -406,6 +427,7 @@
       "is_multiple": false,
       "is_required_in_process": true,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/vnd.ms-excel",
         "application/vnd.oasis.opendocument.spreadsheet",
@@ -424,6 +446,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -442,6 +465,7 @@
       "is_multiple": false,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",
@@ -460,6 +484,7 @@
       "is_multiple": true,
       "is_required_in_process": false,
       "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
         "image/jpeg",

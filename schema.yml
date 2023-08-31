@@ -3789,6 +3789,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
           title: Statut du Document
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de dernière mise à jour
         institution:
           type: integer
           nullable: true
@@ -3798,6 +3803,7 @@ components:
           nullable: true
           title: Fonds
       required:
+      - edition_date
       - id
       - size
     DocumentCreateRequest:
