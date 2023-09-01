@@ -197,9 +197,12 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
             ).__dict__
 
-        data["commission"] = data["project_commission_funds"][0]["commission_data"][
-            "name"
-        ]
+        data["commission_name"] = data["project_commission_funds"][0][
+            "commission_data"
+        ]["name"]
+        data["commission_date"] = data["project_commission_funds"][0][
+            "commission_data"
+        ]["commission_date"]
 
         data["is_first_edition"] = True
         for edition in data["project_commission_funds"]:

@@ -39,9 +39,6 @@
                 </div>
             </div>
             <h1 class="text-center text-uppercase">{% trans 'Student project assistance commitee' %}<br>{% trans 'Summary of grant applications' %}</h1>
-        </header>
-
-        <div>
             <div class="flex flex-space-around">
                 <div class="outline-light text-center">
                     <strong>{% trans 'Associative project' %} {% if association %}☑{% else %}☐{% endif %}</strong>
@@ -50,6 +47,9 @@
                     <strong>{% trans 'Individual holder project' %} {% if user and not association %}☑{% else %}☐{% endif %}</strong>
                 </div>
             </div>
+        </header>
+
+        <div>
             <div class="outline">
                 <div>
                     <strong>{% if association %}{% trans 'Association name' %}{% else %}{% trans 'Individual holder name' %}{% endif %} :</strong>
