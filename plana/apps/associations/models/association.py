@@ -62,6 +62,9 @@ class Association(models.Model):
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
     president_phone = models.CharField(_("President phone"), default="", max_length=32)
+    president_email = models.EmailField(
+        _("President email"), default="", max_length=256
+    )
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(

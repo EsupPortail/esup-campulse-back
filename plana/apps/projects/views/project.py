@@ -765,21 +765,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             "site_name": current_site.name,
         }
 
-        if (
-            new_project_status
-            in Project.ProjectStatus.get_identifier_project_statuses()
-        ):
-            now = datetime.datetime.now()
-            if now.month >= settings.NEW_YEAR_MONTH_INDEX:
-                year = now.year
-            else:
-                year = now.year - 1
-            projects_year_count = Project.visible_objects.filter(
-                manual_identifier__startswith=year
-            ).count()
-            project.manual_identifier = f"{year}{projects_year_count+1:04}"
-            project.save()
-
         if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
             document_process_types = []
             association_email_template_code = ""
@@ -791,6 +776,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
                 association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
                 user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
+                request.data["processing_date"] = datetime.date.today()
             elif (
                 new_project_status
                 in Project.ProjectStatus.get_email_review_processing_project_statuses()
@@ -835,6 +821,21 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            if (
+                new_project_status
+                in Project.ProjectStatus.get_identifier_project_statuses()
+            ):
+                now = datetime.datetime.now()
+                if now.month >= settings.NEW_YEAR_MONTH_INDEX:
+                    year = now.year
+                else:
+                    year = now.year - 1
+                projects_year_count = Project.visible_objects.filter(
+                    manual_identifier__startswith=year
+                ).count()
+                project.manual_identifier = f"{year}{projects_year_count+1:04}"
+                project.save()
+
             managers_emails = []
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
@@ -871,6 +872,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 ):
                     if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
+
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,

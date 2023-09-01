@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-31 14:00+0200\n"
+"POT-Creation-Date: 2023-09-01 10:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
-#: plana/apps/associations/models/association.py:115
+#: plana/apps/associations/models/association.py:118
 #: plana/apps/associations/views/association_export.py:145
 msgid "Activity field"
 msgstr "Domaine d'activité"
@@ -92,6 +92,8 @@ msgstr "Pays"
 
 #: plana/apps/associations/models/association.py:59
 #: plana/apps/users/models/user.py:111
+#: plana/templates/pdf_exports/project_summary.html:100
+#: plana/templates/pdf_exports/project_summary.html:114
 msgid "Phone"
 msgstr "Téléphone"
 
@@ -115,76 +117,80 @@ msgstr "Noms du président"
 msgid "President phone"
 msgstr "Numéro de téléphone du président"
 
-#: plana/apps/associations/models/association.py:65
+#: plana/apps/associations/models/association.py:66
+msgid "President email"
+msgstr "Adresse email du président"
+
+#: plana/apps/associations/models/association.py:68
 msgid "Is enabled"
 msgstr "Est active"
 
-#: plana/apps/associations/models/association.py:66
+#: plana/apps/associations/models/association.py:69
 msgid "Is public"
 msgstr "Est publique"
 
-#: plana/apps/associations/models/association.py:68
+#: plana/apps/associations/models/association.py:71
 #: plana/apps/commissions/models/fund.py:15
 msgid "Is site"
 msgstr "Est site"
 
-#: plana/apps/associations/models/association.py:71
+#: plana/apps/associations/models/association.py:74
 msgid "Amount of members allowed"
 msgstr "Nombre de membres autorisés"
 
-#: plana/apps/associations/models/association.py:74
+#: plana/apps/associations/models/association.py:77
 #: plana/apps/users/models/user.py:112
 msgid "Can submit projects"
 msgstr "Peut soumettre des projets"
 
-#: plana/apps/associations/models/association.py:76
+#: plana/apps/associations/models/association.py:79
 msgid "Charter status"
 msgstr "Statut de la charte"
 
-#: plana/apps/associations/models/association.py:79
+#: plana/apps/associations/models/association.py:82
 msgid "Charter Draft"
 msgstr "Charte en Brouillon"
 
-#: plana/apps/associations/models/association.py:80
+#: plana/apps/associations/models/association.py:83
 msgid "Charter Rejected"
 msgstr "Charte Rejetée"
 
-#: plana/apps/associations/models/association.py:81
+#: plana/apps/associations/models/association.py:84
 msgid "Charter Processing"
 msgstr "Charte en Traitement"
 
-#: plana/apps/associations/models/association.py:82
+#: plana/apps/associations/models/association.py:85
 msgid "Charter Validated"
 msgstr "Charte Validée"
 
-#: plana/apps/associations/models/association.py:83
+#: plana/apps/associations/models/association.py:86
 msgid "Charter Expired"
 msgstr "Charte Expirée"
 
-#: plana/apps/associations/models/association.py:88
+#: plana/apps/associations/models/association.py:91
 msgid "Charter date"
 msgstr "Date de la charte"
 
-#: plana/apps/associations/models/association.py:90
-#: plana/apps/projects/models/project.py:196
+#: plana/apps/associations/models/association.py:93
+#: plana/apps/projects/models/project.py:199
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Creation date"
 msgstr "Date de création"
 
-#: plana/apps/associations/models/association.py:91
+#: plana/apps/associations/models/association.py:94
 msgid "Approval date"
 msgstr "Date d'agrément"
 
-#: plana/apps/associations/models/association.py:93
+#: plana/apps/associations/models/association.py:96
 #: plana/apps/associations/views/association_export.py:147
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
-#: plana/apps/associations/models/association.py:95
+#: plana/apps/associations/models/association.py:98
 msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
-#: plana/apps/associations/models/association.py:101
+#: plana/apps/associations/models/association.py:104
 #: plana/apps/associations/views/association_export.py:144
 #: plana/apps/commissions/models/fund.py:19
 #: plana/apps/documents/models/document.py:88
@@ -193,20 +199,20 @@ msgstr "Date de dernière AG constitutive"
 msgid "Institution"
 msgstr "Établissement"
 
-#: plana/apps/associations/models/association.py:108
+#: plana/apps/associations/models/association.py:111
 #: plana/apps/associations/views/association_export.py:146
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
 
-#: plana/apps/associations/models/association.py:124
+#: plana/apps/associations/models/association.py:127
 #: plana/apps/documents/models/document_upload.py:52
 #: plana/apps/projects/models/project.py:157 plana/apps/users/models/user.py:25
 #: plana/apps/users/models/user.py:41
 msgid "Association"
 msgstr "Association"
 
-#: plana/apps/associations/models/association.py:125
+#: plana/apps/associations/models/association.py:128
 #: plana/apps/users/models/user.py:42 plana/apps/users/models/user.py:121
 msgid "Associations"
 msgstr "Associations"
@@ -300,7 +306,7 @@ msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:755
-#: plana/apps/projects/views/project.py:832
+#: plana/apps/projects/views/project.py:818
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -404,6 +410,7 @@ msgid "Manual identifier"
 msgstr "Identifiant manuel"
 
 #: plana/apps/commissions/views/commission_export.py:116
+#: plana/templates/pdf_exports/project_summary.html:55
 msgid "Association name"
 msgstr "Nom de l'association"
 
@@ -595,7 +602,7 @@ msgid "Document Status"
 msgstr "Statut du Document"
 
 #: plana/apps/documents/models/document.py:104
-#: plana/apps/projects/models/project.py:197
+#: plana/apps/projects/models/project.py:200
 #: plana/apps/projects/models/project_comment.py:13
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
@@ -618,7 +625,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:58
-#: plana/apps/projects/models/project.py:220
+#: plana/apps/projects/models/project.py:224
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:16
 #: plana/apps/projects/models/project_commission_fund.py:13
@@ -712,8 +719,8 @@ msgstr ""
 #: plana/apps/projects/views/project_comment.py:48
 #: plana/apps/projects/views/project_comment.py:121
 #: plana/apps/projects/views/project_commission_fund.py:267
-#: plana/apps/projects/views/project_export.py:45
-#: plana/apps/projects/views/project_export.py:139
+#: plana/apps/projects/views/project_export.py:47
+#: plana/apps/projects/views/project_export.py:152
 #: plana/apps/projects/views/project_review.py:54
 #: plana/apps/projects/views/project_review.py:103
 msgid "Project does not exist."
@@ -860,81 +867,90 @@ msgid "Amount of money asked for each person"
 msgstr "Quantité d'argent demandée par personne"
 
 #: plana/apps/projects/models/project.py:180
+msgid "Amount of money asked for a student"
+msgstr "Quantité d'argent demandée par étudiant"
+
+#: plana/apps/projects/models/project.py:183
 msgid "Amount of money needed by person"
 msgstr "Quantité d'argent nécessaire par personne"
 
-#: plana/apps/projects/models/project.py:182
+#: plana/apps/projects/models/project.py:185
 msgid "Goals"
 msgstr "Objectifs"
 
-#: plana/apps/projects/models/project.py:183
+#: plana/apps/projects/models/project.py:186
 msgid "Summary"
 msgstr "Résumé"
 
-#: plana/apps/projects/models/project.py:184
+#: plana/apps/projects/models/project.py:187
 msgid "Planned activites"
 msgstr "Activités prévues"
 
-#: plana/apps/projects/models/project.py:186
+#: plana/apps/projects/models/project.py:189
 msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
-#: plana/apps/projects/models/project.py:188
+#: plana/apps/projects/models/project.py:191
+#: plana/templates/pdf_exports/project_summary.html:227
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
-#: plana/apps/projects/models/project.py:189
+#: plana/apps/projects/models/project.py:192
 msgid "Sustainable development"
 msgstr ""
 "Actions en rapport avec la DDRS (Développement Durable et Responsabilité "
 "Sociétale)"
 
-#: plana/apps/projects/models/project.py:191
+#: plana/apps/projects/models/project.py:194
 msgid "Project Status"
 msgstr "Statut du Projet"
 
-#: plana/apps/projects/models/project.py:198
+#: plana/apps/projects/models/project.py:201
+msgid "Processing date"
+msgstr "Date de dépôt de projet"
+
+#: plana/apps/projects/models/project.py:202
 msgid "Outcome"
 msgstr "Dépenses"
 
-#: plana/apps/projects/models/project.py:199
+#: plana/apps/projects/models/project.py:203
 msgid "Income"
 msgstr "Recettes"
 
-#: plana/apps/projects/models/project.py:200
+#: plana/apps/projects/models/project.py:204
 msgid "Real start date"
 msgstr "Date de début réelle"
 
-#: plana/apps/projects/models/project.py:201
+#: plana/apps/projects/models/project.py:205
 msgid "Real end date"
 msgstr "Date de fin réelle"
 
-#: plana/apps/projects/models/project.py:202
+#: plana/apps/projects/models/project.py:206
 msgid "Real location"
 msgstr "Lieu réel"
 
-#: plana/apps/projects/models/project.py:204
+#: plana/apps/projects/models/project.py:208
 msgid "Review (amount of students, partnerships, ...)"
 msgstr "Bilan (nombre d'étudiants, partenariats, ...)"
 
-#: plana/apps/projects/models/project.py:206
+#: plana/apps/projects/models/project.py:210
 msgid "Impact on students"
 msgstr "Impact sur les étudiants"
 
-#: plana/apps/projects/models/project.py:208
+#: plana/apps/projects/models/project.py:212
 msgid "Description (activities done, changes from planning, ...)"
 msgstr ""
 "Description (activités réalisées, changements par rapport au planning, ...)"
 
-#: plana/apps/projects/models/project.py:210
+#: plana/apps/projects/models/project.py:214
 msgid "Difficulties"
 msgstr "Difficultés"
 
-#: plana/apps/projects/models/project.py:211
+#: plana/apps/projects/models/project.py:215
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:221
+#: plana/apps/projects/models/project.py:225
 msgid "Projects"
 msgstr "Projets"
 
@@ -975,6 +991,7 @@ msgid "Amount earned on previous edition"
 msgstr "Montant obtenu à l'édition précédente"
 
 #: plana/apps/projects/models/project_commission_fund.py:28
+#: plana/templates/pdf_exports/project_summary.html:29
 msgid "Amount asked"
 msgstr "Montant demandé"
 
@@ -1045,8 +1062,8 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
 #: plana/apps/projects/views/project.py:489
 #: plana/apps/projects/views/project.py:506
-#: plana/apps/projects/views/project_export.py:55
-#: plana/apps/projects/views/project_export.py:149
+#: plana/apps/projects/views/project_export.py:57
+#: plana/apps/projects/views/project_export.py:162
 #: plana/apps/projects/views/project_review.py:64
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
@@ -1706,6 +1723,178 @@ msgstr "Page non trouvée"
 #: plana/templates/500.html:6
 msgid "Error"
 msgstr "Erreur"
+
+#: plana/templates/pdf_exports/commission_projects_list.html:6
+#: plana/templates/pdf_exports/commission_projects_list.html:24
+msgid "Commission project list"
+msgstr "Liste des projets de la commission"
+
+#: plana/templates/pdf_exports/project_summary.html:19
+msgid "SPAC date"
+msgstr "Date de la CAPE"
+
+#: plana/templates/pdf_exports/project_summary.html:21
+msgid "Case number"
+msgstr "Numéro de dossier"
+
+#: plana/templates/pdf_exports/project_summary.html:25
+msgid "Filing date"
+msgstr "Date de dépôt"
+
+#: plana/templates/pdf_exports/project_summary.html:35
+msgid "Amount granted"
+msgstr "Montant alloué"
+
+#: plana/templates/pdf_exports/project_summary.html:41
+msgid "Student project assistance commitee"
+msgstr "Commission d'aide aux projets étudiants"
+
+#: plana/templates/pdf_exports/project_summary.html:41
+msgid "Summary of grant applications"
+msgstr "Résumé de demande de subventions"
+
+#: plana/templates/pdf_exports/project_summary.html:47
+msgid "Associative project"
+msgstr "Projet associatif"
+
+#: plana/templates/pdf_exports/project_summary.html:50
+msgid "Individual holder project"
+msgstr "Projet porteur individuel"
+
+#: plana/templates/pdf_exports/project_summary.html:55
+msgid "Individual holder name"
+msgstr "Nom du porteur individuel"
+
+#: plana/templates/pdf_exports/project_summary.html:60
+msgid "Co-holder association name"
+msgstr "Nom de l'association co-porteuse"
+
+#: plana/templates/pdf_exports/project_summary.html:65
+msgid "Project title"
+msgstr "Intitulé du projet"
+
+#: plana/templates/pdf_exports/project_summary.html:69
+msgid "Project dates"
+msgstr "Dates du projet"
+
+#: plana/templates/pdf_exports/project_summary.html:73
+msgid "Project locations"
+msgstr "Lieux du projet"
+
+#: plana/templates/pdf_exports/project_summary.html:79
+msgid "Association postal address"
+msgstr "Adresse postale de l'association"
+
+#: plana/templates/pdf_exports/project_summary.html:79
+msgid "Individual holder postal address"
+msgstr "Adresse postale du porteur individuel"
+
+#: plana/templates/pdf_exports/project_summary.html:85
+msgid "Association phone"
+msgstr "Téléphone de l'association"
+
+#: plana/templates/pdf_exports/project_summary.html:85
+msgid "Individual holder phone"
+msgstr "Téléphone du porteur individuel"
+
+#: plana/templates/pdf_exports/project_summary.html:89
+msgid "Association email"
+msgstr "Mail de l'association"
+
+#: plana/templates/pdf_exports/project_summary.html:89
+msgid "Individual holder email"
+msgstr "Mail du porteur individuel"
+
+#: plana/templates/pdf_exports/project_summary.html:96
+msgid "Association president name"
+msgstr "Nom de la présidente ou du président de l'association"
+
+#: plana/templates/pdf_exports/project_summary.html:104
+#: plana/templates/pdf_exports/project_summary.html:118
+msgid "Mail"
+msgstr "Mail"
+
+#: plana/templates/pdf_exports/project_summary.html:110
+msgid "Association project holder name"
+msgstr "Nom de la porteuse ou du porteur de projet de l'association"
+
+#: plana/templates/pdf_exports/project_summary.html:127
+msgid "Project type"
+msgstr "Nature du projet"
+
+#: plana/templates/pdf_exports/project_summary.html:148
+msgid "First issue"
+msgstr "Première édition"
+
+#: plana/templates/pdf_exports/project_summary.html:151
+msgid "Reissue"
+msgstr "Réédition"
+
+#: plana/templates/pdf_exports/project_summary.html:157
+msgid "Grants requested for the previous edition"
+msgstr "Subventions demandées pour l'édition précédente"
+
+#: plana/templates/pdf_exports/project_summary.html:163
+msgid "Grants earned"
+msgstr "Montants obtenus"
+
+#: plana/templates/pdf_exports/project_summary.html:169
+msgid "Real project budget (expenses)"
+msgstr "Budget réel du projet (dépenses)"
+
+#: plana/templates/pdf_exports/project_summary.html:179
+msgid "Target audience for the project"
+msgstr "Public visé par le projet"
+
+#: plana/templates/pdf_exports/project_summary.html:181
+msgid "Targeted audience type"
+msgstr "Type de public visé"
+
+#: plana/templates/pdf_exports/project_summary.html:186
+msgid "Number of people targeted"
+msgstr "Nombre de personnes visées"
+
+#: plana/templates/pdf_exports/project_summary.html:190
+msgid "Including students"
+msgstr "Dont étudiantes et étudiants"
+
+#: plana/templates/pdf_exports/project_summary.html:197
+msgid "Participation per person"
+msgstr "Participation par personne"
+
+#: plana/templates/pdf_exports/project_summary.html:201
+msgid "Special student rate"
+msgstr "Tarif préférentiel pour étudiante ou étudiant"
+
+#: plana/templates/pdf_exports/project_summary.html:206
+msgid "Cost per person"
+msgstr "Coût par personne"
+
+#: plana/templates/pdf_exports/project_summary.html:215
+msgid "Aims of the project"
+msgstr "Objectifs visés par le projet"
+
+#: plana/templates/pdf_exports/project_summary.html:219
+msgid "Summary of the project"
+msgstr "Résumé du projet"
+
+#: plana/templates/pdf_exports/project_summary.html:223
+msgid "Prevention and safety programme"
+msgstr "Programme de prévention et de sécurité"
+
+#: plana/templates/pdf_exports/project_summary.html:231
+msgid "Programme of planned activities"
+msgstr "Programme des activités prévues"
+
+#: plana/templates/pdf_exports/project_summary.html:235
+msgid "Actions relating to sustainable development and social responsibility"
+msgstr ""
+"Actions en rapport avec la DDRS (Développement Durable et Responsabilité "
+"Sociétale)"
+
+#: plana/templates/pdf_exports/project_summary.html:242
+msgid "Documents sent"
+msgstr "Documents envoyés"
 
 #: plana/utils.py:22
 msgid "Password is still too weak, please add some characters."

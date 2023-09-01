@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>Liste des projets de la commission : {{ name }}</title>
+        <title>{% trans 'Commission project list' %} : {{ name }}</title>
         <style>
             @page {
                 size: landscape;
@@ -20,7 +21,7 @@
         </style>
     </head>
     <body>
-        <h1>Liste des projets de la commission : {{ name }}</h1>
+        <h1>{% trans 'Commission project list' %} : {{ name }}</h1>
         <section>
             <table>
                 <tr>

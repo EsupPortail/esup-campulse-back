@@ -12,7 +12,9 @@ from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
+from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.projects.serializers.project_review import ProjectReviewSerializer
@@ -70,6 +72,14 @@ class ProjectDataExport(generics.RetrieveAPIView):
         if data["user_id"] is not None:
             data["user"] = User.objects.get(id=data["user_id"])
 
+        data["categories"] = list(Category.objects.all().values("id", "name"))
+
+        data["project_categories"] = list(
+            ProjectCategory.objects.filter(project_id=data["id"]).values_list(
+                "category_id", flat=True
+            )
+        )
+
         data["project_commission_funds"] = list(
             ProjectCommissionFund.objects.filter(project_id=data["id"]).values(
                 "commission_fund_id",
@@ -90,9 +100,12 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
             ).__dict__
 
-        data["commission"] = data["project_commission_funds"][0]["commission_data"][
-            "name"
-        ]
+        data["commission_name"] = data["project_commission_funds"][0][
+            "commission_data"
+        ]["name"]
+        data["commission_date"] = data["project_commission_funds"][0][
+            "commission_data"
+        ]["commission_date"]
 
         data["is_first_edition"] = True
         for edition in data["project_commission_funds"]:

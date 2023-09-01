@@ -3090,6 +3090,11 @@ components:
           type: string
           title: Numéro de téléphone du président
           maxLength: 32
+        president_email:
+          type: string
+          format: email
+          title: Adresse email du président
+          maxLength: 256
         is_enabled:
           type: boolean
           title: Est active
@@ -3182,6 +3187,8 @@ components:
         president_names:
           type: string
         president_phone:
+          type: string
+        president_email:
           type: string
         institution:
           type: integer
@@ -3861,6 +3868,7 @@ components:
         comment:
           type: string
           nullable: true
+          title: Commentaire
         document:
           type: integer
         user:
@@ -3973,6 +3981,7 @@ components:
         comment:
           type: string
           nullable: true
+          title: Commentaire
     ExternalUser:
       type: object
       description: External user serializer.
@@ -4165,10 +4174,10 @@ components:
           title: Acronyme
         title:
           type: string
-          title: Logo alt
+          title: Alt du logo
         url:
           type: string
-          title: Site URL
+          title: URL du site
         path_logo:
           type: string
           format: uri
@@ -4176,7 +4185,7 @@ components:
           title: Miniatures dynamiques pour le logo
         visible:
           type: boolean
-          title: Is visible
+          title: Est visible
       required:
       - id
     PasswordChangeRequest:
@@ -4261,6 +4270,8 @@ components:
         president_names:
           type: string
         president_phone:
+          type: string
+        president_email:
           type: string
         institution:
           type: integer
@@ -4412,6 +4423,7 @@ components:
           type: string
           nullable: true
           minLength: 1
+          title: Commentaire
     PatchedProjectCommentTextRequest:
       type: object
       description: Field that can be updated.
@@ -4497,6 +4509,7 @@ components:
         partner_association:
           type: string
           minLength: 1
+          title: Association co-porteuse
         budget_previous_edition:
           type: integer
           maximum: 2147483647
@@ -4521,6 +4534,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647
@@ -4746,6 +4764,7 @@ components:
           title: Membre d'association
         partner_association:
           type: string
+          title: Association co-porteuse
         categories:
           type: array
           items:
@@ -4779,6 +4798,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647
@@ -5283,6 +5307,7 @@ components:
         partner_association:
           type: string
           minLength: 1
+          title: Association co-porteuse
         budget_previous_edition:
           type: integer
           maximum: 2147483647
@@ -5307,6 +5332,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647

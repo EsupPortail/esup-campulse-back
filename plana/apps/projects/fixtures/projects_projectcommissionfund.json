@@ -79,7 +79,7 @@
     "fields": {
       "project": 6,
       "commission_fund": 6,
-      "is_first_edition": true,
+      "is_first_edition": false,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
       "amount_asked": 200,

@@ -8,6 +8,7 @@ weight: 116
 - `$ python manage.py runserver` : lancer le serveur de développement.
 - `$ python manage.py makemigrations` : créer de nouvelles migrations de l'application après modification de la structure de la BDD dans les fichiers des dossiers `models` (puis exécuter `$ python manage.py migrate` ensuite).
 - `$ python manage.py makemessages -l fr --extension html,txt,py` : régénérer les fichiers de traductions du dossier `plana/locale`.
+- `$ python manage.py compilemessages` : compiler les traductions.
 - `$ python manage.py spectacular --file schema.yml` : régénérer le fichier OpenAPI `schema.yml`.
 - `$ python manage.py reset_permissions [--flush]` : régénère les fixtures de permissions du dossier `plana/apps/groups/fixtures` d'après la variable PERMISSIONS_GROUPS (avec une option `--flush` pour réinitialiser les identifiants).
 

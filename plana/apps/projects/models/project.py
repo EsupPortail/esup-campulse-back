@@ -176,6 +176,9 @@ class Project(models.Model):
     ticket_price = models.PositiveIntegerField(
         _("Amount of money asked for each person"), default=0
     )
+    student_ticket_price = models.PositiveIntegerField(
+        _("Amount of money asked for a student"), default=0
+    )
     individual_cost = models.PositiveIntegerField(
         _("Amount of money needed by person"), default=0
     )
@@ -195,6 +198,7 @@ class Project(models.Model):
     )
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
+    processing_date = models.DateTimeField(_("Processing date"), null=True)
     outcome = models.PositiveIntegerField(_("Outcome"), default=0)
     income = models.PositiveIntegerField(_("Income"), default=0)
     real_start_date = models.DateTimeField(_("Real start date"), null=True)

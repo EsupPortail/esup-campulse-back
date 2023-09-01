@@ -45,6 +45,7 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     website = serializers.CharField(required=False, allow_blank=True)
     president_names = serializers.CharField(required=False, allow_blank=True)
     president_phone = serializers.CharField(required=False, allow_blank=True)
+    president_email = serializers.CharField(required=False, allow_blank=True)
     institution = serializers.PrimaryKeyRelatedField(
         queryset=Institution.objects.all(), allow_null=True, default=None
     )
