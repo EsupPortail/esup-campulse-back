@@ -748,6 +748,7 @@ PERMISSIONS_GROUPS = {
         "change_association_all_fields",
         "delete_association",
         "delete_association_any_institution",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # commissions
@@ -826,6 +827,7 @@ PERMISSIONS_GROUPS = {
         "change_association",
         "change_association_all_fields",
         "delete_association",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # documents
@@ -873,6 +875,7 @@ PERMISSIONS_GROUPS = {
         "change_association",
         "change_association_all_fields",
         "delete_association",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # documents

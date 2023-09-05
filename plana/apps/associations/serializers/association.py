@@ -23,6 +23,21 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     )
     path_logo = ThumbnailField(sizes=["detail"])
 
+    def to_representation(self, obj):
+        request = self.context.get('request', None)
+        representation = super().to_representation(obj)
+
+        if request.user.is_anonymous or (
+            not request.user.is_anonymous
+            and not request.user.is_in_association(obj.id)
+            and not request.user.has_perm("associations.view_association_all_fields")
+        ):
+            private_fields = ["phone", "president_phone", "can_submit_projects"]
+            for private_field in private_fields:
+                representation.pop(private_field)
+
+        return representation
+
     class Meta:
         model = Association
         fields = "__all__"

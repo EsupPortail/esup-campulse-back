@@ -147,6 +147,10 @@ class Association(models.Model):
                 "delete_association_any_institution",
                 "Can delete an association from any institution.",
             ),
+            (
+                "view_association_all_fields",
+                "Can view association private fields.",
+            ),
             ("view_association_not_enabled", "Can view a not enabled association."),
             ("view_association_not_public", "Can view a not public association."),
         ]
