@@ -164,7 +164,18 @@ class User(AbstractUser):
                 and len(set(project_funds_ids).intersection(user_managed_funds_ids))
                 == 0
             ):
-                return False
+                if project_obj.association is not None:
+                    try:
+                        AssociationUser.objects.get(
+                            user_id=self.pk, association_id=project_obj.association
+                        )
+                    except ObjectDoesNotExist:
+                        return False
+                    return True
+                if project_obj.user is not None:
+                    if project_obj.user != self:
+                        return False
+                    return True
             return True
 
         if self.is_staff:
