@@ -931,6 +931,9 @@ class AssociationsViewsTests(TestCase):
         - Association object is correctly deleted from db.
         """
         association_id = 5
+        association = Association.objects.get(id=association_id)
+        association.is_enabled = False
+        association.save()
 
         response_general = self.general_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_general.status_code, status.HTTP_204_NO_CONTENT)
