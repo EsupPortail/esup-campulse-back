@@ -148,6 +148,19 @@ class User(AbstractUser):
 
     def can_access_project(self, project_obj):
         """Check if a user can access a project as association president, misc user, fund member, or manager."""
+        if project_obj.association is not None:
+            try:
+                AssociationUser.objects.get(
+                    user_id=self.pk, association_id=project_obj.association
+                )
+                return True
+            except ObjectDoesNotExist:
+                pass
+
+        if project_obj.user is not None:
+            if project_obj.user == self:
+                return True
+
         if (
             self.get_user_funds().count() != 0
             or self.get_user_managed_funds().count() != 0
@@ -164,18 +177,7 @@ class User(AbstractUser):
                 and len(set(project_funds_ids).intersection(user_managed_funds_ids))
                 == 0
             ):
-                if project_obj.association is not None:
-                    try:
-                        AssociationUser.objects.get(
-                            user_id=self.pk, association_id=project_obj.association
-                        )
-                    except ObjectDoesNotExist:
-                        return False
-                    return True
-                if project_obj.user is not None:
-                    if project_obj.user != self:
-                        return False
-                    return True
+                return False
             return True
 
         if self.is_staff:
@@ -190,20 +192,6 @@ class User(AbstractUser):
             if project_obj.user is not None and not self.has_perm(
                 "users.change_user_misc"
             ):
-                return False
-            return True
-
-        if project_obj.association is not None:
-            try:
-                AssociationUser.objects.get(
-                    user_id=self.pk, association_id=project_obj.association
-                )
-            except ObjectDoesNotExist:
-                return False
-            return True
-
-        if project_obj.user is not None:
-            if project_obj.user != self:
                 return False
             return True
 
