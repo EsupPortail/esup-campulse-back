@@ -12,6 +12,8 @@ def load_key(keyfile):
         return b""
 
 
+APP_VERSION = "0.9.20230906"
+
 ######################
 # Path configuration #
 ######################
@@ -569,7 +571,7 @@ def sentry_init(environment):
 SPECTACULAR_SETTINGS = {
     "TITLE": "PlanA / Opaline API",
     "DESCRIPTION": "API for PlanA / Opaline",
-    "VERSION": "0.9",
+    "VERSION": APP_VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
