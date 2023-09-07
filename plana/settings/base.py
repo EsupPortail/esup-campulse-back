@@ -526,6 +526,8 @@ SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
     "USER_ID_FIELD": "id",
+    "AUDIENCE": "plan_a",
+    "ISSUER": "plan_a",
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
