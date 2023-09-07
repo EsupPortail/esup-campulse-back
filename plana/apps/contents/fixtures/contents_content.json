@@ -18,7 +18,7 @@
       "code": "HOME_ASSOCIATION",
       "label": "Paragraphe de la page d'accueil lié aux associations.",
       "header": "Annuaire des associations",
-      "body": "<p>Besoin d'informations sur une association étudiante ?  Tu as envie de t'engager dans ton association de filière ? L'annuaire des associations étudiantes est là pour ça !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "Consulter l'annuaire",
       "aside": ""
     }
@@ -30,7 +30,7 @@
       "code": "HOME_CHARTER",
       "label": "Paragraphe de la page d'accueil lié aux chartes du Site Alsace.",
       "header": "Charte des associations du Site Alsace",
-      "body": "<p>Une demande de locaux ? Un projet à soumettre pour obtenir une subvention pour son association ? La signature de la charte des associations étudiantes du site Alsace et des chartes de subventionnement sont obligatoires, et ça se passe par ici !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "Espace charte",
       "aside": ""
     }
@@ -42,7 +42,7 @@
       "code": "HOME_PROJECT",
       "label": "Paragraphe de la page d'accueil lié aux demandes de subventions.",
       "header": "CAPE Commission d'aide aux projets étudiants",
-      "body": "<p>Déposez dès à présent vos dossiers de demandes de subventions aux commissions FSDIE, Culture-ActionS et IdEx pour vos projets par ce module !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "Espace CAPE",
       "aside": ""
     }
@@ -54,7 +54,7 @@
       "code": "SITE_FOOTER",
       "label": "Footer général du site.",
       "header": "",
-      "body": "<p>La Base de Données des Associations Etudiantes d’Alsace est un annuaire regroupant les associations étudiantes d’Alsace. Ce projet est réalisé dans le cadre du Schéma Directeur de la Vie Etudiante – Alsace, qui lie les établissements d’enseignement supérieur (Unistra, UHA, INSA, ENGEES, ENSAS, HEAR) et la BNU, en partenariat avec le Crous.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "2017-2023 - Unistra - Tous droits réservés",
       "aside": ""
     }
@@ -66,7 +66,7 @@
       "code": "ASSOCIATION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation de l'annuaire des associations.",
       "header": "Toutes les associations du Site Alsace sont ici !",
-      "body": "<p>Un annuaire des associations complet et intuitif pour faire connaissance avec son association étudiante !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -78,7 +78,7 @@
       "code": "CHARTER_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des chartes.",
       "header": "Charte du Site Alsace",
-      "body": "<p>Une Charte permettant à une association d'être reconnue comme \"association étudiante du site Alsace\", et de bénéficier des Services de l'établissement !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -90,7 +90,7 @@
       "code": "CHARTER_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des chartes.",
       "header": "Chartes FSDIE/IdEx",
-      "body": "<p>Pour les demandes d'agrément</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -102,7 +102,7 @@
       "code": "CHARTER_HOME_ACTION_VALIDATE_CHARTERS",
       "label": "Bloc action la page de présentation du module des chartes (validation des chartes par les gestionnaires).",
       "header": "Valider les signatures de chartes",
-      "body": "<p>Validez les chartes des associations.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -114,7 +114,7 @@
       "code": "CHARTER_HOME_ACTION_MANAGE_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des chartes (gestion des documents types par les gestionnaires).",
       "header": "Gérer la bibliothèque de documents",
-      "body": "<p>Gérez les documents types à télécharger.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -126,7 +126,7 @@
       "code": "CHARTER_HOME_ACTION_SIGN_CHARTERS",
       "label": "Bloc action la page de présentation du module des chartes (signature des chartes par les étudiants).",
       "header": "Signer les chartes",
-      "body": "<p>Signez et gérez les chartes de vos associations.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -138,7 +138,7 @@
       "code": "CHARTER_HOME_ACTION_DOWNLOAD_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des chartes (téléchargement des documents pour les étudiants).",
       "header": "Télécharger les documents types",
-      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -150,7 +150,7 @@
       "code": "COMMISSION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
       "header": "CAPE",
-      "body": "<p>Une instance de financement commune à l'Université de Strasbourg et au service culturel du Crous de Strasbourg, pour déposer ses dossiers de demande de subventions et pouvoir faire financer ses projets !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -162,7 +162,7 @@
       "code": "COMMISSION_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
       "header": "CAPE",
-      "body": "<p>Pour les porteurs individuels de projet</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -174,7 +174,7 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_PROJECTS",
       "label": "Bloc action la page de présentation du module des commissions (gestion des subventions par les gestionnaires).",
       "header": "Gérer les subventions",
-      "body": "<p>Gérez les dossiers de demande de subventionnements.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -186,7 +186,7 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_ARCHIVE",
       "label": "Bloc action la page de présentation du module des commissions (gestion des archives par les gestionnaires).",
       "header": "Consulter les archives",
-      "body": "<p>Consultez les archives des commissions passées.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -198,7 +198,7 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_COMMISSIONS",
       "label": "Bloc action la page de présentation du module des commissions (gestion des commissions par les gestionnaires).",
       "header": "Gérer les commissions",
-      "body": "<p>Créez des commissions à venir et gérez les commissions en cours.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -210,7 +210,7 @@
       "code": "COMMISSION_HOME_ACTION_SUBMIT_PROJECT",
       "label": "Bloc action la page de présentation du module des commissions (soumission de projets par les étudiants).",
       "header": "Gérer et déposer des projets",
-      "body": "<p>Gérez vos projets en cours ou créez un nouveau projet.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -222,7 +222,7 @@
       "code": "COMMISSION_HOME_ACTION_DOWNLOAD_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des commissions (téléchargement des documents pour les étudiants).",
       "header": "Télécharger les documents types",
-      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -234,7 +234,7 @@
       "code": "ABOUT_APP",
       "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
       "header": "Les origines de Campulse",
-      "body": "<p>Dès 2019, le Service de la Vie Universitaire (SVU) de l'Université de Strasbourg a souhaité mettre en place une gestion automatisée des démarches liées à la vie associative. C'est ainsi que les premières réflexions ont été menées en collaboration avec des associations étudiantes.<br>En 2021, le Service de la Vie universitaire a conçu et développé un cahier des charges détaillé qui donnera naissance à la future plateforme. Ces travaux minutieux ont permis de présenter ce dossier à la candidature de l'appel à projets \"Services numériques aux étudiants\" du Ministère de l'Enseignement Supérieur et de la Recherche en décembre 2021.<br>En mars 2022, le projet retient l'attention et devient lauréat de l'appel à projets. Conjointement piloté par le Service de la Vie Universitaire et la Direction du Numérique de l'Université de Strasbourg, avec le concours du Crous de Strasbourg, Campulse voit le jour en septembre 2023.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -246,7 +246,7 @@
       "code": "ABOUT_PARTNERSHIP",
       "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
       "header": "Partenaires",
-      "body": "<p>France Relance; Le Ministère de l'Enseignement Supérieur et de la Recherche; Le Crous de Strasbourg; L'université de Rouen Normandie; l'Université de Caen-Normandie; l'Université Rennes 2; l'université de Reims Champagne Ardennes; l'Université Bordeaux Montaigne; l'Université Picardie Jules Vernes; l'Université de Tours: l'Université Toulouse 2 Jean Jaurès; l'Université de Lille; l'Université Clermont Auvergne; le Crous d'Amiens.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -258,7 +258,7 @@
       "code": "ABOUT_FUNDING",
       "label": "Paragraphe de la page à propos donnant les modes de financement de la plateforme.",
       "header": "Financements",
-      "body": "<p>Le projet a été financé grâce à aux dotations de l'appel à projets \"Services Numériques aux Étudiants\" et de la Contribution Vie Étudiante et de Campus (CVEC) de l'Université de Strasbourg et du Crous de Strasbourg.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -270,7 +270,7 @@
       "code": "ABOUT_ASSOCIATION",
       "label": "Paragraphe de la page à propos lié aux associations.",
       "header": "Annuaire des associations",
-      "body": "<p>A la recherche de ton association étudiante de filière ? Envie de t'engager ? A la recherche d'une activité extra-universitaire ? Les associations étudiantes sont les actrices essentielles de la vie étudiante. Grâce à cet annuaire, trouve facilement l'association qui te convient !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -282,7 +282,7 @@
       "code": "ABOUT_CHARTER",
       "label": "Paragraphe de la page à propos lié aux chartes du Site Alsace.",
       "header": "Charte des associations du Site Alsace",
-      "body": "<p>Mise en place depuis 2017 dans le cadre du \"Schéma Directeur de la Vie étudiante du site Alsace\"(SDVEA), \"la charte des associations étudiantes du site Alsace\" permet aux établissements du site Alsace de reconnaitre à une association la qualité d'association étudiante. Réel contrat moral entre l'association et son établissement de rattachement, elle donne accès à de nombreux services et aides offerts par son établissement.</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
@@ -294,7 +294,7 @@
       "code": "ABOUT_PROJECT",
       "label": "Paragraphe de la page à propos lié aux demandes de subventions.",
       "header": "CAPE Commission d'aide aux projets étudiants",
-      "body": "<p>Les règlements des différents financements disponibles par la CAPE se trouvent ici. Pour prétendre à un financement via la CAPE à l'un des trois fonds possibles (FSDIE / Culture-Actions / IdEx), il faut prendre connaissance des chartes de financement et les signer impérativement. Télécharge-les sur cette page et dépose-les signées ici !</p>",
+      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
       "footer": "",
       "aside": ""
     }
