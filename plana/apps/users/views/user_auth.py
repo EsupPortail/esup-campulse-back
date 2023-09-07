@@ -11,7 +11,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
-from plana.apps.users.models.user import AssociationUser, User
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -65,6 +65,9 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
             if request.user.is_validated_by_admin is False:
                 assos_user = AssociationUser.objects.filter(user_id=request.user.pk)
+                funds_user = GroupInstitutionFundUser.objects.filter(
+                    user_id=request.user.pk
+                )
                 user_id = request.user.pk
                 context[
                     "account_url"
@@ -74,7 +77,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 )
 
                 managers_emails = []
-                if assos_user.count() > 0:
+                if assos_user.count() > 0 or funds_user.count() > 0:
                     for institution in request.user.get_user_institutions():
                         managers_emails += (
                             institution.default_institution_managers().values_list(
@@ -162,6 +165,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
 
         if email_addresses.count() == 1:
             assos_user = AssociationUser.objects.filter(user_id=user.id)
+            funds_user = GroupInstitutionFundUser.objects.filter(user_id=user.id)
 
             current_site = get_current_site(request)
             context = {
@@ -170,7 +174,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
             managers_emails = []
-            if assos_user.count() > 0:
+            if assos_user.count() > 0 or funds_user.count() > 0:
                 template = MailTemplate.objects.get(
                     code="INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
                 )

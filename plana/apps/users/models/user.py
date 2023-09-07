@@ -267,11 +267,20 @@ class User(AbstractUser):
     def get_user_institutions(self):
         """Return a list of Institution IDs linked to a student user."""
         return Institution.objects.filter(
-            id__in=Association.objects.filter(
-                id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
-                    "association_id"
-                )
-            ).values_list("institution_id")
+            models.Q(
+                id__in=Association.objects.filter(
+                    id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
+                        "association_id"
+                    )
+                ).values_list("institution_id")
+            )
+            | models.Q(
+                id__in=Fund.objects.filter(
+                    id__in=GroupInstitutionFundUser.objects.filter(
+                        user_id=self.pk
+                    ).values_list("fund_id")
+                ).values_list("institution_id")
+            )
         )
 
     def get_user_managed_institutions(self):

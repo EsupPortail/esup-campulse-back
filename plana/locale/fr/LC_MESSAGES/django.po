@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-05 10:58+0200\n"
+"POT-Creation-Date: 2023-09-07 14:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -623,7 +623,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:154
 #: plana/apps/projects/models/project_comment.py:22
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:64
-#: plana/apps/users/models/user.py:365
+#: plana/apps/users/models/user.py:373
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1283,7 +1283,7 @@ msgstr "Est étudiant"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/models/user.py:366
+#: plana/apps/users/models/user.py:374
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1453,7 +1453,7 @@ msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
 #: plana/apps/users/views/user.py:228 plana/apps/users/views/user.py:405
-#: plana/apps/users/views/user_auth.py:104
+#: plana/apps/users/views/user_auth.py:107
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
