@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA / Opaline API
-  version: 0.2.0
+  version: 0.9.20230906
   description: API for PlanA / Opaline
 paths:
   /associations/:
@@ -4573,6 +4573,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     PatchedProjectReviewUpdateRequest:
       type: object
       description: Main review serializer for update.
@@ -4841,6 +4846,11 @@ components:
           format: date-time
           readOnly: true
           title: Date de dernière mise à jour
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
       required:
       - categories
       - commissions

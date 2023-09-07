@@ -12,6 +12,8 @@ def load_key(keyfile):
         return b""
 
 
+APP_VERSION = "0.9.20230906"
+
 ######################
 # Path configuration #
 ######################
@@ -524,6 +526,8 @@ SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
     "USER_ID_FIELD": "id",
+    "AUDIENCE": "plan_a",
+    "ISSUER": "plan_a",
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
@@ -569,7 +573,7 @@ def sentry_init(environment):
 SPECTACULAR_SETTINGS = {
     "TITLE": "PlanA / Opaline API",
     "DESCRIPTION": "API for PlanA / Opaline",
-    "VERSION": "0.2.0",
+    "VERSION": APP_VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
@@ -748,6 +752,7 @@ PERMISSIONS_GROUPS = {
         "change_association_all_fields",
         "delete_association",
         "delete_association_any_institution",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # commissions
@@ -826,6 +831,7 @@ PERMISSIONS_GROUPS = {
         "change_association",
         "change_association_all_fields",
         "delete_association",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # documents
@@ -873,6 +879,7 @@ PERMISSIONS_GROUPS = {
         "change_association",
         "change_association_all_fields",
         "delete_association",
+        "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
         # documents

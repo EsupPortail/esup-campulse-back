@@ -231,6 +231,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         if "is_validated_by_admin" not in request.data or (
             "is_validated_by_admin" in request.data
             and (to_bool(request.data["is_validated_by_admin"]) is False)
+            and user.is_validated_by_admin is True
         ):
             current_site = get_current_site(request)
             context = {

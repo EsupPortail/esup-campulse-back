@@ -43,6 +43,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "project_status",
             "creation_date",
             "edition_date",
+            "processing_date",
         ]
 
 

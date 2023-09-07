@@ -34,7 +34,7 @@
                 <div class="flex flex-direction-column outline">
                     <strong>{% trans 'Amount granted' %} :</strong>
                     {% for commission in project_commission_funds %}
-                        <span>{{ commission.fund_data.acronym }} : {{ commission.amount_earned }} €</span>
+                        <span>{{ commission.fund_data.acronym }} : {% if commission.amount_earned is not None %}{{ commission.amount_earned }} €{% endif %}</span>
                     {% endfor %}
                 </div>
             </div>

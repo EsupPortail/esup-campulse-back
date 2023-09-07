@@ -49,7 +49,7 @@
   },
   {
     "model": "projects.projectcategory",
-    "pk": 4,
+    "pk": 7,
     "fields": {
       "category": 4,
       "project": 5
@@ -57,34 +57,10 @@
   },
   {
     "model": "projects.projectcategory",
-    "pk": 5,
-    "fields": {
-      "category": 7,
-      "project": 6
-    }
-  },
-  {
-    "model": "projects.projectcategory",
-    "pk": 6,
-    "fields": {
-      "category": 8,
-      "project": 6
-    }
-  },
-  {
-    "model": "projects.projectcategory",
-    "pk": 7,
-    "fields": {
-      "category": 4,
-      "project": 7
-    }
-  },
-  {
-    "model": "projects.projectcategory",
     "pk": 8,
     "fields": {
       "category": 7,
-      "project": 8
+      "project": 6
     }
   },
   {
@@ -92,12 +68,36 @@
     "pk": 9,
     "fields": {
       "category": 8,
-      "project": 8
+      "project": 6
     }
   },
   {
     "model": "projects.projectcategory",
     "pk": 10,
+    "fields": {
+      "category": 4,
+      "project": 7
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 11,
+    "fields": {
+      "category": 7,
+      "project": 8
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 12,
+    "fields": {
+      "category": 8,
+      "project": 8
+    }
+  },
+  {
+    "model": "projects.projectcategory",
+    "pk": 13,
     "fields": {
       "category": 7,
       "project": 10
@@ -105,7 +105,7 @@
   },
   {
     "model": "projects.projectcategory",
-    "pk": 11,
+    "pk": 14,
     "fields": {
       "category": 8,
       "project": 10
