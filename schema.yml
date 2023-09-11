@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA / Opaline API
-  version: 0.9.20230906
+  version: 0.9.20230907
   description: API for PlanA / Opaline
 paths:
   /associations/:
@@ -203,9 +203,9 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /associations/{id}/pdf_export:
+  /associations/{id}/export:
     get:
-      operationId: associations_pdf_export_retrieve
+      operationId: associations_export_retrieve
       description: Retrieves a PDF file.
       parameters:
       - in: path
@@ -288,16 +288,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
-  /associations/csv_export:
+  /associations/export:
     get:
-      operationId: associations_csv_export_retrieve
-      description: Associations List CSV export.
+      operationId: associations_export_list
+      description: Associations list export.
       parameters:
       - in: query
         name: associations
         schema:
           type: string
         description: IDs of selected associations, separated by a comma.
+      - in: query
+        name: mode
+        schema:
+          type: string
+        description: Export mode (xlsx or csv, csv by default).
       tags:
       - associations
       security:
@@ -595,7 +600,7 @@ paths:
         name: mode
         schema:
           type: string
-        description: Export mode (csv or pdf, csv by default).
+        description: Export mode (xlsx, csv or pdf, csv by default).
       - in: query
         name: project_ids
         schema:

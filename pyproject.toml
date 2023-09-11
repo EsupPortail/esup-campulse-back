@@ -71,6 +71,7 @@ urllib3 = ">=1.26,<2" # needed to avoid dependency problems when updating boto3 
 weasyprint = "^58.1"
 zxcvbn = "^4.4.28"
 num2words = "^0.5.12"
+openpyxl = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"

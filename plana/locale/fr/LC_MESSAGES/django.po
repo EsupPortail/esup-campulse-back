@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-07 14:53+0200\n"
+"POT-Creation-Date: 2023-09-11 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:39
-#: plana/apps/associations/views/association_export.py:142
+#: plana/apps/associations/views/association_export.py:81
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:12
 #: plana/apps/documents/models/document.py:63
@@ -34,7 +34,7 @@ msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
 #: plana/apps/associations/models/association.py:118
-#: plana/apps/associations/views/association_export.py:145
+#: plana/apps/associations/views/association_export.py:84
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -43,13 +43,13 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:42
-#: plana/apps/associations/views/association_export.py:148
+#: plana/apps/associations/views/association_export.py:87
 #: plana/apps/users/models/user.py:104
 msgid "Email"
 msgstr "Courriel"
 
 #: plana/apps/associations/models/association.py:44
-#: plana/apps/associations/views/association_export.py:143
+#: plana/apps/associations/views/association_export.py:82
 #: plana/apps/commissions/models/fund.py:13
 #: plana/apps/contents/models/logo.py:33
 #: plana/apps/documents/models/document.py:64
@@ -184,7 +184,7 @@ msgid "Approval date"
 msgstr "Date d'agrément"
 
 #: plana/apps/associations/models/association.py:96
-#: plana/apps/associations/views/association_export.py:147
+#: plana/apps/associations/views/association_export.py:86
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
@@ -193,7 +193,7 @@ msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:104
-#: plana/apps/associations/views/association_export.py:144
+#: plana/apps/associations/views/association_export.py:83
 #: plana/apps/commissions/models/fund.py:19
 #: plana/apps/documents/models/document.py:88
 #: plana/apps/institutions/models/institution.py:38
@@ -202,7 +202,7 @@ msgid "Institution"
 msgstr "Établissement"
 
 #: plana/apps/associations/models/association.py:111
-#: plana/apps/associations/views/association_export.py:146
+#: plana/apps/associations/views/association_export.py:85
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
@@ -251,7 +251,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:395
 #: plana/apps/associations/views/association.py:562
 #: plana/apps/associations/views/association.py:713
-#: plana/apps/associations/views/association_export.py:47
+#: plana/apps/associations/views/association_export.py:178
 #: plana/apps/documents/views/document_upload.py:207
 #: plana/apps/projects/views/project.py:289
 msgid "Association does not exist."
@@ -313,15 +313,15 @@ msgstr "Choisir ce statut n'est pas autorisé."
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
-#: plana/apps/associations/views/association_export.py:57
-msgid "Not allowed to retrieve this association."
-msgstr "Aucun droit de voir cette association."
-
-#: plana/apps/associations/views/association_export.py:122
+#: plana/apps/associations/views/association_export.py:69
 msgid "Not allowed to export associations list CSV."
 msgstr ""
 "Vous n'avez pas la permission d'exporter la liste des associations au format "
 "CSV."
+
+#: plana/apps/associations/views/association_export.py:188
+msgid "Not allowed to retrieve this association."
+msgstr "Aucun droit de voir cette association."
 
 #: plana/apps/commissions/models/commission.py:9
 msgid "Project submission limit date"
@@ -381,7 +381,7 @@ msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 #: plana/apps/commissions/views/commission.py:321
 #: plana/apps/commissions/views/commission.py:360
 #: plana/apps/commissions/views/commission.py:474
-#: plana/apps/commissions/views/commission_export.py:67
+#: plana/apps/commissions/views/commission_export.py:69
 #: plana/apps/commissions/views/commission_fund.py:101
 msgid "Commission does not exist."
 msgstr "La commission n'existe pas."
@@ -398,59 +398,59 @@ msgstr "Impossible de supprimer une commission passée."
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
-#: plana/apps/commissions/views/commission_export.py:113
+#: plana/apps/commissions/views/commission_export.py:115
 msgid "Project ID"
 msgstr "Numéro de projet"
 
-#: plana/apps/commissions/views/commission_export.py:114
+#: plana/apps/commissions/views/commission_export.py:116
 msgid "Project name"
 msgstr "Nom du projet"
 
-#: plana/apps/commissions/views/commission_export.py:115
+#: plana/apps/commissions/views/commission_export.py:117
 #: plana/apps/projects/models/project.py:148
 msgid "Manual identifier"
 msgstr "Identifiant manuel"
 
-#: plana/apps/commissions/views/commission_export.py:116
+#: plana/apps/commissions/views/commission_export.py:118
 #: plana/templates/pdf_exports/project_review_summary.html:64
 #: plana/templates/pdf_exports/project_summary.html:55
 msgid "Association name"
 msgstr "Nom de l'association"
 
-#: plana/apps/commissions/views/commission_export.py:117
+#: plana/apps/commissions/views/commission_export.py:119
 msgid "Student misc name"
 msgstr "Nom du porteur individuel"
 
-#: plana/apps/commissions/views/commission_export.py:118
+#: plana/apps/commissions/views/commission_export.py:120
 msgid "Project start date"
 msgstr "Date de début de projet"
 
-#: plana/apps/commissions/views/commission_export.py:119
+#: plana/apps/commissions/views/commission_export.py:121
 msgid "Project end date"
 msgstr "Date de fin de projet"
 
-#: plana/apps/commissions/views/commission_export.py:120
+#: plana/apps/commissions/views/commission_export.py:122
 msgid "First edition"
 msgstr "Est la première édition du projet"
 
-#: plana/apps/commissions/views/commission_export.py:121
+#: plana/apps/commissions/views/commission_export.py:123
 #: plana/apps/projects/models/category.py:16
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/commissions/views/commission_export.py:127
+#: plana/apps/commissions/views/commission_export.py:129
 msgid "Amount asked "
 msgstr "Montant demandé "
 
-#: plana/apps/commissions/views/commission_export.py:128
+#: plana/apps/commissions/views/commission_export.py:130
 msgid "Amount earned "
 msgstr "Montant obtenu "
 
-#: plana/apps/commissions/views/commission_export.py:183
+#: plana/apps/commissions/views/commission_export.py:191
 msgid "Yes"
 msgstr "Oui"
 
-#: plana/apps/commissions/views/commission_export.py:186
+#: plana/apps/commissions/views/commission_export.py:194
 msgid "No"
 msgstr "Non"
 

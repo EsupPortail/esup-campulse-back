@@ -367,6 +367,9 @@ docopt==0.6.2 ; python_version >= "3.8" and python_version < "3.11" \
 drf-spectacular==0.24.2 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:b276e6f7bda6dfb911e742dab87c6e97bc67da2dafe82d6fd8df7cec6c8b03ec \
     --hash=sha256:be32417594080a52f996afd83fd47ea9c2b83cbf13f6d3fbf3de809a0dfa7ead
+et-xmlfile==1.1.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c \
+    --hash=sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada
 fonttools[woff]==4.42.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:0eb79a2da5eb6457a6f8ab904838454accc7d4cccdaff1fd2bd3a0679ea33d64 \
     --hash=sha256:113337c2d29665839b7d90b39f99b3cac731f72a0eda9306165a305c7c31d341 \
@@ -511,6 +514,9 @@ num2words==0.5.12 ; python_version >= "3.8" and python_version < "3.11" \
 oauthlib==3.2.2 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca \
     --hash=sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918
+openpyxl==3.1.2 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:a6f5977418eff3b2d5500d54d9db50c8277a368436f4e4f8ddb1be3422870184 \
+    --hash=sha256:f91456ead12ab3c6c2e9491cf33ba6d08357d802192379bb482f1033ade496f5
 pillow==9.5.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:07999f5834bdc404c442146942a2ecadd1cb6292f5229f4ed3b31e0a108746b1 \
     --hash=sha256:0852ddb76d85f127c135b6dd1f0bb88dbb9ee990d2cd9aa9e28526c93e794fba \

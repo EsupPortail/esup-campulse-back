@@ -1,5 +1,6 @@
 """Views directly linked to commission exports."""
 import csv
+from tempfile import NamedTemporaryFile
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -7,6 +8,7 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
+from openpyxl import Workbook
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
@@ -37,7 +39,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 "mode",
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
-                description="Export mode (csv or pdf, csv by default).",
+                description="Export mode (xlsx, csv or pdf, csv by default).",
             ),
             OpenApiParameter(
                 "project_ids",
@@ -110,22 +112,22 @@ class CommissionExport(generics.RetrieveAPIView):
             )
 
         fields = [
-            _("Project ID"),
-            _("Project name"),
-            _("Manual identifier"),
-            _("Association name"),
-            _("Student misc name"),
-            _("Project start date"),
-            _("Project end date"),
-            _("First edition"),
-            _("Categories"),
+            str(_("Project ID")),
+            str(_("Project name")),
+            str(_("Manual identifier")),
+            str(_("Association name")),
+            str(_("Student misc name")),
+            str(_("Project start date")),
+            str(_("Project end date")),
+            str(_("First edition")),
+            str(_("Categories")),
         ]
 
         funds = Fund.objects.all().order_by("acronym")
         for fund in funds:
             acronym = fund.acronym
-            fields.append(_("Amount asked ") + acronym)
-            fields.append(_("Amount earned ") + acronym)
+            fields.append(str(_("Amount asked ") + acronym))
+            fields.append(str(_("Amount earned ") + acronym))
 
         projects = queryset.filter(
             id__in=ProjectCommissionFund.objects.filter(
@@ -138,23 +140,29 @@ class CommissionExport(generics.RetrieveAPIView):
         if project_ids is not None and project_ids != "":
             projects = projects.filter(id__in=project_ids.split(","))
 
+        data = {"projects": []}
         http_response = None
         writer = None
-        data = {"projects": []}
+        workbook = None
+        worksheet = None
+        filename = f"commission_{commission_id}_export"
         if mode is None or mode == "csv":
             http_response = HttpResponse(content_type="application/csv")
             http_response[
                 "Content-Disposition"
-            ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
-
+            ] = f"Content-Disposition: attachment; filename={filename}.csv"
             writer = csv.writer(http_response, delimiter=";")
-            # Write column titles for the CSV file
             writer.writerow([field for field in fields])
+        elif mode == "xlsx":
+            workbook = Workbook()
+            worksheet = workbook.active
+            for index_field, field in enumerate(fields):
+                worksheet.cell(row=1, column=(index_field + 1)).value = field
         elif mode == "pdf":
             data["name"] = commission.name
             data["fields"] = fields
 
-        for project in projects:
+        for index_project, project in enumerate(projects):
             association = (
                 None
                 if project.association_id is None
@@ -180,10 +188,10 @@ class CommissionExport(generics.RetrieveAPIView):
                 project_id=project.id
             )
 
-            is_first_edition = _("Yes")
+            is_first_edition = str(_("Yes"))
             for edition in project_commission_funds:
                 if not edition.is_first_edition:
-                    is_first_edition = _("No")
+                    is_first_edition = str(_("No"))
                     break
 
             fields = [
@@ -214,10 +222,28 @@ class CommissionExport(generics.RetrieveAPIView):
             if mode is None or mode == "csv":
                 # Write CSV file content
                 writer.writerow([field for field in fields])
+            elif mode == "xlsx":
+                for index_field, field in enumerate(fields):
+                    worksheet.cell(
+                        row=(index_project + 2), column=(index_field + 1)
+                    ).value = field
             elif mode == "pdf":
                 data["projects"].append(fields)
 
         if mode is None or mode == "csv":
+            return http_response
+        elif mode == "xlsx":
+            with NamedTemporaryFile() as tmp:
+                workbook.save(tmp.name)
+                tmp.seek(0)
+                stream = tmp.read()
+            http_response = HttpResponse(
+                content=stream,
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+            http_response[
+                "Content-Disposition"
+            ] = f"Content-Disposition: attachment; filename={filename}.xlsx"
             return http_response
         elif mode == "pdf":
             return generate_pdf(
