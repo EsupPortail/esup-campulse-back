@@ -20,6 +20,8 @@ weight: 112
 - [dj-rest-auth](https://pypi.org/project/dj-rest-auth/) : génération des routes d'API liées à l'authentification.
 - [drf-spectacular](https://pypi.org/project/drf-spectacular/) : génération du fichier de documentation d'API.
 - [britney](https://pypi.org/project/britney/) : communication avec un annuaire LDAP.
+- [num2words](https://pypi.org/project/num2words/) : conversion de nombres en toutes lettres.
+- [openpyxl](https://pypi.org/project/openpyxl/) : génération de fichiers Excel.
 - [psycopg2-binary](https://pypi.org/project/psycopg2-binary/) : communication avec la base de données PostgreSQL
 - [pyrage](https://pypi.org/project/pyrage/) : chiffrement des documents.
 - [weasyprint](https://pypi.org/project/weasyprint/) : génération de fichiers PDF.

@@ -144,6 +144,9 @@ class AssociationExportsViewsTests(TestCase):
         - The route can be accessed by a manager user.
         - All associations from db are returned in the CSV.
         """
+        response = self.general_client.get("/associations/export?mode=xlsx")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         response = self.general_client.get("/associations/export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
