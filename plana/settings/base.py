@@ -214,7 +214,6 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "range",
 )
-CORS_REPLACE_HTTPS_REFERER = True
 
 
 ############################

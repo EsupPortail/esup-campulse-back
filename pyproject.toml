@@ -53,7 +53,7 @@ django-allauth = "^0.51.0" # TODO update
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a fork
 django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
 django-cleanup = "^8.0.0"
-django-cors-headers = "^3.13.0" # TODO update
+django-cors-headers = "^4.2.0"
 django-extensions = "^3.2.3"
 django-storages = {extras = ["boto3"], version = "^1.14.0"}
 django-summernote = "<0.9"
