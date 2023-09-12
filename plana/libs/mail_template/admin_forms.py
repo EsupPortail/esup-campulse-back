@@ -75,7 +75,6 @@ class MailTemplateForm(forms.ModelForm):
         try:
             template.Template(body).render(template.Context())
         except template.TemplateSyntaxError as e:
-
             if "template_debug" in dir(e):
                 before: str = e.template_debug["before"]
                 line: int = 1 + before.count("<br>") + before.count("</br>")

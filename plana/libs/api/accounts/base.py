@@ -2,7 +2,6 @@ import abc
 
 
 class BaseAccountsAPI(metaclass=abc.ABCMeta):
-
     api_name = 'accounts'
 
     @abc.abstractmethod

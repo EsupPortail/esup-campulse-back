@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA / Opaline API
-  version: 0.9.20230907
+  version: 0.9.20230911
   description: API for PlanA / Opaline
 paths:
   /associations/:
@@ -3343,6 +3343,7 @@ components:
           maxLength: 250
         has_president:
           type: boolean
+          description: Check if a president has been linked to an association.
           readOnly: true
         institution:
           type: integer
@@ -3464,6 +3465,9 @@ components:
       properties:
         user:
           type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
         is_president:
@@ -3490,6 +3494,10 @@ components:
       properties:
         user:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
         is_president:
@@ -3613,6 +3621,12 @@ components:
       - CHARTER_VALIDATED
       - CHARTER_EXPIRED
       type: string
+      description: |-
+        * `CHARTER_DRAFT` - Charte en Brouillon
+        * `CHARTER_REJECTED` - Charte Rejetée
+        * `CHARTER_PROCESSING` - Charte en Traitement
+        * `CHARTER_VALIDATED` - Charte Validée
+        * `CHARTER_EXPIRED` - Charte Expirée
     Commission:
       type: object
       description: Main serializer.
@@ -3759,6 +3773,7 @@ components:
           readOnly: true
         size:
           type: integer
+          description: Return file size.
           readOnly: true
         name:
           type: string
@@ -3852,9 +3867,11 @@ components:
           readOnly: true
         path_file:
           type: string
+          description: Return a link to DocumentUploadFileRetrieve view.
           readOnly: true
         size:
           type: integer
+          description: Return file size.
           readOnly: true
         name:
           type: string
@@ -3908,6 +3925,9 @@ components:
           type: integer
         user:
           type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
           nullable: true
@@ -3941,6 +3961,10 @@ components:
           type: integer
         user:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
           nullable: true
@@ -4039,9 +4063,11 @@ components:
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions links.
           readOnly: true
         is_public:
           type: boolean
+          description: Is true if the group can be selected on normal registration.
           readOnly: true
       required:
       - id
@@ -4075,6 +4101,9 @@ components:
       properties:
         user:
           type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         group:
           type: integer
         institution:
@@ -4092,6 +4121,10 @@ components:
       properties:
         user:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         group:
           type: integer
         institution:
@@ -4732,6 +4765,14 @@ components:
       - DOCUMENT_PROJECT_REVIEW
       - NO_PROCESS
       type: string
+      description: |-
+        * `CHARTER_ASSOCIATION` - Charte pour Association
+        * `CHARTER_PROJECT_FUND` - Charte pour Demande de Subvention
+        * `DOCUMENT_ASSOCIATION` - Document pour Association
+        * `DOCUMENT_USER` - Document pour Utilisateur
+        * `DOCUMENT_PROJECT` - Document pour Demande de Subvention
+        * `DOCUMENT_PROJECT_REVIEW` - Document pour Bilan de Subvention
+        * `NO_PROCESS` - Document non lié à un processus
     Project:
       type: object
       description: Main serializer.
@@ -5288,6 +5329,16 @@ components:
       - PROJECT_REVIEW_VALIDATED
       - PROJECT_CANCELED
       type: string
+      description: |-
+        * `PROJECT_DRAFT` - Projet en Brouillon
+        * `PROJECT_DRAFT_PROCESSED` - Projet en Brouillon mais traité
+        * `PROJECT_PROCESSING` - Projet en Traitement
+        * `PROJECT_REJECTED` - Projet Rejeté
+        * `PROJECT_VALIDATED` - Projet Validé
+        * `PROJECT_REVIEW_DRAFT` - Bilan de Projet en Brouillon
+        * `PROJECT_REVIEW_PROCESSING` - Bilan de Projet en Traitement
+        * `PROJECT_REVIEW_VALIDATED` - Bilan de Projet validé
+        * `PROJECT_CANCELED` - Projet Annulé
     ProjectUpdateRequest:
       type: object
       description: Main serializer without project_status.
@@ -5464,9 +5515,12 @@ components:
           type: string
         is_cas:
           type: boolean
+          description: Calculate field "is_cas" (True if user registered through CAS).
           readOnly: true
         has_validated_email:
           type: boolean
+          description: Calculate field "has_validated_email" (True if user finished
+            registration).
           readOnly: true
         is_validated_by_admin:
           type: boolean
@@ -5485,10 +5539,12 @@ components:
         groups:
           type: object
           additionalProperties: {}
+          description: Return groups-institutions-users links.
           readOnly: true
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions linked to the user.
           readOnly: true
       required:
       - associations
@@ -5579,9 +5635,12 @@ components:
           type: string
         is_cas:
           type: boolean
+          description: Calculate field "is_cas" (True if user registered through CAS).
           readOnly: true
         has_validated_email:
           type: boolean
+          description: Calculate field "has_validated_email" (True if user finished
+            registration).
           readOnly: true
         is_validated_by_admin:
           type: boolean
@@ -5600,10 +5659,12 @@ components:
         groups:
           type: object
           additionalProperties: {}
+          description: Return groups-institutions-users links.
           readOnly: true
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions linked to the user.
           readOnly: true
       required:
       - associations

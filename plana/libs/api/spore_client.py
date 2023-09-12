@@ -40,7 +40,6 @@ class SporeClient:
     def get_client(
         self, middlewares=None, reset=False, suffix='json', name='', **kwargs
     ):
-
         assert hasattr(self, 'api_name'), 'api_name variable missing'
 
         prefix = self.api_name.upper()
