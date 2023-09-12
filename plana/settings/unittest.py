@@ -83,11 +83,11 @@ REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = [
 # AUTHENTICATION #
 ##################
 
-JWT_AUTH_COOKIE = "plana-auth"
-JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
-
 SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": settings.SECRET_KEY,
     "VERIFYING_KEY": "",
 }
+
+REST_AUTH["JWT_AUTH_COOKIE"] = "plana-auth"
+REST_AUTH["JWT_AUTH_REFRESH_COOKIE"] = "plana-refresh-auth"

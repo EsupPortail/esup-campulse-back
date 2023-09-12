@@ -518,8 +518,6 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Using SimpleJWT with dj-rest-auth
-REST_USE_JWT = True
-
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
@@ -530,14 +528,12 @@ SIMPLE_JWT = {
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
 
-REST_AUTH_SERIALIZERS = {
+REST_AUTH = {
+    "USE_JWT": True,
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetConfirmSerializer",
     "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordChangeSerializer",
-}
-
-REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "plana.apps.users.serializers.user.CustomRegisterSerializer",
 }
 

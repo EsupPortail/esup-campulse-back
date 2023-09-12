@@ -328,8 +328,8 @@ da-vinci==0.4.0 ; python_version >= "3.8" and python_version < "3.11" \
 defusedxml==0.7.1 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
-dj-rest-auth==2.2.8 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:9fb3492888185ede8b2064ad6803120c7b0b83ab08e2347a02e9b44282374242
+dj-rest-auth==5.0.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:11c2d526abf67521f22eb313bcf3107f3a376aca5ea152e8e2014ae0b39caeea
 django-allauth-cas @ https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:7e68300b6905c7da0b21925795e0b2055f86575308db37cd505033689b018a77
 django-allauth==0.54.0 ; python_version >= "3.8" and python_version < "3.11" \
