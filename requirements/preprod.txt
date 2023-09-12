@@ -332,8 +332,8 @@ dj-rest-auth==2.2.8 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:9fb3492888185ede8b2064ad6803120c7b0b83ab08e2347a02e9b44282374242
 django-allauth-cas @ https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:7e68300b6905c7da0b21925795e0b2055f86575308db37cd505033689b018a77
-django-allauth==0.51.0 ; python_version >= "3.8" and python_version < "3.11" \
-    --hash=sha256:ca1622733b6faa591580ccd3984042f12d8c79ade93438212de249b7ffb6f91f
+django-allauth==0.54.0 ; python_version >= "3.8" and python_version < "3.11" \
+    --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
 django-cleanup==8.0.0 ; python_version >= "3.8" and python_version < "3.11" \
     --hash=sha256:8cd8872d67fe1501b19a843d006cdb5673cfbb74ac3d6d8f2c60e8e7723a7f5b \
     --hash=sha256:c739a05544e1e48dc848871c870dbf1595f8533d24523bc67360e43562edaf0d

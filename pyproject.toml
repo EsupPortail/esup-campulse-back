@@ -49,7 +49,7 @@ license = "GPL-3.0-or-later"
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
 django = "<5.0"
-django-allauth = "^0.51.0" # TODO update
+django-allauth = "^0.54.0" # TODO update
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a fork
 django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
 django-cleanup = "^8.0.0"
