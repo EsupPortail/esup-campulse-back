@@ -25,7 +25,7 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectComment
-        fields = ["project", "text", "user"]
+        fields = ["project", "is_visible", "text", "user"]
 
 
 class ProjectCommentTextSerializer(serializers.ModelSerializer):

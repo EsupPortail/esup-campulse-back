@@ -4177,15 +4177,15 @@ components:
       type: object
       description: Serializer for JWT authentication.
       properties:
-        access_token:
+        access:
           type: string
-        refresh_token:
+        refresh:
           type: string
         user:
           $ref: '#/components/schemas/User'
       required:
-      - access_token
-      - refresh_token
+      - access
+      - refresh
       - user
     LoginRequest:
       type: object
@@ -4944,6 +4944,9 @@ components:
         text:
           type: string
           title: Texte
+        is_visible:
+          type: boolean
+          title: Est visible
         creation_date:
           type: string
           format: date-time
@@ -4968,6 +4971,9 @@ components:
         project:
           type: integer
           title: Projet
+        is_visible:
+          type: boolean
+          title: Est visible
         text:
           type: string
           minLength: 1

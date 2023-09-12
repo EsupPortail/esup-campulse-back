@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-11 15:10+0200\n"
+"POT-Creation-Date: 2023-09-12 15:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,7 +175,7 @@ msgstr "Date de la charte"
 
 #: plana/apps/associations/models/association.py:93
 #: plana/apps/projects/models/project.py:199
-#: plana/apps/projects/models/project_comment.py:12
+#: plana/apps/projects/models/project_comment.py:13
 msgid "Creation date"
 msgstr "Date de création"
 
@@ -527,6 +527,7 @@ msgid "Site URL"
 msgstr "URL du site"
 
 #: plana/apps/contents/models/logo.py:42
+#: plana/apps/projects/models/project_comment.py:12
 msgid "Is visible"
 msgstr "Est visible"
 
@@ -606,7 +607,7 @@ msgstr "Statut du Document"
 
 #: plana/apps/documents/models/document.py:104
 #: plana/apps/projects/models/project.py:200
-#: plana/apps/projects/models/project_comment.py:13
+#: plana/apps/projects/models/project_comment.py:14
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
@@ -621,7 +622,7 @@ msgstr "Documents"
 
 #: plana/apps/documents/models/document_upload.py:46
 #: plana/apps/projects/models/project.py:154
-#: plana/apps/projects/models/project_comment.py:22
+#: plana/apps/projects/models/project_comment.py:23
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:64
 #: plana/apps/users/models/user.py:373
 msgid "User"
@@ -630,7 +631,7 @@ msgstr "Utilisateur"
 #: plana/apps/documents/models/document_upload.py:58
 #: plana/apps/projects/models/project.py:224
 #: plana/apps/projects/models/project_category.py:11
-#: plana/apps/projects/models/project_comment.py:16
+#: plana/apps/projects/models/project_comment.py:17
 #: plana/apps/projects/models/project_commission_fund.py:13
 msgid "Project"
 msgstr "Projet"
@@ -975,11 +976,11 @@ msgstr "Catégories de projets"
 msgid "Text"
 msgstr "Texte"
 
-#: plana/apps/projects/models/project_comment.py:32
+#: plana/apps/projects/models/project_comment.py:33
 msgid "Project comment"
 msgstr "Commentaire de projet"
 
-#: plana/apps/projects/models/project_comment.py:33
+#: plana/apps/projects/models/project_comment.py:34
 msgid "Projects comments"
 msgstr "Commentaires liés aux projets"
 
@@ -1076,8 +1077,8 @@ msgstr "Non autorisé à récupérer ce projet."
 
 #: plana/apps/projects/views/project.py:551
 #: plana/apps/projects/views/project.py:716
-#: plana/apps/projects/views/project_comment.py:208
-#: plana/apps/projects/views/project_comment.py:250
+#: plana/apps/projects/views/project_comment.py:215
+#: plana/apps/projects/views/project_comment.py:257
 #: plana/apps/projects/views/project_commission_fund.py:162
 #: plana/apps/projects/views/project_commission_fund.py:371
 #: plana/apps/projects/views/project_commission_fund.py:688
@@ -1131,8 +1132,8 @@ msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
 #: plana/apps/projects/views/project_comment.py:67
-#: plana/apps/projects/views/project_comment.py:217
-#: plana/apps/projects/views/project_comment.py:259
+#: plana/apps/projects/views/project_comment.py:224
+#: plana/apps/projects/views/project_comment.py:266
 msgid "Cannot manage comments on a validated project/review."
 msgstr "Impossible de gérer les commentaires d'un projet/bilan validé."
 
@@ -1140,7 +1141,7 @@ msgstr "Impossible de gérer les commentaires d'un projet/bilan validé."
 msgid "Not allowed to retrieve these project comments."
 msgstr "Non autorisé à récupérer les commentaires de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:202
+#: plana/apps/projects/views/project_comment.py:209
 msgid "Link between this comment and project does not exist."
 msgstr "Ce commentaire de projet n'existe pas."
 
@@ -1490,17 +1491,17 @@ msgstr "Vous n'avez pas les privilèges requis"
 msgid "The message body contains forbidden variables : "
 msgstr "Le corps du message contient des variables interdites : "
 
-#: plana/libs/mail_template/admin_forms.py:84
-#: plana/libs/mail_template/admin_forms.py:93
+#: plana/libs/mail_template/admin_forms.py:83
+#: plana/libs/mail_template/admin_forms.py:92
 msgid "The message body contains syntax error(s) : "
 msgstr "Le corps du message contient des erreurs de syntaxe : "
 
-#: plana/libs/mail_template/admin_forms.py:86
+#: plana/libs/mail_template/admin_forms.py:85
 #, python-format
 msgid "at \"%s\" line %s"
 msgstr "dans \"%s\" ligne %s"
 
-#: plana/libs/mail_template/admin_forms.py:99
+#: plana/libs/mail_template/admin_forms.py:98
 msgid "The message body contains unknown variable(s) : "
 msgstr "Le corps du message contient des variables inconnues : "
 

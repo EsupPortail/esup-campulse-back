@@ -9,6 +9,7 @@ class ProjectComment(models.Model):
     """Main model."""
 
     text = models.TextField(_("Text"))
+    is_visible = models.BooleanField(_("Is visible"), default=True)
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
     project = models.ForeignKey(
@@ -39,5 +40,9 @@ class ProjectComment(models.Model):
             (
                 "view_projectcomment_any_institution",
                 "Can view all comments linked to all projects for an institution.",
+            ),
+            (
+                "view_projectcomment_not_visible",
+                "Can view all comments even if they are restricted.",
             ),
         ]

@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
       "text": "Bravo c'est très bien.",
+      "is_visible": true,
       "creation_date": "2023-03-14T15:30:00.000Z",
       "edition_date": "2023-03-14T15:30:00.000Z",
       "project": 2,
@@ -15,6 +16,7 @@
     "pk": 2,
     "fields": {
       "text": "Peut mieux faire.",
+      "is_visible": true,
       "creation_date": "2023-06-14T15:30:00.000Z",
       "edition_date": "2023-06-14T15:30:00.000Z",
       "project": 1,

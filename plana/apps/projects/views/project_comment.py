@@ -134,9 +134,16 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(
-            self.queryset.filter(project_id=kwargs["project_id"]), many=True
-        )
+        if not request.user.has_perm("projects.view_projectcomment_not_visible"):
+            serializer = self.serializer_class(
+                self.queryset.filter(project_id=kwargs["project_id"], is_visible=True),
+                many=True,
+            )
+        else:
+            serializer = self.serializer_class(
+                self.queryset.filter(project_id=kwargs["project_id"]), many=True
+            )
+
         return response.Response(serializer.data)
 
 
