@@ -48,12 +48,40 @@ STAGE = "{{ goal }}"
 sentry_init(STAGE)
 
 
+##################
+# AUTHENTICATION #
+##################
+
+CAS_SERVER = "https://cas.unistra.fr/cas/"
+CAS_AUTHORIZED_SERVICES = [
+    "https://campulse.unistra.fr/cas-login",
+    "https://campulse.unistra.fr/cas-register",
+]
+
+
+##########
+# Emails #
+##########
+
+EMAIL_TEMPLATE_FRONTEND_URL = "https://campulse.unistra.fr/"
+
+
+#####################
+# S3 storage config #
+#####################
+
+AWS_ACCESS_KEY_ID = "{{ s3_access_key }}"
+AWS_SECRET_ACCESS_KEY = "{{ s3_secret_key }}"
+AWS_STORAGE_BUCKET_NAME = "{{ s3_bucket }}"
+AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
+
+
 ########
 # Misc #
 ########
 
-MIGRATION_SITE_NAME = "Campulse"
 MIGRATION_SITE_DOMAIN = "campulse.unistra.fr"
+MIGRATION_SITE_NAME = "Campulse"
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
