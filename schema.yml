@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: PlanA / Opaline API
+  title: PlanA API
   version: 0.9.20230911
-  description: API for PlanA / Opaline
+  description: API for PlanA
 paths:
   /associations/:
     get:

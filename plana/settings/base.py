@@ -566,8 +566,8 @@ def sentry_init(environment):
 ###############
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "PlanA / Opaline API",
-    "DESCRIPTION": "API for PlanA / Opaline",
+    "TITLE": "PlanA API",
+    "DESCRIPTION": "API for PlanA",
     "VERSION": APP_VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
