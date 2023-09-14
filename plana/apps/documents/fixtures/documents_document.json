@@ -180,6 +180,25 @@
     "model": "documents.document",
     "pk": 10,
     "fields": {
+      "name": "Budget Prévisionnel",
+      "acronym": "BUDGET_PREVISIONNEL",
+      "description": "Budget Prévisionnel",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 11,
+    "fields": {
       "name": "Copie des Statuts de l'Association",
       "acronym": "COPIE_STATUTS_ASSOCIATION",
       "description": "Copie des statuts de l'association",
@@ -197,7 +216,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 11,
+    "pk": 12,
     "fields": {
       "name": "PV de l'AG Constitutive",
       "acronym": "PV_AG_CONSTITUTIVE",
@@ -216,7 +235,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 12,
+    "pk": 13,
     "fields": {
       "name": "Certificat de scolarité du membre élu",
       "acronym": "CERTIFICAT_SCOLARITE_ASSOCIATION",
@@ -235,7 +254,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 13,
+    "pk": 14,
     "fields": {
       "name": "Certificat envoyé par le Tribunal Judiciaire",
       "acronym": "CERTIFICAT_TRIBUNAL_JUDICIAIRE",
@@ -254,7 +273,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 14,
+    "pk": 15,
     "fields": {
       "name": "Extrait du Registre des Associations",
       "acronym": "EXTRAIT_REGISTRE_ASSOCIATIONS",
@@ -273,7 +292,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 15,
+    "pk": 16,
     "fields": {
       "name": "Certificat de scolarité",
       "acronym": "CERTIFICAT_SCOLARITE_USER",
@@ -292,7 +311,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 16,
+    "pk": 17,
     "fields": {
       "name": "Carte Étudiante",
       "acronym": "CARTE_ETUDIANTE",
@@ -306,25 +325,6 @@
         "application/pdf",
         "image/jpeg",
         "image/png"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 17,
-    "fields": {
-      "name": "Budget Prévisionnel",
-      "acronym": "BUDGET_PREVISIONNEL",
-      "description": "Budget Prévisionnel",
-      "contact": "???",
-      "is_multiple": false,
-      "is_required_in_process": true,
-      "process_type": "DOCUMENT_PROJECT",
-      "edition_date": "2023-03-15T10:18:47.000Z",
-      "mime_types": [
-        "application/vnd.ms-excel",
-        "application/vnd.oasis.opendocument.spreadsheet",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       ]
     }
   },

@@ -434,7 +434,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 id=AssociationUser.objects.get(id=project.association_user_id).user_id
             ).email
             owner = Association.objects.get(id=project.association_id)
-            # TODO : helper to get full address in association model ?
             owner = {
                 "name": owner.name,
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
@@ -442,7 +441,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         elif project.user_id is not None:
             email = User.objects.get(id=project.user_id).email
             owner = User.objects.get(id=project.user_id)
-            # TODO : helper to get full address in user model ?
             owner = {
                 "name": f"{owner.first_name} {owner.last_name}",
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",

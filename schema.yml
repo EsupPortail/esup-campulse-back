@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 0.9.20230911
+  version: 0.9.20230914
   description: API for PlanA
 paths:
   /associations/:
