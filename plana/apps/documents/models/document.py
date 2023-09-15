@@ -52,7 +52,7 @@ class Document(models.Model):
         def get_updatable_documents():
             """Documents with those processes can be replaced by a manager."""
 
-            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
+            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND", "DOCUMENT_PROJECT"]
 
         @staticmethod
         def get_validated_documents():
