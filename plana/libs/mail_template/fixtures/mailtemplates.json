@@ -5,7 +5,7 @@
     "fields": {
       "code": "USER_ACCOUNT_CREATION",
       "label": "User Account Creation",
-      "description": "Demande de creation de compte envoyée à un utilisateur",
+      "description": "Demande de création de compte envoyée à un utilisateur",
       "subject": "{{ site_name }} – Création de compte envoyée !",
       "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Nous vous remercions d’avoir complété votre inscription sur l’application {{ site_name }}.<br/>Nous vous confirmons que votre demande de compte a été envoyée avec succès. Pour la valider, merci de cliquer sur ce lien : <a href='{{ activate_url }}'>{{ activate_url }}</a>.<br/>Si vous rencontrez des difficultés merci de nous contacter à <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -258,7 +258,7 @@
     "fields": {
       "code": "USER_ACCOUNT_EMAIL_RECONFIRMATION",
       "label": "User Account Email Reconfirmation",
-      "description": "Confirmation du changement d'adresse email envoyée à un utilisateur",
+      "description": "Confirmation du changement d'adresse mail envoyée à un utilisateur",
       "subject": "{{ site_name }} – Changement de votre adresse mail",
       "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Vous avez changé l'adresse mail liée à votre compte sur l’application {{ site_name }}.<br/>Pour la valider, merci de cliquer sur ce lien : <a href='{{ activate_url }}'>{{ activate_url }}</a>.<br/>Si vous rencontrez des difficultés merci de nous contacter à <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -647,8 +647,8 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_NEEDS_CHANGES",
       "label": "User Or Association Project Needs Changes",
       "description": "Notification d'une demande de subventionnements refusée mais modifiable envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Veuillez modifier votre demande de subventionnements avant de la resoumettre",
-      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée, merci de la modifier avant de la resoumettre.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "subject": "{{ site_name }} – Veuillez modifier votre demande de subventionnements avant de la retourner",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée, merci de la modifier avant de la retourner à nouveau.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2
@@ -662,7 +662,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_REJECTION",
       "label": "User Or Association Project Rejection",
       "description": "Notification d'une demande de subventionnements refusée définitivement envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Votre demande de subventionnements a été rejetée",
+      "subject": "{{ site_name }} – Votre demande de subventionnements a été rejetée",
       "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée définitivement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -677,7 +677,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_POSTPONED",
       "label": "User Or Association Project Postponed",
       "description": "Notification d'un changement de commission pour une demande de subventionnements envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Votre demande de subventionnements est reportée",
+      "subject": "{{ site_name }} – Votre demande de subventionnements est reportée",
       "body": "Bonjour,<br/><br/>L'une des dates de commissions pour l'un de vos projets a été déplacée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -692,7 +692,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION",
       "label": "User Or Association Project Validated",
       "description": "Notification d'une demande de subventionnements validée envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Votre demande de subventionnements a été validée",
+      "subject": "{{ site_name }} – Votre demande de subventionnements a été validée",
       "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -707,7 +707,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_FUND_REJECTION",
       "label": "User Or Association Project Fund Rejection",
       "description": "Notification d'un fonds refusé pour une demande de subventionnements envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - L'un de vos projets n'aura pas de subvention",
+      "subject": "{{ site_name }} – L'un de vos projets n'aura pas de subvention",
       "body": "Bonjour,<br/><br/>L'un de vos projets n'a pas obtenu de financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -722,7 +722,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_FUND_CONFIRMATION",
       "label": "User Or Association Project Fund Confirmation",
       "description": "Notification d'un fonds accepté pour une demande de subventionnements envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - L'un de vos projets aura une subvention",
+      "subject": "{{ site_name }} – L'un de vos projets aura une subvention",
       "body": "Bonjour,<br/><br/>L'un de vos projets a obtenu un financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -802,7 +802,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
       "label": "User Or Association Project Cancellation",
       "description": "Notification de l'annulation d'une demande de subventionnements envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Votre projet est annulé",
+      "subject": "{{ site_name }} – Votre projet est annulé",
       "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme a été annulé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -816,8 +816,8 @@
     "fields": {
       "code": "USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW",
       "label": "User Or Association Project Needs Review",
-      "description": "Notification d'un bilan de demande de subventionnements requis ou à resoumettre envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Veuillez envoyer ou modifier le bilan de votre projet",
+      "description": "Notification d'un bilan de demande de subventionnements requis ou à corriger envoyée à une association ou un porteur individuel",
+      "subject": "{{ site_name }} – Veuillez envoyer ou modifier le bilan de votre projet",
       "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme est en attente de bilan.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
@@ -832,7 +832,7 @@
       "code": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
       "label": "User Or Association Project Review Confirmation",
       "description": "Notification d'un bilan de demande de subventionnements validé envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} - Votre bilan de projet a été validé",
+      "subject": "{{ site_name }} – Votre bilan de projet a été validé",
       "body": "Bonjour,<br/><br/>L'un de vos bilans de projet a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
