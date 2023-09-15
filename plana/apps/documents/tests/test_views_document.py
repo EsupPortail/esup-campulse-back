@@ -316,7 +316,7 @@ class DocumentsViewsTests(TestCase):
         name = "Test process"
         patch_data = {"name": name}
         response = self.general_client.patch(
-            "/documents/9", data=patch_data, content_type="application/json"
+            "/documents/11", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
