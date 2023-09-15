@@ -134,21 +134,15 @@ class AssociationListCreate(generics.ListCreateAPIView):
             is_enabled = True
             is_public = True
 
-        if not request.user.is_anonymous and not request.user.has_perm(
-            "associations.view_association_not_enabled"
-        ):
+        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_enabled"):
             is_enabled = True
 
-        if not request.user.is_anonymous and not request.user.has_perm(
-            "associations.view_association_not_public"
-        ):
+        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_public"):
             is_public = True
 
         if name is not None and name != "":
             name = str(name).strip()
-            self.queryset = self.queryset.filter(
-                name__nospaces__unaccent__icontains=name.replace(" ", "")
-            )
+            self.queryset = self.queryset.filter(name__nospaces__unaccent__icontains=name.replace(" ", ""))
 
         if acronym is not None and acronym != "":
             acronym = str(acronym).strip()
@@ -164,32 +158,20 @@ class AssociationListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(is_site=to_bool(is_site))
 
         if institutions is not None and institutions != "":
-            self.queryset = self.queryset.filter(
-                institution_id__in=institutions.split(",")
-            )
+            self.queryset = self.queryset.filter(institution_id__in=institutions.split(","))
 
         if institution_component is not None:
             if institution_component == "":
-                self.queryset = self.queryset.filter(
-                    institution_component_id__isnull=True
-                )
+                self.queryset = self.queryset.filter(institution_component_id__isnull=True)
             else:
-                self.queryset = self.queryset.filter(
-                    institution_component_id=institution_component
-                )
+                self.queryset = self.queryset.filter(institution_component_id=institution_component)
 
         if activity_field is not None and activity_field != "":
             self.queryset = self.queryset.filter(activity_field_id=activity_field)
 
-        if (
-            user_id is not None
-            and user_id != ""
-            and self.request.user.has_perm("users.view_user_anyone")
-        ):
+        if user_id is not None and user_id != "" and self.request.user.has_perm("users.view_user_anyone"):
             self.queryset = self.queryset.filter(
-                id__in=AssociationUser.objects.filter(user_id=user_id).values_list(
-                    "association_id"
-                )
+                id__in=AssociationUser.objects.filter(user_id=user_id).values_list("association_id")
             )
 
         return self.list(request, *args, **kwargs)
@@ -214,13 +196,8 @@ class AssociationListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-        if (
-            not "institution" in request.data
-            and request.user.get_user_managed_institutions().count() == 1
-        ):
-            request.data["institution"] = (
-                request.user.get_user_managed_institutions().first().id
-            )
+        if not "institution" in request.data and request.user.get_user_managed_institutions().count() == 1:
+            request.data["institution"] = request.user.get_user_managed_institutions().first().id
         elif not "institution" in request.data:
             return response.Response(
                 {"error": _("No institution given.")},
@@ -231,11 +208,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             "associations.add_association_any_institution"
         ) and not request.user.is_staff_in_institution(request.data["institution"]):
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to create an association for this institution."
-                    )
-                },
+                {"error": _("Not allowed to create an association for this institution.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -257,18 +230,14 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         # Removes spaces, uppercase and accented characters to avoid similar association names.
         new_association_name = (
-            unicodedata.normalize(
-                "NFD", request.data["name"].strip().replace(" ", "").lower()
-            )
+            unicodedata.normalize("NFD", request.data["name"].strip().replace(" ", "").lower())
             .encode("ascii", "ignore")
             .decode("utf-8")
         )
         associations = Association.objects.all()
         for association in associations:
             existing_association_name = (
-                unicodedata.normalize(
-                    "NFD", association.name.strip().replace(" ", "").lower()
-                )
+                unicodedata.normalize("NFD", association.name.strip().replace(" ", "").lower())
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
@@ -333,9 +302,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if request.user.is_anonymous and (
-            not association.is_enabled or not association.is_public
-        ):
+        if request.user.is_anonymous and (not association.is_enabled or not association.is_public):
             return response.Response(
                 {"error": _("Association not visible.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -407,9 +374,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             not request.user.is_president_in_association(association_id)
-            and not request.user.has_perm(
-                "associations.change_association_any_institution"
-            )
+            and not request.user.has_perm("associations.change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
@@ -418,11 +383,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         try:
-            social_networks_data = (
-                request.data["social_networks"]
-                if "social_networks" in request.data
-                else []
-            )
+            social_networks_data = request.data["social_networks"] if "social_networks" in request.data else []
             social_networks = (
                 json.loads(social_networks_data)
                 if isinstance(social_networks_data, str)
@@ -449,8 +410,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "path_logo" in request.data
             and request.data["path_logo"] is not None
-            and request.data["path_logo"].content_type
-            not in settings.ALLOWED_IMAGE_MIME_TYPES
+            and request.data["path_logo"].content_type not in settings.ALLOWED_IMAGE_MIME_TYPES
         ):
             return response.Response(
                 {"error": _("Wrong media type for images.")},
@@ -466,26 +426,15 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if request.user.has_perm("associations.change_association_all_fields"):
             if "amount_members_allowed" in request.data:
                 amount_members_allowed = int(request.data["amount_members_allowed"])
-                if (
-                    amount_members_allowed
-                    < AssociationUser.objects.filter(
-                        association_id=association.id
-                    ).count()
-                ):
+                if amount_members_allowed < AssociationUser.objects.filter(association_id=association.id).count():
                     return response.Response(
-                        {
-                            "error": _(
-                                "Cannot set lower amount of members in this association."
-                            )
-                        },
+                        {"error": _("Cannot set lower amount of members in this association.")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
             if "is_public" in request.data:
                 is_public = to_bool(request.data["is_public"])
-                if is_public is True and (
-                    association.is_site is False or association.is_enabled is False
-                ):
+                if is_public is True and (association.is_site is False or association.is_enabled is False):
                     request.data["is_public"] = False
 
             if "is_site" in request.data:
@@ -502,19 +451,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 template = None
                 if to_bool(request.data["can_submit_projects"]) is False:
                     context["manager_email_address"] = request.user.email
-                    template = MailTemplate.objects.get(
-                        code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED"
-                    )
+                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
                 elif to_bool(request.data["can_submit_projects"]) is True:
-                    template = MailTemplate.objects.get(
-                        code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED"
-                    )
+                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=association.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
+                    subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(request.user, request, context),
                 )
 
@@ -534,9 +477,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         context["first_name"] = request.user.first_name
         context["last_name"] = request.user.last_name
         context["association_name"] = association.name
-        template = MailTemplate.objects.get(
-            code="USER_ACCOUNT_ASSOCIATION_CHANGE_CONFIRMATION"
-        )
+        template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_CHANGE_CONFIRMATION")
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=request.user.email,
@@ -575,11 +516,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "associations.delete_association_any_institution"
         ) and not request.user.is_staff_in_institution(association.institution):
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to delete an association for this institution."
-                    )
-                },
+                {"error": _("Not allowed to delete an association for this institution.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -593,9 +530,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=association.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
         return self.destroy(request, *args, **kwargs)
@@ -651,9 +586,7 @@ class AssociationNameList(generics.ListAPIView):
         if allow_new_users is not None and allow_new_users != "":
             assos_ids_with_all_members = []
             for association in self.get_queryset():
-                association_users = AssociationUser.objects.filter(
-                    association_id=association.id
-                )
+                association_users = AssociationUser.objects.filter(association_id=association.id)
                 if (
                     not association.amount_members_allowed is None
                     and association_users.count() >= association.amount_members_allowed
@@ -718,9 +651,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
 
         if (
             not request.user.is_president_in_association(association.id)
-            and not request.user.has_perm(
-                "associations.change_association_any_institution"
-            )
+            and not request.user.has_perm("associations.change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
             return response.Response(
@@ -739,9 +670,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
 
         document_process_type = "DOCUMENT_ASSOCIATION"
         missing_documents_names = (
-            Document.objects.filter(
-                process_type=document_process_type, is_required_in_process=True
-            )
+            Document.objects.filter(process_type=document_process_type, is_required_in_process=True)
             .exclude(
                 id__in=DocumentUpload.objects.filter(
                     association_id=association.id,
@@ -750,9 +679,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             .values_list("name")
         )
         if missing_documents_names.count() > 0:
-            missing_documents_names_string = ', '.join(
-                str(item) for item in missing_documents_names
-            )
+            missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
             return response.Response(
                 {"error": _(f"Missing documents : {missing_documents_names_string}.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -764,21 +691,13 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             "site_name": current_site.name,
         }
         if request.data["charter_status"] == "CHARTER_PROCESSING":
-            template = MailTemplate.objects.get(
-                code="MANAGER_ASSOCIATION_CHARTER_CREATION"
-            )
+            template = MailTemplate.objects.get(code="MANAGER_ASSOCIATION_CHARTER_CREATION")
             institution = Institution.objects.get(id=association.institution_id)
-            managers_emails = list(
-                institution.default_institution_managers().values_list(
-                    "email", flat=True
-                )
-            )
+            managers_emails = list(institution.default_institution_managers().values_list("email", flat=True))
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
             association.charter_date = datetime.date.today()
@@ -797,15 +716,11 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             association.is_site = False
             association.save()
         if request.data["charter_status"] in mail_templates_codes_by_status:
-            template = MailTemplate.objects.get(
-                code=mail_templates_codes_by_status[request.data["charter_status"]]
-            )
+            template = MailTemplate.objects.get(code=mail_templates_codes_by_status[request.data["charter_status"]])
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=association.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 

@@ -19,9 +19,7 @@ class AssociationUserSerializer(serializers.ModelSerializer):
 class AssociationUserCreateSerializer(serializers.ModelSerializer):
     """Serializer for user-associations creation."""
 
-    user = serializers.SlugRelatedField(
-        slug_field="username", queryset=User.objects.all()
-    )
+    user = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
     association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
 
     class Meta:

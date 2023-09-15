@@ -47,29 +47,19 @@ class MailTemplateForm(forms.ModelForm):
         body_errors_list = []
 
         # Check variables and raise an error if forbidden ones are found
-        forbidden_vars = MailTemplateVar.objects.exclude(
-            code__in=[v.code for v in available_vars]
-        )
+        forbidden_vars = MailTemplateVar.objects.exclude(code__in=[v.code for v in available_vars])
 
-        forbidden_vars_list = [
-            f_var.code for f_var in forbidden_vars if f_var.code.lower() in body.lower()
-        ]
+        forbidden_vars_list = [f_var.code for f_var in forbidden_vars if f_var.code.lower() in body.lower()]
 
         if forbidden_vars_list:
-            forbidden_vars_msg = _(
-                "The message body contains forbidden variables : "
-            ) + ', '.join(forbidden_vars_list)
+            forbidden_vars_msg = _("The message body contains forbidden variables : ") + ', '.join(forbidden_vars_list)
 
             body_errors_list.append(self.error_class([forbidden_vars_msg]))
 
         # Check for unknown variables in body
         # all_vars = re.findall(r"(\$\{[\w+\.]*\})", body)  # match for ${my_var}
         all_vars = re.findall(r"(\{\{ *[\w+\.]* *\}\})", body)  # match for {{ my_var }}
-        unknown_vars = [
-            v
-            for v in all_vars
-            if not MailTemplateVar.objects.filter(code__iexact=v.lower()).exists()
-        ]
+        unknown_vars = [v for v in all_vars if not MailTemplateVar.objects.filter(code__iexact=v.lower()).exists()]
 
         # Check for body syntax errors
         try:
@@ -79,24 +69,18 @@ class MailTemplateForm(forms.ModelForm):
                 before: str = e.template_debug["before"]
                 line: int = 1 + before.count("<br>") + before.count("</br>")
                 line += before.count("&lt;br&gt;") + before.count("&lt;/br&gt;")
-                body_syntax_error_msg = _(
-                    "The message body contains syntax error(s) : "
-                )
+                body_syntax_error_msg = _("The message body contains syntax error(s) : ")
                 body_syntax_error_msg += _('at "%s" line %s') % (
                     e.template_debug["during"],
                     line,
                 )
                 body_errors_list.append(self.error_class([body_syntax_error_msg]))
             else:
-                body_syntax_error_msg = _(
-                    "The message body contains syntax error(s) : "
-                ) + str(e)
+                body_syntax_error_msg = _("The message body contains syntax error(s) : ") + str(e)
                 body_errors_list.append(self.error_class([body_syntax_error_msg]))
 
         if unknown_vars:
-            unknown_vars_msg = _(
-                "The message body contains unknown variable(s) : "
-            ) + ', '.join(unknown_vars)
+            unknown_vars_msg = _("The message body contains unknown variable(s) : ") + ', '.join(unknown_vars)
             body_errors_list.append(self.error_class([unknown_vars_msg]))
 
         if body_errors_list:

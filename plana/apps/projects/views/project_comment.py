@@ -59,10 +59,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -74,24 +71,19 @@ class ProjectCommentCreate(generics.CreateAPIView):
         request.data["user"] = request.user.pk
 
         if "is_visible" not in request.data or (
-            request.data["is_visible"] != ""
-            and to_bool(request.data["is_visible"]) is True
+            request.data["is_visible"] != "" and to_bool(request.data["is_visible"]) is True
         ):
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(
-                code="USER_OR_ASSOCIATION_PROJECT_COMMENT"
-            )
+            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_COMMENT")
             email = None
             if project.association_id is not None:
                 if project.association_user_id is not None:
                     email = User.objects.get(
-                        id=AssociationUser.objects.get(
-                            id=project.association_user_id
-                        ).user_id
+                        id=AssociationUser.objects.get(id=project.association_user_id).user_id
                     ).email
                 else:
                     email = Association.objects.get(id=project.association_id).email
@@ -100,9 +92,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -137,9 +127,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
 
         if (
             not request.user.has_perm("projects.view_projectcomment_any_fund")
-            and not request.user.has_perm(
-                "projects.view_projectcomment_any_institution"
-            )
+            and not request.user.has_perm("projects.view_projectcomment_any_institution")
             and not request.user.can_access_project(project)
         ):
             return response.Response(
@@ -153,9 +141,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
                 many=True,
             )
         else:
-            serializer = self.serializer_class(
-                self.queryset.filter(project_id=kwargs["project_id"]), many=True
-            )
+            serializer = self.serializer_class(self.queryset.filter(project_id=kwargs["project_id"]), many=True)
 
         return response.Response(serializer.data)
 
@@ -214,9 +200,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(
-                project_id=kwargs["project_id"], id=kwargs["comment_id"]
-            )
+            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Link between this comment and project does not exist.")},
@@ -229,10 +213,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -256,9 +237,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Destroys comments of a project"""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(
-                project_id=kwargs["project_id"], id=kwargs["comment_id"]
-            )
+            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": "Link between this comment and project does not exist."},
@@ -271,10 +250,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,

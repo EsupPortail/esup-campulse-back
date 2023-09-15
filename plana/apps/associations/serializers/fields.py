@@ -20,9 +20,7 @@ class ThumbnailField(serializers.ReadOnlyField):
         if sizes := kwargs.pop("sizes", None):
             self.sizes = sizes
         else:
-            self.sizes = [
-                size for size in settings.THUMBNAILS["SIZES"] if size != "base"
-            ]
+            self.sizes = [size for size in settings.THUMBNAILS["SIZES"] if size != "base"]
 
         super().__init__(help_text=help_text, **kwargs)
 

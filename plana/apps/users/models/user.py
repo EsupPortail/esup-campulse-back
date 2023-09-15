@@ -21,15 +21,11 @@ class AssociationUser(models.Model):
     """Model that defines the link between a user and an association."""
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
-    association = models.ForeignKey(
-        Association, verbose_name=_("Association"), on_delete=models.CASCADE
-    )
+    association = models.ForeignKey(Association, verbose_name=_("Association"), on_delete=models.CASCADE)
     is_president = models.BooleanField(_("Is president"), default=False)
     can_be_president_from = models.DateField(_("Can be president from"), null=True)
     can_be_president_to = models.DateField(_("Can be president to"), null=True)
-    is_validated_by_admin = models.BooleanField(
-        _("Is validated by admin"), default=False
-    )
+    is_validated_by_admin = models.BooleanField(_("Is validated by admin"), default=False)
     is_vice_president = models.BooleanField(_("Is vice president"), default=False)
     is_secretary = models.BooleanField(_("Is secretary"), default=False)
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
@@ -110,16 +106,10 @@ class User(AbstractUser):
     country = models.CharField(_("Country"), max_length=128, default="")
     phone = models.CharField(_("Phone"), default="", max_length=32, null=True)
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
-    password_last_change_date = models.DateField(
-        _("Password last change date"), null=True
-    )
-    is_validated_by_admin = models.BooleanField(
-        _("Is validated by administrator"), default=False
-    )
+    password_last_change_date = models.DateField(_("Password last change date"), null=True)
+    is_validated_by_admin = models.BooleanField(_("Is validated by administrator"), default=False)
     is_student = models.BooleanField(_("Is student"), default=False)
-    associations = models.ManyToManyField(
-        Association, verbose_name=_("Associations"), through="AssociationUser"
-    )
+    associations = models.ManyToManyField(Association, verbose_name=_("Associations"), through="AssociationUser")
     groups_institutions_funds = models.ManyToManyField(
         Group,
         verbose_name=_("Groups"),
@@ -137,9 +127,7 @@ class User(AbstractUser):
         return (
             Permission.objects.filter(
                 group__id__in=Group.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(
-                        user_id=self.pk
-                    ).values_list("group_id")
+                    id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("group_id")
                 ).values_list("id"),
                 codename=perm.split(".")[1],
             ).count()
@@ -150,9 +138,7 @@ class User(AbstractUser):
         """Check if a user can access a project as association president, misc user, fund member, or manager."""
         if project_obj.association is not None:
             try:
-                AssociationUser.objects.get(
-                    user_id=self.pk, association_id=project_obj.association
-                )
+                AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
                 return True
             except ObjectDoesNotExist:
                 pass
@@ -161,21 +147,17 @@ class User(AbstractUser):
             if project_obj.user == self:
                 return True
 
-        if (
-            self.get_user_funds().count() != 0
-            or self.get_user_managed_funds().count() != 0
-        ):
+        if self.get_user_funds().count() != 0 or self.get_user_managed_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")
             user_managed_funds_ids = self.get_user_managed_funds().values_list("id")
             project_funds_ids = CommissionFund.objects.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    project_id=project_obj.id
-                ).values_list("commission_fund_id")
+                id__in=ProjectCommissionFund.objects.filter(project_id=project_obj.id).values_list(
+                    "commission_fund_id"
+                )
             ).values_list("fund_id")
             if (
                 len(set(project_funds_ids).intersection(user_funds_ids)) == 0
-                and len(set(project_funds_ids).intersection(user_managed_funds_ids))
-                == 0
+                and len(set(project_funds_ids).intersection(user_managed_funds_ids)) == 0
             ):
                 return False
             return True
@@ -183,15 +165,11 @@ class User(AbstractUser):
         if self.is_staff:
             if project_obj.association_id is not None:
                 institution_id = Institution.objects.get(
-                    id=Association.objects.get(
-                        id=project_obj.association_id
-                    ).institution_id
+                    id=Association.objects.get(id=project_obj.association_id).institution_id
                 )
                 if institution_id not in self.get_user_managed_institutions():
                     return False
-            if project_obj.user is not None and not self.has_perm(
-                "users.change_user_misc"
-            ):
+            if project_obj.user is not None and not self.has_perm("users.change_user_misc"):
                 return False
             return True
 
@@ -202,14 +180,8 @@ class User(AbstractUser):
         if not self.can_access_project(project_obj):
             return False
 
-        if (
-            project_obj.association_user is not None
-            and self.get_user_funds().count() == 0
-            and not self.is_staff
-        ):
-            member = AssociationUser.objects.get(
-                user_id=self.pk, association_id=project_obj.association
-            )
+        if project_obj.association_user is not None and self.get_user_funds().count() == 0 and not self.is_staff:
+            member = AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
             if (
                 not member.is_president
                 and not self.is_president_in_association(project_obj.association)
@@ -223,45 +195,35 @@ class User(AbstractUser):
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""
         return Association.objects.filter(
-            id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
-                "association_id"
-            )
+            id__in=AssociationUser.objects.filter(user_id=self.pk).values_list("association_id")
         )
 
     def get_user_managed_associations(self):
         """Return a list of Association IDs linked to a manager user."""
         return Association.objects.filter(
             institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionFundUser.objects.filter(
-                    user_id=self.pk
-                ).values_list("institution_id")
+                id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
             ).values_list("id")
         )
 
     def get_user_funds(self):
         """Return a list of Fund IDs linked to a student user."""
         return Fund.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
-                "fund_id"
-            )
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("fund_id")
         )
 
     def get_user_managed_funds(self):
         """Return a list of Fund IDs linked to a manager user."""
         return Fund.objects.filter(
             institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionFundUser.objects.filter(
-                    user_id=self.pk
-                ).values_list("institution_id")
+                id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
             ).values_list("id")
         )
 
     def get_user_groups(self):
         """Return a list of Group IDs linked to a user."""
         return Group.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
-                "group_id"
-            )
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("group_id")
         )
 
     def get_user_institutions(self):
@@ -269,16 +231,12 @@ class User(AbstractUser):
         return Institution.objects.filter(
             models.Q(
                 id__in=Association.objects.filter(
-                    id__in=AssociationUser.objects.filter(user_id=self.pk).values_list(
-                        "association_id"
-                    )
+                    id__in=AssociationUser.objects.filter(user_id=self.pk).values_list("association_id")
                 ).values_list("institution_id")
             )
             | models.Q(
                 id__in=Fund.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(
-                        user_id=self.pk
-                    ).values_list("fund_id")
+                    id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("fund_id")
                 ).values_list("institution_id")
             )
         )
@@ -286,9 +244,7 @@ class User(AbstractUser):
     def get_user_managed_institutions(self):
         """Return a list of Institution IDs linked to a manager user."""
         return Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list(
-                "institution_id"
-            )
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
         )
 
     def has_validated_email_user(self):
@@ -355,18 +311,14 @@ class User(AbstractUser):
         if self.is_staff:
             return GroupInstitutionFundUser.objects.filter(
                 user_id=self.pk,
-                institution_id=Association.objects.get(
-                    id=association_id
-                ).institution_id,
+                institution_id=Association.objects.get(id=association_id).institution_id,
             )
         return False
 
     def is_staff_in_institution(self, institution_id):
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            return GroupInstitutionFundUser.objects.filter(
-                user_id=self.pk, institution_id=institution_id
-            )
+            return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id)
         return False
 
     class Meta:

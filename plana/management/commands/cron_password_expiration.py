@@ -28,29 +28,19 @@ class Command(BaseCommand):
             mail_sending_due_date = today - datetime.timedelta(
                 days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING
             )
-            mail_sending_queryset = queryset.filter(
-                password_last_change_date=mail_sending_due_date
-            )
+            mail_sending_queryset = queryset.filter(password_last_change_date=mail_sending_due_date)
 
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
-            template = MailTemplate.objects.get(
-                code="USER_ACCOUNT_PASSWORD_RESET_WARNING_SCHEDULED"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET_WARNING_SCHEDULED")
             for user in mail_sending_queryset:
                 self.send_password_mail(user, context, template)
 
             # Invalidate expired passwords (not changed in 12 months)
-            change_due_date = today - datetime.timedelta(
-                days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION
-            )
-            change_password_queryset = queryset.filter(
-                password_last_change_date=change_due_date
-            )
+            change_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION)
+            change_password_queryset = queryset.filter(password_last_change_date=change_due_date)
 
-            template = MailTemplate.objects.get(
-                code="USER_ACCOUNT_PASSWORD_RESET_SCHEDULED"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET_SCHEDULED")
             for user in change_password_queryset:
                 password = "".join(
                     secrets.choice(string.ascii_letters + string.digits)

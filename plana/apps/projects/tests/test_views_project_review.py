@@ -87,9 +87,7 @@ class ProjectReviewsViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
     def test_get_project_review_by_id_anonymous(self):
         """
@@ -149,9 +147,7 @@ class ProjectReviewsViewsTests(TestCase):
         - Always returns a 405.
         """
         patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put(
-            "/projects/1/review", patch_data, content_type="application/json"
-        )
+        response = self.general_client.put("/projects/1/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_review_anonymous(self):
@@ -161,9 +157,7 @@ class ProjectReviewsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         patch_data = {"review": "C'était bien"}
-        response = self.client.patch(
-            "/projects/5/review", patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/projects/5/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_review_not_found(self):
@@ -174,9 +168,7 @@ class ProjectReviewsViewsTests(TestCase):
         - Project must exist.
         """
         patch_data = {"review": "C'était pas ouf"}
-        response = self.student_misc_client.patch(
-            "/projects/999/review", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/999/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_review_forbidden_student(self):
@@ -186,9 +178,7 @@ class ProjectReviewsViewsTests(TestCase):
         - An student user not owning the project cannot execute this request.
         """
         patch_data = {"review": "C'était moyen"}
-        response = self.student_offsite_client.patch(
-            "/projects/6/review", patch_data, content_type="application/json"
-        )
+        response = self.student_offsite_client.patch("/projects/6/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_review_forbidden_user(self):
@@ -199,9 +189,7 @@ class ProjectReviewsViewsTests(TestCase):
         - The project owner must be the authenticated user.
         """
         patch_data = {"review": "Du pur génie, 9 sélec sur Gamekult"}
-        response = self.student_site_client.patch(
-            "/projects/5/review", patch_data, content_type="application/json"
-        )
+        response = self.student_site_client.patch("/projects/5/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_review_manager_error(self):
@@ -211,9 +199,7 @@ class ProjectReviewsViewsTests(TestCase):
         - The route cannot be accessed by a manager user.
         """
         patch_data = {"review": "Mon chien aurait fait mieux"}
-        response = self.general_client.patch(
-            "/projects/6/review", patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/projects/6/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_review_user_wrong_status(self):
@@ -223,12 +209,8 @@ class ProjectReviewsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - Status must be draft.
         """
-        patch_data = {
-            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
-        }
-        response = self.student_misc_client.patch(
-            "/projects/7/review", patch_data, content_type="application/json"
-        )
+        patch_data = {"review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."}
+        response = self.student_misc_client.patch("/projects/7/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_review_association_wrong_dates(self):
@@ -254,14 +236,10 @@ class ProjectReviewsViewsTests(TestCase):
         - A review can't be submitted if commission dates are still pending.
         """
         commission = Commission.objects.get(id=4)
-        commission.commission_date = datetime.datetime.strptime(
-            "2099-12-25", "%Y-%m-%d"
-        ).date()
+        commission.commission_date = datetime.datetime.strptime("2099-12-25", "%Y-%m-%d").date()
         commission.save()
         patch_data = {"review": "Au secours."}
-        response = self.student_misc_client.patch(
-            "/projects/5/review", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/5/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_review_serializer_error(self):
@@ -272,9 +250,7 @@ class ProjectReviewsViewsTests(TestCase):
         - Serializer fields must be valid.
         """
         patch_data = {"review": False}
-        response = self.student_misc_client.patch(
-            "/projects/5/review", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/5/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_review_user_success(self):
@@ -284,12 +260,8 @@ class ProjectReviewsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project is correctly updated in db.
         """
-        patch_data = {
-            "review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."
-        }
-        response = self.student_misc_client.patch(
-            "/projects/5/review", patch_data, content_type="application/json"
-        )
+        patch_data = {"review": "J'ai montré ma recette à un cuisinier, il m'a fait bouffer l'assiette."}
+        response = self.student_misc_client.patch("/projects/5/review", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=5)
         self.assertEqual(project.review, patch_data["review"])

@@ -57,13 +57,12 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
 
-        if not request.user.has_perm(
-            "projects.view_projectcategory_any_commission"
-        ) or not request.user.has_perm("projects.view_projectcategory_any_institution"):
+        if not request.user.has_perm("projects.view_projectcategory_any_commission") or not request.user.has_perm(
+            "projects.view_projectcategory_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
             self.queryset = self.queryset.filter(
@@ -173,9 +172,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_commission")
-            and not request.user.has_perm(
-                "projects.view_projectcategory_any_institution"
-            )
+            and not request.user.has_perm("projects.view_projectcategory_any_institution")
             and not request.user.can_access_project(project)
         ):
             return response.Response(
@@ -183,9 +180,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(
-            self.queryset.filter(project_id=kwargs["project_id"]), many=True
-        )
+        serializer = self.serializer_class(self.queryset.filter(project_id=kwargs["project_id"]), many=True)
         return response.Response(serializer.data)
 
 

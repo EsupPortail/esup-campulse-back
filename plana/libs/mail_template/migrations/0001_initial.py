@@ -27,9 +27,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'description',
-                    models.CharField(
-                        max_length=128, unique=True, verbose_name='Description'
-                    ),
+                    models.CharField(max_length=128, unique=True, verbose_name='Description'),
                 ),
                 (
                     'fake_vars',

@@ -21,9 +21,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = datetime.date.today()
-            mail_sending_due_date = today - datetime.timedelta(
-                days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION
-            )
+            mail_sending_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION)
             projects_needing_reviews = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_review_needed_project_statuses(),
                 planned_end_date__year=mail_sending_due_date.year,
@@ -37,26 +35,18 @@ class Command(BaseCommand):
             for project_needing_review in projects_needing_reviews:
                 context["project_name"] = project_needing_review.name
                 if project_needing_review.association_id is not None:
-                    association = Association.objects.get(
-                        id=project_needing_review.association_id
-                    )
+                    association = Association.objects.get(id=project_needing_review.association_id)
                     if project_needing_review.association_user_id is not None:
                         email = User.objects.get(
-                            id=AssociationUser.objects.get(
-                                id=project_needing_review.association_user_id
-                            ).user_id
+                            id=AssociationUser.objects.get(id=project_needing_review.association_user_id).user_id
                         ).email
                     else:
                         email = association.email
-                    template = MailTemplate.objects.get(
-                        code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED"
-                    )
+                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=email,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
 
@@ -65,47 +55,33 @@ class Command(BaseCommand):
                         .default_institution_managers()
                         .values_list("email", flat=True)
                     )
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED"
-                    )
+                    template = MailTemplate.objects.get(code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=managers_emails,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
 
                 elif project_needing_review.user_id is not None:
                     user = User.objects.get(id=project_needing_review.user_id)
-                    template = MailTemplate.objects.get(
-                        code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED"
-                    )
+                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=user.email,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
 
                     managers_emails = []
-                    for user_to_check in User.objects.filter(
-                        is_superuser=False, is_staff=True
-                    ):
+                    for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                         if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
-                    template = MailTemplate.objects.get(
-                        code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED"
-                    )
+                    template = MailTemplate.objects.get(code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=managers_emails,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
 

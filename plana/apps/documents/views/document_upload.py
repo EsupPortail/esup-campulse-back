@@ -99,12 +99,11 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
 
         if not request.user.has_perm("documents.view_documentupload_all"):
-            user_associations_ids = AssociationUser.objects.filter(
-                user_id=request.user.pk
-            ).values_list("association_id")
+            user_associations_ids = AssociationUser.objects.filter(user_id=request.user.pk).values_list(
+                "association_id"
+            )
             user_documents_ids = DocumentUpload.objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
             self.queryset = self.queryset.filter(id__in=user_documents_ids)
 
@@ -126,9 +125,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 if project_type_code != "" and project_type_code in all_process_types
             ]
             self.queryset = self.queryset.filter(
-                document_id__in=Document.objects.filter(
-                    process_type__in=process_types_codes
-                ).values_list("id")
+                document_id__in=Document.objects.filter(process_type__in=process_types_codes).values_list("id")
             )
 
         if is_validated_by_admin is not None and is_validated_by_admin != "":
@@ -167,15 +164,10 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         existing_document = DocumentUpload.objects.filter(document_id=document.id)
 
         if request.user.is_anonymous and (
-            ("association" in request.data or "project" in request.data)
-            or document.process_type != "DOCUMENT_USER"
+            ("association" in request.data or "project" in request.data) or document.process_type != "DOCUMENT_USER"
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Cannot upload documents not related to user as anonymous."
-                    )
-                },
+                {"error": _("Cannot upload documents not related to user as anonymous.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -210,20 +202,14 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             existing_document = existing_document.filter(association_id=association.id)
             if not request.user.has_perm(
                 "documents.add_documentupload_all"
-            ) and not request.user.is_president_in_association(
-                request.data["association"]
-            ):
+            ) and not request.user.is_president_in_association(request.data["association"]):
                 return response.Response(
                     {"error": _("Not allowed to post documents if not president.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
         user = None
-        if (
-            "user" in request.data
-            and request.data["user"] is not None
-            and request.data["user"] != ""
-        ):
+        if "user" in request.data and request.data["user"] is not None and request.data["user"] != "":
             try:
                 user = User.objects.get(username=request.data["user"])
             except ObjectDoesNotExist:
@@ -243,8 +229,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 )
 
         if "validated_date" in request.data and (
-            request.user.is_anonymous
-            or not request.user.has_perm("documents.add_documentupload_all")
+            request.user.is_anonymous or not request.user.has_perm("documents.add_documentupload_all")
         ):
             return response.Response(
                 {"error": _("Not allowed to validate documents.")},
@@ -300,23 +285,17 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     .values_list("email", flat=True)
                 )
             if user is not None:
-                for user_to_check in User.objects.filter(
-                    is_superuser=False, is_staff=True
-                ):
+                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                     if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
-            template = MailTemplate.objects.get(
-                code="USER_OR_ASSOCIATION_DOCUMENT_CREATION"
-            )
+            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_DOCUMENT_CREATION")
             email = ""
             if association is not None:
                 email = association.email
@@ -325,9 +304,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -371,14 +348,9 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         if not request.user.has_perm("documents.view_documentupload_all") and (
             (
                 document_upload.project_id is not None
-                and not request.user.can_access_project(
-                    Project.visible_objects.get(id=document_upload.project_id)
-                )
+                and not request.user.can_access_project(Project.visible_objects.get(id=document_upload.project_id))
             )
-            or (
-                document_upload.user_id is not None
-                and request.user.pk != document_upload.user_id
-            )
+            or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
             or (
                 document_upload.association_id is not None
                 and not request.user.is_in_association(document_upload.association_id)
@@ -456,9 +428,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(
-                code="USER_OR_ASSOCIATION_DOCUMENT_CONFIRMATION"
-            )
+            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_DOCUMENT_CONFIRMATION")
             email = ""
             if document_upload.association_id is not None:
                 email = Association.objects.get(id=document_upload.association_id).email
@@ -467,9 +437,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -498,14 +466,9 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         if not request.user.has_perm("documents.delete_documentupload_all") and (
             (
                 document_upload.project_id is not None
-                and not request.user.can_edit_project(
-                    Project.visible_objects.get(id=document_upload.project_id)
-                )
+                and not request.user.can_edit_project(Project.visible_objects.get(id=document_upload.project_id))
             )
-            or (
-                document_upload.user_id is not None
-                and request.user.pk != document_upload.user_id
-            )
+            or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
             or (
                 document_upload.association_id is not None
                 and not request.user.is_in_association(document_upload.association_id)
@@ -522,9 +485,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(
-                code="USER_OR_ASSOCIATION_DOCUMENT_REJECTION"
-            )
+            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_DOCUMENT_REJECTION")
             email = ""
             if document_upload.association_id is not None:
                 email = Association.objects.get(id=document_upload.association_id).email
@@ -533,9 +494,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -576,19 +535,12 @@ class DocumentUploadFileList(generics.ListAPIView):
             if not request.user.has_perm("documents.view_documentupload_all") and (
                 (
                     document_upload.project_id is not None
-                    and not request.user.can_access_project(
-                        Project.visible_objects.get(id=document_upload.project_id)
-                    )
+                    and not request.user.can_access_project(Project.visible_objects.get(id=document_upload.project_id))
                 )
-                or (
-                    document_upload.user_id is not None
-                    and request.user.pk != document_upload.user_id
-                )
+                or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
                 or (
                     document_upload.association_id is not None
-                    and not request.user.is_in_association(
-                        document_upload.association_id
-                    )
+                    and not request.user.is_in_association(document_upload.association_id)
                 )
             ):
                 filtered_uploads_ids.append(document_upload.id)
@@ -641,14 +593,9 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
         if not request.user.has_perm("documents.view_documentupload_all") and (
             (
                 document_upload.project_id is not None
-                and not request.user.can_access_project(
-                    Project.visible_objects.get(id=document_upload.project_id)
-                )
+                and not request.user.can_access_project(Project.visible_objects.get(id=document_upload.project_id))
             )
-            or (
-                document_upload.user_id is not None
-                and request.user.pk != document_upload.user_id
-            )
+            or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
             or (
                 document_upload.association_id is not None
                 and not request.user.is_in_association(document_upload.association_id)

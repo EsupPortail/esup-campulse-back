@@ -92,14 +92,10 @@ class CommissionExportsViewsTests(TestCase):
         """
         commission_id = 1
 
-        response = self.student_client.get(
-            f"/commissions/{commission_id}/export?mode=pdf"
-        )
+        response = self.student_client.get(f"/commissions/{commission_id}/export?mode=pdf")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.student_client.get(
-            f"/commissions/{commission_id}/export?mode=xlsx"
-        )
+        response = self.student_client.get(f"/commissions/{commission_id}/export?mode=xlsx")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.student_client.get(f"/commissions/{commission_id}/export")
@@ -110,9 +106,7 @@ class CommissionExportsViewsTests(TestCase):
 
         total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                ).values("id")
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id).values("id")
             ).values("project_id")
         ).count()
         # -1 because of CSV header
@@ -137,17 +131,13 @@ class CommissionExportsViewsTests(TestCase):
 
         total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                ).values("id")
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id).values("id")
             ).values("project_id")
         ).count()
         # -1 because of CSV header
         self.assertNotEqual(len(list(csv_reader)) - 1, total)
 
-        response = self.general_client.get(
-            f"/commissions/{commission_id}/export?project_ids=4,10"
-        )
+        response = self.general_client.get(f"/commissions/{commission_id}/export?project_ids=4,10")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = response.content.decode('utf-8')
@@ -155,9 +145,7 @@ class CommissionExportsViewsTests(TestCase):
 
         total = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                ).values("id")
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id).values("id")
             ).values("project_id")
         )
         total = total.filter(id__in=[4, 10]).count()

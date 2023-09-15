@@ -19,9 +19,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             document_uploads_with_expiration = DocumentUpload.objects.filter(
-                document_id__in=Document.objects.filter(
-                    days_before_expiration__isnull=False
-                ).values_list("id")
+                document_id__in=Document.objects.filter(days_before_expiration__isnull=False).values_list("id")
             )
             for document_upload in document_uploads_with_expiration:
                 document = Document.objects.get(id=document_upload.document_id)
@@ -31,19 +29,13 @@ class Command(BaseCommand):
                     and datetime.date.today()
                     == document_upload.validated_date
                     + document.days_before_expiration
-                    - datetime.timedelta(
-                        days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
-                    )
+                    - datetime.timedelta(days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 ) or (
                     document_upload.validated_date is not None
                     and document.expiration_day is not None
                     and datetime.date.today()
-                    == datetime.datetime.strptime(
-                        document.expiration_day, "%m-%d"
-                    ).date()
-                    - datetime.timedelta(
-                        days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
-                    )
+                    == datetime.datetime.strptime(document.expiration_day, "%m-%d").date()
+                    - datetime.timedelta(days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 ):
                     template = MailTemplate.objects.get(
                         code="USER_OR_ASSOCIATION_DOCUMENT_EXPIRATION_WARNING_SCHEDULED"
@@ -54,27 +46,21 @@ class Command(BaseCommand):
                     if document_upload.user_id is not None:
                         email = User.objects.get(id=document_upload.user_id).email
                     elif document_upload.association_id is not None:
-                        email = Association.objects.get(
-                            id=document_upload.association_id
-                        ).email
+                        email = Association.objects.get(id=document_upload.association_id).email
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=email,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
                 elif (
                     document_upload.validated_date is not None
                     and document.days_before_expiration is not None
-                    and datetime.date.today()
-                    == document_upload.validated_date + document.days_before_expiration
+                    and datetime.date.today() == document_upload.validated_date + document.days_before_expiration
                 ) or (
                     document_upload.validated_date is not None
                     and document.expiration_day is not None
-                    and datetime.date.today().strftime("%m-%d")
-                    == document.expiration_day
+                    and datetime.date.today().strftime("%m-%d") == document.expiration_day
                 ):
                     document_upload.delete()
 

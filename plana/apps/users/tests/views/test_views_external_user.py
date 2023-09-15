@@ -59,9 +59,7 @@ class ExternalUserViewsTests(TestCase):
             }
         ]
 
-        response = self.manager_client.get(
-            reverse('external_user_list'), {'last_name': 'doe'}
-        )
+        response = self.manager_client.get(reverse('external_user_list'), {'last_name': 'doe'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['mail'], 'john.doe@mail.tld')
 
@@ -74,15 +72,11 @@ class ExternalUserViewsTests(TestCase):
                 "password": "motdepasse",
             },
         )
-        response = student_client.get(
-            reverse('external_user_list'), {'last_name': 'jean-doux'}
-        )
+        response = student_client.get(reverse('external_user_list'), {'last_name': 'jean-doux'})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_external_user_detail_missing_last_name(self):
-        response = self.manager_client.get(
-            reverse('external_user_list'), {'wrong': 'wrong'}
-        )
+        response = self.manager_client.get(reverse('external_user_list'), {'wrong': 'wrong'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @patch('plana.apps.users.views.external.Client')
@@ -90,9 +84,7 @@ class ExternalUserViewsTests(TestCase):
         mock_instance = mock_client.return_value
         mock_instance.list_users.return_value = []
 
-        response = self.manager_client.get(
-            reverse('external_user_list'), {'last_name': 'toto'}
-        )
+        response = self.manager_client.get(reverse('external_user_list'), {'last_name': 'toto'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data)
 
@@ -101,7 +93,5 @@ class ExternalUserViewsTests(TestCase):
         mock_instance = mock_client.return_value
         mock_instance.list_users.side_effect = Exception('error')
 
-        response = self.manager_client.get(
-            reverse('external_user_list'), {'last_name': 'toto'}
-        )
+        response = self.manager_client.get(reverse('external_user_list'), {'last_name': 'toto'})
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)

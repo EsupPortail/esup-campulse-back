@@ -76,9 +76,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
     def test_get_project_categories_anonymous(self):
         """
@@ -106,15 +104,15 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/categories")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                user_id=self.manager_institution_user_id
-            ).values_list("institution_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.manager_institution_user_id).values_list(
+                "institution_id"
+            )
         )
         projects_categories_cnt = ProjectCategory.objects.filter(
             project_id__in=Project.visible_objects.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=user_institutions_ids
-                ).values_list("id")
+                association_id__in=Association.objects.filter(institution_id__in=user_institutions_ids).values_list(
+                    "id"
+                )
             )
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -146,9 +144,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.post(
-            "/projects/categories", {"name": "Testing anonymous"}
-        )
+        response = self.client.post("/projects/categories", {"name": "Testing anonymous"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_project_categories_not_found(self):
@@ -196,21 +192,13 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - Project edition date is updated.
         """
         post_data = {"project": 2, "category": 3}
-        old_project_edition_date = Project.visible_objects.get(
-            id=post_data["project"]
-        ).edition_date
+        old_project_edition_date = Project.visible_objects.get(id=post_data["project"]).edition_date
         response = self.student_president_client.post("/projects/categories", post_data)
-        new_project_edition_date = Project.visible_objects.get(
-            id=post_data["project"]
-        ).edition_date
+        new_project_edition_date = Project.visible_objects.get(id=post_data["project"]).edition_date
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             1,
-            len(
-                ProjectCategory.objects.filter(
-                    project=post_data["project"], category=post_data["category"]
-                )
-            ),
+            len(ProjectCategory.objects.filter(project=post_data["project"], category=post_data["category"])),
         )
         self.assertNotEqual(old_project_edition_date, new_project_edition_date)
 
@@ -259,9 +247,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
 
         project_id = 2
         project_test_cnt = ProjectCategory.objects.filter(project_id=project_id).count()
-        response = self.student_president_client.get(
-            f"/projects/{project_id}/categories"
-        )
+        response = self.student_president_client.get(f"/projects/{project_id}/categories")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
@@ -285,16 +271,12 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         project = 999
         category = 1
-        response = self.student_offsite_client.delete(
-            f"/projects/{project}/categories/{category}"
-        )
+        response = self.student_offsite_client.delete(f"/projects/{project}/categories/{category}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         project = 1
         category = 999
-        response = self.student_offsite_client.delete(
-            f"/projects/{project}/categories/{category}"
-        )
+        response = self.student_offsite_client.delete(f"/projects/{project}/categories/{category}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_categories_forbidden_user(self):
@@ -306,9 +288,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         """
         project = 1
         category = 5
-        response = self.student_offsite_client.delete(
-            f"/projects/{project}/categories/{category}"
-        )
+        response = self.student_offsite_client.delete(f"/projects/{project}/categories/{category}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_categories_association_success(self):
@@ -323,9 +303,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         project = 2
         category = 1
         old_project_edition_date = Project.visible_objects.get(id=project).edition_date
-        response = self.student_president_client.delete(
-            f"/projects/{project}/categories/{category}"
-        )
+        response = self.student_president_client.delete(f"/projects/{project}/categories/{category}")
         new_project_edition_date = Project.visible_objects.get(id=project).edition_date
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
@@ -334,7 +312,5 @@ class ProjectCategoryLinksViewsTests(TestCase):
         )
         self.assertNotEqual(old_project_edition_date, new_project_edition_date)
 
-        response = self.student_president_client.delete(
-            f"/projects/{project}/categories/{category}"
-        )
+        response = self.student_president_client.delete(f"/projects/{project}/categories/{category}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

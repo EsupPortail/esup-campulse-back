@@ -22,9 +22,7 @@ urlpatterns = [
         CommissionExport.as_view(),
         name="commission_export",
     ),
-    path(
-        "funds", CommissionFundListCreate.as_view(), name="commission_fund_list_create"
-    ),
+    path("funds", CommissionFundListCreate.as_view(), name="commission_fund_list_create"),
     path(
         "<int:commission_id>/funds",
         CommissionFundRetrieve.as_view(),

@@ -90,9 +90,7 @@ class DocumentsViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
         documents = Document.objects.filter(acronym__in=["RIB", "BILAN_FINANCIER"])
         documents.update(
@@ -121,9 +119,7 @@ class DocumentsViewsTests(TestCase):
             "user": cls.student_misc_user_name,
         }
         cls.student_misc_client.post("/documents/uploads", post_data_1)
-        cls.new_document = cls.student_misc_client.post(
-            "/documents/uploads", post_data_2
-        )
+        cls.new_document = cls.student_misc_client.post("/documents/uploads", post_data_2)
 
     def test_get_document_upload_list_anonymous(self):
         """
@@ -140,12 +136,11 @@ class DocumentsViewsTests(TestCase):
         - A student user gets documents where rights are OK.
         """
         response = self.student_misc_client.get("/documents/uploads")
-        user_associations_ids = AssociationUser.objects.filter(
-            user_id=self.student_misc_user_id
-        ).values_list("association_id")
+        user_associations_ids = AssociationUser.objects.filter(user_id=self.student_misc_user_id).values_list(
+            "association_id"
+        )
         user_documents_cnt = DocumentUpload.objects.filter(
-            models.Q(user_id=self.student_misc_user_id)
-            | models.Q(association_id__in=user_associations_ids)
+            models.Q(user_id=self.student_misc_user_id) | models.Q(association_id__in=user_associations_ids)
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -165,29 +160,19 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), documents_cnt)
 
-        response = self.general_client.get(
-            f"/documents/uploads?user_id={self.student_misc_user_id}"
-        )
-        documents_cnt = DocumentUpload.objects.filter(
-            user_id=self.student_misc_user_id
-        ).count()
+        response = self.general_client.get(f"/documents/uploads?user_id={self.student_misc_user_id}")
+        documents_cnt = DocumentUpload.objects.filter(user_id=self.student_misc_user_id).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
         association_id = 2
-        response = self.general_client.get(
-            f"/documents/uploads?association_id={association_id}"
-        )
-        documents_cnt = DocumentUpload.objects.filter(
-            association_id=association_id
-        ).count()
+        response = self.general_client.get(f"/documents/uploads?association_id={association_id}")
+        documents_cnt = DocumentUpload.objects.filter(association_id=association_id).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
         project_id = 1
-        response = self.general_client.get(
-            f"/documents/uploads?project_id={project_id}"
-        )
+        response = self.general_client.get(f"/documents/uploads?project_id={project_id}")
         documents_cnt = DocumentUpload.objects.filter(project_id=project_id).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
@@ -200,12 +185,8 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
-        response = self.general_client.get(
-            "/documents/uploads?is_validated_by_admin=true"
-        )
-        documents_cnt = DocumentUpload.objects.exclude(
-            validated_date__isnull=True
-        ).count()
+        response = self.general_client.get("/documents/uploads?is_validated_by_admin=true")
+        documents_cnt = DocumentUpload.objects.exclude(validated_date__isnull=True).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
@@ -325,9 +306,7 @@ class DocumentsViewsTests(TestCase):
 
         document_data["association"] = 2
         document_data["user"] = self.student_president_user_name
-        response = self.student_president_client.post(
-            "/documents/uploads", document_data
-        )
+        response = self.student_president_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_document_upload_serializer_error(self):
@@ -345,9 +324,7 @@ class DocumentsViewsTests(TestCase):
             "document": document.id,
             "user": self.student_misc_user_name,
         }
-        response = self.student_misc_client.post(
-            "/documents/uploads", data=post_data, content_type="application/json"
-        )
+        response = self.student_misc_client.post("/documents/uploads", data=post_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_document_upload_forbidden_user(self):
@@ -452,9 +429,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-        documents = Document.objects.filter(
-            acronym__in=["CHARTE_FSDIE", "DOCUMENT_EDITE"]
-        )
+        documents = Document.objects.filter(acronym__in=["CHARTE_FSDIE", "DOCUMENT_EDITE"])
         documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",
@@ -464,11 +439,7 @@ class DocumentsViewsTests(TestCase):
 
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        du_cnt = len(
-            DocumentUpload.objects.filter(
-                project_id=project_id, document_id=document.id
-            )
-        )
+        du_cnt = len(DocumentUpload.objects.filter(project_id=project_id, document_id=document.id))
         self.assertEqual(du_cnt, 1)
 
         self.assertFalse(len(mail.outbox))
@@ -477,9 +448,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         du_cnt = len(
-            DocumentUpload.objects.filter(
-                user_id=self.student_misc_user_id, document_id=post_data["document"]
-            ),
+            DocumentUpload.objects.filter(user_id=self.student_misc_user_id, document_id=post_data["document"]),
         )
         self.assertEqual(du_cnt, 1)
         self.assertTrue(len(mail.outbox))
@@ -533,9 +502,7 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         """
-        response = self.student_misc_client.get(
-            f"/documents/uploads/{self.new_document.data['id']}"
-        )
+        response = self.student_misc_client.get(f"/documents/uploads/{self.new_document.data['id']}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.general_client.get("/documents/uploads/6")
@@ -548,9 +515,7 @@ class DocumentsViewsTests(TestCase):
         - The route returns a 405 everytime.
         """
         data = {"is_validated_by_admin": True}
-        response = self.general_client.put(
-            f"/documents/uploads/{self.new_document.data['id']}", data
-        )
+        response = self.general_client.put(f"/documents/uploads/{self.new_document.data['id']}", data)
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_document_upload_anonymous(self):
@@ -701,9 +666,7 @@ class DocumentsViewsTests(TestCase):
         - The owner of the project must be the authenticated user.
         """
         document_upload_id = 6
-        response = self.student_misc_client.delete(
-            f"/documents/uploads/{document_upload_id}"
-        )
+        response = self.student_misc_client.delete(f"/documents/uploads/{document_upload_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_document_upload_association_success(self):
@@ -717,18 +680,14 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a manager user.
         """
         document_upload_id = 6
-        response = self.student_president_client.delete(
-            f"/documents/uploads/{document_upload_id}"
-        )
+        response = self.student_president_client.delete(f"/documents/uploads/{document_upload_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,
             len(DocumentUpload.objects.filter(id=document_upload_id)),
         )
 
-        response = self.student_president_client.delete(
-            f"/documents/uploads/{document_upload_id}"
-        )
+        response = self.student_president_client.delete(f"/documents/uploads/{document_upload_id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         self.assertFalse(len(mail.outbox))
@@ -736,9 +695,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertTrue(len(mail.outbox))
 
-        response = self.general_client.delete(
-            f"/documents/uploads/{self.new_document.data['id']}"
-        )
+        response = self.general_client.delete(f"/documents/uploads/{self.new_document.data['id']}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_get_document_upload_file_anonymous(self):
@@ -797,7 +754,5 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by a student user.
         """
-        response = self.student_misc_client.get(
-            f"/documents/uploads/{self.new_document.data['id']}/file"
-        )
+        response = self.student_misc_client.get(f"/documents/uploads/{self.new_document.data['id']}/file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -109,15 +109,15 @@ class ProjectCommissionFundViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/commission_funds")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                user_id=self.manager_institution_user_id
-            ).values_list("institution_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.manager_institution_user_id).values_list(
+                "institution_id"
+            )
         )
         pcf_cnt = ProjectCommissionFund.objects.filter(
             project_id__in=Project.visible_objects.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=user_institutions_ids
-                ).values_list("id")
+                association_id__in=Association.objects.filter(institution_id__in=user_institutions_ids).values_list(
+                    "id"
+                )
             )
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -132,12 +132,8 @@ class ProjectCommissionFundViewsTests(TestCase):
         - Correct search results are returned.
         """
         project_id = 1
-        search_db_count = len(
-            ProjectCommissionFund.objects.filter(project_id=project_id)
-        )
-        response = self.general_client.get(
-            f"/projects/commission_funds?project_id={project_id}"
-        )
+        search_db_count = len(ProjectCommissionFund.objects.filter(project_id=project_id))
+        response = self.general_client.get(f"/projects/commission_funds?project_id={project_id}")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(search_db_count, len(content))
@@ -145,14 +141,10 @@ class ProjectCommissionFundViewsTests(TestCase):
         commission_id = 1
         search_db_count = len(
             ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                )
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id)
             )
         )
-        response = self.general_client.get(
-            f"/projects/commission_funds?commission_id={commission_id}"
-        )
+        response = self.general_client.get(f"/projects/commission_funds?commission_id={commission_id}")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(search_db_count, len(content))
@@ -163,9 +155,7 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.post(
-            "/projects/commission_funds", {"project": 1, "commission_fund": 1}
-        )
+        response = self.client.post("/projects/commission_funds", {"project": 1, "commission_fund": 1})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_project_cf_not_found(self):
@@ -175,9 +165,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must exist.
         """
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", {"project": 9999, "commission_fund": 1}
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", {"project": 9999, "commission_fund": 1})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_project_cf_serializer_error(self):
@@ -187,9 +175,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - If data format is not good we get a bad request from the serializer.
         """
         post_data = {"project": 1, "commission_fund": 1, "amount_asked": True}
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", post_data
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_cf_manager_forbidden(self):
@@ -221,9 +207,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The authenticated user must be authorized to edit the requested project.
         """
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", {"project": 2, "commission_fund": 1}
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", {"project": 2, "commission_fund": 1})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_cf_user_not_site(self):
@@ -239,9 +223,7 @@ class ProjectCommissionFundViewsTests(TestCase):
             "commission_fund": commission_fund_id,
             "amount_asked": 500,
         }
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", post_data
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_cf_wrong_submission_date(self):
@@ -282,9 +264,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - A project cannot be linked twice to the same commission fund.
         """
         post_data = {"project": 1, "commission_fund": 3}
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", post_data
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_cf_multiple_commissions(self):
@@ -299,9 +279,7 @@ class ProjectCommissionFundViewsTests(TestCase):
             "project": project_id,
             "commission_fund": commission_fund_id,
         }
-        response = self.president_student_client.post(
-            "/projects/commission_funds", post_data
-        )
+        response = self.president_student_client.post("/projects/commission_funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_cf_user_success(self):
@@ -315,22 +293,16 @@ class ProjectCommissionFundViewsTests(TestCase):
         """
         project_id = 1
         commission_fund_id = 3
-        ProjectCommissionFund.objects.get(
-            project_id=project_id, commission_fund_id=commission_fund_id
-        ).delete()
+        ProjectCommissionFund.objects.get(project_id=project_id, commission_fund_id=commission_fund_id).delete()
         post_data = {
             "project": project_id,
             "commission_fund": commission_fund_id,
             "amount_asked": 500,
         }
-        response = self.student_misc_client.post(
-            "/projects/commission_funds", post_data
-        )
+        response = self.student_misc_client.post("/projects/commission_funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        results = ProjectCommissionFund.objects.filter(
-            project_id=project_id, commission_fund_id=commission_fund_id
-        )
+        results = ProjectCommissionFund.objects.filter(project_id=project_id, commission_fund_id=commission_fund_id)
         self.assertEqual(len(results), 1)
 
     def test_put_project_cf_not_existing(self):
@@ -339,9 +311,7 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - This route always returns a 405.
         """
-        response = self.student_misc_client.put(
-            "/projects/1/commission_funds", {}, content_type="application/json"
-        )
+        response = self.student_misc_client.put("/projects/1/commission_funds", {}, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_get_project_cf_by_id_anonymous(self):
@@ -380,9 +350,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - Correct projects categories are returned.
         """
         project_id = 1
-        project_test_cnt = ProjectCommissionFund.objects.filter(
-            project_id=project_id
-        ).count()
+        project_test_cnt = ProjectCommissionFund.objects.filter(project_id=project_id).count()
         response = self.general_client.get(f"/projects/{project_id}/commission_funds")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -390,12 +358,8 @@ class ProjectCommissionFundViewsTests(TestCase):
         self.assertEqual(len(content), project_test_cnt)
 
         project_id = 2
-        project_test_cnt = ProjectCommissionFund.objects.filter(
-            project_id=project_id
-        ).count()
-        response = self.president_student_client.get(
-            f"/projects/{project_id}/commission_funds"
-        )
+        project_test_cnt = ProjectCommissionFund.objects.filter(project_id=project_id).count()
+        response = self.president_student_client.get(f"/projects/{project_id}/commission_funds")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
@@ -416,9 +380,7 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - Always returns a 405.
         """
-        response = self.general_client.put(
-            "/projects/1/commission_funds/3", {}, content_type="application/json"
-        )
+        response = self.general_client.put("/projects/1/commission_funds/3", {}, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_cf_anonymous(self):
@@ -427,9 +389,7 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response = self.client.patch(
-            "/projects/1/commission_funds/3", {}, content_type="application/json"
-        )
+        response = self.client.patch("/projects/1/commission_funds/3", {}, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_cf_not_found(self):
@@ -700,9 +660,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         - The route can be accessed by a student client.
         - The ProjectCommissionFund object must exist.
         """
-        response = self.student_misc_client.delete(
-            "/projects/99999/commission_funds/99999"
-        )
+        response = self.student_misc_client.delete("/projects/99999/commission_funds/99999")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_project_cf_forbidden(self):
@@ -726,7 +684,5 @@ class ProjectCommissionFundViewsTests(TestCase):
         response = self.student_misc_client.delete("/projects/1/commission_funds/3")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        pcf_not_found = len(
-            ProjectCommissionFund.objects.filter(project_id=1, commission_fund_id=3)
-        )
+        pcf_not_found = len(ProjectCommissionFund.objects.filter(project_id=1, commission_fund_id=3))
         self.assertEqual(pcf_not_found, 0)

@@ -65,9 +65,7 @@ class DynamicStorageFieldFileTest(TestCase):
         field.storage = default_storage
         public_instance = Mock()
         public_instance.is_public = True
-        file = DynamicStorageFieldFile(
-            public_instance, field=field, name="filename.ext"
-        )
+        file = DynamicStorageFieldFile(public_instance, field=field, name="filename.ext")
         file.storage = Mock()
         file.update_acl()
         file.storage.update_acl.assert_called_once_with("filename.ext")

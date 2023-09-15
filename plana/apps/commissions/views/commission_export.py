@@ -84,13 +84,12 @@ class CommissionExport(generics.RetrieveAPIView):
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
-        if not request.user.has_perm(
-            "projects.view_project_any_fund"
-        ) or not request.user.has_perm("projects.view_project_any_institution"):
+        if not request.user.has_perm("projects.view_project_any_fund") or not request.user.has_perm(
+            "projects.view_project_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
             queryset = queryset.filter(
@@ -131,9 +130,7 @@ class CommissionExport(generics.RetrieveAPIView):
 
         projects = queryset.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                ).values("id")
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id).values("id")
             ).values("project_id")
         ).order_by("id")
 
@@ -148,9 +145,7 @@ class CommissionExport(generics.RetrieveAPIView):
         filename = f"commission_{commission_id}_export"
         if mode is None or mode == "csv":
             http_response = HttpResponse(content_type="application/csv")
-            http_response[
-                "Content-Disposition"
-            ] = f"Content-Disposition: attachment; filename={filename}.csv"
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
             writer = csv.writer(http_response, delimiter=";")
             writer.writerow([field for field in fields])
         elif mode == "xlsx":
@@ -164,9 +159,7 @@ class CommissionExport(generics.RetrieveAPIView):
 
         for index_project, project in enumerate(projects):
             association = (
-                None
-                if project.association_id is None
-                else Association.objects.get(id=project.association_id).name
+                None if project.association_id is None else Association.objects.get(id=project.association_id).name
             )
 
             if project.user_id is None:
@@ -177,16 +170,12 @@ class CommissionExport(generics.RetrieveAPIView):
 
             categories = list(
                 Category.objects.filter(
-                    id__in=ProjectCategory.objects.filter(
-                        project_id=project.id
-                    ).values_list("category_id")
+                    id__in=ProjectCategory.objects.filter(project_id=project.id).values_list("category_id")
                 ).values_list("name", flat=True)
             )
             categories = ', '.join(categories)
 
-            project_commission_funds = ProjectCommissionFund.objects.filter(
-                project_id=project.id
-            )
+            project_commission_funds = ProjectCommissionFund.objects.filter(project_id=project.id)
 
             is_first_edition = str(_("Yes"))
             for edition in project_commission_funds:
@@ -209,9 +198,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 try:
                     pcf = ProjectCommissionFund.objects.get(
                         project_id=project.id,
-                        commission_fund_id=CommissionFund.objects.get(
-                            commission_id=commission_id, fund_id=fund.id
-                        ).id,
+                        commission_fund_id=CommissionFund.objects.get(commission_id=commission_id, fund_id=fund.id).id,
                     )
                     fields.append(pcf.amount_asked)
                     fields.append(pcf.amount_earned)
@@ -224,9 +211,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 writer.writerow([field for field in fields])
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
-                    worksheet.cell(
-                        row=(index_project + 2), column=(index_field + 1)
-                    ).value = field
+                    worksheet.cell(row=(index_project + 2), column=(index_field + 1)).value = field
             elif mode == "pdf":
                 data["projects"].append(fields)
 
@@ -241,9 +226,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 content=stream,
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
-            http_response[
-                "Content-Disposition"
-            ] = f"Content-Disposition: attachment; filename={filename}.xlsx"
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
             return http_response
         elif mode == "pdf":
             return generate_pdf(

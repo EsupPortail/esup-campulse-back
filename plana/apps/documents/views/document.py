@@ -221,11 +221,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if document.process_type not in Document.ProcessType.get_updatable_documents():
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to update a document with this process type."
-                    )
-                },
+                {"error": _("Not allowed to update a document with this process type.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 

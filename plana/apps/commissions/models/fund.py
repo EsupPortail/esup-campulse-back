@@ -11,9 +11,7 @@ class Fund(models.Model):
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
     acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
-    is_site = models.BooleanField(
-        _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
-    )
+    is_site = models.BooleanField(_("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT)
     institution = models.ForeignKey(
         Institution,
         verbose_name=_("Institution"),

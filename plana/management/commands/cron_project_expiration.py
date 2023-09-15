@@ -24,9 +24,7 @@ class Command(BaseCommand):
                     archived_projects_ids.append(project.id)
             projects = projects.filter(id__in=archived_projects_ids)
 
-            documents = DocumentUpload.objects.filter(
-                project_id__in=projects.values_list("id")
-            )
+            documents = DocumentUpload.objects.filter(project_id__in=projects.values_list("id"))
             for document in documents:
                 document.path_file.delete()
             documents.delete()

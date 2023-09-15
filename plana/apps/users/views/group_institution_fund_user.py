@@ -67,10 +67,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
             user = User.objects.get(username=request.data["user"])
             institution = None
             institution_id = None
-            if (
-                "institution" in request.data
-                and request.data["institution"] is not None
-            ):
+            if "institution" in request.data and request.data["institution"] is not None:
                 institution = Institution.objects.get(id=request.data["institution"])
                 institution_id = institution.id
             fund = None
@@ -90,11 +87,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            not request.user.is_anonymous
-            and not request.user.is_staff
-            and user.is_validated_by_admin
-        ):
+        if not request.user.is_anonymous and not request.user.is_staff and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit groups.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -111,43 +104,26 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
         group_structure = settings.GROUPS_STRUCTURE[group.name]
         if (
             group_structure["REGISTRATION_ALLOWED"] is False
-            and not request.user.has_perm(
-                "users.add_groupinstitutionfunduser_any_group"
-            )
-            and (
-                not request.user.is_staff
-                or (request.user.is_staff and group in request.user.get_user_groups())
-            )
+            and not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
+            and (not request.user.is_staff or (request.user.is_staff and group in request.user.get_user_groups()))
         ):
             return response.Response(
                 {"error": _("Registering in this group is not allowed.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            group_structure["REGISTRATION_ALLOWED"] is False
-            and user.get_user_groups().count() > 0
-        ) or (
+        if (group_structure["REGISTRATION_ALLOWED"] is False and user.get_user_groups().count() > 0) or (
             group_structure["REGISTRATION_ALLOWED"] is True and user.is_staff is True
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Cannot register in a public and a private group at the same time."
-                    )
-                },
+                {"error": _("Cannot register in a public and a private group at the same time.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         if institution_id is not None:
             if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
-                not request.user.has_perm(
-                    "users.add_groupinstitutionfunduser_any_group"
-                )
-                and (
-                    not request.user.is_anonymous
-                    and not institution in request.user.get_user_managed_institutions()
-                )
+                not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
+                and (not request.user.is_anonymous and not institution in request.user.get_user_managed_institutions())
             ):
                 return response.Response(
                     {"error": _("Adding institution in this group is not possible.")},
@@ -156,13 +132,10 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
 
         if fund_id is not None:
             if (group_structure["FUND_ID_POSSIBLE"] is False) or (
-                not request.user.has_perm(
-                    "users.add_groupinstitutionfunduser_any_group"
-                )
+                not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
                 and (
                     not request.user.is_anonymous
-                    and not fund.institution_id
-                    in request.user.get_user_managed_institutions()
+                    and not fund.institution_id in request.user.get_user_managed_institutions()
                 )
             ):
                 return response.Response(
@@ -306,11 +279,8 @@ class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "users.delete_groupinstitutionfunduser_any_group"
-        ) and (
-            not Fund.objects.get(id=kwargs["fund_id"]).institution_id
-            in request.user.get_user_managed_institutions()
+        if not request.user.has_perm("users.delete_groupinstitutionfunduser_any_group") and (
+            not Fund.objects.get(id=kwargs["fund_id"]).institution_id in request.user.get_user_managed_institutions()
         ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
@@ -361,9 +331,7 @@ class GroupInstitutionFundUserDestroyWithInstitution(generics.DestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "users.delete_groupinstitutionfunduser_any_group"
-        ) and (
+        if not request.user.has_perm("users.delete_groupinstitutionfunduser_any_group") and (
             not kwargs["institution_id"] in request.user.get_user_managed_institutions()
         ):
             return response.Response(

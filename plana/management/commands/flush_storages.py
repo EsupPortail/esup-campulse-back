@@ -23,9 +23,7 @@ class Command(BaseCommand):
                 bucket = resource.Bucket(bucket_name)
                 bucket.objects.all().delete()
 
-                self.stdout.write(
-                    self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned."))
-                )
+                self.stdout.write(self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned.")))
             else:
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))
                 pass

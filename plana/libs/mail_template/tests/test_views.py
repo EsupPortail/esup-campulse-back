@@ -15,9 +15,7 @@ class ViewsTestCase(TestCase):
     def setUpTestData(cls):
         cls.admin_user = User.objects.create_superuser('admin')
         cls.headers = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
-        cls.template_var = MailTemplateVar.objects.create(
-            code='{{ username }}', description='Login'
-        )
+        cls.template_var = MailTemplateVar.objects.create(code='{{ username }}', description='Login')
         cls.mail_template = MailTemplate.objects.create(
             code='TPL',
             label='template',

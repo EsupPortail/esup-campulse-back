@@ -76,9 +76,7 @@ class ProjectCommentLinksViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
         cls.student_user_id = 9
         cls.student_user_name = "etudiant-porteur@mail.tld"
@@ -149,9 +147,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         - Serializer fields must be valid.
         """
         post_data = {"project": 1, "text": False}
-        response = self.general_client.post(
-            "/projects/comments", data=post_data, content_type="application/json"
-        )
+        response = self.general_client.post("/projects/comments", data=post_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_comments_manager_success(self):
@@ -167,11 +163,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             1,
-            len(
-                ProjectComment.objects.filter(
-                    project=post_data["project"], text=post_data["text"]
-                )
-            ),
+            len(ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])),
         )
         self.assertTrue(len(mail.outbox))
         post_data = {"project": 2, "text": "Autre Commentaire"}
@@ -179,11 +171,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
             1,
-            len(
-                ProjectComment.objects.filter(
-                    project=post_data["project"], text=post_data["text"]
-                )
-            ),
+            len(ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])),
         )
 
     def test_get_project_comments_by_id_anonymous(self):
@@ -266,9 +254,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         - An anonymous user cannot execute this command.
         """
         patch_data = {"text": "Commentaire test"}
-        response = self.client.patch(
-            "/projects/2/comments/1", data=patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/projects/2/comments/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_comment_not_found(self):
@@ -391,14 +377,10 @@ class ProjectCommentLinksViewsTests(TestCase):
         """
         project = 2
         comment = 1
-        response = self.student_offsite_client.delete(
-            f"/projects/{project}/comments/{comment}"
-        )
+        response = self.student_offsite_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        response = self.institution_client.delete(
-            f"/projects/{project}/comments/{comment}"
-        )
+        response = self.institution_client.delete(f"/projects/{project}/comments/{comment}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_project_comments_manager_wrong_status(self):
@@ -414,9 +396,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         project.project_status = "PROJECT_REJECTED"
         project.save()
 
-        response = self.general_client.delete(
-            f"/projects/{project_id}/comments/{comment_id}"
-        )
+        response = self.general_client.delete(f"/projects/{project_id}/comments/{comment_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_project_comments_success(self):

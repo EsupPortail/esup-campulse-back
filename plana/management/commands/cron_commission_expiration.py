@@ -16,9 +16,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            expired_commissions = Commission.objects.filter(
-                submission_date__lte=datetime.date.today()
-            )
+            expired_commissions = Commission.objects.filter(submission_date__lte=datetime.date.today())
             expired_commissions.update(is_open_to_projects=False)
 
             ProjectCommissionFund.objects.filter(

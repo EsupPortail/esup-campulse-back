@@ -118,8 +118,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         if (
             not request.user.has_perm("projects.change_project_as_validator")
-            and project.project_status
-            not in Project.ProjectStatus.get_review_needed_project_statuses()
+            and project.project_status not in Project.ProjectStatus.get_review_needed_project_statuses()
         ):
             return response.Response(
                 {"error": _("Project review is not a draft that can be edited.")},
@@ -129,12 +128,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             "real_start_date" in request.data
             and "real_end_date" in request.data
-            and datetime.datetime.strptime(
-                request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
-            > datetime.datetime.strptime(
-                request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            and datetime.datetime.strptime(request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            > datetime.datetime.strptime(request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},
@@ -144,18 +139,14 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         pending_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=kwargs["pk"],
             commission_fund_id__in=CommissionFund.objects.filter(
-                commission_id__in=Commission.objects.filter(
-                    commission_date__gt=datetime.datetime.now()
-                ).values_list("id")
+                commission_id__in=Commission.objects.filter(commission_date__gt=datetime.datetime.now()).values_list(
+                    "id"
+                )
             ).values_list("id"),
         ).count()
         if pending_commission_dates_count > 0:
             return response.Response(
-                {
-                    "error": _(
-                        "Cannot edit review if commission dates are still pending."
-                    )
-                },
+                {"error": _("Cannot edit review if commission dates are still pending.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

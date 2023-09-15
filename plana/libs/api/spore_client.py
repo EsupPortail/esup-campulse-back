@@ -37,9 +37,7 @@ class SporeClient:
 
     __clients = {}
 
-    def get_client(
-        self, middlewares=None, reset=False, suffix='json', name='', **kwargs
-    ):
+    def get_client(self, middlewares=None, reset=False, suffix='json', name='', **kwargs):
         assert hasattr(self, 'api_name'), 'api_name variable missing'
 
         prefix = self.api_name.upper()
@@ -111,9 +109,7 @@ def check_status(logger_name=__name__, object_type=''):
             except SporeMethodCallError as method_call_error:
                 message = f'Bad function call: {method_call_error.cause}'
                 logger.critical(message)
-                logger.critical(
-                    'Expected values: %s', ', '.join(method_call_error.expected_values)
-                )
+                logger.critical('Expected values: %s', ', '.join(method_call_error.expected_values))
                 raise WSError(None, message, obj_type)
             else:
                 logger.debug(response.request.url)

@@ -49,9 +49,7 @@ def send_mail(
     to_ = _listify(to_)
     from_ = from_ or settings.DEFAULT_FROM_EMAIL
 
-    mail = EmailMultiAlternatives(
-        subject, message, from_, to_, cc=cc_, bcc=bcc_, **kwargs
-    )
+    mail = EmailMultiAlternatives(subject, message, from_, to_, cc=cc_, bcc=bcc_, **kwargs)
     if has_html:
         mail.attach_alternative(message, "text/html")
 
@@ -104,9 +102,7 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
 
     html = render_to_string(settings.TEMPLATES_PDF[type_doc], dict_data)
     response = HttpResponse(content_type="application/pdf")
-    response[
-        "Content-Disposition"
-    ] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
+    response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
     return response
 
@@ -114,7 +110,5 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
 def create_pdf(context, request, template_name):
     template = get_template(template_name)
     html = template.render(context)
-    pdf_binary = weasyprint.HTML(
-        string=html, base_url=request.build_absolute_uri('/')
-    ).write_pdf()
+    pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
     return pdf_binary

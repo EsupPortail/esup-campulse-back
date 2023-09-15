@@ -33,9 +33,7 @@ class Command(BaseCommand):
                 | Q(last_login__isnull=False, last_login__date=mail_sending_due_date)
             )
 
-            template = MailTemplate.objects.get(
-                code="USER_ACCOUNT_DELETION_WARNING_SCHEDULED"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_DELETION_WARNING_SCHEDULED")
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
             for user in mail_sending_queryset:
@@ -44,16 +42,12 @@ class Command(BaseCommand):
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=user.email,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
+                    subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(user, None, context),
                 )
 
             # Delete expired accounts (not connected since 1 year)
-            deletion_due_date = today - datetime.timedelta(
-                days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION
-            )
+            deletion_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION)
             deletion_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date__lte=deletion_due_date)
                 | Q(last_login__isnull=False, last_login__date__lte=deletion_due_date)

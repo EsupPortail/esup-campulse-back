@@ -59,15 +59,9 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
 
         if data["association_id"] is not None:
-            data["association"] = Association.objects.get(
-                id=data["association_id"]
-            ).name
+            data["association"] = Association.objects.get(id=data["association_id"]).name
             if data["association_user_id"] is not None:
-                data["user"] = User.objects.get(
-                    id=AssociationUser.objects.get(
-                        id=data["association_user_id"]
-                    ).user_id
-                )
+                data["user"] = User.objects.get(id=AssociationUser.objects.get(id=data["association_user_id"]).user_id)
 
         if data["user_id"] is not None:
             data["user"] = User.objects.get(id=data["user_id"])
@@ -75,9 +69,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
         data["categories"] = list(Category.objects.all().values("id", "name"))
 
         data["project_categories"] = list(
-            ProjectCategory.objects.filter(project_id=data["id"]).values_list(
-                "category_id", flat=True
-            )
+            ProjectCategory.objects.filter(project_id=data["id"]).values_list("category_id", flat=True)
         )
 
         data["project_commission_funds"] = list(
@@ -92,20 +84,14 @@ class ProjectDataExport(generics.RetrieveAPIView):
         )
         for pcf in data["project_commission_funds"]:
             pcf["commission_data"] = Commission.objects.get(
-                id=CommissionFund.objects.get(
-                    id=pcf["commission_fund_id"]
-                ).commission_id
+                id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).commission_id
             ).__dict__
             pcf["fund_data"] = Fund.objects.get(
                 id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
             ).__dict__
 
-        data["commission_name"] = data["project_commission_funds"][0][
-            "commission_data"
-        ]["name"]
-        data["commission_date"] = data["project_commission_funds"][0][
-            "commission_data"
-        ]["commission_date"]
+        data["commission_name"] = data["project_commission_funds"][0]["commission_data"]["name"]
+        data["commission_date"] = data["project_commission_funds"][0]["commission_data"]["commission_date"]
 
         data["is_first_edition"] = True
         for edition in data["project_commission_funds"]:
@@ -116,15 +102,11 @@ class ProjectDataExport(generics.RetrieveAPIView):
         data["documents"] = list(
             DocumentUpload.objects.filter(
                 project_id=data["id"],
-                document_id__in=Document.objects.filter(
-                    process_type="DOCUMENT_PROJECT"
-                ),
+                document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT"),
             ).values("name", "document__name")
         )
 
-        return generate_pdf(
-            data["name"], data, "project_summary", request.build_absolute_uri("/")
-        )
+        return generate_pdf(data["name"], data, "project_summary", request.build_absolute_uri("/"))
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -164,15 +146,9 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
 
         if data["association_id"] is not None:
-            data["association"] = Association.objects.get(
-                id=data["association_id"]
-            ).name
+            data["association"] = Association.objects.get(id=data["association_id"]).name
             if data["association_user_id"] is not None:
-                data["user"] = User.objects.get(
-                    id=AssociationUser.objects.get(
-                        id=data["association_user_id"]
-                    ).user_id
-                )
+                data["user"] = User.objects.get(id=AssociationUser.objects.get(id=data["association_user_id"]).user_id)
 
         if data["user_id"] is not None:
             data["user"] = User.objects.get(id=data["user_id"])
@@ -189,20 +165,14 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         )
         for pcf in data["project_commission_funds"]:
             pcf["commission_data"] = Commission.objects.get(
-                id=CommissionFund.objects.get(
-                    id=pcf["commission_fund_id"]
-                ).commission_id
+                id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).commission_id
             ).__dict__
             pcf["fund_data"] = Fund.objects.get(
                 id=CommissionFund.objects.get(id=pcf["commission_fund_id"]).fund_id
             ).__dict__
 
-        data["commission_name"] = data["project_commission_funds"][0][
-            "commission_data"
-        ]["name"]
-        data["commission_date"] = data["project_commission_funds"][0][
-            "commission_data"
-        ]["commission_date"]
+        data["commission_name"] = data["project_commission_funds"][0]["commission_data"]["name"]
+        data["commission_date"] = data["project_commission_funds"][0]["commission_data"]["commission_date"]
 
         data["is_first_edition"] = True
         for edition in data["project_commission_funds"]:
@@ -213,9 +183,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         data["documents"] = list(
             DocumentUpload.objects.filter(
                 project_id=data["id"],
-                document_id__in=Document.objects.filter(
-                    process_type="DOCUMENT_PROJECT_REVIEW"
-                ),
+                document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT_REVIEW"),
             ).values("name", "document__name")
         )
 

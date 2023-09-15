@@ -12,9 +12,7 @@ class AdminFormsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.admin_user = User.objects.create_superuser('admin')
-        cls.template_var = MailTemplateVar.objects.create(
-            code='{{ username }}', description='Login'
-        )
+        cls.template_var = MailTemplateVar.objects.create(code='{{ username }}', description='Login')
         cls.mail_template = MailTemplate.objects.create(
             code='TPL',
             label='template',

@@ -9,9 +9,7 @@ from django.utils.translation import gettext as _
 
 
 class Command(BaseCommand):
-    help = _(
-        "Applies permissions to groups according to the PERMISSIONS_GROUPS variable."
-    )
+    help = _("Applies permissions to groups according to the PERMISSIONS_GROUPS variable.")
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -42,9 +40,7 @@ class Command(BaseCommand):
             for group in Group.objects.all():
                 group.permissions.clear()
                 for new_group_permission in settings.PERMISSIONS_GROUPS[group.name]:
-                    group.permissions.add(
-                        Permission.objects.get(codename=new_group_permission)
-                    )
+                    group.permissions.add(Permission.objects.get(codename=new_group_permission))
             call_command(
                 "dumpdata",
                 "auth.permission",

@@ -108,32 +108,22 @@ class UserViewsTests(TestCase):
         - association_id query parameter only returns users linked to this association.
         - institutions query parameter only returns users linked to these institutions.
         """
-        response_manager = self.manager_client.get(
-            "/users/?is_validated_by_admin=false"
-        )
+        response_manager = self.manager_client.get("/users/?is_validated_by_admin=false")
         for user in response_manager.data:
             self.assertEqual(user["is_validated_by_admin"], False)
 
         association_id = 2
-        response_manager = self.manager_client.get(
-            f"/users/?association_id={association_id}"
-        )
+        response_manager = self.manager_client.get(f"/users/?association_id={association_id}")
         content = json.loads(response_manager.content.decode("utf-8"))
-        links_cnt = AssociationUser.objects.filter(
-            association_id=association_id
-        ).count()
+        links_cnt = AssociationUser.objects.filter(association_id=association_id).count()
         self.assertEqual(len(content), links_cnt)
 
         institution_ids = [2, 3]
         response_manager = self.manager_client.get("/users/?institutions=2,3")
         content = json.loads(response_manager.content.decode("utf-8"))
 
-        associations_ids = Association.objects.filter(
-            institution_id__in=institution_ids
-        ).values_list("id")
-        links_cnt = AssociationUser.objects.filter(
-            association_id__in=associations_ids
-        ).count()
+        associations_ids = Association.objects.filter(institution_id__in=institution_ids).values_list("id")
+        links_cnt = AssociationUser.objects.filter(association_id__in=associations_ids).count()
         self.assertEqual(len(content), links_cnt)
 
     def test_manager_get_users_list_advanced_queries(self):
@@ -152,31 +142,21 @@ class UserViewsTests(TestCase):
             & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
         )
         commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                fund_id__isnull=False
-            ).values_list("user_id")
+            id__in=GroupInstitutionFundUser.objects.filter(fund_id__isnull=False).values_list("user_id")
         ).values_list("id")
 
         response_manager = self.manager_client.get("/users/?institutions=")
         content = json.loads(response_manager.content.decode("utf-8"))
-        users_query_cnt = User.objects.filter(
-            Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
-        ).count()
+        users_query_cnt = User.objects.filter(Q(id__in=misc_users_query) | Q(id__in=commission_users_query)).count()
         self.assertEqual(len(content), users_query_cnt)
 
-        associations_ids = Association.objects.filter(
-            institution_id__in=[2, 3]
-        ).values_list("id")
-        assos_users_query = AssociationUser.objects.filter(
-            association_id__in=associations_ids
-        ).values_list("user_id")
+        associations_ids = Association.objects.filter(institution_id__in=[2, 3]).values_list("id")
+        assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids).values_list("user_id")
 
         response_manager = self.manager_client.get("/users/?institutions=2,3,")
         content = json.loads(response_manager.content.decode("utf-8"))
         users_query_cnt = User.objects.filter(
-            Q(id__in=assos_users_query)
-            | Q(id__in=misc_users_query)
-            | Q(id__in=commission_users_query)
+            Q(id__in=assos_users_query) | Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
         ).count()
         self.assertEqual(len(content), users_query_cnt)
 
@@ -362,9 +342,7 @@ class UserViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.anonymous_client.get(
-            f"/users/{self.unvalidated_user_id}"
-        )
+        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_manager_get_unexisting_user(self):
@@ -419,12 +397,8 @@ class UserViewsTests(TestCase):
 
         - Always returns a 405 no matter which role tries to acces it
         """
-        response_manager = self.manager_client.put(
-            f"/users/{self.student_user_id}", {"username": "Aurevoirg"}
-        )
-        self.assertEqual(
-            response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
-        )
+        response_manager = self.manager_client.put(f"/users/{self.student_user_id}", {"username": "Aurevoirg"})
+        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_anonymous_patch_user_detail(self):
         """
@@ -471,9 +445,7 @@ class UserViewsTests(TestCase):
         """
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
-            data={
-                "email": f"camping-paradis-cest-mieux-que-la-vie@{settings.RESTRICTED_DOMAINS[0]}"
-            },
+            data={"email": f"camping-paradis-cest-mieux-que-la-vie@{settings.RESTRICTED_DOMAINS[0]}"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -583,9 +555,7 @@ class UserViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.anonymous_client.delete(
-            f"/users/{self.unvalidated_user_id}"
-        )
+        response_anonymous = self.anonymous_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_delete_user(self):
@@ -594,9 +564,7 @@ class UserViewsTests(TestCase):
 
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.delete(
-            f"/users/{self.unvalidated_user_id}"
-        )
+        response_student = self.student_client.delete(f"/users/{self.unvalidated_user_id}")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_manager_delete_user_404(self):

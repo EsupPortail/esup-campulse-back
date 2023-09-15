@@ -102,9 +102,7 @@ class CommissionFundRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = self.serializer_class(
-            self.queryset.filter(commission_id=kwargs["commission_id"]), many=True
-        )
+        serializer = self.serializer_class(self.queryset.filter(commission_id=kwargs["commission_id"]), many=True)
         return response.Response(serializer.data)
 
 

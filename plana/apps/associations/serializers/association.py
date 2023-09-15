@@ -15,12 +15,8 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(
-        queryset=InstitutionComponent.objects.all()
-    )
-    activity_field = serializers.PrimaryKeyRelatedField(
-        queryset=ActivityField.objects.all()
-    )
+    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
+    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
     path_logo = ThumbnailField(sizes=["detail"])
 
     def to_representation(self, obj):
@@ -61,9 +57,7 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     president_names = serializers.CharField(required=False, allow_blank=True)
     president_phone = serializers.CharField(required=False, allow_blank=True)
     president_email = serializers.CharField(required=False, allow_blank=True)
-    institution = serializers.PrimaryKeyRelatedField(
-        queryset=Institution.objects.all(), allow_null=True, default=None
-    )
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all(), allow_null=True, default=None)
     institution_component = serializers.PrimaryKeyRelatedField(
         queryset=InstitutionComponent.objects.all(), allow_null=True, default=None
     )
@@ -87,12 +81,8 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """Smaller serializer to return only some of the informations of an association."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(
-        queryset=InstitutionComponent.objects.all()
-    )
-    activity_field = serializers.PrimaryKeyRelatedField(
-        queryset=ActivityField.objects.all()
-    )
+    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
+    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
     path_logo = ThumbnailField(sizes=["list"])
 
     class Meta:
@@ -137,9 +127,7 @@ class AssociationNameSerializer(serializers.ModelSerializer):
 
     def is_president_in_association(self, association) -> bool:
         """Check if a president has been linked to an association."""
-        return AssociationUser.objects.filter(
-            association_id=association.id, is_president=True
-        ).exists()
+        return AssociationUser.objects.filter(association_id=association.id, is_president=True).exists()
 
     class Meta:
         model = Association

@@ -36,9 +36,7 @@ class ExternalUserList(generics.ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieves an external user from LDAP."""
-        if not request.user.has_perm("users.add_user") and not request.user.has_perm(
-            "users.add_user_misc"
-        ):
+        if not request.user.has_perm("users.add_user") and not request.user.has_perm("users.add_user_misc"):
             return Response(
                 {"error": _("Not allowed to retrieve external users.")},
                 status=status.HTTP_403_FORBIDDEN,

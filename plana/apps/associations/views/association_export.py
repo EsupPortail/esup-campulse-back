@@ -72,9 +72,7 @@ class AssociationListExport(generics.RetrieveAPIView):
             queryset = self.get_queryset().exclude(~Q(institution_id__in=institutions))
 
         if associations is not None and associations != "":
-            association_ids = [
-                int(association) for association in associations.split(",")
-            ]
+            association_ids = [int(association) for association in associations.split(",")]
             queryset = queryset.exclude(~Q(id__in=association_ids))
 
         fields = [
@@ -95,9 +93,7 @@ class AssociationListExport(generics.RetrieveAPIView):
 
         if mode is None or mode == "csv":
             http_response = HttpResponse(content_type="application/csv")
-            http_response[
-                "Content-Disposition"
-            ] = f"Content-Disposition: attachment; filename={filename}.csv"
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
             writer = csv.writer(http_response, delimiter=";")
             writer.writerow([field for field in fields])
         elif mode == "xlsx":
@@ -111,9 +107,7 @@ class AssociationListExport(generics.RetrieveAPIView):
             institution_component = (
                 None
                 if association.institution_component_id is None
-                else InstitutionComponent.objects.get(
-                    id=association.institution_component_id
-                ).name
+                else InstitutionComponent.objects.get(id=association.institution_component_id).name
             )
 
             fields = [
@@ -131,9 +125,7 @@ class AssociationListExport(generics.RetrieveAPIView):
                 writer.writerow([field for field in fields])
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
-                    worksheet.cell(
-                        row=(index_association + 2), column=(index_field + 1)
-                    ).value = field
+                    worksheet.cell(row=(index_association + 2), column=(index_field + 1)).value = field
 
         if mode is None or mode == "csv":
             return http_response
@@ -146,9 +138,7 @@ class AssociationListExport(generics.RetrieveAPIView):
                 content=stream,
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
-            http_response[
-                "Content-Disposition"
-            ] = f"Content-Disposition: attachment; filename={filename}.xlsx"
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
             return http_response
 
 
@@ -189,15 +179,9 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        data["institution"] = Institution.objects.get(
-            id=association.institution_id
-        ).name
-        data["institution_component"] = InstitutionComponent.objects.get(
-            id=association.institution_component_id
-        ).name
-        data["activity_field"] = ActivityField.objects.get(
-            id=association.activity_field_id
-        ).name
+        data["institution"] = Institution.objects.get(id=association.institution_id).name
+        data["institution_component"] = InstitutionComponent.objects.get(id=association.institution_component_id).name
+        data["activity_field"] = ActivityField.objects.get(id=association.activity_field_id).name
 
         data["documents"] = list(
             DocumentUpload.objects.filter(

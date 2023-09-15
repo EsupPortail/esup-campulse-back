@@ -15,9 +15,7 @@ class Institution(models.Model):
 
     def default_institution_managers(self):
         """Return the best list of managers to contact for an institution."""
-        default_institution_managers_query = apps.get_model(
-            "users.user"
-        ).objects.filter(
+        default_institution_managers_query = apps.get_model("users.user").objects.filter(
             is_superuser=False,
             pk__in=apps.get_model("users.groupinstitutionfunduser")
             .objects.filter(institution_id=self.pk)

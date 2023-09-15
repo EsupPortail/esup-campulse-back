@@ -50,9 +50,7 @@ class ProjectsModelsTests(TestCase):
     def test_project_category_model(self):
         """There's at least one project category link in the database."""
         project_cat = ProjectCategory.objects.first()
-        self.assertEqual(
-            str(project_cat), f"{project_cat.project} {project_cat.category}"
-        )
+        self.assertEqual(str(project_cat), f"{project_cat.project} {project_cat.category}")
 
     def test_project_comment_model(self):
         """There's at least one project comment in the database."""
@@ -65,9 +63,7 @@ class ProjectsModelsTests(TestCase):
     def test_project_commission_fund_model(self):
         """There's at least one project commission fund link in the database."""
         project_cd = ProjectCommissionFund.objects.first()
-        self.assertEqual(
-            str(project_cd), f"{project_cd.project} {project_cd.commission_fund}"
-        )
+        self.assertEqual(str(project_cd), f"{project_cd.project} {project_cd.commission_fund}")
 
     def test_can_access_project_success_user(self):
         """

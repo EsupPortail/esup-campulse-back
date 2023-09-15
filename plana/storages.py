@@ -67,16 +67,12 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         self.age_private_key = settings.AGE_PRIVATE_KEY
 
         try:
-            self.identity = x25519.Identity.from_str(
-                self.age_private_key.decode("utf-8").strip()
-            )
+            self.identity = x25519.Identity.from_str(self.age_private_key.decode("utf-8").strip())
         except Exception as error:
             raise ImproperlyConfigured(f"AGE private key not found : {error}")
 
         try:
-            self.recipient = x25519.Recipient.from_str(
-                self.age_public_key.decode("utf-8").strip()
-            )
+            self.recipient = x25519.Recipient.from_str(self.age_public_key.decode("utf-8").strip())
         except Exception as error:
             raise ImproperlyConfigured(f"AGE public key not found : {error}")
 
@@ -140,9 +136,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
     def __init__(self, instance, field, name, **kwargs):
         FieldFile.__init__(self, instance, field, name)
         if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            self.storage = EncryptedPrivateFileStorage(
-                querystring_expire=self.querystring_expire
-            )
+            self.storage = EncryptedPrivateFileStorage(querystring_expire=self.querystring_expire)
         else:
             self.storage = PublicFileStorage()
 

@@ -124,9 +124,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {"commission": commission, "fund": fund}
         response = self.general_client.post("/commissions/funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        commission_fund = CommissionFund.objects.filter(
-            commission_id=commission, fund_id=fund
-        )
+        commission_fund = CommissionFund.objects.filter(commission_id=commission, fund_id=fund)
         self.assertEqual(commission_fund.count(), 1)
 
     def test_get_commission_funds_by_id_404(self):
@@ -146,9 +144,7 @@ class CommissionDatesViewsTests(TestCase):
         - Correct commission funds are returned.
         """
         commission_id = 1
-        commission_test_cnt = CommissionFund.objects.filter(
-            commission_id=commission_id
-        ).count()
+        commission_test_cnt = CommissionFund.objects.filter(commission_id=commission_id).count()
         response = self.client.get(f"/commissions/{commission_id}/funds")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -173,16 +169,12 @@ class CommissionDatesViewsTests(TestCase):
         """
         commission_id = 999
         fund_id = 1
-        response = self.general_client.delete(
-            f"/commissions/{commission_id}/funds/{fund_id}"
-        )
+        response = self.general_client.delete(f"/commissions/{commission_id}/funds/{fund_id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         commission_id = 1
         fund_id = 999
-        response = self.general_client.delete(
-            f"/commissions/{commission_id}/funds/{fund_id}"
-        )
+        response = self.general_client.delete(f"/commissions/{commission_id}/funds/{fund_id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_commission_funds_forbidden_user(self):
@@ -193,9 +185,7 @@ class CommissionDatesViewsTests(TestCase):
         """
         commission_id = 1
         fund_id = 1
-        response = self.student_client.delete(
-            f"/commissions/{commission_id}/funds/{fund_id}"
-        )
+        response = self.student_client.delete(f"/commissions/{commission_id}/funds/{fund_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_commission_funds_success(self):
@@ -208,20 +198,12 @@ class CommissionDatesViewsTests(TestCase):
         """
         commission_id = 1
         fund_id = 1
-        response = self.general_client.delete(
-            f"/commissions/{commission_id}/funds/{fund_id}"
-        )
+        response = self.general_client.delete(f"/commissions/{commission_id}/funds/{fund_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
             0,
-            len(
-                CommissionFund.objects.filter(
-                    commission_id=commission_id, fund_id=fund_id
-                )
-            ),
+            len(CommissionFund.objects.filter(commission_id=commission_id, fund_id=fund_id)),
         )
 
-        response = self.general_client.delete(
-            f"/commissions/{commission_id}/funds/{fund_id}"
-        )
+        response = self.general_client.delete(f"/commissions/{commission_id}/funds/{fund_id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

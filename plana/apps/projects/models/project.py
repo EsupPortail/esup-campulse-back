@@ -17,19 +17,13 @@ class Project(models.Model):
         """List of statuses a project can have (for itself or reviews)."""
 
         PROJECT_DRAFT = "PROJECT_DRAFT", _("Project Draft")
-        PROJECT_DRAFT_PROCESSED = "PROJECT_DRAFT_PROCESSED", _(
-            "Project Draft Processed"
-        )
+        PROJECT_DRAFT_PROCESSED = "PROJECT_DRAFT_PROCESSED", _("Project Draft Processed")
         PROJECT_PROCESSING = "PROJECT_PROCESSING", _("Project Processing")
         PROJECT_REJECTED = "PROJECT_REJECTED", _("Project Rejected")
         PROJECT_VALIDATED = "PROJECT_VALIDATED", _("Project Validated")
         PROJECT_REVIEW_DRAFT = "PROJECT_REVIEW_DRAFT", _("Project Review Draft")
-        PROJECT_REVIEW_PROCESSING = "PROJECT_REVIEW_PROCESSING", _(
-            "Project Review Processing"
-        )
-        PROJECT_REVIEW_VALIDATED = "PROJECT_REVIEW_VALIDATED", _(
-            "Project Review Validated"
-        )
+        PROJECT_REVIEW_PROCESSING = "PROJECT_REVIEW_PROCESSING", _("Project Review Processing")
+        PROJECT_REVIEW_VALIDATED = "PROJECT_REVIEW_VALIDATED", _("Project Review Validated")
         PROJECT_CANCELED = "PROJECT_CANCELED", _("Project Canceled")
 
         @staticmethod
@@ -144,18 +138,12 @@ class Project(models.Model):
             ]
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
-    manual_identifier = models.CharField(
-        _("Manual identifier"), max_length=8, unique=True, null=True
-    )
+    manual_identifier = models.CharField(_("Manual identifier"), max_length=8, unique=True, null=True)
     planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
     planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
     planned_location = models.TextField(_("Planned location"), default="")
-    user = models.ForeignKey(
-        User, verbose_name=_("User"), on_delete=models.CASCADE, null=True
-    )
-    association = models.ForeignKey(
-        Association, verbose_name=_("Association"), on_delete=models.CASCADE, null=True
-    )
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE, null=True)
+    association = models.ForeignKey(Association, verbose_name=_("Association"), on_delete=models.CASCADE, null=True)
     association_user = models.ForeignKey(
         AssociationUser,
         verbose_name=_("Association User"),
@@ -163,31 +151,17 @@ class Project(models.Model):
         null=True,
     )
     partner_association = models.TextField(_("Partner association"), default="")
-    budget_previous_edition = models.PositiveIntegerField(
-        _("Budget on previous edition"), default=0
-    )
+    budget_previous_edition = models.PositiveIntegerField(_("Budget on previous edition"), default=0)
     target_audience = models.TextField(_("Target audience"), default="")
-    amount_students_audience = models.PositiveIntegerField(
-        _("Amount of students in target audience"), default=0
-    )
-    amount_all_audience = models.PositiveIntegerField(
-        _("Amount of all people in target audience"), default=0
-    )
-    ticket_price = models.PositiveIntegerField(
-        _("Amount of money asked for each person"), default=0
-    )
-    student_ticket_price = models.PositiveIntegerField(
-        _("Amount of money asked for a student"), default=0
-    )
-    individual_cost = models.PositiveIntegerField(
-        _("Amount of money needed by person"), default=0
-    )
+    amount_students_audience = models.PositiveIntegerField(_("Amount of students in target audience"), default=0)
+    amount_all_audience = models.PositiveIntegerField(_("Amount of all people in target audience"), default=0)
+    ticket_price = models.PositiveIntegerField(_("Amount of money asked for each person"), default=0)
+    student_ticket_price = models.PositiveIntegerField(_("Amount of money asked for a student"), default=0)
+    individual_cost = models.PositiveIntegerField(_("Amount of money needed by person"), default=0)
     goals = models.TextField(_("Goals"), default="")
     summary = models.TextField(_("Summary"), default="")
     planned_activities = models.TextField(_("Planned activites"), default="")
-    prevention_safety = models.TextField(
-        _("Planned prevention and safety actions"), default=""
-    )
+    prevention_safety = models.TextField(_("Planned prevention and safety actions"), default="")
     marketing_campaign = models.TextField(_("Marketing campaign"), default="")
     sustainable_development = models.TextField(_("Sustainable development"), default="")
     project_status = models.CharField(
@@ -204,13 +178,9 @@ class Project(models.Model):
     real_start_date = models.DateTimeField(_("Real start date"), null=True)
     real_end_date = models.DateTimeField(_("Real end date"), null=True)
     real_location = models.TextField(_("Real location"), default="")
-    review = models.TextField(
-        _("Review (amount of students, partnerships, ...)"), default=""
-    )
+    review = models.TextField(_("Review (amount of students, partnerships, ...)"), default="")
     impact_students = models.TextField(_("Impact on students"), default="")
-    description = models.TextField(
-        _("Description (activities done, changes from planning, ...)"), default=""
-    )
+    description = models.TextField(_("Description (activities done, changes from planning, ...)"), default="")
     difficulties = models.TextField(_("Difficulties"), default="")
     improvements = models.TextField(_("Improvements"), default="")
 

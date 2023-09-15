@@ -115,9 +115,7 @@ class ProjectsViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
     def test_get_project_anonymous(self):
         """
@@ -135,12 +133,11 @@ class ProjectsViewsTests(TestCase):
         - A student user gets projects where rights are OK.
         """
         response = self.student_misc_client.get("/projects/")
-        user_associations_ids = AssociationUser.objects.filter(
-            user_id=self.student_misc_user_id
-        ).values_list("association_id")
+        user_associations_ids = AssociationUser.objects.filter(user_id=self.student_misc_user_id).values_list(
+            "association_id"
+        )
         user_projects_cnt = Project.visible_objects.filter(
-            models.Q(user_id=self.student_misc_user_id)
-            | models.Q(association_id__in=user_associations_ids)
+            models.Q(user_id=self.student_misc_user_id) | models.Q(association_id__in=user_associations_ids)
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -156,9 +153,9 @@ class ProjectsViewsTests(TestCase):
         fund_projects_cnt = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(
-                    fund_id__in=GroupInstitutionFundUser.objects.filter(
-                        user_id=self.fund_user_id
-                    ).values_list("fund_id")
+                    fund_id__in=GroupInstitutionFundUser.objects.filter(user_id=self.fund_user_id).values_list(
+                        "fund_id"
+                    )
                 ).values_list("id")
             ).values_list("project_id"),
             project_status__in=Project.ProjectStatus.get_commissionnable_project_statuses(),
@@ -175,14 +172,12 @@ class ProjectsViewsTests(TestCase):
         """
         response = self.institution_client.get("/projects/")
         user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                user_id=self.manager_institution_user_id
-            ).values_list("institution_id")
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.manager_institution_user_id).values_list(
+                "institution_id"
+            )
         )
         association_projects_cnt = Project.visible_objects.filter(
-            association_id__in=Association.objects.filter(
-                institution_id__in=user_institutions_ids
-            ).values_list("id")
+            association_id__in=Association.objects.filter(institution_id__in=user_institutions_ids).values_list("id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -220,12 +215,8 @@ class ProjectsViewsTests(TestCase):
             "2089",
         ]
         for similar_identifier in similar_identifiers:
-            response = self.general_client.get(
-                f"/projects/?manual_identifier={similar_identifier}"
-            )
-            self.assertEqual(
-                response.data[0]["manual_identifier"], similar_identifiers[0]
-            )
+            response = self.general_client.get(f"/projects/?manual_identifier={similar_identifier}")
+            self.assertEqual(response.data[0]["manual_identifier"], similar_identifiers[0])
 
         year = 2099
         response = self.general_client.get(f"/projects/?year={year}")
@@ -233,32 +224,20 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        response = self.general_client.get(
-            f"/projects/?user_id={self.student_misc_user_id}"
-        )
-        projects_cnt = Project.visible_objects.filter(
-            user_id=self.student_misc_user_id
-        ).count()
+        response = self.general_client.get(f"/projects/?user_id={self.student_misc_user_id}")
+        projects_cnt = Project.visible_objects.filter(user_id=self.student_misc_user_id).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
         association_id = 2
-        response = self.general_client.get(
-            f"/projects/?association_id={association_id}"
-        )
-        projects_cnt = Project.visible_objects.filter(
-            association_id=association_id
-        ).count()
+        response = self.general_client.get(f"/projects/?association_id={association_id}")
+        projects_cnt = Project.visible_objects.filter(association_id=association_id).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
         project_statuses = ["PROJECT_DRAFT", "PROJECT_VALIDATED"]
-        response = self.general_client.get(
-            f"/projects/?project_statuses={','.join(str(x) for x in project_statuses)}"
-        )
-        projects_cnt = Project.visible_objects.filter(
-            project_status__in=project_statuses
-        ).count()
+        response = self.general_client.get(f"/projects/?project_statuses={','.join(str(x) for x in project_statuses)}")
+        projects_cnt = Project.visible_objects.filter(project_status__in=project_statuses).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
@@ -266,17 +245,13 @@ class ProjectsViewsTests(TestCase):
         response = self.general_client.get(f"/projects/?commission_id={commission}")
         projects_cnt = Project.visible_objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission
-                ).values_list("id")
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission).values_list("id")
             ).values_list("project_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), projects_cnt)
 
-        projects_ids_with_comments = ProjectComment.objects.all().values_list(
-            "project_id"
-        )
+        projects_ids_with_comments = ProjectComment.objects.all().values_list("project_id")
         response = self.general_client.get("/projects/?with_comments=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), len(projects_ids_with_comments))
@@ -285,15 +260,11 @@ class ProjectsViewsTests(TestCase):
         self.assertNotEqual(len(content), len(projects_ids_with_comments))
 
         inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
-        inactive_projects = Project.visible_objects.filter(
-            project_status__in=inactive_statuses
-        )
+        inactive_projects = Project.visible_objects.filter(project_status__in=inactive_statuses)
         response = self.general_client.get("/projects/?active_projects=false")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), inactive_projects.count())
-        active_projects = Project.visible_objects.exclude(
-            project_status__in=inactive_statuses
-        )
+        active_projects = Project.visible_objects.exclude(project_status__in=inactive_statuses)
         response = self.general_client.get("/projects/?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), active_projects.count())
@@ -330,9 +301,7 @@ class ProjectsViewsTests(TestCase):
 
         project_data["association"] = 2
         project_data["user"] = self.student_president_user_id
-        GroupInstitutionFundUser.objects.create(
-            user_id=self.student_president_user_id, group_id=6
-        )
+        GroupInstitutionFundUser.objects.create(user_id=self.student_president_user_id, group_id=6)
         response = self.student_president_client.post("/projects/", project_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -480,9 +449,7 @@ class ProjectsViewsTests(TestCase):
             "association": 2,
             "association_user": 5,
         }
-        response = self.student_president_client.post(
-            "/projects/", data=project_data, content_type="application/json"
-        )
+        response = self.student_president_client.post("/projects/", data=project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_project_association_success(self):
@@ -597,9 +564,7 @@ class ProjectsViewsTests(TestCase):
         - Always returns a 405.
         """
         patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put(
-            "/projects/1", patch_data, content_type="application/json"
-        )
+        response = self.general_client.put("/projects/1", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_anonymous(self):
@@ -609,9 +574,7 @@ class ProjectsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         patch_data = {"name": "Test anonymous"}
-        response = self.client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/projects/1", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_not_found(self):
@@ -622,9 +585,7 @@ class ProjectsViewsTests(TestCase):
         - Project must exist.
         """
         patch_data = {"goals": "Testing patching"}
-        response = self.student_misc_client.patch(
-            "/projects/999", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/999", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_forbidden_student(self):
@@ -634,9 +595,7 @@ class ProjectsViewsTests(TestCase):
         - An student user not owning the project cannot execute this request.
         """
         patch_data = {"name": "Test anonymous"}
-        response = self.student_offsite_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
+        response = self.student_offsite_client.patch("/projects/1", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_forbidden_user(self):
@@ -647,9 +606,7 @@ class ProjectsViewsTests(TestCase):
         - The project owner must be the authenticated user.
         """
         patch_data = {"description": "new desc"}
-        response = self.student_site_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
+        response = self.student_site_client.patch("/projects/1", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_project_user_wrong_status(self):
@@ -677,9 +634,7 @@ class ProjectsViewsTests(TestCase):
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}
-        response = self.student_misc_client.patch(
-            "/projects/1", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/1", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_association_wrong_audience(self):
@@ -693,9 +648,7 @@ class ProjectsViewsTests(TestCase):
             "amount_students_audience": 1000,
             "amount_all_audience": 8,
         }
-        response = self.student_president_client.patch(
-            "/projects/2", project_data, content_type="application/json"
-        )
+        response = self.student_president_client.patch("/projects/2", project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_association_wrong_dates(self):
@@ -709,9 +662,7 @@ class ProjectsViewsTests(TestCase):
             "planned_start_date": "2099-12-25T14:00:00.000Z",
             "planned_end_date": "2099-11-30T18:00:00.000Z",
         }
-        response = self.student_president_client.patch(
-            "/projects/2", project_data, content_type="application/json"
-        )
+        response = self.student_president_client.patch("/projects/2", project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_wrong_association_user(self):
@@ -722,9 +673,7 @@ class ProjectsViewsTests(TestCase):
         - A linked user from an association cannot be added to a user project.
         """
         project_data = {"association_user": 2}
-        response = self.student_misc_client.patch(
-            "/projects/1", project_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/1", project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_project_association_wrong_user(self):
@@ -735,9 +684,7 @@ class ProjectsViewsTests(TestCase):
         - The linked user from the association must be correct.
         """
         project_data = {"association_user": 2}
-        response = self.student_president_client.patch(
-            "/projects/2", project_data, content_type="application/json"
-        )
+        response = self.student_president_client.patch("/projects/2", project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_serializer_error(self):
@@ -765,9 +712,7 @@ class ProjectsViewsTests(TestCase):
             "description": "new desc",
             "planned_end_date": "2099-12-25T14:00:00.000000Z",
         }
-        response = self.general_client.patch(
-            f"/projects/{project_id}", patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch(f"/projects/{project_id}", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project = Project.visible_objects.get(id=project_id)
@@ -855,9 +800,7 @@ class ProjectsViewsTests(TestCase):
         - Always returns a 405.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.general_client.put(
-            "/projects/5/status", patch_data, content_type="application/json"
-        )
+        response = self.general_client.put("/projects/5/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_status_anonymous(self):
@@ -867,9 +810,7 @@ class ProjectsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.client.patch(
-            "/projects/1/status", patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/projects/1/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_status_forbidden(self):
@@ -891,9 +832,7 @@ class ProjectsViewsTests(TestCase):
         - Project must exist.
         """
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.general_client.patch(
-            "/projects/999/status", patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/projects/999/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_project_status_serializer_error(self):
@@ -918,16 +857,12 @@ class ProjectsViewsTests(TestCase):
         """
         self.assertFalse(len(mail.outbox))
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_misc_client.patch(
-            "/projects/1/status", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/1/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(len(mail.outbox))
 
         patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_misc_client.patch(
-            "/projects/1/status", patch_data, content_type="application/json"
-        )
+        response = self.student_misc_client.patch("/projects/1/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=1)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
@@ -1058,9 +993,7 @@ class ProjectsViewsTests(TestCase):
         project.save()
 
         self.assertFalse(len(mail.outbox))
-        ProjectCommissionFund.objects.create(
-            project_id=project_id, commission_fund_id=3
-        )
+        ProjectCommissionFund.objects.create(project_id=project_id, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.student_president_client.patch(
             f"/projects/{project_id}/status",

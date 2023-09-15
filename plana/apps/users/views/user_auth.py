@@ -37,9 +37,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
     def patch(self, request, *args, **kwargs):
         """Auto-updates user's own account."""
-        if "can_submit_projects" in request.data and not self.request.user.has_perm(
-            "users.change_user_all_fields"
-        ):
+        if "can_submit_projects" in request.data and not self.request.user.has_perm("users.change_user_all_fields"):
             return response.Response(
                 {"error": _("Only managers can edit this field.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -65,48 +63,32 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
             if request.user.is_validated_by_admin is False:
                 assos_user = AssociationUser.objects.filter(user_id=request.user.pk)
-                funds_user = GroupInstitutionFundUser.objects.filter(
-                    user_id=request.user.pk
-                )
+                funds_user = GroupInstitutionFundUser.objects.filter(user_id=request.user.pk)
                 user_id = request.user.pk
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
-                template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_LDAP_CREATION"
-                )
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LDAP_CREATION")
 
                 managers_emails = []
                 if assos_user.count() > 0 or funds_user.count() > 0:
                     for institution in request.user.get_user_institutions():
-                        managers_emails += (
-                            institution.default_institution_managers().values_list(
-                                "email", flat=True
-                            )
-                        )
+                        managers_emails += institution.default_institution_managers().values_list("email", flat=True)
                     managers_emails = list(set(managers_emails))
                 else:
-                    for user_to_check in User.objects.filter(
-                        is_superuser=False, is_staff=True
-                    ):
+                    for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                         if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=managers_emails,
-                    subject=template.subject.replace(
-                        "{{ site_name }}", context["site_name"]
-                    ),
+                    subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(request.user, request, context),
                 )
         elif "email" in request.data:
             if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
                 return response.Response(
-                    {
-                        "error": _(
-                            "This email address cannot be used for a local account."
-                        )
-                    },
+                    {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             request.data.update({"username": request.data["email"]})
@@ -114,12 +96,8 @@ class UserAuthView(DJRestAuthUserDetailsView):
         user_response = self.partial_update(request, *args, **kwargs)
         new_user_email = user_response.data["email"]
         if "email" in request.data and request.data["email"] == new_user_email:
-            new_user_email_object = EmailAddress.objects.create(
-                email=new_user_email, user_id=request.user.pk
-            )
-            context["key"] = EmailConfirmationHMAC(
-                email_address=new_user_email_object
-            ).key
+            new_user_email_object = EmailAddress.objects.create(email=new_user_email, user_id=request.user.pk)
+            context["key"] = EmailConfirmationHMAC(email_address=new_user_email_object).key
             get_adapter().send_mail(
                 template_prefix="account/email/email_confirmation",
                 email=new_user_email,
@@ -175,31 +153,19 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             }
             managers_emails = []
             if assos_user.count() > 0 or funds_user.count() > 0:
-                template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_LOCAL_CREATION"
-                )
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_CREATION")
                 for institution in user.get_user_institutions():
-                    managers_emails += (
-                        institution.default_institution_managers().values_list(
-                            "email", flat=True
-                        )
-                    )
+                    managers_emails += institution.default_institution_managers().values_list("email", flat=True)
                 managers_emails = list(set(managers_emails))
             else:
-                template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION"
-                )
-                for user_to_check in User.objects.filter(
-                    is_superuser=False, is_staff=True
-                ):
+                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION")
+                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                     if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(user, request, context),
             )
         elif email_addresses.count() > 1:

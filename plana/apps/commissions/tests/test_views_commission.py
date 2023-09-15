@@ -105,9 +105,7 @@ class CommissionDatesViewsTests(TestCase):
                 datetime.date,
             )
         ]
-        response = self.client.get(
-            f"/commissions/?dates={','.join(str(x) for x in dates)}"
-        )
+        response = self.client.get(f"/commissions/?dates={','.join(str(x) for x in dates)}")
         commissions_cnt = Commission.objects.filter(commission_date__in=dates).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
@@ -134,13 +132,9 @@ class CommissionDatesViewsTests(TestCase):
         - funds filters by Fund linked to Commission through CommissionFund.
         """
         fund_ids = [1, 3]
-        response = self.client.get(
-            f"/commissions/?funds={','.join(str(x) for x in fund_ids)}"
-        )
+        response = self.client.get(f"/commissions/?funds={','.join(str(x) for x in fund_ids)}")
         commissions_cnt = Commission.objects.filter(
-            id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list(
-                "commission_id"
-            )
+            id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
@@ -175,9 +169,7 @@ class CommissionDatesViewsTests(TestCase):
                 ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
-        commissions_with_inactive_projects = Commission.objects.filter(
-            id__in=commissions_ids_with_inactive_projects
-        )
+        commissions_with_inactive_projects = Commission.objects.filter(id__in=commissions_ids_with_inactive_projects)
         commissions_ids_with_active_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.exclude(
@@ -185,9 +177,7 @@ class CommissionDatesViewsTests(TestCase):
                 ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
-        commissions_with_active_projects = Commission.objects.filter(
-            id__in=commissions_ids_with_active_projects
-        )
+        commissions_with_active_projects = Commission.objects.filter(id__in=commissions_ids_with_active_projects)
 
         response = self.client.get("/commissions/?with_active_projects=false")
         content = json.loads(response.content.decode("utf-8"))

@@ -105,9 +105,7 @@ class UserGroupViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.anonymous_client.get(
-            f"/users/{self.unvalidated_user_id}/groups/"
-        )
+        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}/groups/")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_manager_get_unexisting_association_user(self):
@@ -125,9 +123,7 @@ class UserGroupViewsTests(TestCase):
 
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.get(
-            f"/users/{self.student_user_id}/groups/"
-        )
+        response_student = self.student_client.get(f"/users/{self.student_user_id}/groups/")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_manager_get_user_groups_details(self):
@@ -136,9 +132,7 @@ class UserGroupViewsTests(TestCase):
 
         - A manager user can execute this request.
         """
-        response_manager = self.manager_client.get(
-            f"/users/{self.student_user_id}/groups/"
-        )
+        response_manager = self.manager_client.get(f"/users/{self.student_user_id}/groups/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
     def test_anonymous_post_user_groups_404_user(self):
@@ -170,9 +164,7 @@ class UserGroupViewsTests(TestCase):
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
-        response_anonymous = self.client.post(
-            "/users/groups/", {"username": self.student_user_name}
-        )
+        response_anonymous = self.client.post("/users/groups/", {"username": self.student_user_name})
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_anonymous_post_user_groups_forbidden(self):
@@ -241,9 +233,7 @@ class UserGroupViewsTests(TestCase):
 
         - An admin-validated student user cannot execute this request.
         """
-        response_student = self.student_client.post(
-            "/users/groups/", {"user": self.student_user_name, "group": 6}
-        )
+        response_student = self.student_client.post("/users/groups/", {"user": self.student_user_name, "group": 6})
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_manager_post_user_groups_other_manager(self):
@@ -302,9 +292,7 @@ class UserGroupViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.client.delete(
-            f"/users/{self.user_id_del_group}/groups/6"
-        )
+        response_anonymous = self.client.delete(f"/users/{self.user_id_del_group}/groups/6")
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_delete_user_group(self):
@@ -313,9 +301,7 @@ class UserGroupViewsTests(TestCase):
 
         - A student user cannot execute this request.
         """
-        response_student = self.student_client.delete(
-            f"/users/{self.user_id_del_group}/groups/6"
-        )
+        response_student = self.student_client.delete(f"/users/{self.user_id_del_group}/groups/6")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_manager_delete_user_group_404(self):
@@ -327,9 +313,7 @@ class UserGroupViewsTests(TestCase):
         response = self.manager_client.get(f"/users/{self.user_id_del_group}/groups/")
         first_user_group_id = response.data[0]["group"]
 
-        response_delete = self.manager_client.delete(
-            f"/users/999/groups/{str(first_user_group_id)}"
-        )
+        response_delete = self.manager_client.delete(f"/users/999/groups/{str(first_user_group_id)}")
         self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_delete_user_group_bad_request(self):
@@ -384,9 +368,7 @@ class UserGroupViewsTests(TestCase):
         second_response_delete = self.manager_client.delete(
             f"/users/{self.user_id_del_group}/groups/{str(second_user_group_id)}"
         )
-        self.assertEqual(
-            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
-        )
+        self.assertEqual(second_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_delete_user_group_fund_404(self):
         """
@@ -394,14 +376,10 @@ class UserGroupViewsTests(TestCase):
 
         - Cannot delete a group from a non-existing user
         """
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_fund}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_fund}/groups/")
         first_user_group_id = response.data[0]["group"]
 
-        response_delete = self.manager_client.delete(
-            f"/users/9999/groups/{str(first_user_group_id)}/funds/1"
-        )
+        response_delete = self.manager_client.delete(f"/users/9999/groups/{str(first_user_group_id)}/funds/1")
         self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_misc_delete_user_group_fund_forbidden(self):
@@ -410,9 +388,7 @@ class UserGroupViewsTests(TestCase):
 
         - A misc manager user cannot execute this request.
         """
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_fund}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_fund}/groups/")
         first_user_group_id = response.data[0]["group"]
 
         response_delete = self.manager_misc_client.delete(
@@ -428,9 +404,7 @@ class UserGroupViewsTests(TestCase):
         - The link between a group and a user is deleted.
         - A link between a group and a use cannot be deleted twice.
         """
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_fund}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_fund}/groups/")
         first_user_group_id = response.data[0]["group"]
 
         first_response_delete = self.manager_client.delete(
@@ -451,9 +425,7 @@ class UserGroupViewsTests(TestCase):
         - The link between a group and a user is deleted.
         - A user should have at least one group.
         """
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_fund}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_fund}/groups/")
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]
 
@@ -465,9 +437,7 @@ class UserGroupViewsTests(TestCase):
         second_response_delete = self.manager_client.delete(
             f"/users/{self.user_id_del_group_user_fund}/groups/{str(second_user_group_id)}/funds/2"
         )
-        self.assertEqual(
-            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
-        )
+        self.assertEqual(second_response_delete.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_manager_delete_user_group_institution_404(self):
         """
@@ -478,14 +448,10 @@ class UserGroupViewsTests(TestCase):
         GroupInstitutionFundUser.objects.create(
             user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
         )
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_insitution}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_insitution}/groups/")
         first_user_group_id = response.data[0]["group"]
 
-        response_delete = self.manager_client.delete(
-            f"/users/9999/groups/{str(first_user_group_id)}/institutions/3"
-        )
+        response_delete = self.manager_client.delete(f"/users/9999/groups/{str(first_user_group_id)}/institutions/3")
         self.assertEqual(response_delete.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_misc_delete_user_group_institution_forbidden(self):
@@ -497,9 +463,7 @@ class UserGroupViewsTests(TestCase):
         GroupInstitutionFundUser.objects.create(
             user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
         )
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_insitution}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_insitution}/groups/")
         first_user_group_id = response.data[0]["group"]
 
         response_delete = self.manager_misc_client.delete(
@@ -518,9 +482,7 @@ class UserGroupViewsTests(TestCase):
         GroupInstitutionFundUser.objects.create(
             user_id=self.user_id_del_group_user_insitution, group_id=2, institution_id=4
         )
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_insitution}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_insitution}/groups/")
         first_user_group_id = response.data[0]["group"]
 
         first_response_delete = self.manager_client.delete(
@@ -547,9 +509,7 @@ class UserGroupViewsTests(TestCase):
         GroupInstitutionFundUser.objects.filter(
             user_id=self.user_id_del_group_user_insitution, fund_id__isnull=False
         ).delete()
-        response = self.manager_client.get(
-            f"/users/{self.user_id_del_group_user_insitution}/groups/"
-        )
+        response = self.manager_client.get(f"/users/{self.user_id_del_group_user_insitution}/groups/")
         first_user_group_id = response.data[0]["group"]
         second_user_group_id = response.data[1]["group"]
 
@@ -561,6 +521,4 @@ class UserGroupViewsTests(TestCase):
         second_response_delete = self.manager_client.delete(
             f"/users/{self.user_id_del_group_user_insitution}/groups/{str(second_user_group_id)}/institutions/4"
         )
-        self.assertEqual(
-            second_response_delete.status_code, status.HTTP_400_BAD_REQUEST
-        )
+        self.assertEqual(second_response_delete.status_code, status.HTTP_400_BAD_REQUEST)

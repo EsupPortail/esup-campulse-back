@@ -246,9 +246,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Associations with a specific user_id can be filtered by a manager.
         """
-        response = self.general_client.get(
-            f"/associations/?user_id={self.student_user_id}"
-        )
+        response = self.general_client.get(f"/associations/?user_id={self.student_user_id}")
         content = json.loads(response.content.decode("utf-8"))
         links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
         self.assertEqual(len(content), links_cnt)
@@ -322,14 +320,10 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
 
         non_enabled_not_member_response = self.member_client.get("/associations/5")
-        self.assertEqual(
-            non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN
-        )
+        self.assertEqual(non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
 
         non_public_not_member_response = self.member_client.get("/associations/3")
-        self.assertEqual(
-            non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN
-        )
+        self.assertEqual(non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_association_details_success(self):
         """
@@ -348,9 +342,7 @@ class AssociationsViewsTests(TestCase):
 
         public_association = json.loads(response.content.decode("utf-8"))
         self.assertEqual(public_association["name"], association.name)
-        self.assertEqual(
-            public_association["currentProjects"], association.current_projects
-        )
+        self.assertEqual(public_association["currentProjects"], association.current_projects)
 
     def test_get_association_details_success_not_enabled(self):
         """
@@ -563,9 +555,7 @@ class AssociationsViewsTests(TestCase):
 
         - Always returns a 405 no matter which user tries to access it.
         """
-        response = self.client.put(
-            "/associations/1", {"name": "Les aficionados d'endives au jambon"}
-        )
+        response = self.client.put("/associations/1", {"name": "Les aficionados d'endives au jambon"})
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_association_anonymous(self):
@@ -638,19 +628,13 @@ class AssociationsViewsTests(TestCase):
             {"name": "Je suis pas de cette asso mais je veux l'éditer."},
             content_type="application/json",
         )
-        self.assertEqual(
-            response_incorrect_member.status_code, status.HTTP_403_FORBIDDEN
-        )
+        self.assertEqual(response_incorrect_member.status_code, status.HTTP_403_FORBIDDEN)
         response_incorrect_president = self.president_client.patch(
             f"/associations/{association_id}",
-            {
-                "name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer."
-            },
+            {"name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer."},
             content_type="application/json",
         )
-        self.assertEqual(
-            response_incorrect_president.status_code, status.HTTP_403_FORBIDDEN
-        )
+        self.assertEqual(response_incorrect_president.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_association_by_its_members_forbidden(self):
         """
@@ -661,9 +645,7 @@ class AssociationsViewsTests(TestCase):
         association_id = 2
         response_correct_member = self.member_client.patch(
             f"/associations/{association_id}",
-            {
-                "name": "Ah et bah moi je suis de l'asso mais je peux pas l'éditer c'est terrible."
-            },
+            {"name": "Ah et bah moi je suis de l'asso mais je peux pas l'éditer c'est terrible."},
             content_type="application/json",
         )
         self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
@@ -775,9 +757,7 @@ class AssociationsViewsTests(TestCase):
             {"social_networks": json.dumps([{"type": "Mastodon", "location": 1234}])},
             content_type="application/json",
         )
-        self.assertEqual(
-            response_general_string.status_code, status.HTTP_400_BAD_REQUEST
-        )
+        self.assertEqual(response_general_string.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_association_social_networks_success(self):
         """
@@ -787,9 +767,7 @@ class AssociationsViewsTests(TestCase):
         - Association's social networks are correctly updated with provided data.
         """
         association_id = 2
-        social_networks_json = json.dumps(
-            [{"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}]
-        )
+        social_networks_json = json.dumps([{"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}])
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {"social_networks": social_networks_json},
@@ -908,9 +886,7 @@ class AssociationsViewsTests(TestCase):
         response_misc = self.misc_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
-        response_institution = self.institution_client.delete(
-            f"/associations/{association_id}"
-        )
+        response_institution = self.institution_client.delete(f"/associations/{association_id}")
         self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_association_404(self):
@@ -948,9 +924,7 @@ class AssociationsViewsTests(TestCase):
         - Always returns a 405.
         """
         patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.general_client.put(
-            "/associations/2/status", patch_data, content_type="application/json"
-        )
+        response = self.general_client.put("/associations/2/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_association_status_anonymous(self):
@@ -960,9 +934,7 @@ class AssociationsViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.client.patch(
-            "/associations/2/status", patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/associations/2/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_association_status_not_found(self):
@@ -972,9 +944,7 @@ class AssociationsViewsTests(TestCase):
         - Association must exist.
         """
         patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.general_client.patch(
-            "/associations/999/status", patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/associations/999/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_association_status_wrong_student(self):
@@ -1136,9 +1106,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Get the same amount of associations by institution through model and view.
         """
-        asso_names_cnt_institution = Association.objects.filter(
-            institution_id__in=[2, 3]
-        ).count()
+        asso_names_cnt_institution = Association.objects.filter(institution_id__in=[2, 3]).count()
         response = self.client.get("/associations/names?institutions=2,3")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), asso_names_cnt_institution)
@@ -1167,18 +1135,10 @@ class AssociationsViewsTests(TestCase):
 
         AssociationUser.objects.create(user_id=12, association_id=2)
 
-        response_assos_users_allowed = self.client.get(
-            "/associations/names?allow_new_users=true"
-        )
-        content_assos_users_allowed = json.loads(
-            response_assos_users_allowed.content.decode("utf-8")
-        )
-        response_assos_users_not_allowed = self.client.get(
-            "/associations/names?allow_new_users=false"
-        )
-        content_assos_users_not_allowed = json.loads(
-            response_assos_users_not_allowed.content.decode("utf-8")
-        )
+        response_assos_users_allowed = self.client.get("/associations/names?allow_new_users=true")
+        content_assos_users_allowed = json.loads(response_assos_users_allowed.content.decode("utf-8"))
+        response_assos_users_not_allowed = self.client.get("/associations/names?allow_new_users=false")
+        content_assos_users_not_allowed = json.loads(response_assos_users_not_allowed.content.decode("utf-8"))
         self.assertEqual(
             len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
             len(content_all_assos),

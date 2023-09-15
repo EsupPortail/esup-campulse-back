@@ -31,9 +31,7 @@ urlpatterns = [
     path("projects/", include("plana.apps.projects.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
-    path(
-        "api/schema/", SpectacularAPIView.as_view(), name="schema"
-    ),  # Downloads schema.yml
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),  # Downloads schema.yml
     path(
         "api/schema/swagger-ui/",
         SpectacularSwaggerView.as_view(url_name="schema"),

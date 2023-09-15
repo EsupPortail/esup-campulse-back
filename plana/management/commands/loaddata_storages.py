@@ -26,9 +26,7 @@ class Command(BaseCommand):
                     endpoint_url=settings.AWS_S3_ENDPOINT_URL,
                 )
                 bucket = resource.Bucket(bucket_name)
-                for file in pathlib.Path().glob(
-                    "plana/apps/contents/fixtures/files/logos/*.*"
-                ):
+                for file in pathlib.Path().glob("plana/apps/contents/fixtures/files/logos/*.*"):
                     with file.open(mode="rb") as logo_file:
                         bucket_object = bucket.put_object(
                             Key=f"{settings.LOGOS_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
@@ -37,23 +35,17 @@ class Command(BaseCommand):
                         logo_object = Logo.objects.get(id=int(file.name.split("_")[0]))
                         logo_object.path_logo = bucket_object.key
                         logo_object.save()
-                for file in pathlib.Path().glob(
-                    "plana/apps/documents/fixtures/files/documents/*.*"
-                ):
+                for file in pathlib.Path().glob("plana/apps/documents/fixtures/files/documents/*.*"):
                     with file.open(mode="rb") as document_file:
                         bucket_object = bucket.put_object(
                             Key=f"{settings.TEMPLATES_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
                             Body=document_file,
                         )
-                        document_object = Document.objects.get(
-                            id=int(file.name.split("_")[0])
-                        )
+                        document_object = Document.objects.get(id=int(file.name.split("_")[0]))
                         document_object.path_template = bucket_object.key
                         document_object.save()
 
-                self.stdout.write(
-                    self.style.SUCCESS(_(f"S3 bucket {bucket_name} content loaded."))
-                )
+                self.stdout.write(self.style.SUCCESS(_(f"S3 bucket {bucket_name} content loaded.")))
             else:
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))
                 pass

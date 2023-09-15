@@ -21,9 +21,7 @@ def get_file_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.DOCUMENTS_FILEPATH
-            if hasattr(settings, 'DOCUMENTS_FILEPATH')
-            else '',
+            settings.DOCUMENTS_FILEPATH if hasattr(settings, 'DOCUMENTS_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
