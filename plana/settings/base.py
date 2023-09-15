@@ -12,7 +12,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "0.9.20230914"
+APP_VERSION = "0.9.20230915"
 
 ######################
 # Path configuration #
@@ -317,9 +317,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "default": {
-            "format": "%(levelname)s %(asctime)s %(name)s:%(lineno)s %(message)s"
-        },
+        "default": {"format": "%(levelname)s %(asctime)s %(name)s:%(lineno)s %(message)s"},
         "django.server": {
             "()": "django.utils.log.ServerFormatter",
             "format": "[%(server_time)s] %(message)s",
