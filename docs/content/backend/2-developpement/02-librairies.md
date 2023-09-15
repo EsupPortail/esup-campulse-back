@@ -33,7 +33,6 @@ weight: 112
 - [coverage](https://pypi.org/project/coverage/) : indique la couverture des tests unitaires.
 - [django-debug-toolbar](https://pypi.org/project/django-debug-toolbar/) : outils de debug Django.
 - [pre-commit](https://pypi.org/project/pre-commit/) : exécute des actions avant chaque commit (linting, vérification des dépendances, ...).
-- [pycodestyle](https://pypi.org/project/pycodestyle/) : directives PEP 8 suivies par le linter.
 - [pylint](https://pypi.org/project/pylint/) : linter avancé Python.
 - [pylint-django](https://pypi.org/project/pylint-django/) : directives de linter supplémentaires pour Django.
 - [safety](https://pypi.org/project/safety/) : vérification des failles de sécurité dans les dépendances.
