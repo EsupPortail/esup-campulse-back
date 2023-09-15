@@ -430,10 +430,15 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         email = ""
         owner = None
         if project.association_id is not None:
-            email = User.objects.get(
-                id=AssociationUser.objects.get(id=project.association_user_id).user_id
-            ).email
             owner = Association.objects.get(id=project.association_id)
+            if project.association_user_id is not None:
+                email = User.objects.get(
+                    id=AssociationUser.objects.get(
+                        id=project.association_user_id
+                    ).user_id
+                ).email
+            else:
+                email = owner.email
             owner = {
                 "name": owner.name,
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
@@ -475,7 +480,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "commission_fund_id",
                 request.data["new_commission_fund_id"],
             )
-            template = MailTemplate.objects.get(code="PROJECT_POSTPONED")
+            template = MailTemplate.objects.get(
+                code="USER_OR_ASSOCIATION_PROJECT_POSTPONED"
+            )
             templates_name = f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
             attachment = None
             # Creating context for notifications attachments
@@ -511,7 +518,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             attachments = []
             managers_emails = []
             if int(request.data["amount_earned"]) == 0:
-                template = MailTemplate.objects.get(code="PROJECT_FUND_REFUSED")
+                template = MailTemplate.objects.get(
+                    code="USER_OR_ASSOCIATION_PROJECT_FUND_REJECTION"
+                )
                 templates_name = f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
                 if templates_name in settings.TEMPLATES_NOTIFICATIONS:
                     # Creating context for notifications attachments
@@ -542,7 +551,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         }
                     )
             else:
-                template = MailTemplate.objects.get(code="PROJECT_FUND_ATTRIBUTED")
+                template = MailTemplate.objects.get(
+                    code="USER_OR_ASSOCIATION_PROJECT_FUND_CONFIRMATION"
+                )
                 for templates_name in [
                     f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION",
                     f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION",
@@ -630,7 +641,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             if validated_project_commission_funds.count() > 0:
                 project.project_status = "PROJECT_VALIDATED"
                 project.save()
-                template = MailTemplate.objects.get(code="PROJECT_VALIDATED")
+                template = MailTemplate.objects.get(
+                    code="USER_OR_ASSOCIATION_PROJECT_CONFIRMATION"
+                )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=email,
@@ -642,7 +655,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             else:
                 project.project_status = "PROJECT_REJECTED"
                 project.save()
-                template = MailTemplate.objects.get(code="PROJECT_REJECTED")
+                template = MailTemplate.objects.get(
+                    code="USER_OR_ASSOCIATION_PROJECT_REJECTION"
+                )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=email,

@@ -35,16 +35,18 @@ class PlanAAdapter(DefaultAccountAdapter):
             "account/email/email_confirmation",
         ]:
             if template_prefix == "account/email/email_confirmation_signup":
-                template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_CREATION")
             elif template_prefix == "account/email/email_confirmation":
-                template = MailTemplate.objects.get(code="EMAIL_RECONFIRMATION_MESSAGE")
+                template = MailTemplate.objects.get(
+                    code="USER_ACCOUNT_EMAIL_RECONFIRMATION"
+                )
             key = context['key']
             context[
                 "activate_url"
             ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"
 
         elif template_prefix == "account/email/password_reset_key":
-            template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET")
             password_reset_url_parts = re.match(
                 r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]
             )

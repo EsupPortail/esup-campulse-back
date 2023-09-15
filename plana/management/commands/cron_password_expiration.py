@@ -34,7 +34,9 @@ class Command(BaseCommand):
 
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
-            template = MailTemplate.objects.get(code="PASSWORD_RESET_ADVISED")
+            template = MailTemplate.objects.get(
+                code="USER_ACCOUNT_PASSWORD_RESET_WARNING_SCHEDULED"
+            )
             for user in mail_sending_queryset:
                 self.send_password_mail(user, context, template)
 
@@ -46,7 +48,9 @@ class Command(BaseCommand):
                 password_last_change_date=change_due_date
             )
 
-            template = MailTemplate.objects.get(code="PASSWORD_RESET_MANDATORY")
+            template = MailTemplate.objects.get(
+                code="USER_ACCOUNT_PASSWORD_RESET_SCHEDULED"
+            )
             for user in change_password_queryset:
                 password = "".join(
                     secrets.choice(string.ascii_letters + string.digits)

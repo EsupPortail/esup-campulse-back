@@ -273,7 +273,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 "password_change_url"
             ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
             template = MailTemplate.objects.get(
-                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
+                code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION"
             )
         else:
             SocialAccount.objects.create(
@@ -283,7 +283,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 extra_data={},
             )
             template = MailTemplate.objects.get(
-                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION_LDAP"
+                code="USER_ACCOUNT_LDAP_BY_MANAGER_CONFIRMATION"
             )
 
         send_mail(
@@ -420,11 +420,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             template = None
             if to_bool(request.data["can_submit_projects"]) is False:
                 template = MailTemplate.objects.get(
-                    code="DEACTIVATE_PROJECT_SUBMISSION"
+                    code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED"
                 )
             elif to_bool(request.data["can_submit_projects"]) is True:
                 template = MailTemplate.objects.get(
-                    code="REACTIVATE_PROJECT_SUBMISSION"
+                    code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED"
                 )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -445,10 +445,10 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context["documentation_url"] = settings.APP_DOCUMENTATION_URL
             if user.is_cas_user():
                 template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
+                    code="USER_ACCOUNT_LDAP_CONFIRMATION"
                 )
             else:
-                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_CONFIRMATION")
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_CONFIRMATION")
                 uid = user_pk_to_url_str(user)
                 token = default_token_generator.make_token(user)
                 context[
@@ -472,7 +472,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         "user_association_url"
                     ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
                     template = MailTemplate.objects.get(
-                        code="USER_ASSOCIATION_MANAGER_MESSAGE"
+                        code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
@@ -522,7 +522,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "site_name": current_site.name,
                 "manager_email_address": request.user.email,
             }
-            template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_REJECTION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
@@ -536,7 +536,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_DELETION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,

@@ -40,17 +40,20 @@ class Command(BaseCommand):
                     association = Association.objects.get(
                         id=project_needing_review.association_id
                     )
-                    association_user_email = User.objects.get(
-                        id=AssociationUser.objects.get(
-                            id=project_needing_review.association_user_id
-                        ).user_id
-                    ).email
+                    if project_needing_review.association_user_id is not None:
+                        email = User.objects.get(
+                            id=AssociationUser.objects.get(
+                                id=project_needing_review.association_user_id
+                            ).user_id
+                        ).email
+                    else:
+                        email = association.email
                     template = MailTemplate.objects.get(
-                        code="PROJECT_NEEDS_REVIEW_STUDENT"
+                        code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=association_user_email,
+                        to_=email,
                         subject=template.subject.replace(
                             "{{ site_name }}", context["site_name"]
                         ),
@@ -63,7 +66,7 @@ class Command(BaseCommand):
                         .values_list("email", flat=True)
                     )
                     template = MailTemplate.objects.get(
-                        code="PROJECT_NEEDS_REVIEW_MANAGER"
+                        code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
@@ -77,7 +80,7 @@ class Command(BaseCommand):
                 elif project_needing_review.user_id is not None:
                     user = User.objects.get(id=project_needing_review.user_id)
                     template = MailTemplate.objects.get(
-                        code="PROJECT_NEEDS_REVIEW_STUDENT"
+                        code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
@@ -95,7 +98,7 @@ class Command(BaseCommand):
                         if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
                     template = MailTemplate.objects.get(
-                        code="PROJECT_NEEDS_REVIEW_MANAGER"
+                        code="MANAGER_PROJECT_NEEDS_REVIEW_SCHEDULED"
                     )
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,

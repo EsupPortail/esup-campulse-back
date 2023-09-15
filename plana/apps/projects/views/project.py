@@ -774,8 +774,8 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 in Project.ProjectStatus.get_email_project_processing_project_statuses()
             ):
                 document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
-                association_email_template_code = "NEW_ASSOCIATION_PROJECT_TO_PROCESS"
-                user_email_template_code = "NEW_USER_PROJECT_TO_PROCESS"
+                association_email_template_code = "MANAGER_PROJECT_ASSOCIATION_CREATION"
+                user_email_template_code = "MANAGER_PROJECT_USER_CREATION"
                 request.data["processing_date"] = datetime.date.today()
             elif (
                 new_project_status
@@ -783,9 +783,9 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             ):
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = (
-                    "NEW_ASSOCIATION_PROJECT_REVIEW_TO_PROCESS"
+                    "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"
                 )
-                user_email_template_code = "NEW_USER_PROJECT_REVIEW_TO_PROCESS"
+                user_email_template_code = "MANAGER_PROJECT_REVIEW_USER_CREATION"
             missing_documents_names = (
                 Document.objects.filter(
                     models.Q(process_type__in=document_process_types)
@@ -885,23 +885,26 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             new_project_status in Project.ProjectStatus.get_validator_project_statuses()
         ):
             mail_templates_codes_by_status = {
-                "PROJECT_DRAFT_PROCESSED": "PROJECT_NEEDS_CHANGES",
-                "PROJECT_REJECTED": "PROJECT_REJECTED",
-                "PROJECT_VALIDATED": "PROJECT_VALIDATED",
-                "PROJECT_REVIEW_DRAFT": "PROJECT_NEEDS_REVIEW",
-                "PROJECT_REVIEW_VALIDATED": "PROJECT_REVIEW_VALIDATED",
-                "PROJECT_CANCELED": "PROJECT_CANCELED",
+                "PROJECT_DRAFT_PROCESSED": "USER_OR_ASSOCIATION_PROJECT_NEEDS_CHANGES",
+                "PROJECT_REJECTED": "USER_OR_ASSOCIATION_PROJECT_REJECTION",
+                "PROJECT_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION",
+                "PROJECT_REVIEW_DRAFT": "USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW",
+                "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
+                "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
             }
             template = MailTemplate.objects.get(
                 code=mail_templates_codes_by_status[new_project_status]
             )
             email = ""
             if project.association_id is not None:
-                email = User.objects.get(
-                    id=AssociationUser.objects.get(
-                        id=project.association_user_id
-                    ).user_id
-                ).email
+                if project.association_user_id is not None:
+                    email = User.objects.get(
+                        id=AssociationUser.objects.get(
+                            id=project.association_user_id
+                        ).user_id
+                    ).email
+                else:
+                    email = Association.objects.get(id=project.association_id).email
             elif project.user_id is not None:
                 email = User.objects.get(id=project.user_id).email
             send_mail(

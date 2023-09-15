@@ -73,7 +73,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
                 template = MailTemplate.objects.get(
-                    code="MANAGER_LDAP_ACCOUNT_CONFIRMATION"
+                    code="MANAGER_ACCOUNT_LDAP_CREATION"
                 )
 
                 managers_emails = []
@@ -176,7 +176,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             managers_emails = []
             if assos_user.count() > 0 or funds_user.count() > 0:
                 template = MailTemplate.objects.get(
-                    code="INSTITUTION_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                    code="MANAGER_ACCOUNT_LOCAL_CREATION"
                 )
                 for institution in user.get_user_institutions():
                     managers_emails += (
@@ -187,7 +187,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 managers_emails = list(set(managers_emails))
             else:
                 template = MailTemplate.objects.get(
-                    code="MISC_MANAGER_LOCAL_ACCOUNT_CONFIRMATION"
+                    code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION"
                 )
                 for user_to_check in User.objects.filter(
                     is_superuser=False, is_staff=True

@@ -92,7 +92,9 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
             "first_name": self.user.first_name,
             "last_name": self.user.last_name,
         }
-        template = MailTemplate.objects.get(code="PASSWORD_RESET_CONFIRMATION")
+        template = MailTemplate.objects.get(
+            code="USER_ACCOUNT_PASSWORD_RESET_CONFIRMATION"
+        )
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=self.user.email,

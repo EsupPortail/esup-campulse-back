@@ -45,7 +45,9 @@ class Command(BaseCommand):
                         days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING
                     )
                 ):
-                    template = MailTemplate.objects.get(code="DOCUMENT_NEARLY_EXPIRED")
+                    template = MailTemplate.objects.get(
+                        code="USER_OR_ASSOCIATION_DOCUMENT_EXPIRATION_WARNING_SCHEDULED"
+                    )
                     current_site = get_current_site(None)
                     context = {"site_name": current_site.name}
                     email = ""

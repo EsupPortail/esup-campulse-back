@@ -26,7 +26,7 @@ class Command(BaseCommand):
                     )
                 ):
                     template = MailTemplate.objects.get(
-                        code="ASSOCIATION_CHARTER_NEARLY_EXPIRED"
+                        code="ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED"
                     )
                     current_site = get_current_site(None)
                     context = {"site_name": current_site.name}

@@ -33,7 +33,9 @@ class Command(BaseCommand):
                 | Q(last_login__isnull=False, last_login__date=mail_sending_due_date)
             )
 
-            template = MailTemplate.objects.get(code="ACCOUNT_EXPIRATION")
+            template = MailTemplate.objects.get(
+                code="USER_ACCOUNT_DELETION_WARNING_SCHEDULED"
+            )
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
             for user in mail_sending_queryset:

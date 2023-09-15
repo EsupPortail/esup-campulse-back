@@ -291,7 +291,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 "site_name": current_site.name,
             }
 
-            template = MailTemplate.objects.get(code="NEW_DOCUMENT_TO_PROCESS")
+            template = MailTemplate.objects.get(code="MANAGER_DOCUMENT_CREATION")
             managers_emails = []
             if association is not None:
                 managers_emails = list(
@@ -314,7 +314,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
-            template = MailTemplate.objects.get(code="DOCUMENT_SENT")
+            template = MailTemplate.objects.get(
+                code="USER_OR_ASSOCIATION_DOCUMENT_CREATION"
+            )
             email = ""
             if association is not None:
                 email = association.email
@@ -454,7 +456,9 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(code="DOCUMENT_VALIDATED")
+            template = MailTemplate.objects.get(
+                code="USER_OR_ASSOCIATION_DOCUMENT_CONFIRMATION"
+            )
             email = ""
             if document_upload.association_id is not None:
                 email = Association.objects.get(id=document_upload.association_id).email
@@ -518,7 +522,9 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(code="DOCUMENT_REJECTED")
+            template = MailTemplate.objects.get(
+                code="USER_OR_ASSOCIATION_DOCUMENT_REJECTION"
+            )
             email = ""
             if document_upload.association_id is not None:
                 email = Association.objects.get(id=document_upload.association_id).email

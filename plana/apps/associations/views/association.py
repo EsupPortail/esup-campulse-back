@@ -503,11 +503,11 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 if to_bool(request.data["can_submit_projects"]) is False:
                     context["manager_email_address"] = request.user.email
                     template = MailTemplate.objects.get(
-                        code="DEACTIVATE_PROJECT_SUBMISSION"
+                        code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED"
                     )
                 elif to_bool(request.data["can_submit_projects"]) is True:
                     template = MailTemplate.objects.get(
-                        code="REACTIVATE_PROJECT_SUBMISSION"
+                        code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED"
                     )
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
@@ -534,7 +534,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         context["first_name"] = request.user.first_name
         context["last_name"] = request.user.last_name
         context["association_name"] = association.name
-        template = MailTemplate.objects.get(code="ASSOCIATION_CONTENT_CHANGE")
+        template = MailTemplate.objects.get(
+            code="USER_ACCOUNT_ASSOCIATION_CHANGE_CONFIRMATION"
+        )
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=request.user.email,
@@ -587,7 +589,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(code="ASSOCIATION_DELETE")
+            template = MailTemplate.objects.get(code="ASSOCIATION_ACCOUNT_DELETION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=association.email,
@@ -763,7 +765,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         }
         if request.data["charter_status"] == "CHARTER_PROCESSING":
             template = MailTemplate.objects.get(
-                code="NEW_ASSOCIATION_CHARTER_TO_PROCESS"
+                code="MANAGER_ASSOCIATION_CHARTER_CREATION"
             )
             institution = Institution.objects.get(id=association.institution_id)
             managers_emails = list(
@@ -783,10 +785,10 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             association.save()
 
         mail_templates_codes_by_status = {
-            "CHARTER_DRAFT": "ASSOCIATION_CHARTER_REJECTED",
-            "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_SENT",
-            "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_VALIDATED",
-            "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTED",
+            "CHARTER_DRAFT": "ASSOCIATION_CHARTER_REJECTION",
+            "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_CREATION",
+            "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_CONFIRMATION",
+            "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTION",
         }
         if request.data["charter_status"] == "CHARTER_VALIDATED":
             association.is_site = True

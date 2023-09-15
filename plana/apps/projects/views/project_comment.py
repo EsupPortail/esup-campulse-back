@@ -73,25 +73,38 @@ class ProjectCommentCreate(generics.CreateAPIView):
         request.data["edition_date"] = today
         request.data["user"] = request.user.pk
 
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-        }
-        template = MailTemplate.objects.get(code="NEW_PROJECT_COMMENT")
-        email = None
-        if project.association_id is not None:
-            email = User.objects.get(
-                id=AssociationUser.objects.get(id=project.association_user_id).user_id
-            ).email
-        elif project.user_id is not None:
-            email = User.objects.get(id=project.user_id).email
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
+        if "is_visible" not in request.data or (
+            request.data["is_visible"] != ""
+            and to_bool(request.data["is_visible"]) is True
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(
+                code="USER_OR_ASSOCIATION_PROJECT_COMMENT"
+            )
+            email = None
+            if project.association_id is not None:
+                if project.association_user_id is not None:
+                    email = User.objects.get(
+                        id=AssociationUser.objects.get(
+                            id=project.association_user_id
+                        ).user_id
+                    ).email
+                else:
+                    email = Association.objects.get(id=project.association_id).email
+            elif project.user_id is not None:
+                email = User.objects.get(id=project.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace(
+                    "{{ site_name }}", context["site_name"]
+                ),
+                message=template.parse_vars(request.user, request, context),
+            )
 
         return super().create(request, *args, **kwargs)
 

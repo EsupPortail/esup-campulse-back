@@ -239,7 +239,9 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 "site_name": current_site.name,
                 "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
             }
-            template = MailTemplate.objects.get(code="USER_ASSOCIATION_MANAGER_MESSAGE")
+            template = MailTemplate.objects.get(
+                code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION"
+            )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=list(
@@ -524,7 +526,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
         ):
             template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_STUDENT_MESSAGE_CONFIRMATION"
+                code="USER_ACCOUNT_ASSOCIATION_USER_CONFIRMATION"
             )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -544,7 +546,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
         ):
             template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_CAN_BE_PRESIDENT_CONFIRMATION"
+                code="USER_ACCOUNT_ASSOCIATION_PRESIDENT_CONFIRMATION"
             )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -608,7 +610,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "association_name": association.name,
             }
             template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_STUDENT_MESSAGE_REJECTION"
+                code="USER_ACCOUNT_ASSOCIATION_USER_REJECTION"
             )
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,

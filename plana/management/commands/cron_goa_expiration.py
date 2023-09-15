@@ -29,7 +29,9 @@ class Command(BaseCommand):
                         f"{association.name} - {association.last_goa_date}<br/>"
                     )
 
-            template = MailTemplate.objects.get(code="ASSOCIATION_GOA_EXPIRING")
+            template = MailTemplate.objects.get(
+                code="MANAGER_ACCOUNT_ASSOCIATION_GOA_EXPIRATION_SCHEDULED"
+            )
             current_site = get_current_site(None)
             context = {"site_name": current_site.name}
             for institution in institutions:
