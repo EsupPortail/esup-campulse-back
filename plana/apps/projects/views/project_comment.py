@@ -19,7 +19,7 @@ from plana.apps.projects.serializers.project_comment import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, to_bool
 
 
 class ProjectCommentCreate(generics.CreateAPIView):
