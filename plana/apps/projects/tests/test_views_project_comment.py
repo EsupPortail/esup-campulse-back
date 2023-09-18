@@ -336,11 +336,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         PATCH /projects/{project_id}/comments/{comment_id}
 
         - A user with proper permissions can execute this request.
-        - TOOD : The comment is correctly updated in db.
+        - TODO : The comment is correctly updated in db.
         """
         comment = 1
         project = 2
-        patch_data = {"text": "Commentaire sent with success"}
+        patch_data = {"text": "Commentaire sent with success", "is_visible": True}
         response = self.general_client.patch(
             f"/projects/{project}/comments/{comment}",
             data=patch_data,
