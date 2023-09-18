@@ -221,6 +221,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         project_comment.edition_date = datetime.date.today()
         project_comment.text = request.data["text"]
+        project_comment.is_visible = request.data["is_visible"]
         project_comment.save()
         return response.Response({}, status=status.HTTP_200_OK)
 
