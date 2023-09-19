@@ -162,6 +162,12 @@ class CommissionDatesViewsTests(TestCase):
         - with_active_projects returns commissions depending on their projects statuses.
         - only_with_active_projects returns commissions depending on their projects statuses.
         """
+        commissions_ids_without_projects = CommissionFund.objects.exclude(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id__in=Project.objects.all().values_list("id")
+            ).values_list("commission_fund_id")
+        ).values_list("commission_id")
+
         commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
@@ -169,7 +175,9 @@ class CommissionDatesViewsTests(TestCase):
                 ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
-        commissions_with_inactive_projects = Commission.objects.filter(id__in=commissions_ids_with_inactive_projects)
+        commissions_with_inactive_projects = Commission.objects.filter(
+            models.Q(id__in=commissions_ids_with_inactive_projects) | models.Q(id__in=commissions_ids_without_projects)
+        )
         commissions_ids_with_active_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.exclude(
@@ -177,7 +185,9 @@ class CommissionDatesViewsTests(TestCase):
                 ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
-        commissions_with_active_projects = Commission.objects.filter(id__in=commissions_ids_with_active_projects)
+        commissions_with_active_projects = Commission.objects.filter(
+            models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
+        )
 
         response = self.client.get("/commissions/?with_active_projects=false")
         content = json.loads(response.content.decode("utf-8"))

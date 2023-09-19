@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 11:33+0200\n"
+"POT-Creation-Date: 2023-09-19 13:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -363,38 +363,38 @@ msgstr "Fonds liés à des Commissions"
 msgid "Funds"
 msgstr "Fonds"
 
-#: plana/apps/commissions/views/commission.py:235
-#: plana/apps/commissions/views/commission.py:352
+#: plana/apps/commissions/views/commission.py:246
+#: plana/apps/commissions/views/commission.py:363
 msgid "Commission name already taken."
 msgstr "Nom de commission déjà enregistré."
 
-#: plana/apps/commissions/views/commission.py:244
-#: plana/apps/commissions/views/commission.py:363
+#: plana/apps/commissions/views/commission.py:255
+#: plana/apps/commissions/views/commission.py:374
 msgid "Cannot create commission date taking place before today."
 msgstr "Impossible de créer une date de commission passée."
 
-#: plana/apps/commissions/views/commission.py:255
-#: plana/apps/commissions/views/commission.py:377
+#: plana/apps/commissions/views/commission.py:266
+#: plana/apps/commissions/views/commission.py:388
 msgid "Can't set submission date after commission date."
 msgstr "La date de soumission ne peut avoir lieu après la date de commission."
 
-#: plana/apps/commissions/views/commission.py:294
-#: plana/apps/commissions/views/commission.py:333
-#: plana/apps/commissions/views/commission.py:416
+#: plana/apps/commissions/views/commission.py:305
+#: plana/apps/commissions/views/commission.py:344
+#: plana/apps/commissions/views/commission.py:427
 #: plana/apps/commissions/views/commission_export.py:69
 #: plana/apps/commissions/views/commission_fund.py:101
 msgid "Commission does not exist."
 msgstr "La commission n'existe pas."
 
-#: plana/apps/commissions/views/commission.py:396
+#: plana/apps/commissions/views/commission.py:407
 msgid "Can't set commission date before submission date."
 msgstr "La date de commission ne peut avoir lieu avant la date de soumission."
 
-#: plana/apps/commissions/views/commission.py:422
+#: plana/apps/commissions/views/commission.py:433
 msgid "Cannot delete commission taking place before today."
 msgstr "Impossible de supprimer une commission passée."
 
-#: plana/apps/commissions/views/commission.py:434
+#: plana/apps/commissions/views/commission.py:445
 msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 

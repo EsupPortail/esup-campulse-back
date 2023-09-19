@@ -123,6 +123,11 @@ class CommissionListCreate(generics.ListCreateAPIView):
                 id__in=CommissionFund.objects.filter(fund_id__in=funds.split(",")).values_list("commission_id")
             )
 
+        commissions_ids_without_projects = CommissionFund.objects.exclude(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id__in=Project.objects.all().values_list("id")
+            ).values_list("commission_fund_id")
+        ).values_list("commission_id")
         commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
@@ -140,9 +145,15 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
         if with_active_projects is not None and with_active_projects != "":
             if to_bool(with_active_projects) is False:
-                self.queryset = self.queryset.filter(id__in=commissions_ids_with_inactive_projects)
+                self.queryset = self.queryset.filter(
+                    models.Q(id__in=commissions_ids_with_inactive_projects)
+                    | models.Q(id__in=commissions_ids_without_projects)
+                )
             else:
-                self.queryset = self.queryset.filter(id__in=commissions_ids_with_active_projects)
+                self.queryset = self.queryset.filter(
+                    models.Q(id__in=commissions_ids_with_active_projects)
+                    | models.Q(id__in=commissions_ids_without_projects)
+                )
 
         if only_with_active_projects is not None and only_with_active_projects != "":
             if to_bool(only_with_active_projects) is False:
