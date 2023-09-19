@@ -5064,7 +5064,7 @@ components:
           title: Est validé par l'équipe d'administration
         commission_fund_id:
           type: integer
-          title: Fond lié à une Commission
+          title: Fonds lié à une Commission
           readOnly: true
         new_commission_fund_id:
           type: integer
