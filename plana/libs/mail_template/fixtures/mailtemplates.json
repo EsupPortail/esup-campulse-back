@@ -57,8 +57,8 @@
       "code": "MANAGER_ACCOUNT_LDAP_CREATION",
       "label": "Manager Account LDAP Creation",
       "description": "Demande de création de compte LDAP envoyée à un gestionnaire",
-      "subject": "{{ site_name }} – Demande de création de compte Ernest",
-      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte via Ernest vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "subject": "{{ site_name }} – Demande de création de compte",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,

@@ -67,6 +67,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
+        if value == '':
+            return value
         pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
         if not re.match(pattern, value):
             raise serializers.ValidationError("Wrong phone number format.")
