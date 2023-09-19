@@ -15,7 +15,7 @@ from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
     ProjectCommentDataSerializer,
     ProjectCommentSerializer,
-    ProjectCommentTextSerializer,
+    ProjectCommentUpdateSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
@@ -150,7 +150,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/comments/{comment_id} route"""
 
     queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentTextSerializer
+    serializer_class = ProjectCommentUpdateSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):

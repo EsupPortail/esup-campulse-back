@@ -336,7 +336,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         PATCH /projects/{project_id}/comments/{comment_id}
 
         - A user with proper permissions can execute this request.
-        - TODO : The comment is correctly updated in db.
+        - The comment is correctly updated in db.
         """
         comment = 1
         project = 2
@@ -347,6 +347,8 @@ class ProjectCommentLinksViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_comment = ProjectComment.objects.get(id=comment, project_id=project)
+        self.assertEqual(updated_comment.text, "Commentaire sent with success")
 
     def test_delete_project_comments_anonymous(self):
         """

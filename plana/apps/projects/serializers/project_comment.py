@@ -28,9 +28,9 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
         fields = ["project", "is_visible", "text", "user"]
 
 
-class ProjectCommentTextSerializer(serializers.ModelSerializer):
+class ProjectCommentUpdateSerializer(serializers.ModelSerializer):
     """Field that can be updated."""
 
     class Meta:
         model = ProjectComment
-        fields = ["text"]
+        fields = ["text", "is_visible"]

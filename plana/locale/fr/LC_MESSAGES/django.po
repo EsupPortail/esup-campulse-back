@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 11:41+0200\n"
+"POT-Creation-Date: 2023-09-19 08:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1078,7 +1078,7 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project.py:508
 #: plana/apps/projects/views/project.py:660
 #: plana/apps/projects/views/project_comment.py:212
-#: plana/apps/projects/views/project_comment.py:249
+#: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:147
 #: plana/apps/projects/views/project_commission_fund.py:327
 #: plana/apps/projects/views/project_commission_fund.py:584
@@ -1133,7 +1133,7 @@ msgstr "Non autorisé à récupérer les catégories de ce projet."
 
 #: plana/apps/projects/views/project_comment.py:64
 #: plana/apps/projects/views/project_comment.py:218
-#: plana/apps/projects/views/project_comment.py:255
+#: plana/apps/projects/views/project_comment.py:256
 msgid "Cannot manage comments on a validated project/review."
 msgstr "Impossible de gérer les commentaires d'un projet/bilan validé."
 

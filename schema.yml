@@ -1675,13 +1675,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -4462,7 +4462,7 @@ components:
           nullable: true
           minLength: 1
           title: Commentaire
-    PatchedProjectCommentTextRequest:
+    PatchedProjectCommentUpdateRequest:
       type: object
       description: Field that can be updated.
       properties:
@@ -4470,6 +4470,9 @@ components:
           type: string
           minLength: 1
           title: Texte
+        is_visible:
+          type: boolean
+          title: Est visible
     PatchedProjectCommissionFundDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
