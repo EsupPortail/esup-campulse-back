@@ -135,7 +135,8 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
                 and (
                     not request.user.is_anonymous
-                    and not fund.institution_id in request.user.get_user_managed_institutions()
+                    and not fund.institution_id
+                    in request.user.get_user_managed_institutions().values_list("id", flat=True)
                 )
             ):
                 return response.Response(

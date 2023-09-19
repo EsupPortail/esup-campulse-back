@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 08:22+0200\n"
+"POT-Creation-Date: 2023-09-19 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -353,7 +353,7 @@ msgstr "Fonds"
 #: plana/apps/commissions/models/commission_fund.py:24
 #: plana/apps/projects/models/project_commission_fund.py:18
 msgid "Commission Fund"
-msgstr "Fond lié à une Commission"
+msgstr "Fonds lié à une Commission"
 
 #: plana/apps/commissions/models/commission_fund.py:25
 msgid "Commissions Funds"
@@ -740,7 +740,7 @@ msgstr "Non autorisé à ajouter un document si non président."
 
 #: plana/apps/documents/views/document_upload.py:217
 #: plana/apps/users/views/association_user.py:260
-#: plana/apps/users/views/group_institution_fund_user.py:178
+#: plana/apps/users/views/group_institution_fund_user.py:179
 #: plana/apps/users/views/user.py:302 plana/apps/users/views/user.py:349
 #: plana/apps/users/views/user.py:452
 msgid "User does not exist."
@@ -1397,7 +1397,7 @@ msgstr "Aucun nom de famille donné."
 
 #: plana/apps/users/views/group_institution_fund_user.py:80
 msgid "User or group or institution or fund does not exist."
-msgstr "L'utilisateur ou le groupe ou l'institution ou le fond n'existe pas."
+msgstr "L'utilisateur ou le groupe ou l'institution ou le fonds n'existe pas."
 
 #: plana/apps/users/views/group_institution_fund_user.py:86
 msgid "Only managers can edit groups for this account."
@@ -1424,32 +1424,32 @@ msgstr ""
 msgid "Adding institution in this group is not possible."
 msgstr "Ajouter un établissement dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/group_institution_fund_user.py:142
+#: plana/apps/users/views/group_institution_fund_user.py:143
 msgid "Adding fund in this group is not possible."
-msgstr "Ajouter un fond dans ce groupe n'est pas possible."
+msgstr "Ajouter un fonds dans ce groupe n'est pas possible."
 
-#: plana/apps/users/views/group_institution_fund_user.py:184
+#: plana/apps/users/views/group_institution_fund_user.py:185
 msgid "Not allowed to get this link between group and user."
 msgstr "Non autorisé à récupérer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/group_institution_fund_user.py:224
-#: plana/apps/users/views/group_institution_fund_user.py:278
-#: plana/apps/users/views/group_institution_fund_user.py:330
+#: plana/apps/users/views/group_institution_fund_user.py:225
+#: plana/apps/users/views/group_institution_fund_user.py:279
+#: plana/apps/users/views/group_institution_fund_user.py:331
 msgid "User or link does not exist."
 msgstr "L'association ou le lien n'existe pas."
 
-#: plana/apps/users/views/group_institution_fund_user.py:234
+#: plana/apps/users/views/group_institution_fund_user.py:235
 msgid "User is still linked to an association."
 msgstr "L'utilisateur est encore membre d'une association."
 
-#: plana/apps/users/views/group_institution_fund_user.py:240
-#: plana/apps/users/views/group_institution_fund_user.py:292
-#: plana/apps/users/views/group_institution_fund_user.py:344
+#: plana/apps/users/views/group_institution_fund_user.py:241
+#: plana/apps/users/views/group_institution_fund_user.py:293
+#: plana/apps/users/views/group_institution_fund_user.py:345
 msgid "User should have at least one group."
 msgstr "L'utilisateur doit avoir au moins un groupe."
 
-#: plana/apps/users/views/group_institution_fund_user.py:286
-#: plana/apps/users/views/group_institution_fund_user.py:338
+#: plana/apps/users/views/group_institution_fund_user.py:287
+#: plana/apps/users/views/group_institution_fund_user.py:339
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 

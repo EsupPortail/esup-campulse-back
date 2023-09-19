@@ -174,7 +174,7 @@
       "code": "COMMISSION_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
       "header": "CAPE",
-      "body": "<p>Vous êtes étudiante ou étudiant avec l'envie de porter un projet pour les autres universitaires ? Il vous est possible de demander un soutien financier auprès de votre Crous en déposant un dossier de demande de subvention au fond Culture-ActionS. Pour bénéficier d'un accompagnement dans votre démarche, contactez votre référent Culture-ActionS ! Attention : les fonds FSDIE et IdEx ne financent pas les projets individuels.</p>",
+      "body": "<p>Vous êtes étudiante ou étudiant avec l'envie de porter un projet pour les autres universitaires ? Il vous est possible de demander un soutien financier auprès de votre Crous en déposant un dossier de demande de subvention au fonds Culture-ActionS. Pour bénéficier d'un accompagnement dans votre démarche, contactez votre référent Culture-ActionS ! Attention : les fonds FSDIE et IdEx ne financent pas les projets individuels.</p>",
       "footer": "",
       "aside": ""
     }
