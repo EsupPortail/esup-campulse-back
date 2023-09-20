@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
@@ -189,6 +190,21 @@ class Project(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_project_default_manager_emails(self):
+        """Returns a list of manager email addresses affected to a project."""
+        managers_emails = []
+        if self.association_id is not None:
+            managers_emails = list(
+                Institution.objects.get(id=Association.objects.get(id=self.association_id).institution_id)
+                .default_institution_managers()
+                .values_list("email", flat=True)
+            )
+        if self.user_id is not None:
+            for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
+                if user_to_check.has_perm("users.change_user_misc"):
+                    managers_emails.append(user_to_check.email)
+        return managers_emails
 
     class Meta:
         verbose_name = _("Project")

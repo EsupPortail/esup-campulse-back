@@ -28,7 +28,7 @@ class PlanAAdapter(DefaultAccountAdapter):
         context["username"] = user.username
         context["first_name"] = user.first_name
         context["last_name"] = user.last_name
-        context["manager_email_address"] = settings.DEFAULT_FROM_EMAIL
+        context["manager_email_address"] = ','.join(user.get_user_default_manager_emails())
 
         if template_prefix in [
             "account/email/email_confirmation_signup",
@@ -38,7 +38,7 @@ class PlanAAdapter(DefaultAccountAdapter):
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_CREATION")
             elif template_prefix == "account/email/email_confirmation":
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_EMAIL_RECONFIRMATION")
-            key = context['key']
+            key = context["key"]
             context[
                 "activate_url"
             ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"

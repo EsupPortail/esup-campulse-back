@@ -525,6 +525,11 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
+                "manager_email_address": ','.join(
+                    Institution.objects.get(id=association.institution_id)
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                ),
             }
             template = MailTemplate.objects.get(code="ASSOCIATION_ACCOUNT_DELETION")
             send_mail(
@@ -689,6 +694,11 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         context = {
             "site_domain": current_site.domain,
             "site_name": current_site.name,
+            "manager_email_address": ','.join(
+                Institution.objects.get(id=association.institution_id)
+                .default_institution_managers()
+                .values_list("email", flat=True)
+            ),
         }
         if request.data["charter_status"] == "CHARTER_PROCESSING":
             template = MailTemplate.objects.get(code="MANAGER_ASSOCIATION_CHARTER_CREATION")

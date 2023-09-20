@@ -62,26 +62,14 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     request.data.pop(restricted_field, False)
 
             if request.user.is_validated_by_admin is False:
-                assos_user = AssociationUser.objects.filter(user_id=request.user.pk)
-                funds_user = GroupInstitutionFundUser.objects.filter(user_id=request.user.pk)
                 user_id = request.user.pk
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LDAP_CREATION")
-
-                managers_emails = []
-                if assos_user.count() > 0 or funds_user.count() > 0:
-                    for institution in request.user.get_user_institutions():
-                        managers_emails += institution.default_institution_managers().values_list("email", flat=True)
-                    managers_emails = list(set(managers_emails))
-                else:
-                    for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                        if user_to_check.has_perm("users.change_user_misc"):
-                            managers_emails.append(user_to_check.email)
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=managers_emails,
+                    to_=request.user.get_user_default_manager_emails(),
                     subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(request.user, request, context),
                 )
@@ -151,17 +139,11 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 "site_name": current_site.name,
                 "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
-            managers_emails = []
+            managers_emails = user.get_user_default_manager_emails()
             if assos_user.count() > 0 or funds_user.count() > 0:
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_CREATION")
-                for institution in user.get_user_institutions():
-                    managers_emails += institution.default_institution_managers().values_list("email", flat=True)
-                managers_emails = list(set(managers_emails))
             else:
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION")
-                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                    if user_to_check.has_perm("users.change_user_misc"):
-                        managers_emails.append(user_to_check.email)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=managers_emails,

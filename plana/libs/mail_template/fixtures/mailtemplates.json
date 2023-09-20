@@ -58,7 +58,7 @@
       "label": "Manager Account LDAP Creation",
       "description": "Demande de création de compte LDAP envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Demande de création de compte",
-      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte via l’authentification centralisée vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -370,10 +370,11 @@
       "label": "Association Account Deletion",
       "description": "Confirmation de la suppression d'une association envoyée à une association",
       "subject": "{{ site_name }} – La fiche de votre association a été supprimée",
-      "body": "Bonjour,<br/><br/>La fiche de votre association a été supprimée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Votre association a bien été supprimée de l’application {{ site_name }}. Si cela ne devait pas être le cas, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -419,10 +420,11 @@
       "label": "Association Charter Expiration Warning Scheduled",
       "description": "Tâche automatisée prévenant de l'expiration de la charte Site Alsace envoyée à une association",
       "subject": "{{ site_name }} – La charte de votre association va bientôt expirer",
-      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace. En cas de problème sur le renouvellement de la charte, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -464,10 +466,11 @@
       "label": "Association Charter Rejection",
       "description": "Rejet du dépôt de la charte Site Alsace envoyé à une association",
       "subject": "{{ site_name }} – Votre nouvelle charte a été rejetée",
-      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a été rejetée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a été rejetée. Merci de faire le nécessaire pour régulariser la situation ou de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -539,10 +542,11 @@
       "label": "User Or Association Document Rejection",
       "description": "Rejet du dépôt d'un document envoyé à une association ou un utilisateur",
       "subject": "{{ site_name }} – L'un de vos documents a été rejeté",
-      "body": "Bonjour,<br/><br/>L'un de vos documents a été rejeté.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>L'un de vos documents a été rejeté. Pour plus de détails merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -663,10 +667,11 @@
       "label": "User Or Association Project Rejection",
       "description": "Notification d'une demande de subventionnements refusée définitivement envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – Votre demande de subventionnements a été rejetée",
-      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée définitivement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été rejetée définitivement. Pour plus de détails, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -708,10 +713,11 @@
       "label": "User Or Association Project Fund Rejection",
       "description": "Notification d'un fonds refusé pour une demande de subventionnements envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – L'un de vos projets n'aura pas de subvention",
-      "body": "Bonjour,<br/><br/>L'un de vos projets n'a pas obtenu de financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Votre projet {{ project_name }} n'a pas obtenu de financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        15
       ]
     }
   },
@@ -723,10 +729,11 @@
       "label": "User Or Association Project Fund Confirmation",
       "description": "Notification d'un fonds accepté pour une demande de subventionnements envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – L'un de vos projets aura une subvention",
-      "body": "Bonjour,<br/><br/>L'un de vos projets a obtenu un financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Votre projet {{ project_name }} a obtenu un financement.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        15
       ]
     }
   },
@@ -738,7 +745,7 @@
       "label": "User Or Association Project Needs Review Scheduled",
       "description": "Tâche automatisée prévenant qu'un bilan doit être déposé pour un projet envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – Vous devez déposer le bilan de votre projet subventionné par la CAPE",
-      "body": "Bonjour,<br/><br/>Il semblerait que vous n'ayez pas encore déposé de bilan CAPE pour l'événement : {{ project_name }}.<br/><br/>Il vous reste 1 mois pour le faire, passée cette date, vous ne pourrez plus faire de demande de subventionnements CAPE tant que le bilan n'est pas déposé.<br/><br/>Merci de votre compréhension.<br/><br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Il semblerait que vous n'ayez pas encore déposé de bilan CAPE pour le projet : {{ project_name }}.<br/><br/>Il vous reste 1 mois pour le faire, passée cette date, vous ne pourrez plus faire de demande de subventionnements CAPE tant que le bilan n'est pas déposé.<br/><br/>Merci de votre compréhension.<br/><br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -803,10 +810,11 @@
       "label": "User Or Association Project Cancellation",
       "description": "Notification de l'annulation d'une demande de subventionnements envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – Votre projet est annulé",
-      "body": "Bonjour,<br/><br/>L'un de vos projets déposés sur la plate-forme a été annulé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Le projet {{ project_name }} déposé sur la plate-forme a été annulé. Pour plus de détails, merci de contacter : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        6
       ]
     }
   },
@@ -833,10 +841,11 @@
       "label": "User Or Association Project Review Confirmation",
       "description": "Notification d'un bilan de demande de subventionnements validé envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – Votre bilan de projet a été validé",
-      "body": "Bonjour,<br/><br/>L'un de vos bilans de projet a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Le bilan du projet {{ project_name}} a été validé.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        15
       ]
     }
   }

@@ -757,10 +757,9 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 project.manual_identifier = f"{year}{projects_year_count+1:04}"
                 project.save()
 
-            managers_emails = []
+            managers_emails = project.get_project_default_manager_emails()
             if project.association_id is not None:
                 association = Association.objects.get(id=project.association_id)
-                institution = Institution.objects.get(id=association.institution_id)
                 funds_misc_used = Fund.objects.filter(
                     id__in=CommissionFund.objects.filter(
                         id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
@@ -771,7 +770,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 )
                 context["association_name"] = association.name
                 template = MailTemplate.objects.get(code=association_email_template_code)
-                managers_emails += institution.default_institution_managers().values_list("email", flat=True)
                 if funds_misc_used.count() > 0:
                     for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                         if user_to_check.has_perm("users.change_user_misc"):
@@ -780,9 +778,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 context["first_name"] = request.user.first_name
                 context["last_name"] = request.user.last_name
                 template = MailTemplate.objects.get(code=user_email_template_code)
-                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                    if user_to_check.has_perm("users.change_user_misc"):
-                        managers_emails.append(user_to_check.email)
 
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -810,6 +805,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     email = Association.objects.get(id=project.association_id).email
             elif project.user_id is not None:
                 email = User.objects.get(id=project.user_id).email
+            context["manager_email_address"] = ','.join(project.get_project_default_manager_emails())
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,

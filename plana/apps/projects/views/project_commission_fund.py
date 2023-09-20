@@ -492,16 +492,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             }
                         )
                         if templates_name == f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION":
-                            if project.association_id is not None:
-                                managers_emails = list(
-                                    Institution.objects.get(id=project.association.institution_id)
-                                    .default_institution_managers()
-                                    .values_list("email", flat=True)
-                                )
-                            if project.user_id is not None:
-                                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                                    if user_to_check.has_perm("users.change_user_misc"):
-                                        managers_emails.append(user_to_check.email)
+                            managers_emails = project.get_project_default_manager_emails()
+            context["project_name"] = project.name
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
@@ -547,6 +539,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 project.project_status = "PROJECT_REJECTED"
                 project.save()
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_REJECTION")
+                context["manager_email_address"] = ','.join(project.get_project_default_manager_emails())
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=email,

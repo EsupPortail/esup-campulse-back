@@ -247,6 +247,21 @@ class User(AbstractUser):
             id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
         )
 
+    def get_user_default_manager_emails(self):
+        """Returns a list of manager email addresses affected to a user."""
+        assos_user = AssociationUser.objects.filter(user_id=self.pk)
+        funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk)
+        managers_emails = []
+        if assos_user.count() > 0 or funds_user.count() > 0:
+            for institution in self.get_user_institutions():
+                managers_emails += institution.default_institution_managers().values_list("email", flat=True)
+            managers_emails = list(set(managers_emails))
+        else:
+            for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
+                if user_to_check.has_perm("users.change_user_misc"):
+                    managers_emails.append(user_to_check.email)
+        return managers_emails
+
     def has_validated_email_user(self):
         """Return True if the user account has a validated email."""
         try:

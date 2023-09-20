@@ -486,11 +486,23 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
                 "site_name": current_site.name,
             }
             template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_DOCUMENT_REJECTION")
+            managers_emails = []
             email = ""
             if document_upload.association_id is not None:
                 email = Association.objects.get(id=document_upload.association_id).email
+                managers_emails = list(
+                    Institution.objects.get(
+                        id=Association.objects.get(id=document_upload.association_id).institution_id
+                    )
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                )
             if document_upload.user_id is not None:
                 email = User.objects.get(id=document_upload.user_id).email
+                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
+                    if user_to_check.has_perm("users.change_user_misc"):
+                        managers_emails.append(user_to_check.email)
+            context["manager_email_address"] = ','.join(managers_emails)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=email,
