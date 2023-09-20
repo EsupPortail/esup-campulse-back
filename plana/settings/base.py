@@ -853,6 +853,8 @@ PERMISSIONS_GROUPS = {
         "change_projectcommissionfund",
         "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
         # users
         "add_user",
         "change_user",
@@ -902,6 +904,8 @@ PERMISSIONS_GROUPS = {
         "change_projectcommissionfund",
         "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
         # users
         "add_user",
         "add_user_misc",

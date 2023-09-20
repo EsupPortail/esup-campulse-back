@@ -92,6 +92,15 @@ class ProjectCommissionFundViewsTests(TestCase):
         response = self.client.get("/projects/commission_funds")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_get_project_cf_manager(self):
+        """
+        GET /projects/commission_funds .
+
+        - A manager user gets all commission funds details.
+        """
+        response = self.institution_client.get("/projects/commission_funds")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_get_project_cf_student(self):
         """
         GET /projects/commission_funds .
@@ -99,26 +108,8 @@ class ProjectCommissionFundViewsTests(TestCase):
         - A student user gets commission funds details where projects rights are OK.
         """
         response = self.student_misc_client.get("/projects/commission_funds")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_project_cf_manager(self):
-        """
-        GET /projects/commission_funds .
-
-        - A student user gets commission funds details where projects rights are OK.
-        """
-        response = self.institution_client.get("/projects/commission_funds")
-        user_institutions_ids = Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.manager_institution_user_id).values_list(
-                "institution_id"
-            )
-        )
         pcf_cnt = ProjectCommissionFund.objects.filter(
-            project_id__in=Project.visible_objects.filter(
-                association_id__in=Association.objects.filter(institution_id__in=user_institutions_ids).values_list(
-                    "id"
-                )
-            )
+            project_id__in=Project.visible_objects.filter(user_id=self.student_misc_user_id)
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
