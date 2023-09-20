@@ -344,8 +344,8 @@
       "title": "Décision de subvention FSDIE",
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU le Décret n°94-39 du 14.1.1994</p><p>VU la décision du Président de l'Université de Strasbourg portant délégation de signature au Chef du Service de la vie universitaire</p><p>VU la décision du Conseil d’Administration de l’Université de Strasbourg du 20 octobre 2009 portant délégation de signature au Vice-président Vie universitaire</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de {{ amount_earned }}€ est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre de l'opération {{ project_name }}.</p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, domaine fonctionnel D202.</p><h2>ARTICLE 3</h2><p>L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
-      "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p>Prénom NOM</p><p>Vice-présidente Vie universitaire</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p>Marine STOFFEL</p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Marine STOFFEL</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -357,8 +357,8 @@
       "title": "Notification d'attribution FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission}}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) vous a été attribué.</p><p>Cette subvention vous sera versée dans les prochaines semaines pas les services financiers de l'Université de Strasbourg.</p><p><strong>Rappels:<br>- Le logo de l'Université de Strasbourg devra obligatoirement être présent sur tous les documents de communication du projet tels que tracts, affiches... (le logo est disponible sur simple demande au SVU).<br>- Il est impératif de nous faire parvenir un bilan moral ainsi qu'un bilan financier de l'opération dans un délai de 2 mois maximum après la date de l'opération.</strong></p>",
-      "footer": "<p>Prénom NOM</p><p>Chef de Service</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Chef de Service de la vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p>Diane DUPRONT</p><p>Chef de Service</p>",
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -370,8 +370,8 @@
       "title": "Notification de report FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
-      "footer": "<p><strong>Prénom NOM</strong></p><p>Chef de Service</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Chef de Service de la vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p><strong>Diane DUPRONT</strong></p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -383,8 +383,8 @@
       "title": "Notification de refus FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
-      "footer": "<p><strong>Prénom NOM</strong></p><p>Chef de Service</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Chef de Service de la vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p><strong>Diane DUPRONT</strong></p><p>Chef de Service</p>",
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -396,8 +396,8 @@
       "title": "Décision de subvention IdEx",
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU la circulaire n° 2011-1021 du 3-11-2011 sur le développement de la vie associative et des initiatives étudiantes</p><p>VU la délibération du Conseil d’Administration du 12 mai 2009 établissant la Commission d’aide aux projets étudiants (CAPE) et adoptant la charte de subventionnement</p><p>VU la décision du Conseil d’Administration du 16 décembre 2014 validant le programme IdEx «Creative Thinkers» permettant de soutenir des projets portés par des associations étudiantes Unistra</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre du programme IdEx «Creative Thinkers» pour l'organisation de l'opération : {{ project_name }}.</p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, E-OTP W17SVU06ETUDX.</p><h2>ARTICLE 3</h2><p>L'agent Comptable de l'Université et le Chef du Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
-      "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p><strong>Prénom NOM</strong></p><p>Vice-présidente Vie universitaire</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p>Fait à Strasbourg, le {{ date }}</p><p><strong>Marine STOFFEL</strong></p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Marine STOFFEL</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -409,8 +409,8 @@
       "title": "Notification d'attribution IdEx",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé {{ project_name }}.</p><p>Cette subvention d'un montant de {{ amount_earned }}€ ({{ amount_earned_litteral }} euros) est mise en oeuvre dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx, programme dédié aux projets étudiants.<p><p>Elle vous sera versée dans les prochaines semaines par les services financiers de l'Université de Strasbourg.</p><p>Conformément au règlement financier de l’Agence Nationale de la Recherche (ANR), vous êtes tenu de faire état de ce soutien financier accordé dans le cadre du Programme Investissements d’Avenir (PIA), dans toute action de communication interne ou externe. Cette mention au financement du PIA pourra notamment être réalisée à travers l’apposition du logotype «Investissements d’Avenir» sur les documents produits.</p><p><strong>Il est impératif de nous faire parvenir un bilan moral ainsi qu’un bilan financier de l’opération dans un délai de 2 mois maximum après la date de l’opération.</strong></p><p>Le Service de la vie universitaire et la Mission Investissements d’avenir de l’Université de Strasbourg restent à votre disposition pour la bonne exécution de votre projet.</p><p>Je vous prie d’agréer l’expression de mes salutations distinguées.</p>",
-      "footer": "<p><strong>Prénom NOM</stong></p><p>Vice-présidente Vie universitaire</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p><strong>Marine STOFFEL</stong></p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Marine STOFFEL</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -422,8 +422,8 @@
       "title": "Notification de report IdEx",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
-      "footer": "<p><strong>Prénom NOM</strong></p><p>Vice-présidente Vie universitaire</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p><strong>Marine STOFFEL</strong></p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Marine STOFFEL</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -435,8 +435,8 @@
       "title": "Notification de refus IdEx",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
-      "footer": "<p><strong>Prénom NOM</strong></p><p>Vice-présidente Vie universitaire</p>",
-      "aside": "<p><strong>Prénom NOM</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: prenom.nom@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "footer": "<p><strong>Marine STOFFEL</strong></p><p>Vice-présidente Vie universitaire</p>",
+      "aside": "<p><strong>Marine STOFFEL</strong><br>Vice-présidente Vie universitaire</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Patio<br>22 rue René Descartes<br>67084 Strasbourg Cedex<br>www.unistra.fr</p>"
     }
   },
   {
@@ -448,8 +448,8 @@
       "title": "Notification d'attribution Culture-ActionS",
       "header": "<p>Strasbourg, le {{ date }}</p>",
       "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le plaisir de vous informer qu'après délibération, la Commission Culture-ActionS du Crous a décidé de vous attribuer une <strong class='underline'>aide financière de {{ amount_earned }}€</strong>.</p><p>L'octroi de cette aide est subordonné à la <strong>mention du Crous sur tous les documents de communication</strong>. Le logo du Crous est disponible sous différents formats sur simple demande à : culture@crous-strasbourg.fr<br>Il ne doit pas être modifié, ni en sa forme ni en sa couleur.</p><p>Pour le versement de cette aide, il conviendra de nous adresser <strong>le bilan moral et financier de votre action</strong> dans les deux mois suivant la réalisation de votre projet.</p><p>Le Crous de Strasbourg reste à votre disposition pour vous accompagner dans la mise en œuvre de votre projet.</p>",
-      "footer": "<p>La Directrice générale</p><p>Prénom NOM</p>",
-      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Chargée d'action culturelle<br>Tél. 01.02.03.04.05<br><span class='underline'>prenom.nom@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
+      "footer": "<p>La Directrice générale</p><p>Sophie ROUSSEL</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
     }
   },
   {
@@ -461,8 +461,8 @@
       "title": "Notification de refus Culture-ActionS",
       "header": "<p>Strasbourg, le {{ date }}</p>",
       "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le regret de vous informer que la Commission Culture-ActionS, après examen de votre dossier, ne peut répondre favorablement à votre demande d’aide financière.</p><p class='border'><p><span class='underline'Motif du refus</span> :</p><p>{{ comment }}</p></p><p>Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p>",
-      "footer": "<p>La Directrice générale</p><p>Prénom NOM</p>",
-      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Chargée d'action culturelle<br>Tél. 01.02.03.04.05<br><span class='underline'>prenom.nom@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
+      "footer": "<p>La Directrice générale</p><p>Sophie ROUSSEL</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
     }
   }
 ]

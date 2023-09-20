@@ -21,9 +21,7 @@ env.root_package_name = 'plana'  # name of app in webapp
 env.remote_home = '/home/django'  # remote home root
 env.remote_python_version = '3.9'  # python version
 env.remote_virtualenv_root = join(env.remote_home, '.virtualenvs')  # venv root
-env.remote_virtualenv_dir = join(
-    env.remote_virtualenv_root, env.application_name
-)  # venv for webapp dir
+env.remote_virtualenv_dir = join(env.remote_virtualenv_root, env.application_name)  # venv for webapp dir
 # git repository url
 env.remote_repo_url = 'git@git.unistra.fr:di/plan_a/plana.git'
 env.local_tmp_dir = '/tmp'  # tmp dir
@@ -61,7 +59,9 @@ env.extra_symlink_dirs = ['keys']
 env.no_circus_web = True  # Avoid using circusweb dashboard (buggy in last releases)
 # env.circus_backend = 'gevent' # name of circus backend to use
 
-env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
+env.chaussette_backend = (
+    'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
+)
 
 
 env.nginx_location_extra_directives = [
@@ -170,17 +170,20 @@ def preprod():
 @task
 def prod():
     """Define prod stage"""
-    env.roledefs = {'web': ['plana.net'], 'lb': ['lb.plana.net']}
+    env.roledefs = {
+        'web': ['django-w7.di.unistra.fr', 'django-w8.di.unistra.fr'],
+        'lb': ['rp-dip-public-m.di.unistra.fr', 'rp-dip-public-s.di.unistra.fr'],
+    }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.server_name = 'plana.net'
-    env.short_server_name = 'plana'
+    env.server_name = 'etu-campulse.fr'
+    env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
     env.server_ip = ''
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = '/etc/ssl/certs/plana.net.pem'
-    env.path_to_cert_key = '/etc/ssl/private/plana.net.key'
+    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
+    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
     env.goal = 'prod'
     env.socket_port = ''
     env.map_settings = {
