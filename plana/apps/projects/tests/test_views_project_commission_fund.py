@@ -557,6 +557,12 @@ class ProjectCommissionFundViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_VALIDATED"
         project.save()
+        commission_fund = ProjectCommissionFund.objects.get(project_id=project_id, commission_fund_id=1)
+        commission_fund.is_validated_by_admin = True
+        commission_fund.save()
+        commission_fund = ProjectCommissionFund.objects.get(project_id=project_id, commission_fund_id=2)
+        commission_fund.is_validated_by_admin = True
+        commission_fund.save()
 
         self.assertFalse(len(mail.outbox))
         commission_fund_id = 1

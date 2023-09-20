@@ -491,8 +491,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 "request": request,
                             }
                         )
-                        if templates_name == f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION":
-                            managers_emails = project.get_project_default_manager_emails()
+            managers_emails = project.get_project_default_manager_emails()
             context["project_name"] = project.name
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -508,9 +507,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         project_commission_fund.save()
 
         remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
-            project_id=project.id, amount_earned__isnull=True
+            project_id=project.id, amount_earned__isnull=True, is_validated_by_admin=True
         ).count()
-        if remaining_project_commission_funds_count == 0:
+        if remaining_project_commission_funds_count == 0 and "is_validated_by_admin" not in request.data:
             project.project_status = "PROJECT_REVIEW_DRAFT"
             project.save()
 
