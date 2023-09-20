@@ -122,4 +122,4 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ["project_status"]
+        fields = ["project_status", "processing_date"]

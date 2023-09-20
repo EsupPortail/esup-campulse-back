@@ -4680,6 +4680,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -5326,6 +5331,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT

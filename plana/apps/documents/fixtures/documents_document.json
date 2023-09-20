@@ -256,9 +256,9 @@
     "model": "documents.document",
     "pk": 14,
     "fields": {
-      "name": "Certificat envoyé par le Tribunal Judiciaire",
+      "name": "Certificat envoyé par le Tribunal Judiciaire (ou la Préfecture)",
       "acronym": "CERTIFICAT_TRIBUNAL_JUDICIAIRE",
-      "description": "Certificat envoyé par le Tribunal Judiciaire",
+      "description": "Certificat envoyé par le Tribunal Judiciaire (ou la Préfecture)",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,

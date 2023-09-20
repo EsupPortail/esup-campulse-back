@@ -713,7 +713,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
                 association_email_template_code = "MANAGER_PROJECT_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_USER_CREATION"
-                request.data["processing_date"] = datetime.date.today()
+                request.data["processing_date"] = datetime.datetime.today()
             elif new_project_status in Project.ProjectStatus.get_email_review_processing_project_statuses():
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"

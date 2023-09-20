@@ -59,7 +59,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             )
 
         if data["association_id"] is not None:
-            data["association"] = Association.objects.get(id=data["association_id"]).name
+            data["association"] = Association.objects.get(id=data["association_id"])
             if data["association_user_id"] is not None:
                 data["user"] = User.objects.get(id=AssociationUser.objects.get(id=data["association_user_id"]).user_id)
 
@@ -146,7 +146,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             )
 
         if data["association_id"] is not None:
-            data["association"] = Association.objects.get(id=data["association_id"]).name
+            data["association"] = Association.objects.get(id=data["association_id"])
             if data["association_user_id"] is not None:
                 data["user"] = User.objects.get(id=AssociationUser.objects.get(id=data["association_user_id"]).user_id)
 
