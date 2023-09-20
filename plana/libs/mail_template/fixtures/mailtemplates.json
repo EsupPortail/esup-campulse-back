@@ -298,7 +298,7 @@
       "label": "User Account Password Reset Confirmation",
       "description": "Confirmation de réinitialisation de mot de passe envoyée à un utilisateur",
       "subject": "{{ site_name }} – Demande de nouveau mot de passe",
-      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre mot de passe a bien été réinitialisé, vous pouvez désormais vous reconnecter à {{ site_name }} via le lien suivant : <a href='{{ site_domain }}'>{{ site_domain }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour {{ first_name }} {{ last_name }},<br/><br/>Votre mot de passe a bien été modifié, vous pouvez désormais vous reconnecter à {{ site_name }} via le lien suivant : <a href='{{ site_domain }}'>{{ site_domain }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         1,

@@ -28,7 +28,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import create_pdf, send_mail
+from plana.utils import send_mail
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):

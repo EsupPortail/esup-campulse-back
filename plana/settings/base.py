@@ -935,6 +935,8 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "view_projectcomment_not_visible",
         "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
         # users
         "view_user",
         "view_user_misc",
