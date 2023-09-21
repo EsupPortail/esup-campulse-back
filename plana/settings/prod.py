@@ -54,8 +54,8 @@ sentry_init(STAGE)
 
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_AUTHORIZED_SERVICES = [
-    "https://campulse.unistra.fr/cas-login",
-    "https://campulse.unistra.fr/cas-register",
+    "https://etu-campulse.fr/cas-login",
+    "https://etu-campulse.fr/cas-register",
 ]
 
 
@@ -63,7 +63,7 @@ CAS_AUTHORIZED_SERVICES = [
 # Emails #
 ##########
 
-EMAIL_TEMPLATE_FRONTEND_URL = "https://campulse.unistra.fr/"
+EMAIL_TEMPLATE_FRONTEND_URL = "https://etu-campulse.fr/"
 
 
 #####################
@@ -80,8 +80,9 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 # Misc #
 ########
 
-MIGRATION_SITE_DOMAIN = "campulse.unistra.fr"
+MIGRATION_SITE_DOMAIN = "etu-campulse.fr"
 MIGRATION_SITE_NAME = "Campulse"
+DEFAULT_FROM_EMAIL = "no-reply@etu-campulse.fr"
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
