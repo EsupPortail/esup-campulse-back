@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-21 09:04+0200\n"
+"POT-Creation-Date: 2023-09-21 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1572,26 +1572,30 @@ msgstr "Régénère la structure et le contenu de la base de données."
 msgid "Database regenerated."
 msgstr "Base de données régénérée."
 
-#: plana/management/commands/createmanageruser.py:17
+#: plana/management/commands/createmanageruser.py:19
 msgid "Creates a new manager user."
 msgstr "Crée un utilisateur gestionnaire."
 
-#: plana/management/commands/createmanageruser.py:32
+#: plana/management/commands/createmanageruser.py:35
 msgid "Group codename."
 msgstr "Nom de code de groupe."
 
-#: plana/management/commands/createmanageruser.py:38
+#: plana/management/commands/createmanageruser.py:41
 msgid "Institution codename (all by default)."
 msgstr "Nom de code d'établissement (tous par défaut)."
 
-#: plana/management/commands/createmanageruser.py:43
+#: plana/management/commands/createmanageruser.py:46
 msgid "Set without value if user should be a superuser."
 msgstr "Spécifier sans valeur si l'utilisateur doit être un superutilisateur."
 
-#: plana/management/commands/createmanageruser.py:81
+#: plana/management/commands/createmanageruser.py:96
+msgid "User created"
+msgstr "Utilisateur crée."
+
+#: plana/management/commands/createmanageruser.py:98
 #, python-brace-format
-msgid "User created. Password : {password}"
-msgstr "Utilisateur crée. Mot de passe : {password}"
+msgid "Password : {password}"
+msgstr "Mot de passe : {password}"
 
 #: plana/management/commands/cron_account_expiration.py:17
 msgid "Expired accounts policy."

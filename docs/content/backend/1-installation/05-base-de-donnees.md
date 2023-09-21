@@ -34,6 +34,7 @@ $ python manage.py createmanageruser \
   --firstname FIRST_NAME \
   --lastname LAST_NAME \
   --group GROUP_NAME \
+  [--cas IDENTIFIANT_CAS] \
   [--institution INSTITUTION] \
   [--superuser]
 ``` 

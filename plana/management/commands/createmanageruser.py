@@ -3,6 +3,7 @@ import secrets
 import string
 
 from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -11,6 +12,7 @@ from django.utils.translation import gettext as _
 
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import GroupInstitutionFundUser
+from plana.apps.users.provider import CASProvider
 
 
 class Command(BaseCommand):
@@ -27,6 +29,7 @@ class Command(BaseCommand):
         parser.add_argument("--firstname", help="First name.", required=True)
         parser.add_argument("--lastname", help="Last name.", required=True)
         parser.add_argument("--password", help="Password.")
+        parser.add_argument("--cas", help="Identifier on CAS.")
         parser.add_argument(
             "--group",
             help=_("Group codename."),
@@ -47,15 +50,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             user = get_user_model().objects.create_user(username=options["email"], email=options["email"])
-            if options["password"] is None:
-                password = "".join(
-                    secrets.choice(string.ascii_letters + string.digits)
-                    for i in range(settings.DEFAULT_PASSWORD_LENGTH)
-                )
-            else:
-                password = options["password"]
-            user.set_password(password)
-            user.password_last_change_date = datetime.datetime.today()
             user.first_name = options["firstname"]
             user.last_name = options["lastname"]
             user.is_active = True
@@ -63,6 +57,27 @@ class Command(BaseCommand):
             user.is_validated_by_admin = True
             if options["superuser"] is True:
                 user.is_superuser = True
+
+            password = ""
+            if options["cas"] is not None:
+                user.username = options["cas"]
+                SocialAccount.objects.create(
+                    user=user,
+                    provider=CASProvider.id,
+                    uid=user.username,
+                    extra_data={},
+                )
+            else:
+                if options["password"] is None:
+                    password = "".join(
+                        secrets.choice(string.ascii_letters + string.digits)
+                        for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                    )
+                else:
+                    password = options["password"]
+                user.set_password(password)
+                user.password_last_change_date = datetime.datetime.today()
+
             user.save()
             EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
             group = Group.objects.get(name=options["group"])
@@ -78,7 +93,9 @@ class Command(BaseCommand):
                         group_id=group.id,
                         institution_id=institution_id,
                     )
-            self.stdout.write(self.style.SUCCESS(_(f"User created. Password : {password}")))
+            self.stdout.write(self.style.SUCCESS(_("User created")))
+            if password != "":
+                self.stdout.write(self.style.SUCCESS(_(f"Password : {password}")))
 
         except Exception as error:
             self.stdout.write(self.style.ERROR(f"Error : {error}"))
