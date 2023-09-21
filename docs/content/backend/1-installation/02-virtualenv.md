@@ -32,4 +32,3 @@ export ACCOUNTS_API_SPORE_TOKEN="t0k3n"
 
 Certaines variables doivent être reparamétrées sur les environnements de preprod et de prod.
 - `SECRET_KEY` : clé utilisée par Django pour les signatures cryptographiques.
-- `HEALTH_CHECK_SECRET_KEY` : clé utilisée par django-health-check pour construire l'URL d'accès au rapport.

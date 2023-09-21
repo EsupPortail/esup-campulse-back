@@ -34,7 +34,6 @@ LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log
 ###############
 
 SECRET_KEY = "{{ secret_key }}"
-HEALTH_CHECK_SECRET_KEY = "{{ health_check_secret_key }}"
 
 
 ############

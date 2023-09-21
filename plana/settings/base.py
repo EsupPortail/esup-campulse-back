@@ -171,7 +171,6 @@ DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
 # Only for dev and test environnement. Should be redefined for production
 # environnement
 SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
-HEALTH_CHECK_SECRET_KEY = "-fhcKUdjVZTeUkhjaypOdaB8bkYWW-ksh5-c0iuWMBc"
 
 
 ##########################
