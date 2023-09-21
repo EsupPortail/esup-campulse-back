@@ -176,10 +176,10 @@ def prod():
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.server_name = 'etu-campulse.fr'
+    env.server_name = 'api.etu-campulse.fr'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
-    env.server_ip = ''
+    env.server_ip = '130.79.245.214'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
