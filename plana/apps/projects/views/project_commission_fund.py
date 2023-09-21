@@ -506,12 +506,13 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             setattr(project_commission_fund, field, request.data[field])
         project_commission_fund.save()
 
-        remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
-            project_id=project.id, amount_earned__isnull=True, is_validated_by_admin=True
-        ).count()
-        if remaining_project_commission_funds_count == 0 and "is_validated_by_admin" not in request.data:
-            project.project_status = "PROJECT_REVIEW_DRAFT"
-            project.save()
+        if "amount_earned" in request.data:
+            remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+                project_id=project.id, amount_earned__isnull=True, is_validated_by_admin=True
+            ).count()
+            if remaining_project_commission_funds_count == 0 and "is_validated_by_admin" not in request.data:
+                project.project_status = "PROJECT_REVIEW_DRAFT"
+                project.save()
 
         unchecked_project_commission_funds = ProjectCommissionFund.objects.filter(
             project_id=project.id, is_validated_by_admin__isnull=True
