@@ -27,3 +27,9 @@ export ACCOUNTS_API_SPORE_DESCRIPTION_FILE="https://rest-api-domain.tld/path/des
 export ACCOUNTS_API_SPORE_BASE_URL="https://ldapws-domain.tld"
 export ACCOUNTS_API_SPORE_TOKEN="t0k3n"
 ```
+
+## Variables d'environnement au déploiement
+
+Certaines variables doivent être reparamétrées sur les environnements de preprod et de prod.
+- `SECRET_KEY` : clé utilisée par Django pour les signatures cryptographiques.
+- `HEALTH_CHECK_SECRET_KEY` : clé utilisée par django-health-check pour construire l'URL d'accès au rapport.

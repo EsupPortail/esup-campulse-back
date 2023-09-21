@@ -340,6 +340,9 @@ django-cors-headers==4.2.0 ; python_version >= "3.8" and python_version < "3.12"
 django-extensions==3.2.3 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a \
     --hash=sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401
+django-health-check==3.17.0 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c \
+    --hash=sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778
 django-storages[boto3]==1.14 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:11280a883b13812df548f3cfe9c10280afc0d4727c8babdee369a75e71158f16 \
     --hash=sha256:6c97e5faad829c923a1262206281742c484d76d43b332a196ddcc242b909c551

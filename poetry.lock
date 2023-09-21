@@ -881,6 +881,24 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-health-check"
+version = "3.17.0"
+description = "Run checks on services like databases, queue servers, celery processes, etc."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-health-check-3.17.0.tar.gz", hash = "sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778"},
+    {file = "django_health_check-3.17.0-py2.py3-none-any.whl", hash = "sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c"},
+]
+
+[package.dependencies]
+django = ">=2.2"
+
+[package.extras]
+docs = ["sphinx"]
+test = ["celery", "pytest", "pytest-cov", "pytest-django", "redis"]
+
+[[package]]
 name = "django-storages"
 version = "1.14"
 description = "Support for many storage backends in Django"
@@ -2819,4 +2837,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "2e52a29d03c292481255331e2ab769eaa78188bc063f5f93225d87b053e342ef"
+content-hash = "6582b6d211f6c77820a99f9cd68bb8f5b0188a9a7e069cd7271169e6e0844c0d"

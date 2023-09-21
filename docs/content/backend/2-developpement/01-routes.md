@@ -11,3 +11,4 @@ L'application est découpée en plusieurs services accessibles lors du développ
 - [http://localhost:1313/plana/](http://localhost:1313/plana/) : documentation technique générale.
 - [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/) : documentation de l'API avec UI Swagger.
 - [http://localhost:8000/api/schema/redoc/](http://localhost:8000/api/schema/redoc/) : documentation de l'API avec UI Redoc.
+- [http://localhost:8000/health/-fhcKUdjVZTeUkhjaypOdaB8bkYWW-ksh5-c0iuWMBc/](http://localhost:8000/health/-fhcKUdjVZTeUkhjaypOdaB8bkYWW-ksh5-c0iuWMBc/) : page de statut des services du back avec django-health-check.

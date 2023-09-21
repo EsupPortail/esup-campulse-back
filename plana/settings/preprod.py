@@ -29,11 +29,12 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log"
 
 
-##############
-# Secret key #
-##############
+###############
+# Secret keys #
+###############
 
 SECRET_KEY = "{{ secret_key }}"
+HEALTH_CHECK_SECRET_KEY = "{{ health_check_secret_key }}"
 
 
 ############

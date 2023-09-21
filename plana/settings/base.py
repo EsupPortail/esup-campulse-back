@@ -171,6 +171,7 @@ DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
 # Only for dev and test environnement. Should be redefined for production
 # environnement
 SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
+HEALTH_CHECK_SECRET_KEY = "-fhcKUdjVZTeUkhjaypOdaB8bkYWW-ksh5-c0iuWMBc"
 
 
 ##########################
@@ -283,6 +284,11 @@ THIRD_PARTY_APPS = [
     "storages",
     "thumbnails",
     "django_cleanup",
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
+    "health_check.contrib.s3boto3_storage",
 ]
 
 LOCAL_APPS = [
