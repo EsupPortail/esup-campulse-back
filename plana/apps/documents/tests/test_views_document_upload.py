@@ -124,6 +124,7 @@ class DocumentsViewsTests(TestCase):
     def test_get_document_upload_list_anonymous(self):
         """
         GET /documents/uploads .
+
         - An anonymous user cannot execute this request.
         """
         response = self.client.get("/documents/uploads")
@@ -193,6 +194,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_project_anonymous(self):
         """
         POST /documents/uploads .
+
         - An anonymous user can execute this request.
         - project and association cannot be specified.
         - Document must have a DOCUMENT_USER process type.
@@ -236,6 +238,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_project_not_found(self):
         """
         POST /documents/uploads .
+
         - The route can be accessed by any authenticated user.
         - The project edited must exist.
         """
@@ -251,6 +254,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_document_not_found(self):
         """
         POST /documents/uploads .
+
         - The route can be accessed by any authenticated user.
         - The document linked must exist.
         """

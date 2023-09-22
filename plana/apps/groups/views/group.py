@@ -9,7 +9,7 @@ from plana.apps.groups.serializers.group import GroupSerializer
 
 
 class GroupList(generics.ListAPIView):
-    """/groups/ route"""
+    """/groups/ route."""
 
     permission_classes = [AllowAny]
     queryset = Group.objects.all().order_by("name")
@@ -29,7 +29,7 @@ class GroupList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all groups."""
+        """List all groups."""
         name = request.query_params.get("name")
 
         if name is not None and name != "":

@@ -18,7 +18,7 @@ class PlanAAdapter(DefaultAccountAdapter):
     """Default adapter for local accounts."""
 
     def send_mail(self, template_prefix, email, context):
-        """Overrided send_mail django-allauth method to use the one from the utils file."""
+        """Override send_mail django-allauth method to use the one from the utils file."""
         user = User.objects.get(email=email)
         request = context.get("request")
         current_site = get_current_site(request)

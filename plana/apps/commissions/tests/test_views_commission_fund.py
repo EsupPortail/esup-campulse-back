@@ -57,6 +57,7 @@ class CommissionDatesViewsTests(TestCase):
     def test_get_commission_funds_list(self):
         """
         GET /commissions/funds .
+
         - There's at least one commission_fund in the list.
         - The route can be accessed by anyone.
         - We get the same amount of commission_funds through the model and through the view.

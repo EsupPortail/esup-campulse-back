@@ -32,7 +32,7 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
         tags=["commissions/funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all links between commissions and funds."""
+        """List all links between commissions and funds."""
         return self.list(request, *args, **kwargs)
 
     @extend_schema(
@@ -46,7 +46,7 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
         tags=["commissions/funds"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a link between a commission and a fund."""
+        """Create a link between a commission and a fund."""
         try:
             Commission.objects.get(id=request.data["commission"])
             Fund.objects.get(id=request.data["fund"])
@@ -79,7 +79,7 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
 
 
 class CommissionFundRetrieve(generics.RetrieveAPIView):
-    """/commissions/{commission_id}/funds route"""
+    """/commissions/{commission_id}/funds route."""
 
     permission_classes = [AllowAny]
     queryset = CommissionFund.objects.all()
@@ -93,7 +93,7 @@ class CommissionFundRetrieve(generics.RetrieveAPIView):
         tags=["commissions/funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all funds linked to a commission."""
+        """Retrieve all funds linked to a commission."""
         try:
             Commission.objects.get(id=kwargs["commission_id"])
         except ObjectDoesNotExist:
@@ -107,7 +107,7 @@ class CommissionFundRetrieve(generics.RetrieveAPIView):
 
 
 class CommissionFundDestroy(generics.DestroyAPIView):
-    """/commissions/{commission_id}/funds/{fund_id} route"""
+    """/commissions/{commission_id}/funds/{fund_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = CommissionFund.objects.all()

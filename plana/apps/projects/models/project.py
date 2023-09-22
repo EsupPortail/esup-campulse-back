@@ -30,7 +30,6 @@ class Project(models.Model):
         @staticmethod
         def get_project_statuses_order():
             """Status can only be changed to the next associated number."""
-
             return {
                 "PROJECT_DRAFT": 1,
                 "PROJECT_DRAFT_PROCESSED": 1,
@@ -46,19 +45,16 @@ class Project(models.Model):
         @staticmethod
         def get_rollbackable_project_statuses():
             """Statuses for projects that can be changed to the previous associated number."""
-
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
         def get_unfinished_project_statuses():
             """Commission dates with projects having these statuses can be deleted."""
-
             return ["PROJECT_DRAFT"]
 
         @staticmethod
         def get_commentable_project_statuses():
             """Statuses for projects where managing comments is allowed."""
-
             return [
                 "PROJECT_DRAFT",
                 "PROJECT_DRAFT_PROCESSED",
@@ -71,25 +67,21 @@ class Project(models.Model):
         @staticmethod
         def get_identifier_project_statuses():
             """If project has one of these statuses, create manual identifier for it."""
-
             return ["PROJECT_PROCESSING"]
 
         @staticmethod
         def get_email_project_processing_project_statuses():
             """If project has one of these statuses, send an email to warn managers."""
-
             return ["PROJECT_PROCESSING"]
 
         @staticmethod
         def get_validated_fund_project_statuses():
             """If funds are validated for a project with these statuses, validate the project."""
-
             return ["PROJECT_PROCESSING"]
 
         @staticmethod
         def get_commissionnable_project_statuses():
             """Projects with those statuses are validated but without a review."""
-
             return [
                 "PROJECT_VALIDATED",
                 "PROJECT_REVIEW_DRAFT",
@@ -99,19 +91,16 @@ class Project(models.Model):
         @staticmethod
         def get_review_needed_project_statuses():
             """Projects with those statuses need to submit a review."""
-
             return ["PROJECT_REVIEW_DRAFT"]
 
         @staticmethod
         def get_email_review_processing_project_statuses():
             """If project has one of these statuses, send an email to warn managers."""
-
             return ["PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
         def get_archived_project_statuses():
             """Statuses for projects that can't be updated anymore."""
-
             return [
                 "PROJECT_REJECTED",
                 "PROJECT_REVIEW_VALIDATED",
@@ -121,13 +110,11 @@ class Project(models.Model):
         @staticmethod
         def get_bearer_project_statuses():
             """Statuses for projects that can be set by project bearer."""
-
             return ["PROJECT_PROCESSING", "PROJECT_REVIEW_PROCESSING"]
 
         @staticmethod
         def get_validator_project_statuses():
             """Statuses for projects that can be set by project validator."""
-
             return [
                 "PROJECT_DRAFT",
                 "PROJECT_DRAFT_PROCESSED",
@@ -192,7 +179,7 @@ class Project(models.Model):
         return f"{self.name}"
 
     def get_project_default_manager_emails(self):
-        """Returns a list of manager email addresses affected to a project."""
+        """Return a list of manager email addresses affected to a project."""
         managers_emails = []
         if self.association_id is not None:
             managers_emails = list(

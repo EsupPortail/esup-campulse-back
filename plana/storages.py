@@ -33,7 +33,7 @@ class MediaStorage(S3Boto3Storage):
 
 
 class UpdateACLStorage(S3Boto3Storage):
-    """Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
+    """https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
 
     def update_acl(self, name, acl=None):
         acl = acl or self.default_acl
@@ -69,12 +69,12 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         try:
             self.identity = x25519.Identity.from_str(self.age_private_key.decode("utf-8").strip())
         except Exception as error:
-            raise ImproperlyConfigured(f"AGE private key not found : {error}")
+            raise ImproperlyConfigured(f"AGE private key not found : {error}") from error
 
         try:
             self.recipient = x25519.Recipient.from_str(self.age_public_key.decode("utf-8").strip())
         except Exception as error:
-            raise ImproperlyConfigured(f"AGE public key not found : {error}")
+            raise ImproperlyConfigured(f"AGE public key not found : {error}") from error
 
     def _open(self, name, mode="rb"):
         file = super()._open(name, mode)

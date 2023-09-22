@@ -18,7 +18,7 @@ from plana.apps.projects.serializers.project_review import (
 
 
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
-    """/projects/{id}/review route"""
+    """/projects/{id}/review route."""
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -46,7 +46,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         }
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a project review with all its details."""
+        """Retrieve a project review with all its details."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -86,7 +86,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project review details."""
+        """Update project review details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

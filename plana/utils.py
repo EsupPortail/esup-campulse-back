@@ -14,7 +14,6 @@ from zxcvbn import zxcvbn
 
 def check_valid_password(password):
     """Check password standard rules and zxcvbn rules."""
-
     messages = []
 
     password_result = zxcvbn(password)
@@ -45,6 +44,7 @@ def send_mail(
     has_html=True,
     **kwargs,
 ):
+    """Send an email."""
     # Listify recipient address
     to_ = _listify(to_)
     from_ = from_ or settings.DEFAULT_FROM_EMAIL
@@ -78,7 +78,6 @@ def send_mail(
 
 def to_bool(attr):
     """Translate strings like "true"/"false" into boolean."""
-
     if isinstance(attr, bool):
         return attr
     if isinstance(attr, str):
@@ -87,8 +86,7 @@ def to_bool(attr):
 
 
 def valid_date_format(date):
-    """Checks date format without time."""
-
+    """Check date format without time."""
     date_format = "%Y-%m-%d"
     try:
         datetime.datetime.strptime(date, date_format)
@@ -99,7 +97,6 @@ def valid_date_format(date):
 
 def generate_pdf(filename, dict_data, type_doc, base_url):
     """Generate a PDF file depending on the process."""
-
     html = render_to_string(settings.TEMPLATES_PDF[type_doc], dict_data)
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
@@ -108,6 +105,7 @@ def generate_pdf(filename, dict_data, type_doc, base_url):
 
 
 def create_pdf(context, request, template_name):
+    """Create a PDF file."""
     template = get_template(template_name)
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()

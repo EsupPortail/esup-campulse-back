@@ -3,7 +3,6 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from django.apps import apps
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -248,7 +247,7 @@ class User(AbstractUser):
         )
 
     def get_user_default_manager_emails(self):
-        """Returns a list of manager email addresses affected to a user."""
+        """Return a list of manager email addresses affected to a user."""
         assos_user = AssociationUser.objects.filter(user_id=self.pk)
         funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk)
         managers_emails = []

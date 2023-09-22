@@ -16,8 +16,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         """Return file size."""
         if document.path_template:
             return document.path_template.size
-        else:
-            return 0
+        return 0
 
     class Meta:
         model = Document

@@ -47,7 +47,6 @@ class Document(models.Model):
         @staticmethod
         def get_updatable_documents():
             """Documents with those processes can be replaced by a manager."""
-
             return [
                 "NO_PROCESS",
                 "CHARTER_ASSOCIATION",
@@ -58,7 +57,6 @@ class Document(models.Model):
         @staticmethod
         def get_validated_documents():
             """Documents with those processes have to be validated to be used."""
-
             return ["CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
 
     name = models.CharField(_("Name"), max_length=250, default="")

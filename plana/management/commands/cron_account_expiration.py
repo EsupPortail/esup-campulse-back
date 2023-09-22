@@ -20,7 +20,6 @@ class Command(BaseCommand):
         try:
             today = datetime.date.today()
 
-            # FIXME: comptes inactifs ?
             # Get all users which aren't managers.
             queryset = User.objects.filter(is_staff=False)
 

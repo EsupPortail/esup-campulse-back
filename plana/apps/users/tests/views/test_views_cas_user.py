@@ -34,6 +34,7 @@ class UserViewsTests(TestCase):
     @patch('plana.apps.users.serializers.cas.CASSerializer.validate')
     @override_settings(CAS_AUTHORIZED_SERVICES=["http://service.url"])
     def setUp(self, validate):
+        """Fake account to test CAS."""
         user = User.objects.create_user(
             username="PatriciaCAS",
             password="pbkdf2_sha256$260000$H2vwf1hYXyooB1Qhsevrk6$ISSNgBZtbGWwNL6TSktlDCeGfd5Ib9F3c9DkKhYkZMQ=",

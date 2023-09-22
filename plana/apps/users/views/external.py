@@ -12,7 +12,7 @@ from ..serializers.external import ExternalUserSerializer
 
 
 class ExternalUserList(generics.ListAPIView):
-    """/users/external/ route"""
+    """/users/external/ route."""
 
     permission_classes = [IsAuthenticated]
     serializer_class = ExternalUserSerializer
@@ -35,7 +35,7 @@ class ExternalUserList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves an external user from LDAP."""
+        """Retrieve an external user from LDAP."""
         if not request.user.has_perm("users.add_user") and not request.user.has_perm("users.add_user_misc"):
             return Response(
                 {"error": _("Not allowed to retrieve external users.")},
@@ -52,8 +52,8 @@ class ExternalUserList(generics.ListAPIView):
                 {"error": _("No last name given.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        except Exception as e:
+        except Exception as error:
             return Response(
-                {"error": str(e)},
+                {"error": str(error)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

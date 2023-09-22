@@ -10,7 +10,7 @@ from plana.apps.institutions.serializers.institution_component import (
 
 
 class InstitutionComponentList(generics.ListAPIView):
-    """/institutions/institution_components route"""
+    """/institutions/institution_components route."""
 
     permission_classes = [AllowAny]
     queryset = InstitutionComponent.objects.all().order_by("name")
@@ -22,5 +22,5 @@ class InstitutionComponentList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all institution components."""
+        """List all institution components."""
         return self.list(request, *args, **kwargs)

@@ -1,3 +1,4 @@
+"""Configuration for unit tests environment."""
 from os import environ
 from os.path import normpath
 
@@ -39,9 +40,7 @@ ALLOWED_HOSTS = ["*"]
 # Log configuration #
 #####################
 
-LOGGING["handlers"]["file"]["filename"] = environ.get(
-    "LOG_DIR", normpath(join("/tmp", "test_%s.log" % SITE_NAME))
-)
+LOGGING["handlers"]["file"]["filename"] = environ.get("LOG_DIR", normpath(join("/tmp", f"test_{SITE_NAME}.log")))
 LOGGING["handlers"]["file"]["level"] = "DEBUG"
 
 for logger in LOGGING["loggers"]:

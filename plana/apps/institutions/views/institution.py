@@ -9,7 +9,7 @@ from plana.apps.institutions.serializers.institution import InstitutionSerialize
 
 
 class InstitutionList(generics.ListAPIView):
-    """/institutions/ route"""
+    """/institutions/ route."""
 
     permission_classes = [AllowAny]
     queryset = Institution.objects.all().order_by("name")
@@ -29,7 +29,7 @@ class InstitutionList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all institutions."""
+        """List all institutions."""
         acronym = request.query_params.get("acronym")
 
         if acronym is not None and acronym != "":

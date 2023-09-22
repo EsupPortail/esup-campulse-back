@@ -1,13 +1,15 @@
+"""Base configuration for all environments."""
 from os import environ
 from os.path import join, normpath
 from pathlib import Path
 
 
 def load_key(keyfile):
+    """Load JWT and AGE keys."""
     try:
         keyfile = SITE_ROOT / "keys" / keyfile
-        with open(keyfile, "rb") as f:
-            return f.read()
+        with open(keyfile, "rb") as file:
+            return file.read()
     except FileNotFoundError:
         return b""
 
@@ -237,7 +239,7 @@ MIDDLEWARE = [
 # Url configuration #
 #####################
 
-ROOT_URLCONF = "%s.urls" % SITE_NAME
+ROOT_URLCONF = f"{SITE_NAME}.urls"
 
 
 ######################
@@ -245,7 +247,7 @@ ROOT_URLCONF = "%s.urls" % SITE_NAME
 ######################
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = "%s.wsgi.application" % SITE_NAME
+WSGI_APPLICATION = f"{SITE_NAME}.wsgi.application"
 
 
 #############################
@@ -548,19 +550,21 @@ REST_AUTH = {
 ##########
 
 STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 
 def sentry_init(environment):
+    """Init Sentry service."""
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn="https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54",
+        dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
         ],
         environment=environment,
-        release=open(join(SITE_ROOT, "build.txt")).read(),
+        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
         send_default_pii=True,
     )
 
@@ -636,7 +640,6 @@ TEMPLATES_PDF = {
 TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
     "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/decision_attribution.html",
     "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
     "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
     "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
@@ -645,7 +648,6 @@ TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
     "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
     "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": f"./{TEMPLATES__NOTIFICATIONS_FOLDER}/Culture-ActionS/postpone.html",
 }
 
 

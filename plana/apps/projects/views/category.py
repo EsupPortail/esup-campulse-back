@@ -8,7 +8,7 @@ from plana.apps.projects.serializers.category import CategorySerializer
 
 
 class CategoryList(generics.ListAPIView):
-    """/projects/categories/names route"""
+    """/projects/categories/names route."""
 
     permission_classes = [AllowAny]
     queryset = Category.objects.all().order_by("name")
@@ -21,5 +21,5 @@ class CategoryList(generics.ListAPIView):
         tags=["projects/categories"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all categories that can be linked to a project."""
+        """List all categories that can be linked to a project."""
         return self.list(request, *args, **kwargs)

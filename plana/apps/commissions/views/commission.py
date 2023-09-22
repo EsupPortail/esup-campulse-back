@@ -24,7 +24,7 @@ from plana.utils import to_bool, valid_date_format
 
 
 class CommissionListCreate(generics.ListCreateAPIView):
-    """/commissions/ route"""
+    """/commissions/ route."""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
@@ -86,7 +86,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all commissions."""
+        """List all commissions."""
         dates = request.query_params.get("dates")
         is_site = request.query_params.get("is_site")
         is_open_to_projects = request.query_params.get("is_open_to_projects")
@@ -212,7 +212,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new commission (manager only)."""
+        """Create a new commission (manager only)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -271,7 +271,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
 
 class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/commissions/{id} route"""
+    """/commissions/{id} route."""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
@@ -297,7 +297,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a commission date with all its details."""
+        """Retrieve a commission date with all its details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -327,7 +327,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates commission date details."""
+        """Update commission date details."""
         # try:
         #     serializer = self.get_serializer(data=request.data)
         #     serializer.is_valid(raise_exception=True)

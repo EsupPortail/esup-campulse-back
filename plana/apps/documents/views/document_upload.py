@@ -32,7 +32,7 @@ from plana.utils import send_mail, to_bool
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
-    """/documents/uploads route"""
+    """/documents/uploads route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
@@ -91,7 +91,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         tags=["documents/uploads"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all documents uploads."""
+        """List all documents uploads."""
         user = request.query_params.get("user_id")
         association = request.query_params.get("association_id")
         project = request.query_params.get("project_id")
@@ -147,7 +147,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         tags=["documents/uploads"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new document upload."""
+        """Create a new document upload."""
         if "document" not in request.data:
             return response.Response(
                 {"error": _("Document does not exist.")},
@@ -314,7 +314,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
 
 class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/documents/uploads/{id} route"""
+    """/documents/uploads/{id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
@@ -336,7 +336,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         tags=["documents/uploads"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a document uploaded by a user."""
+        """Retrieve a document uploaded by a user."""
         try:
             document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -383,7 +383,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         tags=["documents/uploads"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates document upload details."""
+        """Update document upload details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -514,7 +514,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
 
 class DocumentUploadFileList(generics.ListAPIView):
-    """/documents/uploads/file route"""
+    """/documents/uploads/file route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
@@ -536,7 +536,7 @@ class DocumentUploadFileList(generics.ListAPIView):
         tags=["documents/uploads"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all uploaded documents."""
+        """Retrieve all uploaded documents."""
         project = request.query_params.get("project_id")
 
         if project is not None and project != "":
@@ -569,15 +569,15 @@ class DocumentUploadFileList(generics.ListAPIView):
         archive.close()
         buffer.seek(0)
 
-        response = HttpResponse(buffer.getvalue())
-        response['Content-Type'] = "application/x-zip-compressed"
-        response['Content-Disposition'] = "attachment; filename=documents.zip"
+        res = HttpResponse(buffer.getvalue())
+        res['Content-Type'] = "application/x-zip-compressed"
+        res['Content-Disposition'] = "attachment; filename=documents.zip"
 
-        return response
+        return res
 
 
 class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
-    """/documents/uploads/{id}/file route"""
+    """/documents/uploads/{id}/file route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
@@ -593,7 +593,7 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
         tags=["documents/uploads"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a document uploaded by a user."""
+        """Retrieve a document uploaded by a user."""
         try:
             document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:

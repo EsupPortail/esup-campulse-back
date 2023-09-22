@@ -1,3 +1,4 @@
+"""Configuration for local dev environment."""
 from os import environ
 from os.path import normpath
 
@@ -46,9 +47,7 @@ ALLOWED_HOSTS = ["*"]
 # Log configuration #
 #####################
 
-LOGGING["handlers"]["file"]["filename"] = environ.get(
-    "LOG_DIR", normpath(join("/tmp", "%s.log" % SITE_NAME))
-)
+LOGGING["handlers"]["file"]["filename"] = environ.get("LOG_DIR", normpath(join("/tmp", f"{SITE_NAME}.log")))
 LOGGING["handlers"]["file"]["level"] = "DEBUG"
 
 for logger in LOGGING["loggers"]:
@@ -70,7 +69,7 @@ INSTALLED_APPS += [
 ############
 
 DIPSTRAP_VERSION = environ.get("DIPSTRAP_VERSION", "latest")
-DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
+DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 
 
 #################
@@ -124,8 +123,6 @@ CAS_AUTHORIZED_SERVICES = [
 ########
 
 # External APIs
-ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get(
-    'ACCOUNTS_API_SPORE_DESCRIPTION_FILE'
-)
+ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get('ACCOUNTS_API_SPORE_DESCRIPTION_FILE')
 ACCOUNTS_API_CONF["BASE_URL"] = environ.get('ACCOUNTS_API_SPORE_BASE_URL')
 ACCOUNTS_API_CONF["TOKEN"] = environ.get('ACCOUNTS_API_SPORE_TOKEN')

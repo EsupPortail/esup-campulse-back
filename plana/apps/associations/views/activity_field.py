@@ -8,7 +8,7 @@ from plana.apps.associations.serializers.activity_field import ActivityFieldSeri
 
 
 class AssociationActivityFieldList(generics.ListAPIView):
-    """/associations/activity_fields route"""
+    """/associations/activity_fields route."""
 
     permission_classes = [AllowAny]
     queryset = ActivityField.objects.all().order_by("name")
@@ -20,5 +20,5 @@ class AssociationActivityFieldList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all activity fields that can be linked to an association."""
+        """List all activity fields that can be linked to an association."""
         return self.list(request, *args, **kwargs)

@@ -18,7 +18,7 @@ from plana.apps.users.serializers.group_institution_fund_user import (
 
 
 class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
-    """/users/groups/ route"""
+    """/users/groups/ route."""
 
     queryset = GroupInstitutionFundUser.objects.all()
     serializer_class = GroupInstitutionFundUserCreateSerializer
@@ -39,7 +39,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
         tags=["users/groups"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all groups linked to a user, or all groups of all users (manager)."""
+        """List all groups linked to a user, or all groups of all users (manager)."""
         if request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             serializer = self.serializer_class(self.queryset.all(), many=True)
             return response.Response(serializer.data)
@@ -59,7 +59,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
         tags=["users/groups"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new link between a non-validated user and a group."""
+        """Create a new link between a non-validated user and a group."""
         # TODO Remove multiple is_staff checks to use another helper.
         try:
             group_id = request.data["group"]
@@ -155,7 +155,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
 
 
 class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
-    """/users/{user_id}/groups/ route"""
+    """/users/{user_id}/groups/ route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
@@ -171,7 +171,7 @@ class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
         tags=["users/groups"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all groups linked to a user (manager)."""
+        """List all groups linked to a user (manager)."""
         try:
             User.objects.get(id=kwargs["user_id"])
         except ObjectDoesNotExist:
@@ -193,7 +193,7 @@ class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
 
 
 class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
-    """/users/{user_id}/groups/{group_id}"""
+    """/users/{user_id}/groups/{group_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
@@ -247,7 +247,7 @@ class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
 
 
 class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
-    """/users/{user_id}/groups/{group_id}/funds/{fund_id}"""
+    """/users/{user_id}/groups/{group_id}/funds/{fund_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()
@@ -299,7 +299,7 @@ class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
 
 
 class GroupInstitutionFundUserDestroyWithInstitution(generics.DestroyAPIView):
-    """/users/{user_id}/groups/{group_id}/institutions/{institution_id}"""
+    """/users/{user_id}/groups/{group_id}/institutions/{institution_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = GroupInstitutionFundUser.objects.all()

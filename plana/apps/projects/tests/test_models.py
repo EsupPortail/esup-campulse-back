@@ -67,7 +67,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_success_user(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The project owner must be the authenticated user.
         """
         project = Project.visible_objects.get(id=1)
@@ -76,7 +77,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_forbidden_user(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=1)
@@ -85,7 +87,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_success_association(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
@@ -94,7 +97,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_forbidden_association(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
@@ -103,7 +107,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_forbidden_president(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be the president of the association owning the project.
         """
         project = Project.visible_objects.get(id=2)
@@ -112,7 +117,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_success_commission(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be linked to a fund linked to a project.
         """
         project = Project.visible_objects.get(id=5)
@@ -121,7 +127,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_forbidden_commission(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be linked to a fund linked to a project.
         """
         project = Project.visible_objects.get(id=1)
@@ -130,7 +137,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_success_institution(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be linked to an institution linked to a project.
         """
         project = Project.visible_objects.get(id=1)
@@ -139,7 +147,8 @@ class ProjectsModelsTests(TestCase):
 
     def test_can_access_project_forbidden_institution(self):
         """
-        Testing can_access_project Project helper
+        Testing can_access_project Project helper.
+
         - The authenticated user must be linked to an institution linked to a project.
         """
         user = User.objects.get(username="gestionnaire-uha@mail.tld")

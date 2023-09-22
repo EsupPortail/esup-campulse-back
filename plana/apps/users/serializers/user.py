@@ -204,6 +204,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=False, allow_blank=True)
 
     def save(self, request):
+        """Save the user."""
         self.cleaned_data = request.data
         if self.cleaned_data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
             raise exceptions.ValidationError(

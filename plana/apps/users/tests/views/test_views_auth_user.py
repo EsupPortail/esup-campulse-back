@@ -35,6 +35,7 @@ class AuthUserViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Test authentication with default data."""
         url_login = reverse("rest_login")
         # Vars used in unittests
         cls.unvalidated_user_id = 2

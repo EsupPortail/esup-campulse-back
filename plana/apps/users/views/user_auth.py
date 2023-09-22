@@ -27,7 +27,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
 @extend_schema(methods=["PUT"], exclude=True)
 class UserAuthView(DJRestAuthUserDetailsView):
     """
-    /users/auth/user/ route
+    /users/auth/user/ route.
 
     Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
     """
@@ -106,7 +106,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    /users/auth/registration/verify-email/ route
+    /users/auth/registration/verify-email/ route.
 
     OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
     """

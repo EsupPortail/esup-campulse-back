@@ -16,7 +16,7 @@ from plana.apps.documents.serializers.document import (
 
 
 class DocumentList(generics.ListCreateAPIView):
-    """/documents/ route"""
+    """/documents/ route."""
 
     queryset = Document.objects.all().order_by("name")
 
@@ -60,7 +60,7 @@ class DocumentList(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all documents types."""
+        """List all documents types."""
         acronym = request.query_params.get("acronym")
         fund_ids = request.query_params.get("fund_ids")
         process_types = request.query_params.get("process_types")
@@ -92,7 +92,7 @@ class DocumentList(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new document type (manager only)."""
+        """Create a new document type (manager only)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -126,7 +126,7 @@ class DocumentList(generics.ListCreateAPIView):
 
 
 class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/documents/{id} route"""
+    """/documents/{id} route."""
 
     queryset = Document.objects.all()
 
@@ -151,7 +151,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a document type with all its details."""
+        """Retrieve a document type with all its details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -181,7 +181,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates document details."""
+        """Update document details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

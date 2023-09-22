@@ -11,7 +11,7 @@ from plana.apps.contents.serializers.content import ContentSerializer
 
 
 class ContentList(generics.ListAPIView):
-    """/contents/ route"""
+    """/contents/ route."""
 
     permission_classes = [AllowAny]
     queryset = Content.objects.all()
@@ -31,7 +31,7 @@ class ContentList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all contents."""
+        """List all contents."""
         code = request.query_params.get("code")
 
         if code is not None and code != "":
@@ -41,7 +41,7 @@ class ContentList(generics.ListAPIView):
 
 
 class ContentRetrieve(generics.RetrieveAPIView):
-    """/contents/{id} route"""
+    """/contents/{id} route."""
 
     permission_classes = [AllowAny]
     queryset = Content.objects.all()
@@ -54,7 +54,7 @@ class ContentRetrieve(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a content."""
+        """Retrieve a content."""
         try:
             content_id = kwargs["pk"]
             Content.objects.get(id=content_id)

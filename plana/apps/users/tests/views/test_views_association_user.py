@@ -135,7 +135,6 @@ class AssociationUserViewsTests(TestCase):
         - Filter by is_validated_by_admin is possible.
         - Filter by institutions is possible.
         """
-
         associations_user_validated_cnt = AssociationUser.objects.filter(is_validated_by_admin=False).count()
         response_validated_asso = self.manager_client.get("/users/associations/?is_validated_by_admin=false")
         content_validated_asso = json.loads(response_validated_asso.content.decode("utf-8"))

@@ -6,6 +6,7 @@ load-plugins=pylint_django
 django-settings-module=plana.settings.dev
 
 [FORMAT]
+
 max-line-length=119
 
 [MESSAGE CONTROL]

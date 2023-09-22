@@ -7,7 +7,7 @@ paths:
   /associations/:
     get:
       operationId: associations_list
-      description: Lists all associations with many filters.
+      description: List all associations with many filters.
       parameters:
       - in: query
         name: acronym
@@ -76,8 +76,7 @@ paths:
           description: ''
     post:
       operationId: associations_create
-      description: Creates a new association with mandatory informations (manager
-        only).
+      description: Create a new association with mandatory informations (manager only).
       tags:
       - associations
       requestBody:
@@ -112,7 +111,7 @@ paths:
   /associations/{id}:
     get:
       operationId: associations_retrieve
-      description: Retrieves an association with all its details.
+      description: Retrieve an association with all its details.
       parameters:
       - in: path
         name: id
@@ -137,7 +136,7 @@ paths:
           description: No response body
     patch:
       operationId: associations_partial_update
-      description: Updates association details (president and manager only, restricted
+      description: Update association details (president and manager only, restricted
         fields for president).
       parameters:
       - in: path
@@ -206,7 +205,7 @@ paths:
   /associations/{id}/export:
     get:
       operationId: associations_export_retrieve
-      description: Retrieves a PDF file.
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -233,7 +232,7 @@ paths:
   /associations/{id}/status:
     patch:
       operationId: associations_status_partial_update
-      description: Updates association charter status.
+      description: Update association charter status.
       parameters:
       - in: path
         name: id
@@ -273,7 +272,7 @@ paths:
   /associations/activity_fields:
     get:
       operationId: associations_activity_fields_list
-      description: Lists all activity fields that can be linked to an association.
+      description: List all activity fields that can be linked to an association.
       tags:
       - associations
       security:
@@ -321,7 +320,7 @@ paths:
   /associations/names:
     get:
       operationId: associations_names_list
-      description: Lists minimal details for all associations with many filters.
+      description: List minimal details for all associations with many filters.
       parameters:
       - in: query
         name: allow_new_users
@@ -355,7 +354,7 @@ paths:
   /commissions/:
     get:
       operationId: commissions_list
-      description: Lists all commissions.
+      description: List all commissions.
       parameters:
       - in: query
         name: dates
@@ -411,7 +410,7 @@ paths:
           description: ''
     post:
       operationId: commissions_create
-      description: Creates a new commission (manager only).
+      description: Create a new commission (manager only).
       tags:
       - commissions
       requestBody:
@@ -444,7 +443,7 @@ paths:
   /commissions/{commission_id}/funds:
     get:
       operationId: commissions_funds_retrieve
-      description: Retrieves all funds linked to a commission.
+      description: Retrieve all funds linked to a commission.
       parameters:
       - in: path
         name: commission_id
@@ -500,7 +499,7 @@ paths:
   /commissions/{id}:
     get:
       operationId: commissions_retrieve
-      description: Retrieves a commission date with all its details.
+      description: Retrieve a commission date with all its details.
       parameters:
       - in: path
         name: id
@@ -523,7 +522,7 @@ paths:
           description: No response body
     patch:
       operationId: commissions_partial_update
-      description: Updates commission date details.
+      description: Update commission date details.
       parameters:
       - in: path
         name: id
@@ -624,7 +623,7 @@ paths:
   /commissions/funds:
     get:
       operationId: commissions_funds_list
-      description: Lists all links between commissions and funds.
+      description: List all links between commissions and funds.
       tags:
       - commissions/funds
       security:
@@ -641,7 +640,7 @@ paths:
           description: ''
     post:
       operationId: commissions_funds_create
-      description: Creates a link between a commission and a fund.
+      description: Create a link between a commission and a fund.
       tags:
       - commissions/funds
       requestBody:
@@ -676,7 +675,7 @@ paths:
   /commissions/funds/names:
     get:
       operationId: commissions_funds_names_list
-      description: Lists all fund types.
+      description: List all fund types.
       parameters:
       - in: query
         name: acronym
@@ -700,7 +699,7 @@ paths:
   /contents/:
     get:
       operationId: contents_list
-      description: Lists all contents.
+      description: List all contents.
       parameters:
       - in: query
         name: code
@@ -724,7 +723,7 @@ paths:
   /contents/{id}:
     get:
       operationId: contents_retrieve
-      description: Retrieves a content.
+      description: Retrieve a content.
       parameters:
       - in: path
         name: id
@@ -748,7 +747,7 @@ paths:
   /contents/logos:
     get:
       operationId: contents_logos_list
-      description: Lists all logos.
+      description: List all logos.
       tags:
       - contents
       security:
@@ -766,7 +765,7 @@ paths:
   /documents/:
     get:
       operationId: documents_list
-      description: Lists all documents types.
+      description: List all documents types.
       parameters:
       - in: query
         name: acronym
@@ -799,7 +798,7 @@ paths:
           description: ''
     post:
       operationId: documents_create
-      description: Creates a new document type (manager only).
+      description: Create a new document type (manager only).
       tags:
       - documents
       requestBody:
@@ -831,7 +830,7 @@ paths:
   /documents/{id}:
     get:
       operationId: documents_retrieve
-      description: Retrieves a document type with all its details.
+      description: Retrieve a document type with all its details.
       parameters:
       - in: path
         name: id
@@ -854,7 +853,7 @@ paths:
           description: No response body
     patch:
       operationId: documents_partial_update
-      description: Updates document details.
+      description: Update document details.
       parameters:
       - in: path
         name: id
@@ -922,7 +921,7 @@ paths:
   /documents/uploads:
     get:
       operationId: documents_uploads_list
-      description: Lists all documents uploads.
+      description: List all documents uploads.
       parameters:
       - in: query
         name: association_id
@@ -966,7 +965,7 @@ paths:
           description: No response body
     post:
       operationId: documents_uploads_create
-      description: Creates a new document upload.
+      description: Create a new document upload.
       tags:
       - documents/uploads
       requestBody:
@@ -1002,7 +1001,7 @@ paths:
   /documents/uploads/{id}:
     get:
       operationId: documents_uploads_retrieve
-      description: Retrieves a document uploaded by a user.
+      description: Retrieve a document uploaded by a user.
       parameters:
       - in: path
         name: id
@@ -1028,7 +1027,7 @@ paths:
           description: No response body
     patch:
       operationId: documents_uploads_partial_update
-      description: Updates document upload details.
+      description: Update document upload details.
       parameters:
       - in: path
         name: id
@@ -1094,7 +1093,7 @@ paths:
   /documents/uploads/{id}/file:
     get:
       operationId: documents_uploads_file_retrieve
-      description: Retrieves a document uploaded by a user.
+      description: Retrieve a document uploaded by a user.
       parameters:
       - in: path
         name: id
@@ -1121,7 +1120,7 @@ paths:
   /documents/uploads/file:
     get:
       operationId: documents_uploads_file_list
-      description: Retrieves all uploaded documents.
+      description: Retrieve all uploaded documents.
       parameters:
       - in: query
         name: project_id
@@ -1146,7 +1145,7 @@ paths:
   /groups/:
     get:
       operationId: groups_list
-      description: Lists all groups.
+      description: List all groups.
       parameters:
       - in: query
         name: name
@@ -1170,7 +1169,7 @@ paths:
   /institutions/:
     get:
       operationId: institutions_list
-      description: Lists all institutions.
+      description: List all institutions.
       parameters:
       - in: query
         name: acronym
@@ -1194,7 +1193,7 @@ paths:
   /institutions/institution_components:
     get:
       operationId: institutions_institution_components_list
-      description: Lists all institution components.
+      description: List all institution components.
       tags:
       - institutions
       security:
@@ -1212,7 +1211,7 @@ paths:
   /projects/:
     get:
       operationId: projects_list
-      description: Lists all projects linked to a user, or all projects with all their
+      description: List all projects linked to a user, or all projects with all their
         details (manager).
       parameters:
       - in: query
@@ -1285,7 +1284,7 @@ paths:
           description: No response body
     post:
       operationId: projects_create
-      description: Creates a new project.
+      description: Create a new project.
       tags:
       - projects
       requestBody:
@@ -1319,7 +1318,7 @@ paths:
   /projects/{id}:
     get:
       operationId: projects_retrieve
-      description: Retrieves a project with all its details.
+      description: Retrieve a project with all its details.
       parameters:
       - in: path
         name: id
@@ -1345,7 +1344,7 @@ paths:
           description: No response body
     patch:
       operationId: projects_partial_update
-      description: Updates project details.
+      description: Update project details.
       parameters:
       - in: path
         name: id
@@ -1384,7 +1383,7 @@ paths:
           description: No response body
     delete:
       operationId: projects_destroy
-      description: /projects/{id} route
+      description: Destroys a project.
       parameters:
       - in: path
         name: id
@@ -1411,7 +1410,7 @@ paths:
   /projects/{id}/pdf_export:
     get:
       operationId: projects_pdf_export_retrieve
-      description: Retrieves a PDF file.
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -1438,7 +1437,7 @@ paths:
   /projects/{id}/review:
     get:
       operationId: projects_review_retrieve
-      description: Retrieves a project review with all its details.
+      description: Retrieve a project review with all its details.
       parameters:
       - in: path
         name: id
@@ -1464,7 +1463,7 @@ paths:
           description: No response body
     patch:
       operationId: projects_review_partial_update
-      description: Updates project review details.
+      description: Update project review details.
       parameters:
       - in: path
         name: id
@@ -1504,7 +1503,7 @@ paths:
   /projects/{id}/review/pdf_export:
     get:
       operationId: projects_review_pdf_export_retrieve
-      description: Retrieves a PDF file.
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -1531,7 +1530,7 @@ paths:
   /projects/{id}/status:
     patch:
       operationId: projects_status_partial_update
-      description: Updates project status.
+      description: Update project status.
       parameters:
       - in: path
         name: id
@@ -1571,7 +1570,7 @@ paths:
   /projects/{project_id}/categories:
     get:
       operationId: projects_categories_retrieve
-      description: Retrieves all categories linked to a project.
+      description: Retrieve all categories linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1630,7 +1629,7 @@ paths:
   /projects/{project_id}/comments:
     get:
       operationId: projects_comments_retrieve
-      description: Retrieves all comments linked to a project
+      description: Retrieve all comments linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1657,7 +1656,7 @@ paths:
   /projects/{project_id}/comments/{comment_id}:
     patch:
       operationId: projects_comments_partial_update
-      description: Updates comments of the project
+      description: Update comments of the project.
       parameters:
       - in: path
         name: comment_id
@@ -1701,7 +1700,7 @@ paths:
           description: No response body
     delete:
       operationId: projects_comments_destroy
-      description: Destroys comments of a project
+      description: Destroys comments of a project.
       parameters:
       - in: path
         name: comment_id
@@ -1733,7 +1732,7 @@ paths:
   /projects/{project_id}/commission_funds:
     get:
       operationId: projects_commission_funds_retrieve
-      description: Retrieves all commission dates linked to a project.
+      description: Retrieve all commission dates linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1760,7 +1759,7 @@ paths:
   /projects/{project_id}/commission_funds/{commission_fund_id}:
     patch:
       operationId: projects_commission_funds_partial_update
-      description: Updates details of a project linked to a commission fund object.
+      description: Update details of a project linked to a commission fund object.
       parameters:
       - in: path
         name: commission_fund_id
@@ -1836,7 +1835,7 @@ paths:
   /projects/categories:
     get:
       operationId: projects_categories_list
-      description: Lists all links between categories and projects.
+      description: List all links between categories and projects.
       parameters:
       - in: query
         name: project_id
@@ -1862,7 +1861,7 @@ paths:
           description: No response body
     post:
       operationId: projects_categories_create
-      description: Creates a link between a category and a project.
+      description: Create a link between a category and a project.
       tags:
       - projects/categories
       requestBody:
@@ -1897,7 +1896,7 @@ paths:
   /projects/categories/names:
     get:
       operationId: projects_categories_names_list
-      description: Lists all categories that can be linked to a project.
+      description: List all categories that can be linked to a project.
       tags:
       - projects/categories
       security:
@@ -1915,7 +1914,7 @@ paths:
   /projects/comments:
     post:
       operationId: projects_comments_create
-      description: Create a link between a comment and a project
+      description: Create a link between a comment and a project.
       tags:
       - projects/comments
       requestBody:
@@ -1950,7 +1949,7 @@ paths:
   /projects/commission_funds:
     get:
       operationId: projects_commission_funds_list
-      description: Lists all commission funds that can be linked to a project.
+      description: List all commission funds that can be linked to a project.
       parameters:
       - in: query
         name: commission_id
@@ -1981,7 +1980,7 @@ paths:
           description: No response body
     post:
       operationId: projects_commission_funds_create
-      description: Creates a link between a project and a commission fund object.
+      description: Create a link between a project and a commission fund object.
       tags:
       - projects/commission_funds
       requestBody:
@@ -2016,7 +2015,7 @@ paths:
   /users/:
     get:
       operationId: users_list
-      description: Lists users sharing the same association, or all users (manager).
+      description: List users sharing the same association, or all users (manager).
       parameters:
       - in: query
         name: association_id
@@ -2106,7 +2105,7 @@ paths:
   /users/{id}:
     get:
       operationId: users_retrieve
-      description: Retrieves a user with all details.
+      description: Retrieve a user with all details.
       parameters:
       - in: path
         name: id
@@ -2132,8 +2131,7 @@ paths:
           description: No response body
     patch:
       operationId: users_partial_update
-      description: Updates a user field (with a restriction on CAS auto-generated
-        fields).
+      description: Update a user field (with a restriction on CAS auto-generated fields).
       parameters:
       - in: path
         name: id
@@ -2200,7 +2198,7 @@ paths:
   /users/{user_id}/associations/:
     get:
       operationId: users_associations_retrieve
-      description: Retrieves all associations linked to a user (manager).
+      description: Retrieve all associations linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -2227,7 +2225,7 @@ paths:
   /users/{user_id}/associations/{association_id}:
     patch:
       operationId: users_associations_partial_update
-      description: Updates user role in an association (manager and president).
+      description: Update user role in an association (manager and president).
       parameters:
       - in: path
         name: association_id
@@ -2299,7 +2297,7 @@ paths:
   /users/{user_id}/groups/:
     get:
       operationId: users_groups_retrieve
-      description: Lists all groups linked to a user (manager).
+      description: List all groups linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -2432,7 +2430,7 @@ paths:
   /users/associations/:
     get:
       operationId: users_associations_list
-      description: Lists all associations linked to a user, or all associations of
+      description: List all associations linked to a user, or all associations of
         all users (manager).
       parameters:
       - in: query
@@ -2469,7 +2467,7 @@ paths:
           description: No response body
     post:
       operationId: users_associations_create
-      description: Creates a new link between a user and an association.
+      description: Create a new link between a user and an association.
       tags:
       - users/associations
       requestBody:
@@ -2504,7 +2502,7 @@ paths:
     post:
       operationId: users_auth_cas_login_create
       description: |-
-        /users/auth/cas/login/ route
+        /users/auth/cas/login/ route.
 
         POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
       tags:
@@ -2535,7 +2533,7 @@ paths:
     get:
       operationId: users_auth_cas_logout_retrieve
       description: |-
-        /users/auth/cas/logout/ route
+        /users/auth/cas/logout/ route.
 
         GET : Logs out a user authenticated with CAS out.
 
@@ -2555,7 +2553,7 @@ paths:
     post:
       operationId: users_auth_cas_logout_create
       description: |-
-        /users/auth/cas/logout/ route
+        /users/auth/cas/logout/ route.
 
         GET : Logs out a user authenticated with CAS out.
 
@@ -2868,7 +2866,7 @@ paths:
     get:
       operationId: users_auth_user_retrieve
       description: |-
-        /users/auth/user/ route
+        /users/auth/user/ route.
 
         Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
       tags:
@@ -2920,7 +2918,7 @@ paths:
   /users/external/:
     get:
       operationId: users_external_list
-      description: Retrieves an external user from LDAP.
+      description: Retrieve an external user from LDAP.
       parameters:
       - in: query
         name: last_name
@@ -2951,7 +2949,7 @@ paths:
   /users/groups/:
     get:
       operationId: users_groups_list
-      description: Lists all groups linked to a user, or all groups of all users (manager).
+      description: List all groups linked to a user, or all groups of all users (manager).
       tags:
       - users/groups
       security:
@@ -2971,7 +2969,7 @@ paths:
           description: No response body
     post:
       operationId: users_groups_create
-      description: Creates a new link between a non-validated user and a group.
+      description: Create a new link between a non-validated user and a group.
       tags:
       - users/groups
       requestBody:
@@ -4464,7 +4462,7 @@ components:
           title: Commentaire
     PatchedProjectCommentUpdateRequest:
       type: object
-      description: Field that can be updated.
+      description: Fields that can be updated.
       properties:
         text:
           type: string
@@ -4940,7 +4938,7 @@ components:
       - project
     ProjectComment:
       type: object
-      description: Main serializer
+      description: Main serializer.
       properties:
         id:
           type: integer
