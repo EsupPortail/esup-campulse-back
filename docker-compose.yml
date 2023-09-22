@@ -1,27 +1,60 @@
-version: "3"
+version: "3.9"
 services:
   db:
-    image: "postgres_12_fr"
-    build: ./docker
-    container_name: plana_db
-    restart: unless-stopped
-    environment:
-      - POSTGRES_PASSWORD=plana
-      - POSTGRES_USER=plana
-      - POSTGRES_DB=plana
-    ports:
-      - "5432:5432"
+    container_name: plana-db
+    image: postgres:12
+    networks:
+      - plana-back
     volumes:
-      - plana_db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=plana
+      - POSTGRES_USER=plana
+      - POSTGRES_PASSWORD=plana
+    ports:
+      - 5432:5432
+    restart: always
+
+  api:
+    container_name: plana-api
+    networks:
+      - plana-back
+    build:
+      context: ./
+      dockerfile: ./docker/app/Dockerfile
+    expose:
+      - 8000
+    restart: always
+    env_file:
+      - ./docker/.env.dev
+    depends_on:
+      - db
+
+  nginx:
+    container_name: plana-nginx
+    networks:
+      - plana-back
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 80:80
+    restart: always
+    env_file:
+      - ./deploy/docker/.env.dev
+    depends_on:
+      - api
 
   maildev:
-    image: "maildev/maildev:2.0.5"
-    container_name: maildev
-    restart: unless-stopped
+    image: maildev/maildev:2.0.5
+    container_name: plana-maildev
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - 1080:1080
+      - 1025:1025
+    restart: unless-stopped
 
 volumes:
-  plana_db:
-    driver: local
+  postgres_data:
+
+networks:
+  plana-back:
