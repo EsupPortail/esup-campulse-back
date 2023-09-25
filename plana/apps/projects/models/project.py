@@ -50,7 +50,7 @@ class Project(models.Model):
         @staticmethod
         def get_unfinished_project_statuses():
             """Commission dates with projects having these statuses can be deleted."""
-            return ["PROJECT_DRAFT"]
+            return ["PROJECT_DRAFT", "PROJECT_DRAFT_PROCESSED"]
 
         @staticmethod
         def get_commentable_project_statuses():
