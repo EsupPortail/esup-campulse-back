@@ -748,7 +748,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if new_project_status in Project.ProjectStatus.get_identifier_project_statuses():
+            if (
+                project.manual_identifier is None
+                and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
+            ):
                 now = datetime.datetime.now()
                 if now.month >= settings.NEW_YEAR_MONTH_INDEX:
                     year = now.year
