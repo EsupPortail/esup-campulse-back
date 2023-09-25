@@ -3,7 +3,7 @@ stages:
   - deploy
 
 services:
-  - postgres:12
+  - postgres-12:latest
 
 variables:
   POSTGRES_DB: plana_test
