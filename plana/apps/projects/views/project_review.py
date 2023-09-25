@@ -1,6 +1,7 @@
 """Views directly linked to project reviews."""
 import datetime
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
@@ -133,20 +134,6 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        pending_commission_dates_count = ProjectCommissionFund.objects.filter(
-            project_id=kwargs["pk"],
-            commission_fund_id__in=CommissionFund.objects.filter(
-                commission_id__in=Commission.objects.filter(commission_date__gt=datetime.datetime.now()).values_list(
-                    "id"
-                )
-            ).values_list("id"),
-        ).count()
-        if pending_commission_dates_count > 0:
-            return response.Response(
-                {"error": _("Cannot edit review if commission dates are still pending.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

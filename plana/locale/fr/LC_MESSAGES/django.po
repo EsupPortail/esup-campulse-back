@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 08:12+0200\n"
+"POT-Creation-Date: 2023-09-25 15:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -725,8 +725,8 @@ msgstr ""
 #: plana/apps/projects/views/project_commission_fund.py:237
 #: plana/apps/projects/views/project_export.py:47
 #: plana/apps/projects/views/project_export.py:134
-#: plana/apps/projects/views/project_review.py:54
-#: plana/apps/projects/views/project_review.py:103
+#: plana/apps/projects/views/project_review.py:55
+#: plana/apps/projects/views/project_review.py:104
 msgid "Project does not exist."
 msgstr "Le projet n'existe pas."
 
@@ -1071,7 +1071,7 @@ msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 #: plana/apps/projects/views/project.py:463
 #: plana/apps/projects/views/project_export.py:57
 #: plana/apps/projects/views/project_export.py:144
-#: plana/apps/projects/views/project_review.py:64
+#: plana/apps/projects/views/project_review.py:65
 msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
@@ -1082,7 +1082,7 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_commission_fund.py:147
 #: plana/apps/projects/views/project_commission_fund.py:327
 #: plana/apps/projects/views/project_commission_fund.py:577
-#: plana/apps/projects/views/project_review.py:115
+#: plana/apps/projects/views/project_review.py:116
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
 
@@ -1210,23 +1210,17 @@ msgstr ""
 "La nouvelle liaison entre commission et fonds est liée à une plus vieille "
 "commission que la précédente."
 
-#: plana/apps/projects/views/project_review.py:109
+#: plana/apps/projects/views/project_review.py:110
 msgid "Not allowed to update bearer fields for this project."
 msgstr "Non autorisé à mettre à jour les champs du porteur de ce projet."
 
-#: plana/apps/projects/views/project_review.py:124
+#: plana/apps/projects/views/project_review.py:125
 msgid "Project review is not a draft that can be edited."
 msgstr "Le bilan de projet n'est pas un brouillon pouvant être modifié."
 
-#: plana/apps/projects/views/project_review.py:135
+#: plana/apps/projects/views/project_review.py:136
 msgid "Can't set start date after end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
-
-#: plana/apps/projects/views/project_review.py:149
-msgid "Cannot edit review if commission dates are still pending."
-msgstr ""
-"Impossible de rédiger un bilan si des dates de commission liées ne sont pas "
-"passées."
 
 #: plana/apps/users/models/user.py:24
 msgid "Is president"
