@@ -639,9 +639,9 @@ psycopg2-binary==2.9.7 ; python_version >= "3.8" and python_version < "3.12" \
 pycparser==2.21 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
-pydyf==0.7.0 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:23a753daa75adba387606c54eab4d5c9bca83f076be697e59f719d238753fb05 \
-    --hash=sha256:a5a88cb06e5beb64a1ef2147ee879b0e5139f5fdb827fda2fcf14a018c7b11e6
+pydyf==0.8.0 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:901186a2e9f897108139426a6486f5225bdcc9b70be2ec965f25111e42f8ac5d \
+    --hash=sha256:b22b1ef016141b54941ad66ed4e036a7bdff39c0b360993b283875c3f854dd9a
 pyjwt==2.8.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de \
     --hash=sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320
