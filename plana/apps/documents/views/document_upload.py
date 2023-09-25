@@ -244,7 +244,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         if association is None and user is None:
             return response.Response(
-                {"error": _("Missing affectation of the new document upload.")},
+                {"error": _("No user or association specified in the new document upload.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
