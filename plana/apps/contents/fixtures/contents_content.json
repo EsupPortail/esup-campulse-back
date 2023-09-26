@@ -5,8 +5,8 @@
     "fields": {
       "code": "HOME_INFO",
       "label": "Paragraphe de la page d'accueil lié aux informations générales / bandeau d'informations.",
-      "header": "INFORMATIONS: Commission de CAPE le 23 novembre 2023",
-      "body": "<p>Association, porteur ou porteuse de projet, venez présenter votre projet.</p>",
+      "header": "Information : Commission de CAPE le 19 octobre 2023",
+      "body": "<p>Association, porteur ou porteuse de projet, venez présenter votre projet avant le 5 octobre !</p>",
       "footer": "",
       "aside": ""
     }
@@ -18,7 +18,7 @@
       "code": "HOME_ASSOCIATION",
       "label": "Paragraphe de la page d'accueil lié aux associations.",
       "header": "Annuaire des associations",
-      "body": "<p>Besoin d'informations sur une association étudiante ? Tu as envie de t'engager dans ton association de filière ? L'annuaire des associations étudiantes est là pour ça !</p>",
+      "body": "<p>Besoin d'informations sur une association étudiante ? Envie de vous engager dans votre association de filière ? L'annuaire des associations étudiantes est là pour ça !</p>",
       "footer": "Consulter l'annuaire",
       "aside": ""
     }
@@ -28,9 +28,9 @@
     "pk": 3,
     "fields": {
       "code": "HOME_CHARTER",
-      "label": "Paragraphe de la page d'accueil lié aux chartes du Site Alsace.",
-      "header": "Charte des associations du Site Alsace",
-      "body": "<p>Une demande de locaux ? Un projet à soumettre pour obtenir une subvention pour son association ? La signature de la charte des associations étudiantes du site Alsace et des chartes de subventionnement sont obligatoires, et ça se passe par ici !</p>",
+      "label": "Paragraphe de la page d'accueil lié aux chartes du site Alsace.",
+      "header": "Charte des associations du site Alsace",
+      "body": "<p>Une demande de locaux ? Un projet à soumettre pour obtenir une subvention pour votre association ? La signature de la charte des associations étudiantes du site Alsace et des chartes de subventionnement sont obligatoires, et ça se passe par ici !</p>",
       "footer": "Espace charte",
       "aside": ""
     }
@@ -54,7 +54,7 @@
       "code": "SITE_FOOTER",
       "label": "Footer général du site.",
       "header": "",
-      "body": "<p>La Base de Données des Associations Etudiantes d’Alsace est un annuaire regroupant les associations étudiantes d’Alsace. Ce projet est réalisé dans le cadre du Schéma Directeur de la Vie Etudiante – Alsace, qui lie les établissements d’enseignement supérieur (Unistra, UHA, INSA, ENGEES, ENSAS, HEAR) et la BNU, en partenariat avec le Crous.</p>",
+      "body": "<p>La Base de Données des Associations Étudiantes d’Alsace est un annuaire regroupant les associations étudiantes d’Alsace. Ce projet est réalisé dans le cadre du Schéma Directeur de la Vie Étudiante – Alsace, qui lie les établissements d’enseignement supérieur (Unistra, UHA, INSA, ENGEES, ENSAS, HEAR) et la BNU, en partenariat avec le Crous.</p>",
       "footer": "2017-2023 - Unistra - Tous droits réservés",
       "aside": ""
     }
@@ -65,8 +65,8 @@
     "fields": {
       "code": "ASSOCIATION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation de l'annuaire des associations.",
-      "header": "Toutes les associations du Site Alsace sont ici !",
-      "body": "<p>A la recherche de ton association étudiante de filière ? Envie de t'engager ? A la recherche d'activités extra-universitaires ? Les associations étudiantes sont les actrices essentielles de la vie étudiante. Grâce à cet annuaire, trouve facilement l'association qui te convient !</p>",
+      "header": "Toutes les associations du site Alsace sont ici !",
+      "body": "<p>À la recherche de votre association étudiante de filière ? Envie de vous engager ? En quête d'activités extra-universitaires ? Les associations étudiantes sont les actrices essentielles de la vie étudiante. Grâce à cet annuaire, trouvez facilement l'association qui vous convient !</p>",
       "footer": "",
       "aside": ""
     }
@@ -77,7 +77,7 @@
     "fields": {
       "code": "CHARTER_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des chartes.",
-      "header": "Charte du Site Alsace",
+      "header": "Charte du site Alsace",
       "body": "<p>Mise en place depuis 2017 dans le cadre du \"Schéma Directeur de la Vie étudiante du site Alsace\" (SDVEA), la \"charte des associations étudiantes du site Alsace\" permet aux établissements du site Alsace de reconnaitre à une association la qualité d'association étudiante. Réel contrat moral entre l'association et son établissement de rattachement, elle donne accès à de nombreuses aides et services offerts par son établissement.</p>",
       "footer": "",
       "aside": ""
@@ -90,7 +90,7 @@
       "code": "CHARTER_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des chartes.",
       "header": "Chartes FSDIE/IdEx",
-      "body": "<p>Les règlements des différents financements disponibles par la CAPE se trouvent ici. Pour prétendre à un financement via la CAPE à l'un des trois fonds possibles (FSDIE - Culture-ActionS - Idex) il faut prendre connaissance des chartes de financement et les signer impérativement. Télécharge-les sur cette page et dépose-les signées ici !</p>",
+      "body": "<p>Les règlements des différents financements disponibles par la CAPE se trouvent ici. Pour prétendre à un financement via la CAPE à l'un des trois fonds possibles (FSDIE, Culture-ActionS, Idex) il faut prendre connaissance des chartes de financement et les signer impérativement. Téléchargez-les sur cette page et déposez-les signées ici !</p>",
       "footer": "",
       "aside": ""
     }
@@ -161,7 +161,7 @@
     "fields": {
       "code": "COMMISSION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
-      "header": "CAPE",
+      "header": "Pour les associations",
       "body": "<p>La Commission d’Aide aux Projets Étudiants permet de financer les projets associatifs des associations ayant signé la charte des associations étudiantes du site Alsace. Cette commission unique réunit l’Université de Strasbourg et le Crous. Elle est composée de trois fonds de financement distincts : le fonds FSDIE, le fonds IdEx \"creative thinkers\" et le fonds Culture-ActionS.</p>",
       "footer": "",
       "aside": ""
@@ -173,7 +173,7 @@
     "fields": {
       "code": "COMMISSION_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
-      "header": "CAPE",
+      "header": "Pour les étudiants",
       "body": "<p>Vous êtes étudiante ou étudiant avec l'envie de porter un projet pour les autres universitaires ? Il vous est possible de demander un soutien financier auprès de votre Crous en déposant un dossier de demande de subvention au fonds Culture-ActionS. Pour bénéficier d'un accompagnement dans votre démarche, contactez votre référent Culture-ActionS ! Attention : les fonds FSDIE et IdEx ne financent pas les projets individuels.</p>",
       "footer": "",
       "aside": ""
@@ -258,7 +258,7 @@
       "code": "ABOUT_PARTNERSHIP",
       "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
       "header": "Partenaires",
-      "body": "<p>France Relance; le Ministère de l'Enseignement Supérieur et de la Recherche; le Crous de Strasbourg; l'Université de Rouen Normandie; l'Université de Caen-Normandie; l'Université Rennes 2; l'Université de Reims Champagne Ardennes; l'Université Bordeaux Montaigne; l'Université Picardie Jules Vernes; l'Université de Tours; l'Université Toulouse 2 Jean Jaurès; l'Université de Lille; l'Université Clermont Auvergne; le Crous d'Amiens.</p>",
+      "body": "<p>France Relance, le Ministère de l'Enseignement Supérieur et de la Recherche, le Crous de Strasbourg, l'Université de Rouen Normandie, l'Université de Caen-Normandie, l'Université Rennes 2, l'Université de Reims Champagne Ardennes, l'Université Bordeaux Montaigne, l'Université Picardie Jules Vernes, l'Université de Tours, l'Université Toulouse 2 Jean Jaurès, l'Université de Lille, l'Université Clermont Auvergne, le Crous d'Amiens.</p>",
       "footer": "",
       "aside": ""
     }
@@ -292,8 +292,8 @@
     "pk": 25,
     "fields": {
       "code": "ABOUT_CHARTER",
-      "label": "Paragraphe de la page à propos lié aux chartes du Site Alsace.",
-      "header": "Charte des associations du Site Alsace",
+      "label": "Paragraphe de la page à propos lié aux chartes du site Alsace.",
+      "header": "Charte des associations du site Alsace",
       "body": "<p>Une charte permettant à une association d'être reconnue comme \"association étudiante du site Alsace\", et de bénéficier des services de l'établissement !</p>",
       "footer": "",
       "aside": ""
