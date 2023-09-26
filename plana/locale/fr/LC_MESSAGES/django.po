@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 15:46+0200\n"
+"POT-Creation-Date: 2023-09-26 16:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:37
 #: plana/apps/associations/views/association_export.py:85
-#: plana/apps/users/models/user.py:99
+#: plana/apps/users/admin.py:23 plana/apps/users/models/user.py:99
 msgid "Email"
 msgstr "Courriel"
 
@@ -1222,6 +1222,42 @@ msgstr "Le bilan de projet n'est pas un brouillon pouvant être modifié."
 msgid "Can't set start date after end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
+#: plana/apps/users/admin.py:24 plana/apps/users/models/user.py:100
+msgid "First name"
+msgstr "Prénom"
+
+#: plana/apps/users/admin.py:25 plana/apps/users/models/user.py:101
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: plana/apps/users/admin.py:27
+msgid "Password"
+msgstr "Mot de passe"
+
+#: plana/apps/users/admin.py:34
+msgid "Password confirmation"
+msgstr "Confirmation du mot de passe"
+
+#: plana/apps/users/admin.py:37
+msgid "Enter the same password as before, for verification."
+msgstr "Entrer le même mot de passe qu'avant, pour vérification."
+
+#: plana/apps/users/admin.py:41
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: plana/apps/users/admin.py:41
+msgid "Change only if CAS account, with its identifier."
+msgstr "Changer uniquement si c'est un compte CAS, avec son identifiant."
+
+#: plana/apps/users/admin.py:43
+msgid "Is superuser"
+msgstr "Est superutilisateur"
+
+#: plana/apps/users/admin.py:44
+msgid "Is Manager General"
+msgstr "Est Gestionnaire Général"
+
 #: plana/apps/users/models/user.py:24
 msgid "Is president"
 msgstr "Dirige l'association"
@@ -1253,14 +1289,6 @@ msgstr "Groupes-établissements-fonds de l'utilisateur"
 #: plana/apps/users/models/user.py:69
 msgid "Users Institution Fund Groups"
 msgstr "Groupes-établissements-fonds des utilisateurs"
-
-#: plana/apps/users/models/user.py:100
-msgid "First name"
-msgstr "Prénom"
-
-#: plana/apps/users/models/user.py:101
-msgid "Last name"
-msgstr "Nom de famille"
 
 #: plana/apps/users/models/user.py:108
 msgid "Password last change date"
