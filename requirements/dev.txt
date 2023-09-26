@@ -1,5 +1,5 @@
 asgiref==3.7.2 ; python_version >= "3.8" and python_version < "3.12"
-astroid==2.15.7 ; python_version >= "3.8" and python_version < "3.12"
+astroid==2.15.8 ; python_version >= "3.8" and python_version < "3.12"
 attrs==23.1.0 ; python_version >= "3.8" and python_version < "3.12"
 backports-zoneinfo==0.2.1 ; python_version >= "3.8" and python_version < "3.9"
 black==23.9.1 ; python_version >= "3.8" and python_version < "3.12"
