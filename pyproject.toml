@@ -70,7 +70,7 @@ openpyxl = "^3.1.2"
 psycopg2-binary = "^2.9.7"
 pyrage = "^1.1.1"
 urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and botocore
-weasyprint = "^59.0.0"
+weasyprint = "^60.0.0"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
