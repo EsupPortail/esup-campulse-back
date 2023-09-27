@@ -291,7 +291,13 @@ class User(AbstractUser):
 
     def is_member_in_fund(self, fund_id):
         """Check if a user is linked as member to a fund."""
-        return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
+        return (
+            GroupInstitutionFundUser.objects.filter(
+                models.Q(user_id=self.pk, fund_id=fund_id)
+                | models.Q(user_id=self.pk, institution_id=Fund.objects.get(id=fund_id).institution_id)
+            ).count()
+            > 0
+        )
 
     def is_president_in_association(self, association_id):
         """Check if a user can write in an association."""

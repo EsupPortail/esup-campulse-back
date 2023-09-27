@@ -200,9 +200,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.institution is not None
+            document.institution_id is not None
             and not request.user.has_perm("documents.change_document_any_institution")
-            and not request.user.is_staff_in_institution(document.institution)
+            and not request.user.is_staff_in_institution(document.institution_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this institution.")},
@@ -210,9 +210,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.fund is not None
+            document.fund_id is not None
             and not request.user.has_perm("documents.change_document_any_fund")
-            and not request.user.is_member_in_fund(document.fund)
+            and not request.user.is_member_in_fund(document.fund_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this fund.")},
@@ -256,9 +256,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.institution is not None
+            document.institution_id is not None
             and not request.user.has_perm("documents.delete_document_any_institution")
-            and not request.user.is_staff_in_institution(document.institution)
+            and not request.user.is_staff_in_institution(document.institution_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this institution.")},
@@ -266,9 +266,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.fund is not None
+            document.fund_id is not None
             and not request.user.has_perm("documents.delete_document_any_fund")
-            and not request.user.is_member_in_fund(document.fund)
+            and not request.user.is_member_in_fund(document.fund_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this fund.")},

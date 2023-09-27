@@ -661,7 +661,7 @@ msgstr "Non autorisé à créer un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:121
 msgid "Not allowed to create a document for this fund."
-msgstr "Non autorisé à créer un document pour ce fond."
+msgstr "Non autorisé à créer un document pour ce fonds."
 
 #: plana/apps/documents/views/document.py:159
 #: plana/apps/documents/views/document.py:198
@@ -679,7 +679,7 @@ msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 #: plana/apps/documents/views/document.py:218
 #: plana/apps/documents/views/document_upload.py:421
 msgid "Not allowed to update a document for this fund."
-msgstr "Non autorisé à mettre à jour un document pour ce fond."
+msgstr "Non autorisé à mettre à jour un document pour ce fonds."
 
 #: plana/apps/documents/views/document.py:224
 msgid "Not allowed to update a document with this process type."
@@ -696,7 +696,7 @@ msgstr "Non autorisé à supprimer un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:274
 msgid "Not allowed to delete a document for this fund."
-msgstr "Non autorisé à supprimer un document pour ce fond."
+msgstr "Non autorisé à supprimer un document pour ce fonds."
 
 #: plana/apps/documents/views/document.py:280
 msgid "Not allowed to delete a document with a process type."
