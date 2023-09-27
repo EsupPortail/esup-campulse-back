@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-26 16:01+0200\n"
+"POT-Creation-Date: 2023-09-27 07:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -399,58 +399,53 @@ msgid "Cannot delete commission date with linked projects."
 msgstr "Impossible de supprimer une date de commission avec des projets liés."
 
 #: plana/apps/commissions/views/commission_export.py:114
-msgid "Project ID"
-msgstr "Numéro de projet"
+msgid "Identifier"
+msgstr "Identifiant"
 
 #: plana/apps/commissions/views/commission_export.py:115
 msgid "Project name"
 msgstr "Nom du projet"
 
 #: plana/apps/commissions/views/commission_export.py:116
-#: plana/apps/projects/models/project.py:129
-msgid "Manual identifier"
-msgstr "Identifiant manuel"
-
-#: plana/apps/commissions/views/commission_export.py:117
 #: plana/templates/pdf_exports/project_review_summary.html:64
 #: plana/templates/pdf_exports/project_summary.html:55
 msgid "Association name"
 msgstr "Nom de l'association"
 
-#: plana/apps/commissions/views/commission_export.py:118
+#: plana/apps/commissions/views/commission_export.py:117
 msgid "Student misc name"
 msgstr "Nom du porteur individuel"
 
-#: plana/apps/commissions/views/commission_export.py:119
+#: plana/apps/commissions/views/commission_export.py:118
 msgid "Project start date"
 msgstr "Date de début de projet"
 
-#: plana/apps/commissions/views/commission_export.py:120
+#: plana/apps/commissions/views/commission_export.py:119
 msgid "Project end date"
 msgstr "Date de fin de projet"
 
-#: plana/apps/commissions/views/commission_export.py:121
+#: plana/apps/commissions/views/commission_export.py:120
 msgid "First edition"
 msgstr "Est la première édition du projet"
 
-#: plana/apps/commissions/views/commission_export.py:122
+#: plana/apps/commissions/views/commission_export.py:121
 #: plana/apps/projects/models/category.py:16
 msgid "Categories"
 msgstr "Catégories"
 
-#: plana/apps/commissions/views/commission_export.py:128
+#: plana/apps/commissions/views/commission_export.py:127
 msgid "Amount asked "
 msgstr "Montant demandé "
 
-#: plana/apps/commissions/views/commission_export.py:129
+#: plana/apps/commissions/views/commission_export.py:128
 msgid "Amount earned "
 msgstr "Montant obtenu "
 
-#: plana/apps/commissions/views/commission_export.py:180
+#: plana/apps/commissions/views/commission_export.py:179
 msgid "Yes"
 msgstr "Oui"
 
-#: plana/apps/commissions/views/commission_export.py:183
+#: plana/apps/commissions/views/commission_export.py:182
 msgid "No"
 msgstr "Non"
 
@@ -829,6 +824,10 @@ msgstr "Bilan de Projet validé"
 #: plana/apps/projects/models/project.py:28
 msgid "Project Canceled"
 msgstr "Projet Annulé"
+
+#: plana/apps/projects/models/project.py:129
+msgid "Manual identifier"
+msgstr "Identifiant manuel"
 
 #: plana/apps/projects/models/project.py:130
 msgid "Planned start date"

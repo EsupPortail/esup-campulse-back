@@ -111,9 +111,8 @@ class CommissionExport(generics.RetrieveAPIView):
             )
 
         fields = [
-            str(_("Project ID")),
+            str(_("Identifier")),
             str(_("Project name")),
-            str(_("Manual identifier")),
             str(_("Association name")),
             str(_("Student misc name")),
             str(_("Project start date")),
@@ -184,9 +183,8 @@ class CommissionExport(generics.RetrieveAPIView):
                     break
 
             fields = [
-                project.id,
-                project.name,
                 project.manual_identifier,
+                project.name,
                 association,
                 user,
                 project.planned_start_date.date(),
