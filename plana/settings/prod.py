@@ -82,7 +82,6 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 ########
 
 MIGRATION_SITE_DOMAIN = "etu-campulse.fr"
-MIGRATION_SITE_NAME = "Campulse"
 DEFAULT_FROM_EMAIL = "no-reply@etu-campulse.fr"
 
 # External APIs

@@ -666,7 +666,7 @@ APPEND_SLASH = False
 
 # Site name as set in migration in contents module.
 MIGRATION_SITE_DOMAIN = "localhost:3000"
-MIGRATION_SITE_NAME = "Opaline"
+MIGRATION_SITE_NAME = "Campulse"
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
