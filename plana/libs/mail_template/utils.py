@@ -51,9 +51,7 @@ def parser(message_body, available_vars=None, user=None, request=None, **kwargs)
     )
 
 
-def parser_faker(
-    message_body, context_params, available_vars=None, user=None, request=None, **kwargs
-):
+def parser_faker(message_body, context_params, available_vars=None, user=None, request=None, **kwargs):
     return ParserFaker.parser(
         message_body=message_body,
         context_params=context_params,
@@ -75,9 +73,7 @@ class ParserFaker:
         request=None,
         **kwargs,
     ) -> str:
-        context = cls.get_context(
-            request, available_vars=available_vars, extra_variables=context_params
-        )
+        context = cls.get_context(request, available_vars=available_vars, extra_variables=context_params)
         return render_text(template_data=message_body, data=context)
 
     @classmethod

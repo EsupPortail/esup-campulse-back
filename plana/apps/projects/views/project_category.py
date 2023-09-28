@@ -20,7 +20,7 @@ from plana.apps.projects.serializers.project_category import ProjectCategorySeri
 
 
 class ProjectCategoryListCreate(generics.ListCreateAPIView):
-    """/projects/categories route"""
+    """/projects/categories route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCategory.objects.all()
@@ -43,7 +43,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         tags=["projects/categories"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all links between categories and projects."""
+        """List all links between categories and projects."""
         project_id = request.query_params.get("project_id")
 
         user_funds_ids = []
@@ -57,13 +57,12 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
 
-        if not request.user.has_perm(
-            "projects.view_projectcategory_any_commission"
-        ) or not request.user.has_perm("projects.view_projectcategory_any_institution"):
+        if not request.user.has_perm("projects.view_projectcategory_any_commission") or not request.user.has_perm(
+            "projects.view_projectcategory_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
             self.queryset = self.queryset.filter(
@@ -104,7 +103,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         tags=["projects/categories"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a link between a category and a project."""
+        """Create a link between a category and a project."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
             Category.objects.get(id=request.data["category"])
@@ -146,7 +145,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
 
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
-    """/projects/{project_id}/categories route"""
+    """/projects/{project_id}/categories route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCategory.objects.all()
@@ -162,7 +161,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
         tags=["projects/categories"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all categories linked to a project."""
+        """Retrieve all categories linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
@@ -173,9 +172,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_commission")
-            and not request.user.has_perm(
-                "projects.view_projectcategory_any_institution"
-            )
+            and not request.user.has_perm("projects.view_projectcategory_any_institution")
             and not request.user.can_access_project(project)
         ):
             return response.Response(
@@ -183,14 +180,12 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(
-            self.queryset.filter(project_id=kwargs["project_id"]), many=True
-        )
+        serializer = self.serializer_class(self.queryset.filter(project_id=kwargs["project_id"]), many=True)
         return response.Response(serializer.data)
 
 
 class ProjectCategoryDestroy(generics.DestroyAPIView):
-    """/projects/{project_id}/categories/{category_id} route"""
+    """/projects/{project_id}/categories/{category_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCategory.objects.all()

@@ -3,8 +3,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-      "domain": "plana-pprd.app.unistra.fr",
-      "name": "Opaline"
+      "domain": "etu-campulse.fr",
+      "name": "Campulse"
     }
   }
 ]

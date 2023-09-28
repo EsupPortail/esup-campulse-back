@@ -1,3 +1,4 @@
+"""Configuration for pre-production server environment."""
 from .base import *
 
 ##########################
@@ -29,9 +30,9 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log"
 
 
-##############
-# Secret key #
-##############
+###############
+# Secret keys #
+###############
 
 SECRET_KEY = "{{ secret_key }}"
 
@@ -41,7 +42,7 @@ SECRET_KEY = "{{ secret_key }}"
 ############
 
 DIPSTRAP_VERSION = "{{ dipstrap_version }}"
-DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
+DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 
 
 ##########
@@ -84,7 +85,6 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 ########
 
 MIGRATION_SITE_DOMAIN = "plana-pprd.app.unistra.fr"
-MIGRATION_SITE_NAME = "Campulse"
 DEFAULT_FROM_EMAIL = "appli-plana-pprd@unistra.fr"
 
 # External APIs

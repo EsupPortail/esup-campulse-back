@@ -8,7 +8,7 @@ from .views.association import (
     AssociationRetrieveUpdateDestroy,
     AssociationStatusUpdate,
 )
-from .views.association_export import AssociationDataExport, AssociationsCSVExport
+from .views.association_export import AssociationListExport, AssociationRetrieveExport
 
 urlpatterns = [
     path("", AssociationListCreate.as_view(), name="association_list_create"),
@@ -18,9 +18,9 @@ urlpatterns = [
         name="association_retrieve_update_destroy",
     ),
     path(
-        "<int:pk>/pdf_export",
-        AssociationDataExport.as_view(),
-        name="association_data_export",
+        "<int:pk>/export",
+        AssociationRetrieveExport.as_view(),
+        name="association_retrieve_export",
     ),
     path(
         "<int:pk>/status",
@@ -33,9 +33,9 @@ urlpatterns = [
         name="association_activity_field_list",
     ),
     path(
-        "csv_export",
-        AssociationsCSVExport.as_view(),
-        name="associations_csv_export",
+        "export",
+        AssociationListExport.as_view(),
+        name="associations_list_export",
     ),
     path("names", AssociationNameList.as_view(), name="association_name_list"),
 ]

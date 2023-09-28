@@ -35,6 +35,7 @@ class AuthUserViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Test authentication with default data."""
         url_login = reverse("rest_login")
         # Vars used in unittests
         cls.unvalidated_user_id = 2
@@ -151,9 +152,7 @@ class AuthUserViewsTests(TestCase):
                     "token": default_token_generator.make_token(user),
                 },
             )
-            self.assertEqual(
-                response_anonymous.status_code, status.HTTP_400_BAD_REQUEST
-            )
+            self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_anonymous_post_password_reset_confirm(self):
         """
@@ -249,13 +248,9 @@ class AuthUserViewsTests(TestCase):
                 "last_name": "Moutarde",
             },
         )
-        email_address = EmailAddress.objects.get(
-            email="michel.moutarde@jaime-le-raisin-de-table.org"
-        )
+        email_address = EmailAddress.objects.get(email="michel.moutarde@jaime-le-raisin-de-table.org")
         key = EmailConfirmationHMAC(email_address=email_address).key
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/registration/verify-email/", {"key": key}
-        )
+        response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
         self.assertTrue(len(mail.outbox))
 
@@ -272,32 +267,22 @@ class AuthUserViewsTests(TestCase):
         AssociationUser.objects.create(user_id=user.id, association_id=3)
         email_address = EmailAddress.objects.get(email=email)
         key = EmailConfirmationHMAC(email_address=email_address).key
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/registration/verify-email/", {"key": key}
-        )
+        response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
         email_address.verified = False
         email_address.save()
         AssociationUser.objects.create(user_id=user.id, association_id=2)
         key = EmailConfirmationHMAC(email_address=email_address).key
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/registration/verify-email/", {"key": key}
-        )
+        response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
-        new_email = (
-            "philippe.bearnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
-        )
+        new_email = "philippe.bearnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
         user.email = new_email
         user.save()
-        new_email_address = EmailAddress.objects.create(
-            user_id=user.id, email=new_email
-        )
+        new_email_address = EmailAddress.objects.create(user_id=user.id, email=new_email)
         key = EmailConfirmationHMAC(email_address=new_email_address).key
-        response_anonymous = self.anonymous_client.post(
-            "/users/auth/registration/verify-email/", {"key": key}
-        )
+        response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
     def test_anonymous_get_auth_user_detail(self):
@@ -342,12 +327,8 @@ class AuthUserViewsTests(TestCase):
 
         - Always returns a 405 no matter which role tries to access it.
         """
-        response_manager = self.manager_client.put(
-            "/users/auth/user/", {"username": "Coucouw"}
-        )
-        self.assertEqual(
-            response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
-        )
+        response_manager = self.manager_client.put("/users/auth/user/", {"username": "Coucouw"})
+        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_anonymous_patch_auth_user_detail(self):
         """
@@ -355,9 +336,7 @@ class AuthUserViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.anonymous_client.patch(
-            "/users/auth/user/", {"username": "Bienvenueg"}
-        )
+        response_anonymous = self.anonymous_client.patch("/users/auth/user/", {"username": "Bienvenueg"})
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_patch_auth_user_detail_restricted_fields(self):

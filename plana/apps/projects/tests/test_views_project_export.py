@@ -97,9 +97,7 @@ class ProjectsViewsTests(TestCase):
             "username": cls.student_president_user_name,
             "password": "motdepasse",
         }
-        cls.response = cls.student_president_client.post(
-            url_login, data_student_president
-        )
+        cls.response = cls.student_president_client.post(url_login, data_student_president)
 
         project_id = 1
         DocumentUpload.objects.filter(project_id=project_id).delete()
@@ -161,9 +159,7 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 2
-        response = self.student_president_client.get(
-            f"/projects/{project_id}/pdf_export"
-        )
+        response = self.student_president_client.get(f"/projects/{project_id}/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_export_project_review_by_id_anonymous(self):
@@ -205,7 +201,5 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         project_id = 6
-        response = self.student_president_client.get(
-            f"/projects/{project_id}/review/pdf_export"
-        )
+        response = self.student_president_client.get(f"/projects/{project_id}/review/pdf_export")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

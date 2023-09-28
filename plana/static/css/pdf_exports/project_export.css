@@ -1,0 +1,72 @@
+@page {
+    margin: 1cm;
+    size: A4 portrait;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+}
+
+header img {
+    max-height: 2cm;
+    max-width: 5cm;
+}
+
+h1 {
+    font-size: 18pt;
+    margin: 5mm 0;
+}
+
+h2 {
+    font-size: 10pt;
+    margin: 0;
+}
+
+.break {
+    break-before: page;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex > * {
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.flex-direction-column {
+    flex-direction: column;
+}
+
+.flex-space-around {
+    justify-content: space-around;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.margin-bottom {
+    margin-bottom: 5mm;
+}
+
+.outline {
+    outline: 1px solid #000;
+    padding: 1mm;
+}
+
+.outline-light {
+    outline: 0.5px solid #000;
+    padding: 1mm;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}

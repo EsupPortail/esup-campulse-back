@@ -8,9 +8,7 @@ from django.utils.translation import gettext as _
 
 
 class Command(BaseCommand):
-    help = _(
-        "Generate pair of RSA 256 private and public keys to sign and verify JWT tokens."
-    )
+    help = _("Generate pair of RSA 256 private and public keys to sign and verify JWT tokens.")
 
     @staticmethod
     def _key_path(key) -> PosixPath:

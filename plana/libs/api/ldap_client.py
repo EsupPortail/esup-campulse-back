@@ -41,9 +41,7 @@ class LdapClient:
         conf = getattr(settings, f'{self.api_name.upper()}_API_CONF')
 
         results = []
-        server = Server(
-            conf['HOST'], port=conf['PORT'], use_ssl=conf['USE_TLS'], get_info=ALL
-        )
+        server = Server(conf['HOST'], port=conf['PORT'], use_ssl=conf['USE_TLS'], get_info=ALL)
         ldap_filter = conf['FILTER'].format(**kwargs)
         mapping = self.get_mapping(conf['ATTRIBUTES'])
         with Connection(server, conf['BIND_DN'], conf['PASSWORD']) as conn:
@@ -53,11 +51,7 @@ class LdapClient:
                 attributes = entry['attributes']
                 for mapped_attr, ldap_attr in mapping.items():
                     if ldap_val := attributes.get(ldap_attr):
-                        value = (
-                            ldap_val[0]
-                            if isinstance(ldap_val, list) and len(ldap_val)
-                            else ldap_val
-                        )
+                        value = ldap_val[0] if isinstance(ldap_val, list) and len(ldap_val) else ldap_val
                         result[mapped_attr] = self.decode_value(value)
                 results.append(result)
         return results

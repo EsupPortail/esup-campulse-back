@@ -1236,25 +1236,6 @@
   },
   {
     "model": "associations.association",
-    "pk": 76,
-    "fields": {
-      "name": "Asso test",
-      "address": "Test",
-      "acronym": "",
-      "activity_field_id": 13,
-      "institution_id": 2,
-      "is_enabled": true,
-      "is_site": false,
-      "website": "",
-      "creation_date": "2023-02-09T09:05:52.000Z",
-      "is_public": false,
-      "current_projects": "",
-      "social_object": "",
-      "email": "asso-76@mail.tld"
-    }
-  },
-  {
-    "model": "associations.association",
     "pk": 77,
     "fields": {
       "name": "Model United Nation Society Strasbourg",
@@ -1673,25 +1654,6 @@
   },
   {
     "model": "associations.association",
-    "pk": 99,
-    "fields": {
-      "name": "LIMITE CHARTE ASSO UNISTRA CHARTE ASSO ALSACE",
-      "address": "",
-      "acronym": "",
-      "activity_field_id": 13,
-      "institution_id": 2,
-      "is_enabled": false,
-      "is_site": false,
-      "website": "",
-      "creation_date": "2023-02-09T09:05:52.000Z",
-      "is_public": false,
-      "current_projects": "",
-      "social_object": "",
-      "email": "asso-99@mail.tld"
-    }
-  },
-  {
-    "model": "associations.association",
     "pk": 100,
     "fields": {
       "name": "Amicale des Etudiants et Anciens de l'IUT de Haguenau",
@@ -1726,25 +1688,6 @@
       "current_projects": "",
       "social_object": "",
       "email": "asso-101@mail.tld"
-    }
-  },
-  {
-    "model": "associations.association",
-    "pk": 102,
-    "fields": {
-      "name": "TestDD",
-      "address": "22 Rue René Descartes",
-      "acronym": "",
-      "activity_field_id": 3,
-      "institution_id": 2,
-      "is_enabled": false,
-      "is_site": false,
-      "website": "",
-      "creation_date": "2023-02-09T09:05:52.000Z",
-      "is_public": false,
-      "current_projects": "erzerzer",
-      "social_object": "ezetrze",
-      "email": "asso-102@mail.tld"
     }
   },
   {

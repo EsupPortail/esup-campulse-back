@@ -32,7 +32,7 @@ from plana.utils import send_mail, to_bool
 
 
 class UserListCreate(generics.ListCreateAPIView):
-    """/users/ route"""
+    """/users/ route."""
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -46,9 +46,9 @@ class UserListCreate(generics.ListCreateAPIView):
     ]
 
     def get_serializer_class(self):
-        if not self.request.user.has_perm(
-            "users.view_user_anyone"
-        ) and not self.request.user.has_perm("users.view_user_misc"):
+        if not self.request.user.has_perm("users.view_user_anyone") and not self.request.user.has_perm(
+            "users.view_user_misc"
+        ):
             self.serializer_class = UserPartialDataSerializer
         else:
             self.serializer_class = UserSerializer
@@ -100,7 +100,7 @@ class UserListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists users sharing the same association, or all users (manager)."""
+        """List users sharing the same association, or all users (manager)."""
         name = request.query_params.get("name")
         email = request.query_params.get("email")
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
@@ -108,14 +108,10 @@ class UserListCreate(generics.ListCreateAPIView):
         association_id = request.query_params.get("association_id")
         institutions = request.query_params.get("institutions")
 
-        if not request.user.has_perm(
-            "users.view_user_anyone"
-        ) and not request.user.has_perm("users.view_user_misc"):
+        if not request.user.has_perm("users.view_user_anyone") and not request.user.has_perm("users.view_user_misc"):
             self.queryset = self.queryset.filter(
                 id__in=AssociationUser.objects.filter(
-                    association_id__in=request.user.get_user_associations().values_list(
-                        "id"
-                    )
+                    association_id__in=request.user.get_user_associations().values_list("id")
                 ).values_list("user_id")
             )
         else:
@@ -128,15 +124,11 @@ class UserListCreate(generics.ListCreateAPIView):
 
             if email is not None and email != "":
                 email = str(email).strip()
-                self.queryset = self.queryset.filter(
-                    email__nospaces__unaccent__icontains=email.replace(" ", "")
-                )
+                self.queryset = self.queryset.filter(email__nospaces__unaccent__icontains=email.replace(" ", ""))
 
             if is_validated_by_admin is not None and is_validated_by_admin != "":
                 is_validated_by_admin = to_bool(is_validated_by_admin)
-                email_validated_user_ids = EmailAddress.objects.filter(
-                    verified=True
-                ).values_list("user_id")
+                email_validated_user_ids = EmailAddress.objects.filter(verified=True).values_list("user_id")
                 self.queryset = self.queryset.filter(
                     is_validated_by_admin=is_validated_by_admin,
                     id__in=email_validated_user_ids,
@@ -144,19 +136,15 @@ class UserListCreate(generics.ListCreateAPIView):
 
             if is_cas is not None and is_cas != "":
                 is_cas = to_bool(is_cas)
-                cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list(
-                    "user_id"
-                )
+                cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list("user_id")
                 self.queryset = (
-                    self.queryset.filter(id__in=cas_ids_list)
-                    if is_cas
-                    else self.queryset.exclude(id__in=cas_ids_list)
+                    self.queryset.filter(id__in=cas_ids_list) if is_cas else self.queryset.exclude(id__in=cas_ids_list)
                 )
 
             if association_id is not None and association_id != "":
-                assos_users_query = AssociationUser.objects.filter(
-                    association_id=association_id
-                ).values_list("user_id")
+                assos_users_query = AssociationUser.objects.filter(association_id=association_id).values_list(
+                    "user_id"
+                )
                 self.queryset = self.queryset.filter(id__in=assos_users_query)
 
             if institutions is not None:
@@ -169,14 +157,10 @@ class UserListCreate(generics.ListCreateAPIView):
                     & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
                 )
                 commission_users_query = User.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(
-                        fund_id__isnull=False
-                    ).values_list("user_id")
+                    id__in=GroupInstitutionFundUser.objects.filter(fund_id__isnull=False).values_list("user_id")
                 ).values_list("id")
                 if institutions == "":
-                    self.queryset = self.queryset.filter(
-                        Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
-                    )
+                    self.queryset = self.queryset.filter(Q(id__in=misc_users_query) | Q(id__in=commission_users_query))
                 else:
                     institutions_ids = institutions.split(",")
                     check_other_users = False
@@ -188,18 +172,16 @@ class UserListCreate(generics.ListCreateAPIView):
                         if institution_id != "" and institution_id.isdigit()
                     ]
 
-                    associations_ids = Association.objects.filter(
-                        institution_id__in=institutions_ids
-                    ).values_list("id")
+                    associations_ids = Association.objects.filter(institution_id__in=institutions_ids).values_list(
+                        "id"
+                    )
                     assos_users_query = AssociationUser.objects.filter(
                         association_id__in=associations_ids
                     ).values_list("user_id")
 
                     if check_other_users is True:
                         self.queryset = self.queryset.filter(
-                            Q(id__in=assos_users_query)
-                            | Q(id__in=misc_users_query)
-                            | Q(id__in=commission_users_query)
+                            Q(id__in=assos_users_query) | Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
                         )
                     else:
                         self.queryset = self.queryset.filter(id__in=assos_users_query)
@@ -217,17 +199,11 @@ class UserListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Create an account for another person (manager only)."""
         is_cas = True
-        if not "is_cas" in request.data or (
-            "is_cas" in request.data and request.data["is_cas"] is False
-        ):
+        if not "is_cas" in request.data or ("is_cas" in request.data and request.data["is_cas"] is False):
             is_cas = False
             if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
                 return response.Response(
-                    {
-                        "error": _(
-                            "This email address cannot be used for a local account."
-                        )
-                    },
+                    {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             request.data.update({"username": request.data["email"]})
@@ -244,9 +220,7 @@ class UserListCreate(generics.ListCreateAPIView):
         request.data.update({"is_validated_by_admin": True})
         user_response = self.create(request, *args, **kwargs)
         user = User.objects.get(id=user_response.data["id"])
-        EmailAddress.objects.create(
-            email=user.email, verified=True, primary=True, user_id=user.id
-        )
+        EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
 
         current_site = get_current_site(request)
         context = {
@@ -262,8 +236,7 @@ class UserListCreate(generics.ListCreateAPIView):
         template = None
         if not is_cas:
             password = "".join(
-                secrets.choice(string.ascii_letters + string.digits)
-                for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+                secrets.choice(string.ascii_letters + string.digits) for i in range(settings.DEFAULT_PASSWORD_LENGTH)
             )
             user.set_password(password)
             user.password_last_change_date = datetime.datetime.today()
@@ -272,9 +245,7 @@ class UserListCreate(generics.ListCreateAPIView):
             context[
                 "password_change_url"
             ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
-            template = MailTemplate.objects.get(
-                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION")
         else:
             SocialAccount.objects.create(
                 user=user,
@@ -282,9 +253,7 @@ class UserListCreate(generics.ListCreateAPIView):
                 uid=user.username,
                 extra_data={},
             )
-            template = MailTemplate.objects.get(
-                code="ACCOUNT_CREATED_BY_MANAGER_CONFIRMATION_LDAP"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_BY_MANAGER_CONFIRMATION")
 
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
@@ -297,7 +266,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/users/{id} route"""
+    """/users/{id} route."""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -325,7 +294,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a user with all details."""
+        """Retrieve a user with all details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -334,9 +303,9 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if not request.user.has_perm(
-            "users.view_user_anyone"
-        ) and not self.request.user.has_perm("users.view_user_misc"):
+        if not request.user.has_perm("users.view_user_anyone") and not self.request.user.has_perm(
+            "users.view_user_misc"
+        ):
             return response.Response(
                 {"error": _("Not allowed to retrieve this user.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -363,7 +332,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def patch(self, request, *args, **kwargs):
-        """Updates a user field (with a restriction on CAS auto-generated fields)."""
+        """Update a user field (with a restriction on CAS auto-generated fields)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -400,11 +369,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         elif "email" in request.data:
             if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
                 return response.Response(
-                    {
-                        "error": _(
-                            "This email address cannot be used for a local account."
-                        )
-                    },
+                    {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             request.data.update({"username": request.data["email"]})
@@ -419,36 +384,25 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if "can_submit_projects" in request.data:
             template = None
             if to_bool(request.data["can_submit_projects"]) is False:
-                template = MailTemplate.objects.get(
-                    code="DEACTIVATE_PROJECT_SUBMISSION"
-                )
+                template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
             elif to_bool(request.data["can_submit_projects"]) is True:
-                template = MailTemplate.objects.get(
-                    code="REACTIVATE_PROJECT_SUBMISSION"
-                )
+                template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
-        if (
-            "is_validated_by_admin" in request.data
-            and to_bool(request.data["is_validated_by_admin"]) is True
-        ):
+        if "is_validated_by_admin" in request.data and to_bool(request.data["is_validated_by_admin"]) is True:
             context["username"] = user.username
             context["first_name"] = user.first_name
             context["last_name"] = user.last_name
             context["documentation_url"] = settings.APP_DOCUMENTATION_URL
             if user.is_cas_user():
-                template = MailTemplate.objects.get(
-                    code="MANAGER_ACCOUNT_CONFIRMATION_LDAP"
-                )
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_CONFIRMATION")
             else:
-                template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_CONFIRMATION")
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_CONFIRMATION")
                 uid = user_pk_to_url_str(user)
                 token = default_token_generator.make_token(user)
                 context[
@@ -457,35 +411,25 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(user, request, context),
             )
 
-            unvalidated_assos_user = AssociationUser.objects.filter(
-                user_id=user.id, is_validated_by_admin=False
-            )
+            unvalidated_assos_user = AssociationUser.objects.filter(user_id=user.id, is_validated_by_admin=False)
             if unvalidated_assos_user.count() > 0:
                 for unvalidated_asso_user in unvalidated_assos_user:
                     context[
                         "user_association_url"
                     ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
-                    template = MailTemplate.objects.get(
-                        code="USER_ASSOCIATION_MANAGER_MESSAGE"
-                    )
+                    template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=list(
-                            Institution.objects.get(
-                                id=unvalidated_asso_user.association.institution_id
-                            )
+                            Institution.objects.get(id=unvalidated_asso_user.association.institution_id)
                             .default_institution_managers()
                             .values_list("email", flat=True)
                         ),
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(request.user, request, context),
                     )
 
@@ -522,13 +466,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "site_name": current_site.name,
                 "manager_email_address": request.user.email,
             }
-            template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_REJECTION")
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_REJECTION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
         else:
@@ -536,13 +478,11 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
             }
-            template = MailTemplate.objects.get(code="ACCOUNT_DELETE")
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_DELETION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 

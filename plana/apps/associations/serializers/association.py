@@ -15,13 +15,25 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(
-        queryset=InstitutionComponent.objects.all()
-    )
-    activity_field = serializers.PrimaryKeyRelatedField(
-        queryset=ActivityField.objects.all()
-    )
+    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
+    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
     path_logo = ThumbnailField(sizes=["detail"])
+
+    def to_representation(self, obj):
+        """Don't send confidential values depending on the user doing the request."""
+        request = self.context.get('request', None)
+        representation = super().to_representation(obj)
+
+        if request.user.is_anonymous or (
+            not request.user.is_anonymous
+            and not request.user.is_in_association(obj.id)
+            and not request.user.has_perm("associations.view_association_all_fields")
+        ):
+            private_fields = ["phone", "president_phone", "can_submit_projects"]
+            for private_field in private_fields:
+                representation.pop(private_field)
+
+        return representation
 
     class Meta:
         model = Association
@@ -45,9 +57,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     website = serializers.CharField(required=False, allow_blank=True)
     president_names = serializers.CharField(required=False, allow_blank=True)
     president_phone = serializers.CharField(required=False, allow_blank=True)
-    institution = serializers.PrimaryKeyRelatedField(
-        queryset=Institution.objects.all(), allow_null=True, default=None
-    )
+    president_email = serializers.CharField(required=False, allow_blank=True)
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all(), allow_null=True, default=None)
     institution_component = serializers.PrimaryKeyRelatedField(
         queryset=InstitutionComponent.objects.all(), allow_null=True, default=None
     )
@@ -57,6 +68,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
+        if value == '':
+            return value
         pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
         if not re.match(pattern, value):
             raise serializers.ValidationError("Wrong phone number format.")
@@ -71,12 +84,8 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """Smaller serializer to return only some of the informations of an association."""
 
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(
-        queryset=InstitutionComponent.objects.all()
-    )
-    activity_field = serializers.PrimaryKeyRelatedField(
-        queryset=ActivityField.objects.all()
-    )
+    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
+    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
     path_logo = ThumbnailField(sizes=["list"])
 
     class Meta:
@@ -121,9 +130,7 @@ class AssociationNameSerializer(serializers.ModelSerializer):
 
     def is_president_in_association(self, association) -> bool:
         """Check if a president has been linked to an association."""
-        return AssociationUser.objects.filter(
-            association_id=association.id, is_president=True
-        ).exists()
+        return AssociationUser.objects.filter(association_id=association.id, is_president=True).exists()
 
     class Meta:
         model = Association

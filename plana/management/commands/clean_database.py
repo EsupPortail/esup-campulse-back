@@ -8,13 +8,6 @@ from django.utils.translation import gettext as _
 class Command(BaseCommand):
     help = _("Resets database structure and content.")
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--storages",
-            help=_("Set without value if storages should be flushed."),
-            action="store_true",
-        )
-
     def handle(self, *args, **options):
         try:
             call_command("flush", "--no-input")
@@ -27,10 +20,8 @@ class Command(BaseCommand):
             call_command("loaddata", *apps_fixtures)
             libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
             call_command("loaddata", *libs_fixtures)
-
-            if options["storages"] is True:
-                call_command("flush_storages")
-                call_command("loaddata_storages")
+            call_command("flush_storages")
+            call_command("loaddata_storages")
 
             self.stdout.write(self.style.SUCCESS(_("Database regenerated.")))
 

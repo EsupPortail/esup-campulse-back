@@ -1,6 +1,7 @@
 """Views directly linked to project reviews."""
 import datetime
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
@@ -18,7 +19,7 @@ from plana.apps.projects.serializers.project_review import (
 
 
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
-    """/projects/{id}/review route"""
+    """/projects/{id}/review route."""
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -46,7 +47,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         }
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a project review with all its details."""
+        """Retrieve a project review with all its details."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -86,7 +87,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project review details."""
+        """Update project review details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -118,8 +119,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
 
         if (
             not request.user.has_perm("projects.change_project_as_validator")
-            and project.project_status
-            not in Project.ProjectStatus.get_review_needed_project_statuses()
+            and project.project_status not in Project.ProjectStatus.get_review_needed_project_statuses()
         ):
             return response.Response(
                 {"error": _("Project review is not a draft that can be edited.")},
@@ -129,33 +129,11 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             "real_start_date" in request.data
             and "real_end_date" in request.data
-            and datetime.datetime.strptime(
-                request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
-            > datetime.datetime.strptime(
-                request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            and datetime.datetime.strptime(request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            > datetime.datetime.strptime(request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        pending_commission_dates_count = ProjectCommissionFund.objects.filter(
-            project_id=kwargs["pk"],
-            commission_fund_id__in=CommissionFund.objects.filter(
-                commission_id__in=Commission.objects.filter(
-                    commission_date__gt=datetime.datetime.now()
-                ).values_list("id")
-            ).values_list("id"),
-        ).count()
-        if pending_commission_dates_count > 0:
-            return response.Response(
-                {
-                    "error": _(
-                        "Cannot edit review if commission dates are still pending."
-                    )
-                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

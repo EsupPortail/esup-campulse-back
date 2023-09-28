@@ -1,18 +1,20 @@
+"""Base configuration for all environments."""
 from os import environ
 from os.path import join, normpath
 from pathlib import Path
 
-from .permissions import *
-
 
 def load_key(keyfile):
+    """Load JWT and AGE keys."""
     try:
         keyfile = SITE_ROOT / "keys" / keyfile
-        with open(keyfile, "rb") as f:
-            return f.read()
+        with open(keyfile, "rb") as file:
+            return file.read()
     except FileNotFoundError:
         return b""
 
+
+APP_VERSION = "1.0.0-beta"
 
 ######################
 # Path configuration #
@@ -214,7 +216,6 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "range",
 )
-CORS_REPLACE_HTTPS_REFERER = True
 
 
 ############################
@@ -238,7 +239,7 @@ MIDDLEWARE = [
 # Url configuration #
 #####################
 
-ROOT_URLCONF = "%s.urls" % SITE_NAME
+ROOT_URLCONF = f"{SITE_NAME}.urls"
 
 
 ######################
@@ -246,7 +247,7 @@ ROOT_URLCONF = "%s.urls" % SITE_NAME
 ######################
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = "%s.wsgi.application" % SITE_NAME
+WSGI_APPLICATION = f"{SITE_NAME}.wsgi.application"
 
 
 #############################
@@ -284,6 +285,12 @@ THIRD_PARTY_APPS = [
     "storages",
     "thumbnails",
     "django_cleanup",
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
+    'health_check.contrib.migrations',
+    "health_check.contrib.s3boto3_storage",
 ]
 
 LOCAL_APPS = [
@@ -318,9 +325,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "default": {
-            "format": "%(levelname)s %(asctime)s %(name)s:%(lineno)s %(message)s"
-        },
+        "default": {"format": "%(levelname)s %(asctime)s %(name)s:%(lineno)s %(message)s"},
         "django.server": {
             "()": "django.utils.log.ServerFormatter",
             "format": "[%(server_time)s] %(message)s",
@@ -403,7 +408,6 @@ REST_FRAMEWORK = {
         "no_underscore_before_number": True,
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
 }
 
 
@@ -428,7 +432,8 @@ AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
-LOGO_FILEPATH = "associations_logos"
+LOGOS_FILEPATH = "logos"
+ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 TEMPLATES_FILEPATH = "associations_documents_templates"
 DOCUMENTS_FILEPATH = "associations_documents"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
@@ -519,24 +524,23 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Using SimpleJWT with dj-rest-auth
-REST_USE_JWT = True
-
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "USER_ID_CLAIM": "user_id",
     "USER_ID_FIELD": "id",
+    "AUDIENCE": "plan_a",
+    "ISSUER": "plan_a",
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
 }
 
-REST_AUTH_SERIALIZERS = {
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_HTTPONLY": False,
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetConfirmSerializer",
     "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordChangeSerializer",
-}
-
-REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "plana.apps.users.serializers.user.CustomRegisterSerializer",
 }
 
@@ -546,19 +550,21 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 ##########
 
 STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 
 def sentry_init(environment):
+    """Init Sentry service."""
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn="https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54",
+        dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
         ],
         environment=environment,
-        release=open(join(SITE_ROOT, "build.txt")).read(),
+        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
         send_default_pii=True,
     )
 
@@ -568,9 +574,9 @@ def sentry_init(environment):
 ###############
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "PlanA / Opaline API",
-    "DESCRIPTION": "API for PlanA / Opaline",
-    "VERSION": "0.2.0",
+    "TITLE": "PlanA API",
+    "DESCRIPTION": "API for PlanA",
+    "VERSION": APP_VERSION,
     "SERVE_INCLUDE_SCHEMA": False,
     "POST_PROCESSING_HOOKS": [
         "drf_spectacular.hooks.postprocess_schema_enums",
@@ -613,6 +619,38 @@ CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
 CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION = 30
 
 
+#####################
+# Templates folders #
+#####################
+
+# Names of the folders where templates are stored (used to store multiple templates, like themes).
+TEMPLATES_PDF_FOLDER = "pdf_exports"
+TEMPLATES_NOTIFICATIONS_FOLDER = "notifications"
+
+# Generic PDF templates.
+TEMPLATES_PDF = {
+    "association_charter_summary": f"./{TEMPLATES_PDF_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"./{TEMPLATES_PDF_FOLDER}/commission_projects_list.html",
+    "project_summary": f"./{TEMPLATES_PDF_FOLDER}/project_summary.html",
+    "project_review_summary": f"./{TEMPLATES_PDF_FOLDER}/project_review_summary.html",
+}
+
+# Notifications pdf templates used as mail attachments.
+# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
+TEMPLATES_NOTIFICATIONS = {
+    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
+    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
+    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
+    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
+    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
+    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/rejection.html",
+    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/rejection.html",
+    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
+    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
+    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
+}
+
+
 ########
 # Misc #
 ########
@@ -628,7 +666,7 @@ APPEND_SLASH = False
 
 # Site name as set in migration in contents module.
 MIGRATION_SITE_DOMAIN = "localhost:3000"
-MIGRATION_SITE_NAME = "Opaline"
+MIGRATION_SITE_NAME = "Campulse"
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
@@ -699,19 +737,277 @@ GROUPS_STRUCTURE = {
     },
 }
 
-# Notifications pdf templates used as mail attachments
-# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY)
-TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": "./notifications/FSDIE/decision_attribution.html",
-    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": "./notifications/IdEx/decision_attribution.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": "./notifications/Culture-ActionS/decision_attribution.html",
-    "NOTIFICATION_FSDIE_ATTRIBUTION": "./notifications/FSDIE/attribution.html",
-    "NOTIFICATION_IDEX_ATTRIBUTION": "./notifications/IdEx/attribution.html",
-    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": "./notifications/Culture-ActionS/attribution.html",
-    "NOTIFICATION_FSDIE_REJECTION": "./notifications/FSDIE/rejection.html",
-    "NOTIFICATION_IDEX_REJECTION": "./notifications/IdEx/rejection.html",
-    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": "./notifications/Culture-ActionS/rejection.html",
-    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": "./notifications/FSDIE/postpone.html",
-    "NOTIFICATION_IDEX_PROJECT_POSTPONED": "./notifications/IdEx/postpone.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": "./notifications/Culture-ActionS/postpone.html",
+
+########################
+# Groups & Permissions #
+########################
+
+PERMISSIONS_GROUPS = {
+    "MANAGER_GENERAL": [
+        # associations
+        "add_association",
+        "add_association_any_institution",
+        "add_association_all_fields",
+        "change_association",
+        "change_association_any_institution",
+        "change_association_all_fields",
+        "delete_association",
+        "delete_association_any_institution",
+        "view_association_all_fields",
+        "view_association_not_enabled",
+        "view_association_not_public",
+        # commissions
+        "add_commission",
+        "change_commission",
+        "delete_commission",
+        "add_commissionfund",
+        "delete_commissionfund",
+        # contents
+        "change_content",
+        # documents
+        "add_document",
+        "add_document_any_fund",
+        "add_document_any_institution",
+        "change_document",
+        "change_document_any_fund",
+        "change_document_any_institution",
+        "delete_document",
+        "delete_document_any_fund",
+        "delete_document_any_institution",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_as_validator",
+        "view_project",
+        "view_project_any_fund",
+        "view_project_any_institution",
+        "view_project_any_status",
+        "view_projectcategory",
+        "view_projectcategory_any_commission",
+        "view_projectcategory_any_institution",
+        "add_projectcomment",
+        "change_projectcomment",
+        "delete_projectcomment",
+        "view_projectcomment",
+        "view_projectcomment_any_fund",
+        "view_projectcomment_any_institution",
+        "view_projectcomment_not_visible",
+        "change_projectcommissionfund",
+        "change_projectcommissionfund_as_validator",
+        "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
+        # users
+        "add_user",
+        "add_user_misc",
+        "change_user",
+        "change_user_misc",
+        "change_user_all_fields",
+        "delete_user",
+        "delete_user_misc",
+        "view_user",
+        "view_user_misc",
+        "view_user_anyone",
+        "change_associationuser",
+        "change_associationuser_any_institution",
+        "delete_associationuser",
+        "delete_associationuser_any_institution",
+        "view_associationuser",
+        "view_associationuser_anyone",
+        "add_groupinstitutionfunduser_any_group",
+        "delete_groupinstitutionfunduser",
+        "delete_groupinstitutionfunduser_any_group",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
+    ],
+    "MANAGER_INSTITUTION": [
+        # associations
+        "add_association",
+        "add_association_all_fields",
+        "change_association",
+        "change_association_all_fields",
+        "delete_association",
+        "view_association_all_fields",
+        "view_association_not_enabled",
+        "view_association_not_public",
+        # documents
+        "add_document",
+        "change_document",
+        "delete_document",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_as_validator",
+        "view_project",
+        "view_project_any_status",
+        "view_projectcategory",
+        "add_projectcomment",
+        "change_projectcomment",
+        "delete_projectcomment",
+        "view_projectcomment",
+        "view_projectcomment_not_visible",
+        "change_projectcommissionfund",
+        "change_projectcommissionfund_as_validator",
+        "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
+        # users
+        "add_user",
+        "change_user",
+        "change_user_all_fields",
+        "delete_user",
+        "view_user",
+        "view_user_anyone",
+        "change_associationuser",
+        "delete_associationuser",
+        "view_associationuser",
+        "view_associationuser_anyone",
+        "delete_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
+    ],
+    "MANAGER_MISC": [
+        # associations
+        "add_association",
+        "change_association",
+        "change_association_all_fields",
+        "delete_association",
+        "view_association_all_fields",
+        "view_association_not_enabled",
+        "view_association_not_public",
+        # documents
+        "add_document",
+        "change_document",
+        "delete_document",
+        "add_documentupload",
+        "add_documentupload_all",
+        "change_documentupload",
+        "delete_documentupload",
+        "delete_documentupload_all",
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "change_project",
+        "change_project_as_validator",
+        "view_project",
+        "view_project_any_status",
+        "view_projectcategory",
+        "add_projectcomment",
+        "change_projectcomment",
+        "delete_projectcomment",
+        "view_projectcomment",
+        "view_projectcomment_not_visible",
+        "change_projectcommissionfund",
+        "change_projectcommissionfund_as_validator",
+        "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
+        # users
+        "add_user",
+        "add_user_misc",
+        "change_user",
+        "change_user_misc",
+        "change_user_all_fields",
+        "delete_user",
+        "delete_user_misc",
+        "view_user",
+        "view_user_misc",
+        "change_associationuser",
+        "delete_associationuser",
+        "view_associationuser",
+        "view_associationuser_anyone",
+        "delete_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser",
+        "view_groupinstitutionfunduser_any_group",
+    ],
+    "MEMBER_FUND": [
+        # associations
+        "view_association_not_public",
+        # documents
+        "view_documentupload",
+        "view_documentupload_all",
+        # projects
+        "view_project",
+        "view_projectcategory",
+        "add_projectcomment",
+        "change_projectcomment",
+        "delete_projectcomment",
+        "view_projectcomment",
+        "view_projectcomment_not_visible",
+        "view_projectcommissionfund",
+        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_institution",
+        # users
+        "view_user",
+        "view_user_misc",
+        "view_user_anyone",
+        "view_associationuser",
+        "view_groupinstitutionfunduser",
+    ],
+    "STUDENT_INSTITUTION": [
+        # associations
+        "change_association",
+        # documents
+        "add_documentupload",
+        "delete_documentupload",
+        "view_documentupload",
+        # projects
+        "add_project",
+        "add_project_association",
+        "change_project",
+        "change_project_as_bearer",
+        "delete_project",
+        "view_project",
+        "add_projectcategory",
+        "delete_projectcategory",
+        "view_projectcategory",
+        "view_projectcomment",
+        "add_projectcommissionfund",
+        "change_projectcommissionfund",
+        "change_projectcommissionfund_as_bearer",
+        "delete_projectcommissionfund",
+        "view_projectcommissionfund",
+        # users
+        "view_user",
+        "change_associationuser",
+        "delete_associationuser",
+        "view_associationuser",
+        "view_groupinstitutionfunduser",
+    ],
+    "STUDENT_MISC": [
+        # documents
+        "add_documentupload",
+        "delete_documentupload",
+        "view_documentupload",
+        # projects
+        "add_project",
+        "add_project_user",
+        "change_project",
+        "change_project_as_bearer",
+        "delete_project",
+        "view_project",
+        "add_projectcategory",
+        "delete_projectcategory",
+        "view_projectcategory",
+        "view_projectcomment",
+        "add_projectcommissionfund",
+        "change_projectcommissionfund",
+        "change_projectcommissionfund_as_bearer",
+        "delete_projectcommissionfund",
+        "view_projectcommissionfund",
+        # users
+        "view_groupinstitutionfunduser",
+    ],
 }

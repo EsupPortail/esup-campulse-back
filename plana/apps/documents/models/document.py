@@ -21,9 +21,7 @@ def get_template_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.TEMPLATES_FILEPATH
-            if hasattr(settings, 'TEMPLATES_FILEPATH')
-            else '',
+            settings.TEMPLATES_FILEPATH if hasattr(settings, 'TEMPLATES_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
@@ -43,21 +41,22 @@ class Document(models.Model):
         DOCUMENT_ASSOCIATION = "DOCUMENT_ASSOCIATION", _("Document for Association")
         DOCUMENT_USER = "DOCUMENT_USER", _("Document for User")
         DOCUMENT_PROJECT = "DOCUMENT_PROJECT", _("Document for Project")
-        DOCUMENT_PROJECT_REVIEW = "DOCUMENT_PROJECT_REVIEW", _(
-            "Document for Project Review"
-        )
+        DOCUMENT_PROJECT_REVIEW = "DOCUMENT_PROJECT_REVIEW", _("Document for Project Review")
         NO_PROCESS = "NO_PROCESS", _("Document not linked to a process")
 
         @staticmethod
         def get_updatable_documents():
             """Documents with those processes can be replaced by a manager."""
-
-            return ["NO_PROCESS", "CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
+            return [
+                "NO_PROCESS",
+                "CHARTER_ASSOCIATION",
+                "CHARTER_PROJECT_FUND",
+                "DOCUMENT_PROJECT",
+            ]
 
         @staticmethod
         def get_validated_documents():
             """Documents with those processes have to be validated to be used."""
-
             return ["CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
 
     name = models.CharField(_("Name"), max_length=250, default="")
@@ -65,12 +64,8 @@ class Document(models.Model):
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), default="")
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
-    is_required_in_process = models.BooleanField(
-        _("Is required in process"), default=False
-    )
-    days_before_expiration = models.DurationField(
-        _("Days before document expiration"), null=True
-    )
+    is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
+    days_before_expiration = models.DurationField(_("Days before document expiration"), null=True)
     expiration_day = models.CharField(
         _("Document expiration day of the year in %m-%d format"),
         max_length=5,
@@ -101,6 +96,7 @@ class Document(models.Model):
         choices=ProcessType.choices,
         default="NO_PROCESS",
     )
+    edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
 
     def __str__(self):
         return f"{self.name}"

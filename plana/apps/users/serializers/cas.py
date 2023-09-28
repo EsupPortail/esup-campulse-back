@@ -40,9 +40,7 @@ class CASSerializer(LoginSerializer):
         request = self.context.get("request")
 
         if not view:
-            raise exceptions.ValidationError(
-                _("View is not defined, pass it as a context variable")
-            )
+            raise exceptions.ValidationError(_("View is not defined, pass it as a context variable"))
 
         adapter = self.get_adapter(request, view)
 
@@ -56,9 +54,7 @@ class CASSerializer(LoginSerializer):
         uid, extra, _pgtiou = response
 
         if not uid:
-            raise exceptions.ValidationError(
-                _("CAS server doesn't validate the ticket")
-            )
+            raise exceptions.ValidationError(_("CAS server doesn't validate the ticket"))
 
         data = (uid, extra or {})
 
@@ -75,9 +71,9 @@ class CASSerializer(LoginSerializer):
                 )
                 attrs["user"] = login.account.user
                 user = User.objects.get(email=attrs["user"].email)
-                user.is_student = (
-                    True if extra.get("affiliation", "") == "student" else False
-                )
+                user.is_student = False
+                if extra.get("affiliation", "") == "student":
+                    user.is_student = True
                 user.save()
             except IntegrityError:
                 pass
@@ -85,9 +81,7 @@ class CASSerializer(LoginSerializer):
             attrs["user"] = login.account.user
             user = User.objects.get(email=attrs["user"].email)
             if user.get_user_groups().count() == 0:
-                raise exceptions.ValidationError(
-                    _("Account registration must be completed.")
-                )
+                raise exceptions.ValidationError(_("Account registration must be completed."))
 
         return attrs
 
@@ -122,8 +116,6 @@ class CASSerializer(LoginSerializer):
         """Get CAS adapter informations."""
         adapter_class = getattr(view, "adapter_class", None)
         if not adapter_class:
-            raise serializers.ValidationError(
-                _("Can not find adapter_class attribute on view")
-            )
+            raise serializers.ValidationError(_("Can not find adapter_class attribute on view"))
         adapter = adapter_class(request)
         return adapter

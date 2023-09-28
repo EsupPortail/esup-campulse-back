@@ -16,7 +16,7 @@ from plana.apps.documents.serializers.document import (
 
 
 class DocumentList(generics.ListCreateAPIView):
-    """/documents/ route"""
+    """/documents/ route."""
 
     queryset = Document.objects.all().order_by("name")
 
@@ -60,7 +60,7 @@ class DocumentList(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all documents types."""
+        """List all documents types."""
         acronym = request.query_params.get("acronym")
         fund_ids = request.query_params.get("fund_ids")
         process_types = request.query_params.get("process_types")
@@ -92,7 +92,7 @@ class DocumentList(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new document type (manager only)."""
+        """Create a new document type (manager only)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -126,7 +126,7 @@ class DocumentList(generics.ListCreateAPIView):
 
 
 class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/documents/{id} route"""
+    """/documents/{id} route."""
 
     queryset = Document.objects.all()
 
@@ -151,7 +151,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a document type with all its details."""
+        """Retrieve a document type with all its details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -181,7 +181,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates document details."""
+        """Update document details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -200,9 +200,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.institution is not None
+            document.institution_id is not None
             and not request.user.has_perm("documents.change_document_any_institution")
-            and not request.user.is_staff_in_institution(document.institution)
+            and not request.user.is_staff_in_institution(document.institution_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this institution.")},
@@ -210,9 +210,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.fund is not None
+            document.fund_id is not None
             and not request.user.has_perm("documents.change_document_any_fund")
-            and not request.user.is_member_in_fund(document.fund)
+            and not request.user.is_member_in_fund(document.fund_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to update a document for this fund.")},
@@ -221,11 +221,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if document.process_type not in Document.ProcessType.get_updatable_documents():
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to update a document with this process type."
-                    )
-                },
+                {"error": _("Not allowed to update a document with this process type.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -260,9 +256,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.institution is not None
+            document.institution_id is not None
             and not request.user.has_perm("documents.delete_document_any_institution")
-            and not request.user.is_staff_in_institution(document.institution)
+            and not request.user.is_staff_in_institution(document.institution_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this institution.")},
@@ -270,9 +266,9 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if (
-            document.fund is not None
+            document.fund_id is not None
             and not request.user.has_perm("documents.delete_document_any_fund")
-            and not request.user.is_member_in_fund(document.fund)
+            and not request.user.is_member_in_fund(document.fund_id)
         ):
             return response.Response(
                 {"error": _("Not allowed to delete a document for this fund.")},

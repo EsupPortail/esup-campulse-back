@@ -5,12 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class MailTemplateVar(models.Model):
-    code = models.CharField(
-        _("Code"), max_length=64, blank=False, null=False, unique=True
-    )
-    description = models.CharField(
-        _("Description"), max_length=128, blank=False, null=False, unique=True
-    )
+    code = models.CharField(_("Code"), max_length=64, blank=False, null=False, unique=True)
+    description = models.CharField(_("Description"), max_length=128, blank=False, null=False, unique=True)
     fake_vars = models.JSONField(_("Fake vars"), null=True, blank=True)
 
     @property
@@ -36,15 +32,9 @@ class MailTemplate(models.Model):
     Mail templates with HTML content
     """
 
-    code = models.CharField(
-        _("Code"), max_length=128, blank=False, null=False, unique=True
-    )
-    label = models.CharField(
-        _("Label"), max_length=128, blank=False, null=False, unique=True
-    )
-    description = models.CharField(
-        _("Description"), max_length=512, blank=False, null=False
-    )
+    code = models.CharField(_("Code"), max_length=128, blank=False, null=False, unique=True)
+    label = models.CharField(_("Label"), max_length=128, blank=False, null=False, unique=True)
+    description = models.CharField(_("Description"), max_length=512, blank=False, null=False)
     subject = models.CharField(_("Subject"), max_length=256, blank=False, null=False)
     body = models.TextField(_("Body"), blank=False, null=False)
     active = models.BooleanField(_("Active"), default=True)
@@ -80,9 +70,7 @@ class MailTemplate(models.Model):
     #         **kwargs,
     #     )
 
-    def parse_var_faker_from_string(
-        self, user, body, request, context_params, available_vars=None, **kwargs
-    ):
+    def parse_var_faker_from_string(self, user, body, request, context_params, available_vars=None, **kwargs):
         from .utils import parser_faker
 
         return parser_faker(

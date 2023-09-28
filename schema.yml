@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
-  title: PlanA / Opaline API
-  version: 0.2.0
-  description: API for PlanA / Opaline
+  title: PlanA API
+  version: 1.0.0-beta
+  description: API for PlanA
 paths:
   /associations/:
     get:
       operationId: associations_list
-      description: Lists all associations with many filters.
+      description: List all associations with many filters.
       parameters:
       - in: query
         name: acronym
@@ -76,8 +76,7 @@ paths:
           description: ''
     post:
       operationId: associations_create
-      description: Creates a new association with mandatory informations (manager
-        only).
+      description: Create a new association with mandatory informations (manager only).
       tags:
       - associations
       requestBody:
@@ -112,7 +111,7 @@ paths:
   /associations/{id}:
     get:
       operationId: associations_retrieve
-      description: Retrieves an association with all its details.
+      description: Retrieve an association with all its details.
       parameters:
       - in: path
         name: id
@@ -137,7 +136,7 @@ paths:
           description: No response body
     patch:
       operationId: associations_partial_update
-      description: Updates association details (president and manager only, restricted
+      description: Update association details (president and manager only, restricted
         fields for president).
       parameters:
       - in: path
@@ -203,10 +202,10 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /associations/{id}/pdf_export:
+  /associations/{id}/export:
     get:
-      operationId: associations_pdf_export_retrieve
-      description: Retrieves a PDF file.
+      operationId: associations_export_retrieve
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -233,7 +232,7 @@ paths:
   /associations/{id}/status:
     patch:
       operationId: associations_status_partial_update
-      description: Updates association charter status.
+      description: Update association charter status.
       parameters:
       - in: path
         name: id
@@ -273,7 +272,7 @@ paths:
   /associations/activity_fields:
     get:
       operationId: associations_activity_fields_list
-      description: Lists all activity fields that can be linked to an association.
+      description: List all activity fields that can be linked to an association.
       tags:
       - associations
       security:
@@ -288,16 +287,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/ActivityField'
           description: ''
-  /associations/csv_export:
+  /associations/export:
     get:
-      operationId: associations_csv_export_retrieve
-      description: Associations List CSV export.
+      operationId: associations_export_list
+      description: Associations list export.
       parameters:
       - in: query
         name: associations
         schema:
           type: string
-        description: IDs of selected associations, separated by a coma.
+        description: IDs of selected associations, separated by a comma.
+      - in: query
+        name: mode
+        schema:
+          type: string
+        description: Export mode (xlsx or csv, csv by default).
       tags:
       - associations
       security:
@@ -316,7 +320,7 @@ paths:
   /associations/names:
     get:
       operationId: associations_names_list
-      description: Lists minimal details for all associations with many filters.
+      description: List minimal details for all associations with many filters.
       parameters:
       - in: query
         name: allow_new_users
@@ -350,7 +354,7 @@ paths:
   /commissions/:
     get:
       operationId: commissions_list
-      description: Lists all commissions.
+      description: List all commissions.
       parameters:
       - in: query
         name: dates
@@ -406,7 +410,7 @@ paths:
           description: ''
     post:
       operationId: commissions_create
-      description: Creates a new commission (manager only).
+      description: Create a new commission (manager only).
       tags:
       - commissions
       requestBody:
@@ -439,7 +443,7 @@ paths:
   /commissions/{commission_id}/funds:
     get:
       operationId: commissions_funds_retrieve
-      description: Retrieves all funds linked to a commission.
+      description: Retrieve all funds linked to a commission.
       parameters:
       - in: path
         name: commission_id
@@ -495,7 +499,7 @@ paths:
   /commissions/{id}:
     get:
       operationId: commissions_retrieve
-      description: Retrieves a commission date with all its details.
+      description: Retrieve a commission date with all its details.
       parameters:
       - in: path
         name: id
@@ -518,7 +522,7 @@ paths:
           description: No response body
     patch:
       operationId: commissions_partial_update
-      description: Updates commission date details.
+      description: Update commission date details.
       parameters:
       - in: path
         name: id
@@ -581,16 +585,26 @@ paths:
           description: No response body
         '404':
           description: No response body
-  /commissions/{id}/csv_export:
+  /commissions/{id}/export:
     get:
-      operationId: commissions_csv_export_retrieve
-      description: Projects presented to the commission CSV export.
+      operationId: commissions_export_retrieve
+      description: Projects presented to the commission export.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
         required: true
+      - in: query
+        name: mode
+        schema:
+          type: string
+        description: Export mode (xlsx, csv or pdf, csv by default).
+      - in: query
+        name: project_ids
+        schema:
+          type: string
+        description: Filter by Projects IDs.
       tags:
       - commissions
       security:
@@ -609,7 +623,7 @@ paths:
   /commissions/funds:
     get:
       operationId: commissions_funds_list
-      description: Lists all links between commissions and funds.
+      description: List all links between commissions and funds.
       tags:
       - commissions/funds
       security:
@@ -626,7 +640,7 @@ paths:
           description: ''
     post:
       operationId: commissions_funds_create
-      description: Creates a link between a commission and a fund.
+      description: Create a link between a commission and a fund.
       tags:
       - commissions/funds
       requestBody:
@@ -661,7 +675,7 @@ paths:
   /commissions/funds/names:
     get:
       operationId: commissions_funds_names_list
-      description: Lists all fund types.
+      description: List all fund types.
       parameters:
       - in: query
         name: acronym
@@ -685,7 +699,7 @@ paths:
   /contents/:
     get:
       operationId: contents_list
-      description: Lists all contents.
+      description: List all contents.
       parameters:
       - in: query
         name: code
@@ -709,7 +723,7 @@ paths:
   /contents/{id}:
     get:
       operationId: contents_retrieve
-      description: Retrieves a content.
+      description: Retrieve a content.
       parameters:
       - in: path
         name: id
@@ -730,10 +744,28 @@ paths:
           description: ''
         '404':
           description: No response body
+  /contents/logos:
+    get:
+      operationId: contents_logos_list
+      description: List all logos.
+      tags:
+      - contents
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Logo'
+          description: ''
   /documents/:
     get:
       operationId: documents_list
-      description: Lists all documents types.
+      description: List all documents types.
       parameters:
       - in: query
         name: acronym
@@ -766,7 +798,7 @@ paths:
           description: ''
     post:
       operationId: documents_create
-      description: Creates a new document type (manager only).
+      description: Create a new document type (manager only).
       tags:
       - documents
       requestBody:
@@ -798,7 +830,7 @@ paths:
   /documents/{id}:
     get:
       operationId: documents_retrieve
-      description: Retrieves a document type with all its details.
+      description: Retrieve a document type with all its details.
       parameters:
       - in: path
         name: id
@@ -821,7 +853,7 @@ paths:
           description: No response body
     patch:
       operationId: documents_partial_update
-      description: Updates document details.
+      description: Update document details.
       parameters:
       - in: path
         name: id
@@ -889,7 +921,7 @@ paths:
   /documents/uploads:
     get:
       operationId: documents_uploads_list
-      description: Lists all documents uploads.
+      description: List all documents uploads.
       parameters:
       - in: query
         name: association_id
@@ -933,7 +965,7 @@ paths:
           description: No response body
     post:
       operationId: documents_uploads_create
-      description: Creates a new document upload.
+      description: Create a new document upload.
       tags:
       - documents/uploads
       requestBody:
@@ -969,7 +1001,7 @@ paths:
   /documents/uploads/{id}:
     get:
       operationId: documents_uploads_retrieve
-      description: Retrieves a document uploaded by a user.
+      description: Retrieve a document uploaded by a user.
       parameters:
       - in: path
         name: id
@@ -995,7 +1027,7 @@ paths:
           description: No response body
     patch:
       operationId: documents_uploads_partial_update
-      description: Updates document upload details.
+      description: Update document upload details.
       parameters:
       - in: path
         name: id
@@ -1061,7 +1093,7 @@ paths:
   /documents/uploads/{id}/file:
     get:
       operationId: documents_uploads_file_retrieve
-      description: Retrieves a document uploaded by a user.
+      description: Retrieve a document uploaded by a user.
       parameters:
       - in: path
         name: id
@@ -1085,10 +1117,35 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /documents/uploads/file:
+    get:
+      operationId: documents_uploads_file_list
+      description: Retrieve all uploaded documents.
+      parameters:
+      - in: query
+        name: project_id
+        schema:
+          type: integer
+        description: Filter by Project ID.
+      tags:
+      - documents/uploads
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentUploadFile'
+          description: ''
+        '401':
+          description: No response body
   /groups/:
     get:
       operationId: groups_list
-      description: Lists all groups.
+      description: List all groups.
       parameters:
       - in: query
         name: name
@@ -1112,7 +1169,7 @@ paths:
   /institutions/:
     get:
       operationId: institutions_list
-      description: Lists all institutions.
+      description: List all institutions.
       parameters:
       - in: query
         name: acronym
@@ -1136,7 +1193,7 @@ paths:
   /institutions/institution_components:
     get:
       operationId: institutions_institution_components_list
-      description: Lists all institution components.
+      description: List all institution components.
       tags:
       - institutions
       security:
@@ -1154,7 +1211,7 @@ paths:
   /projects/:
     get:
       operationId: projects_list
-      description: Lists all projects linked to a user, or all projects with all their
+      description: List all projects linked to a user, or all projects with all their
         details (manager).
       parameters:
       - in: query
@@ -1227,7 +1284,7 @@ paths:
           description: No response body
     post:
       operationId: projects_create
-      description: Creates a new project.
+      description: Create a new project.
       tags:
       - projects
       requestBody:
@@ -1261,7 +1318,7 @@ paths:
   /projects/{id}:
     get:
       operationId: projects_retrieve
-      description: Retrieves a project with all its details.
+      description: Retrieve a project with all its details.
       parameters:
       - in: path
         name: id
@@ -1287,7 +1344,7 @@ paths:
           description: No response body
     patch:
       operationId: projects_partial_update
-      description: Updates project details.
+      description: Update project details.
       parameters:
       - in: path
         name: id
@@ -1326,7 +1383,7 @@ paths:
           description: No response body
     delete:
       operationId: projects_destroy
-      description: /projects/{id} route
+      description: Destroys a project.
       parameters:
       - in: path
         name: id
@@ -1353,7 +1410,7 @@ paths:
   /projects/{id}/pdf_export:
     get:
       operationId: projects_pdf_export_retrieve
-      description: Retrieves a PDF file.
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -1380,7 +1437,7 @@ paths:
   /projects/{id}/review:
     get:
       operationId: projects_review_retrieve
-      description: Retrieves a project review with all its details.
+      description: Retrieve a project review with all its details.
       parameters:
       - in: path
         name: id
@@ -1406,7 +1463,7 @@ paths:
           description: No response body
     patch:
       operationId: projects_review_partial_update
-      description: Updates project review details.
+      description: Update project review details.
       parameters:
       - in: path
         name: id
@@ -1446,7 +1503,7 @@ paths:
   /projects/{id}/review/pdf_export:
     get:
       operationId: projects_review_pdf_export_retrieve
-      description: Retrieves a PDF file.
+      description: Retrieve a PDF file.
       parameters:
       - in: path
         name: id
@@ -1473,7 +1530,7 @@ paths:
   /projects/{id}/status:
     patch:
       operationId: projects_status_partial_update
-      description: Updates project status.
+      description: Update project status.
       parameters:
       - in: path
         name: id
@@ -1513,7 +1570,7 @@ paths:
   /projects/{project_id}/categories:
     get:
       operationId: projects_categories_retrieve
-      description: Retrieves all categories linked to a project.
+      description: Retrieve all categories linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1572,7 +1629,7 @@ paths:
   /projects/{project_id}/comments:
     get:
       operationId: projects_comments_retrieve
-      description: Retrieves all comments linked to a project
+      description: Retrieve all comments linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1599,7 +1656,7 @@ paths:
   /projects/{project_id}/comments/{comment_id}:
     patch:
       operationId: projects_comments_partial_update
-      description: Updates comments of the project
+      description: Update comments of the project.
       parameters:
       - in: path
         name: comment_id
@@ -1617,13 +1674,13 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProjectCommentTextRequest'
+              $ref: '#/components/schemas/PatchedProjectCommentUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1643,7 +1700,7 @@ paths:
           description: No response body
     delete:
       operationId: projects_comments_destroy
-      description: Destroys comments of a project
+      description: Destroys comments of a project.
       parameters:
       - in: path
         name: comment_id
@@ -1675,7 +1732,7 @@ paths:
   /projects/{project_id}/commission_funds:
     get:
       operationId: projects_commission_funds_retrieve
-      description: Retrieves all commission dates linked to a project.
+      description: Retrieve all commission dates linked to a project.
       parameters:
       - in: path
         name: project_id
@@ -1702,7 +1759,7 @@ paths:
   /projects/{project_id}/commission_funds/{commission_fund_id}:
     patch:
       operationId: projects_commission_funds_partial_update
-      description: Updates details of a project linked to a commission fund object.
+      description: Update details of a project linked to a commission fund object.
       parameters:
       - in: path
         name: commission_fund_id
@@ -1778,7 +1835,7 @@ paths:
   /projects/categories:
     get:
       operationId: projects_categories_list
-      description: Lists all links between categories and projects.
+      description: List all links between categories and projects.
       parameters:
       - in: query
         name: project_id
@@ -1804,7 +1861,7 @@ paths:
           description: No response body
     post:
       operationId: projects_categories_create
-      description: Creates a link between a category and a project.
+      description: Create a link between a category and a project.
       tags:
       - projects/categories
       requestBody:
@@ -1839,7 +1896,7 @@ paths:
   /projects/categories/names:
     get:
       operationId: projects_categories_names_list
-      description: Lists all categories that can be linked to a project.
+      description: List all categories that can be linked to a project.
       tags:
       - projects/categories
       security:
@@ -1857,7 +1914,7 @@ paths:
   /projects/comments:
     post:
       operationId: projects_comments_create
-      description: Create a link between a comment and a project
+      description: Create a link between a comment and a project.
       tags:
       - projects/comments
       requestBody:
@@ -1892,7 +1949,7 @@ paths:
   /projects/commission_funds:
     get:
       operationId: projects_commission_funds_list
-      description: Lists all commission funds that can be linked to a project.
+      description: List all commission funds that can be linked to a project.
       parameters:
       - in: query
         name: commission_id
@@ -1923,7 +1980,7 @@ paths:
           description: No response body
     post:
       operationId: projects_commission_funds_create
-      description: Creates a link between a project and a commission fund object.
+      description: Create a link between a project and a commission fund object.
       tags:
       - projects/commission_funds
       requestBody:
@@ -1958,7 +2015,7 @@ paths:
   /users/:
     get:
       operationId: users_list
-      description: Lists users sharing the same association, or all users (manager).
+      description: List users sharing the same association, or all users (manager).
       parameters:
       - in: query
         name: association_id
@@ -2048,7 +2105,7 @@ paths:
   /users/{id}:
     get:
       operationId: users_retrieve
-      description: Retrieves a user with all details.
+      description: Retrieve a user with all details.
       parameters:
       - in: path
         name: id
@@ -2074,8 +2131,7 @@ paths:
           description: No response body
     patch:
       operationId: users_partial_update
-      description: Updates a user field (with a restriction on CAS auto-generated
-        fields).
+      description: Update a user field (with a restriction on CAS auto-generated fields).
       parameters:
       - in: path
         name: id
@@ -2142,7 +2198,7 @@ paths:
   /users/{user_id}/associations/:
     get:
       operationId: users_associations_retrieve
-      description: Retrieves all associations linked to a user (manager).
+      description: Retrieve all associations linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -2169,7 +2225,7 @@ paths:
   /users/{user_id}/associations/{association_id}:
     patch:
       operationId: users_associations_partial_update
-      description: Updates user role in an association (manager and president).
+      description: Update user role in an association (manager and president).
       parameters:
       - in: path
         name: association_id
@@ -2241,7 +2297,7 @@ paths:
   /users/{user_id}/groups/:
     get:
       operationId: users_groups_retrieve
-      description: Lists all groups linked to a user (manager).
+      description: List all groups linked to a user (manager).
       parameters:
       - in: path
         name: user_id
@@ -2374,7 +2430,7 @@ paths:
   /users/associations/:
     get:
       operationId: users_associations_list
-      description: Lists all associations linked to a user, or all associations of
+      description: List all associations linked to a user, or all associations of
         all users (manager).
       parameters:
       - in: query
@@ -2411,7 +2467,7 @@ paths:
           description: No response body
     post:
       operationId: users_associations_create
-      description: Creates a new link between a user and an association.
+      description: Create a new link between a user and an association.
       tags:
       - users/associations
       requestBody:
@@ -2446,7 +2502,7 @@ paths:
     post:
       operationId: users_auth_cas_login_create
       description: |-
-        /users/auth/cas/login/ route
+        /users/auth/cas/login/ route.
 
         POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
       tags:
@@ -2477,7 +2533,7 @@ paths:
     get:
       operationId: users_auth_cas_logout_retrieve
       description: |-
-        /users/auth/cas/logout/ route
+        /users/auth/cas/logout/ route.
 
         GET : Logs out a user authenticated with CAS out.
 
@@ -2497,7 +2553,7 @@ paths:
     post:
       operationId: users_auth_cas_logout_create
       description: |-
-        /users/auth/cas/logout/ route
+        /users/auth/cas/logout/ route.
 
         GET : Logs out a user authenticated with CAS out.
 
@@ -2810,7 +2866,7 @@ paths:
     get:
       operationId: users_auth_user_retrieve
       description: |-
-        /users/auth/user/ route
+        /users/auth/user/ route.
 
         Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
       tags:
@@ -2862,7 +2918,7 @@ paths:
   /users/external/:
     get:
       operationId: users_external_list
-      description: Retrieves an external user from LDAP.
+      description: Retrieve an external user from LDAP.
       parameters:
       - in: query
         name: last_name
@@ -2893,7 +2949,7 @@ paths:
   /users/groups/:
     get:
       operationId: users_groups_list
-      description: Lists all groups linked to a user, or all groups of all users (manager).
+      description: List all groups linked to a user, or all groups of all users (manager).
       tags:
       - users/groups
       security:
@@ -2913,7 +2969,7 @@ paths:
           description: No response body
     post:
       operationId: users_groups_create
-      description: Creates a new link between a non-validated user and a group.
+      description: Create a new link between a non-validated user and a group.
       tags:
       - users/groups
       requestBody:
@@ -3037,6 +3093,11 @@ components:
           type: string
           title: Numéro de téléphone du président
           maxLength: 32
+        president_email:
+          type: string
+          format: email
+          title: Adresse email du président
+          maxLength: 256
         is_enabled:
           type: boolean
           title: Est active
@@ -3129,6 +3190,8 @@ components:
         president_names:
           type: string
         president_phone:
+          type: string
+        president_email:
           type: string
         institution:
           type: integer
@@ -3278,6 +3341,7 @@ components:
           maxLength: 250
         has_president:
           type: boolean
+          description: Check if a president has been linked to an association.
           readOnly: true
         institution:
           type: integer
@@ -3399,6 +3463,9 @@ components:
       properties:
         user:
           type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
         is_president:
@@ -3425,6 +3492,10 @@ components:
       properties:
         user:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
         is_president:
@@ -3548,6 +3619,12 @@ components:
       - CHARTER_VALIDATED
       - CHARTER_EXPIRED
       type: string
+      description: |-
+        * `CHARTER_DRAFT` - Charte en Brouillon
+        * `CHARTER_REJECTED` - Charte Rejetée
+        * `CHARTER_PROCESSING` - Charte en Traitement
+        * `CHARTER_VALIDATED` - Charte Validée
+        * `CHARTER_EXPIRED` - Charte Expirée
     Commission:
       type: object
       description: Main serializer.
@@ -3692,6 +3769,10 @@ components:
         id:
           type: integer
           readOnly: true
+        size:
+          type: integer
+          description: Return file size.
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -3733,6 +3814,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProcessTypeEnum'
           title: Statut du Document
+        edition_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de dernière mise à jour
         institution:
           type: integer
           nullable: true
@@ -3742,7 +3828,9 @@ components:
           nullable: true
           title: Fonds
       required:
+      - edition_date
       - id
+      - size
     DocumentCreateRequest:
       type: object
       description: Serializer for document create.
@@ -3777,9 +3865,11 @@ components:
           readOnly: true
         path_file:
           type: string
+          description: Return a link to DocumentUploadFileRetrieve view.
           readOnly: true
         size:
           type: integer
+          description: Return file size.
           readOnly: true
         name:
           type: string
@@ -3795,6 +3885,10 @@ components:
           format: date
           nullable: true
           title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Commentaire
         document:
           type: integer
         user:
@@ -3825,26 +3919,13 @@ components:
           type: string
           title: Nom
           maxLength: 250
-        upload_date:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Date d'envoi
-        path_file:
-          type: string
-          format: uri
-          title: Fichier envoyé
-        validated_date:
-          type: string
-          format: date
-          nullable: true
-          title: Date de validation
         document:
           type: integer
         user:
-          type: integer
-          nullable: true
-          title: Utilisateur
+          type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
           nullable: true
@@ -3852,11 +3933,19 @@ components:
           type: integer
           nullable: true
           title: Projet
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
+        path_file:
+          type: string
+          format: uri
+          title: Fichier envoyé
       required:
       - document
       - id
       - path_file
-      - upload_date
     DocumentUploadCreateRequest:
       type: object
       description: Main serializer not overriding path_file.
@@ -3866,21 +3955,14 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
-        path_file:
-          type: string
-          format: binary
-          title: Fichier envoyé
-        validated_date:
-          type: string
-          format: date
-          nullable: true
-          title: Date de validation
         document:
           type: integer
         user:
-          type: integer
-          nullable: true
-          title: Utilisateur
+          type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         association:
           type: integer
           nullable: true
@@ -3888,6 +3970,15 @@ components:
           type: integer
           nullable: true
           title: Projet
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
+        path_file:
+          type: string
+          format: binary
+          title: Fichier envoyé
       required:
       - document
       - path_file
@@ -3914,6 +4005,10 @@ components:
           format: date
           nullable: true
           title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Commentaire
     ExternalUser:
       type: object
       description: External user serializer.
@@ -3966,9 +4061,11 @@ components:
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions links.
           readOnly: true
         is_public:
           type: boolean
+          description: Is true if the group can be selected on normal registration.
           readOnly: true
       required:
       - id
@@ -4002,6 +4099,9 @@ components:
       properties:
         user:
           type: string
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         group:
           type: integer
         institution:
@@ -4019,6 +4119,10 @@ components:
       properties:
         user:
           type: string
+          minLength: 1
+          title: Nom d’utilisateur
+          description: Requis. 150 caractères maximum. Uniquement des lettres, nombres
+            et les caractères « @ », « . », « + », « - » et « _ ».
         group:
           type: integer
         institution:
@@ -4071,15 +4175,15 @@ components:
       type: object
       description: Serializer for JWT authentication.
       properties:
-        access_token:
+        access:
           type: string
-        refresh_token:
+        refresh:
           type: string
         user:
           $ref: '#/components/schemas/User'
       required:
-      - access_token
-      - refresh_token
+      - access
+      - refresh
       - user
     LoginRequest:
       type: object
@@ -4094,6 +4198,32 @@ components:
           minLength: 1
       required:
       - password
+    Logo:
+      type: object
+      description: Main serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        acronym:
+          type: string
+          title: Acronyme
+        title:
+          type: string
+          title: Alt du logo
+        url:
+          type: string
+          title: URL du site
+        path_logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Miniatures dynamiques pour le logo
+        visible:
+          type: boolean
+          title: Est visible
+      required:
+      - id
     PasswordChangeRequest:
       type: object
       description: Overrided PasswordChangeSerializer to prevent CAS users to change
@@ -4176,6 +4306,8 @@ components:
         president_names:
           type: string
         president_phone:
+          type: string
+        president_email:
           type: string
         institution:
           type: integer
@@ -4323,14 +4455,22 @@ components:
           format: date
           nullable: true
           title: Date de validation
-    PatchedProjectCommentTextRequest:
+        comment:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Commentaire
+    PatchedProjectCommentUpdateRequest:
       type: object
-      description: Field that can be updated.
+      description: Fields that can be updated.
       properties:
         text:
           type: string
           minLength: 1
           title: Texte
+        is_visible:
+          type: boolean
+          title: Est visible
     PatchedProjectCommissionFundDataRequest:
       type: object
       description: Fields that can be updated by project's bearer.
@@ -4405,6 +4545,10 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
+          minLength: 1
+          title: Association co-porteuse
         budget_previous_edition:
           type: integer
           maximum: 2147483647
@@ -4429,6 +4573,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647
@@ -4463,6 +4612,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     PatchedProjectReviewUpdateRequest:
       type: object
       description: Main review serializer for update.
@@ -4524,6 +4678,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     PatchedUserRequest:
       type: object
       description: Main serializer.
@@ -4612,6 +4771,14 @@ components:
       - DOCUMENT_PROJECT_REVIEW
       - NO_PROCESS
       type: string
+      description: |-
+        * `CHARTER_ASSOCIATION` - Charte pour Association
+        * `CHARTER_PROJECT_FUND` - Charte pour Demande de Subvention
+        * `DOCUMENT_ASSOCIATION` - Document pour Association
+        * `DOCUMENT_USER` - Document pour Utilisateur
+        * `DOCUMENT_PROJECT` - Document pour Demande de Subvention
+        * `DOCUMENT_PROJECT_REVIEW` - Document pour Bilan de Subvention
+        * `NO_PROCESS` - Document non lié à un processus
     Project:
       type: object
       description: Main serializer.
@@ -4652,6 +4819,9 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
+          title: Association co-porteuse
         categories:
           type: array
           items:
@@ -4685,6 +4855,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647
@@ -4723,6 +4898,11 @@ components:
           format: date-time
           readOnly: true
           title: Date de dernière mise à jour
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
       required:
       - categories
       - commissions
@@ -4758,7 +4938,7 @@ components:
       - project
     ProjectComment:
       type: object
-      description: Main serializer
+      description: Main serializer.
       properties:
         id:
           type: integer
@@ -4770,6 +4950,9 @@ components:
         text:
           type: string
           title: Texte
+        is_visible:
+          type: boolean
+          title: Est visible
         creation_date:
           type: string
           format: date-time
@@ -4794,6 +4977,9 @@ components:
         project:
           type: integer
           title: Projet
+        is_visible:
+          type: boolean
+          title: Est visible
         text:
           type: string
           minLength: 1
@@ -4881,7 +5067,7 @@ components:
           title: Est validé par l'équipe d'administration
         commission_fund_id:
           type: integer
-          title: Fond lié à une Commission
+          title: Fonds lié à une Commission
           readOnly: true
         new_commission_fund_id:
           type: integer
@@ -5143,6 +5329,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        processing_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Date de dépôt de projet
     ProjectStatusEnum:
       enum:
       - PROJECT_DRAFT
@@ -5155,6 +5346,16 @@ components:
       - PROJECT_REVIEW_VALIDATED
       - PROJECT_CANCELED
       type: string
+      description: |-
+        * `PROJECT_DRAFT` - Projet en Brouillon
+        * `PROJECT_DRAFT_PROCESSED` - Projet en Brouillon mais traité
+        * `PROJECT_PROCESSING` - Projet en Traitement
+        * `PROJECT_REJECTED` - Projet Rejeté
+        * `PROJECT_VALIDATED` - Projet Validé
+        * `PROJECT_REVIEW_DRAFT` - Bilan de Projet en Brouillon
+        * `PROJECT_REVIEW_PROCESSING` - Bilan de Projet en Traitement
+        * `PROJECT_REVIEW_VALIDATED` - Bilan de Projet validé
+        * `PROJECT_CANCELED` - Projet Annulé
     ProjectUpdateRequest:
       type: object
       description: Main serializer without project_status.
@@ -5186,6 +5387,10 @@ components:
           type: integer
           nullable: true
           title: Membre d'association
+        partner_association:
+          type: string
+          minLength: 1
+          title: Association co-porteuse
         budget_previous_edition:
           type: integer
           maximum: 2147483647
@@ -5210,6 +5415,11 @@ components:
           maximum: 2147483647
           minimum: 0
           title: Quantité d'argent demandée par personne
+        student_ticket_price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Quantité d'argent demandée par étudiant
         individual_cost:
           type: integer
           maximum: 2147483647
@@ -5322,9 +5532,12 @@ components:
           type: string
         is_cas:
           type: boolean
+          description: Calculate field "is_cas" (True if user registered through CAS).
           readOnly: true
         has_validated_email:
           type: boolean
+          description: Calculate field "has_validated_email" (True if user finished
+            registration).
           readOnly: true
         is_validated_by_admin:
           type: boolean
@@ -5343,10 +5556,12 @@ components:
         groups:
           type: object
           additionalProperties: {}
+          description: Return groups-institutions-users links.
           readOnly: true
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions linked to the user.
           readOnly: true
       required:
       - associations
@@ -5437,9 +5652,12 @@ components:
           type: string
         is_cas:
           type: boolean
+          description: Calculate field "is_cas" (True if user registered through CAS).
           readOnly: true
         has_validated_email:
           type: boolean
+          description: Calculate field "has_validated_email" (True if user finished
+            registration).
           readOnly: true
         is_validated_by_admin:
           type: boolean
@@ -5458,10 +5676,12 @@ components:
         groups:
           type: object
           additionalProperties: {}
+          description: Return groups-institutions-users links.
           readOnly: true
         permissions:
           type: object
           additionalProperties: {}
+          description: Return permissions linked to the user.
           readOnly: true
       required:
       - associations

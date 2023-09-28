@@ -14,7 +14,8 @@ Plusieurs variables permettent d'intégrer le serveur CAS pour authentifier des 
 ## Stockage
 
 Le stockage des fichiers est optimisé pour un serveur S3 découpé en trois buckets :
-- `LOGO_FILEPATH` : nom du bucket pour stocker les logos des associations (voir modèle `Association`).
+- `LOGOS_FILEPATH` : nom du bucket pour stocker les logos du footer (voir modèle `Logo`).
+- `ASSOCIATIONS_LOGOS_FILEPATH` : nom du bucket pour stocker les logos des associations (voir modèle `Association`).
 - `TEMPLATES_FILEPATH` : nom du bucket pour stocker les modèles de documents publics (voir modèle `Document`).
 - `DOCUMENTS_FILEPATH` : nom du bucket pour stocker les documents des étudiantes et étudiants de manière chiffrée (voir modèle `DocumentUpload`).
 

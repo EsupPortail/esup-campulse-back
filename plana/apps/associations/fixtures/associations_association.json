@@ -18,6 +18,7 @@
       "student_count": 150,
       "president_names": "Ministère de l'Enseignement Supérieur et de la Recherche",
       "president_phone": "+33 6 00 11 22 33",
+      "president_email": "test@mail.tld",
       "creation_date": "2022-10-26T15:45:35.000Z",
       "approval_date": "2022-10-27",
       "last_goa_date": "2022-10-28",
@@ -88,7 +89,7 @@
       "institution_component_id": 1,
       "is_site": true,
       "is_public": false,
-      "is_enabled": false
+      "is_enabled": true
     }
   },
   {
@@ -102,7 +103,7 @@
       "institution_id": 5,
       "is_site": false,
       "is_public": false,
-      "is_enabled": false
+      "is_enabled": true
     }
   },
   {

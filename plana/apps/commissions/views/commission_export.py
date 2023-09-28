@@ -1,16 +1,19 @@
 """Views directly linked to commission exports."""
 import csv
+from tempfile import NamedTemporaryFile
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from openpyxl import Workbook
 from rest_framework import generics, response, status
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
-from plana.apps.commissions.models import CommissionFund, Fund
+from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models import (
     Category,
@@ -20,16 +23,31 @@ from plana.apps.projects.models import (
 )
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
+from plana.utils import generate_pdf
 
 
-class CommissionCSVExport(generics.RetrieveAPIView):
-    """/commissions/{id}/csv_export route"""
+class CommissionExport(generics.RetrieveAPIView):
+    """/commissions/{id}/export route."""
 
     permission_classes = [IsAuthenticated]
     queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "mode",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Export mode (xlsx, csv or pdf, csv by default).",
+            ),
+            OpenApiParameter(
+                "project_ids",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="Filter by Projects IDs.",
+            ),
+        ],
         responses={
             status.HTTP_200_OK: ProjectSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -37,13 +55,15 @@ class CommissionCSVExport(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Projects presented to the commission CSV export."""
+        """Projects presented to the commission export."""
+        mode = request.query_params.get("mode")
+        project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
         commission_id = kwargs["pk"]
 
         try:
-            self.queryset.get(id=kwargs["pk"])
+            commission = Commission.objects.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Commission does not exist.")},
@@ -64,13 +84,12 @@ class CommissionCSVExport(generics.RetrieveAPIView):
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
-        if not request.user.has_perm(
-            "projects.view_project_any_fund"
-        ) or not request.user.has_perm("projects.view_project_any_institution"):
+        if not request.user.has_perm("projects.view_project_any_fund") or not request.user.has_perm(
+            "projects.view_project_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
-                models.Q(user_id=request.user.pk)
-                | models.Q(association_id__in=user_associations_ids)
+                models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
             queryset = queryset.filter(
@@ -92,45 +111,54 @@ class CommissionCSVExport(generics.RetrieveAPIView):
             )
 
         fields = [
-            _("Project ID"),
-            _("Project name"),
-            _("Manual identifier"),
-            _("Association name"),
-            _("Student misc name"),
-            _("Project start date"),
-            _("Project end date"),
-            _("First edition"),
-            _("Categories"),
+            str(_("Identifier")),
+            str(_("Project name")),
+            str(_("Association name")),
+            str(_("Student misc name")),
+            str(_("Project start date")),
+            str(_("Project end date")),
+            str(_("First edition")),
+            str(_("Categories")),
         ]
 
         funds = Fund.objects.all().order_by("acronym")
         for fund in funds:
             acronym = fund.acronym
-            fields.append(_("Amount asked ") + acronym)
-            fields.append(_("Amount earned ") + acronym)
+            fields.append(str(_("Amount asked ") + acronym))
+            fields.append(str(_("Amount earned ") + acronym))
 
         projects = queryset.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                commission_fund_id__in=CommissionFund.objects.filter(
-                    commission_id=commission_id
-                ).values("id")
-            )
+                commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission_id).values("id")
+            ).values("project_id")
         ).order_by("id")
 
-        http_response = HttpResponse(content_type="application/csv")
-        http_response[
-            "Content-Disposition"
-        ] = f"Content-Disposition: attachment; filename=commission_{commission_id}_export.csv"
+        if project_ids is not None and project_ids != "":
+            projects = projects.filter(id__in=project_ids.split(","))
 
-        writer = csv.writer(http_response, delimiter=";")
-        # Write column titles for the CSV file
-        writer.writerow([field for field in fields])
+        data = {"projects": []}
+        http_response = None
+        writer = None
+        workbook = None
+        worksheet = None
+        filename = f"commission_{commission_id}_export"
+        if mode is None or mode == "csv":
+            http_response = HttpResponse(content_type="application/csv")
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
+            writer = csv.writer(http_response, delimiter=";")
+            writer.writerow([field for field in fields])
+        elif mode == "xlsx":
+            workbook = Workbook()
+            worksheet = workbook.active
+            for index_field, field in enumerate(fields):
+                worksheet.cell(row=1, column=index_field + 1).value = field
+        elif mode == "pdf":
+            data["name"] = commission.name
+            data["fields"] = fields
 
-        for project in projects:
+        for index_project, project in enumerate(projects):
             association = (
-                None
-                if project.association_id is None
-                else Association.objects.get(id=project.association_id).name
+                None if project.association_id is None else Association.objects.get(id=project.association_id).name
             )
 
             if project.user_id is None:
@@ -141,27 +169,22 @@ class CommissionCSVExport(generics.RetrieveAPIView):
 
             categories = list(
                 Category.objects.filter(
-                    id__in=ProjectCategory.objects.filter(
-                        project_id=project.id
-                    ).values_list("category_id")
+                    id__in=ProjectCategory.objects.filter(project_id=project.id).values_list("category_id")
                 ).values_list("name", flat=True)
             )
             categories = ', '.join(categories)
 
-            project_commission_funds = ProjectCommissionFund.objects.filter(
-                project_id=project.id
-            )
+            project_commission_funds = ProjectCommissionFund.objects.filter(project_id=project.id)
 
-            is_first_edition = _("Yes")
+            is_first_edition = str(_("Yes"))
             for edition in project_commission_funds:
                 if not edition.is_first_edition:
-                    is_first_edition = _("No")
+                    is_first_edition = str(_("No"))
                     break
 
             fields = [
-                project.id,
-                project.name,
                 project.manual_identifier,
+                project.name,
                 association,
                 user,
                 project.planned_start_date.date(),
@@ -173,9 +196,7 @@ class CommissionCSVExport(generics.RetrieveAPIView):
                 try:
                     pcf = ProjectCommissionFund.objects.get(
                         project_id=project.id,
-                        commission_fund_id=CommissionFund.objects.get(
-                            commission_id=commission_id, fund_id=fund.id
-                        ).id,
+                        commission_fund_id=CommissionFund.objects.get(commission_id=commission_id, fund_id=fund.id).id,
                     )
                     fields.append(pcf.amount_asked)
                     fields.append(pcf.amount_earned)
@@ -183,7 +204,32 @@ class CommissionCSVExport(generics.RetrieveAPIView):
                     fields.append(0)
                     fields.append(0)
 
-            # Write CSV file content
-            writer.writerow([field for field in fields])
+            if mode is None or mode == "csv":
+                # Write CSV file content
+                writer.writerow([field for field in fields])
+            elif mode == "xlsx":
+                for index_field, field in enumerate(fields):
+                    worksheet.cell(row=index_project + 2, column=index_field + 1).value = field
+            elif mode == "pdf":
+                data["projects"].append(fields)
 
-        return http_response
+        if mode is None or mode == "csv":
+            return http_response
+        if mode == "xlsx":
+            with NamedTemporaryFile() as tmp:
+                workbook.save(tmp.name)
+                tmp.seek(0)
+                stream = tmp.read()
+            http_response = HttpResponse(
+                content=stream,
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
+            return http_response
+        if mode == "pdf":
+            return generate_pdf(
+                data["name"],
+                data,
+                "commission_projects_list",
+                request.build_absolute_uri("/"),
+            )

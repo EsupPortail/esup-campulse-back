@@ -31,9 +31,7 @@ urlpatterns = [
     path("projects/", include("plana.apps.projects.urls")),
     path("users/", include("plana.apps.users.urls")),
     path("admin/", admin.site.urls),
-    path(
-        "api/schema/", SpectacularAPIView.as_view(), name="schema"
-    ),  # Downloads schema.yml
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),  # Downloads schema.yml
     path(
         "api/schema/swagger-ui/",
         SpectacularSwaggerView.as_view(url_name="schema"),
@@ -44,8 +42,9 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path('summernote/', include('django_summernote.urls')),
-    path('mail_template/', include('plana.libs.mail_template.urls')),
+    path("summernote/", include('django_summernote.urls')),
+    path("mail_template/", include('plana.libs.mail_template.urls')),
+    path("_hc/", include('health_check.urls')),
 ]
 
 # debug toolbar for dev

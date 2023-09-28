@@ -21,9 +21,7 @@ env.root_package_name = 'plana'  # name of app in webapp
 env.remote_home = '/home/django'  # remote home root
 env.remote_python_version = '3.9'  # python version
 env.remote_virtualenv_root = join(env.remote_home, '.virtualenvs')  # venv root
-env.remote_virtualenv_dir = join(
-    env.remote_virtualenv_root, env.application_name
-)  # venv for webapp dir
+env.remote_virtualenv_dir = join(env.remote_virtualenv_root, env.application_name)  # venv for webapp dir
 # git repository url
 env.remote_repo_url = 'git@git.unistra.fr:di/plan_a/plana.git'
 env.local_tmp_dir = '/tmp'  # tmp dir
@@ -61,7 +59,9 @@ env.extra_symlink_dirs = ['keys']
 env.no_circus_web = True  # Avoid using circusweb dashboard (buggy in last releases)
 # env.circus_backend = 'gevent' # name of circus backend to use
 
-env.chaussette_backend = 'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
+env.chaussette_backend = (
+    'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
+)
 
 
 env.nginx_location_extra_directives = [
@@ -170,24 +170,31 @@ def preprod():
 @task
 def prod():
     """Define prod stage"""
-    env.roledefs = {'web': ['plana.net'], 'lb': ['lb.plana.net']}
+    env.roledefs = {
+        'web': ['django-w7.di.unistra.fr', 'django-w8.di.unistra.fr'],
+        'lb': ['rp-dip-public-m.di.unistra.fr', 'rp-dip-public-s.di.unistra.fr'],
+    }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.server_name = 'plana.net'
-    env.short_server_name = 'plana'
+    env.server_name = 'api.etu-campulse.fr'
+    env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
-    env.server_ip = ''
+    env.server_ip = '130.79.245.214'
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = '/etc/ssl/certs/plana.net.pem'
-    env.path_to_cert_key = '/etc/ssl/private/plana.net.key'
+    env.path_to_cert = '/etc/ssl/certs/etu-campulse_fr_with_chain.cer'
+    env.path_to_cert_key = '/etc/ssl/private/etu-campulse.fr.key'
     env.goal = 'prod'
-    env.socket_port = ''
+    env.socket_port = '8014'
     env.map_settings = {
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_user': 'DATABASES["default"]["USER"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
+        's3_access_key': "AWS_ACCESS_KEY_ID",
+        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
+        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
+        's3_endpoint': "AWS_S3_ENDPOINT_URL",
         'secret_key': 'SECRET_KEY',
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',

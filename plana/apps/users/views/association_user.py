@@ -25,7 +25,7 @@ from plana.utils import send_mail, to_bool
 
 
 class AssociationUserListCreate(generics.ListCreateAPIView):
-    """/users/associations/ route"""
+    """/users/associations/ route."""
 
     queryset = AssociationUser.objects.all()
 
@@ -72,7 +72,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         tags=["users/associations"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all associations linked to a user, or all associations of all users (manager)."""
+        """List all associations linked to a user, or all associations of all users (manager)."""
         association_id = request.query_params.get("association_id")
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
         institutions = request.query_params.get("institutions")
@@ -90,9 +90,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(user_id=request.user.pk)
 
         if is_validated_by_admin is not None and is_validated_by_admin != "":
-            self.queryset = self.queryset.filter(
-                is_validated_by_admin=to_bool(is_validated_by_admin)
-            )
+            self.queryset = self.queryset.filter(is_validated_by_admin=to_bool(is_validated_by_admin))
 
         if institutions is not None and institutions != "":
             institutions_ids = institutions.split(",")
@@ -102,9 +100,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 if institution_id != "" and institution_id.isdigit()
             ]
             self.queryset = self.queryset.filter(
-                association_id__in=Association.objects.filter(
-                    institution_id__in=institutions_ids
-                ).values_list("id")
+                association_id__in=Association.objects.filter(institution_id__in=institutions_ids).values_list("id")
             )
 
         return self.list(request, *args, **kwargs)
@@ -119,7 +115,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         tags=["users/associations"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new link between a user and an association."""
+        """Create a new link between a user and an association."""
         try:
             username = request.data["user"]
             association_id = request.data["association"]
@@ -149,9 +145,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         # TODO Remove is_staff check to use another helper.
         if (
             request.user.is_staff
-            and not request.user.has_perm(
-                "users.change_associationuser_any_institution"
-            )
+            and not request.user.has_perm("users.change_associationuser_any_institution")
             and not request.user.is_staff_for_association(association_id)
         ):
             return response.Response(
@@ -163,18 +157,12 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             to_bool(request.data["is_validated_by_admin"]) is True
             and request.user.is_anonymous
             or (
-                not request.user.has_perm(
-                    "users.change_associationuser_any_institution"
-                )
+                not request.user.has_perm("users.change_associationuser_any_institution")
                 and not request.user.is_staff_for_association(association_id)
             )
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Only managers can validate associations for this account."
-                    )
-                },
+                {"error": _("Only managers can validate associations for this account.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -188,9 +176,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        association_users = AssociationUser.objects.filter(
-            association_id=association_id
-        )
+        association_users = AssociationUser.objects.filter(association_id=association_id)
         if (
             not association.amount_members_allowed is None
             and association_users.count() >= association.amount_members_allowed
@@ -200,19 +186,14 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        association_user = AssociationUser.objects.filter(
-            user_id=user.id, association_id=association_id
-        )
+        association_user = AssociationUser.objects.filter(user_id=user.id, association_id=association_id)
         if association_user.count() > 0:
             return response.Response(
                 {"error": _("User already in association.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            "is_president" in request.data
-            and to_bool(request.data["is_president"]) is True
-        ):
+        if "is_president" in request.data and to_bool(request.data["is_president"]) is True:
             association_user_president = AssociationUser.objects.filter(
                 association_id=association_id, is_president=True
             )
@@ -231,6 +212,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         if "is_validated_by_admin" not in request.data or (
             "is_validated_by_admin" in request.data
             and (to_bool(request.data["is_validated_by_admin"]) is False)
+            and user.is_validated_by_admin is True
         ):
             current_site = get_current_site(request)
             context = {
@@ -238,7 +220,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 "site_name": current_site.name,
                 "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
             }
-            template = MailTemplate.objects.get(code="USER_ASSOCIATION_MANAGER_MESSAGE")
+            template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=list(
@@ -246,9 +228,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                     .default_institution_managers()
                     .values_list("email", flat=True)
                 ),
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -256,7 +236,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
 
 class AssociationUserRetrieve(generics.RetrieveAPIView):
-    """/users/{user_id}/associations/ route"""
+    """/users/{user_id}/associations/ route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
@@ -272,7 +252,7 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
         tags=["users/associations"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all associations linked to a user (manager)."""
+        """Retrieve all associations linked to a user (manager)."""
         try:
             User.objects.get(id=kwargs["user_id"])
         except ObjectDoesNotExist:
@@ -281,27 +261,18 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if (
-            request.user.has_perm("users.view_associationuser_anyone")
-            or kwargs["user_id"] == request.user.pk
-        ):
-            serializer = self.serializer_class(
-                self.queryset.filter(user_id=kwargs["user_id"]), many=True
-            )
+        if request.user.has_perm("users.view_associationuser_anyone") or kwargs["user_id"] == request.user.pk:
+            serializer = self.serializer_class(self.queryset.filter(user_id=kwargs["user_id"]), many=True)
         else:
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to get this link between association and user."
-                    )
-                },
+                {"error": _("Not allowed to get this link between association and user.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
         return response.Response(serializer.data)
 
 
 class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/users/{user_id}/associations/{association_id} route"""
+    """/users/{user_id}/associations/{association_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
@@ -343,7 +314,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["users/associations"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates user role in an association (manager and president)."""
+        """Update user role in an association (manager and president)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -363,9 +334,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         try:
-            asso_user = self.queryset.get(
-                user_id=kwargs["user_id"], association_id=kwargs["association_id"]
-            )
+            asso_user = self.queryset.get(user_id=kwargs["user_id"], association_id=kwargs["association_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Link between this user and association does not exist.")},
@@ -394,19 +363,11 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and not request.user.is_staff_for_association(kwargs["association_id"])
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Only managers can validate associations for this account."
-                    )
-                },
+                {"error": _("Only managers can validate associations for this account.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            "is_president" in request.data
-            and president
-            and asso_user.user_id == request.user.pk
-        ):
+        if "is_president" in request.data and president and asso_user.user_id == request.user.pk:
             return response.Response(
                 {"error": _("President cannot self-edit.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -436,50 +397,31 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.data["can_be_president_from"] is not None
             and "can_be_president_to" in request.data
             and request.data["can_be_president_to"] is not None
-            and datetime.datetime.strptime(
-                request.data["can_be_president_from"], "%Y-%m-%d"
-            )
-            > datetime.datetime.strptime(
-                request.data["can_be_president_to"], "%Y-%m-%d"
-            )
+            and datetime.datetime.strptime(request.data["can_be_president_from"], "%Y-%m-%d")
+            > datetime.datetime.strptime(request.data["can_be_president_to"], "%Y-%m-%d")
         ):
             return response.Response(
                 {"error": _("Can't remove president delegation before giving it.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            "can_be_president_from" in request.data
-            and not "can_be_president_to" in request.data
-        ):
+        if "can_be_president_from" in request.data and not "can_be_president_to" in request.data:
             request.data["can_be_president_to"] = None
 
-        if (
-            "can_be_president_to" in request.data
-            and not "can_be_president_from" in request.data
-        ):
+        if "can_be_president_to" in request.data and not "can_be_president_from" in request.data:
             request.data["can_be_president_from"] = datetime.date.today()
 
-        if (
-            "is_vice_president" in request.data
-            and to_bool(request.data["is_vice_president"]) is True
-        ):
+        if "is_vice_president" in request.data and to_bool(request.data["is_vice_president"]) is True:
             request.data["is_president"] = False
             request.data["is_secretary"] = False
             request.data["is_treasurer"] = False
 
-        if (
-            "is_secretary" in request.data
-            and to_bool(request.data["is_secretary"]) is True
-        ):
+        if "is_secretary" in request.data and to_bool(request.data["is_secretary"]) is True:
             request.data["is_president"] = False
             request.data["is_vice_president"] = False
             request.data["is_treasurer"] = False
 
-        if (
-            "is_treasurer" in request.data
-            and to_bool(request.data["is_treasurer"]) is True
-        ):
+        if "is_treasurer" in request.data and to_bool(request.data["is_treasurer"]) is True:
             request.data["is_president"] = False
             request.data["is_vice_president"] = False
             request.data["is_secretary"] = False
@@ -522,35 +464,24 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 or request.user.is_staff_for_association(kwargs["association_id"])
             )
         ):
-            template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_STUDENT_MESSAGE_CONFIRMATION"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_USER_CONFIRMATION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
         if (
             "can_be_president_from" in request.data
             and "can_be_president_to" in request.data
-            and (
-                request.data["can_be_president_from"] is not None
-                or request.data["can_be_president_to"] is not None
-            )
+            and (request.data["can_be_president_from"] is not None or request.data["can_be_president_to"] is not None)
         ):
-            template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_CAN_BE_PRESIDENT_CONFIRMATION"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_PRESIDENT_CONFIRMATION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
@@ -584,17 +515,11 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.user.pk != kwargs["user_id"]
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Not allowed to delete this link between association and user."
-                    )
-                },
+                {"error": _("Not allowed to delete this link between association and user.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        AssociationUser.objects.filter(
-            user_id=kwargs["user_id"], association_id=kwargs["association_id"]
-        ).delete()
+        AssociationUser.objects.filter(user_id=kwargs["user_id"], association_id=kwargs["association_id"]).delete()
         if request.user.has_perm(
             "users.delete_associationuser_any_institution"
         ) or request.user.is_staff_for_association(kwargs["association_id"]):
@@ -606,15 +531,11 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 "last_name": user.last_name,
                 "association_name": association.name,
             }
-            template = MailTemplate.objects.get(
-                code="USER_ASSOCIATION_STUDENT_MESSAGE_REJECTION"
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_USER_REJECTION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
-                subject=template.subject.replace(
-                    "{{ site_name }}", context["site_name"]
-                ),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
         return response.Response({}, status=status.HTTP_204_NO_CONTENT)

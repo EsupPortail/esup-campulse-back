@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.users.models.user import User
 
 
 class DocumentUploadSerializer(serializers.ModelSerializer):
@@ -21,7 +22,9 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.INT)
     def get_size(self, document):
         """Return file size."""
-        return document.path_file.size
+        if document.path_file:
+            return document.path_file.size
+        return 0
 
     class Meta:
         model = DocumentUpload
@@ -31,9 +34,20 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
 class DocumentUploadCreateSerializer(serializers.ModelSerializer):
     """Main serializer not overriding path_file."""
 
+    user = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all(), required=False)
+
     class Meta:
         model = DocumentUpload
-        fields = "__all__"
+        fields = [
+            "id",
+            "name",
+            "document",
+            "user",
+            "association",
+            "project",
+            "validated_date",
+            "path_file",
+        ]
 
 
 class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
@@ -41,7 +55,7 @@ class DocumentUploadUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentUpload
-        fields = ["validated_date"]
+        fields = ["validated_date", "comment"]
 
 
 class DocumentUploadFileSerializer(serializers.ModelSerializer):

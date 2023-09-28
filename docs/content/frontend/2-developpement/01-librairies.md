@@ -6,18 +6,21 @@ weight: 211
 ## Librairies et frameworks
 
 - [vue](https://www.npmjs.com/package/vue) : framework général.
+- [@quasar/extras](https://www.npmjs.com/package/@quasar/extras) : icônes.
 - [@sentry/vue](https://www.npmjs.com/package/@sentry/vue) : bug reporting.
 - [axios](https://www.npmjs.com/package/axios) : requêtes vers l'API.
 - [bootstrap-icons](https://www.npmjs.com/package/bootstrap-icons) : icônes.
 - [pinia](https://www.npmjs.com/package/pinia) : store de données.
 - [quasar](https://www.npmjs.com/package/quasar) : framework de composants.
 - [vue-i18n](https://www.npmjs.com/package/vue-i18n) : traduction.
+- [vue-matomo](https://www.npmjs.com/package/vue-matomo) : tracking.
 - [vue-router](https://www.npmjs.com/package/vue-router) : routing.
 - [zxcvbn](https://www.npmjs.com/package/zxcvbn) : estimation de la force d'un mot de passe.
 - [@vue-unistra/cas-authentication](https://git.unistra.fr/vue-unistra/cas-authentication) : plugin d'authentification vers CAS.
 
 ## Utilitaires de développement
 
+- [@intlify/eslint-plugin-vue-i18n](https://www.npmjs.com/package/@intlify/eslint-plugin-vue-i18n) : optimisation du linter pour les traductions.
 - [@intlify/unplugin-vue-i18n](https://www.npmjs.com/package/@intlify/unplugin-vue-i18n) : optimisation du plugin de traductions pour le bundler.
 - [@pinia/testing](https://www.npmjs.com/package/@pinia/testing) : suite de tests pour le store de données.
 - [@quasar/vite-plugin](https://www.npmjs.com/package/@quasar/vite-plugin) : optimisation du framework de composants pour le bundler.
@@ -25,7 +28,7 @@ weight: 211
 - [@types/node](https://www.npmjs.com/package/@types/node) : types pour Node.
 - [@types/zxcvbn](https://www.npmjs.com/package/@types/zxcvbn) : types pour zxcvbn.
 - [@vitejs/plugin-vue](https://www.npmjs.com/package/@vitejs/plugin-vue) : optimisation du framework pour le bundler.
-- [@vitest/coverage-c8](https://www.npmjs.com/package/@vitest/coverage-c8) : couverture des tests.
+- [@vitest/coverage-v8](https://www.npmjs.com/package/@vitest/coverage-v8) : couverture des tests.
 - [@vitest/ui](https://www.npmjs.com/package/@vitest/ui) : interface graphique de la suite de tests.
 - [@vue/eslint-config-typescript](https://www.npmjs.com/package/@vue/eslint-config-typescript) : optimisation du linter pour TypeScript.
 - [@vue/test-utils](https://www.npmjs.com/package/@vue/test-utils) : suite de tests pour le framework.

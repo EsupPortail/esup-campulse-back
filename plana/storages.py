@@ -19,7 +19,7 @@ from thumbnails.files import ThumbnailedImageFile, ThumbnailManager
 PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
 
-PUBLIC_CLASSES_NAMES = ["Association", "Document"]
+PUBLIC_CLASSES_NAMES = ["Logo", "Association", "Document"]
 PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
 
 
@@ -33,7 +33,7 @@ class MediaStorage(S3Boto3Storage):
 
 
 class UpdateACLStorage(S3Boto3Storage):
-    """Inspired by https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
+    """https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
 
     def update_acl(self, name, acl=None):
         acl = acl or self.default_acl
@@ -67,18 +67,14 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         self.age_private_key = settings.AGE_PRIVATE_KEY
 
         try:
-            self.identity = x25519.Identity.from_str(
-                self.age_private_key.decode("utf-8").strip()
-            )
+            self.identity = x25519.Identity.from_str(self.age_private_key.decode("utf-8").strip())
         except Exception as error:
-            raise ImproperlyConfigured(f"AGE private key not found : {error}")
+            raise ImproperlyConfigured(f"AGE private key not found : {error}") from error
 
         try:
-            self.recipient = x25519.Recipient.from_str(
-                self.age_public_key.decode("utf-8").strip()
-            )
+            self.recipient = x25519.Recipient.from_str(self.age_public_key.decode("utf-8").strip())
         except Exception as error:
-            raise ImproperlyConfigured(f"AGE public key not found : {error}")
+            raise ImproperlyConfigured(f"AGE public key not found : {error}") from error
 
     def _open(self, name, mode="rb"):
         file = super()._open(name, mode)
@@ -140,9 +136,7 @@ class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
     def __init__(self, instance, field, name, **kwargs):
         FieldFile.__init__(self, instance, field, name)
         if instance.__class__.__name__ in PRIVATE_CLASSES_NAMES:
-            self.storage = EncryptedPrivateFileStorage(
-                querystring_expire=self.querystring_expire
-            )
+            self.storage = EncryptedPrivateFileStorage(querystring_expire=self.querystring_expire)
         else:
             self.storage = PublicFileStorage()
 

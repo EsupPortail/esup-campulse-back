@@ -34,9 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
-                "group_id"
-            )
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list("group_id")
         )
         for group in groups:
             permissions = [
@@ -61,6 +59,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
+        if value == '':
+            return value
         pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
         if not re.match(pattern, value):
             raise serializers.ValidationError("Wrong phone number format.")
@@ -113,9 +113,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         """Return permissions linked to the user."""
         permissions = []
         groups = Group.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list(
-                "group_id"
-            )
+            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list("group_id")
         )
         for group in groups:
             permissions = [
@@ -140,6 +138,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
+        if value == '':
+            return value
         pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
         if not re.match(pattern, value):
             raise serializers.ValidationError("Wrong phone number format.")
@@ -204,16 +204,11 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=False, allow_blank=True)
 
     def save(self, request):
+        """Save the user."""
         self.cleaned_data = request.data
         if self.cleaned_data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
             raise exceptions.ValidationError(
-                {
-                    "detail": [
-                        _(
-                            "This email address cannot be used to create a local account."
-                        )
-                    ]
-                }
+                {"detail": [_("This email address cannot be used to create a local account.")]}
             )
         adapter = get_adapter()
         user = adapter.new_user(request)

@@ -105,9 +105,7 @@ class CommissionDatesViewsTests(TestCase):
                 datetime.date,
             )
         ]
-        response = self.client.get(
-            f"/commissions/?dates={','.join(str(x) for x in dates)}"
-        )
+        response = self.client.get(f"/commissions/?dates={','.join(str(x) for x in dates)}")
         commissions_cnt = Commission.objects.filter(commission_date__in=dates).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
@@ -134,13 +132,9 @@ class CommissionDatesViewsTests(TestCase):
         - funds filters by Fund linked to Commission through CommissionFund.
         """
         fund_ids = [1, 3]
-        response = self.client.get(
-            f"/commissions/?funds={','.join(str(x) for x in fund_ids)}"
-        )
+        response = self.client.get(f"/commissions/?funds={','.join(str(x) for x in fund_ids)}")
         commissions_cnt = Commission.objects.filter(
-            id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list(
-                "commission_id"
-            )
+            id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
@@ -168,52 +162,52 @@ class CommissionDatesViewsTests(TestCase):
         - with_active_projects returns commissions depending on their projects statuses.
         - only_with_active_projects returns commissions depending on their projects statuses.
         """
-        inactive_projects = Project.visible_objects.filter(
-            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-        )
-        commissions_with_inactive_projects = Commission.objects.filter(
+        commissions_ids_without_projects = CommissionFund.objects.exclude(
             id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=inactive_projects
+                project_id__in=Project.objects.all().values_list("id")
             ).values_list("commission_fund_id")
-        )
-        response = self.client.get("/commissions/?with_active_projects=false")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_inactive_projects.count())
-
-        commissions_with_active_projects = Commission.objects.exclude(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=inactive_projects
-            ).values_list("commission_fund_id")
-        )
-        response = self.client.get("/commissions/?with_active_projects=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_active_projects.count())
+        ).values_list("commission_id")
 
         commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
                 project_id__in=Project.visible_objects.filter(
                     project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                )
+                ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
+        commissions_with_inactive_projects = Commission.objects.filter(
+            models.Q(id__in=commissions_ids_with_inactive_projects) | models.Q(id__in=commissions_ids_without_projects)
+        )
         commissions_ids_with_active_projects = CommissionFund.objects.filter(
             id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.visible_objects.filter(
+                project_id__in=Project.visible_objects.exclude(
                     project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                )
+                ).values_list("id")
             ).values_list("commission_fund_id")
         ).values_list("commission_id")
+        commissions_with_active_projects = Commission.objects.filter(
+            models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
+        )
+
+        response = self.client.get("/commissions/?with_active_projects=false")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commissions_with_inactive_projects.count())
+
+        response = self.client.get("/commissions/?with_active_projects=true")
+        content = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content), commissions_with_active_projects.count())
 
         commissions_only_with_inactive_projects = Commission.objects.filter(
             id__in=commissions_ids_with_inactive_projects
         ).exclude(id__in=commissions_ids_with_active_projects)
+        commissions_only_with_active_projects = Commission.objects.exclude(
+            id__in=commissions_ids_with_inactive_projects
+        ).filter(id__in=commissions_ids_with_active_projects)
+
         response = self.client.get("/commissions/?only_with_active_projects=false")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_only_with_inactive_projects.count())
 
-        commissions_only_with_active_projects = Commission.objects.exclude(
-            id__in=commissions_ids_with_inactive_projects
-        ).filter(id__in=commissions_ids_with_active_projects)
         response = self.client.get("/commissions/?only_with_active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_only_with_active_projects.count())
@@ -224,7 +218,6 @@ class CommissionDatesViewsTests(TestCase):
 
         - managed_projects returns funds where current user manages projects.
         """
-
         commissions_with_managed_projects = Commission.objects.filter(
             models.Q(
                 id__in=CommissionFund.objects.filter(

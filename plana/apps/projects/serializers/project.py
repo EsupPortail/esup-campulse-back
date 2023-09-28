@@ -24,6 +24,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "user",
             "association",
             "association_user",
+            "partner_association",
             "categories",
             "commissions",
             "budget_previous_edition",
@@ -31,6 +32,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "amount_students_audience",
             "amount_all_audience",
             "ticket_price",
+            "student_ticket_price",
             "individual_cost",
             "goals",
             "summary",
@@ -41,6 +43,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "project_status",
             "creation_date",
             "edition_date",
+            "processing_date",
         ]
 
 
@@ -62,6 +65,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "user",
             "association",
             "association_user",
+            "partner_association",
             "categories",
             "commissions",
             "budget_previous_edition",
@@ -69,6 +73,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "amount_students_audience",
             "amount_all_audience",
             "ticket_price",
+            "student_ticket_price",
             "individual_cost",
             "goals",
             "summary",
@@ -117,4 +122,4 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ["project_status"]
+        fields = ["project_status", "processing_date"]

@@ -21,7 +21,7 @@ def get_logo_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.LOGO_FILEPATH if hasattr(settings, 'LOGO_FILEPATH') else '',
+            settings.ASSOCIATIONS_LOGOS_FILEPATH if hasattr(settings, 'ASSOCIATIONS_LOGOS_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
@@ -33,12 +33,8 @@ def get_logo_path(instance, filename):
 class Association(models.Model):
     """Main model."""
 
-    name = models.CharField(
-        _("Name"), max_length=250, null=False, blank=False, unique=True
-    )
-    email = models.EmailField(
-        _("Email"), max_length=256, null=False, blank=False, unique=True
-    )
+    name = models.CharField(_("Name"), max_length=250, null=False, blank=False, unique=True)
+    email = models.EmailField(_("Email"), max_length=256, null=False, blank=False, unique=True)
     acronym = models.CharField(_("Acronym"), default="", max_length=30)
     path_logo = DynamicThumbnailImageField(
         _("Dynamic thumbnails for the logo"),
@@ -60,11 +56,10 @@ class Association(models.Model):
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), default="", max_length=256)
     president_phone = models.CharField(_("President phone"), default="", max_length=32)
+    president_email = models.EmailField(_("President email"), default="", max_length=256)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
-    is_site = models.BooleanField(
-        _("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT
-    )
+    is_site = models.BooleanField(_("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT)
     amount_members_allowed = models.PositiveIntegerField(
         _("Amount of members allowed"),
         default=settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED,
@@ -82,18 +77,12 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
-    charter_date = models.DateField(
-        _("Charter date"), null=True
-    )  # date de dernier dépôt de charte
+    charter_date = models.DateField(_("Charter date"), null=True)  # date de dernier dépôt de charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateField(_("Approval date"), null=True)  # date d'agrément
-    last_goa_date = models.DateField(
-        _("Last GOA date"), null=True
-    )  # date de dernière AGO
+    last_goa_date = models.DateField(_("Last GOA date"), null=True)  # date de dernière AGO
     cga_date = models.DateField(_("CGA date"), null=True)  # date d'AG constitutive
-    social_networks = models.JSONField(
-        default=list
-    )  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
+    social_networks = models.JSONField(default=list)  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
     institution = models.ForeignKey(
         Institution,
         verbose_name=_("Institution"),
@@ -142,6 +131,10 @@ class Association(models.Model):
                 "delete_association_any_institution",
                 "Can delete an association from any institution.",
             ),
+            (
+                "view_association_all_fields",
+                "Can view association private fields.",
+            ),
             ("view_association_not_enabled", "Can view a not enabled association."),
             ("view_association_not_public", "Can view a not public association."),
         ]
@@ -158,7 +151,7 @@ class SpaceRemovedValue(models.Transform):
 
     def as_sql(self, compiler, connection):
         lhs, params = compiler.compile(self.lhs)
-        return "REPLACE(%s, ' ', '')" % lhs, params
+        return f"REPLACE({lhs}, ' ', '')", params
 
 
 models.CharField.register_lookup(SpaceRemovedValue)

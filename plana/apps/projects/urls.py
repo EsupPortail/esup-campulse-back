@@ -32,9 +32,7 @@ urlpatterns = [
         ProjectRetrieveUpdateDestroy.as_view(),
         name="project_retrieve_update_destroy",
     ),
-    path(
-        "<int:pk>/pdf_export", ProjectDataExport.as_view(), name="project_data_export"
-    ),
+    path("<int:pk>/pdf_export", ProjectDataExport.as_view(), name="project_data_export"),
     path(
         "<int:pk>/review",
         ProjectReviewRetrieveUpdate.as_view(),
@@ -45,9 +43,7 @@ urlpatterns = [
         ProjectReviewDataExport.as_view(),
         name="project_review_data_export",
     ),
-    path(
-        "<int:pk>/status", ProjectStatusUpdate.as_view(), name="project_status_update"
-    ),
+    path("<int:pk>/status", ProjectStatusUpdate.as_view(), name="project_status_update"),
     path(
         "categories",
         ProjectCategoryListCreate.as_view(),

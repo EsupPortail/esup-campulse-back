@@ -17,6 +17,7 @@ class TestLocalUserPasswordChangeSerializer(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Defalut data to test password change."""
         user = User.objects.create_user(
             username="Georges",
             email="georges@saucisse.fr",
@@ -47,6 +48,7 @@ class TestLocalUserPasswordResetSerializer(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Defalut data to test password reset."""
         user = User.objects.create_user(
             username="Georges",
             email="georges@saucisse.fr",
@@ -81,6 +83,7 @@ class TestCASUserPasswordChangeSerializer(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Defalut data to test password change with CAS."""
         user = User.objects.create_user(
             username="GeorgesCAS",
             email="georges-cas@unistra.fr",
@@ -114,6 +117,7 @@ class TestCASUserPasswordResetSerializer(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Defalut data to test password reset with CAS."""
         user = User.objects.create_user(
             username="GeorgesCAS",
             email="georges-cas@unistra.fr",

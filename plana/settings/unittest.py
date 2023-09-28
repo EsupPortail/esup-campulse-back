@@ -1,3 +1,4 @@
+"""Configuration for unit tests environment."""
 from os import environ
 from os.path import normpath
 
@@ -39,9 +40,7 @@ ALLOWED_HOSTS = ["*"]
 # Log configuration #
 #####################
 
-LOGGING["handlers"]["file"]["filename"] = environ.get(
-    "LOG_DIR", normpath(join("/tmp", "test_%s.log" % SITE_NAME))
-)
+LOGGING["handlers"]["file"]["filename"] = environ.get("LOG_DIR", normpath(join("/tmp", f"test_{SITE_NAME}.log")))
 LOGGING["handlers"]["file"]["level"] = "DEBUG"
 
 for logger in LOGGING["loggers"]:
@@ -83,11 +82,11 @@ REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = [
 # AUTHENTICATION #
 ##################
 
-JWT_AUTH_COOKIE = "plana-auth"
-JWT_AUTH_REFRESH_COOKIE = "plana-refresh-auth"
-
 SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": settings.SECRET_KEY,
     "VERIFYING_KEY": "",
 }
+
+REST_AUTH["JWT_AUTH_COOKIE"] = "plana-auth"
+REST_AUTH["JWT_AUTH_REFRESH_COOKIE"] = "plana-refresh-auth"

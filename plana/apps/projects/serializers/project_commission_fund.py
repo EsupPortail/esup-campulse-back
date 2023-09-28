@@ -10,9 +10,7 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
-    commission_fund = serializers.PrimaryKeyRelatedField(
-        queryset=CommissionFund.objects.all()
-    )
+    commission_fund = serializers.PrimaryKeyRelatedField(queryset=CommissionFund.objects.all())
 
     class Meta:
         model = ProjectCommissionFund
@@ -22,9 +20,7 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
 class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
     """Fields that can be updated by project's bearer."""
 
-    new_commission_fund_id = serializers.PrimaryKeyRelatedField(
-        queryset=CommissionFund.objects.all(), required=False
-    )
+    new_commission_fund_id = serializers.PrimaryKeyRelatedField(queryset=CommissionFund.objects.all(), required=False)
 
     class Meta:
         model = ProjectCommissionFund

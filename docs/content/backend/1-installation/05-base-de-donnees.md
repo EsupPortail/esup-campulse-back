@@ -11,6 +11,8 @@ La configuration Docker fournit :
 
 La configuration paramétrable via le fichier `docker-compose.yml` situé à la racine du projet et peut être lancée via `$ sudo docker compose up -d` ou arrêtée via `$ sudo docker compose down`.
 
+La variable de configuration `DATABASES` est utilisée pour stocker les identifiants de la base de données sur certains environnements.
+
 ## Activation des extensions
 
 L'extension PostgreSQL `unaccent` est nécessaire pour gérer les caractères accentués pour les fonctionnalités de recherche de contenu.
@@ -32,6 +34,7 @@ $ python manage.py createmanageruser \
   --firstname FIRST_NAME \
   --lastname LAST_NAME \
   --group GROUP_NAME \
+  [--cas IDENTIFIANT_CAS] \
   [--institution INSTITUTION] \
   [--superuser]
 ``` 

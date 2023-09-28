@@ -15,15 +15,15 @@ from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
     ProjectCommentDataSerializer,
     ProjectCommentSerializer,
-    ProjectCommentTextSerializer,
+    ProjectCommentUpdateSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, to_bool
 
 
 class ProjectCommentCreate(generics.CreateAPIView):
-    """/projects/comments route"""
+    """/projects/comments route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
@@ -40,7 +40,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
         tags=["projects/comments"],
     )
     def post(self, request, *args, **kwargs):
-        """Create a link between a comment and a project"""
+        """Create a link between a comment and a project."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
         except ObjectDoesNotExist:
@@ -59,10 +59,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -73,31 +70,37 @@ class ProjectCommentCreate(generics.CreateAPIView):
         request.data["edition_date"] = today
         request.data["user"] = request.user.pk
 
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-        }
-        template = MailTemplate.objects.get(code="NEW_PROJECT_COMMENT")
-        email = None
-        if project.association_id is not None:
-            email = User.objects.get(
-                id=AssociationUser.objects.get(id=project.association_user_id).user_id
-            ).email
-        elif project.user_id is not None:
-            email = User.objects.get(id=project.user_id).email
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
+        if "is_visible" not in request.data or (
+            request.data["is_visible"] != "" and to_bool(request.data["is_visible"]) is True
+        ):
+            current_site = get_current_site(request)
+            context = {
+                "site_domain": current_site.domain,
+                "site_name": current_site.name,
+            }
+            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_COMMENT")
+            email = None
+            if project.association_id is not None:
+                if project.association_user_id is not None:
+                    email = User.objects.get(
+                        id=AssociationUser.objects.get(id=project.association_user_id).user_id
+                    ).email
+                else:
+                    email = Association.objects.get(id=project.association_id).email
+            elif project.user_id is not None:
+                email = User.objects.get(id=project.user_id).email
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=email,
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+                message=template.parse_vars(request.user, request, context),
+            )
 
         return super().create(request, *args, **kwargs)
 
 
 class ProjectCommentRetrieve(generics.RetrieveAPIView):
-    """/projects/{project_id}/comments route"""
+    """/projects/{project_id}/comments route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
@@ -113,7 +116,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
         tags=["projects/comments"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all comments linked to a project"""
+        """Retrieve all comments linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
@@ -124,9 +127,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
 
         if (
             not request.user.has_perm("projects.view_projectcomment_any_fund")
-            and not request.user.has_perm(
-                "projects.view_projectcomment_any_institution"
-            )
+            and not request.user.has_perm("projects.view_projectcomment_any_institution")
             and not request.user.can_access_project(project)
         ):
             return response.Response(
@@ -134,17 +135,22 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.serializer_class(
-            self.queryset.filter(project_id=kwargs["project_id"]), many=True
-        )
+        if not request.user.has_perm("projects.view_projectcomment_not_visible"):
+            serializer = self.serializer_class(
+                self.queryset.filter(project_id=kwargs["project_id"], is_visible=True),
+                many=True,
+            )
+        else:
+            serializer = self.serializer_class(self.queryset.filter(project_id=kwargs["project_id"]), many=True)
+
         return response.Response(serializer.data)
 
 
 class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{project_id}/comments/{comment_id} route"""
+    """/projects/{project_id}/comments/{comment_id} route."""
 
     queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentTextSerializer
+    serializer_class = ProjectCommentUpdateSerializer
 
     def get_permissions(self):
         if self.request.method in ("GET", "PUT"):
@@ -182,7 +188,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["projects/comments"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates comments of the project"""
+        """Update comments of the project."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -194,9 +200,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(
-                project_id=kwargs["project_id"], id=kwargs["comment_id"]
-            )
+            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Link between this comment and project does not exist.")},
@@ -209,10 +213,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -220,6 +221,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         project_comment.edition_date = datetime.date.today()
         project_comment.text = request.data["text"]
+        project_comment.is_visible = request.data["is_visible"]
         project_comment.save()
         return response.Response({}, status=status.HTTP_200_OK)
 
@@ -233,12 +235,10 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["projects/comments"],
     )
     def delete(self, request, *args, **kwargs):
-        """Destroys comments of a project"""
+        """Destroys comments of a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(
-                project_id=kwargs["project_id"], id=kwargs["comment_id"]
-            )
+            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": "Link between this comment and project does not exist."},
@@ -251,10 +251,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if (
-            project.project_status
-            not in Project.ProjectStatus.get_commentable_project_statuses()
-        ):
+        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
                 {"error": _("Cannot manage comments on a validated project/review.")},
                 status=status.HTTP_400_BAD_REQUEST,

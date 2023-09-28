@@ -8,7 +8,7 @@ from plana.apps.users.serializers.user import UserNameSerializer
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):
-    """Main serializer"""
+    """Main serializer."""
 
     project = serializers.PrimaryKeyRelatedField(queryset=Project.visible_objects.all())
     user = UserNameSerializer()
@@ -25,12 +25,12 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectComment
-        fields = ["project", "text", "user"]
+        fields = ["project", "is_visible", "text", "user"]
 
 
-class ProjectCommentTextSerializer(serializers.ModelSerializer):
-    """Field that can be updated."""
+class ProjectCommentUpdateSerializer(serializers.ModelSerializer):
+    """Fields that can be updated."""
 
     class Meta:
         model = ProjectComment
-        fields = ["text"]
+        fields = ["text", "is_visible"]

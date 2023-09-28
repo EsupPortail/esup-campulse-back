@@ -1,3 +1,4 @@
+"""Configuration for test server environment."""
 from .base import *
 
 #######################
@@ -42,7 +43,7 @@ for logger in LOGGING["loggers"]:
 ############
 
 DIPSTRAP_VERSION = "{{ dipstrap_version }}"
-DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
+DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 
 
 ##########

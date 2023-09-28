@@ -68,6 +68,16 @@ class DocumentsViewsTests(TestCase):
         )
         cls.institution_document_id = document.id
 
+        field = Mock()
+        field.storage = default_storage
+        file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
+        file.storage = Mock()
+        post_data = {
+            "name": "Document test",
+            "path_template": file,
+        }
+        cls.new_document = cls.general_client.post("/documents/", post_data)
+
     def test_get_documents_list(self):
         """
         GET /documents/ .
@@ -95,16 +105,12 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.data[0]["acronym"], acronym)
 
         fund_ids = [1]
-        response = self.client.get(
-            f"/documents/?fund_ids={','.join(str(x) for x in fund_ids)}"
-        )
+        response = self.client.get(f"/documents/?fund_ids={','.join(str(x) for x in fund_ids)}")
         for document in response.data:
             self.assertEqual(document["fund"], fund_ids[0])
 
         process_types = ["DOCUMENT_PROJECT", "NO_PROCESS"]
-        response = self.general_client.get(
-            f"/documents/?process_types={','.join(str(x) for x in process_types)}"
-        )
+        response = self.general_client.get(f"/documents/?process_types={','.join(str(x) for x in process_types)}")
         documents_cnt = Document.objects.filter(process_type__in=process_types).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
@@ -159,9 +165,7 @@ class DocumentsViewsTests(TestCase):
         - Serializers fields must be valid.
         """
         post_data = {"name": False}
-        response = self.general_client.post(
-            "/documents/", data=post_data, content_type="application/json"
-        )
+        response = self.general_client.post("/documents/", data=post_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_documents_success(self):
@@ -202,6 +206,9 @@ class DocumentsViewsTests(TestCase):
         response = self.client.get("/documents/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response = self.client.get(f"/documents/{self.new_document.data['id']}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_get_document_by_id(self):
         """
         GET /documents/{id} .
@@ -235,9 +242,7 @@ class DocumentsViewsTests(TestCase):
         - An anonymous user can't execute this request.
         """
         patch_data = {"name": "test anonymous"}
-        response = self.client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
-        )
+        response = self.client.patch("/documents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_documents_404(self):
@@ -249,9 +254,7 @@ class DocumentsViewsTests(TestCase):
         """
         name = "Test fail"
         patch_data = {"name": name}
-        response = self.general_client.patch(
-            "/documents/999", data=patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/documents/999", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_documents_forbidden(self):
@@ -261,9 +264,7 @@ class DocumentsViewsTests(TestCase):
         - A user without proper permissions can't execute this request.
         """
         patch_data = {"name": "Test anonymous"}
-        response = self.student_client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
-        )
+        response = self.student_client.patch("/documents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_documents_forbidden_institution(self):
@@ -289,9 +290,7 @@ class DocumentsViewsTests(TestCase):
         """
         fund = 3
         patch_data = {"name": "Test forbidden", "fund": fund}
-        response = self.institution_client.patch(
-            "/documents/3", data=patch_data, content_type="application/json"
-        )
+        response = self.institution_client.patch("/documents/3", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_documents_wrong_process(self):
@@ -302,9 +301,7 @@ class DocumentsViewsTests(TestCase):
         """
         name = "Test process"
         patch_data = {"name": name}
-        response = self.general_client.patch(
-            "/documents/9", data=patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/documents/11", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_documents_serializer_error(self):
@@ -315,9 +312,7 @@ class DocumentsViewsTests(TestCase):
         - Serializers fields must be valid.
         """
         patch_data = {"name": False}
-        response = self.general_client.patch(
-            "/documents/1", data=patch_data, content_type="application/json"
-        )
+        response = self.general_client.patch("/documents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_documents_success(self):
@@ -382,8 +377,7 @@ class DocumentsViewsTests(TestCase):
 
         - A document linked to an institution cannot be deleted by a user who's not linked to the same institution.
         """
-        document_id = 25
-        response = self.institution_client.delete(f"/documents/{document_id}")
+        response = self.institution_client.delete(f"/documents/{self.institution_document_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_document_by_id_forbidden_fund(self):
@@ -412,9 +406,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by an authenticated user with correct permissions.
         - The document is correctly deleted.
         """
-        response = self.general_client.delete(
-            f"/documents/{self.institution_document_id}"
-        )
+        response = self.general_client.delete(f"/documents/{self.institution_document_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         doc_deleted = Document.objects.filter(id=self.institution_document_id)

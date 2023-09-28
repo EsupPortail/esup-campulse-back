@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.institutions.models.institution import Institution
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -21,30 +22,29 @@ class Command(BaseCommand):
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(
-                        days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING
-                    )
+                    + datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING)
                 ):
-                    template = MailTemplate.objects.get(
-                        code="ASSOCIATION_CHARTER_NEARLY_EXPIRED"
-                    )
+                    template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED")
                     current_site = get_current_site(None)
-                    context = {"site_name": current_site.name}
+                    context = {
+                        "site_name": current_site.name,
+                        "manager_email_address": ','.join(
+                            Institution.objects.get(id=association.institution_id)
+                            .default_institution_managers()
+                            .values_list("email", flat=True)
+                        ),
+                    }
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
                         to_=association.email,
-                        subject=template.subject.replace(
-                            "{{ site_name }}", context["site_name"]
-                        ),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
                 elif (
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(
-                        days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION
-                    )
+                    + datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION)
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.save()

@@ -18,7 +18,7 @@ class PlanAAdapter(DefaultAccountAdapter):
     """Default adapter for local accounts."""
 
     def send_mail(self, template_prefix, email, context):
-        """Overrided send_mail django-allauth method to use the one from the utils file."""
+        """Override send_mail django-allauth method to use the one from the utils file."""
         user = User.objects.get(email=email)
         request = context.get("request")
         current_site = get_current_site(request)
@@ -28,26 +28,24 @@ class PlanAAdapter(DefaultAccountAdapter):
         context["username"] = user.username
         context["first_name"] = user.first_name
         context["last_name"] = user.last_name
-        context["manager_email_address"] = settings.DEFAULT_FROM_EMAIL
+        context["manager_email_address"] = ','.join(user.get_user_default_manager_emails())
 
         if template_prefix in [
             "account/email/email_confirmation_signup",
             "account/email/email_confirmation",
         ]:
             if template_prefix == "account/email/email_confirmation_signup":
-                template = MailTemplate.objects.get(code="EMAIL_CONFIRMATION_MESSAGE")
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_CREATION")
             elif template_prefix == "account/email/email_confirmation":
-                template = MailTemplate.objects.get(code="EMAIL_RECONFIRMATION_MESSAGE")
-            key = context['key']
+                template = MailTemplate.objects.get(code="USER_ACCOUNT_EMAIL_RECONFIRMATION")
+            key = context["key"]
             context[
                 "activate_url"
             ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"
 
         elif template_prefix == "account/email/password_reset_key":
-            template = MailTemplate.objects.get(code="PASSWORD_RESET_KEY")
-            password_reset_url_parts = re.match(
-                r"^(.*)/(.*)/(.*)/$", context["password_reset_url"]
-            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET")
+            password_reset_url_parts = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"])
             uid = password_reset_url_parts.group(2)
             token = password_reset_url_parts.group(3)
             context[

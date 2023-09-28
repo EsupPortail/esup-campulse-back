@@ -28,9 +28,7 @@ class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):
         request = self.context.get("request")
         user = User.objects.get(email=request.user.email)
         if user.is_cas_user():
-            raise exceptions.ValidationError(
-                {"detail": [_("Unable to change the password of a CAS account.")]}
-            )
+            raise exceptions.ValidationError({"detail": [_("Unable to change the password of a CAS account.")]})
         valid_password = check_valid_password(request.data["new_password1"])
         if not valid_password["valid"]:
             raise exceptions.ValidationError({"detail": valid_password["messages"]})
@@ -66,9 +64,7 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
         try:
             user = User.objects.get(email=request.data["email"])
             if user.is_cas_user():
-                raise exceptions.ValidationError(
-                    {"detail": [_("Unable to reset the password of a CAS account.")]}
-                )
+                raise exceptions.ValidationError({"detail": [_("Unable to reset the password of a CAS account.")]})
             self.reset_form.save(**opts)
         except ObjectDoesNotExist:
             pass
@@ -92,7 +88,7 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
             "first_name": self.user.first_name,
             "last_name": self.user.last_name,
         }
-        template = MailTemplate.objects.get(code="PASSWORD_RESET_CONFIRMATION")
+        template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET_CONFIRMATION")
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=self.user.email,

@@ -24,7 +24,7 @@ from plana.utils import to_bool, valid_date_format
 
 
 class CommissionListCreate(generics.ListCreateAPIView):
-    """/commissions/ route"""
+    """/commissions/ route."""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
@@ -86,15 +86,13 @@ class CommissionListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all commissions."""
+        """List all commissions."""
         dates = request.query_params.get("dates")
         is_site = request.query_params.get("is_site")
         is_open_to_projects = request.query_params.get("is_open_to_projects")
         funds = request.query_params.get("funds")
         with_active_projects = request.query_params.get("with_active_projects")
-        only_with_active_projects = request.query_params.get(
-            "only_with_active_projects"
-        )
+        only_with_active_projects = request.query_params.get("only_with_active_projects")
         managed_projects = request.query_params.get("managed_projects")
 
         if dates is not None and dates != "":
@@ -113,74 +111,61 @@ class CommissionListCreate(generics.ListCreateAPIView):
         if is_site is not None and is_site != "":
             self.queryset = self.queryset.filter(
                 id__in=CommissionFund.objects.filter(
-                    fund_id__in=Fund.objects.filter(
-                        is_site=to_bool(is_site)
-                    ).values_list("id")
+                    fund_id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
                 ).values_list("commission_id")
             )
 
         if is_open_to_projects is not None and is_open_to_projects != "":
-            self.queryset = self.queryset.filter(
-                is_open_to_projects=to_bool(is_open_to_projects)
-            )
+            self.queryset = self.queryset.filter(is_open_to_projects=to_bool(is_open_to_projects))
 
         if funds is not None and funds != "":
             self.queryset = self.queryset.filter(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=funds.split(",")
-                ).values_list("commission_id")
+                id__in=CommissionFund.objects.filter(fund_id__in=funds.split(",")).values_list("commission_id")
             )
 
+        commissions_ids_without_projects = CommissionFund.objects.exclude(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id__in=Project.objects.all().values_list("id")
+            ).values_list("commission_fund_id")
+        ).values_list("commission_id")
+        commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id__in=Project.visible_objects.filter(
+                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+                ).values_list("id")
+            ).values_list("commission_fund_id")
+        ).values_list("commission_id")
+        commissions_ids_with_active_projects = CommissionFund.objects.filter(
+            id__in=ProjectCommissionFund.objects.filter(
+                project_id__in=Project.visible_objects.exclude(
+                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+                ).values_list("id")
+            ).values_list("commission_fund_id")
+        ).values_list("commission_id")
+
         if with_active_projects is not None and with_active_projects != "":
-            inactive_projects = Project.visible_objects.filter(
-                project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-            )
             if to_bool(with_active_projects) is False:
                 self.queryset = self.queryset.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_fund_id")
-                    ).values_list("commission_id")
+                    models.Q(id__in=commissions_ids_with_inactive_projects)
+                    | models.Q(id__in=commissions_ids_without_projects)
                 )
             else:
-                self.queryset = self.queryset.exclude(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(
-                            project_id__in=inactive_projects
-                        ).values_list("commission_fund_id")
-                    ).values_list("commission_id")
+                self.queryset = self.queryset.filter(
+                    models.Q(id__in=commissions_ids_with_active_projects)
+                    | models.Q(id__in=commissions_ids_without_projects)
                 )
 
         if only_with_active_projects is not None and only_with_active_projects != "":
-            commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    project_id__in=Project.visible_objects.filter(
-                        project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                    )
-                ).values_list("commission_fund_id")
-            ).values_list("commission_id")
-            commissions_ids_with_active_projects = CommissionFund.objects.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    project_id__in=Project.visible_objects.filter(
-                        project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                    )
-                ).values_list("commission_fund_id")
-            ).values_list("commission_id")
             if to_bool(only_with_active_projects) is False:
-                self.queryset = self.queryset.filter(
-                    id__in=commissions_ids_with_inactive_projects
-                ).exclude(id__in=commissions_ids_with_active_projects)
+                self.queryset = self.queryset.filter(id__in=commissions_ids_with_inactive_projects).exclude(
+                    id__in=commissions_ids_with_active_projects
+                )
             else:
-                self.queryset = self.queryset.exclude(
-                    id__in=commissions_ids_with_inactive_projects
-                ).filter(id__in=commissions_ids_with_active_projects)
+                self.queryset = self.queryset.exclude(id__in=commissions_ids_with_inactive_projects).filter(
+                    id__in=commissions_ids_with_active_projects
+                )
 
-        if (
-            managed_projects is not None
-            and managed_projects != ""
-            and not request.user.is_anonymous
-        ):
+        if managed_projects is not None and managed_projects != "" and not request.user.is_anonymous:
             if to_bool(managed_projects) is True:
                 self.queryset = self.queryset.filter(
                     models.Q(
@@ -227,7 +212,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new commission (manager only)."""
+        """Create a new commission (manager only)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -245,18 +230,14 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
         # Removes spaces, uppercase and accented characters to avoid similar commission names.
         new_commission_name = (
-            unicodedata.normalize(
-                "NFD", request.data["name"].strip().replace(" ", "").lower()
-            )
+            unicodedata.normalize("NFD", request.data["name"].strip().replace(" ", "").lower())
             .encode("ascii", "ignore")
             .decode("utf-8")
         )
         commissions = Commission.objects.all()
         for commission in commissions:
             existing_commission_name = (
-                unicodedata.normalize(
-                    "NFD", commission.name.strip().replace(" ", "").lower()
-                )
+                unicodedata.normalize("NFD", commission.name.strip().replace(" ", "").lower())
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
@@ -268,17 +249,10 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
         if (
             "submission_date" in request.data
-            and datetime.datetime.strptime(
-                request.data["submission_date"], "%Y-%m-%d"
-            ).date()
-            < datetime.date.today()
+            and datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d").date() < datetime.date.today()
         ):
             return response.Response(
-                {
-                    "error": _(
-                        "Cannot create commission date taking place before today."
-                    )
-                },
+                {"error": _("Cannot create commission date taking place before today.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -297,7 +271,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
 
 
 class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/commissions/{id} route"""
+    """/commissions/{id} route."""
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
@@ -323,7 +297,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a commission date with all its details."""
+        """Retrieve a commission date with all its details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -353,7 +327,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates commission date details."""
+        """Update commission date details."""
         # try:
         #     serializer = self.get_serializer(data=request.data)
         #     serializer.is_valid(raise_exception=True)
@@ -371,24 +345,16 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        if (
-            "name" in request.data
-            and request.data["name"] != ""
-            and request.data["name"] is not None
-        ):
+        if "name" in request.data and request.data["name"] != "" and request.data["name"] is not None:
             new_commission_name = (
-                unicodedata.normalize(
-                    "NFD", request.data["name"].strip().replace(" ", "").lower()
-                )
+                unicodedata.normalize("NFD", request.data["name"].strip().replace(" ", "").lower())
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
             commissions = Commission.objects.all()
             for commission in commissions:
                 existing_commission_name = (
-                    unicodedata.normalize(
-                        "NFD", commission.name.strip().replace(" ", "").lower()
-                    )
+                    unicodedata.normalize("NFD", commission.name.strip().replace(" ", "").lower())
                     .encode("ascii", "ignore")
                     .decode("utf-8")
                 )
@@ -403,18 +369,9 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and request.data["submission_date"] is not None
             and valid_date_format(request.data["submission_date"])
         ):
-            if (
-                datetime.datetime.strptime(
-                    request.data["submission_date"], "%Y-%m-%d"
-                ).date()
-                < datetime.date.today()
-            ):
+            if datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d").date() < datetime.date.today():
                 return response.Response(
-                    {
-                        "error": _(
-                            "Cannot create commission date taking place before today."
-                        )
-                    },
+                    {"error": _("Cannot create commission date taking place before today.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -423,17 +380,10 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 and request.data["commission_date"] is not None
                 and valid_date_format(request.data["commission_date"])
             ):
-                commission_date = datetime.datetime.strptime(
-                    request.data["commission_date"], "%Y-%m-%d"
-                ).date()
+                commission_date = datetime.datetime.strptime(request.data["commission_date"], "%Y-%m-%d").date()
             else:
                 commission_date = self.queryset.get(id=kwargs["pk"]).commission_date
-            if (
-                datetime.datetime.strptime(
-                    request.data["submission_date"], "%Y-%m-%d"
-                ).date()
-                > commission_date
-            ):
+            if datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d").date() > commission_date:
                 return response.Response(
                     {"error": _("Can't set submission date after commission date.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -449,17 +399,10 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 and request.data["commission_date"] is not None
                 and valid_date_format(request.data["submission_date"])
             ):
-                submission_date = datetime.datetime.strptime(
-                    request.data["submission_date"], "%Y-%m-%d"
-                ).date()
+                submission_date = datetime.datetime.strptime(request.data["submission_date"], "%Y-%m-%d").date()
             else:
                 submission_date = self.queryset.get(id=kwargs["pk"]).submission_date
-            if (
-                submission_date
-                > datetime.datetime.strptime(
-                    request.data["commission_date"], "%Y-%m-%d"
-                ).date()
-            ):
+            if submission_date > datetime.datetime.strptime(request.data["commission_date"], "%Y-%m-%d").date():
                 return response.Response(
                     {"error": _("Can't set commission date before submission date.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -492,9 +435,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         projects_commission_fund_count = ProjectCommissionFund.objects.filter(
-            commission_fund_id__in=CommissionFund.objects.filter(
-                commission_id=commission.id
-            ),
+            commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission.id),
             project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_unfinished_project_statuses()
             ),
