@@ -29,7 +29,7 @@ recursive_requirements('requirements.txt', libraries, dependency_links)
 
 setup(
     name='plana',
-    version='0.9.20230926',
+    version='1.0.0-beta',
     packages=find_packages(),
     install_requires=libraries,
     dependency_links=dependency_links,
