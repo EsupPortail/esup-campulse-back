@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 "loaddata",
                 [
                     "associations_activityfield",
-                    "commissions_commission",
+                    "associations_association_real",
                     "commissions_fund",
                     "contents_content",
                     "django_site",
