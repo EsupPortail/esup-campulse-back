@@ -3,6 +3,7 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -254,6 +255,10 @@ class User(AbstractUser):
         if assos_user.count() > 0 or funds_user.count() > 0:
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
+            managers_emails = list(set(managers_emails))
+        elif self.is_cas_user() is True:
+            institution = Institution.objects.get(id=settings.CAS_INSTITUTION_ID)
+            managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         else:
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):

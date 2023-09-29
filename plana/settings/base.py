@@ -494,6 +494,7 @@ CAS_ID = "cas"
 CAS_NAME = "CAS Unistra"
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
+CAS_INSTITUTION_ID = 2
 
 CAS_AUTHORIZED_SERVICES = [
     "http://localhost:8000/users/auth/cas_verify/",
