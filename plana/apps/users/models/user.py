@@ -302,7 +302,7 @@ class User(AbstractUser):
     def is_president_in_association(self, association_id):
         """Check if a user can write in an association."""
         try:
-            now = datetime.datetime.now()
+            now = datetime.date.today()
             AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
@@ -314,8 +314,8 @@ class User(AbstractUser):
                     can_be_president_to__lte=now,
                 )
                 | models.Q(
-                    can_be_president_from__gte=now,
-                    can_be_president_to__lte=now,
+                    can_be_president_from__lte=now,
+                    can_be_president_to__gte=now,
                 )
             ).get(
                 user_id=self.pk,
