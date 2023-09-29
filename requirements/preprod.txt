@@ -331,9 +331,9 @@ django-extensions==3.2.3 ; python_version >= "3.8" and python_version < "3.12" \
 django-health-check==3.17.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c \
     --hash=sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778
-django-storages[boto3]==1.14.1 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:18cb6c305fbb2f114c11b5b7b647b6271aa251972dcd4a5651b9cee2b0bd3a8a \
-    --hash=sha256:a2c327d67792eec04c7f5f5bb2900b21f426de8a3a811cea85fac7904bdccf36
+django-storages[boto3]==1.14 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:11280a883b13812df548f3cfe9c10280afc0d4727c8babdee369a75e71158f16 \
+    --hash=sha256:6c97e5faad829c923a1262206281742c484d76d43b332a196ddcc242b909c551
 django-summernote==0.8.20.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:52e9b12438ed9eac0d77729f758f2aae06e468b5cbce133e24100d58ae4e43a8
 django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.12" \
