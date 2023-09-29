@@ -48,14 +48,36 @@
       "name": "Association du Site Alsace",
       "email": "asso-site-alsace@unistra.fr",
       "acronym": "AssoSite",
+      "social_object": "Asso.",
+      "current_projects": "Projets.",
       "address": "Université de Strasbourg (Le Portique, 3ème étage), Rue René Descartes",
       "zipcode": "67000",
       "city": "Strasbourg",
       "country": "France",
+      "phone": "0123456789",
+      "siret": 1234567890,
+      "website": "https://www.domain.tld/",
+      "student_count": 150,
+      "president_names": "Michel Président",
+      "president_phone": "+33 6 11 22 33 44",
+      "president_email": "test@mail.tld",
       "creation_date": "2022-10-27T14:12:11.000Z",
+      "approval_date": "2022-10-28",
+      "last_goa_date": "2022-10-29",
+      "cga_date": "2022-10-30",
       "activity_field_id": 3,
       "institution_id": 2,
       "institution_component_id": 1,
+      "social_networks": [
+        {
+          "type": "Mastodon",
+          "location": "https://joinmastodon.org/"
+        },
+        {
+          "type": "PeerTube",
+          "location": "https://joinpeertube.org/"
+        }
+      ],
       "is_site": true,
       "is_public": true,
       "is_enabled": true
