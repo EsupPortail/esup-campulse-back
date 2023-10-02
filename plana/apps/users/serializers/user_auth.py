@@ -83,7 +83,7 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
         request = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
             "first_name": self.user.first_name,
             "last_name": self.user.last_name,

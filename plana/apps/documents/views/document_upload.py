@@ -272,13 +272,15 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         if document.process_type in Document.ProcessType.get_validated_documents():
             current_site = get_current_site(request)
             context = {
-                "site_domain": current_site.domain,
+                "site_domain": f"https://{current_site.domain}",
                 "site_name": current_site.name,
+                "document_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH}",
             }
 
             template = MailTemplate.objects.get(code="MANAGER_DOCUMENT_CREATION")
             managers_emails = []
             if association is not None:
+                context["document_url"] += str(association.id)
                 managers_emails = list(
                     Institution.objects.get(id=association.institution_id)
                     .default_institution_managers()

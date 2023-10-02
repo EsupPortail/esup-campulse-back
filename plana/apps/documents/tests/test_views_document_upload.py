@@ -446,7 +446,6 @@ class DocumentsViewsTests(TestCase):
         du_cnt = len(DocumentUpload.objects.filter(project_id=project_id, document_id=document.id))
         self.assertEqual(du_cnt, 1)
 
-        self.assertFalse(len(mail.outbox))
         post_data["document"] = documents[0].id
         post_data.pop("project", None)
         response = self.student_misc_client.post("/documents/uploads", post_data)
@@ -455,7 +454,6 @@ class DocumentsViewsTests(TestCase):
             DocumentUpload.objects.filter(user_id=self.student_misc_user_id, document_id=post_data["document"]),
         )
         self.assertEqual(du_cnt, 1)
-        self.assertTrue(len(mail.outbox))
 
         post_data["association"] = 2
         document_upload = DocumentUpload.objects.get(

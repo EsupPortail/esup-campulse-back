@@ -23,7 +23,7 @@ class PlanAAdapter(DefaultAccountAdapter):
         request = context.get("request")
         current_site = get_current_site(request)
         template = MailTemplate.objects.all()
-        context["site_domain"] = current_site.domain
+        context["site_domain"] = f"https://{current_site.domain}"
         context["site_name"] = current_site.name
         context["username"] = user.username
         context["first_name"] = user.first_name

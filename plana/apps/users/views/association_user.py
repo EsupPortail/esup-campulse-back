@@ -216,7 +216,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         ):
             current_site = get_current_site(request)
             context = {
-                "site_domain": current_site.domain,
+                "site_domain": f"https://{current_site.domain}",
                 "site_name": current_site.name,
                 "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
             }

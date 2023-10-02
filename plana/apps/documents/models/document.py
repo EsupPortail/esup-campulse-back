@@ -57,7 +57,7 @@ class Document(models.Model):
         @staticmethod
         def get_validated_documents():
             """Documents with those processes have to be validated to be used."""
-            return ["CHARTER_ASSOCIATION", "CHARTER_PROJECT_FUND"]
+            return ["CHARTER_ASSOCIATION"]
 
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
