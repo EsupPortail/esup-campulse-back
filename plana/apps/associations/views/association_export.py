@@ -180,7 +180,11 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
             )
 
         data["institution"] = Institution.objects.get(id=association.institution_id).name
-        data["institution_component"] = InstitutionComponent.objects.get(id=association.institution_component_id).name
+        data["institution_component"] = (
+            None
+            if association.institution_component_id is None
+            else InstitutionComponent.objects.get(id=association.institution_component_id).name
+        )
         data["activity_field"] = ActivityField.objects.get(id=association.activity_field_id).name
 
         data["documents"] = list(

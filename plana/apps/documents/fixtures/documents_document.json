@@ -9,7 +9,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": true,
-      "days_before_expiration": "365 days",
+      "expiration_day": "08-31",
       "process_type": "CHARTER_ASSOCIATION",
       "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
@@ -27,7 +27,7 @@
       "contact": "https://svu.unistra.fr/vie-des-campus/vie-universitaire/soutien-aux-associations-etudiantes/agrement-association-etudiante-du-site-alsace",
       "is_multiple": false,
       "is_required_in_process": true,
-      "days_before_expiration": "365 days",
+      "expiration_day": "08-31",
       "process_type": "CHARTER_ASSOCIATION",
       "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [

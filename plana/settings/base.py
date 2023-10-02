@@ -14,7 +14,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.0.0-beta"
+APP_VERSION = "1.0.1-beta"
 
 ######################
 # Path configuration #
@@ -837,6 +837,8 @@ PERMISSIONS_GROUPS = {
         "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "change_commission",
         # documents
         "add_document",
         "change_document",
@@ -888,6 +890,8 @@ PERMISSIONS_GROUPS = {
         "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "change_commission",
         # documents
         "add_document",
         "change_document",
