@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 11:50+0200\n"
+"POT-Creation-Date: 2023-10-02 15:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -672,12 +672,12 @@ msgid "Document does not exist."
 msgstr "Le document n'existe pas."
 
 #: plana/apps/documents/views/document.py:208
-#: plana/apps/documents/views/document_upload.py:411
+#: plana/apps/documents/views/document_upload.py:413
 msgid "Not allowed to update a document for this institution."
 msgstr "Non autorisé à mettre à jour un document pour cet établissement."
 
 #: plana/apps/documents/views/document.py:218
-#: plana/apps/documents/views/document_upload.py:421
+#: plana/apps/documents/views/document_upload.py:423
 msgid "Not allowed to update a document for this fund."
 msgstr "Non autorisé à mettre à jour un document pour ce fonds."
 
@@ -761,19 +761,19 @@ msgstr "Le document n'est affecté à aucune personne ou association."
 msgid "Document cannot be submitted multiple times."
 msgstr "Ce document ne peut être proposé plusieurs fois."
 
-#: plana/apps/documents/views/document_upload.py:344
-#: plana/apps/documents/views/document_upload.py:401
-#: plana/apps/documents/views/document_upload.py:462
-#: plana/apps/documents/views/document_upload.py:601
+#: plana/apps/documents/views/document_upload.py:346
+#: plana/apps/documents/views/document_upload.py:403
+#: plana/apps/documents/views/document_upload.py:464
+#: plana/apps/documents/views/document_upload.py:603
 msgid "Document upload does not exist."
 msgstr "Le document n'existe pas."
 
-#: plana/apps/documents/views/document_upload.py:360
-#: plana/apps/documents/views/document_upload.py:617
+#: plana/apps/documents/views/document_upload.py:362
+#: plana/apps/documents/views/document_upload.py:619
 msgid "Not allowed to retrieve this uploaded document."
 msgstr "Non autorisé à récupérer ce document."
 
-#: plana/apps/documents/views/document_upload.py:478
+#: plana/apps/documents/views/document_upload.py:480
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
 
