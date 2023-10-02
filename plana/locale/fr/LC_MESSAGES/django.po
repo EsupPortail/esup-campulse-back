@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 08:27+0200\n"
+"POT-Creation-Date: 2023-10-02 11:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,12 +303,12 @@ msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #: plana/apps/associations/views/association.py:672
-#: plana/apps/projects/views/project.py:675
+#: plana/apps/projects/views/project.py:677
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:689
-#: plana/apps/projects/views/project.py:747
+#: plana/apps/projects/views/project.py:749
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -711,8 +711,8 @@ msgstr ""
 #: plana/apps/documents/views/document_upload.py:179
 #: plana/apps/projects/views/project.py:440
 #: plana/apps/projects/views/project.py:502
-#: plana/apps/projects/views/project.py:588
-#: plana/apps/projects/views/project.py:655
+#: plana/apps/projects/views/project.py:590
+#: plana/apps/projects/views/project.py:657
 #: plana/apps/projects/views/project_category.py:169
 #: plana/apps/projects/views/project_category.py:212
 #: plana/apps/projects/views/project_comment.py:48
@@ -1053,7 +1053,7 @@ msgid "Link between association and user does not exist."
 msgstr "Le lien entre l'utilisateur et l'association n'existe pas."
 
 #: plana/apps/projects/views/project.py:378
-#: plana/apps/projects/views/project.py:556
+#: plana/apps/projects/views/project.py:558
 msgid ""
 "Number of students in audience cannot exceed number of all people in "
 "audience."
@@ -1062,7 +1062,7 @@ msgstr ""
 "nombre total de personnes attendues."
 
 #: plana/apps/projects/views/project.py:389
-#: plana/apps/projects/views/project.py:567
+#: plana/apps/projects/views/project.py:569
 msgid "Can't set planned start date after planned end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
@@ -1075,7 +1075,7 @@ msgid "Not allowed to retrieve this project."
 msgstr "Non autorisé à récupérer ce projet."
 
 #: plana/apps/projects/views/project.py:508
-#: plana/apps/projects/views/project.py:661
+#: plana/apps/projects/views/project.py:663
 #: plana/apps/projects/views/project_comment.py:212
 #: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:147
@@ -1089,27 +1089,27 @@ msgstr "Non autorisé à mettre à jour ce projet."
 msgid "Project is not a draft that can be edited."
 msgstr "Le projet n'est pas un brouillon pouvant être modifié."
 
-#: plana/apps/projects/views/project.py:546
+#: plana/apps/projects/views/project.py:548
 msgid "Project is linked to expired commissions."
 msgstr "Ce projet est lié à des commissions passées."
 
-#: plana/apps/projects/views/project.py:594
+#: plana/apps/projects/views/project.py:596
 msgid "Not allowed to delete this project."
 msgstr "Non autorisé à supprimer ce projet."
 
-#: plana/apps/projects/views/project.py:600
+#: plana/apps/projects/views/project.py:602
 msgid "Cannot delete a non-draft project."
 msgstr "Impossible de supprimer un projet non-brouillon."
 
-#: plana/apps/projects/views/project.py:682
+#: plana/apps/projects/views/project.py:684
 msgid "Cannot change this project status anymore."
 msgstr "Il n'est plus possible de changer le statut de ce projet."
 
-#: plana/apps/projects/views/project.py:690
+#: plana/apps/projects/views/project.py:692
 msgid "Cannot rollback to a previous status."
 msgstr "Un projet ne peut revenir à un état précédent."
 
-#: plana/apps/projects/views/project.py:698
+#: plana/apps/projects/views/project.py:700
 msgid "Wrong status process."
 msgstr "Mauvais statut de projet."
 
