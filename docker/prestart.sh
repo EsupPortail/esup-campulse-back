@@ -2,7 +2,7 @@
 set -e
 echo "Running inside /prestart.sh"
 
-export DJANGO_SETTINGS_MODULE=plana.settings.test
+export DJANGO_SETTINGS_MODULE=plana.settings.dev
 export DJANGO_APP_NAME=plana
 cd /app
 python manage.py migrate
