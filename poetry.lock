@@ -903,13 +903,13 @@ test = ["celery", "pytest", "pytest-cov", "pytest-django", "redis"]
 
 [[package]]
 name = "django-storages"
-version = "1.14"
+version = "1.14.1"
 description = "Support for many storage backends in Django"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "django-storages-1.14.tar.gz", hash = "sha256:6c97e5faad829c923a1262206281742c484d76d43b332a196ddcc242b909c551"},
-    {file = "django_storages-1.14-py3-none-any.whl", hash = "sha256:11280a883b13812df548f3cfe9c10280afc0d4727c8babdee369a75e71158f16"},
+    {file = "django-storages-1.14.1.tar.gz", hash = "sha256:a2c327d67792eec04c7f5f5bb2900b21f426de8a3a811cea85fac7904bdccf36"},
+    {file = "django_storages-1.14.1-py3-none-any.whl", hash = "sha256:18cb6c305fbb2f114c11b5b7b647b6271aa251972dcd4a5651b9cee2b0bd3a8a"},
 ]
 
 [package.dependencies]
@@ -917,13 +917,13 @@ boto3 = {version = ">=1.4.4", optional = true, markers = "extra == \"boto3\""}
 Django = ">=3.2"
 
 [package.extras]
-azure = ["azure-storage-blob (>=12.0.0)"]
+azure = ["azure-storage-blob (>=12)"]
 boto3 = ["boto3 (>=1.4.4)"]
 dropbox = ["dropbox (>=7.2.1)"]
-google = ["google-cloud-storage (>=1.27.0)"]
+google = ["google-cloud-storage (>=1.27)"]
 libcloud = ["apache-libcloud"]
 s3 = ["boto3 (>=1.4.4)"]
-sftp = ["paramiko (>=1.15.0)"]
+sftp = ["paramiko (>=1.15)"]
 
 [[package]]
 name = "django-summernote"
@@ -2848,4 +2848,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "f37c8a2ddb29d7898e0fd306047f6a5a54e731a62a36639826ef87566097f32a"
+content-hash = "c24d86932bfff2b77df9e646157c9f3312606d93d1264d9e104b6e4b968d1e76"
