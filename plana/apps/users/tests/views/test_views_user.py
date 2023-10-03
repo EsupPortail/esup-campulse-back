@@ -82,7 +82,7 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(users[0]["firstName"])
         with self.assertRaises(KeyError):
-            print(users[0]["email"])
+            print(users[0]["address"])
 
     def test_manager_get_users_list(self):
         """
