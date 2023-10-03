@@ -11,7 +11,7 @@ services:
       - 5432:5432
     restart: always
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data/
 
   api:
     container_name: plana-api
@@ -21,7 +21,7 @@ services:
     hostname: back
     volumes:
       - ./plana/settings:/app/plana/settings
-      - ./plana/keys:/app/plana/keys
+      - ./plana/keys:/app/keys
     ports:
       - "8080:8080"
     env_file:
@@ -38,3 +38,6 @@ services:
       - 1080:1080
       - 1025:1025
     restart: unless-stopped
+
+volumes:
+  postgres_data:

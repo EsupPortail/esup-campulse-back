@@ -41,13 +41,14 @@ docs
 eggs
 fabfile.py
 htmlcov/
-immersionlyceens.egg-info/
+keys/
 lib
 lib64
 media
 nosetests.xml
 parts
 pip-log.txt
+plana.egg-info/
 preprod.py
 prod.py
 pyvenv.cfg

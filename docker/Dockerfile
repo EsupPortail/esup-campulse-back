@@ -8,7 +8,7 @@ RUN useradd -m -s /bin/bash django
 # Install the application
 RUN set -ex \
     && apt update \
-    && apt install -y gettext gcc libpangocairo-1.0-0 \
+    && apt install -y gettext gcc libpangocairo-1.0-0 openssh-client \
     # Third libraries dependencies
     # && apk --update add ... \
     && pip install -U pip uwsgi
