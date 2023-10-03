@@ -90,3 +90,13 @@ SIMPLE_JWT = {
 
 REST_AUTH["JWT_AUTH_COOKIE"] = "plana-auth"
 REST_AUTH["JWT_AUTH_REFRESH_COOKIE"] = "plana-refresh-auth"
+
+
+#####################
+# S3 storage config #
+#####################
+
+AWS_ACCESS_KEY_ID = "FAKE"
+AWS_SECRET_ACCESS_KEY = "FAKE"
+AWS_STORAGE_BUCKET_NAME = "FAKE"
+AWS_S3_ENDPOINT_URL = "FAKE"
