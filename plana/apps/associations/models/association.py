@@ -151,7 +151,7 @@ class SpaceRemovedValue(models.Transform):
 
     def as_sql(self, compiler, connection):
         lhs, params = compiler.compile(self.lhs)
-        return "REPLACE(%s, ' ', '')" % lhs, params
+        return f"REPLACE({lhs}, ' ', '')", params
 
 
 models.CharField.register_lookup(SpaceRemovedValue)

@@ -38,6 +38,7 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 - `EMAIL_TEMPLATE_PASSWORD_RESET_URL` : chemin menant à la page de réinitialisation du mot de passe pour une personne non connectée.
 - `EMAIL_TEMPLATE_PASSWORD_CHANGE_URL` : chemin menant à la page de changement du mot de passe pour une personne connectée.
 - `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation des comptes pour un gestionnaire connecté.
+- `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation d'une charte pour un gestionnaire connecté.
 - `APP_DOCUMENTATION_URL` : URL menant vers la documentation utilisateur.
 
 ## Nombre de jours attendus dans les tâches CRON.
@@ -57,6 +58,7 @@ Les tâches CRON envoient de multiples emails dont des relances dépendant de no
 - `DEFAULT_PASSWORD_LENGTH` : taille des mots de passe générés.
 - `DEFAULT_FROM_EMAIL` : adresse mail "noreply" par défaut renseignée dans les emails envoyés par l'appli.
 - `RESTRICTED_DOMAINS` : domaines d'adresses mail non autorisés pour les comptes locaux (généralement, les domaines utilisés par les comptes se connectant via le CAS paramétré).
+- `CAS_INSTITUTION_ID` : identifiant de l'établissement en charge de gérer les comptes CAS.
 - `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
 - `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités de l'application côté association (utilisé pour définir si une association a signé la Charte Site Alsace de l'Université de Strasbourg par exemple), laisser à `True` pour désactiver la validation.
 - `NEW_YEAR_MONTH_INDEX` : index du mois auquel une année scolaire débute (9 pour Septembre).

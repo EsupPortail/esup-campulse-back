@@ -32,7 +32,7 @@ from plana.utils import send_mail, to_bool
 
 
 class UserListCreate(generics.ListCreateAPIView):
-    """/users/ route"""
+    """/users/ route."""
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -100,7 +100,7 @@ class UserListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists users sharing the same association, or all users (manager)."""
+        """List users sharing the same association, or all users (manager)."""
         name = request.query_params.get("name")
         email = request.query_params.get("email")
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
@@ -224,7 +224,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
             "username": user.username,
             "first_name": user.first_name,
@@ -266,7 +266,7 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/users/{id} route"""
+    """/users/{id} route."""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -294,7 +294,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a user with all details."""
+        """Retrieve a user with all details."""
         try:
             self.queryset.get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -332,7 +332,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def patch(self, request, *args, **kwargs):
-        """Updates a user field (with a restriction on CAS auto-generated fields)."""
+        """Update a user field (with a restriction on CAS auto-generated fields)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

@@ -27,7 +27,7 @@ from plana.utils import generate_pdf
 
 
 class CommissionExport(generics.RetrieveAPIView):
-    """/commissions/{id}/export route"""
+    """/commissions/{id}/export route."""
 
     permission_classes = [IsAuthenticated]
     queryset = Project.visible_objects.all()
@@ -111,9 +111,8 @@ class CommissionExport(generics.RetrieveAPIView):
             )
 
         fields = [
-            str(_("Project ID")),
+            str(_("Identifier")),
             str(_("Project name")),
-            str(_("Manual identifier")),
             str(_("Association name")),
             str(_("Student misc name")),
             str(_("Project start date")),
@@ -152,7 +151,7 @@ class CommissionExport(generics.RetrieveAPIView):
             workbook = Workbook()
             worksheet = workbook.active
             for index_field, field in enumerate(fields):
-                worksheet.cell(row=1, column=(index_field + 1)).value = field
+                worksheet.cell(row=1, column=index_field + 1).value = field
         elif mode == "pdf":
             data["name"] = commission.name
             data["fields"] = fields
@@ -184,9 +183,8 @@ class CommissionExport(generics.RetrieveAPIView):
                     break
 
             fields = [
-                project.id,
-                project.name,
                 project.manual_identifier,
+                project.name,
                 association,
                 user,
                 project.planned_start_date.date(),
@@ -211,13 +209,13 @@ class CommissionExport(generics.RetrieveAPIView):
                 writer.writerow([field for field in fields])
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
-                    worksheet.cell(row=(index_project + 2), column=(index_field + 1)).value = field
+                    worksheet.cell(row=index_project + 2, column=index_field + 1).value = field
             elif mode == "pdf":
                 data["projects"].append(fields)
 
         if mode is None or mode == "csv":
             return http_response
-        elif mode == "xlsx":
+        if mode == "xlsx":
             with NamedTemporaryFile() as tmp:
                 workbook.save(tmp.name)
                 tmp.seek(0)
@@ -228,7 +226,7 @@ class CommissionExport(generics.RetrieveAPIView):
             )
             http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
             return http_response
-        elif mode == "pdf":
+        if mode == "pdf":
             return generate_pdf(
                 data["name"],
                 data,

@@ -25,7 +25,7 @@ from plana.utils import send_mail, to_bool
 
 
 class AssociationUserListCreate(generics.ListCreateAPIView):
-    """/users/associations/ route"""
+    """/users/associations/ route."""
 
     queryset = AssociationUser.objects.all()
 
@@ -72,7 +72,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         tags=["users/associations"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all associations linked to a user, or all associations of all users (manager)."""
+        """List all associations linked to a user, or all associations of all users (manager)."""
         association_id = request.query_params.get("association_id")
         is_validated_by_admin = request.query_params.get("is_validated_by_admin")
         institutions = request.query_params.get("institutions")
@@ -115,7 +115,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         tags=["users/associations"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new link between a user and an association."""
+        """Create a new link between a user and an association."""
         try:
             username = request.data["user"]
             association_id = request.data["association"]
@@ -216,7 +216,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         ):
             current_site = get_current_site(request)
             context = {
-                "site_domain": current_site.domain,
+                "site_domain": f"https://{current_site.domain}",
                 "site_name": current_site.name,
                 "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
             }
@@ -236,7 +236,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
 
 class AssociationUserRetrieve(generics.RetrieveAPIView):
-    """/users/{user_id}/associations/ route"""
+    """/users/{user_id}/associations/ route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
@@ -252,7 +252,7 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
         tags=["users/associations"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all associations linked to a user (manager)."""
+        """Retrieve all associations linked to a user (manager)."""
         try:
             User.objects.get(id=kwargs["user_id"])
         except ObjectDoesNotExist:
@@ -272,7 +272,7 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
 
 
 class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/users/{user_id}/associations/{association_id} route"""
+    """/users/{user_id}/associations/{association_id} route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
@@ -314,7 +314,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["users/associations"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates user role in an association (manager and president)."""
+        """Update user role in an association (manager and president)."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)

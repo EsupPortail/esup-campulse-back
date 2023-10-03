@@ -6,12 +6,9 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund
-from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class ProjectCommissionFundViewsTests(TestCase):

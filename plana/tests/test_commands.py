@@ -24,10 +24,12 @@ class AccountExpirationCommandTest(TestCase):
     fixtures = ['auth_group', 'mailtemplatevars', 'mailtemplates']
 
     def setUp(self):
+        """Cache users."""
         self.superuser = User.objects.create_superuser('superuser', email='super@mail.tld', is_staff=True)
         self.user = User.objects.create_user('user', email='user@mail.tld')
 
     def test_current_users(self):
+        """Users should not be deleted if login is recent."""
         self.superuser.last_login = timezone.now()
         self.superuser.save()
         self.user.last_login = timezone.now()
@@ -37,6 +39,7 @@ class AccountExpirationCommandTest(TestCase):
         self.assertEqual(User.objects.count(), 2)
 
     def test_old_staff_user(self):
+        """Staff users shouldn't be deleted."""
         self.superuser.date_joined = timezone.now() - datetime.timedelta(days=1000)
         self.superuser.save()
         call_command('cron_account_expiration')
@@ -44,6 +47,7 @@ class AccountExpirationCommandTest(TestCase):
         self.assertTrue(User.objects.filter(pk=self.superuser.pk).exists())
 
     def test_account_without_connection_expiration_mail(self):
+        """User without login should be warned."""
         self.user.date_joined = timezone.now() - datetime.timedelta(
             days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
         )
@@ -53,6 +57,7 @@ class AccountExpirationCommandTest(TestCase):
         self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
 
     def test_account_without_recent_connection_expiration_mail(self):
+        """User without recent login should be warned."""
         self.user.last_login = timezone.now() - datetime.timedelta(
             days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
         )
@@ -62,6 +67,7 @@ class AccountExpirationCommandTest(TestCase):
         self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
 
     def test_account_without_connection_deletion(self):
+        """User without recent login and warned should be deleted."""
         self.user.date_joined = timezone.now() - datetime.timedelta(days=1000)
         self.user.save()
         call_command('cron_account_expiration')
@@ -194,10 +200,15 @@ class DocumentExpirationCommandTest(TestCase):
 
     def setUp(self):
         """Cache all document uploads."""
+        # TODO Write tests with expiration_day instead.
         self.days_before_expiration = 365
-        self.document_uploads = DocumentUpload.objects.filter(
-            document_id__in=Document.objects.filter(days_before_expiration=f"{self.days_before_expiration} days")
-        )
+        self.expiration_day = "08-31"
+        self.document_uploads = DocumentUpload.objects.all()
+        for document_upload in self.document_uploads:
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = None
+            document.days_before_expiration = f"{self.days_before_expiration} days"
+            document.save()
         self.today = datetime.date.today()
 
     def test_no_document_upload_expiration(self):
@@ -237,7 +248,7 @@ class DocumentExpirationCommandTest(TestCase):
         """Document upload expires today."""
         initial_document_uploads_count = self.document_uploads.count()
         self.document_uploads.update(
-            validated_date=(self.today - datetime.timedelta(days=(self.days_before_expiration)))
+            validated_date=(self.today - datetime.timedelta(days=self.days_before_expiration))
         )
         call_command("cron_document_expiration")
         self.assertNotEqual(self.document_uploads.count(), initial_document_uploads_count)
@@ -266,7 +277,7 @@ class GOAExpirationCommandTest(TestCase):
 
     def test_no_goa_expiration(self):
         """Nothing should change if no GOA date expires."""
-        self.associations.update(last_goa_date=(self.today))
+        self.associations.update(last_goa_date=self.today)
         call_command("cron_goa_expiration")
         self.assertFalse(len(mail.outbox))
 
@@ -310,7 +321,7 @@ class PasswordExpirationCommandTest(TestCase):
         """Nothing should change if password is WARNING + 1 months old."""
         self.users.update(
             password_last_change_date=(
-                self.today - datetime.timedelta(days=(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING + 1))
+                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING + 1)
             )
         )
         call_command("cron_password_expiration")

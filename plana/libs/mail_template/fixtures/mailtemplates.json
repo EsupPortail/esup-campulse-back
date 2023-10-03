@@ -404,7 +404,7 @@
       "label": "Manager Account Association GOA Expiration Scheduled",
       "description": "Tâche automatisée listant les associations dont la date d'assemblée générale a eu lieu presque un an plus tôt envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Récapitulatif des associations dont le mandat arrive à terme",
-      "body": "Bonjour,<br/><br/>Voici le récapitulatif de toutes les associations dont le mandat arrivera à terme dans les prochaines semaines :<br/><br/>{{ associations_goa_list }}<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Voici le récapitulatif de toutes les associations dont le mandat arrivera à terme dans les prochaines semaines :<br/><br/>{{ associations_goa_list | linebreaks }}<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -527,10 +527,11 @@
       "label": "Manager Document Creation",
       "description": "Confirmation du dépôt d'un nouveau document envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Un document à valider vient d'être déposé",
-      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel à l'adresse <a href='{{ document_url }}'>{{ document_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        17
       ]
     }
   },

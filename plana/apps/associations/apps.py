@@ -7,6 +7,7 @@ class AssociationsConfig(AppConfig):
     name = "plana.apps.associations"
 
     def ready(self):
+        """Add health check on Association."""
         from plana.apps.associations.backends import AssociationCheckBackend
 
         plugin_dir.register(AssociationCheckBackend)

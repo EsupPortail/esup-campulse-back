@@ -28,6 +28,7 @@ class UserGroupViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Fake accounts to test."""
         url_login = reverse("rest_login")
         # Vars used in unittests
         cls.unvalidated_user_id = 2

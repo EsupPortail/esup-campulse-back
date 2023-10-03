@@ -39,7 +39,7 @@ env.verbose_output = False  # True for verbose output
 # env.excluded_files = ['pron.jpg'] # file(s) that rsync should exclude when deploying app
 # env.extra_ppa_to_install = ['ppa:vincent-c/ponysay'] # extra ppa source(s) to use
 # extra debian/ubuntu package(s) to install on remote
-env.extra_pkg_to_install = ['age']
+env.extra_pkg_to_install = []
 # env.cfg_shared_files = ['config','/app/path/to/config/config_file'] # config files to be placed in shared config dir
 # dirs to be symlinked in shared directory
 env.extra_symlink_dirs = ['keys']
@@ -182,8 +182,8 @@ def prod():
     env.server_ip = '130.79.245.214'
     env.no_shared_sessions = False
     env.server_ssl_on = True
-    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
-    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
+    env.path_to_cert = '/etc/ssl/certs/etu-campulse_fr_with_chain.cer'
+    env.path_to_cert_key = '/etc/ssl/private/etu-campulse.fr.key'
     env.goal = 'prod'
     env.socket_port = '8014'
     env.map_settings = {

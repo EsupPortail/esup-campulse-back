@@ -1,18 +1,20 @@
+"""Base configuration for all environments."""
 from os import environ
 from os.path import join, normpath
 from pathlib import Path
 
 
 def load_key(keyfile):
+    """Load JWT and AGE keys."""
     try:
         keyfile = SITE_ROOT / "keys" / keyfile
-        with open(keyfile, "rb") as f:
-            return f.read()
+        with open(keyfile, "rb") as file:
+            return file.read()
     except FileNotFoundError:
         return b""
 
 
-APP_VERSION = "0.9.20230921"
+APP_VERSION = "1.0.1-beta-20231002"
 
 ######################
 # Path configuration #
@@ -237,7 +239,7 @@ MIDDLEWARE = [
 # Url configuration #
 #####################
 
-ROOT_URLCONF = "%s.urls" % SITE_NAME
+ROOT_URLCONF = f"{SITE_NAME}.urls"
 
 
 ######################
@@ -245,7 +247,7 @@ ROOT_URLCONF = "%s.urls" % SITE_NAME
 ######################
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = "%s.wsgi.application" % SITE_NAME
+WSGI_APPLICATION = f"{SITE_NAME}.wsgi.application"
 
 
 #############################
@@ -492,6 +494,7 @@ CAS_ID = "cas"
 CAS_NAME = "CAS Unistra"
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
+CAS_INSTITUTION_ID = 2
 
 CAS_AUTHORIZED_SERVICES = [
     "http://localhost:8000/users/auth/cas_verify/",
@@ -548,19 +551,21 @@ REST_AUTH = {
 ##########
 
 STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 
 def sentry_init(environment):
+    """Init Sentry service."""
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn="https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54",
+        dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
         ],
         environment=environment,
-        release=open(join(SITE_ROOT, "build.txt")).read(),
+        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
         send_default_pii=True,
     )
 
@@ -599,6 +604,7 @@ EMAIL_TEMPLATE_PASSWORD_RESET_PATH = "password-reset-confirm/"
 EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH = "dashboard/password-change-url/"
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH = "dashboard/validate-users/"
 EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-users/"
+EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
 ########
@@ -636,7 +642,6 @@ TEMPLATES_PDF = {
 TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
     "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/decision_attribution.html",
     "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
     "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
     "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
@@ -645,7 +650,6 @@ TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
     "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
     "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
-    # "NOTIFICATION_CULTURE-ACTIONS_PROJECT_POSTPONED": f"./{TEMPLATES__NOTIFICATIONS_FOLDER}/Culture-ActionS/postpone.html",
 }
 
 
@@ -664,7 +668,7 @@ APPEND_SLASH = False
 
 # Site name as set in migration in contents module.
 MIGRATION_SITE_DOMAIN = "localhost:3000"
-MIGRATION_SITE_NAME = "Opaline"
+MIGRATION_SITE_NAME = "Campulse"
 
 # Documentation URL sent in emails.
 APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
@@ -834,6 +838,8 @@ PERMISSIONS_GROUPS = {
         "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "change_commission",
         # documents
         "add_document",
         "change_document",
@@ -885,6 +891,8 @@ PERMISSIONS_GROUPS = {
         "view_association_all_fields",
         "view_association_not_enabled",
         "view_association_not_public",
+        # commissions
+        "change_commission",
         # documents
         "add_document",
         "change_document",

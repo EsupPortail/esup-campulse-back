@@ -71,7 +71,9 @@ class CASSerializer(LoginSerializer):
                 )
                 attrs["user"] = login.account.user
                 user = User.objects.get(email=attrs["user"].email)
-                user.is_student = True if extra.get("affiliation", "") == "student" else False
+                user.is_student = False
+                if extra.get("affiliation", "") == "student":
+                    user.is_student = True
                 user.save()
             except IntegrityError:
                 pass

@@ -218,7 +218,6 @@ class CommissionDatesViewsTests(TestCase):
 
         - managed_projects returns funds where current user manages projects.
         """
-
         commissions_with_managed_projects = Commission.objects.filter(
             models.Q(
                 id__in=CommissionFund.objects.filter(

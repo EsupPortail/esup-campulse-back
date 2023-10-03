@@ -23,7 +23,7 @@ from plana.utils import send_mail, to_bool
 
 
 class ProjectCommentCreate(generics.CreateAPIView):
-    """/projects/comments route"""
+    """/projects/comments route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
@@ -40,7 +40,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
         tags=["projects/comments"],
     )
     def post(self, request, *args, **kwargs):
-        """Create a link between a comment and a project"""
+        """Create a link between a comment and a project."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
         except ObjectDoesNotExist:
@@ -75,7 +75,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
         ):
             current_site = get_current_site(request)
             context = {
-                "site_domain": current_site.domain,
+                "site_domain": f"https://{current_site.domain}",
                 "site_name": current_site.name,
             }
             template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_COMMENT")
@@ -100,7 +100,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
 
 
 class ProjectCommentRetrieve(generics.RetrieveAPIView):
-    """/projects/{project_id}/comments route"""
+    """/projects/{project_id}/comments route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectComment.objects.all()
@@ -116,7 +116,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
         tags=["projects/comments"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all comments linked to a project"""
+        """Retrieve all comments linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
@@ -147,7 +147,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
 
 
 class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{project_id}/comments/{comment_id} route"""
+    """/projects/{project_id}/comments/{comment_id} route."""
 
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentUpdateSerializer
@@ -188,7 +188,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["projects/comments"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates comments of the project"""
+        """Update comments of the project."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -235,7 +235,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["projects/comments"],
     )
     def delete(self, request, *args, **kwargs):
-        """Destroys comments of a project"""
+        """Destroys comments of a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
             project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])

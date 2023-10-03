@@ -9,7 +9,7 @@ from plana.apps.contents.serializers.logo import LogoSerializer
 
 
 class LogoList(generics.ListAPIView):
-    """/contents/logos route"""
+    """/contents/logos route."""
 
     permission_classes = [AllowAny]
     queryset = Logo.objects.all().order_by("id")
@@ -21,5 +21,5 @@ class LogoList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all logos."""
+        """List all logos."""
         return self.list(request, *args, **kwargs)

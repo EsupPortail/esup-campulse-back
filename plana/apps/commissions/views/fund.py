@@ -9,7 +9,7 @@ from plana.apps.commissions.serializers.fund import FundSerializer
 
 
 class FundList(generics.ListAPIView):
-    """/commissions/funds/names route"""
+    """/commissions/funds/names route."""
 
     permission_classes = [AllowAny]
     queryset = Fund.objects.all()
@@ -30,7 +30,7 @@ class FundList(generics.ListAPIView):
         tags=["commissions/funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all fund types."""
+        """List all fund types."""
         acronym = request.query_params.get("acronym")
 
         if acronym is not None and acronym != "":

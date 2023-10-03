@@ -1,13 +1,9 @@
 """List of tests done on associations views."""
 import json
-from unittest.mock import Mock
 
-from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.storage import default_storage
 from django.test import Client, TestCase
-from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
 from django.urls import reverse
 from rest_framework import status
 
@@ -16,7 +12,12 @@ from plana.apps.associations.models.association import Association
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import AssociationUser
-from plana.storages import DynamicThumbnailImageField
+
+# from django.conf import settings
+# from django.core.files.storage import default_storage
+# from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
+# from unittest.mock import Mock
+# from plana.storages import DynamicThumbnailImageField
 
 
 class AssociationsViewsTests(TestCase):
@@ -837,7 +838,6 @@ class AssociationsViewsTests(TestCase):
         - Association's logo can be updated.
         - Returns 415 if MIME type is wrong.
         """
-
         # TODO Find how to mock images.
         """
         association_id = 1

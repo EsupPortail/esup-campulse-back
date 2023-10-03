@@ -25,7 +25,7 @@ from plana.utils import generate_pdf
 
 
 class AssociationListExport(generics.RetrieveAPIView):
-    """/associations/export route"""
+    """/associations/export route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
@@ -100,7 +100,7 @@ class AssociationListExport(generics.RetrieveAPIView):
             workbook = Workbook()
             worksheet = workbook.active
             for index_field, field in enumerate(fields):
-                worksheet.cell(row=1, column=(index_field + 1)).value = field
+                worksheet.cell(row=1, column=index_field + 1).value = field
 
         # Write CSV file content
         for index_association, association in enumerate(queryset):
@@ -125,11 +125,11 @@ class AssociationListExport(generics.RetrieveAPIView):
                 writer.writerow([field for field in fields])
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
-                    worksheet.cell(row=(index_association + 2), column=(index_field + 1)).value = field
+                    worksheet.cell(row=index_association + 2, column=index_field + 1).value = field
 
         if mode is None or mode == "csv":
             return http_response
-        elif mode == "xlsx":
+        if mode == "xlsx":
             with NamedTemporaryFile() as tmp:
                 workbook.save(tmp.name)
                 tmp.seek(0)
@@ -143,7 +143,7 @@ class AssociationListExport(generics.RetrieveAPIView):
 
 
 class AssociationRetrieveExport(generics.RetrieveAPIView):
-    """/associations/{id}/export route"""
+    """/associations/{id}/export route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
@@ -159,7 +159,7 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a PDF file."""
+        """Retrieve a PDF file."""
         try:
             association = self.queryset.get(id=kwargs["pk"])
             data = association.__dict__
@@ -180,7 +180,11 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
             )
 
         data["institution"] = Institution.objects.get(id=association.institution_id).name
-        data["institution_component"] = InstitutionComponent.objects.get(id=association.institution_component_id).name
+        data["institution_component"] = (
+            None
+            if association.institution_component_id is None
+            else InstitutionComponent.objects.get(id=association.institution_component_id).name
+        )
         data["activity_field"] = ActivityField.objects.get(id=association.activity_field_id).name
 
         data["documents"] = list(

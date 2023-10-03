@@ -1,3 +1,4 @@
+"""Configuration for production server environment."""
 from .base import *
 
 ##########################
@@ -38,7 +39,7 @@ SECRET_KEY = "{{ secret_key }}"
 ############
 
 DIPSTRAP_VERSION = "{{ dipstrap_version }}"
-DIPSTRAP_STATIC_URL += "%s/" % DIPSTRAP_VERSION
+DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 
 ##########
 # Sentry #
@@ -81,7 +82,6 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 ########
 
 MIGRATION_SITE_DOMAIN = "etu-campulse.fr"
-MIGRATION_SITE_NAME = "Campulse"
 DEFAULT_FROM_EMAIL = "no-reply@etu-campulse.fr"
 
 # External APIs

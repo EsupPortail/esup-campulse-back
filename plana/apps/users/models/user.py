@@ -3,7 +3,7 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from django.apps import apps
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -248,13 +248,17 @@ class User(AbstractUser):
         )
 
     def get_user_default_manager_emails(self):
-        """Returns a list of manager email addresses affected to a user."""
+        """Return a list of manager email addresses affected to a user."""
         assos_user = AssociationUser.objects.filter(user_id=self.pk)
         funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk)
         managers_emails = []
         if assos_user.count() > 0 or funds_user.count() > 0:
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
+            managers_emails = list(set(managers_emails))
+        elif self.is_cas_user() is True:
+            institution = Institution.objects.get(id=settings.CAS_INSTITUTION_ID)
+            managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         else:
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
@@ -292,12 +296,18 @@ class User(AbstractUser):
 
     def is_member_in_fund(self, fund_id):
         """Check if a user is linked as member to a fund."""
-        return GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id=fund_id)
+        return (
+            GroupInstitutionFundUser.objects.filter(
+                models.Q(user_id=self.pk, fund_id=fund_id)
+                | models.Q(user_id=self.pk, institution_id=Fund.objects.get(id=fund_id).institution_id)
+            ).count()
+            > 0
+        )
 
     def is_president_in_association(self, association_id):
         """Check if a user can write in an association."""
         try:
-            now = datetime.datetime.now()
+            now = datetime.date.today()
             AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
@@ -309,8 +319,8 @@ class User(AbstractUser):
                     can_be_president_to__lte=now,
                 )
                 | models.Q(
-                    can_be_president_from__gte=now,
-                    can_be_president_to__lte=now,
+                    can_be_president_from__lte=now,
+                    can_be_president_to__gte=now,
                 )
             ).get(
                 user_id=self.pk,

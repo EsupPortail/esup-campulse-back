@@ -27,7 +27,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
 @extend_schema(methods=["PUT"], exclude=True)
 class UserAuthView(DJRestAuthUserDetailsView):
     """
-    /users/auth/user/ route
+    /users/auth/user/ route.
 
     Overrided UserDetailsView to prevent CAS users to change their own auto-generated fields.
     """
@@ -51,7 +51,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
         if "is_validated_by_admin" in request.data and not request.user.is_cas_user():
@@ -106,7 +106,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
 class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
     """
-    /users/auth/registration/verify-email/ route
+    /users/auth/registration/verify-email/ route.
 
     OverridedVerifyEmailView to send an email to a manager (not if user revalidates an email address).
     """

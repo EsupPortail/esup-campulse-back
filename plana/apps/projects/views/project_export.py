@@ -23,7 +23,7 @@ from plana.utils import generate_pdf
 
 
 class ProjectDataExport(generics.RetrieveAPIView):
-    """/projects/{id}/pdf_export route"""
+    """/projects/{id}/pdf_export route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.visible_objects.all()
@@ -38,7 +38,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a PDF file."""
+        """Retrieve a PDF file."""
         try:
             project = self.queryset.get(id=kwargs["pk"])
             data = project.__dict__
@@ -110,7 +110,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
-    """/projects/{id}/review/pdf_export route"""
+    """/projects/{id}/review/pdf_export route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Project.visible_objects.all()
@@ -125,7 +125,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a PDF file."""
+        """Retrieve a PDF file."""
         try:
             project = self.queryset.get(id=kwargs["pk"])
             data = project.__dict__

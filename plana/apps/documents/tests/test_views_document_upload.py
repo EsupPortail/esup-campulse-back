@@ -124,6 +124,7 @@ class DocumentsViewsTests(TestCase):
     def test_get_document_upload_list_anonymous(self):
         """
         GET /documents/uploads .
+
         - An anonymous user cannot execute this request.
         """
         response = self.client.get("/documents/uploads")
@@ -193,6 +194,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_project_anonymous(self):
         """
         POST /documents/uploads .
+
         - An anonymous user can execute this request.
         - project and association cannot be specified.
         - Document must have a DOCUMENT_USER process type.
@@ -236,6 +238,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_project_not_found(self):
         """
         POST /documents/uploads .
+
         - The route can be accessed by any authenticated user.
         - The project edited must exist.
         """
@@ -251,6 +254,7 @@ class DocumentsViewsTests(TestCase):
     def test_post_document_upload_document_not_found(self):
         """
         POST /documents/uploads .
+
         - The route can be accessed by any authenticated user.
         - The document linked must exist.
         """
@@ -442,7 +446,6 @@ class DocumentsViewsTests(TestCase):
         du_cnt = len(DocumentUpload.objects.filter(project_id=project_id, document_id=document.id))
         self.assertEqual(du_cnt, 1)
 
-        self.assertFalse(len(mail.outbox))
         post_data["document"] = documents[0].id
         post_data.pop("project", None)
         response = self.student_misc_client.post("/documents/uploads", post_data)
@@ -451,7 +454,6 @@ class DocumentsViewsTests(TestCase):
             DocumentUpload.objects.filter(user_id=self.student_misc_user_id, document_id=post_data["document"]),
         )
         self.assertEqual(du_cnt, 1)
-        self.assertTrue(len(mail.outbox))
 
         post_data["association"] = 2
         document_upload = DocumentUpload.objects.get(

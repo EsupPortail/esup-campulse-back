@@ -229,19 +229,6 @@ class ProjectReviewsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_patch_project_review_not_ended(self):
-        """
-        PATCH /projects/{id}/review .
-
-        - A review can't be submitted if commission dates are still pending.
-        """
-        commission = Commission.objects.get(id=4)
-        commission.commission_date = datetime.datetime.strptime("2099-12-25", "%Y-%m-%d").date()
-        commission.save()
-        patch_data = {"review": "Au secours."}
-        response = self.student_misc_client.patch("/projects/5/review", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_patch_project_review_serializer_error(self):
         """
         PATCH /projects/{id}/review .

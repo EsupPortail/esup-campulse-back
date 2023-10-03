@@ -20,6 +20,7 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     path_logo = ThumbnailField(sizes=["detail"])
 
     def to_representation(self, obj):
+        """Don't send confidential values depending on the user doing the request."""
         request = self.context.get('request', None)
         representation = super().to_representation(obj)
 

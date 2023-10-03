@@ -16,7 +16,7 @@ class ContentsViewsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # Start a default client used on most tests.
+        """Start a default client used on most tests."""
         cls.client = Client()
 
     def test_get_contents_list(self):

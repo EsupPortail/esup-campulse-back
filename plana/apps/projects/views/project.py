@@ -33,7 +33,7 @@ from plana.utils import send_mail, to_bool
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
-    """/projects/ route"""
+    """/projects/ route."""
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -120,7 +120,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all projects linked to a user, or all projects with all their details (manager)."""
+        """List all projects linked to a user, or all projects with all their details (manager)."""
         queryset = self.get_queryset()
 
         name = request.query_params.get("name")
@@ -264,7 +264,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new project."""
+        """Create a new project."""
         if (
             "association" in request.data
             and request.data["association"] is not None
@@ -398,7 +398,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
 
 class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{id} route"""
+    """/projects/{id} route."""
 
     def get_permissions(self):
         if self.request.method == "PUT":
@@ -432,7 +432,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves a project with all its details."""
+        """Retrieve a project with all its details."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -485,7 +485,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project details."""
+        """Update project details."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -537,8 +537,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,
-            commission_fund_id__in=Commission.objects.filter(
-                submission_date__lte=datetime.datetime.today()
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id__in=Commission.objects.filter(
+                    submission_date__lte=datetime.datetime.today()
+                ).values_list("id")
             ).values_list("id"),
         ).count()
         if expired_project_commission_dates_count > 0:
@@ -580,6 +582,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def delete(self, request, *args, **kwargs):
+        """Destroys a project."""
         try:
             project = self.get_queryset().get(id=kwargs["pk"])
         except ObjectDoesNotExist:
@@ -604,7 +607,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProjectStatusUpdate(generics.UpdateAPIView):
-    """/projects/{id}/status route"""
+    """/projects/{id}/status route."""
 
     serializer_class = ProjectStatusSerializer
 
@@ -637,7 +640,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates project status."""
+        """Update project status."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -701,7 +704,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         template = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
 
@@ -747,7 +750,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if new_project_status in Project.ProjectStatus.get_identifier_project_statuses():
+            if (
+                project.manual_identifier is None
+                and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
+            ):
                 now = datetime.datetime.now()
                 if now.month >= settings.NEW_YEAR_MONTH_INDEX:
                     year = now.year

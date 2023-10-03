@@ -16,7 +16,7 @@ class RootViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_forbidden(self):
-        """403"""
+        """403 test."""
         # TODO Simulate generic 403 request.
         """
         response = self.client.get("/admin")
@@ -24,6 +24,6 @@ class RootViewsTests(TestCase):
         """
 
     def test_not_found(self):
-        """404"""
+        """404 test."""
         response = self.client.get("/saucisse")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

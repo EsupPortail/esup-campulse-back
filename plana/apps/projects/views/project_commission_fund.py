@@ -32,7 +32,7 @@ from plana.utils import send_mail
 
 
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
-    """/projects/commission_funds route"""
+    """/projects/commission_funds route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
@@ -61,7 +61,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         tags=["projects/commission_funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Lists all commission funds that can be linked to a project."""
+        """List all commission funds that can be linked to a project."""
         project_id = request.query_params.get("project_id")
         commission_id = request.query_params.get("commission_id")
 
@@ -122,7 +122,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         tags=["projects/commission_funds"],
     )
     def post(self, request, *args, **kwargs):
-        """Creates a link between a project and a commission fund object."""
+        """Create a link between a project and a commission fund object."""
         try:
             project = Project.visible_objects.get(id=request.data["project"])
             commission_fund = CommissionFund.objects.get(id=request.data["commission_fund"])
@@ -213,7 +213,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
 
 
 class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
-    """/projects/{project_id}/commission_funds route"""
+    """/projects/{project_id}/commission_funds route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
@@ -229,7 +229,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
         tags=["projects/commission_funds"],
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves all commission dates linked to a project."""
+        """Retrieve all commission dates linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
         except ObjectDoesNotExist:
@@ -253,7 +253,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
 
 
 class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{project_id}/commission_funds/{commission_fund_id} route"""
+    """/projects/{project_id}/commission_funds/{commission_fund_id} route."""
 
     queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionFundDataSerializer
@@ -294,7 +294,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         tags=["projects/commission_funds"],
     )
     def patch(self, request, *args, **kwargs):
-        """Updates details of a project linked to a commission fund object."""
+        """Update details of a project linked to a commission fund object."""
         new_commission_fund = None
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
@@ -364,7 +364,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
         email = ""

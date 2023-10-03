@@ -31,7 +31,7 @@ from plana.utils import send_mail, to_bool
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
-    """/associations/ route"""
+    """/associations/ route."""
 
     filter_backends = [filters.SearchFilter]
     queryset = Association.objects.all().order_by("name")
@@ -119,7 +119,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists all associations with many filters."""
+        """List all associations with many filters."""
         name = request.query_params.get("name")
         acronym = request.query_params.get("acronym")
         is_enabled = request.query_params.get("is_enabled")
@@ -186,7 +186,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         }
     )
     def post(self, request, *args, **kwargs):
-        """Creates a new association with mandatory informations (manager only)."""
+        """Create a new association with mandatory informations (manager only)."""
         if "institution" in request.data and request.data["institution"] != "":
             try:
                 Institution.objects.get(id=request.data["institution"])
@@ -266,7 +266,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
 
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/associations/{id} route"""
+    """/associations/{id} route."""
 
     queryset = Association.objects.all()
 
@@ -292,7 +292,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Retrieves an association with all its details."""
+        """Retrieve an association with all its details."""
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
@@ -353,7 +353,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates association details (president and manager only, restricted fields for president)."""
+        """Update association details (president and manager only, restricted fields for president)."""
         try:
             association_id = kwargs["pk"]
             association = Association.objects.get(id=association_id)
@@ -419,7 +419,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
 
@@ -542,7 +542,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AssociationNameList(generics.ListAPIView):
-    """/associations/names route"""
+    """/associations/names route."""
 
     permission_classes = [AllowAny]
     queryset = Association.objects.all().order_by("name")
@@ -574,7 +574,7 @@ class AssociationNameList(generics.ListAPIView):
         },
     )
     def get(self, request, *args, **kwargs):
-        """Lists minimal details for all associations with many filters."""
+        """List minimal details for all associations with many filters."""
         institutions = request.query_params.get("institutions")
         is_public = request.query_params.get("is_public")
         allow_new_users = request.query_params.get("allow_new_users")
@@ -605,7 +605,7 @@ class AssociationNameList(generics.ListAPIView):
 
 
 class AssociationStatusUpdate(generics.UpdateAPIView):
-    """/associations/{id}/status route"""
+    """/associations/{id}/status route."""
 
     queryset = Association.objects.all()
     serializer_class = AssociationStatusSerializer
@@ -636,7 +636,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         }
     )
     def patch(self, request, *args, **kwargs):
-        """Updates association charter status."""
+        """Update association charter status."""
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -721,9 +721,11 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         }
         if request.data["charter_status"] == "CHARTER_VALIDATED":
             association.is_site = True
+            association.is_public = True
             association.save()
         elif request.data["charter_status"] == "CHARTER_REJECTED":
             association.is_site = False
+            association.is_public = False
             association.save()
         if request.data["charter_status"] in mail_templates_codes_by_status:
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[request.data["charter_status"]])
