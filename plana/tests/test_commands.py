@@ -181,7 +181,6 @@ class CommissionExpirationCommandTest(TestCase):
 
 
 class DocumentExpirationCommandTest(TestCase):
-    # TODO Rewrite all tests with expiration_day checks instead of days_before_expiration.
     """Test document_expiration command."""
 
     fixtures = [
@@ -201,21 +200,21 @@ class DocumentExpirationCommandTest(TestCase):
 
     def setUp(self):
         """Cache all document uploads."""
+        # TODO Write tests with expiration_day instead.
         self.days_before_expiration = 365
         self.expiration_day = "08-31"
-        self.document_uploads = DocumentUpload.objects.filter(
-            document_id__in=Document.objects.filter(expiration_day=self.expiration_day)
-        )
+        self.document_uploads = DocumentUpload.objects.all()
         for document_upload in self.document_uploads:
-            document_upload.expiration_day = None
-            document_upload.days_before_expiration = f"{self.days_before_expiration} days"
-            document_upload.save()
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = None
+            document.days_before_expiration = f"{self.days_before_expiration} days"
+            document.save()
         self.today = datetime.date.today()
 
     def test_no_document_upload_expiration(self):
         """Nothing should change if no document upload expires."""
         call_command("cron_document_expiration")
-        # self.assertFalse(len(mail.outbox))
+        self.assertFalse(len(mail.outbox))
 
     def test_almost_document_upload_expiration(self):
         """An email is sent if document upload expires in WARNING days."""
@@ -228,7 +227,7 @@ class DocumentExpirationCommandTest(TestCase):
             )
         )
         call_command("cron_document_expiration")
-        # self.assertTrue(len(mail.outbox))
+        self.assertTrue(len(mail.outbox))
 
     def test_almost_document_upload_expiration_but_no_document_upload_expiration(self):
         """Nothing should change if document expires in WARNING - 1 days."""
@@ -243,7 +242,7 @@ class DocumentExpirationCommandTest(TestCase):
             )
         )
         call_command("cron_document_expiration")
-        # self.assertFalse(len(mail.outbox))
+        self.assertFalse(len(mail.outbox))
 
     def test_document_upload_expiration(self):
         """Document upload expires today."""
@@ -252,7 +251,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(self.today - datetime.timedelta(days=self.days_before_expiration))
         )
         call_command("cron_document_expiration")
-        # self.assertNotEqual(self.document_uploads.count(), initial_document_uploads_count)
+        self.assertNotEqual(self.document_uploads.count(), initial_document_uploads_count)
 
 
 class GOAExpirationCommandTest(TestCase):
