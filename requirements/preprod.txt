@@ -24,12 +24,12 @@ backports-zoneinfo==0.2.1 ; python_version >= "3.8" and python_version < "3.9" \
 bleach==6.0.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:1a1a85c1595e07d8db14c5f09f09e6433502c51c595970edc090551f0db99414 \
     --hash=sha256:33c16e3353dbd13028ab4799a0f89a83f113405c766e9c122df8a06f5b85b3f4
-boto3==1.28.59 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:7623b52c135becf145f762a9cc4203a1fb30055bb1cc7a254f82e5f7954d44a1 \
-    --hash=sha256:aa861e5568a564a5ce2fff5413d6ae2cda0eed7399b3a949bc861a20915e2046
-botocore==1.31.59 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:159f637300206a0b37b49c1bee61265650843f591e9cb62e9adcb3d1c2afec91 \
-    --hash=sha256:6485a700744c60fcbf4bba4fcacb22067f601e79fb0c27fae04cf07b03c5e8f9
+boto3==1.28.60 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:d5f270c2c9a051f78c308cbba4268458e8df441057b73ba140742707ac1bc7ea \
+    --hash=sha256:dccb49cc10b31314b8553c6c9614c44b2249e0d0285d73f608a5d2010f6e1d82
+botocore==1.31.60 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:578470a15a5bd64f67437a81f23feccba85084167acf63c56acada2c1c1d95d8 \
+    --hash=sha256:b6de7a6a03ca3da18b78615a2cb5221c9fdb9483d3f50cb4281ae038b3f22d9f
 britney==0.5.1 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:680faf36f00865ab77dbb7a092d34ed3bbf7f3da018a37e6eb8207aebd01a942 \
     --hash=sha256:6e2c461ede290246b777dc1444fcf5823234825d7746f6d6aabc4793340d2e3b
@@ -354,9 +354,9 @@ django-summernote==0.8.20.0 ; python_version >= "3.8" and python_version < "3.12
 django-thumbnails==0.7.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:0c26ff03762beb7b6bec01edc6f012eba05085bc235cdc598d388487c3542e61 \
     --hash=sha256:ffcc1223da4c0d4eb764ca28cd79f702dff62936ab583d8f59b5ec07e0ce2365
-django==4.2.5 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:5e5c1c9548ffb7796b4a8a4782e9a2e5a3df3615259fc1bfd3ebc73b646146c1 \
-    --hash=sha256:b6b2b5cae821077f137dc4dade696a1c2aa292f892eca28fa8d7bfdf2608ddd4
+django==4.2.6 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:08f41f468b63335aea0d904c5729e0250300f6a1907bf293a65499496cdbc68f \
+    --hash=sha256:a64d2487cdb00ad7461434320ccc38e60af9c404773a2f95ab0093b4453a3215
 djangorestframework-camel-case==1.4.2 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:cdae75846648abb6585c7470639a1d2fb064dc45f8e8b62aaa50be7f1a7a61f4
 djangorestframework-simplejwt==5.3.0 ; python_version >= "3.8" and python_version < "3.12" \
