@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-03 09:39+0200\n"
+"POT-Creation-Date: 2023-10-05 07:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -736,8 +736,8 @@ msgstr "Non autorisé à ajouter un document si non président."
 #: plana/apps/documents/views/document_upload.py:217
 #: plana/apps/users/views/association_user.py:260
 #: plana/apps/users/views/group_institution_fund_user.py:179
-#: plana/apps/users/views/user.py:302 plana/apps/users/views/user.py:349
-#: plana/apps/users/views/user.py:452
+#: plana/apps/users/views/user.py:318 plana/apps/users/views/user.py:365
+#: plana/apps/users/views/user.py:468
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
@@ -1474,20 +1474,20 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:206 plana/apps/users/views/user.py:372
+#: plana/apps/users/views/user.py:222 plana/apps/users/views/user.py:388
 #: plana/apps/users/views/user_auth.py:79
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:310
+#: plana/apps/users/views/user.py:326
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:357
+#: plana/apps/users/views/user.py:373
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:458
+#: plana/apps/users/views/user.py:474
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 
