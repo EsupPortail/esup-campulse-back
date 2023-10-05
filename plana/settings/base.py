@@ -232,6 +232,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
 ]
 
 
@@ -285,6 +286,7 @@ THIRD_PARTY_APPS = [
     "storages",
     "thumbnails",
     "django_cleanup",
+    "hijack",
     "health_check",
     "health_check.db",
     "health_check.cache",
