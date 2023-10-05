@@ -148,5 +148,15 @@
       "primary": true,
       "user_id": 15
     }
+  },
+  {
+    "model": "account.emailaddress",
+    "pk": 16,
+    "fields": {
+      "email": "gestionnaire-unistra@mail.tld",
+      "verified": true,
+      "primary": true,
+      "user_id": 16
+    }
   }
 ]
