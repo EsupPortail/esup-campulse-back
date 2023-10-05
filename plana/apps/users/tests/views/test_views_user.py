@@ -11,6 +11,8 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.fund import Fund
+from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
 
@@ -123,10 +125,18 @@ class UserViewsTests(TestCase):
         response_manager = self.manager_client.get("/users/?institutions=2,3")
         content = json.loads(response_manager.content.decode("utf-8"))
 
-        associations_ids = Association.objects.filter(institution_id__in=institution_ids).values_list("id")
-        links_cnt = AssociationUser.objects.filter(association_id__in=associations_ids).count()
-        # TODO Failing test due to last minute change.
-        # self.assertEqual(len(content), links_cnt)
+        associations_users_ids = AssociationUser.objects.filter(
+            association_id__in=Association.objects.filter(institution_id__in=institution_ids).values_list("id")
+        ).values_list("user_id")
+        commission_users_ids = User.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
+                fund_id__in=Fund.objects.filter(
+                    institution_id__in=Institution.objects.filter(id__in=institution_ids).values_list("id")
+                ).values_list("id")
+            ).values_list("user_id")
+        ).values_list("id")
+        links_cnt = User.objects.filter(Q(id__in=associations_users_ids) | Q(id__in=commission_users_ids)).count()
+        self.assertEqual(len(content), links_cnt)
 
     def test_manager_get_users_list_advanced_queries(self):
         """
@@ -154,14 +164,20 @@ class UserViewsTests(TestCase):
 
         associations_ids = Association.objects.filter(institution_id__in=[2, 3]).values_list("id")
         assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids).values_list("user_id")
+        commission_users_query = User.objects.filter(
+            id__in=GroupInstitutionFundUser.objects.filter(
+                fund_id__in=Fund.objects.filter(
+                    institution_id__in=Institution.objects.filter(id__in=[2, 3]).values_list("id")
+                ).values_list("id")
+            ).values_list("user_id")
+        )
 
         response_manager = self.manager_client.get("/users/?institutions=2,3,")
         content = json.loads(response_manager.content.decode("utf-8"))
         users_query_cnt = User.objects.filter(
             Q(id__in=assos_users_query) | Q(id__in=misc_users_query) | Q(id__in=commission_users_query)
         ).count()
-        # TODO Failing test due to last minute change.
-        # self.assertEqual(len(content), users_query_cnt)
+        self.assertEqual(len(content), users_query_cnt)
 
     def test_manager_get_users_list_is_cas_false(self):
         """
