@@ -537,8 +537,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
             project_id=project.id,
-            commission_fund_id__in=Commission.objects.filter(
-                submission_date__lte=datetime.datetime.today()
+            commission_fund_id__in=CommissionFund.objects.filter(
+                commission_id__in=Commission.objects.filter(
+                    submission_date__lte=datetime.datetime.today()
+                ).values_list("id")
             ).values_list("id"),
         ).count()
         if expired_project_commission_dates_count > 0:
@@ -702,7 +704,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         template = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": current_site.domain,
+            "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
 

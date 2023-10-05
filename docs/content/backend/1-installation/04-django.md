@@ -38,6 +38,7 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 - `EMAIL_TEMPLATE_PASSWORD_RESET_URL` : chemin menant à la page de réinitialisation du mot de passe pour une personne non connectée.
 - `EMAIL_TEMPLATE_PASSWORD_CHANGE_URL` : chemin menant à la page de changement du mot de passe pour une personne connectée.
 - `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation des comptes pour un gestionnaire connecté.
+- `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation d'une charte pour un gestionnaire connecté.
 - `APP_DOCUMENTATION_URL` : URL menant vers la documentation utilisateur.
 
 ## Nombre de jours attendus dans les tâches CRON.

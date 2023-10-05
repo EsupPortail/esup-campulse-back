@@ -527,10 +527,11 @@
       "label": "Manager Document Creation",
       "description": "Confirmation du dépôt d'un nouveau document envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Un document à valider vient d'être déposé",
-      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Un nouveau document à valider vient d'être déposé, vous pouvez le vérifier sur votre espace personnel à l'adresse <a href='{{ document_url }}'>{{ document_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
-        2
+        2,
+        17
       ]
     }
   },

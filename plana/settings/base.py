@@ -14,7 +14,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.0.1-beta"
+APP_VERSION = "1.0.2-beta"
 
 ######################
 # Path configuration #
@@ -232,6 +232,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
 ]
 
 
@@ -285,6 +286,7 @@ THIRD_PARTY_APPS = [
     "storages",
     "thumbnails",
     "django_cleanup",
+    "hijack",
     "health_check",
     "health_check.db",
     "health_check.cache",
@@ -604,6 +606,7 @@ EMAIL_TEMPLATE_PASSWORD_RESET_PATH = "password-reset-confirm/"
 EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH = "dashboard/password-change-url/"
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH = "dashboard/validate-users/"
 EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-users/"
+EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
 ########

@@ -146,5 +146,14 @@
       "description": "Liste des dates de dernières Assemblées Générales Ordinaires des associations.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 17,
+    "fields": {
+      "code": "{{ document_url }}",
+      "description": "URL menant vers une page de validation de document.",
+      "fake_vars": []
+    }
   }
 ]

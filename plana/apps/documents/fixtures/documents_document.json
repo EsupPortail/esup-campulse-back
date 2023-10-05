@@ -218,9 +218,9 @@
     "model": "documents.document",
     "pk": 12,
     "fields": {
-      "name": "PV de l'AG Constitutive",
-      "acronym": "PV_AG_CONSTITUTIVE",
-      "description": "Procès-verbal de l'assemblée générale constitutive",
+      "name": "PV de l'AG Constitutive / PV de la dernière AGO",
+      "acronym": "PV_AG_CONSTITUTIVE_AGO",
+      "description": "Procès-verbal de l'assemblée générale constitutive ou procès-verbal de la dernière assemblée générale ordinaire",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,

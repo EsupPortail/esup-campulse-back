@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.1-beta
+  version: 1.0.2-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -5615,6 +5615,18 @@ components:
           minLength: 1
           title: Nom de famille
           maxLength: 150
+        phone:
+          type: string
+          nullable: true
+          minLength: 1
+          title: Téléphone
+          maxLength: 32
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Courriel
+          maxLength: 254
         is_cas:
           type: boolean
           default: false
@@ -5622,6 +5634,7 @@ components:
           type: boolean
           title: Est validé par l'équipe d'administration
       required:
+      - email
       - first_name
       - last_name
       - username

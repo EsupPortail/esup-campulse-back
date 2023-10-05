@@ -630,7 +630,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - The project must be linked to non expired commission dates.
         """
-        expired_commission_date = Commission.objects.get(id=3)
+        expired_commission_date = Commission.objects.get(id=1)
         expired_commission_date.submission_date = "1968-05-03"
         expired_commission_date.save()
         patch_data = {"summary": "new summary"}

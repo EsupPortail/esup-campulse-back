@@ -181,6 +181,8 @@ class UserPartialDataSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "phone",
+            "email",
             "is_cas",
             "is_validated_by_admin",
         ]
