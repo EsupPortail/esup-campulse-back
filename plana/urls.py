@@ -42,9 +42,10 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path("summernote/", include('django_summernote.urls')),
-    path("mail_template/", include('plana.libs.mail_template.urls')),
-    path("_hc/", include('health_check.urls')),
+    path("hijack/", include("hijack.urls")),
+    path("summernote/", include("django_summernote.urls")),
+    path("mail_template/", include("plana.libs.mail_template.urls")),
+    path("_hc/", include("health_check.urls")),
 ]
 
 # debug toolbar for dev

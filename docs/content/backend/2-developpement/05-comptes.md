@@ -19,3 +19,4 @@ Plusieurs comptes de tests sont présents dans le jeu de données initial. Il s'
 13. `president-asso-site@mail.tld` : `STUDENT_INSTITUTION`
 14. `president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld` : `MEMBER_FUND` + `STUDENT_INSTITUTION` + `STUDENT_MISC`
 15. `compte-presque-valide@mail.tld` (nouveau compte avec adresse email validée) : `STUDENT_MISC`
+16. `gestionnaire-unistra@mail.tld` : `MANAGER_INSTITUTION`

@@ -346,6 +346,9 @@ django-extensions==3.2.3 ; python_version >= "3.8" and python_version < "3.12" \
 django-health-check==3.17.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c \
     --hash=sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778
+django-hijack==3.4.1 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:2bdd7ffa42198637f49c195468b8330ea51dc36b7c2bee0f3c220c9d7de78764 \
+    --hash=sha256:d49b4b6426f4c4694ee0c7591990f9ccb91a7910ba22a8f10e11e0b1f3e0b5b4
 django-storages[boto3]==1.14.1 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:18cb6c305fbb2f114c11b5b7b647b6271aa251972dcd4a5651b9cee2b0bd3a8a \
     --hash=sha256:a2c327d67792eec04c7f5f5bb2900b21f426de8a3a811cea85fac7904bdccf36

@@ -12,6 +12,7 @@ weight: 112
 - [django-cors-headers](https://pypi.org/project/django-cors-headers/) : définition de headers HTTP par défaut pour les CORS.
 - [django-extensions](https://pypi.org/project/django-extensions/) : ajout de fonctionnalités de développement à Django.
 - [django-health-check](https://pypi.org/project/django-health-check/) : vérification de l'utilisation du stockage.
+- [django-hijack](https://pypi.org/project/django-hijack/) : endossement de compte pour les superusers.
 - [django-storages](https://pypi.org/project/django-storages/) : gestion des supports de stockage externes comme S3.
 - [django-summernote](https://pypi.org/project/django-summernote/) : intégration d'un WYSIWYG à l'interface d'administration Django.
 - [django-thumbnails](https://pypi.org/project/django-thumbnails/) : redimensionnement des images.
