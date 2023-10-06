@@ -2,7 +2,7 @@
 set -e
 echo "Running inside /prestart.sh"
 
-cd /app
+cd /app/plana-api
 python manage.py migrate
 # Don't stop building when compilemessages fail
 python manage.py compilemessages || true
