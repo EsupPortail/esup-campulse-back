@@ -311,5 +311,14 @@
       "user_id": 15,
       "group_id": 6
     }
+  },
+  {
+    "model": "users.groupinstitutionfunduser",
+    "pk": 37,
+    "fields": {
+      "user_id": 16,
+      "group_id": 2,
+      "institution_id": 2
+    }
   }
 ]

@@ -10,7 +10,7 @@ from .models import MailTemplate, MailTemplateVar
 @admin.register(MailTemplate)
 class MailTemplateAdmin(SummernoteModelAdmin):
     form = MailTemplateForm
-    list_display = ('code', 'label', 'active')
+    list_display = ('code', 'subject', 'active')
     filter_horizontal = ('available_vars',)
     summernote_fields = ('body',)
 
