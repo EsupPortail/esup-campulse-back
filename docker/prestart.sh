@@ -7,6 +7,7 @@ python manage.py migrate
 # Don't stop building when compilemessages fail
 python manage.py compilemessages || true
 python manage.py initial_import
+mkdir keys
 python manage.py generate_jwt_keys
 python manage.py generate_age_keys
 

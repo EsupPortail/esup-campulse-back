@@ -1,14 +1,14 @@
 # production stage
-FROM python:3.9-slim-buster
+FROM python:3.9-slim-bookworm
 
-EXPOSE 8080
+EXPOSE 8000
 
 RUN useradd -m -s /bin/bash django
 
 # Install the application
 RUN set -ex \
     && apt update \
-    && apt install -y gettext gcc libpangocairo-1.0-0 openssh-client \
+    && apt install -y age gettext gcc libpangocairo-1.0-0 openssh-client \
     # Third libraries dependencies
     # && apk --update add ... \
     && pip install -U pip uwsgi

@@ -20,7 +20,7 @@ services:
       dockerfile: ./docker/Dockerfile
     hostname: back
     volumes:
-      - ../plana-api:/app/plana-api
+      - ../plana-api:/app/plana/back
     ports:
       - "8080:8080"
     env_file:
