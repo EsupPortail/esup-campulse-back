@@ -1,6 +1,8 @@
 """Generic functions to send emails, and convert "true" and "false" to real booleans."""
 import ast
 import datetime
+import logging
+from smtplib import SMTPException
 
 import weasyprint
 from django.conf import settings
@@ -73,7 +75,12 @@ def send_mail(
                 temp_attachment["mimetype"],
             )
 
-    mail.send()
+    logger = logging.getLogger(__name__)
+    try:
+        mail.send()
+    except SMTPException as smtp_error:
+        logger.exception(smtp_error)
+        raise
 
 
 def to_bool(attr):
