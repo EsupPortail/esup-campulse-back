@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-09 10:28+0200\n"
+"POT-Creation-Date: 2023-10-09 13:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,6 +174,7 @@ msgid "Charter date"
 msgstr "Date de la charte"
 
 #: plana/apps/associations/models/association.py:81
+#: plana/apps/history/models/history.py:46
 #: plana/apps/projects/models/project.py:161
 #: plana/apps/projects/models/project_comment.py:13
 msgid "Creation date"
@@ -776,6 +777,82 @@ msgstr "Non autorisé à récupérer ce document."
 #: plana/apps/documents/views/document_upload.py:480
 msgid "Not allowed to delete this uploaded document."
 msgstr "Non autorisé à supprimer ce document."
+
+#: plana/apps/history/models/history.py:17
+msgid "A user is logged in"
+msgstr "Un utilisateur est connecté"
+
+#: plana/apps/history/models/history.py:18
+msgid "A user is registered"
+msgstr "Un utilisateur s'est inscrit"
+
+#: plana/apps/history/models/history.py:19
+msgid "A user is validated"
+msgstr "Un utilisateur est validé"
+
+#: plana/apps/history/models/history.py:20
+msgid "An association is changed"
+msgstr "Une association est changée"
+
+#: plana/apps/history/models/history.py:21
+msgid "An association charter is changed"
+msgstr "Une charte d'association est changée"
+
+#: plana/apps/history/models/history.py:23
+msgid "A link between an association and a user is validated"
+msgstr "Un lien entre utilisateur et association est validé"
+
+#: plana/apps/history/models/history.py:25
+msgid "A link between an association and a user is changed"
+msgstr "Un lien entre utilisateur et association est changé"
+
+#: plana/apps/history/models/history.py:27
+msgid "A delegation between an association and a user is changed"
+msgstr "Une délégation entre une association et un utilisateur est changée"
+
+#: plana/apps/history/models/history.py:30
+msgid "A link between group and user is changed"
+msgstr "Un lien entre utilisateur et groupe est changé"
+
+#: plana/apps/history/models/history.py:32
+msgid "A document upload is changed"
+msgstr "Un document téléversé est changé"
+
+#: plana/apps/history/models/history.py:33
+msgid "A project is validated"
+msgstr "Un projet est validé"
+
+#: plana/apps/history/models/history.py:36
+msgid "Action title"
+msgstr "Intitulé de l'action"
+
+#: plana/apps/history/models/history.py:42
+msgid "User who did action"
+msgstr "Utilisateur ayant réalisé l'action"
+
+#: plana/apps/history/models/history.py:49
+msgid "User affected by change"
+msgstr "Utilisateur affecté par le changement"
+
+#: plana/apps/history/models/history.py:56
+msgid "Association affected by change"
+msgstr "Association affectée par le changement"
+
+#: plana/apps/history/models/history.py:62
+msgid "Link between association and user affected by change"
+msgstr "Lien entre utilisateur et association affecté par le changement"
+
+#: plana/apps/history/models/history.py:68
+msgid "Link between group and user affected by change"
+msgstr "Lien entre utilisateur et groupe affecté par le changement"
+
+#: plana/apps/history/models/history.py:74
+msgid "Document affected by change"
+msgstr "Document affecté par le changement"
+
+#: plana/apps/history/models/history.py:80
+msgid "Project affected by change"
+msgstr "Projet affecté par le changement"
 
 #: plana/apps/institutions/models/institution.py:37
 msgid "Institutions"

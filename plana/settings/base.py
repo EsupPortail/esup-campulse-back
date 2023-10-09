@@ -301,6 +301,7 @@ LOCAL_APPS = [
     "plana.apps.consents",
     "plana.apps.documents",
     "plana.apps.groups",
+    "plana.apps.history",
     "plana.apps.institutions",
     "plana.apps.projects",
     "plana.apps.users",
