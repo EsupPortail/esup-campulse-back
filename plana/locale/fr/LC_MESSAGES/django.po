@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-09 15:18+0200\n"
+"POT-Creation-Date: 2023-10-09 15:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -853,6 +853,11 @@ msgstr "Document affecté par le changement"
 #: plana/apps/history/models/history.py:80
 msgid "Project affected by change"
 msgstr "Projet affecté par le changement"
+
+#: plana/apps/history/models/history.py:89
+#: plana/apps/history/models/history.py:90
+msgid "History"
+msgstr "Historique"
 
 #: plana/apps/institutions/models/institution.py:37
 msgid "Institutions"
@@ -1716,6 +1721,10 @@ msgid "Checks last General Ordinary Assembly date of associations."
 msgstr ""
 "Vérifie la date de dernière Assemblée Générale Ordinaire des associations."
 
+#: plana/management/commands/cron_history_expiration.py:12
+msgid "Deletes all History old lines."
+msgstr "Supprime toutes les anciennes lignes d'historique"
+
 #: plana/management/commands/cron_password_expiration.py:20
 msgid "Expired password policy."
 msgstr "Politique d'expiration des mots de passe."
@@ -2053,6 +2062,3 @@ msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
 "des caractères."
-
-#~ msgid "Account registration must be completed."
-#~ msgstr "L'inscription de ce compte n'est pas terminée."

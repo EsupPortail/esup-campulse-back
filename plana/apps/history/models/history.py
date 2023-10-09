@@ -84,3 +84,7 @@ class History(models.Model):
 
     def __str__(self):
         return f"{self.action_title}"
+
+    class Meta:
+        verbose_name = _("History")
+        verbose_name_plural = _("History")

@@ -222,7 +222,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(self.days_before_expiration - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
+                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 )
             )
         )
@@ -235,9 +235,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(
-                        self.days_before_expiration - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING - 1
-                    )
+                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING - 1)
                 )
             )
         )
@@ -413,7 +411,7 @@ class ReviewExpirationCommandTest(TestCase):
         today = datetime.date.today()
         mail_sending_due_date = timezone.make_aware(
             datetime.datetime.combine(
-                today - datetime.timedelta(days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION),
+                today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_REVIEW_EXPIRATION),
                 datetime.datetime.min.time(),
             )
         )
