@@ -79,9 +79,6 @@ class CASSerializer(LoginSerializer):
                 pass
         else:
             attrs["user"] = login.account.user
-            user = User.objects.get(email=attrs["user"].email)
-            if user.get_user_groups().count() == 0:
-                raise exceptions.ValidationError(_("Account registration must be completed."))
 
         return attrs
 

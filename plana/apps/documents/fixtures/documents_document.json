@@ -491,5 +491,62 @@
         "image/png"
       ]
     }
+  },
+  {
+    "model": "documents.document",
+    "pk": 26,
+    "fields": {
+      "name": "Attestation d'Assurance Responsabilité Civile",
+      "acronym": "ATTESTATION_ASSURANCE_RESPONSABILITE_CIVILE",
+      "description": "Attestation d'Assurance Responsabilité Civile",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 27,
+    "fields": {
+      "name": "Bilan Moral",
+      "acronym": "BILAN_MORAL",
+      "description": "Bilan Moral (pour les renouvellements de chartes existantes)",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 28,
+    "fields": {
+      "name": "Bilan Financier",
+      "acronym": "BILAN_MORAL",
+      "description": "Bilan Financier (pour les renouvellements de chartes existantes)",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
   }
 ]

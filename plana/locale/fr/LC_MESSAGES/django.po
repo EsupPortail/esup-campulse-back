@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 07:57+0200\n"
+"POT-Creation-Date: 2023-10-09 10:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1314,20 +1314,16 @@ msgid "View is not defined, pass it as a context variable"
 msgstr "Vue non définie, passez-là dans une variable de contexte"
 
 #: plana/apps/users/serializers/cas.py:57
-#: plana/apps/users/tests/serializers/test_cas.py:172
+#: plana/apps/users/tests/serializers/test_cas.py:148
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:84
-msgid "Account registration must be completed."
-msgstr "L'inscription de ce compte n'est pas terminée."
-
-#: plana/apps/users/serializers/cas.py:91
+#: plana/apps/users/serializers/cas.py:88
 #, python-brace-format
 msgid "{value} is not a valid service"
 msgstr "{value} n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:119
+#: plana/apps/users/serializers/cas.py:116
 #: plana/apps/users/tests/serializers/test_cas.py:47
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -1975,8 +1971,11 @@ msgstr ""
 "Actions en rapport avec la DDRS (Développement Durable et Responsabilité "
 "Sociétale)"
 
-#: plana/utils.py:21
+#: plana/utils.py:23
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
 "des caractères."
+
+#~ msgid "Account registration must be completed."
+#~ msgstr "L'inscription de ce compte n'est pas terminée."
