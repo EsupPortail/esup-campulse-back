@@ -1,4 +1,5 @@
 """Base configuration for all environments."""
+from datetime import timedelta
 from os import environ
 from os.path import join, normpath
 from pathlib import Path
@@ -528,13 +529,14 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Using SimpleJWT with dj-rest-auth
 SIMPLE_JWT = {
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=1),
     "ALGORITHM": "RS256",
-    "USER_ID_CLAIM": "user_id",
-    "USER_ID_FIELD": "id",
-    "AUDIENCE": "plan_a",
-    "ISSUER": "plan_a",
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
+    "AUDIENCE": "plan_a",
+    "ISSUER": "plan_a",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
 }
 
 REST_AUTH = {
