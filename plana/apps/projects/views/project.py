@@ -16,6 +16,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
@@ -800,6 +801,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
                 "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
             }
+            if mail_templates_codes_by_status[new_project_status] == "PROJECT_VALIDATED":
+                History.objects.create(
+                    action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
+                )
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[new_project_status])
             email = ""
             if project.association_id is not None:

@@ -541,6 +541,7 @@ SIMPLE_JWT = {
 REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,
+    "LOGIN_SERIALIZER": "plana.apps.users.serializers.user_auth.LoginSerializer",
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetConfirmSerializer",

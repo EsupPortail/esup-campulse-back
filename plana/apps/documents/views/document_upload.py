@@ -24,6 +24,7 @@ from plana.apps.documents.serializers.document_upload import (
     DocumentUploadSerializer,
     DocumentUploadUpdateSerializer,
 )
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, User
@@ -311,8 +312,14 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             )
 
         request.data["name"] = request.data["path_file"].name
-
-        return super().create(request, *args, **kwargs)
+        document_upload_response = super().create(request, *args, **kwargs)
+        if document.acronym == "RIB":
+            History.objects.create(
+                action_title="DOCUMENT_UPLOAD_CHANGED",
+                action_user_id=request.user.pk,
+                document_upload_id=document_upload_response.data["id"],
+            )
+        return document_upload_response
 
 
 class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -422,6 +429,13 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             return response.Response(
                 {"error": _("Not allowed to update a document for this fund.")},
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if document.acronym == "RIB":
+            History.objects.create(
+                action_title="DOCUMENT_UPLOAD_CHANGED",
+                action_user_id=request.user.pk,
+                document_upload_id=document_upload.id,
             )
 
         if "validated_date" in request.data and request.data["validated_date"] != "":

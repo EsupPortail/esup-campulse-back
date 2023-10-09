@@ -20,6 +20,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
@@ -424,6 +425,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 context[
                     "password_reset_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
+            History.objects.create(action_title="USER_VALIDATED", action_user_id=request.user.pk, user_id=user.id)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,

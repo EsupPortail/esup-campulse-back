@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
-from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
@@ -48,37 +48,37 @@ class History(models.Model):
         User,
         verbose_name=_("User affected by change"),
         related_name="user_set",
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     association = models.ForeignKey(
         Association,
         verbose_name=_("Association affected by change"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     association_user = models.ForeignKey(
         AssociationUser,
         verbose_name=_("Link between association and user affected by change"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     group_institution_fund_user = models.ForeignKey(
         GroupInstitutionFundUser,
         verbose_name=_("Link between group and user affected by change"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
-    document = models.ForeignKey(
-        Document,
+    document_upload = models.ForeignKey(
+        DocumentUpload,
         verbose_name=_("Document affected by change"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
     project = models.ForeignKey(
         Project,
         verbose_name=_("Project affected by change"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         null=True,
     )
 

@@ -1,6 +1,7 @@
 """dj-rest-auth overrided serializers."""
 import datetime
 
+from dj_rest_auth.serializers import LoginSerializer as DJRestAuthLoginSerializer
 from dj_rest_auth.serializers import (
     PasswordChangeSerializer as DJRestAuthPasswordChangeSerializer,
 )
@@ -11,14 +12,25 @@ from dj_rest_auth.serializers import (
     PasswordResetSerializer as DJRestAuthPasswordResetSerializer,
 )
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions
 
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import check_valid_password, send_mail
+
+
+class LoginSerializer(DJRestAuthLoginSerializer):
+    """Overrided LoginSerializer to log the action in history."""
+
+    def authenticate(self, **kwargs):
+        auth = authenticate(self.context["request"], **kwargs)
+        History.objects.create(action_title="USER_LOGGED", action_user_id=auth.id)
+        return auth
 
 
 class PasswordChangeSerializer(DJRestAuthPasswordChangeSerializer):

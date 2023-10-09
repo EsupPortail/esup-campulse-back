@@ -9,6 +9,7 @@ from rest_framework import generics, response, status
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.serializers.group_institution_fund_user import (
@@ -144,12 +145,19 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        GroupInstitutionFundUser.objects.create(
+        gifu = GroupInstitutionFundUser.objects.create(
             user_id=user.id,
             group_id=group_id,
             institution_id=institution_id,
             fund_id=fund_id,
         )
+
+        if not request.user.is_anonymous:
+            History.objects.create(
+                action_title="GROUP_INSTITUTION_FUND_USER_CHANGED",
+                action_user_id=request.user.pk,
+                group_institution_fund_user_id=gifu.id,
+            )
 
         return response.Response({}, status=status.HTTP_201_CREATED)
 

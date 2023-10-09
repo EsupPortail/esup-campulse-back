@@ -4187,6 +4187,7 @@ components:
       - user
     LoginRequest:
       type: object
+      description: Overrided LoginSerializer to log the action in history.
       properties:
         username:
           type: string

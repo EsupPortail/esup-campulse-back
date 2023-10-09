@@ -11,6 +11,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
@@ -66,6 +67,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 context[
                     "account_url"
                 ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
+                History.objects.create(action_title="USER_REGISTERED", action_user_id=request.user.pk)
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LDAP_CREATION")
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
@@ -140,6 +142,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
                 "account_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user.id}",
             }
             managers_emails = user.get_user_default_manager_emails()
+            History.objects.create(action_title="USER_REGISTERED", action_user_id=user.id)
             if assos_user.count() > 0 or funds_user.count() > 0:
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_CREATION")
             else:
