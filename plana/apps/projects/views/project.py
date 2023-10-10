@@ -766,7 +766,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 )
                 if projects_year.count() > 0:
                     last_identifier = (
-                        int(projects_year.order_by("-manual_identifier").first().values('manual_identifier')) % 10000
+                        int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
                     )
                 project.manual_identifier = f"{year}{last_identifier+1:04}"
                 project.save()
