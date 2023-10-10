@@ -115,6 +115,7 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "acronym",
             "email",
             "is_enabled",
             "is_public",
