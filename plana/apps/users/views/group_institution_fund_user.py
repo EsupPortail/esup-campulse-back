@@ -82,6 +82,20 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        if (
+            GroupInstitutionFundUser.objects.filter(
+                user_id=user.id,
+                group_id=group_id,
+                institution_id=institution_id,
+                fund_id=fund_id,
+            ).count()
+            > 0
+        ):
+            return response.Response(
+                {"error": _("Link between user and group does exist.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if request.user.is_anonymous and user.is_validated_by_admin:
             return response.Response(
                 {"error": _("Only managers can edit groups for this account.")},
