@@ -812,6 +812,23 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 History.objects.create(
                     action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
                 )
+                commission = Commission.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                            "commission_fund_id"
+                        )
+                    ).values_list("commission_id")
+                ).first()
+                fund = Fund.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                            "commission_fund_id"
+                        )
+                    ).values_list("fund_id")
+                ).first()
+                context["project_name"] = project.name
+                context["fund_name"] = fund.acronym
+                context["commission_name"] = commission.name
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[new_project_status])
             email = ""
             if project.association_id is not None:
