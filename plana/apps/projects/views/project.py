@@ -759,8 +759,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     year = now.year
                 else:
                     year = now.year - 1
-                projects_year_count = Project.visible_objects.filter(manual_identifier__startswith=year).count()
-                project.manual_identifier = f"{year}{projects_year_count+1:04}"
+                last_identifier = 0
+                projects_year = Project.visible_objects.filter(
+                    manual_identifier__isnull=False, manual_identifier__startswith=year
+                )
+                if projects_year.count() > 0:
+                    last_identifier = (
+                        int(projects_year.order_by("-manual_identifier").first().values('manual_identifier')) % 10000
+                    )
+                project.manual_identifier = f"{year}{last_identifier+1:04}"
                 project.save()
 
             managers_emails = project.get_project_default_manager_emails()
