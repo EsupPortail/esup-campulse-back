@@ -29,13 +29,13 @@ class Command(BaseCommand):
                     and datetime.date.today()
                     == document_upload.validated_date
                     + document.days_before_expiration
-                    - datetime.timedelta(days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
+                    - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 ) or (
                     document_upload.validated_date is not None
                     and document.expiration_day is not None
                     and datetime.date.today()
                     == datetime.datetime.strptime(document.expiration_day, "%m-%d").date()
-                    - datetime.timedelta(days=settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
+                    - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 ):
                     template = MailTemplate.objects.get(
                         code="USER_OR_ASSOCIATION_DOCUMENT_EXPIRATION_WARNING_SCHEDULED"

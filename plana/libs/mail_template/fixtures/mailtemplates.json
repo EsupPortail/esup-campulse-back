@@ -699,7 +699,7 @@
       "label": "User Or Association Project Validated",
       "description": "Notification d'une demande de subventionnements validée envoyée à une association ou un porteur individuel",
       "subject": "{{ site_name }} – Votre demande de subventionnements a été validée",
-      "body": "Bonjour,<br/><br/>L'une de vos demandes de subventionnements a été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Votre projet {{ project_name }} vient d'être validé pour le fonds {{ fund_name }}.<br/>Vous êtes donc invité au Forum des Associations en vue de la présentation de votre projet aux membres du jury de la Commission d'Aide aux Projets Étudiants : {{ commission_name }}.<br/>Votre présence est obligatoire et votre présentation ne doit pas dépasser 3 minutes.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2

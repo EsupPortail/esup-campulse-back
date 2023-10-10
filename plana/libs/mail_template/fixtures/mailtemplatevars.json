@@ -155,5 +155,23 @@
       "description": "URL menant vers une page de validation de document.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 18,
+    "fields": {
+      "code": "{{ fund_name }}",
+      "description": "Nom d'un fonds.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 19,
+    "fields": {
+      "code": "{{ commission_name }}",
+      "description": "Nom d'une commission.",
+      "fake_vars": []
+    }
   }
 ]

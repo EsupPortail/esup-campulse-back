@@ -11,6 +11,7 @@ from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser
 
 # from django.conf import settings
@@ -657,6 +658,7 @@ class AssociationsViewsTests(TestCase):
         PATCH /associations/{id} .
 
         - A member of the association's office can edit information from the association.
+        - Event is stored in History.
         - An email is received if change is successful.
         """
         association_id = 2
@@ -669,6 +671,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_correct_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_CHANGED").count(), 1)
         association = Association.objects.get(id=association_id)
         self.assertEqual(
             association.name,
@@ -681,6 +684,7 @@ class AssociationsViewsTests(TestCase):
         PATCH /associations/{id} .
 
         - A General Manager can edit an association.
+        - Event is stored in History.
         - An email is received if change is successful.
         - can_submit_projects can be set by a manager.
         """
@@ -697,6 +701,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_CHANGED").count(), 1)
         association = Association.objects.get(id=association_id)
         self.assertEqual(
             association.name,
@@ -765,6 +770,7 @@ class AssociationsViewsTests(TestCase):
         PATCH /associations/{id} .
 
         - A General Manager can edit an association's social networks.
+        - Event is stored in History.
         - Association's social networks are correctly updated with provided data.
         """
         association_id = 2
@@ -775,6 +781,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_CHANGED").count(), 1)
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.social_networks, social_networks_json)
 
@@ -984,6 +991,7 @@ class AssociationsViewsTests(TestCase):
 
         - An student user cannot execute this request if status is not allowed.
         - An student user can execute this request if status is allowed.
+        - Event is stored in History.
         """
         association_id = 2
         self.assertFalse(len(mail.outbox))
@@ -1003,6 +1011,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_CHARTER_CHANGED").count(), 1)
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.charter_status, "CHARTER_PROCESSING")
         self.assertTrue(len(mail.outbox))

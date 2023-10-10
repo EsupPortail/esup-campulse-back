@@ -9,6 +9,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from plana.apps.associations.models.association import Association
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
@@ -548,6 +549,7 @@ class AssociationUserViewsTests(TestCase):
 
         - A student president of an association can execute this request.
         - A student president of an association can update vice-president, secretary and treasurer.
+        - Event is stored in History.
         - A student president of an association can add a delegation.
         """
         association_id = 2
@@ -564,6 +566,7 @@ class AssociationUserViewsTests(TestCase):
         )
         asso_user = AssociationUser.objects.get(user_id=self.student_user_id, association_id=association_id)
         self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_USER_DELEGATION_CHANGED").count(), 1)
         self.assertTrue(len(mail.outbox))
         self.assertEqual(asso_user.can_be_president_from, datetime.date(2023, 3, 22))
         self.assertFalse(asso_user.is_president)
@@ -636,6 +639,7 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager can execute this request.
         - Link between member and association is correctly updated.
+        - Event is stored in History.
         - If giving president privileges to a member,
               the old president is no longer president of the association.
         - A manager can validate a UserAssociation link.
@@ -650,6 +654,7 @@ class AssociationUserViewsTests(TestCase):
         )
         asso_user = AssociationUser.objects.get(user_id=self.student_user_id, association_id=association_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_USER_CHANGED").count(), 1)
         self.assertTrue(asso_user.is_president)
 
         old_president = AssociationUser.objects.get(user_id=self.president_user_id, association_id=association_id)
@@ -689,6 +694,7 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager can execute this request.
         - Link between member and association is correctly updated.
+        - Event is stored in History.
         """
         asso_user = AssociationUser.objects.get(user_id=self.president_user_id, is_president=True)
         response = self.manager_client.patch(
@@ -698,6 +704,7 @@ class AssociationUserViewsTests(TestCase):
         )
         asso_user = AssociationUser.objects.get(user_id=self.president_user_id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="ASSOCIATION_USER_CHANGED").count(), 1)
         self.assertFalse(asso_user.is_president)
 
     def test_manager_patch_association_user_404(self):

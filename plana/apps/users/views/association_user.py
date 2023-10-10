@@ -13,6 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
@@ -464,6 +465,11 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 or request.user.is_staff_for_association(kwargs["association_id"])
             )
         ):
+            History.objects.create(
+                action_title="ASSOCIATION_USER_VALIDATED",
+                action_user_id=request.user.pk,
+                association_user_id=asso_user.id,
+            )
             template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_USER_CONFIRMATION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -477,12 +483,23 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             and "can_be_president_to" in request.data
             and (request.data["can_be_president_from"] is not None or request.data["can_be_president_to"] is not None)
         ):
+            History.objects.create(
+                action_title="ASSOCIATION_USER_DELEGATION_CHANGED",
+                action_user_id=request.user.pk,
+                association_user_id=asso_user.id,
+            )
             template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_PRESIDENT_CONFIRMATION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=user.email,
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
+            )
+        elif "is_validated_by_admin" not in request.data:
+            History.objects.create(
+                action_title="ASSOCIATION_USER_CHANGED",
+                action_user_id=request.user.pk,
+                association_user_id=asso_user.id,
             )
 
         return response.Response({}, status=status.HTTP_200_OK)

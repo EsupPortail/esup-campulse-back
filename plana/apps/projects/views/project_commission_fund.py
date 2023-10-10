@@ -529,6 +529,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 project.project_status = "PROJECT_VALIDATED"
                 project.save()
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_CONFIRMATION")
+                context["project_name"] = project.name
+                context["fund_name"] = fund.acronym
+                context["commission_name"] = commission.name
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
                     to_=email,

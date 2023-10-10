@@ -535,7 +535,7 @@
     "pk": 28,
     "fields": {
       "name": "Bilan Financier",
-      "acronym": "BILAN_MORAL",
+      "acronym": "BILAN_FINANCIER",
       "description": "Bilan Financier (pour les renouvellements de chartes existantes)",
       "contact": "???",
       "is_multiple": false,

@@ -12,6 +12,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
@@ -222,7 +223,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(self.days_before_expiration - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING)
+                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING)
                 )
             )
         )
@@ -235,9 +236,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(
-                        self.days_before_expiration - settings.CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING - 1
-                    )
+                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING - 1)
                 )
             )
         )
@@ -285,6 +284,29 @@ class GOAExpirationCommandTest(TestCase):
         """GOA date expires this month."""
         call_command("cron_goa_expiration")
         self.assertTrue(len(mail.outbox))
+
+
+class HistoryExpirationCommandTest(TestCase):
+    """Test history_expiration command."""
+
+    fixtures = []
+
+    def setUp(self):
+        """Cache all history."""
+        self.history = History.objects.all()
+        self.today = datetime.date.today()
+
+    def test_no_history_expiration(self):
+        """Nothing should change if no History date expires."""
+        self.history.update(creation_date=self.today)
+        call_command("cron_history_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_goa_expiration(self):
+        """History date expires today."""
+        call_command("cron_history_expiration")
+        # TODO Create History fixtures for this test.
+        # self.assertTrue(len(mail.outbox))
 
 
 class PasswordExpirationCommandTest(TestCase):
@@ -413,7 +435,7 @@ class ReviewExpirationCommandTest(TestCase):
         today = datetime.date.today()
         mail_sending_due_date = timezone.make_aware(
             datetime.datetime.combine(
-                today - datetime.timedelta(days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION),
+                today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_REVIEW_EXPIRATION),
                 datetime.datetime.min.time(),
             )
         )
