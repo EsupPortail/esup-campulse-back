@@ -12,6 +12,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 
@@ -283,6 +284,29 @@ class GOAExpirationCommandTest(TestCase):
         """GOA date expires this month."""
         call_command("cron_goa_expiration")
         self.assertTrue(len(mail.outbox))
+
+
+class HistoryExpirationCommandTest(TestCase):
+    """Test history_expiration command."""
+
+    fixtures = []
+
+    def setUp(self):
+        """Cache all history."""
+        self.history = History.objects.all()
+        self.today = datetime.date.today()
+
+    def test_no_history_expiration(self):
+        """Nothing should change if no History date expires."""
+        self.history.update(creation_date=self.today)
+        call_command("cron_history_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_goa_expiration(self):
+        """History date expires today."""
+        call_command("cron_history_expiration")
+        # TODO Create History fixtures for this test.
+        # self.assertTrue(len(mail.outbox))
 
 
 class PasswordExpirationCommandTest(TestCase):

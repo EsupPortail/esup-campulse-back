@@ -442,6 +442,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:
                     request.data["is_public"] = False
+                else:
+                    request.data["is_public"] = True
 
             if "is_enabled" in request.data:
                 is_enabled = to_bool(request.data["is_enabled"])

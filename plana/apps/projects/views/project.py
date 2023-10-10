@@ -808,7 +808,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
                 "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
             }
-            if mail_templates_codes_by_status[new_project_status] == "PROJECT_VALIDATED":
+            if new_project_status == "PROJECT_VALIDATED":
                 History.objects.create(
                     action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
                 )

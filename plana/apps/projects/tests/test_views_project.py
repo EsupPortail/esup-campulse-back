@@ -13,6 +13,7 @@ from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
@@ -875,6 +876,7 @@ class ProjectsViewsTests(TestCase):
         - A manager user cannot execute this request if status is not allowed.
         - Statuses must follow order defined in ProjectStatus sub-model.
         - A manager user can execute this request if status is allowed.
+        - PROJECT_VALIDATED Event is stored in History.
         - Archived statuses cannot be updated anymore.
         - Cannot rollback to a previous status, except if allowed in order.
         """
@@ -912,6 +914,7 @@ class ProjectsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="PROJECT_VALIDATED").count(), 1)
         project = Project.visible_objects.get(id=4)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 

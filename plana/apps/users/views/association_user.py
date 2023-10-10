@@ -495,7 +495,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
-        else:
+        elif "is_validated_by_admin" not in request.data:
             History.objects.create(
                 action_title="ASSOCIATION_USER_CHANGED",
                 action_user_id=request.user.pk,

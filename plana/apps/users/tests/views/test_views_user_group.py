@@ -3,6 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
 
 
@@ -273,6 +274,7 @@ class UserGroupViewsTests(TestCase):
         POST /users/groups/ .
 
         - A manager user can add a group to a validated student.
+        - Event is stored in History if authenticated.
         - A manager user cannot add a group to student if the link already exists.
         - A manager user can add a group to a non-validated student.
         """
@@ -281,6 +283,7 @@ class UserGroupViewsTests(TestCase):
             {"user": self.student_user_name, "group": 6},
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(History.objects.filter(action_title="GROUP_INSTITUTION_FUND_USER_CHANGED").count(), 1)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
