@@ -8,6 +8,7 @@ RUN useradd -m -s /bin/bash django
 # Install the application
 RUN set -ex \
     && apt update \
+    # age and openssh-client for keys, libpangocairo for Weasyprint.
     && apt install -y age gettext gcc libpangocairo-1.0-0 openssh-client \
     # Third libraries dependencies
     # && apk --update add ... \

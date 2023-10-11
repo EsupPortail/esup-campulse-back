@@ -11,7 +11,7 @@ services:
       - 5432:5432
     restart: always
     volumes:
-      - ../plana-db:/var/lib/postgresql/data/
+      - plana-db:/var/lib/postgresql/data
 
   api:
     container_name: plana-api
@@ -20,9 +20,9 @@ services:
       dockerfile: ./docker/Dockerfile
     hostname: back
     volumes:
-      - ../plana-api:/app/plana/back
+      - ./:/app/plana-api
     ports:
-      - "8080:8080"
+      - "8000:8000"
     env_file:
       - ./docker/.env.dev
     links:
@@ -39,4 +39,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  plana-db:
+    driver: local
