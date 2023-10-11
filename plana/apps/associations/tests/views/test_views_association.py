@@ -450,7 +450,7 @@ class AssociationsViewsTests(TestCase):
 
         response_misc = self.misc_client.post(
             "/associations/",
-            {"name": "Dans mes gâteaux je mets de la CASsonnade.", "is_site": True},
+            {"name": "Dans mes gâteaux je mets de la CASsonnade.", "is_public": True},
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -543,12 +543,11 @@ class AssociationsViewsTests(TestCase):
                 "name": "Les gens qui savent imiter Bourvil",
                 "email": "ah-bah-mon-velo@mail.tld",
                 "institution": 2,
-                "is_site": True,
+                "is_public": True,
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
         site_association = json.loads(response_general.content.decode("utf-8"))
-        self.assertTrue(site_association["isSite"])
         self.assertTrue(site_association["isPublic"])
 
     def test_put_association(self):
@@ -789,33 +788,20 @@ class AssociationsViewsTests(TestCase):
         """
         PATCH /associations/{id} .
 
-        - An association can't be public if not enabled and not site.
+        - An association can't be public if not enabled.
         - An association must be lost public status if enabled or site is removed.
         """
-        # This association is not enabled and not site by default
+        # This association is not enabled by default
         association_id = 3
         self.general_client.patch(
             f"/associations/{association_id}",
-            {"is_public": True},
+            {"is_enabled": False},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_public, False)
+        self.assertEqual(association.is_enabled, False)
 
-        # Association public status can be true only if is_site and is_enabled are true
-        self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": False, "is_site": True},
-            content_type="application/json",
-        )
-        self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_public": True},
-            content_type="application/json",
-        )
-        association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_public, False)
-
+        # Association public status can be true only if is_enabled is true
         self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": True},
@@ -829,10 +815,10 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.is_public, True)
 
-        # Association loosing its public status by changing to is_site to false
+        # Association loosing its public status by changing is_enabled to false
         self.general_client.patch(
             f"/associations/{association_id}",
-            {"is_site": False},
+            {"is_enabled": False},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)

@@ -214,12 +214,12 @@ class AssociationListCreate(generics.ListCreateAPIView):
             )
 
         if (
-            "is_site" in request.data
-            and to_bool(request.data["is_site"]) is True
+            "is_public" in request.data
+            and to_bool(request.data["is_public"]) is True
             and not request.user.has_perm("associations.add_association_all_fields")
         ):
             return response.Response(
-                {"error": _("No rights to set is_site on this association.")},
+                {"error": _("No rights to set is_public on this association.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
@@ -257,11 +257,8 @@ class AssociationListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "is_site" not in request.data:
-            request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
-        elif to_bool(request.data["is_site"]) is True:
-            request.data["is_enabled"] = True
-            request.data["is_public"] = True
+        request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
+        request.data["is_enabled"] = True
 
         return super().create(request, *args, **kwargs)
 
@@ -433,17 +430,12 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
+            request.data["is_site"] = association.is_site
+
             if "is_public" in request.data:
                 is_public = to_bool(request.data["is_public"])
-                if is_public is True and (association.is_site is False or association.is_enabled is False):
+                if is_public is True and association.is_enabled is False:
                     request.data["is_public"] = False
-
-            if "is_site" in request.data:
-                is_site = to_bool(request.data["is_site"])
-                if is_site is False:
-                    request.data["is_public"] = False
-                else:
-                    request.data["is_public"] = True
 
             if "is_enabled" in request.data:
                 is_enabled = to_bool(request.data["is_enabled"])
@@ -727,11 +719,9 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         }
         if request.data["charter_status"] == "CHARTER_VALIDATED":
             association.is_site = True
-            association.is_public = True
             association.save()
         elif request.data["charter_status"] == "CHARTER_REJECTED":
             association.is_site = False
-            association.is_public = False
             association.save()
         elif request.data["charter_status"] == "CHARTER_PROCESSING":
             History.objects.create(
