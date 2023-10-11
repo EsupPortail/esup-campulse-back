@@ -21,7 +21,8 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.documents.serializers.document_upload import (
     DocumentUploadCreateSerializer,
     DocumentUploadFileSerializer,
-    DocumentUploadSerializer,
+    DocumentUploadListSerializer,
+    DocumentUploadRetrieveSerializer,
     DocumentUploadUpdateSerializer,
 )
 from plana.apps.history.models.history import History
@@ -49,7 +50,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         if self.request.method == "POST":
             self.serializer_class = DocumentUploadCreateSerializer
         else:
-            self.serializer_class = DocumentUploadSerializer
+            self.serializer_class = DocumentUploadListSerializer
         return super().get_serializer_class()
 
     @extend_schema(
@@ -86,7 +87,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             ),
         ],
         responses={
-            status.HTTP_200_OK: DocumentUploadSerializer,
+            status.HTTP_200_OK: DocumentUploadListSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
         },
         tags=["documents/uploads"],
@@ -332,12 +333,12 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         if self.request.method == "PATCH":
             self.serializer_class = DocumentUploadUpdateSerializer
         else:
-            self.serializer_class = DocumentUploadSerializer
+            self.serializer_class = DocumentUploadRetrieveSerializer
         return super().get_serializer_class()
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: DocumentUploadSerializer,
+            status.HTTP_200_OK: DocumentUploadRetrieveSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
@@ -461,7 +462,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
     @extend_schema(
         responses={
-            status.HTTP_204_NO_CONTENT: DocumentUploadSerializer,
+            status.HTTP_204_NO_CONTENT: DocumentUploadRetrieveSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,

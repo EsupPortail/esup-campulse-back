@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.4-beta
+  version: 1.0.5-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -959,7 +959,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DocumentUpload'
+                  $ref: '#/components/schemas/DocumentUploadList'
           description: ''
         '401':
           description: No response body
@@ -1017,7 +1017,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DocumentUpload'
+                $ref: '#/components/schemas/DocumentUploadRetrieve'
           description: ''
         '401':
           description: No response body
@@ -1082,7 +1082,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DocumentUpload'
+                $ref: '#/components/schemas/DocumentUploadRetrieve'
           description: ''
         '401':
           description: No response body
@@ -3865,58 +3865,6 @@ components:
           type: integer
           nullable: true
           title: Fonds
-    DocumentUpload:
-      type: object
-      description: Main serializer.
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        path_file:
-          type: string
-          description: Return a link to DocumentUploadFileRetrieve view.
-          readOnly: true
-        size:
-          type: integer
-          description: Return file size.
-          readOnly: true
-        name:
-          type: string
-          title: Nom
-          maxLength: 250
-        upload_date:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Date d'envoi
-        validated_date:
-          type: string
-          format: date
-          nullable: true
-          title: Date de validation
-        comment:
-          type: string
-          nullable: true
-          title: Commentaire
-        document:
-          type: integer
-        user:
-          type: integer
-          nullable: true
-          title: Utilisateur
-        association:
-          type: integer
-          nullable: true
-        project:
-          type: integer
-          nullable: true
-          title: Projet
-      required:
-      - document
-      - id
-      - path_file
-      - size
-      - upload_date
     DocumentUploadCreate:
       type: object
       description: Main serializer not overriding path_file.
@@ -4005,6 +3953,105 @@ components:
           maxLength: 250
       required:
       - path_file
+    DocumentUploadList:
+      type: object
+      description: Main serializer without file size.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        path_file:
+          type: string
+          description: Return a link to DocumentUploadFileRetrieve view.
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        upload_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date d'envoi
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Commentaire
+        document:
+          type: integer
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        project:
+          type: integer
+          nullable: true
+          title: Projet
+      required:
+      - document
+      - id
+      - path_file
+      - upload_date
+    DocumentUploadRetrieve:
+      type: object
+      description: Main serializer with file size.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        path_file:
+          type: string
+          description: Return a link to DocumentUploadFileRetrieve view.
+          readOnly: true
+        size:
+          type: integer
+          description: Return file size.
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 250
+        upload_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date d'envoi
+        validated_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de validation
+        comment:
+          type: string
+          nullable: true
+          title: Commentaire
+        document:
+          type: integer
+        user:
+          type: integer
+          nullable: true
+          title: Utilisateur
+        association:
+          type: integer
+          nullable: true
+        project:
+          type: integer
+          nullable: true
+          title: Projet
+      required:
+      - document
+      - id
+      - path_file
+      - size
+      - upload_date
     DocumentUploadUpdate:
       type: object
       description: Serializer to validate a document.
