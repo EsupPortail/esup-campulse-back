@@ -8,8 +8,23 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import User
 
 
-class DocumentUploadSerializer(serializers.ModelSerializer):
-    """Main serializer."""
+class DocumentUploadListSerializer(serializers.ModelSerializer):
+    """Main serializer without file size."""
+
+    path_file = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_path_file(self, document):
+        """Return a link to DocumentUploadFileRetrieve view."""
+        return reverse('document_upload_file_retrieve', args=[document.id])
+
+    class Meta:
+        model = DocumentUpload
+        fields = "__all__"
+
+
+class DocumentUploadRetrieveSerializer(serializers.ModelSerializer):
+    """Main serializer with file size."""
 
     path_file = serializers.SerializerMethodField()
     size = serializers.SerializerMethodField()
