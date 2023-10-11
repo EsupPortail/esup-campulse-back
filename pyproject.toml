@@ -41,7 +41,7 @@ multi_line_output = 3
 
 [tool.poetry]
 name = "plana"
-version = "1.0.4-beta"
+version = "1.0.5-beta"
 description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
