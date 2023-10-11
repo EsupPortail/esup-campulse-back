@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.2-beta
+  version: 1.0.4-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -3275,6 +3275,10 @@ components:
           type: string
           title: Nom
           maxLength: 250
+        acronym:
+          type: string
+          title: Acronyme
+          maxLength: 30
         email:
           type: string
           format: email
@@ -3306,6 +3310,11 @@ components:
           minLength: 1
           title: Nom
           maxLength: 250
+        acronym:
+          type: string
+          minLength: 1
+          title: Acronyme
+          maxLength: 30
         email:
           type: string
           format: email
@@ -4187,6 +4196,7 @@ components:
       - user
     LoginRequest:
       type: object
+      description: Overrided LoginSerializer to log the action in history.
       properties:
         username:
           type: string

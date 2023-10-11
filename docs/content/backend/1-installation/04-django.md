@@ -46,12 +46,13 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 Les tâches CRON envoient de multiples emails dont des relances dépendant de nombres de jours.
 - `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING` : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression future de ce compte.
 - `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION` :  : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression de ce compte.
-- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING` : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration future de cette charte.
-- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION ` : : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration de cette charte.
-- `CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING` : nombre de jours avant la date d'expiration d'un document après lequel un mail est envoyé pour prévenir de l'expiration future de ce document.
 - `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration future de ce mot de passe.
 - `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration de ce mot de passe.
-- `CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION` : nombre de jours avant la date d'expiration d'un bilan après lequel un mail est envoyé pour prévenir de l'expiration future de ce bilan.
+- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING` : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration future de cette charte.
+- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION ` : : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration de cette charte.
+- `CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING` : nombre de jours avant la date d'expiration d'un document après lequel un mail est envoyé pour prévenir de l'expiration future de ce document.
+- `CRON_DAYS_BEFORE_REVIEW_EXPIRATION` : nombre de jours avant la date d'expiration d'un bilan après lequel un mail est envoyé pour prévenir de l'expiration future de ce bilan.
+- `CRON_DAYS_BEFORE_HISTORY_EXPIRATION` : nombre de jours avant la date d'expiration d'une ligne d'historique.
 
 ## Autres variables
 

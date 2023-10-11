@@ -21,7 +21,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             today = datetime.date.today()
-            mail_sending_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION)
+            mail_sending_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_REVIEW_EXPIRATION)
             projects_needing_reviews = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_review_needed_project_statuses(),
                 planned_end_date__year=mail_sending_due_date.year,

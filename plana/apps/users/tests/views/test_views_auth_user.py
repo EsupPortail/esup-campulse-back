@@ -10,6 +10,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, User
 
 
@@ -235,6 +236,7 @@ class AuthUserViewsTests(TestCase):
 
         - An anonymous user can execute this request.
         - An email is received if verification is successful.
+        - Event is stored in History.
         - An anonymous user with association where is_site is false can execute this request.
         - An anonymous user with association where is_site is true can execute this request.
         - An anonymous user can verify a new email address associated to an account.
@@ -252,6 +254,7 @@ class AuthUserViewsTests(TestCase):
         key = EmailConfirmationHMAC(email_address=email_address).key
         response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="USER_REGISTERED").count(), 1)
         self.assertTrue(len(mail.outbox))
 
         email = "damien.mayonnaise@je-prefere-les-crackers-au-sel.org"

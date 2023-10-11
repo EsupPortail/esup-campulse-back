@@ -12,6 +12,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
@@ -538,6 +539,7 @@ class UserViewsTests(TestCase):
 
         - A manager user can execute this request.
         - A manager user can update user details.
+        - Event is stored in History.
         - An email is received if validation is successful.
         - can_submit_projects can be set by a manager.
         """
@@ -554,6 +556,7 @@ class UserViewsTests(TestCase):
         )
         user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        self.assertEqual(History.objects.filter(action_title="USER_VALIDATED").count(), 1)
         self.assertEqual(user.phone, "0836656565")
         self.assertEqual(user.username, "aymar-venceslas@oui.org")
         self.assertEqual(user.can_submit_projects, False)

@@ -24,6 +24,7 @@ from plana.apps.associations.serializers.association import (
 )
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
@@ -441,6 +442,8 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 is_site = to_bool(request.data["is_site"])
                 if is_site is False:
                     request.data["is_public"] = False
+                else:
+                    request.data["is_public"] = True
 
             if "is_enabled" in request.data:
                 is_enabled = to_bool(request.data["is_enabled"])
@@ -477,6 +480,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         context["first_name"] = request.user.first_name
         context["last_name"] = request.user.last_name
         context["association_name"] = association.name
+        History.objects.create(
+            action_title="ASSOCIATION_CHANGED", action_user_id=request.user.pk, association_id=association.id
+        )
         template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_CHANGE_CONFIRMATION")
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
@@ -727,6 +733,12 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             association.is_site = False
             association.is_public = False
             association.save()
+        elif request.data["charter_status"] == "CHARTER_PROCESSING":
+            History.objects.create(
+                action_title="ASSOCIATION_CHARTER_CHANGED",
+                action_user_id=request.user.pk,
+                association_id=association.id,
+            )
         if request.data["charter_status"] in mail_templates_codes_by_status:
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[request.data["charter_status"]])
             send_mail(

@@ -1,4 +1,5 @@
 """Base configuration for all environments."""
+from datetime import timedelta
 from os import environ
 from os.path import join, normpath
 from pathlib import Path
@@ -14,7 +15,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.0.2-beta"
+APP_VERSION = "1.0.4-beta"
 
 ######################
 # Path configuration #
@@ -232,7 +233,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "hijack.middleware.HijackUserMiddleware",
 ]
 
 
@@ -286,7 +286,6 @@ THIRD_PARTY_APPS = [
     "storages",
     "thumbnails",
     "django_cleanup",
-    "hijack",
     "health_check",
     "health_check.db",
     "health_check.cache",
@@ -302,6 +301,7 @@ LOCAL_APPS = [
     "plana.apps.consents",
     "plana.apps.documents",
     "plana.apps.groups",
+    "plana.apps.history",
     "plana.apps.institutions",
     "plana.apps.projects",
     "plana.apps.users",
@@ -528,18 +528,20 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Using SimpleJWT with dj-rest-auth
 SIMPLE_JWT = {
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=1),
     "ALGORITHM": "RS256",
-    "USER_ID_CLAIM": "user_id",
-    "USER_ID_FIELD": "id",
-    "AUDIENCE": "plan_a",
-    "ISSUER": "plan_a",
     "SIGNING_KEY": load_key("jwt-private-key.pem"),
     "VERIFYING_KEY": load_key("jwt-public-key.pem"),
+    "AUDIENCE": "plan_a",
+    "ISSUER": "plan_a",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
 }
 
 REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,
+    "LOGIN_SERIALIZER": "plana.apps.users.serializers.user_auth.LoginSerializer",
     "USER_DETAILS_SERIALIZER": "plana.apps.users.serializers.user.UserSerializer",
     "PASSWORD_RESET_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordResetConfirmSerializer",
@@ -615,12 +617,13 @@ EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = 335
 CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = 365
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = 355
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = 365
-CRON_DAYS_DELAY_BEFORE_DOCUMENT_EXPIRATION_WARNING = 10
 CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = 335
 CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
-CRON_DAYS_DELAY_AFTER_REVIEW_EXPIRATION = 30
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = 355
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = 365
+CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING = 10
+CRON_DAYS_BEFORE_REVIEW_EXPIRATION = 30
+CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 
 
 #####################

@@ -16,6 +16,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_comment import ProjectComment
@@ -759,8 +760,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     year = now.year
                 else:
                     year = now.year - 1
-                projects_year_count = Project.visible_objects.filter(manual_identifier__startswith=year).count()
-                project.manual_identifier = f"{year}{projects_year_count+1:04}"
+                last_identifier = 0
+                projects_year = Project.visible_objects.filter(
+                    manual_identifier__isnull=False, manual_identifier__startswith=year
+                )
+                if projects_year.count() > 0:
+                    last_identifier = (
+                        int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
+                    )
+                project.manual_identifier = f"{year}{last_identifier+1:04}"
                 project.save()
 
             managers_emails = project.get_project_default_manager_emails()
@@ -800,6 +808,27 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
                 "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
             }
+            if new_project_status == "PROJECT_VALIDATED":
+                History.objects.create(
+                    action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
+                )
+                commission = Commission.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                            "commission_fund_id"
+                        )
+                    ).values_list("commission_id")
+                ).first()
+                fund = Fund.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                            "commission_fund_id"
+                        )
+                    ).values_list("fund_id")
+                ).first()
+                context["project_name"] = project.name
+                context["fund_name"] = fund.acronym
+                context["commission_name"] = commission.name
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[new_project_status])
             email = ""
             if project.association_id is not None:
