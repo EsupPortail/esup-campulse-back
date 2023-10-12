@@ -29,7 +29,8 @@ class LoginSerializer(DJRestAuthLoginSerializer):
 
     def authenticate(self, **kwargs):
         auth = authenticate(self.context["request"], **kwargs)
-        History.objects.create(action_title="USER_LOGGED", action_user_id=auth.id)
+        if auth.id:
+            History.objects.create(action_title="USER_LOGGED", action_user_id=auth.id)
         return auth
 
 
