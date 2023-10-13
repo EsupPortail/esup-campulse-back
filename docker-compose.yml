@@ -2,6 +2,7 @@ version: "3.9"
 services:
   postgres:
     container_name: plana-db
+    hostname: bdd
     build:
       dockerfile: ./docker/db/Dockerfile
     ports:
@@ -14,6 +15,7 @@ services:
 
   api:
     container_name: plana-api
+    hostname: back
     build:
       dockerfile: ./docker/api/Dockerfile
     ports:
