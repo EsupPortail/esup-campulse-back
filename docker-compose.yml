@@ -19,10 +19,8 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     hostname: back
-    volumes:
-      - ./:/app/plana-api
     ports:
-      - "8000:8000"
+      - 8000:8000
     env_file:
       - ./docker/.env.dev
     links:
