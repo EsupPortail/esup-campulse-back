@@ -57,3 +57,6 @@ plana/media/
 
 # Keys
 keys/*
+
+# Docker
+docker/.env.dev
