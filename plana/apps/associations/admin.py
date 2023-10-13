@@ -2,14 +2,12 @@ from django.contrib import admin
 
 from .models import ActivityField, Association
 
-admin.site.register(ActivityField)
-
 
 @admin.register(Association)
 class AssociationAdmin(admin.ModelAdmin):
     list_display = [
-        "name",
         "acronym",
+        "name",
         "email",
         "institution",
         "is_enabled",
@@ -17,4 +15,11 @@ class AssociationAdmin(admin.ModelAdmin):
         "is_site",
         "charter_status",
         "can_submit_projects",
+    ]
+
+
+@admin.register(ActivityField)
+class ActivityFieldAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
     ]

@@ -328,7 +328,7 @@ msgstr "Aucun droit de voir cette association."
 
 #: plana/apps/commissions/models/commission.py:9
 msgid "Project submission limit date"
-msgstr "Date de fin de soumission du projet"
+msgstr "Date de fin de soumission des projets"
 
 #: plana/apps/commissions/models/commission.py:10
 msgid "Commission date"
