@@ -3,6 +3,7 @@ title: Pré-requis
 weight: 101
 ---
 
+
 ## Technologies requises
 
 - [Python](https://www.python.org/) (version >= 3.9)
@@ -23,3 +24,16 @@ weight: 101
 - [Pylint](https://github.com/pylint-dev/pylint) (linter avancé)
 - [tox](https://github.com/tox-dev/tox) (tests unitaires)
 - [Hugo](https://github.com/gohugoio/hugo) (documentation)
+
+## Docker
+
+- Seuls Docker et S3 sont requis, la plupart des autres étapes d'installation sont automatisées.
+- Copier-coller les fichiers `docker/**/.env.dev.dist` vers de nouveaux fichiers `docker/**/.env.dev` et y placer les variables d'environnement requises (voir étape "Environnement virtuel" et "Base de données").
+- La configuration automatise les étapes suivantes :
+  - Installation de la base de données.
+  - Installation des paquets système.
+  - Installation des librairies Python.
+  - Import de jeux de données de test en base de données et dans le bucket local du S3.
+  - Génération des clés JWT et AGE.
+  - Exécution du serveur.
+- Exécuter `sudo docker compose up -d` pour démarrer le container et `sudo docker compose down` pour l'arrêter.

@@ -14,12 +14,12 @@ RUN set -ex \
     # && apk --update add ... \
     && pip install -U pip uwsgi
 
-COPY --chown=django:django .. /app/plana-api
+COPY --chown=django:django ../.. /app/plana-api
 RUN set -ex \
     && pip install --trusted-host pypi.python.org -r /app/plana-api/requirements/dev.txt
 
-COPY --chown=django:django docker/uwsgi.ini /etc/uwsgi/uwsgi.ini
-COPY --chown=django:django docker/prestart.sh /prestart.sh
+COPY --chown=django:django docker/api/uwsgi.ini /etc/uwsgi/uwsgi.ini
+COPY --chown=django:django docker/api/prestart.sh /prestart.sh
 
 WORKDIR /app/plana-api
 

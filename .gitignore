@@ -59,4 +59,4 @@ plana/media/
 keys/*
 
 # Docker
-docker/.env.dev
+docker/**/.env.dev

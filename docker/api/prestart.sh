@@ -6,7 +6,8 @@ cd /app/plana-api
 python manage.py migrate
 # Don't stop building when compilemessages fail
 python manage.py compilemessages || true
-python manage.py initial_import
+python manage.py initial_import --test
+python manage.py loaddata_storages
 mkdir -p keys
 python manage.py generate_jwt_keys
 python manage.py generate_age_keys

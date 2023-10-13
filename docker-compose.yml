@@ -1,14 +1,13 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:12
     container_name: plana-db
-    environment:
-      - POSTGRES_DB=plana
-      - POSTGRES_USER=plana
-      - POSTGRES_PASSWORD=plana
+    build:
+      dockerfile: ./docker/db/Dockerfile
     ports:
       - 5432:5432
+    env_file:
+      - ./docker/db/.env.dev
     restart: always
     volumes:
       - plana-db:/var/lib/postgresql/data
@@ -16,15 +15,11 @@ services:
   api:
     container_name: plana-api
     build:
-      context: .
-      dockerfile: ./docker/Dockerfile
-    hostname: back
+      dockerfile: ./docker/api/Dockerfile
     ports:
       - 8000:8000
     env_file:
-      - ./docker/.env.dev
-    links:
-      - postgres
+      - ./docker/api/.env.dev
     depends_on:
       - postgres
 
