@@ -60,9 +60,11 @@ class ProjectAdmin(admin.ModelAdmin):
     def get_commission_funds(self, obj):
         """Get commissions and funds linked to a project."""
         project_commission_funds = ProjectCommissionFund.objects.filter(project_id=obj.id)
-        commission_name = project_commission_funds.first().commission_fund.commission.name
-        fund_names = list(project_commission_funds.values_list("commission_fund__fund__acronym", flat=True))
-        return f"{commission_name} - {', '.join(fund_names)}"
+        if project_commission_funds.count() > 0:
+            commission_name = project_commission_funds.first().commission_fund.commission.name
+            fund_names = list(project_commission_funds.values_list("commission_fund__fund__acronym", flat=True))
+            return f"{commission_name} - {', '.join(fund_names)}"
+        return "-"
 
 
 @admin.register(ProjectCategory)
