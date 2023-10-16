@@ -14,6 +14,7 @@ class CommissionAdmin(admin.ModelAdmin):
     search_fields = ["name", "submission_date", "commission_date"]
 
     @admin.display(description=_("Funds"))
+    @admin.display(ordering="commissionfund")
     def get_funds(self, obj):
         """Get funds linked to a commission."""
         return list(CommissionFund.objects.filter(commission_id=obj.id).values_list("fund__acronym", flat=True))

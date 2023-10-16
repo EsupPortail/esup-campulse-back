@@ -136,6 +136,7 @@ class UserAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
     @admin.display(description=_("Groups"))
+    @admin.display(ordering="groups_institutions_funds")
     def get_groups(self, obj):
         """Get groups linked to user."""
         return list(
@@ -145,17 +146,20 @@ class UserAdmin(admin.ModelAdmin):
         )
 
     @admin.display(description=_("Associations"))
+    @admin.display(ordering="associationuser")
     def get_associations(self, obj):
         """Get associations linked to user."""
         return list(AssociationUser.objects.filter(user_id=obj.id).values_list("association__acronym", flat=True))
 
     @admin.display(boolean=True)
     @admin.display(description=_("Has validated email address"))
+    @admin.display(ordering="emailaddress")
     def is_validated_by_email(self, obj):
         return obj.has_validated_email_user()
 
     @admin.display(boolean=True)
     @admin.display(description=_("Is CAS user"))
+    @admin.display(ordering="socialaccount")
     def is_cas(self, obj):
         return obj.is_cas_user()
 

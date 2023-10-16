@@ -47,6 +47,7 @@ class ProjectAdmin(admin.ModelAdmin):
     ]
 
     @admin.display(description=_("Association User"))
+    @admin.display(ordering="association_user")
     def get_association_user(self, obj):
         """Get user that manages a project in an association."""
         if obj.association_user is not None:
@@ -55,6 +56,7 @@ class ProjectAdmin(admin.ModelAdmin):
         return "-"
 
     @admin.display(description=_("Project commission fund"))
+    @admin.display(ordering="projectcommissionfund")
     def get_commission_funds(self, obj):
         """Get commissions and funds linked to a project."""
         project_commission_funds = ProjectCommissionFund.objects.filter(project_id=obj.id)
