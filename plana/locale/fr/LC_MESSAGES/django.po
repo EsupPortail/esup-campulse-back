@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 11:49+0200\n"
+"POT-Creation-Date: 2023-10-16 12:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,7 +216,8 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/users/models/user.py:38 plana/apps/users/models/user.py:112
+#: plana/apps/users/admin.py:143 plana/apps/users/models/user.py:38
+#: plana/apps/users/models/user.py:112
 msgid "Associations"
 msgstr "Associations"
 
@@ -1340,11 +1341,15 @@ msgstr "Est superutilisateur"
 msgid "Is Manager General"
 msgstr "Est Gestionnaire Général"
 
-#: plana/apps/users/admin.py:136
+#: plana/apps/users/admin.py:138 plana/apps/users/models/user.py:115
+msgid "Groups"
+msgstr "Groupes"
+
+#: plana/apps/users/admin.py:149
 msgid "Has validated email address"
 msgstr "A une adresse email validée"
 
-#: plana/apps/users/admin.py:140
+#: plana/apps/users/admin.py:154
 msgid "Is CAS user"
 msgstr "Est utilisateur CAS"
 
@@ -1391,10 +1396,6 @@ msgstr "Est validé par l'équipe d'administration"
 #: plana/apps/users/models/user.py:111
 msgid "Is student"
 msgstr "Est étudiant"
-
-#: plana/apps/users/models/user.py:115
-msgid "Groups"
-msgstr "Groupes"
 
 #: plana/apps/users/models/user.py:351
 msgid "Users"

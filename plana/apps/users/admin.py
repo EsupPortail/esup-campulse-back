@@ -116,6 +116,8 @@ class UserAdmin(admin.ModelAdmin):
         "email",
         "first_name",
         "last_name",
+        "get_groups",
+        "get_associations",
         "is_validated_by_email",
         "is_cas",
         "is_validated_by_admin",
@@ -132,6 +134,20 @@ class UserAdmin(admin.ModelAdmin):
             self.form = self.change_form
 
         return super().get_form(request, obj, **kwargs)
+
+    @admin.display(description=_("Groups"))
+    def get_groups(self, obj):
+        """Get groups linked to user."""
+        return list(
+            GroupInstitutionFundUser.objects.filter(user_id=obj.id)
+            .distinct('group__name')
+            .values_list("group__name", flat=True)
+        )
+
+    @admin.display(description=_("Associations"))
+    def get_associations(self, obj):
+        """Get associations linked to user."""
+        return list(AssociationUser.objects.filter(user_id=obj.id).values_list("association__acronym", flat=True))
 
     @admin.display(boolean=True)
     @admin.display(description=_("Has validated email address"))
