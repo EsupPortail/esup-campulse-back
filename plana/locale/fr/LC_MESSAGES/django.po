@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 12:47+0200\n"
+"POT-Creation-Date: 2023-10-16 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,7 +216,7 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/users/admin.py:143 plana/apps/users/models/user.py:38
+#: plana/apps/users/admin.py:148 plana/apps/users/models/user.py:38
 #: plana/apps/users/models/user.py:112
 msgid "Associations"
 msgstr "Associations"
@@ -872,7 +872,7 @@ msgstr "Composantes"
 msgid "Association User"
 msgstr "Membre d'association"
 
-#: plana/apps/projects/admin.py:57
+#: plana/apps/projects/admin.py:58
 #: plana/apps/projects/models/project_commission_fund.py:32
 msgid "Project commission fund"
 msgstr "Fonds de Commission lié à un projet"
@@ -1345,11 +1345,11 @@ msgstr "Est Gestionnaire Général"
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/admin.py:149
+#: plana/apps/users/admin.py:155
 msgid "Has validated email address"
 msgstr "A une adresse email validée"
 
-#: plana/apps/users/admin.py:154
+#: plana/apps/users/admin.py:161
 msgid "Is CAS user"
 msgstr "Est utilisateur CAS"
 
