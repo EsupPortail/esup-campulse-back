@@ -66,7 +66,7 @@ class DocumentUpload(models.Model):
     comment = models.TextField(_("Comment"), null=True)
 
     def __str__(self):
-        return f"{self.document}"
+        return self.name
 
     class Meta:
         verbose_name = _("Document from association or user")

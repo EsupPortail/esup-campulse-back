@@ -20,9 +20,9 @@ class ContentsModelsTests(TestCase):
     def test_content_model(self):
         """There's at least one content in the database."""
         content = Content.objects.first()
-        self.assertEqual(str(content), f"{content.code} : {content.label}")
+        self.assertEqual(str(content), content.code)
 
     def test_logo_model(self):
         """There's at least one logo in the database."""
         logo = Logo.objects.first()
-        self.assertEqual(str(logo), f"{logo.title} : {logo.acronym}")
+        self.assertEqual(str(logo), logo.acronym)

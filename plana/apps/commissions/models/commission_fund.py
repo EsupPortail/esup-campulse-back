@@ -18,7 +18,7 @@ class CommissionFund(models.Model):
     )
 
     def __str__(self):
-        return f"{self.commission}, {self.fund}"
+        return f"{self.commission} - {self.fund}"
 
     class Meta:
         verbose_name = _("Commission Fund")

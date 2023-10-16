@@ -26,7 +26,7 @@ class ProjectCommissionFund(models.Model):
     is_validated_by_admin = models.BooleanField(_("Is validated by admin"), default=None, null=True)
 
     def __str__(self):
-        return f"{self.project} {self.commission_fund}"
+        return f"{self.project} - {self.commission_fund}"
 
     class Meta:
         verbose_name = _("Project commission fund")

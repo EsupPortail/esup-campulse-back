@@ -175,9 +175,6 @@ class Project(models.Model):
     objects = models.Manager()
     visible_objects = VisibleProjectManager()
 
-    def __str__(self):
-        return f"{self.name}"
-
     def get_project_default_manager_emails(self):
         """Return a list of manager email addresses affected to a project."""
         managers_emails = []
@@ -192,6 +189,9 @@ class Project(models.Model):
                 if user_to_check.has_perm("users.change_user_misc"):
                     managers_emails.append(user_to_check.email)
         return managers_emails
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = _("Project")

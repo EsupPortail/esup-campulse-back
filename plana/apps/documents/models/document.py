@@ -99,7 +99,7 @@ class Document(models.Model):
     edition_date = models.DateTimeField(_("Edition date"), auto_now=True)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.acronym
 
     class Meta:
         verbose_name = _("Document")

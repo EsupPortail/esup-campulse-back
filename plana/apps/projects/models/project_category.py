@@ -18,7 +18,7 @@ class ProjectCategory(models.Model):
     )
 
     def __str__(self):
-        return f"{self.project} {self.category}"
+        return f"{self.project} - {self.category}"
 
     class Meta:
         verbose_name = _("Project category")

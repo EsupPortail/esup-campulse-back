@@ -21,12 +21,9 @@ class CommissionsModelsTests(TestCase):
     def test_fund_model(self):
         """There's at least one fund in the database."""
         fund = Fund.objects.first()
-        self.assertEqual(str(fund), f"{fund.name} ({fund.acronym})")
+        self.assertEqual(str(fund), fund.acronym)
 
     def test_commission_model(self):
         """There's at least one commission in the database."""
         commission = Commission.objects.first()
-        self.assertEqual(
-            str(commission),
-            f"{commission.name} : {commission.submission_date}, {commission.commission_date}, {commission.is_open_to_projects}",
-        )
+        self.assertEqual(str(commission), commission.name)

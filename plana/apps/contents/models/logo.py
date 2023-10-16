@@ -42,7 +42,7 @@ class Logo(models.Model):
     visible = models.BooleanField(_("Is visible"), default=False)
 
     def __str__(self):
-        return f"{self.title} : {self.acronym}"
+        return self.acronym
 
     class Meta:
         verbose_name = _("Logo")

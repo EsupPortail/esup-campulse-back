@@ -28,9 +28,9 @@ class DocumentsModelsTests(TestCase):
     def test_document_model(self):
         """There's at least one document in the database."""
         document = Document.objects.first()
-        self.assertEqual(str(document), document.name)
+        self.assertEqual(str(document), document.acronym)
 
     def test_document_upload_model(self):
         """There's at least one document upload in the database."""
         document_upload = DocumentUpload.objects.first()
-        self.assertEqual(str(document_upload), document_upload.document.name)
+        self.assertEqual(str(document_upload), document_upload.name)

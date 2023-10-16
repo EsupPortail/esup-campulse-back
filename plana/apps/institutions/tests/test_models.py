@@ -20,9 +20,9 @@ class AssociationsModelsTests(TestCase):
     def test_institution_model(self):
         """There's at least one institution in the database."""
         institution = Institution.objects.first()
-        self.assertEqual(str(institution), f"{institution.name} ({institution.acronym})")
+        self.assertEqual(str(institution), institution.acronym)
 
     def test_institution_component_model(self):
         """There's at least one institution component in the database."""
         component = InstitutionComponent.objects.first()
-        self.assertEqual(str(component), f"{component.name} ({component.institution})")
+        self.assertEqual(str(component), component.name)

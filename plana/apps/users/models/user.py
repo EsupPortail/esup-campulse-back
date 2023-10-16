@@ -31,7 +31,7 @@ class AssociationUser(models.Model):
     is_treasurer = models.BooleanField(_("Is treasurer"), default=False)
 
     def __str__(self):
-        return f"{self.user}, {self.association}"
+        return f"{self.user} - {self.association}"
 
     class Meta:
         verbose_name = _("Association")
@@ -63,7 +63,7 @@ class GroupInstitutionFundUser(models.Model):
     fund = models.ForeignKey(Fund, on_delete=models.RESTRICT, null=True)
 
     def __str__(self):
-        return f"{self.user}, {self.group}, {self.institution}, {self.fund}"
+        return f"{self.user} - {self.group} - {self.institution} - {self.fund}"
 
     class Meta:
         verbose_name = _("User Institution Fund Groups")
@@ -116,9 +116,6 @@ class User(AbstractUser):
         through="GroupInstitutionFundUser",
         related_name="group_institution_fund_set",
     )
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 
     def has_perm(self, perm, obj=None):
         """Overriden has_perm to check for institutions."""
@@ -345,6 +342,9 @@ class User(AbstractUser):
         if self.is_staff:
             return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id)
         return False
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = _("User")

@@ -16,10 +16,11 @@ class AssociationAdmin(admin.ModelAdmin):
         "charter_status",
         "can_submit_projects",
     ]
+    list_filter = ["is_enabled", "is_public", "is_site", "can_submit_projects"]
+    search_fields = ["acronym", "name", "email", "institution__acronym", "institution__name", "charter_status"]
 
 
 @admin.register(ActivityField)
 class ActivityFieldAdmin(admin.ModelAdmin):
-    list_display = [
-        "name",
-    ]
+    list_display = ["name"]
+    search_fields = ["name"]
