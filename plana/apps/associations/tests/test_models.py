@@ -22,9 +22,9 @@ class AssociationsModelsTests(TestCase):
     def test_association_model(self):
         """There's at least one association in the database."""
         association = Association.objects.first()
-        self.assertEqual(str(association), f"{association.name} ({association.acronym})")
+        self.assertEqual(str(association), association.acronym)
 
     def test_activity_field_model(self):
         """There's at least one activity field in the database."""
         activity_field = ActivityField.objects.first()
-        self.assertEqual(str(activity_field), f"{activity_field.name}")
+        self.assertEqual(str(activity_field), activity_field.name)

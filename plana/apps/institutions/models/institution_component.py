@@ -16,7 +16,7 @@ class InstitutionComponent(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} ({self.institution})"
+        return self.name
 
     class Meta:
         verbose_name = _("Institution component")

@@ -9,7 +9,7 @@ class GDPRConsent(models.Model):
     title = models.CharField(_("GDPR Consent title"), max_length=256, blank=False)
 
     def __str__(self):
-        return f"{self.title}"
+        return self.title
 
     class Meta:
         verbose_name = _("GDPR Consent")

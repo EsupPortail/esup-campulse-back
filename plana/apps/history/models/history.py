@@ -83,7 +83,7 @@ class History(models.Model):
     )
 
     def __str__(self):
-        return f"{self.action_title}"
+        return self.action_title
 
     class Meta:
         verbose_name = _("History")

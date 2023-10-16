@@ -9,7 +9,7 @@ class ActivityField(models.Model):
     name = models.CharField(_("Name"), max_length=250, blank=False)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
     class Meta:
         verbose_name = _("Activity field")

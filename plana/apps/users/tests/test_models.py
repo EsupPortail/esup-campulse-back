@@ -32,10 +32,7 @@ class UsersModelsTests(TestCase):
     def test_association_user_model(self):
         """There's at least one user linked to the correct association in the database."""
         asso_user = AssociationUser.objects.filter(is_validated_by_admin=True).first()
-        self.assertEqual(
-            str(asso_user),
-            f"{asso_user.user}, {asso_user.association}",
-        )
+        self.assertEqual(str(asso_user), f"{asso_user.user} - {asso_user.association}")
         self.assertEqual(asso_user.user.is_in_association(asso_user.association), True)
         self.assertEqual(asso_user.user.is_in_association(7), False)
 
@@ -44,5 +41,5 @@ class UsersModelsTests(TestCase):
         group_user = GroupInstitutionFundUser.objects.first()
         self.assertEqual(
             str(group_user),
-            f"{group_user.user}, {group_user.group}, {group_user.institution}, {group_user.fund}",
+            f"{group_user.user} - {group_user.group} - {group_user.institution} - {group_user.fund}",
         )

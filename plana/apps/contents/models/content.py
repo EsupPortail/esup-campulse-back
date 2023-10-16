@@ -15,7 +15,7 @@ class Content(models.Model):
     aside = models.TextField(_("Sidebar"), default="")
 
     def __str__(self):
-        return f"{self.code} : {self.label}"
+        return self.code
 
     class Meta:
         verbose_name = _("Content")

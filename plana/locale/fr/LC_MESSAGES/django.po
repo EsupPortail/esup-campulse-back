@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 09:17+0200\n"
+"POT-Creation-Date: 2023-10-16 12:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:37
 #: plana/apps/associations/views/association_export.py:85
-#: plana/apps/users/admin.py:23 plana/apps/users/models/user.py:100
+#: plana/apps/users/admin.py:24 plana/apps/users/models/user.py:100
 msgid "Email"
 msgstr "Courriel"
 
@@ -216,7 +216,8 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/users/models/user.py:38 plana/apps/users/models/user.py:112
+#: plana/apps/users/admin.py:143 plana/apps/users/models/user.py:38
+#: plana/apps/users/models/user.py:112
 msgid "Associations"
 msgstr "Associations"
 
@@ -237,10 +238,8 @@ msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
 #: plana/apps/associations/views/association.py:222
-#, fuzzy
-#| msgid "No rights to set is_site on this association."
 msgid "No rights to set is_public on this association."
-msgstr "Aucun droit d'éditer le champ is_site de cette association."
+msgstr "Aucun droit d'éditer le champ is_public de cette association."
 
 #: plana/apps/associations/views/association.py:228
 msgid "Association name not set."
@@ -326,9 +325,13 @@ msgstr ""
 msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
+#: plana/apps/commissions/admin.py:16 plana/apps/commissions/models/fund.py:26
+msgid "Funds"
+msgstr "Fonds"
+
 #: plana/apps/commissions/models/commission.py:9
 msgid "Project submission limit date"
-msgstr "Date de fin de soumission du projet"
+msgstr "Date de fin de soumission des projets"
 
 #: plana/apps/commissions/models/commission.py:10
 msgid "Commission date"
@@ -361,10 +364,6 @@ msgstr "Fonds lié à une Commission"
 #: plana/apps/commissions/models/commission_fund.py:25
 msgid "Commissions Funds"
 msgstr "Fonds liés à des Commissions"
-
-#: plana/apps/commissions/models/fund.py:26
-msgid "Funds"
-msgstr "Fonds"
 
 #: plana/apps/commissions/views/commission.py:246
 #: plana/apps/commissions/views/commission.py:363
@@ -869,6 +868,15 @@ msgstr "Établissements"
 msgid "Institution components"
 msgstr "Composantes"
 
+#: plana/apps/projects/admin.py:49 plana/apps/projects/models/project.py:137
+msgid "Association User"
+msgstr "Membre d'association"
+
+#: plana/apps/projects/admin.py:57
+#: plana/apps/projects/models/project_commission_fund.py:32
+msgid "Project commission fund"
+msgstr "Fonds de Commission lié à un projet"
+
 #: plana/apps/projects/models/category.py:15
 msgid "Category"
 msgstr "Catégorie"
@@ -924,10 +932,6 @@ msgstr "Date de fin prévue"
 #: plana/apps/projects/models/project.py:132
 msgid "Planned location"
 msgstr "Lieu prévu"
-
-#: plana/apps/projects/models/project.py:137
-msgid "Association User"
-msgstr "Membre d'association"
 
 #: plana/apps/projects/models/project.py:141
 msgid "Partner association"
@@ -1093,10 +1097,6 @@ msgstr "Montant obtenu"
 #: plana/apps/users/models/user.py:28
 msgid "Is validated by admin"
 msgstr "Est validé par l'équipe d'administration"
-
-#: plana/apps/projects/models/project_commission_fund.py:32
-msgid "Project commission fund"
-msgstr "Fonds de Commission lié à un projet"
 
 #: plana/apps/projects/models/project_commission_fund.py:33
 msgid "Projects commissions funds"
@@ -1305,41 +1305,53 @@ msgstr "Le bilan de projet n'est pas un brouillon pouvant être modifié."
 msgid "Can't set start date after end date."
 msgstr "La date de début de projet ne peut avoir lieu après la date de fin."
 
-#: plana/apps/users/admin.py:24 plana/apps/users/models/user.py:101
+#: plana/apps/users/admin.py:25 plana/apps/users/models/user.py:101
 msgid "First name"
 msgstr "Prénom"
 
-#: plana/apps/users/admin.py:25 plana/apps/users/models/user.py:102
+#: plana/apps/users/admin.py:26 plana/apps/users/models/user.py:102
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: plana/apps/users/admin.py:27
+#: plana/apps/users/admin.py:28
 msgid "Password"
 msgstr "Mot de passe"
 
-#: plana/apps/users/admin.py:34
+#: plana/apps/users/admin.py:35
 msgid "Password confirmation"
 msgstr "Confirmation du mot de passe"
 
-#: plana/apps/users/admin.py:37
+#: plana/apps/users/admin.py:38
 msgid "Enter the same password as before, for verification."
 msgstr "Entrer le même mot de passe qu'avant, pour vérification."
 
-#: plana/apps/users/admin.py:41
+#: plana/apps/users/admin.py:42
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: plana/apps/users/admin.py:41
+#: plana/apps/users/admin.py:42
 msgid "Change only if CAS account, with its identifier."
 msgstr "Changer uniquement si c'est un compte CAS, avec son identifiant."
 
-#: plana/apps/users/admin.py:43
+#: plana/apps/users/admin.py:44
 msgid "Is superuser"
 msgstr "Est superutilisateur"
 
-#: plana/apps/users/admin.py:44
+#: plana/apps/users/admin.py:45
 msgid "Is Manager General"
 msgstr "Est Gestionnaire Général"
+
+#: plana/apps/users/admin.py:138 plana/apps/users/models/user.py:115
+msgid "Groups"
+msgstr "Groupes"
+
+#: plana/apps/users/admin.py:149
+msgid "Has validated email address"
+msgstr "A une adresse email validée"
+
+#: plana/apps/users/admin.py:154
+msgid "Is CAS user"
+msgstr "Est utilisateur CAS"
 
 #: plana/apps/users/models/user.py:25
 msgid "Is president"
@@ -1384,10 +1396,6 @@ msgstr "Est validé par l'équipe d'administration"
 #: plana/apps/users/models/user.py:111
 msgid "Is student"
 msgstr "Est étudiant"
-
-#: plana/apps/users/models/user.py:115
-msgid "Groups"
-msgstr "Groupes"
 
 #: plana/apps/users/models/user.py:351
 msgid "Users"
@@ -1501,10 +1509,8 @@ msgid "User or group or institution or fund does not exist."
 msgstr "L'utilisateur ou le groupe ou l'institution ou le fonds n'existe pas."
 
 #: plana/apps/users/views/group_institution_fund_user.py:95
-#, fuzzy
-#| msgid "Link between this user and association does not exist."
 msgid "Link between user and group does exist."
-msgstr "Le lien entre cet utilisateur et l'association n'existe pas."
+msgstr "Le lien entre cet utilisateur et le groupe n'existe pas."
 
 #: plana/apps/users/views/group_institution_fund_user.py:101
 msgid "Only managers can edit groups for this account."
@@ -1802,15 +1808,19 @@ msgstr ""
 "Génère une paire de clés RSA 256 publique et privée pour signer et vérifier "
 "les jetons JWT."
 
-#: plana/management/commands/initial_import.py:7
+#: plana/management/commands/initial_import.py:9
 msgid "Import application initial datas."
 msgstr "Importe les données initiales de l'application."
 
-#: plana/management/commands/initial_import.py:12
+#: plana/management/commands/initial_import.py:14
 msgid "Set without value if storages should be added."
 msgstr "Spécifier sans valeur si les contenus doivent être ajoutés."
 
-#: plana/management/commands/initial_import.py:42
+#: plana/management/commands/initial_import.py:19
+msgid "Set without value if testing data should be added."
+msgstr "Spécifier sans valeur si les données de test doivent être ajoutés."
+
+#: plana/management/commands/initial_import.py:59
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 

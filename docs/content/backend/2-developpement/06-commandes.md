@@ -16,8 +16,7 @@ weight: 116
 
 - `$ python manage.py flush` : vider le contenu de la base de données.
 - `$ python manage.py migrate` : mettre à jour la structure de la base de données (à précéder de `$ python manage.py makemigrations` pour créer les fichiers de migrations au besoin).
-- `$ python manage.py loaddata plana/apps/*/fixtures/*.json` : ajouter les jeux de données de test (utilisateurs, associations, projets, ...).
-- `$ python manage.py loaddata plana/libs/*/fixtures/*.json` : ajouter les jeux de données liées aux templates de mails.
+- `$ python manage.py initial_import [--test]` : ajouter les jeux de données de test (utilisateurs, associations, projets, ...) et liées aux templates de mails.
 - `$ python manage.py flush_storages` : vide le contenu du bucket S3 de l'environnement courant.
 - `$ python manage.py loaddata_storages` : ajoute de premiers documents au bucket S3 de l'environnement courant.
 - `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata`, `flush_storages`, `loaddata_storages` en une seule commande.
@@ -39,3 +38,5 @@ weight: 116
 - `$ black plana` : linter les fichiers.
 - `$ pylint plana --output-format=json:pylint.json` : liste des erreurs non lintables exportées dans un fichier `pylint.json`.
 - `$ cd docs && hugo server && cd ..` : lancer le serveur de développement de la documentation.
+- `$ sudo docker image prune -a && sudo docker builder prune` : vider le cache de la configuration Docker.
+- `$ sudo docker compose up --build` : recharger l'image Docker.

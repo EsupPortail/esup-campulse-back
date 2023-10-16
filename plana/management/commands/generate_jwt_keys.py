@@ -32,10 +32,10 @@ class Command(BaseCommand):
         private_key = self._key_path("jwt-private-key.pem")
         public_key = self._key_path("jwt-public-key.pem")
         if private_key.exists() and private_key.is_file():
-            if options.get("keep_keys", False):
+            if options.get("keep-keys", True):
                 self.stdout.write(self.style.NOTICE(_("Keys not replaced")))
                 sys.exit()
-            if self.get_confirmation(_(f"Replace key file {str(private_key)}?")):
+            elif self.get_confirmation(_(f"Replace key file {str(private_key)}?")):
                 private_key.unlink(missing_ok=True)
                 public_key.unlink(missing_ok=True)
             else:

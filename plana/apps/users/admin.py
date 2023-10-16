@@ -1,3 +1,4 @@
+"""Admin view for User models."""
 import secrets
 import string
 
@@ -104,12 +105,26 @@ class GroupInstitutionFundUserInline(admin.StackedInline):
 
 
 @admin.register(User)
-class ManagerUser(admin.ModelAdmin):
-    """Define new way to manage user."""
+class UserAdmin(admin.ModelAdmin):
+    """List view for users, and define new way to manage user."""
 
     add_form = ManagerUserCreationForm
     change_form = UserChangeForm
     inlines = [GroupInstitutionFundUserInline]
+
+    list_display = [
+        "email",
+        "first_name",
+        "last_name",
+        "get_groups",
+        "get_associations",
+        "is_validated_by_email",
+        "is_cas",
+        "is_validated_by_admin",
+        "can_submit_projects",
+    ]
+    list_filter = ["is_validated_by_admin", "can_submit_projects"]
+    search_fields = ["email", "first_name", "last_name"]
 
     def get_form(self, request, obj=None, **kwargs):
         """Route correct form if user is created or changed."""
@@ -120,6 +135,69 @@ class ManagerUser(admin.ModelAdmin):
 
         return super().get_form(request, obj, **kwargs)
 
+    @admin.display(description=_("Groups"))
+    @admin.display(ordering="groups_institutions_funds")
+    def get_groups(self, obj):
+        """Get groups linked to user."""
+        return list(
+            GroupInstitutionFundUser.objects.filter(user_id=obj.id)
+            .distinct('group__name')
+            .values_list("group__name", flat=True)
+        )
 
-admin.site.register(AssociationUser)
-admin.site.register(GroupInstitutionFundUser)
+    @admin.display(description=_("Associations"))
+    @admin.display(ordering="associationuser")
+    def get_associations(self, obj):
+        """Get associations linked to user."""
+        return list(AssociationUser.objects.filter(user_id=obj.id).values_list("association__acronym", flat=True))
+
+    @admin.display(boolean=True)
+    @admin.display(description=_("Has validated email address"))
+    @admin.display(ordering="emailaddress")
+    def is_validated_by_email(self, obj):
+        return obj.has_validated_email_user()
+
+    @admin.display(boolean=True)
+    @admin.display(description=_("Is CAS user"))
+    @admin.display(ordering="socialaccount")
+    def is_cas(self, obj):
+        return obj.is_cas_user()
+
+
+@admin.register(AssociationUser)
+class AssociationUserAdmin(admin.ModelAdmin):
+    """List view for association users."""
+
+    list_display = [
+        "user",
+        "association",
+        "is_validated_by_admin",
+        "is_president",
+        "can_be_president_from",
+        "can_be_president_to",
+    ]
+    list_filter = ["is_validated_by_admin", "is_president"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "association__acronym",
+        "association__name",
+        "can_be_president_from",
+        "can_be_president_to",
+    ]
+
+
+@admin.register(GroupInstitutionFundUser)
+class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
+    """List view for group users."""
+
+    list_display = ["user", "group", "institution", "fund"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "group__name",
+        "institution__acronym",
+        "institution__name",
+        "fund__acronym",
+        "fund__name",
+    ]

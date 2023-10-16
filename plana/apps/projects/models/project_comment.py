@@ -27,7 +27,7 @@ class ProjectComment(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user} {self.project} : {self.text}"
+        return self.text
 
     class Meta:
         verbose_name = _("Project comment")

@@ -33,6 +33,9 @@ Le dossier `plana/apps` du backend est découpé en huit sous-applications compr
 - `groups`
   - Le module ajoute des routes permettant de lire la liste des groupes et permissions accessibles dans les tables générées par Django (mais pas leur affectations aux comptes).
 
+- `history`
+  - `history` : table de journalisation de différentes actions.
+
 - `institutions`
   - `institution` : établissements, la liste ne peut être modifiée hors de l'interface d'administration de Django.
   - `institution_component` : composantes d'établissements, reliées aux établissements, la liste ne peut être modifiée hors de l'interface d'administration de Django.

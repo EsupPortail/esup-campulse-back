@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.5-beta-20231012-2
+  version: 1.0.6-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -3644,7 +3644,7 @@ components:
         submission_date:
           type: string
           format: date
-          title: Date de fin de soumission du projet
+          title: Date de fin de soumission des projets
         commission_date:
           type: string
           format: date
@@ -3695,7 +3695,7 @@ components:
         submission_date:
           type: string
           format: date
-          title: Date de fin de soumission du projet
+          title: Date de fin de soumission des projets
         commission_date:
           type: string
           format: date
@@ -4473,7 +4473,7 @@ components:
         submission_date:
           type: string
           format: date
-          title: Date de fin de soumission du projet
+          title: Date de fin de soumission des projets
         commission_date:
           type: string
           format: date

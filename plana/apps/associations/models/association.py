@@ -105,7 +105,7 @@ class Association(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} ({self.acronym})"
+        return self.acronym
 
     class Meta:
         verbose_name = _("Association")

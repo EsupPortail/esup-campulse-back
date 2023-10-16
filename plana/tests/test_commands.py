@@ -298,6 +298,7 @@ class HistoryExpirationCommandTest(TestCase):
 
     def test_no_history_expiration(self):
         """Nothing should change if no History date expires."""
+        # TODO Date is naive.
         self.history.update(creation_date=self.today)
         call_command("cron_history_expiration")
         self.assertFalse(len(mail.outbox))

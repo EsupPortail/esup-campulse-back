@@ -10,9 +10,6 @@ class Institution(models.Model):
     name = models.CharField(_("Name"), max_length=250, blank=False)
     acronym = models.CharField(_("Acronym"), max_length=30, blank=False)
 
-    def __str__(self):
-        return f"{self.name} ({self.acronym})"
-
     def default_institution_managers(self):
         """Return the best list of managers to contact for an institution."""
         default_institution_managers_query = apps.get_model("users.user").objects.filter(
@@ -31,6 +28,9 @@ class Institution(models.Model):
         if better_institution_managers_query.count() > 0:
             query_to_return = better_institution_managers_query
         return query_to_return.values_list("first_name", "last_name", "email")
+
+    def __str__(self):
+        return self.acronym
 
     class Meta:
         verbose_name = _("Institution")
