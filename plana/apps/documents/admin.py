@@ -1,3 +1,4 @@
+"""Admin view for Document models."""
 from django.contrib import admin
 
 from .models import Document, DocumentUpload
@@ -5,6 +6,8 @@ from .models import Document, DocumentUpload
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
+    """List view for documents."""
+
     list_display = [
         "acronym",
         "description",
@@ -29,6 +32,8 @@ class DocumentAdmin(admin.ModelAdmin):
 
 @admin.register(DocumentUpload)
 class DocumentUploadAdmin(admin.ModelAdmin):
+    """List view for document uploads."""
+
     list_display = ["name", "document", "user", "association", "project"]
     search_fields = [
         "name",
