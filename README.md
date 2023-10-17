@@ -9,8 +9,12 @@
 
 ## Description
 
-Création d'une application web pour la gestion des associations étudiantes et de leurs projets.
+Création d'une application web pour la gestion des associations étudiantes et de leurs projets.  
 Documentation technique accessible à l'adresse [https://di.pages.unistra.fr/plan_a/plana](https://di.pages.unistra.fr/plan_a/plana)
+
+### Instances en ligne
+
+- Strasbourg [https://etu-campulse.fr/](https://etu-campulse.fr/)
 
 ## Technologies requises
 
