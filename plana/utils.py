@@ -2,7 +2,6 @@
 import ast
 import datetime
 import logging
-from smtplib import SMTPException
 
 import weasyprint
 from django.conf import settings
@@ -78,9 +77,12 @@ def send_mail(
     logger = logging.getLogger(__name__)
     try:
         mail.send()
-    except SMTPException as smtp_error:
-        logger.exception(smtp_error)
-        raise
+    except Exception as error:
+        if settings.DEBUG:
+            print(f"Mail \"{subject}\" not sent.")
+        else:
+            logger.exception(error)
+            raise
 
 
 def to_bool(attr):

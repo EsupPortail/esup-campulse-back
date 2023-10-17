@@ -356,7 +356,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        if commission.submission_date < datetime.date.today():
+        if commission.submission_date < datetime.date.today() and not request.user.has_perm(
+            "project.change_projectcommissionfund_as_validator"
+        ):
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
                 status=status.HTTP_400_BAD_REQUEST,
