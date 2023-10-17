@@ -190,17 +190,24 @@ class UserListCreate(generics.ListCreateAPIView):
                             ).values_list("id")
                         ).values_list("user_id")
                     )
+                    institution_users_query = User.objects.filter(
+                        id__in=GroupInstitutionFundUser.objects.filter(
+                            institution_id__in=Institution.objects.filter(id__in=institutions_ids).values_list("id")
+                        ).values_list("user_id")
+                    )
 
                     if check_other_users is True:
                         self.queryset = self.queryset.filter(
                             Q(id__in=assos_users_query.values_list("user_id"))
                             | Q(id__in=misc_users_query.values_list("id"))
                             | Q(id__in=commission_users_query.values_list("id"))
+                            | Q(id__in=institution_users_query.values_list("id"))
                         )
                     else:
                         self.queryset = self.queryset.filter(
                             Q(id__in=assos_users_query.values_list("user_id"))
                             | Q(id__in=commission_users_query.values_list("id"))
+                            | Q(id__in=institution_users_query.values_list("id"))
                         )
 
         return self.list(request, *args, **kwargs)
