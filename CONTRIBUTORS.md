@@ -1,4 +1,4 @@
-# Contributeurs
+# Contributions
 
 Le projet _Plateforme de Liaison et ANnuaire Associatif_ a été développé par [la Direction du Numérique de l'Université de Strasbourg](https://www.unistra.fr/dnum).
 
