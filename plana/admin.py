@@ -1,11 +1,12 @@
-import pprint
-
+"""Admin home page."""
 from django.contrib import admin
 from django.contrib.admin import sites
 
 
 class CustomAdminSite(admin.AdminSite):
-    def get_app_list(self, request):
+    """Admin home page."""
+
+    def get_app_list(self, request, app_label=None):
         """Sort applications in admin menu."""
         apps_order = {
             "history": 1,
@@ -41,6 +42,7 @@ class CustomAdminSite(admin.AdminSite):
             "Document": 20,
             "DocumentUpload": 21,
         }
+
         app_dict = self._build_app_dict(request)
         app_list = sorted(app_dict.values(), key=lambda x: apps_order[x["app_label"]])
 
