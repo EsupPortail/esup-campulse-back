@@ -433,7 +433,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-        documents = Document.objects.filter(acronym__in=["CHARTE_FSDIE", "DOCUMENT_EDITE"])
+        documents = Document.objects.filter(acronym__in=["RGPD_SITE_ALSACE", "CHARTE_FSDIE", "DOCUMENT_EDITE"])
         documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",
@@ -470,6 +470,14 @@ class DocumentsViewsTests(TestCase):
             ),
         )
         self.assertEqual(du_cnt, 1)
+
+        post_data = {
+            "path_file": file,
+            "document": 2,
+            "association": 3,
+        }
+        response = self.general_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_document_upload_by_id_anonymous(self):
         """
@@ -627,6 +635,14 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["comment"], "Cuisse de poulet")
         self.assertTrue(len(mail.outbox))
+
+        response = self.general_client.patch(
+            "/documents/uploads/7",
+            data=patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["comment"], "Cuisse de poulet")
 
         document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])
         self.assertNotEqual(document_upload.validated_date, None)

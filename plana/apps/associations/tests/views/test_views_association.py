@@ -301,69 +301,6 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_public"], False)
 
-    def test_get_association_details_404(self):
-        """
-        GET /associations/{id} .
-
-        - A non-existing association can't be returned.
-        """
-        not_found_response = self.client.get("/associations/9999")
-        self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_association_details_forbidden(self):
-        """
-        GET /associations/{id} .
-
-        - A non-public association can't be seen by an anonymous user.
-        - A non-enabled association can't be seen by a student user who's not in it.
-        - A non-public association can't be seen by a student user who's not in it.
-        """
-        non_public_response = self.client.get("/associations/3")
-        self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
-
-        non_enabled_not_member_response = self.member_client.get("/associations/5")
-        self.assertEqual(non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
-
-        non_public_not_member_response = self.member_client.get("/associations/3")
-        self.assertEqual(non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_get_association_details_success(self):
-        """
-        GET /associations/{id} .
-
-        - The route can be accessed by anyone.
-        - Main association details are returned (test the "name" attribute).
-        - All associations details are returned (test the "current_projects" attribute).
-        - A non-enabled association can be seen by a student user who's in it.
-        - A non-public association can be seen by a student user who's in it.
-        """
-        association = Association.objects.get(id=1)
-
-        response = self.client.get("/associations/1")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        public_association = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(public_association["name"], association.name)
-        self.assertEqual(public_association["currentProjects"], association.current_projects)
-
-    def test_get_association_details_success_not_enabled(self):
-        """
-        GET /associations/{id} .
-
-        - A non-enabled association can be seen by a student user who's in it.
-        """
-        non_enabled_member_response = self.member_client.get("/associations/2")
-        self.assertEqual(non_enabled_member_response.status_code, status.HTTP_200_OK)
-
-    def test_get_association_details_success_not_public(self):
-        """
-        GET /associations/{id} .
-
-        - A non-public association can be seen by a student user who's in it.
-        """
-        non_public_member_response = self.member_client.get("/associations/2")
-        self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
-
     def test_post_association_bad_request(self):
         """
         POST /associations/ .
@@ -549,6 +486,72 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
         site_association = json.loads(response_general.content.decode("utf-8"))
         self.assertTrue(site_association["isPublic"])
+
+    def test_get_association_details_404(self):
+        """
+        GET /associations/{id} .
+
+        - A non-existing association can't be returned.
+        """
+        not_found_response = self.client.get("/associations/9999")
+        self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_association_details_forbidden(self):
+        """
+        GET /associations/{id} .
+
+        - A non-public association can't be seen by an anonymous user.
+        - A non-enabled association can't be seen by a student user who's not in it.
+        - A non-public association can't be seen by a student user who's not in it.
+        """
+        non_public_response = self.client.get("/associations/3")
+        self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
+
+        association = Association.objects.get(id=5)
+        association.is_enabled = False
+        association.save()
+        non_enabled_not_member_response = self.member_client.get("/associations/5")
+        self.assertEqual(non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
+
+        non_public_not_member_response = self.member_client.get("/associations/3")
+        self.assertEqual(non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_association_details_success(self):
+        """
+        GET /associations/{id} .
+
+        - The route can be accessed by anyone.
+        - Main association details are returned (test the "name" attribute).
+        - All associations details are returned (test the "current_projects" attribute).
+        - A non-enabled association can be seen by a student user who's in it.
+        - A non-public association can be seen by a student user who's in it.
+        """
+        association = Association.objects.get(id=1)
+
+        response = self.client.get("/associations/1")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        public_association = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(public_association["name"], association.name)
+        self.assertEqual(public_association["currentProjects"], association.current_projects)
+
+    def test_get_association_details_success_not_enabled(self):
+        """
+        GET /associations/{id} .
+
+        - A non-enabled association can be seen by a student user who's in it.
+        """
+        non_enabled_member_response = self.member_client.get("/associations/2")
+        self.assertEqual(non_enabled_member_response.status_code, status.HTTP_200_OK)
+
+    def test_get_association_details_success_not_public(self):
+        """
+        GET /associations/{id} .
+
+        - A non-public association can be seen by a student user who's in it.
+        """
+        non_public_member_response = self.member_client.get("/associations/2")
+        self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
 
     def test_put_association(self):
         """
@@ -802,6 +805,13 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(association.is_enabled, False)
 
         # Association public status can be true only if is_enabled is true
+        self.general_client.patch(
+            f"/associations/{association_id}",
+            {"is_public": True},
+            content_type="application/json",
+        )
+        association = Association.objects.get(id=association_id)
+        self.assertEqual(association.is_public, False)
         self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": True},
