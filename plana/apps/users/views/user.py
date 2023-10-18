@@ -222,6 +222,7 @@ class UserListCreate(generics.ListCreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """Create an account for another person (manager only)."""
+        request.data.update({"email": request.data["email"].lower()})
         is_cas = True
         if not "is_cas" in request.data or ("is_cas" in request.data and request.data["is_cas"] is False):
             is_cas = False
@@ -391,6 +392,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             ]:
                 request.data.pop(restricted_field, False)
         elif "email" in request.data:
+            request.data.update({"email": request.data["email"].lower()})
             if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},

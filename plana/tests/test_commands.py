@@ -294,12 +294,11 @@ class HistoryExpirationCommandTest(TestCase):
     def setUp(self):
         """Cache all history."""
         self.history = History.objects.all()
-        self.today = datetime.date.today()
+        self.now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=0)))
 
     def test_no_history_expiration(self):
         """Nothing should change if no History date expires."""
-        # TODO Date is naive.
-        self.history.update(creation_date=self.today)
+        self.history.update(creation_date=self.now)
         call_command("cron_history_expiration")
         self.assertFalse(len(mail.outbox))
 

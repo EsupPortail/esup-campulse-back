@@ -43,21 +43,21 @@ class AssociationAllDataReadSerializer(serializers.ModelSerializer):
 class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    name = serializers.CharField(required=False, allow_blank=True)
-    acronym = serializers.CharField(required=False, allow_blank=True)
+    name = serializers.CharField(required=False, allow_blank=True, max_length=250)
+    acronym = serializers.CharField(required=False, allow_blank=True, max_length=30)
     social_object = serializers.CharField(required=False, allow_blank=True)
     current_projects = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
-    zipcode = serializers.CharField(required=False, allow_blank=True)
-    city = serializers.CharField(required=False, allow_blank=True)
-    country = serializers.CharField(required=False, allow_blank=True)
-    phone = serializers.CharField(required=False, allow_blank=True)
-    email = serializers.CharField(required=False, allow_blank=True)
-    siret = serializers.CharField(required=False, allow_blank=True)
-    website = serializers.CharField(required=False, allow_blank=True)
-    president_names = serializers.CharField(required=False, allow_blank=True)
-    president_phone = serializers.CharField(required=False, allow_blank=True)
-    president_email = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    city = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    email = serializers.CharField(required=False, allow_blank=True, max_length=256)
+    siret = serializers.CharField(required=False, allow_blank=True, max_length=14)
+    website = serializers.CharField(required=False, allow_blank=True, max_length=200)
+    president_names = serializers.CharField(required=False, allow_blank=True, max_length=256)
+    president_phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    president_email = serializers.CharField(required=False, allow_blank=True, max_length=256)
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all(), allow_null=True, default=None)
     institution_component = serializers.PrimaryKeyRelatedField(
         queryset=InstitutionComponent.objects.all(), allow_null=True, default=None

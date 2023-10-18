@@ -133,6 +133,7 @@ class ProjectsViewsTests(TestCase):
 
         - A student user gets projects where rights are OK.
         """
+        ProjectCommissionFund.objects.get(project_id=1).delete()
         response = self.student_misc_client.get("/projects/")
         user_associations_ids = AssociationUser.objects.filter(user_id=self.student_misc_user_id).values_list(
             "association_id"
@@ -868,6 +869,13 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=1)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
         self.assertTrue(len(mail.outbox))
+
+        response = self.student_president_client.patch(
+            "/projects/2/status", patch_data, content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.visible_objects.get(id=2)
+        self.assertEqual(project.project_status, "PROJECT_PROCESSING")
 
     def test_patch_project_status_manager(self):
         """

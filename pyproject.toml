@@ -74,7 +74,7 @@ weasyprint = "^60.1"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.9.1"
+black = "^23.10.0"
 coverage = "^7.3.2"
 django-debug-toolbar = "^4.2.0"
 pre-commit = "^3.4.0"
