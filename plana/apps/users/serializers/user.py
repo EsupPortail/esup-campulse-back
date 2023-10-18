@@ -216,6 +216,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         user = adapter.new_user(request)
         adapter.save_user(request, user, self)
 
+        user.email = self.cleaned_data["email"].lower()
         user.username = self.cleaned_data["email"]
         if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
