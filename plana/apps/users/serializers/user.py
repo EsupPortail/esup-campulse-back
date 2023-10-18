@@ -19,10 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     address = serializers.CharField(required=False, allow_blank=True)
-    zipcode = serializers.CharField(required=False, allow_blank=True)
-    city = serializers.CharField(required=False, allow_blank=True)
-    country = serializers.CharField(required=False, allow_blank=True)
-    phone = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    city = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
     is_cas = serializers.SerializerMethodField("is_cas_user")
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
@@ -94,14 +94,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     """Serializer to patch the user."""
 
     username = serializers.CharField(required=False, allow_blank=True)
-    first_name = serializers.CharField(required=False, allow_blank=True)
-    last_name = serializers.CharField(required=False, allow_blank=True)
+    first_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
+    last_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
     email = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
-    zipcode = serializers.CharField(required=False, allow_blank=True)
-    city = serializers.CharField(required=False, allow_blank=True)
-    country = serializers.CharField(required=False, allow_blank=True)
-    phone = serializers.CharField(required=False, allow_blank=True)
+    zipcode = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    city = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=128)
+    phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
     is_cas = serializers.SerializerMethodField("is_cas_user")
     has_validated_email = serializers.SerializerMethodField("has_validated_email_user")
     associations = AssociationMandatoryDataSerializer(many=True, read_only=True)
@@ -203,7 +203,7 @@ class UserNameSerializer(serializers.ModelSerializer):
 class CustomRegisterSerializer(serializers.ModelSerializer):
     """Used for the user registration form (to parse the phone field)."""
 
-    phone = serializers.CharField(required=False, allow_blank=True)
+    phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
 
     def save(self, request):
         """Save the user."""

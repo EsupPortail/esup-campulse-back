@@ -3165,8 +3165,10 @@ components:
           readOnly: true
         name:
           type: string
+          maxLength: 250
         acronym:
           type: string
+          maxLength: 30
         social_object:
           type: string
         current_projects:
@@ -3175,24 +3177,34 @@ components:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         email:
           type: string
+          maxLength: 256
         siret:
           type: string
+          maxLength: 14
         website:
           type: string
+          maxLength: 200
         president_names:
           type: string
+          maxLength: 256
         president_phone:
           type: string
+          maxLength: 32
         president_email:
           type: string
+          maxLength: 256
         institution:
           type: integer
           nullable: true
@@ -3767,6 +3779,7 @@ components:
           maxLength: 150
         phone:
           type: string
+          maxLength: 32
       required:
       - email
       - first_name
@@ -4338,8 +4351,10 @@ components:
       properties:
         name:
           type: string
+          maxLength: 250
         acronym:
           type: string
+          maxLength: 30
         social_object:
           type: string
         current_projects:
@@ -4348,24 +4363,34 @@ components:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         email:
           type: string
+          maxLength: 256
         siret:
           type: string
+          maxLength: 14
         website:
           type: string
+          maxLength: 200
         president_names:
           type: string
+          maxLength: 256
         president_phone:
           type: string
+          maxLength: 32
         president_email:
           type: string
+          maxLength: 256
         institution:
           type: integer
           nullable: true
@@ -4772,12 +4797,16 @@ components:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
@@ -4795,20 +4824,26 @@ components:
           type: string
         first_name:
           type: string
+          maxLength: 150
         last_name:
           type: string
+          maxLength: 150
         email:
           type: string
         address:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         is_validated_by_admin:
           type: boolean
           title: Est validé par l'équipe d'administration
@@ -5419,6 +5454,7 @@ components:
       properties:
         name:
           type: string
+          maxLength: 250
         planned_start_date:
           type: string
           format: date-time
@@ -5581,12 +5617,16 @@ components:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         is_cas:
           type: boolean
           description: Calculate field "is_cas" (True if user registered through CAS).
@@ -5706,20 +5746,26 @@ components:
           type: string
         first_name:
           type: string
+          maxLength: 150
         last_name:
           type: string
+          maxLength: 150
         email:
           type: string
         address:
           type: string
         zipcode:
           type: string
+          maxLength: 32
         city:
           type: string
+          maxLength: 128
         country:
           type: string
+          maxLength: 128
         phone:
           type: string
+          maxLength: 32
         is_cas:
           type: boolean
           description: Calculate field "is_cas" (True if user registered through CAS).
