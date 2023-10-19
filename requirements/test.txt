@@ -24,12 +24,12 @@ backports-zoneinfo==0.2.1 ; python_version >= "3.8" and python_version < "3.9" \
 bleach==6.1.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe \
     --hash=sha256:3225f354cfc436b9789c66c4ee030194bee0568fbf9cbdad3bc8b5c26c5f12b6
-boto3==1.28.65 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:9d52a1605657aeb5b19b09cfc01d9a92f88a616a5daf5479a59656d6341ea6b3 \
-    --hash=sha256:ff3d0116e0ca6c096547652390025780eace3a28f6c04c9ffbf38448f1e5a87b
-botocore==1.31.65 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:90716c6f1af97e5c2f516e9a3379767ebdddcc6cbed79b026fa5038ce4e5e43e \
-    --hash=sha256:f74e3da98dfcec17bc63ef58f82c643bf5bd7ec6cc11a26ede21cc4cd064917f
+boto3==1.28.66 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:38658585791f47cca3fc6aad03838de0136778b533e8c71c6a9590aedc60fbde \
+    --hash=sha256:a8228522c7db33694c0746dec8b48c05473671626359dd62ab6829eb7871eddc
+botocore==1.31.66 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:70e94a5f9bd46b26b63a41fb441ad35f2ae8862ad9d90765b6fa31ccc02c0a19 \
+    --hash=sha256:8d161a97a25eb381721b4b7251d5126ef4ec57e452114250b3e51ba5e4ff45a4
 britney==0.5.1 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:680faf36f00865ab77dbb7a092d34ed3bbf7f3da018a37e6eb8207aebd01a942 \
     --hash=sha256:6e2c461ede290246b777dc1444fcf5823234825d7746f6d6aabc4793340d2e3b
@@ -519,9 +519,9 @@ lxml==4.9.3 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:fc9b106a1bf918db68619fdcd6d5ad4f972fdd19c01d19bdb6bf63f3589a9ec5 \
     --hash=sha256:fcdd00edfd0a3001e0181eab3e63bd5c74ad3e67152c84f93f13769a40e073a7 \
     --hash=sha256:fe4bda6bd4340caa6e5cf95e73f8fea5c4bfc55763dd42f1b50a94c1b4a2fbd4
-num2words==0.5.12 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:7e7c0b0f080405aa3a1dd9d32b1ca90b3bf03bab17b8e54db05e1b78301a0988 \
-    --hash=sha256:9eeef488658226ab36818c06d7aeb956d19b530fb62030596b6802fb4659f30e
+num2words==0.5.13 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:39e662c663f0a7e15415431ea68eb3dc711b49e3b776d93403e1da0a219ca4ee \
+    --hash=sha256:a3064716fbbf90d75c449450cebfbc73a6a13e63b2531d09bdecc3ab1a2209cf
 oauthlib==3.2.2 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca \
     --hash=sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918
