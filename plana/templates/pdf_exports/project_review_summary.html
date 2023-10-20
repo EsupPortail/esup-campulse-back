@@ -62,7 +62,7 @@
             <div class="outline">
                 <div>
                     <strong>{% if association %}{% trans 'Association name' %}{% else %}{% trans 'Individual holder name' %}{% endif %} :</strong>
-                    <span>{% if association %}{{ association }}{% else %}{{ user.first_name }} {{ user.last_name }}{% endif %}</span>
+                    <span>{% if association %}{{ association.name }}{% else %}{{ user.first_name }} {{ user.last_name }}{% endif %}</span>
                 </div>
                 {% if partner_association %}
                     <div>
