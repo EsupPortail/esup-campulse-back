@@ -1011,16 +1011,6 @@ python-jose = ["python-jose (==3.3.0)"]
 test = ["cryptography", "pytest", "pytest-cov", "pytest-django", "pytest-xdist", "tox"]
 
 [[package]]
-name = "docopt"
-version = "0.6.2"
-description = "Pythonic argument parser, that will make you smile"
-optional = false
-python-versions = "*"
-files = [
-    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
-]
-
-[[package]]
 name = "dparse"
 version = "0.6.3"
 description = "A parser for Python dependency files"
@@ -1572,20 +1562,6 @@ files = [
 
 [package.dependencies]
 setuptools = "*"
-
-[[package]]
-name = "num2words"
-version = "0.5.13"
-description = "Modules to convert numbers to words. Easily extensible."
-optional = false
-python-versions = "*"
-files = [
-    {file = "num2words-0.5.13-py3-none-any.whl", hash = "sha256:39e662c663f0a7e15415431ea68eb3dc711b49e3b776d93403e1da0a219ca4ee"},
-    {file = "num2words-0.5.13.tar.gz", hash = "sha256:a3064716fbbf90d75c449450cebfbc73a6a13e63b2531d09bdecc3ab1a2209cf"},
-]
-
-[package.dependencies]
-docopt = ">=0.6.2"
 
 [[package]]
 name = "oauthlib"
@@ -2283,13 +2259,13 @@ files = [
 
 [[package]]
 name = "ruamel-yaml"
-version = "0.17.39"
+version = "0.17.40"
 description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "ruamel.yaml-0.17.39-py3-none-any.whl", hash = "sha256:8df81a51384f2e6af73d88bede63ec437df4854a5a74841f40e7622471298457"},
-    {file = "ruamel.yaml-0.17.39.tar.gz", hash = "sha256:ee9a9178a231306d2b260e67ba497c136d4639d58b08775ab67f5fb0f21e73f0"},
+    {file = "ruamel.yaml-0.17.40-py3-none-any.whl", hash = "sha256:b16b6c3816dff0a93dca12acf5e70afd089fa5acb80604afd1ffa8b465b7722c"},
+    {file = "ruamel.yaml-0.17.40.tar.gz", hash = "sha256:6024b986f06765d482b5b07e086cc4b4cd05dd22ddcbc758fa23d54873cf313d"},
 ]
 
 [package.dependencies]
@@ -2852,4 +2828,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "e0d40fc114fefc93e969a089a252f2f08eb1587432a802b06771c1a3fa93af55"
+content-hash = "8812c594f09d2c11719815a7e8c229bd77b5cacdeee935a820c0ba248ec2243d"

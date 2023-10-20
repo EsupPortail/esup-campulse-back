@@ -2,7 +2,6 @@
 import datetime
 import locale
 
-import num2words
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -478,13 +477,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 "filename": f"{slugify(content.title)}.pdf",
                                 "context_attach": {
                                     "amount_earned": request.data["amount_earned"],
-                                    "amount_earned_litteral": num2words.num2words(
-                                        request.data["amount_earned"],
-                                        lang=locale.getlocale()[0],
-                                    ),
                                     "project_name": project.name,
                                     "project_manual_identifier": project.manual_identifier,
                                     "date": datetime.date.today().strftime('%d %B %Y'),
+                                    "year": datetime.date.today().strftime('%Y'),
                                     "date_commission": commission.commission_date.strftime('%d %B %Y'),
                                     "owner": owner,
                                     "content": content,
