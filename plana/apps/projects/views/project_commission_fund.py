@@ -435,6 +435,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if "amount_earned" in request.data:
+            locale.setlocale(locale.LC_ALL, "")
             attachments = []
             managers_emails = []
             if int(request.data["amount_earned"]) == 0:
