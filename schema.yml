@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.0-beta-19
+  version: 1.0.0-beta-20
   description: API for PlanA
 paths:
   /associations/:
@@ -4688,7 +4688,7 @@ components:
         sustainable_development:
           type: string
           minLength: 1
-          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+          title: Actions en rapport avec le DDRS (Développement Durable et Responsabilité
             Sociétale)
         project_status:
           allOf:
@@ -4974,7 +4974,7 @@ components:
           title: Campagne de communication
         sustainable_development:
           type: string
-          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+          title: Actions en rapport avec le DDRS (Développement Durable et Responsabilité
             Sociétale)
         project_status:
           allOf:
@@ -5541,7 +5541,7 @@ components:
         sustainable_development:
           type: string
           minLength: 1
-          title: Actions en rapport avec la DDRS (Développement Durable et Responsabilité
+          title: Actions en rapport avec le DDRS (Développement Durable et Responsabilité
             Sociétale)
     ResendEmailVerificationRequest:
       type: object
