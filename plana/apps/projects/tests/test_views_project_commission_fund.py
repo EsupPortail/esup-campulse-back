@@ -579,10 +579,12 @@ class ProjectCommissionFundViewsTests(TestCase):
         commission_fund_id = 3
         response = self.general_client.patch(
             f"/projects/{project_id}/commission_funds/{commission_fund_id}",
-            {"amount_earned": 20},
+            {"amount_earned": 0},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        project = Project.visible_objects.get(id=project_id)
+        self.assertEqual(project.project_status, "PROJECT_CANCELLED")
 
     def test_patch_project_cf_success(self):
         """

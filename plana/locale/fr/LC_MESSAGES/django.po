@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 10:43+0200\n"
+"POT-Creation-Date: 2023-10-24 11:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1164,7 +1164,7 @@ msgstr "Non autorisé à récupérer ce projet."
 #: plana/apps/projects/views/project_comment.py:250
 #: plana/apps/projects/views/project_commission_fund.py:147
 #: plana/apps/projects/views/project_commission_fund.py:327
-#: plana/apps/projects/views/project_commission_fund.py:584
+#: plana/apps/projects/views/project_commission_fund.py:587
 #: plana/apps/projects/views/project_review.py:116
 msgid "Not allowed to update this project."
 msgstr "Non autorisé à mettre à jour ce projet."
@@ -1267,7 +1267,7 @@ msgstr ""
 "commission."
 
 #: plana/apps/projects/views/project_commission_fund.py:312
-#: plana/apps/projects/views/project_commission_fund.py:578
+#: plana/apps/projects/views/project_commission_fund.py:581
 msgid "Link between this project and commission does not exist."
 msgstr "Le lien entre ce projet et cette commission n'existe pas."
 
