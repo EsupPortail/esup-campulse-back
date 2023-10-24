@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import Sum
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -510,8 +511,12 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 project_id=project.id, amount_earned__isnull=True, is_validated_by_admin=True
             ).count()
             if remaining_project_commission_funds_count == 0 and "is_validated_by_admin" not in request.data:
-                project.project_status = "PROJECT_REVIEW_DRAFT"
-                project.save()
+                total_amounts_earned = ProjectCommissionFund.objects.filter(project_id=project.id).aggregate(
+                    total_amounts_earned=Sum("amount_earned")
+                )["total_amounts_earned"]
+                if total_amounts_earned > 0:
+                    project.project_status = "PROJECT_REVIEW_DRAFT"
+                    project.save()
 
         unchecked_project_commission_funds = ProjectCommissionFund.objects.filter(
             project_id=project.id, is_validated_by_admin__isnull=True
