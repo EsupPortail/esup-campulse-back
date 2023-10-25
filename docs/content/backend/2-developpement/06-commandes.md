@@ -38,5 +38,3 @@ weight: 116
 - `$ black plana` : linter les fichiers.
 - `$ pylint plana --output-format=json:pylint.json` : liste des erreurs non lintables exportées dans un fichier `pylint.json`.
 - `$ cd docs && hugo server && cd ..` : lancer le serveur de développement de la documentation.
-- `$ sudo docker image prune -a && sudo docker builder prune` : vider le cache de la configuration Docker.
-- `$ sudo docker compose up --build` : recharger l'image Docker.

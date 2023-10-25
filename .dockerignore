@@ -1,9 +1,0 @@
-*
-
-!docker/
-!plana/
-!requirements/
-!manage.py
-!poetry.lock
-!requirements.txt
-!setup.py

@@ -25,12 +25,14 @@ Documentation technique accessible à l'adresse [https://di.pages.unistra.fr/pla
 ## Technologies conseillées
 
 - [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) (gestion de l'environnement virtuel)
-- [Docker](https://www.docker.com/) (déploiement de l'application)
 - [Poetry](https://python-poetry.org/) (gestionnaire de dépendances)
 - [age](https://github.com/FiloSottile/age) (chiffrement des documents privés)
 
 ## Technologies de développement
 
+- [MailDev](https://github.com/maildev/maildev) (serveur mail)
 - [isort](https://github.com/pycqa/isort) (tri des imports)
 - [Black](https://github.com/psf/black) (linter général)
 - [Pylint](https://github.com/pylint-dev/pylint) (linter avancé)
+- [tox](https://github.com/tox-dev/tox) (tests unitaires)
+- [Hugo](https://github.com/gohugoio/hugo) (documentation)
