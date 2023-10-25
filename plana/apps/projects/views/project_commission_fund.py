@@ -518,7 +518,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     project.project_status = "PROJECT_REVIEW_DRAFT"
                     project.save()
                 else:
-                    project.project_status = "PROJECT_CANCELLED"
+                    project.project_status = "PROJECT_CANCELED"
                     project.save()
 
         unchecked_project_commission_funds = ProjectCommissionFund.objects.filter(

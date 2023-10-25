@@ -50,7 +50,7 @@ Le dossier `plana/apps` du backend est découpé en huit sous-applications compr
     - `PROJECT_REVIEW_DRAFT` : brouillon de bilan attendu.
     - `PROJECT_REVIEW_PROCESSING` : bilan en cours d'étude par les gestionnaires concernés.
     - `PROJECT_REVIEW_VALIDATED` : bilan validé par un des gestionnaires concernés.
-    - `PROJECT_CANCELLED` : projet validé mais finalement annulé.
+    - `PROJECT_CANCELED` : projet validé mais finalement annulé.
   - `category` : catégories de projets, un projet peut en posséder plusieurs, la liste ne peut être modifiée hors de l'interface d'administration de Django.
   - `project_category` : catégories affectées aux différents projets.
   - `project_commission_fund` : fonds pour une commission par projet, avec les différents montants obtenus et demandés.

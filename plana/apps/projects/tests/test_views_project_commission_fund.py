@@ -584,7 +584,7 @@ class ProjectCommissionFundViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=project_id)
-        self.assertEqual(project.project_status, "PROJECT_CANCELLED")
+        self.assertEqual(project.project_status, "PROJECT_CANCELED")
 
     def test_patch_project_cf_success(self):
         """
