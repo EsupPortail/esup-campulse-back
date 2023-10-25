@@ -47,9 +47,24 @@ EMAIL_USE_TLS = False
 EMAIL_TEMPLATE_FRONTEND_URL = "maildev:3000/"
 
 
+#####################
+# S3 storage config #
+#####################
+
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL")
+
+
 ########
 # Misc #
 ########
 
 MIGRATION_SITE_NAME = "Campulse"
-MIGRATION_SITE_DOMAIN = environ.get('SITE_DOMAIN')
+MIGRATION_SITE_DOMAIN = environ.get("SITE_DOMAIN")
+
+# External APIs
+ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get("ACCOUNTS_API_SPORE_DESCRIPTION_FILE")
+ACCOUNTS_API_CONF["BASE_URL"] = environ.get("ACCOUNTS_API_SPORE_BASE_URL")
+ACCOUNTS_API_CONF["TOKEN"] = environ.get("ACCOUNTS_API_SPORE_TOKEN")
