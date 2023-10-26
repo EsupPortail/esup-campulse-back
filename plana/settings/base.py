@@ -15,7 +15,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.0.0-beta-20"
+APP_VERSION = "1.0.0-beta-21"
 
 ######################
 # Path configuration #
