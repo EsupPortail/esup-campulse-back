@@ -182,7 +182,7 @@ class User(AbstractUser):
             if (
                 not member.is_president
                 and not self.is_president_in_association(project_obj.association)
-                and member.id != project_obj.association_user
+                and member.id != project_obj.association_user.id
             ):
                 return False
             return True
