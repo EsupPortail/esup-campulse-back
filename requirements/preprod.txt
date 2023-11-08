@@ -24,12 +24,12 @@ backports-zoneinfo==0.2.1 ; python_version >= "3.8" and python_version < "3.9" \
 bleach==6.1.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe \
     --hash=sha256:3225f354cfc436b9789c66c4ee030194bee0568fbf9cbdad3bc8b5c26c5f12b6
-boto3==1.28.79 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:02ce7dcad2d3b054cd99e7ca6df7a708e016a31b1c98b46d8df3b3891070c121 \
-    --hash=sha256:b8acb57a124434284d6ab69c61d32d70e84e13e2c27c33b4ad3c32f15ad407d3
-botocore==1.31.79 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:07ecb93833475dde68e5c0e02a7ccf8ca22caf68cdc892651c300529894133e1 \
-    --hash=sha256:6f1fc49e9e12f9772b4fef577837670bc84d772a7c946b4d08fe2890e34a4305
+boto3==1.28.80 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:2f43e032ab804a3c39996d524003d2b906e5d86856a32da3427e36912a22d2b7 \
+    --hash=sha256:c48c6e04e43f894881b883a28fd032f16805f6cb2771b85f0c97f3fe34db0a41
+botocore==1.31.80 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:1c693c0f8b2553fcbe0df223241191e6f9f60b4245d65c1822c08f659274fef2 \
+    --hash=sha256:d43fe303530c12efca9be4ec3a9104e8a669f11d1ba9feb18f0284d751a9672c
 britney==0.5.1 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:680faf36f00865ab77dbb7a092d34ed3bbf7f3da018a37e6eb8207aebd01a942 \
     --hash=sha256:6e2c461ede290246b777dc1444fcf5823234825d7746f6d6aabc4793340d2e3b
