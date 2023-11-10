@@ -173,6 +173,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        project = None
         if "project" in request.data and request.data["project"] != "":
             try:
                 project = Project.visible_objects.get(id=request.data["project"])
@@ -202,9 +203,11 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             existing_document = existing_document.filter(association_id=association.id)
-            if not request.user.has_perm(
-                "documents.add_documentupload_all"
-            ) and not request.user.is_president_in_association(request.data["association"]):
+            if (
+                not request.user.has_perm("documents.add_documentupload_all")
+                and not request.user.is_president_in_association(request.data["association"])
+                and project is None
+            ):
                 return response.Response(
                     {"error": _("Not allowed to post documents if not president.")},
                     status=status.HTTP_403_FORBIDDEN,

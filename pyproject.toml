@@ -41,7 +41,7 @@ multi_line_output = 3
 
 [tool.poetry]
 name = "plana"
-version = "1.0.0-beta-22"
+version = "1.0.0-beta-23"
 description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
@@ -73,7 +73,7 @@ weasyprint = "^60.1"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.10.1"
+black = "^23.11.0"
 coverage = "^7.3.2"
 django-debug-toolbar = "^4.2.0"
 pre-commit = "^3.4.0"
