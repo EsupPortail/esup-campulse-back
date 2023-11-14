@@ -330,7 +330,7 @@
       "code": "CONTACT_LIST",
       "label": "Paragraphe de la page contact listant les contacts des gestionnaires établissements.",
       "header": "",
-      "body": "<ul><li><h3>Associations Unistra</h3><p><span>Service de la Vie Universitaire</span><br><a href='mailto:svu-campulse@unistra.fr'>svu-campulse@unistra.fr</a><br><span>03.68.85.63.73</span></p></li><li><h3>Associations Crous & Porteurs de projets individuels</h3><p><span>Crous de Strasbourg</span><br><a href='mailto:culture@crous-strasbourg.fr'>culture@crous-strasbourg.fr</a><br><span>03.88.21.28.18</span></p></li></ul>",
+      "body": "<ul><li><h3>Associations rattachées à l'Université de Strasbourg</h3><p><span>Service de la Vie Universitaire</span><br><a href='mailto:svu-campulse@unistra.fr'>svu-campulse@unistra.fr</a><br><span>03.68.85.63.73</span></p></li><li><h3>Autres associations étudiantes & Porteurs de projets individuels</h3><p><span>Crous de Strasbourg</span><br><a href='mailto:culture@crous-strasbourg.fr'>culture@crous-strasbourg.fr</a><br><span>03.88.21.28.18</span></p></li></ul>",
       "footer": "",
       "aside": ""
     }
