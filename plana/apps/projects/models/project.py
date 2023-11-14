@@ -1,5 +1,6 @@
 """Models describing projects."""
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -139,13 +140,19 @@ class Project(models.Model):
         null=True,
     )
     partner_association = models.TextField(_("Partner association"), default="")
-    budget_previous_edition = models.PositiveIntegerField(_("Budget on previous edition"), default=0)
+    budget_previous_edition = models.PositiveIntegerField(
+        _("Budget on previous edition"), default=1, validators=[MinValueValidator(1)]
+    )
     target_audience = models.TextField(_("Target audience"), default="")
     amount_students_audience = models.PositiveIntegerField(_("Amount of students in target audience"), default=0)
-    amount_all_audience = models.PositiveIntegerField(_("Amount of all people in target audience"), default=0)
+    amount_all_audience = models.PositiveIntegerField(
+        _("Amount of all people in target audience"), default=1, validators=[MinValueValidator(1)]
+    )
     ticket_price = models.PositiveIntegerField(_("Amount of money asked for each person"), default=0)
     student_ticket_price = models.PositiveIntegerField(_("Amount of money asked for a student"), default=0)
-    individual_cost = models.PositiveIntegerField(_("Amount of money needed by person"), default=0)
+    individual_cost = models.PositiveIntegerField(
+        _("Amount of money needed by person"), default=1, validators=[MinValueValidator(1)]
+    )
     goals = models.TextField(_("Goals"), default="")
     summary = models.TextField(_("Summary"), default="")
     planned_activities = models.TextField(_("Planned activites"), default="")

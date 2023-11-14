@@ -4634,7 +4634,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Budget de l'édition précédente
         target_audience:
           type: string
@@ -4648,7 +4648,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -4663,7 +4663,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string
@@ -4927,7 +4927,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Budget de l'édition précédente
         target_audience:
           type: string
@@ -4940,7 +4940,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -4955,7 +4955,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string
@@ -5487,7 +5487,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Budget de l'édition précédente
         target_audience:
           type: string
@@ -5501,7 +5501,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -5516,7 +5516,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string
