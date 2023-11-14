@@ -4634,7 +4634,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 1
+          minimum: 0
           title: Budget de l'édition précédente
         target_audience:
           type: string
@@ -4927,7 +4927,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 1
+          minimum: 0
           title: Budget de l'édition précédente
         target_audience:
           type: string
@@ -5487,7 +5487,7 @@ components:
         budget_previous_edition:
           type: integer
           maximum: 2147483647
-          minimum: 1
+          minimum: 0
           title: Budget de l'édition précédente
         target_audience:
           type: string

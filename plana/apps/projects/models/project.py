@@ -140,9 +140,7 @@ class Project(models.Model):
         null=True,
     )
     partner_association = models.TextField(_("Partner association"), default="")
-    budget_previous_edition = models.PositiveIntegerField(
-        _("Budget on previous edition"), default=1, validators=[MinValueValidator(1)]
-    )
+    budget_previous_edition = models.PositiveIntegerField(_("Budget on previous edition"), default=1)
     target_audience = models.TextField(_("Target audience"), default="")
     amount_students_audience = models.PositiveIntegerField(_("Amount of students in target audience"), default=0)
     amount_all_audience = models.PositiveIntegerField(
