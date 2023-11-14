@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-10 07:51+0100\n"
+"POT-Creation-Date: 2023-11-14 13:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:37
-#: plana/apps/associations/views/association_export.py:85
+#: plana/apps/associations/views/association_export.py:86
 #: plana/apps/users/admin.py:24 plana/apps/users/models/user.py:100
 msgid "Email"
 msgstr "Courriel"
@@ -170,6 +170,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:80
+#: plana/apps/associations/views/association_export.py:84
 msgid "Charter date"
 msgstr "Date de la charte"
 
@@ -185,7 +186,7 @@ msgid "Approval date"
 msgstr "Date d'agrément"
 
 #: plana/apps/associations/models/association.py:83
-#: plana/apps/associations/views/association_export.py:84
+#: plana/apps/associations/views/association_export.py:85
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
@@ -253,7 +254,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:360
 #: plana/apps/associations/views/association.py:503
 #: plana/apps/associations/views/association.py:651
-#: plana/apps/associations/views/association_export.py:168
+#: plana/apps/associations/views/association_export.py:170
 #: plana/apps/documents/views/document_upload.py:202
 #: plana/apps/projects/views/project.py:278
 msgid "Association does not exist."
@@ -321,7 +322,7 @@ msgstr ""
 "Vous n'avez pas la permission d'exporter la liste des associations au format "
 "CSV."
 
-#: plana/apps/associations/views/association_export.py:178
+#: plana/apps/associations/views/association_export.py:180
 msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
