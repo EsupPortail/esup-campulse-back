@@ -1,7 +1,13 @@
 """Serializers describing fields used on projects."""
+from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from plana.apps.commissions.serializers.commission import CommissionSerializer
+from plana.apps.documents.models.document import Document
+from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
 
@@ -99,6 +105,18 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
     """Serializer for project list."""
 
     commission = CommissionSerializer(many=False, read_only=True)
+    budget_file = serializers.SerializerMethodField("get_budget_file")
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_budget_file(self, project):
+        """Return a link to DocumentUploadFileRetrieve view for BUDGET_PREVISIONNEL."""
+        try:
+            budget_file = DocumentUpload.objects.get(
+                document_id=Document.objects.get(acronym="BUDGET_PREVISIONNEL"), project_id=project.id
+            )
+            return reverse('document_upload_file_retrieve', args=[budget_file.id])
+        except ObjectDoesNotExist:
+            return None
 
     class Meta:
         model = Project
@@ -114,6 +132,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "planned_end_date",
             "edition_date",
             "project_status",
+            "budget_file",
         ]
 
 

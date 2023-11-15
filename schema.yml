@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.0-beta-23
+  version: 1.0.0-beta-24
   description: API for PlanA
 paths:
   /associations/:
@@ -4289,6 +4289,16 @@ components:
           format: uri
           nullable: true
           title: Miniatures dynamiques pour le logo
+        row:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Row where logo is placed in layout
+        column:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Column where logo is placed in layout
         visible:
           type: boolean
           title: Est visible
@@ -4648,7 +4658,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -4663,7 +4673,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string
@@ -4940,7 +4950,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -4955,7 +4965,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string
@@ -5259,7 +5269,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        budget_file:
+          type: string
+          description: Return a link to DocumentUploadFileRetrieve view for BUDGET_PREVISIONNEL.
+          readOnly: true
       required:
+      - budget_file
       - commission
       - edition_date
       - id
@@ -5501,7 +5516,7 @@ components:
         amount_all_audience:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Nombre de personnes au total dans le public visé
         ticket_price:
           type: integer
@@ -5516,7 +5531,7 @@ components:
         individual_cost:
           type: integer
           maximum: 2147483647
-          minimum: 0
+          minimum: 1
           title: Quantité d'argent nécessaire par personne
         goals:
           type: string

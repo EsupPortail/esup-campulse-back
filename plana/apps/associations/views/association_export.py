@@ -81,6 +81,7 @@ class AssociationListExport(generics.RetrieveAPIView):
             str(_("Institution")),
             str(_("Activity field")),
             str(_("Institution component")),
+            str(_("Charter date")),
             str(_("Last GOA date")),
             str(_("Email")),
         ]
@@ -116,6 +117,7 @@ class AssociationListExport(generics.RetrieveAPIView):
                 Institution.objects.get(id=association.institution_id).name,
                 str(association.activity_field),
                 institution_component,
+                association.charter_date,
                 association.last_goa_date,
                 association.email,
             ]

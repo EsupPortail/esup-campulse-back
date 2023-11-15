@@ -6,6 +6,8 @@
       "acronym": "crous",
       "title": "Le Centre régional des œuvres universitaires et scolaires",
       "url": "https://www.crous-strasbourg.fr/",
+      "row": 1,
+      "column": 2,
       "visible": true
     }
   },
@@ -16,6 +18,8 @@
       "acronym": "unistra",
       "title": "L'Université de Strasbourg",
       "url": "https://www.unistra.fr/",
+      "row": 1,
+      "column": 1,
       "visible": true
     }
   },
@@ -26,6 +30,8 @@
       "acronym": "uha",
       "title": "L'Université de Haute-Alsace",
       "url": "https://www.uha.fr/",
+      "row": 1,
+      "column": 3,
       "visible": false
     }
   },
@@ -36,6 +42,8 @@
       "acronym": "insa",
       "title": "L'Institut National des Sciences Appliquées Strasbourg",
       "url": "https://www.insa-strasbourg.fr/",
+      "row": 1,
+      "column": 4,
       "visible": false
     }
   },
@@ -46,6 +54,8 @@
       "acronym": "hear",
       "title": "La Haute École des Arts du Rhin",
       "url": "https://www.hear.fr/",
+      "row": 1,
+      "column": 5,
       "visible": false
     }
   },
@@ -56,6 +66,8 @@
       "acronym": "engees",
       "title": "L'École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
       "url": "https://engees.unistra.fr/",
+      "row": 1,
+      "column": 6,
       "visible": false
     }
   },
@@ -66,6 +78,8 @@
       "acronym": "ensas",
       "title": "L'École Nationale Supérieure d'Architecture de Strasbourg",
       "url": "https://www.strasbourg.archi.fr/",
+      "row": 1,
+      "column": 7,
       "visible": false
     }
   },
@@ -76,6 +90,8 @@
       "acronym": "cvec",
       "title": "La Contribution Vie Étudiante et de Campus",
       "url": "https://cvec.etudiant.gouv.fr/",
+      "row": 2,
+      "column": 2,
       "visible": true
     }
   },
@@ -86,6 +102,8 @@
       "acronym": "france-relance",
       "title": "France Relance",
       "url": "https://www.economie.gouv.fr/plan-de-relance",
+      "row": 2,
+      "column": 1,
       "visible": true
     }
   },
@@ -96,6 +114,8 @@
       "acronym": "esr",
       "title": "Le Ministère de l'Enseignement Supérieur et de la Recherche",
       "url": "https://www.enseignementsup-recherche.gouv.fr/",
+      "row": 2,
+      "column": 3,
       "visible": true
     }
   }

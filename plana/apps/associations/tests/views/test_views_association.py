@@ -460,6 +460,7 @@ class AssociationsViewsTests(TestCase):
         POST /associations/ .
 
         - A General Manager can add an association.
+        - A General Manager can add a public association.
         - A General Manager can add a site association.
         """
         response_general = self.general_client.post(
@@ -484,8 +485,21 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
+        public_association = json.loads(response_general.content.decode("utf-8"))
+        self.assertTrue(public_association["isPublic"])
+
+        response_general = self.general_client.post(
+            "/associations/",
+            {
+                "name": "Les gens qui savent imiter Philippe Risoli",
+                "email": "cuitas-les-bananas@mail.tld",
+                "institution": 2,
+                "is_site": True,
+            },
+        )
+        self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
         site_association = json.loads(response_general.content.decode("utf-8"))
-        self.assertTrue(site_association["isPublic"])
+        self.assertTrue(site_association["isSite"])
 
     def test_get_association_details_404(self):
         """
