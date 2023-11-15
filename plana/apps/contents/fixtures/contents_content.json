@@ -488,5 +488,29 @@
       "footer": "",
       "aside": ""
     }
+  },
+  {
+    "model": "contents.content",
+    "pk": 41,
+    "fields": {
+      "code": "ACCESSIBILITY_DECLARATION",
+      "label": "Page de Déclaration d'Accessibilité.",
+      "header": "Déclaration d'Accessibilité",
+      "body": "<p>Déclaration d'Accessibilité</p>",
+      "footer": "",
+      "aside": ""
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 42,
+    "fields": {
+      "code": "MULTIANNUAL_ACCESSIBILITY_PLAN",
+      "label": "Page de Schéma Pluriannuel de Mise en Accessibilité.",
+      "header": "Schéma Pluriannuel de Mise en Accessibilité",
+      "body": "<p>Schéma Pluriannuel de Mise en Accessibilité</p>",
+      "footer": "",
+      "aside": ""
+    }
   }
 ]
