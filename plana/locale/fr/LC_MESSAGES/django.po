@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-15 11:46+0100\n"
+"POT-Creation-Date: 2023-11-15 14:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,75 +242,79 @@ msgstr "Non autorisé à créer une association pour cet établissement."
 msgid "No rights to set is_public on this association."
 msgstr "Aucun droit d'éditer le champ is_public de cette association."
 
-#: plana/apps/associations/views/association.py:228
+#: plana/apps/associations/views/association.py:232
+msgid "No rights to set is_site on this association."
+msgstr "Aucun droit d'éditer le champ is_site de cette association."
+
+#: plana/apps/associations/views/association.py:238
 msgid "Association name not set."
 msgstr "Aucun nom d'association donné."
 
-#: plana/apps/associations/views/association.py:247
+#: plana/apps/associations/views/association.py:257
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
 
-#: plana/apps/associations/views/association.py:299
-#: plana/apps/associations/views/association.py:360
-#: plana/apps/associations/views/association.py:503
-#: plana/apps/associations/views/association.py:651
+#: plana/apps/associations/views/association.py:310
+#: plana/apps/associations/views/association.py:371
+#: plana/apps/associations/views/association.py:512
+#: plana/apps/associations/views/association.py:660
 #: plana/apps/associations/views/association_export.py:170
 #: plana/apps/documents/views/document_upload.py:202
 #: plana/apps/projects/views/project.py:278
 msgid "Association does not exist."
 msgstr "L'association n'existe pas."
 
-#: plana/apps/associations/views/association.py:305
+#: plana/apps/associations/views/association.py:316
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/views/association.py:316
+#: plana/apps/associations/views/association.py:327
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/views/association.py:327
+#: plana/apps/associations/views/association.py:338
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/views/association.py:379
-#: plana/apps/associations/views/association.py:661
+#: plana/apps/associations/views/association.py:390
+#: plana/apps/associations/views/association.py:670
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:393
+#: plana/apps/associations/views/association.py:404
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:398
+#: plana/apps/associations/views/association.py:409
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:404
+#: plana/apps/associations/views/association.py:415
 msgid "Error on social networks format."
 msgstr "Erreur de format de réseaux sociaux."
 
-#: plana/apps/associations/views/association.py:414
+#: plana/apps/associations/views/association.py:425
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:429
+#: plana/apps/associations/views/association.py:440
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:509
+#: plana/apps/associations/views/association.py:518
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:517
+#: plana/apps/associations/views/association.py:526
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:670
+#: plana/apps/associations/views/association.py:679
 #: plana/apps/projects/views/project.py:678
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:687
+#: plana/apps/associations/views/association.py:696
 #: plana/apps/projects/views/project.py:750
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
