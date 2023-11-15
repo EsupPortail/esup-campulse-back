@@ -39,6 +39,8 @@ class Logo(models.Model):
         blank=True,
         upload_to=get_logo_path,
     )
+    row = models.PositiveIntegerField(_("Row where logo is placed in layout"), default=1)
+    column = models.PositiveIntegerField(_("Column where logo is placed in layout"), default=1)
     visible = models.BooleanField(_("Is visible"), default=False)
 
     def __str__(self):

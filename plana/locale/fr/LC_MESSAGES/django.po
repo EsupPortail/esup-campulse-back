@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 14:03+0100\n"
+"POT-Creation-Date: 2023-11-15 11:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -525,15 +525,23 @@ msgid "Site URL"
 msgstr "URL du site"
 
 #: plana/apps/contents/models/logo.py:42
+msgid "Row where logo is placed in layout"
+msgstr "Ligne où est placé le logo dans la disposition"
+
+#: plana/apps/contents/models/logo.py:43
+msgid "Column where logo is placed in layout"
+msgstr "Colonne où est placé le logo dans la disposition"
+
+#: plana/apps/contents/models/logo.py:44
 #: plana/apps/projects/models/project_comment.py:12
 msgid "Is visible"
 msgstr "Est visible"
 
-#: plana/apps/contents/models/logo.py:48
+#: plana/apps/contents/models/logo.py:50
 msgid "Logo"
 msgstr "Logo"
 
-#: plana/apps/contents/models/logo.py:49
+#: plana/apps/contents/models/logo.py:51
 msgid "Logos"
 msgstr "Logos"
 

@@ -4289,6 +4289,16 @@ components:
           format: uri
           nullable: true
           title: Miniatures dynamiques pour le logo
+        row:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Row where logo is placed in layout
+        column:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Column where logo is placed in layout
         visible:
           type: boolean
           title: Est visible
@@ -5259,7 +5269,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectStatusEnum'
           title: Statut du Projet
+        budget_file:
+          type: string
+          description: Return a link to DocumentUploadFileRetrieve view for BUDGET_PREVISIONNEL.
+          readOnly: true
       required:
+      - budget_file
       - commission
       - edition_date
       - id
