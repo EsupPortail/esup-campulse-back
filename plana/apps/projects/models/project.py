@@ -5,10 +5,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission_fund import CommissionFund
+from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
+from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.users.models.user import AssociationUser, User
 
 
@@ -182,6 +185,12 @@ class Project(models.Model):
 
     def get_project_default_manager_emails(self):
         """Return a list of manager email addresses affected to a project."""
+        misc_project_commission_funds = ProjectCommissionFund.objects.filter(
+            project_id=self.id,
+            commission_fund_id__in=CommissionFund.objects.filter(
+                fund_id__in=Fund.objects.filter(is_site=False).values_list("id")
+            ).values_list("id"),
+        )
         managers_emails = []
         if self.association_id is not None:
             managers_emails = list(
@@ -189,7 +198,7 @@ class Project(models.Model):
                 .default_institution_managers()
                 .values_list("email", flat=True)
             )
-        if self.user_id is not None:
+        if self.user_id is not None or misc_project_commission_funds.count() > 0:
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                 if user_to_check.has_perm("users.change_user_misc"):
                     managers_emails.append(user_to_check.email)
