@@ -722,28 +722,36 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_REVIEW_USER_CREATION"
-            missing_documents_names = (
-                Document.objects.filter(
-                    models.Q(process_type__in=document_process_types)
-                    & (
-                        models.Q(is_required_in_process=True, fund_id=None)
-                        | models.Q(
-                            is_required_in_process=True,
-                            fund_id__in=CommissionFund.objects.filter(
-                                id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                                    "commission_fund_id"
-                                )
-                            ).values_list("fund_id"),
-                        )
+            missing_documents_names = Document.objects.filter(
+                models.Q(process_type__in=document_process_types)
+                & (
+                    models.Q(is_required_in_process=True, fund_id=None)
+                    | models.Q(
+                        is_required_in_process=True,
+                        fund_id__in=CommissionFund.objects.filter(
+                            id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                                "commission_fund_id"
+                            )
+                        ).values_list("fund_id"),
                     )
                 )
-                .exclude(
-                    id__in=DocumentUpload.objects.filter(
-                        project_id=project.id,
-                    ).values_list("document_id")
-                )
-                .values_list("name")
+            ).exclude(
+                id__in=DocumentUpload.objects.filter(
+                    project_id=project.id,
+                ).values_list("document_id")
             )
+            if project.association_id is not None:
+                missing_documents_names = missing_documents_names.exclude(
+                    id__in=DocumentUpload.objects.filter(
+                        association_id=project.association_id,
+                    ).values_list("document_id")
+                ).values_list("name")
+            elif project.user_id is not None:
+                missing_documents_names = missing_documents_names.exclude(
+                    id__in=DocumentUpload.objects.filter(
+                        user_id=project.user_id,
+                    ).values_list("document_id")
+                ).values_list("name")
             if missing_documents_names.count() > 0:
                 missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
                 return response.Response(
