@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.0
+  version: 1.0.1
   description: API for PlanA
 paths:
   /associations/:
@@ -3738,19 +3738,23 @@ components:
           maxLength: 128
         title:
           type: string
+          nullable: true
           title: Titre
           maxLength: 512
         header:
           type: string
+          nullable: true
           title: En-tête
         body:
           type: string
           title: Corps du message
         footer:
           type: string
+          nullable: true
           title: Pied de page
         aside:
           type: string
+          nullable: true
           title: Barre annexe
       required:
       - body
