@@ -10,7 +10,8 @@
 ## Description
 
 Création d'une application web pour la gestion des associations étudiantes et de leurs projets.  
-Documentation technique accessible à l'adresse [https://di.pages.unistra.fr/plan_a/plana](https://di.pages.unistra.fr/plan_a/plana)
+Documentation technique accessible à l'adresse [https://di.pages.unistra.fr/plan_a/plana](https://di.pages.unistra.fr/plan_a/plana)  
+Dépôt du front accessible à l'adresse [https://github.com/EsupPortail/esup-campulse-front](https://github.com/EsupPortail/esup-campulse-front)
 
 ### Instances en ligne
 

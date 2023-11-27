@@ -12,7 +12,7 @@ from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.users.models.user import AssociationUser, User
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
 
 class Project(models.Model):
@@ -183,25 +183,39 @@ class Project(models.Model):
     objects = models.Manager()
     visible_objects = VisibleProjectManager()
 
-    def get_project_default_manager_emails(self):
+    def get_project_default_manager_emails(self, fund_id=None):
         """Return a list of manager email addresses affected to a project."""
-        misc_project_commission_funds = ProjectCommissionFund.objects.filter(
-            project_id=self.id,
-            commission_fund_id__in=CommissionFund.objects.filter(
-                fund_id__in=Fund.objects.filter(is_site=False).values_list("id")
-            ).values_list("id"),
-        )
         managers_emails = []
-        if self.association_id is not None:
-            managers_emails = list(
-                Institution.objects.get(id=Association.objects.get(id=self.association_id).institution_id)
-                .default_institution_managers()
-                .values_list("email", flat=True)
+        if fund_id is not None:
+            project_commission_funds = ProjectCommissionFund.objects.filter(
+                project_id=self.id,
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    fund_id=Fund.objects.get(id=fund_id).id
+                ).values_list("id"),
             )
-        if self.user_id is not None or misc_project_commission_funds.count() > 0:
-            for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                if user_to_check.has_perm("users.change_user_misc"):
-                    managers_emails.append(user_to_check.email)
+            if project_commission_funds.count() > 0:
+                managers_emails = list(
+                    Institution.objects.get(id=Fund.objects.get(id=fund_id).institution_id)
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                )
+        else:
+            misc_project_commission_funds = ProjectCommissionFund.objects.filter(
+                project_id=self.id,
+                commission_fund_id__in=CommissionFund.objects.filter(
+                    fund_id__in=Fund.objects.filter(is_site=False).values_list("id")
+                ).values_list("id"),
+            )
+            if self.association_id is not None:
+                managers_emails = list(
+                    Institution.objects.get(id=Association.objects.get(id=self.association_id).institution_id)
+                    .default_institution_managers()
+                    .values_list("email", flat=True)
+                )
+            if self.user_id is not None or misc_project_commission_funds.count() > 0:
+                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
+                    if user_to_check.has_perm("users.change_user_misc"):
+                        managers_emails.append(user_to_check.email)
         return managers_emails
 
     def __str__(self):

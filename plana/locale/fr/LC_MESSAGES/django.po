@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-16 10:55+0100\n"
+"POT-Creation-Date: 2023-11-27 08:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -639,7 +639,7 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: plana/apps/documents/models/document_upload.py:56
-#: plana/apps/projects/models/project.py:211
+#: plana/apps/projects/models/project.py:225
 #: plana/apps/projects/models/project_category.py:11
 #: plana/apps/projects/models/project_comment.py:17
 #: plana/apps/projects/models/project_commission_fund.py:13
@@ -1056,7 +1056,7 @@ msgstr "Difficultés"
 msgid "Improvements"
 msgstr "Améliorations"
 
-#: plana/apps/projects/models/project.py:212
+#: plana/apps/projects/models/project.py:226
 msgid "Projects"
 msgstr "Projets"
 

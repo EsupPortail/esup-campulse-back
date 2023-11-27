@@ -491,7 +491,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 "request": request,
                             }
                         )
-            managers_emails = project.get_project_default_manager_emails()
+            managers_emails = project.get_project_default_manager_emails(fund.id)
             context["project_name"] = project.name
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
