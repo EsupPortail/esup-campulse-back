@@ -155,6 +155,7 @@ class User(AbstractUser):
             if (
                 len(set(project_funds_ids).intersection(user_funds_ids)) == 0
                 and len(set(project_funds_ids).intersection(user_managed_funds_ids)) == 0
+                and not self.is_staff
             ):
                 return False
             return True
