@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 08:26+0100\n"
+"POT-Creation-Date: 2024-01-12 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -315,7 +315,7 @@ msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
 #: plana/apps/associations/views/association.py:696
-#: plana/apps/projects/views/project.py:758
+#: plana/apps/projects/views/project.py:767
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
@@ -634,7 +634,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:137
 #: plana/apps/projects/models/project_comment.py:23
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:60
-#: plana/apps/users/models/user.py:350
+#: plana/apps/users/models/user.py:351
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1410,7 +1410,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Is student"
 msgstr "Est étudiant"
 
-#: plana/apps/users/models/user.py:351
+#: plana/apps/users/models/user.py:352
 msgid "Users"
 msgstr "Utilisateurs"
 
