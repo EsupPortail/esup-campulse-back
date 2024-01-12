@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 (12 Janvier 2024)
+
+- Correction des droits d'accès à un projet par un gestionnaire.
+- Modification des templates de mails relatifs à l'envoi d'un bilan de projet.
+
 ## 1.0.2 (27 Novembre 2023)
 
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.

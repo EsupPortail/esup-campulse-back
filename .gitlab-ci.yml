@@ -32,7 +32,8 @@ unittest:
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 include:
-  - remote: https://git.unistra.fr/docker/template/-/raw/main/python-licenses.gitlab-ci.yml
+  - project: docker/template
+    file: python-licenses.gitlab-ci.yml
   
 pages:
   stage: deploy

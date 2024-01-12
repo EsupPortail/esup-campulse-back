@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.2
+  version: 1.0.3
   description: API for PlanA
 paths:
   /associations/:
@@ -4297,12 +4297,12 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Row where logo is placed in layout
+          title: Ligne où est placé le logo dans la disposition
         column:
           type: integer
           maximum: 2147483647
           minimum: 0
-          title: Column where logo is placed in layout
+          title: Colonne où est placé le logo dans la disposition
         visible:
           type: boolean
           title: Est visible
