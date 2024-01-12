@@ -494,7 +494,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 26,
+    "pk": 27,
     "fields": {
       "name": "Attestation d'Assurance Responsabilité Civile",
       "acronym": "ATTESTATION_ASSURANCE_RESPONSABILITE_CIVILE",
@@ -513,7 +513,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 27,
+    "pk": 28,
     "fields": {
       "name": "Bilan Moral",
       "acronym": "BILAN_MORAL",
@@ -532,7 +532,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 28,
+    "pk": 29,
     "fields": {
       "name": "Bilan Financier",
       "acronym": "BILAN_FINANCIER",
@@ -547,6 +547,26 @@
         "image/jpeg",
         "image/png"
       ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 30,
+    "fields": {
+      "name": "Règlement Intérieur FSDIE",
+      "acronym": "REGLEMENT_FSDIE",
+      "process_type": "NO_PROCESS",
+      "edition_date": "2023-03-15T10:18:47.000Z"
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 31,
+    "fields": {
+      "name": "Règlement Intérieur IdEx",
+      "acronym": "REGLEMENT_IDEX",
+      "process_type": "NO_PROCESS",
+      "edition_date": "2023-03-15T10:18:47.000Z"
     }
   }
 ]
