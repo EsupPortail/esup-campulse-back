@@ -722,6 +722,15 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_REVIEW_USER_CREATION"
+                commission = Commission.objects.filter(
+                    id__in=CommissionFund.objects.filter(
+                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
+                            "commission_fund_id"
+                        )
+                    ).values_list("commission_id")
+                ).first()
+                context["commission_name"] = commission.name
+                context["project_name"] = project.name
             missing_documents_names = Document.objects.filter(
                 models.Q(process_type__in=document_process_types)
                 & (

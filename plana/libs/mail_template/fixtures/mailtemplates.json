@@ -781,11 +781,13 @@
       "label": "Manager Project Review Association Creation",
       "description": "Confirmation du dépôt d'un nouveau bilan de demande de subventionnements par une association envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Nouveau bilan de projet déposé par une association",
-      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE pour l'association \"{{ association_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE pour l'association \"{{ association_name }}\" pour le projet \"{{ project_name }}\" de la CAPE \"{{ commission_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
-        13
+        13,
+        15,
+        19
       ]
     }
   },
@@ -797,12 +799,14 @@
       "label": "Manager Project Review User Creation",
       "description": "Confirmation du dépôt d'un nouveau bilan de demande de subventionnements par un porteur individuel envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Nouveau bilan de projet déposé par un porteur individuel",
-      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE par {{ first_name }} {{ last_name }} est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "body": "Bonjour,<br/><br/>Un nouveau bilan CAPE par {{ first_name }} {{ last_name }} pour le projet \"{{ project_name }}\" de la CAPE \"{{ commission_name }}\" est disponible dans votre espace.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
         4,
-        5
+        5,
+        15,
+        19
       ]
     }
   },
