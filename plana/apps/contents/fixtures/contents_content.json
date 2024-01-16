@@ -6,9 +6,10 @@
       "code": "HOME_INFO",
       "label": "Paragraphe de la page d'accueil lié aux informations générales / bandeau d'informations.",
       "header": "Information : Commission d'Aide aux Projets Étudiants le 19 octobre 2023",
-      "body": "<p>Association, porteur ou porteuse de projet, venez présenter votre projet avant le 5 octobre !</p>",
+      "body": "Association, porteur ou porteuse de projet, venez présenter votre projet avant le 5 octobre !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -18,9 +19,10 @@
       "code": "HOME_ASSOCIATION",
       "label": "Paragraphe de la page d'accueil lié aux associations.",
       "header": "Annuaire des associations",
-      "body": "<p>Besoin d'informations sur une association étudiante ? Envie de vous engager dans votre association de filière ? L'annuaire des associations étudiantes est là pour ça !</p>",
+      "body": "Besoin d'informations sur une association étudiante ? Envie de vous engager dans votre association de filière ? L'annuaire des associations étudiantes est là pour ça !",
       "footer": "Consulter l'annuaire",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -30,9 +32,10 @@
       "code": "HOME_CHARTER",
       "label": "Paragraphe de la page d'accueil lié aux chartes du site Alsace.",
       "header": "Charte des associations du site Alsace",
-      "body": "<p>Une demande de locaux ? Un projet à soumettre pour obtenir une subvention pour votre association ? La signature de la charte des associations étudiantes du site Alsace et des chartes de subventionnement sont obligatoires, et ça se passe par ici !</p>",
+      "body": "Une demande de locaux ? Un projet à soumettre pour obtenir une subvention pour votre association ? La signature de la charte des associations étudiantes du site Alsace et des chartes de subventionnement sont obligatoires, et ça se passe par ici !",
       "footer": "Espace charte",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -42,9 +45,10 @@
       "code": "HOME_PROJECT",
       "label": "Paragraphe de la page d'accueil lié aux demandes de subventions.",
       "header": "CAPE Commission d'aide aux projets étudiants",
-      "body": "<p>Déposez dès à présent vos dossiers de demandes de subventions aux commissions FSDIE, Cultures-ActionS et IdEx pour vos projets par ce module !</p>",
+      "body": "Déposez dès à présent vos dossiers de demandes de subventions aux commissions FSDIE, Cultures-ActionS et IdEx pour vos projets par ce module !",
       "footer": "Espace CAPE",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -54,9 +58,10 @@
       "code": "SITE_FOOTER",
       "label": "Footer général du site.",
       "header": "",
-      "body": "<p>La Base de Données des Associations Étudiantes d’Alsace est un annuaire regroupant les associations étudiantes d’Alsace. Ce projet est réalisé dans le cadre du Schéma Directeur de la Vie Étudiante – Alsace, qui lie les établissements d’enseignement supérieur (Unistra, UHA, INSA, ENGEES, ENSAS, HEAR) et la BNU, en partenariat avec le Crous.</p>",
+      "body": "La Base de Données des Associations Étudiantes d’Alsace est un annuaire regroupant les associations étudiantes d’Alsace. Ce projet est réalisé dans le cadre du Schéma Directeur de la Vie Étudiante – Alsace, qui lie les établissements d’enseignement supérieur (Unistra, UHA, INSA, ENGEES, ENSAS, HEAR) et la BNU, en partenariat avec le Crous.",
       "footer": "2017-2023 - Unistra - Tous droits réservés",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -66,9 +71,10 @@
       "code": "ASSOCIATION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation de l'annuaire des associations.",
       "header": "Toutes les associations du site Alsace sont ici !",
-      "body": "<p>À la recherche de votre association étudiante de filière ? Envie de vous engager ? En quête d'activités extra-universitaires ? Les associations étudiantes sont les actrices essentielles de la vie étudiante. Grâce à cet annuaire, trouvez facilement l'association qui vous convient !</p>",
+      "body": "À la recherche de votre association étudiante de filière ? Envie de vous engager ? En quête d'activités extra-universitaires ? Les associations étudiantes sont les actrices essentielles de la vie étudiante. Grâce à cet annuaire, trouvez facilement l'association qui vous convient !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -78,9 +84,10 @@
       "code": "CHARTER_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des chartes.",
       "header": "Charte du site Alsace",
-      "body": "<p>Mise en place depuis 2017 dans le cadre du \"Schéma Directeur de la Vie étudiante du site Alsace\" (SDVEA), la \"charte des associations étudiantes du site Alsace\" permet aux établissements du site Alsace de reconnaitre à une association la qualité d'association étudiante. Réel contrat moral entre l'association et son établissement de rattachement, elle donne accès à de nombreuses aides et services offerts par son établissement.</p>",
+      "body": "Mise en place depuis 2017 dans le cadre du \"Schéma Directeur de la Vie étudiante du site Alsace\" (SDVEA), la \"charte des associations étudiantes du site Alsace\" permet aux établissements du site Alsace de reconnaitre à une association la qualité d'association étudiante. Réel contrat moral entre l'association et son établissement de rattachement, elle donne accès à de nombreuses aides et services offerts par son établissement.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -90,9 +97,10 @@
       "code": "CHARTER_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des chartes.",
       "header": "Chartes FSDIE/IdEx",
-      "body": "<p>Les règlements des différents financements disponibles par la CAPE se trouvent ici. Pour prétendre à un financement via la CAPE aux fonds FSDIE et IdEx, il faut prendre connaissance des chartes de financement et les signer impérativement. Téléchargez-les sur cette page et déposez-les signées ici !</p>",
+      "body": "Les règlements des différents financements disponibles par la CAPE se trouvent ici. Pour prétendre à un financement via la CAPE aux fonds FSDIE et IdEx, il faut prendre connaissance des chartes de financement et les signer impérativement. Téléchargez-les sur cette page et déposez-les signées ici !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -102,9 +110,10 @@
       "code": "CHARTER_HOME_THIRD_BLOCK",
       "label": "Troisième paragraphe de la page de présentation du module des chartes.",
       "header": "Charte Culture-ActionS",
-      "body": "<p>Culture-ActionS, c’est le fonds d’aide aux projets étudiants du Crous de Strasbourg, pour soutenir les initiatives des étudiants et associations étudiantes. Culture-ActionS apporte un soutien financier et matériel dans la réalisation des projets culturels, sportifs, citoyens ou encore solidaires. La charte Culture-ActionS est à signer à chaque dépôt de dossier.</p>",
+      "body": "Culture-ActionS, c’est le fonds d’aide aux projets étudiants du Crous de Strasbourg, pour soutenir les initiatives des étudiants et associations étudiantes. Culture-ActionS apporte un soutien financier et matériel dans la réalisation des projets culturels, sportifs, citoyens ou encore solidaires. La charte Culture-ActionS est à signer à chaque dépôt de dossier.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -114,9 +123,10 @@
       "code": "CHARTER_HOME_ACTION_VALIDATE_CHARTERS",
       "label": "Bloc action la page de présentation du module des chartes (validation des chartes par les gestionnaires).",
       "header": "Valider les signatures de chartes",
-      "body": "<p>Validez les chartes des associations.</p>",
+      "body": "Validez les chartes des associations.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -126,9 +136,10 @@
       "code": "CHARTER_HOME_ACTION_MANAGE_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des chartes (gestion des documents types par les gestionnaires).",
       "header": "Gérer la bibliothèque de documents",
-      "body": "<p>Gérez les documents types à télécharger.</p>",
+      "body": "Gérez les documents types à télécharger.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -138,9 +149,10 @@
       "code": "CHARTER_HOME_ACTION_SIGN_CHARTERS",
       "label": "Bloc action la page de présentation du module des chartes (signature des chartes par les étudiants).",
       "header": "Signer les chartes",
-      "body": "<p>Signez et gérez les chartes de vos associations.</p>",
+      "body": "Signez et gérez les chartes de vos associations.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -150,9 +162,10 @@
       "code": "CHARTER_HOME_ACTION_DOWNLOAD_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des chartes (téléchargement des documents pour les étudiants).",
       "header": "Télécharger les documents types",
-      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "body": "Téléchargez les documents types nécessaires à vos démarches.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -162,9 +175,10 @@
       "code": "COMMISSION_HOME_FIRST_BLOCK",
       "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
       "header": "Pour les associations",
-      "body": "<p>La Commission d’Aide aux Projets Étudiants permet de financer les projets associatifs des associations ayant signé la charte des associations étudiantes du site Alsace. Cette commission unique réunit l’Université de Strasbourg et le Crous. Elle est composée de trois fonds de financement distincts : le fonds FSDIE, le fonds IdEx \"creative thinkers\" et le fonds Culture-ActionS.</p>",
+      "body": "La Commission d’Aide aux Projets Étudiants permet de financer les projets associatifs des associations ayant signé la charte des associations étudiantes du site Alsace. Cette commission unique réunit l’Université de Strasbourg et le Crous. Elle est composée de trois fonds de financement distincts : le fonds FSDIE, le fonds IdEx \"creative thinkers\" et le fonds Culture-ActionS.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -174,9 +188,10 @@
       "code": "COMMISSION_HOME_SECOND_BLOCK",
       "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
       "header": "Pour les étudiants",
-      "body": "<p>Vous êtes étudiante ou étudiant avec l'envie de porter un projet pour les autres universitaires ? Il vous est possible de demander un soutien financier auprès de votre Crous en déposant un dossier de demande de subvention au fonds Culture-ActionS. Pour bénéficier d'un accompagnement dans votre démarche, contactez votre référent Culture-ActionS ! Attention : les fonds FSDIE et IdEx ne financent pas les projets individuels.</p>",
+      "body": "Vous êtes étudiante ou étudiant avec l'envie de porter un projet pour les autres universitaires ? Il vous est possible de demander un soutien financier auprès de votre Crous en déposant un dossier de demande de subvention au fonds Culture-ActionS. Pour bénéficier d'un accompagnement dans votre démarche, contactez votre référent Culture-ActionS ! Attention : les fonds FSDIE et IdEx ne financent pas les projets individuels.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -186,9 +201,10 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_PROJECTS",
       "label": "Bloc action la page de présentation du module des commissions (gestion des subventions par les gestionnaires).",
       "header": "Gérer les subventions",
-      "body": "<p>Gérez les dossiers de demande de subventionnements.</p>",
+      "body": "Gérez les dossiers de demande de subventionnements.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -198,9 +214,10 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_ARCHIVE",
       "label": "Bloc action la page de présentation du module des commissions (gestion des archives par les gestionnaires).",
       "header": "Consulter les archives",
-      "body": "<p>Consultez les archives des commissions passées.</p>",
+      "body": "Consultez les archives des commissions passées.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -210,9 +227,10 @@
       "code": "COMMISSION_HOME_ACTION_MANAGE_COMMISSIONS",
       "label": "Bloc action la page de présentation du module des commissions (gestion des commissions par les gestionnaires).",
       "header": "Gérer les commissions",
-      "body": "<p>Créez des commissions à venir et gérez les commissions en cours.</p>",
+      "body": "Créez des commissions à venir et gérez les commissions en cours.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -222,9 +240,10 @@
       "code": "COMMISSION_HOME_ACTION_SUBMIT_PROJECT",
       "label": "Bloc action la page de présentation du module des commissions (soumission de projets par les étudiants).",
       "header": "Gérer et déposer des projets",
-      "body": "<p>Gérez vos projets en cours ou créez un nouveau projet.</p>",
+      "body": "Gérez vos projets en cours ou créez un nouveau projet.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -234,9 +253,10 @@
       "code": "COMMISSION_HOME_ACTION_DOWNLOAD_DOCUMENTS",
       "label": "Bloc action la page de présentation du module des commissions (téléchargement des documents pour les étudiants).",
       "header": "Télécharger les documents types",
-      "body": "<p>Téléchargez les documents types nécessaires à vos démarches.</p>",
+      "body": "Téléchargez les documents types nécessaires à vos démarches.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -246,9 +266,10 @@
       "code": "ABOUT_APP",
       "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
       "header": "Les origines de l'application",
-      "body": "<p>Dès 2019, le Service de la Vie Universitaire (SVU) de l'Université de Strasbourg a souhaité mettre en place une gestion automatisée des démarches liées à la vie associative. C'est ainsi que les premières réflexions ont été menées en collaboration avec des associations étudiantes. En 2021, le Service de la Vie Universitaire a conçu et développé un cahier des charges détaillé qui donnera naissance à la future plateforme. Ces travaux minutieux ont permis de présenter ce dossier à la candidature de l'appel à projets \"Services numériques aux étudiants\" du Ministère de l'Enseignement Supérieur et de la Recherche en décembre 2021. En mars 2022, le projet retient l'attention et devient lauréat de l'appel à projets. Conjointement piloté par le Service de la Vie Universitaire et la Direction du Numérique de l'Université de Strasbourg, avec le concours du Crous de Strasbourg, l'application voit le jour en septembre 2023.</p>",
+      "body": "Dès 2019, le Service de la Vie Universitaire (SVU) de l'Université de Strasbourg a souhaité mettre en place une gestion automatisée des démarches liées à la vie associative. C'est ainsi que les premières réflexions ont été menées en collaboration avec des associations étudiantes. En 2021, le Service de la Vie Universitaire a conçu et développé un cahier des charges détaillé qui donnera naissance à la future plateforme. Ces travaux minutieux ont permis de présenter ce dossier à la candidature de l'appel à projets \"Services numériques aux étudiants\" du Ministère de l'Enseignement Supérieur et de la Recherche en décembre 2021. En mars 2022, le projet retient l'attention et devient lauréat de l'appel à projets. Conjointement piloté par le Service de la Vie Universitaire et la Direction du Numérique de l'Université de Strasbourg, avec le concours du Crous de Strasbourg, l'application voit le jour en septembre 2023.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -258,9 +279,10 @@
       "code": "ABOUT_PARTNERSHIP",
       "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
       "header": "Partenaires",
-      "body": "<p>France Relance, le Ministère de l'Enseignement Supérieur et de la Recherche, le Crous de Strasbourg, l'Université de Rouen Normandie, l'Université de Caen-Normandie, l'Université Rennes 2, l'Université de Reims Champagne Ardennes, l'Université Bordeaux Montaigne, l'Université Picardie Jules Vernes, l'Université de Tours, l'Université Toulouse 2 Jean Jaurès, l'Université de Lille, l'Université Clermont Auvergne, le Crous d'Amiens.</p>",
+      "body": "France Relance, le Ministère de l'Enseignement Supérieur et de la Recherche, le Crous de Strasbourg, l'Université de Rouen Normandie, l'Université de Caen-Normandie, l'Université Rennes 2, l'Université de Reims Champagne Ardennes, l'Université Bordeaux Montaigne, l'Université Picardie Jules Vernes, l'Université de Tours, l'Université Toulouse 2 Jean Jaurès, l'Université de Lille, l'Université Clermont Auvergne, le Crous d'Amiens.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -270,9 +292,10 @@
       "code": "ABOUT_FUNDING",
       "label": "Paragraphe de la page à propos donnant les modes de financement de la plateforme.",
       "header": "Financements",
-      "body": "<p>Le projet a été financé grâce aux dotations de l'appel à projets \"Services numériques aux étudiants\" et de la Contribution Vie Étudiante et de Campus (CVEC) de l'Université de Strasbourg et du Crous de Strasbourg.</p>",
+      "body": "Le projet a été financé grâce aux dotations de l'appel à projets \"Services numériques aux étudiants\" et de la Contribution Vie Étudiante et de Campus (CVEC) de l'Université de Strasbourg et du Crous de Strasbourg.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -282,9 +305,10 @@
       "code": "ABOUT_ASSOCIATION",
       "label": "Paragraphe de la page à propos lié aux associations.",
       "header": "Annuaire des associations",
-      "body": "<p>Un annuaire des associations complet et intuitif pour faire connaissance avec son association étudiante !</p>",
+      "body": "Un annuaire des associations complet et intuitif pour faire connaissance avec son association étudiante !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -294,9 +318,10 @@
       "code": "ABOUT_CHARTER",
       "label": "Paragraphe de la page à propos lié aux chartes du site Alsace.",
       "header": "Charte des associations du site Alsace",
-      "body": "<p>Une charte permettant à une association d'être reconnue comme \"association étudiante du site Alsace\", et de bénéficier des services de l'établissement !</p>",
+      "body": "Une charte permettant à une association d'être reconnue comme \"association étudiante du site Alsace\", et de bénéficier des services de l'établissement !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -306,9 +331,10 @@
       "code": "ABOUT_PROJECT",
       "label": "Paragraphe de la page à propos lié aux demandes de subventions.",
       "header": "CAPE Commission d'aide aux projets étudiants",
-      "body": "<p>Une instance de financement commune à l'Université de Strasbourg et au service culturel du Crous de Strasbourg, pour déposer ses dossiers de demandes de subventions et pouvoir faire financer ses projets !</p>",
+      "body": "Une instance de financement commune à l'Université de Strasbourg et au service culturel du Crous de Strasbourg, pour déposer ses dossiers de demandes de subventions et pouvoir faire financer ses projets !",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -318,9 +344,10 @@
       "code": "CONTACT_INFO",
       "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
       "header": "Un problème ? Besoin d'informations complémentaires ? Contactez votre gestionnaire d'établissement !",
-      "body": "<p>Attention : si vous êtes porteur individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire Crous.</p>",
+      "body": "Attention : si vous êtes porteur individuel ou faites partie d'une association hors contrats de sites, merci de contacter le gestionnaire Crous.",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -332,7 +359,8 @@
       "header": "",
       "body": "<ul><li><h3>Associations rattachées à l'Université de Strasbourg</h3><p><span>Service de la Vie Universitaire</span><br><a href='mailto:svu-campulse@unistra.fr'>svu-campulse@unistra.fr</a><br><span>03.68.85.63.73</span></p></li><li><h3>Autres associations étudiantes & Porteurs de projets individuels</h3><p><span>Crous de Strasbourg</span><br><a href='mailto:culture@crous-strasbourg.fr'>culture@crous-strasbourg.fr</a><br><span>03.88.21.28.18</span></p></li></ul>",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": true
     }
   },
   {
@@ -345,7 +373,8 @@
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU le Décret n°94-39 du 14.1.1994</p><p>VU la décision du Président de l'Université de Strasbourg portant délégation de signature au Chef du Service de la vie universitaire</p><p>VU la décision du Conseil d’Administration de l’Université de Strasbourg du 20 octobre 2009 portant délégation de signature au Vice-président Vie universitaire</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite <strong>{{ owner.name }}</strong> dans le cadre de l'opération :<br><strong>{{ project_name }}</strong></p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, domaine fonctionnel D202.</p><h2>ARTICLE 3</h2><p>L'agent Comptable de l'Université et le Chef de Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
       "footer": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p>",
-      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -358,7 +387,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de <strong>{{ amount_earned }} euros</strong> vous a été attribué.</p><p>Cette subvention vous sera versée dans les prochaines semaines pas les services financiers de l'Université de Strasbourg.</p><p><strong>Rappels :<br>- Les logos de l'Université de Strasbourg et de la CVEC devront obligatoirement être présents sur tous les documents de communication du projet tels que tracts, affiches, ... (les logos sont disponibles sur simple demande au SVU).<br>- Nous vous rappelons que votre bilan moral sera à déposer sur la plateforme Campulse deux mois maximum après la fin de votre projet.</strong></p>",
       "footer": "<p><strong>Diane DUPRONT</strong></p><p><strong>Chef de Service</strong></p>",
-      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -371,7 +401,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
       "footer": "<p><strong>Diane DUPRONT</strong></p><p><strong>Chef de Service</strong></p>",
-      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -384,7 +415,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
       "footer": "<p><strong>Diane DUPRONT</strong></p><p><strong>Chef de Service</strong></p>",
-      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Diane DUPRONT</strong><br>Chef de Service de la vie universitaire<br>Tél: 03.35.85.63.74<br>Mail: diane.dupront@unistra.fr</p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -397,7 +429,8 @@
       "header": "<p>Le Président de l'Université de Strasbourg</p><p>VU le code de l’éducation</p><p>VU la circulaire n° 2011-1021 du 3-11-2011 sur le développement de la vie associative et des initiatives étudiantes</p><p>VU la délibération du Conseil d’Administration du 12 mai 2009 établissant la Commission d’aide aux projets étudiants (CAPE) et adoptant la charte de subventionnement</p><p>VU la décision du Conseil d’Administration du 16 décembre 2014 validant le programme IdEx «Creative Thinkers» permettant de soutenir des projets portés par des associations étudiantes Unistra</p>",
       "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre du programme IdEx «Creative Thinkers» pour l'organisation de l'opération :<br><strong>{{ project_name }}</strong>.</p><h2>ARTICLE 2</h2><p>Cette subvention sera imputée sur le centre financier SVU, centre de coût SVU, E-OTP W17SVU06ETUDX.</p><h2>ARTICLE 3</h2><p>L'Agent Comptable de l'Université et le Chef du Service de la vie universitaire sont chargés, chacun en ce qui le concerne, de l'exécution de la présente décision.</p>",
       "footer": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p>",
-      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -410,7 +443,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé <strong>{{ project_name }}</strong>.</p><p>Cette subvention d'un montant de <strong>{{ amount_earned }} euros</strong> au titre de l'année {{ year }}, est mise en oeuvre dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx, programme dédié aux projets étudiants.<p><p>Elle vous sera versée dans les prochaines semaines par les services financiers de l'Université de Strasbourg.</p><p><strong>Conformément au règlement financier de l’Agence Nationale de la Recherche (ANR), vous êtes tenu de faire état de ce soutien financier accordé dans le cadre du Programme Investissements d’Avenir (PIA), dans toute action de communication interne ou externe. Cette mention au financement du PIA pourra notamment être réalisée à travers l’apposition du logotype «Investissements d’Avenir» sur les documents produits.</strong></p><p><strong>Il est impératif de déposer sur la plateforme Campulse un bilan moral ainsi qu'un bilan financier de l'opération dans un délai de 2 mois maximum après la date de l’opération.</strong></p><p>Le Service de la vie universitaire et la Mission Investissements d’avenir de l’Université de Strasbourg restent à votre disposition pour la bonne exécution de votre projet.</p><p>Je vous prie d’agréer l’expression de mes salutations distinguées.</p>",
       "footer": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p>",
-      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -423,7 +457,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p><p>Vous pourrez ainsi représenter votre demande à la prochaine CAPE.</p><p>Je vous prie d'agréer l'expression de mes salutations distinguées.</p>",
       "footer": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p>",
-      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -436,7 +471,8 @@
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
       "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande pour le motif suivant : </p><p><strong>{{ comment }}</strong></p>",
       "footer": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p>",
-      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>"
+      "aside": "<p><strong>Angéline OKOMBI NDINGA</strong><br><strong>Vice-présidente Vie universitaire</strong></p><p><strong>Affaire suivie par</strong><br>Anne REYMANN<br>Tél: 03.68.85.63.73<br>Mail: anne.reymann@unistra.fr</p><p>Service de la vie universitaire | SVU<br>Mission vie étudiante<br>Bâtiment | Le Studium<br>2 rue Blaise Pascal<br>67000 Strasbourg Cedex<br>www.unistra.fr</p>",
+      "is_editable": false
     }
   },
   {
@@ -449,7 +485,8 @@
       "header": "<p>Strasbourg, le {{ date }}</p>",
       "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le plaisir de vous informer qu'après délibération, la Commission Culture-ActionS du Crous a décidé de vous attribuer une <strong class='underline'>aide financière de {{ amount_earned }} euros</strong>.</p><p>L'octroi de cette aide est subordonné à la <strong>mention du Crous sur tous les documents de communication</strong>. Le logo du Crous est disponible sous différents formats sur simple demande à : culture@crous-strasbourg.fr<br>Il ne doit pas être modifié, ni en sa forme ni en sa couleur.</p><p>Pour le versement de cette aide, il conviendra de nous adresser <strong>le bilan moral et financier de votre action</strong> dans les deux mois suivant la réalisation de votre projet.</p><p>Le Crous de Strasbourg reste à votre disposition pour vous accompagner dans la mise en œuvre de votre projet.</p>",
       "footer": "<p>La Directrice générale</p><p>Sophie ROUSSEL</p>",
-      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
+      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>",
+      "is_editable": false
     }
   },
   {
@@ -462,7 +499,8 @@
       "header": "<p>Strasbourg, le {{ date }}</p>",
       "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le regret de vous informer que la Commission Culture-ActionS, après examen de votre dossier, ne peut répondre favorablement à votre demande d’aide financière.</p><p class='border'><span class='underline'>Motif du refus</span> :<br><br>{{ comment }}</p><p>Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p>",
       "footer": "<p>La Directrice générale</p><p>Sophie ROUSSEL</p>",
-      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>"
+      "aside": "<p><strong>Affaire suivie par<br>Clara LEBIGRE</strong><br>Chargée d'action culturelle<br>Tél. 03.88.21.28.18<br><span class='underline'>culture@crous-strasbourg.fr</span></p><p><strong>Crous de Strasbourg</strong><br>1, quai du Maire Dietrich<br>C.S. 50168<br>67004 Strasbourg cedex<br><span class='underline'>www.crous-strasbourg.fr</span></p>",
+      "is_editable": false
     }
   },
   {
@@ -474,7 +512,8 @@
       "header": "Mentions Légales",
       "body": "<h2>Crédits</h2><ul><li>Directeur de la publication : Michel Deneken, Président de l'Université de Strasbourg</li><li>Coordination du projet (Service de la Vie Universitaire - Université de Strasbourg) :<ul><li>Luca Di Vagno</li><li>Diane Dupront</li><li>Anne Reymann</li></ul></li><li>Coordination du projet (Crous Strasbourg) :<ul><li>Clara Lebigre</li><li>Juliette Lacladère</li></ul></li><li>Conception et développement (Direction du Numérique - Université de Strasbourg) :<ul><li>Marie Didienne</li><li>Pauline Gilg</li><li>Carlo Spiga</li><li>Léa Stroh</li><li>Carolane Lefebvre</li><li>Thierry Schlecht</li><li>Christophe Boccheciampe</li><li>Virgile Gerecke</li></ul></li><li>Crédits photographiques :<ul><li>Catherine Schröder</li><li>Manu Grimm</li></ul></li></ul><h2>Technologies utilisées</h2><p>L'application est disponible sous licence libre GPLv3. Plus d'informations sur les frameworks et technologies utilisées sont mentionnées dans son code source.</p><ul><li><a href='https://github.com/EsupPortail/esup-campulse-front'>Interface web de l'application</a></li><li><a href='https://github.com/EsupPortail/esup-campulse-back'>API de l'application</a></li></ul><h2>Éditeur</h2><p><span>Service de la Vie Universitaire</span><br><span>Bâtiment Le Studium</span><br><span>4 rue Blaise Pascal</span><br><span>67081 Strasbourg Cedex</span><br><span>03.68.85.63.73</span><br><span>03.68.85.63.77</span></p><h2>Hébergeur</h2><p><span>Direction du Numérique</span><br><span>Bâtiment Le Portique</span><br><span>14 rue René Descartes</span><br><span>67084 Strasbourg Cedex</span><br><span>03.68.85.06.00</span></p><h2>Objectif</h2><p>L’objectif de cette application est de recenser dans un annuaire l’ensemble des associations étudiantes financées par les fonds FSDIE, Idex et Culture-ActionS et la gestion administrative de ces dernières.</p><h2>Propriété</h2><p>Ce site est la propriété de l'Université de Strasbourg.</p><p>Toute extraction, par transfert permanent ou temporaire, de la totalité ou d'une partie qualitativement ou quantitativement substantielle du contenu du site sur un autre support, par tout moyen ou sous toute forme que ce soit, ainsi que la réutilisation, par la mise à disposition du public de la totalité ou d'une partie qualitativement ou quantitativement substantielle du contenu du site, quelle qu'en soit la forme, est illicite.</p><h2>Contenu du site - Responsabilité</h2><p>En dépit du soin apporté au recueil des informations ainsi qu'à la réalisation du site au moyen des techniques les plus récentes, des erreurs, omissions, inexactitudes, coupures ou additions indépendantes de notre volonté peuvent demeurer ou s'insérer sur ce site. En outre, de même que pour toute publication, après un certain temps, des informations ou éléments contenus dans ce site, peuvent devenir obsolètes. Les informations fournies sont non contractuelles.</p><p>En toute hypothèse et compte tenu de ce qui précède, l'utilisateur du site et des informations qu'il contient reconnaît qu'il en fait usage sous sa seule responsabilité. L'Université de Strasbourg ne saurait en conséquence voir sa responsabilité engagée à raison de tout préjudice, direct ou indirect, de quelque nature que ce soit, résultant pour tout ou partie de l'utilisation des informations du site.</p><p>En outre, l'Université de Strasbourg ne saurait voir sa responsabilité engagée à raison de la nature ou du contenu des sites référencés sur les pages du site et notamment ceux pour lesquels il existe un lien direct aux ressources constituées par les sites tiers sélectionnés.</p><h2>Informatique et libertés</h2><p>Les informations enregistrées sur le site sont des données non personnalisées sur les pages visitées. Les informations éventuellement collectées sur notre site par le biais du courrier électronique ne sont en aucun cas partagées avec d'autres organisations à des fins commerciales.</p>",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": false
     }
   },
   {
@@ -486,7 +525,8 @@
       "header": "Politique de Confidentialité",
       "body": "<h2>1. Objet du traitement de données</h2><h3>Finalité</h3><p>Les données récoltées ont pour but d’identifier les personnes sujettes à suivre des projets et d’en demander un financement auprès des instances universitaires et du Crous, ainsi que la production de données statistiques.</p><h3>Base légale</h3><p>Ce traitement relève de l'exécution d'une mission d'intérêt public et de votre consentement, articles 6 (1.a et 1.e) du Règlement Général sur la Protection des Données EU-2016/679 (RGPD).</p><h2>2. Données traitées</h2><h3>Catégories de données</h3><p>Les données personnelles pouvant être collectées sont les suivantes :</p><ul><li>Nom de famille</li><li>Prénom</li><li>Adresse email</li><li>Certificat de scolarité et/ou carte étudiante</li></ul><p>L'utilisateur peut aussi être invité à stocker ces informations dans le cadre de certains traitements réalisés dans l'application :</p><ul><li>Numéro de téléphone</li><li>Adresse, code postal, ville et pays</li><li>Commentaires sur les chartes et demandes de projets déposées</li></ul><p>Ces données d'utilisation sont stockées sans limite de durée :</p><ul><li>Date de création de compte</li><li>Date de dernière connexion à l'application</li><li>Date de dépôt et de validation d'un document</li><li>Dates de création et d'édition d'un commentaire sur une charte ou une demande de subventionnements déposée</li></ul><p>Ces données d'utilisation sont stockées pour une durée de trois mois :</p><ul><li>Date de connexion à l'application</li><li>Date de validation d'un compte par un membre de l'équipe d'administration</li><li>Date de validation d'une affiliation d'un compte à une association par un membre de l'équipe d'administration</li><li>Date de validation d'une demande de subventionnements par un membre de l'équipe d'administration</li><li>Date de mise à jour d'un relevé d'identité bancaire rattaché à une demande de subventionnements</li><li>Date de mise à jour du niveau de droits d'un compte par un membre de l'équipe d'administration</li><li>Date de mise à jour du statut d'un membre au sein de son association</li><li>Date de mise à jour de la fiche annuaire d'une association</li><li>Date de dépôt de la charte des associations étudiantes du Site Alsace par une association</li><li>Date de mise à jour du niveau de droits d'un compte à l'échelle d'une association</li></ul><p>Autres données stockées</p><ul><li>Relevé d'Identité Bancaire d'une association déposant une demande de subventionnements</li><li>Nom de famille, prénom, numéro de téléphone et adresse email d'une présidente ou d'un président d'association ne disposant pas de compte sur l'application</li><li>L'appartenance de membres à certaines associations peut permettre de déduire des données sensibles (opinions politiques, origine ethnique, ...)</li></ul><h3>Prise de décision automatisée</h3><p>Le traitement ne prévoit pas de prise de décision automatisée selon l’article 22 du RGPD.</p><h3>Sécurité des données</h3><p>L’Université de Strasbourg met en œuvre des mesures de sécurité appropriées.</p><h2>3. Personnes concernées</h2><p>Votre consentement n'engage que vous.</p><h2>4. Destinataires des données</h2><p>Le traitement de données est géré par les destinataires suivants :</p><ul><li>Université de Strasbourg : Service de la Vie Universitaire, Direction du Numérique</li><li>Crous Strasbourg</li></ul><p>Aucun transfert de données hors de l'Union européenne n'est réalisé.</p><h2>5. Durée de conservation des données</h2><p>Les données sont conservées pendant 1 an après dernière connexion sur l’application.</p><h2>6. Vos droits sur les données vous concernant</h2><p>Conformément au Règlement Général sur la Protection des Données EU-2016/679, vous disposez d’un droit d’accès, de rectification, de suppression, de limitation et de rétractation sur le traitement des données. Pour exercer ces droits, vous pouvez contacter <a href='mailto:dnum-assistance-campulse@unistra.fr'>dnum-assistance-campulse@unistra.fr</a>.</p><p>En cas de difficulté, vous pouvez saisir le Délégué à la Protection des Données désigné par l’Université de Strasbourg à l’adresse suivante : <a href='mailto:dpo@unistra.fr'>dpo@unistra.fr</a> ou par voie postale à l’adresse suivante : Université de Strasbourg - DNUM, 14 Rue René Descartes, 67084 Strasbourg Cedex.</p><p>Si après nous avoir contacté, vous estimez que les droits relatifs à la protection de vos données personnelles n’ont pas été respectés, vous avez la possibilité d’introduire une réclamation auprès de l’autorité de contrôle locale via le site <a href='https://www.cnil.fr'>https://www.cnil.fr</a>.</p>",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": false
     }
   },
   {
@@ -498,7 +538,8 @@
       "header": "Déclaration d'Accessibilité",
       "body": "<p>Déclaration d'Accessibilité</p>",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": false
     }
   },
   {
@@ -510,7 +551,8 @@
       "header": "Schéma Pluriannuel de Mise en Accessibilité",
       "body": "<p>Schéma Pluriannuel de Mise en Accessibilité</p>",
       "footer": "",
-      "aside": ""
+      "aside": "",
+      "is_editable": false
     }
   }
 ]

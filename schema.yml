@@ -744,6 +744,47 @@ paths:
           description: ''
         '404':
           description: No response body
+    patch:
+      operationId: contents_partial_update
+      description: Update association details (president and manager only, restricted
+        fields for president).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - contents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContentRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContentRequest'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentUpdate'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
+        '404':
+          description: No response body
   /contents/logos:
     get:
       operationId: contents_logos_list
@@ -3756,11 +3797,34 @@ components:
           type: string
           nullable: true
           title: Barre annexe
+        is_editable:
+          type: boolean
       required:
       - body
       - code
       - id
       - label
+    ContentUpdate:
+      type: object
+      description: Serializer for fields that can be updated as manager.
+      properties:
+        header:
+          type: string
+          nullable: true
+          title: En-tête
+        body:
+          type: string
+          title: Corps du message
+        footer:
+          type: string
+          nullable: true
+          title: Pied de page
+        aside:
+          type: string
+          nullable: true
+          title: Barre annexe
+      required:
+      - body
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -4525,6 +4589,41 @@ components:
         is_open_to_projects:
           type: boolean
           title: Peut recevoir des projets
+    PatchedContentRequest:
+      type: object
+      description: Main serializer.
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        label:
+          type: string
+          minLength: 1
+          maxLength: 128
+        title:
+          type: string
+          nullable: true
+          title: Titre
+          maxLength: 512
+        header:
+          type: string
+          nullable: true
+          title: En-tête
+        body:
+          type: string
+          minLength: 1
+          title: Corps du message
+        footer:
+          type: string
+          nullable: true
+          title: Pied de page
+        aside:
+          type: string
+          nullable: true
+          title: Barre annexe
+        is_editable:
+          type: boolean
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

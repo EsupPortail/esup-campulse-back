@@ -10,3 +10,21 @@ class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         fields = "__all__"
+
+
+class ContentUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for fields that can be updated as manager."""
+
+    header = serializers.CharField(required=False, allow_blank=True)
+    body = serializers.CharField(required=False, allow_blank=True)
+    footer = serializers.CharField(required=False, allow_blank=True)
+    aside = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = Content
+        fields = [
+            "header",
+            "body",
+            "footer",
+            "aside",
+        ]
