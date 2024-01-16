@@ -56,6 +56,7 @@ class ContentsViewsTests(TestCase):
         - We get the same amount of contents through the model and through the view.
         - Contents details are returned (test the "code" attribute).
         - Filter by code is available.
+        - Filter by is_editable is available.
         """
         contents_cnt = Content.objects.count()
         self.assertTrue(contents_cnt > 0)
@@ -72,6 +73,11 @@ class ContentsViewsTests(TestCase):
         code = "HOME_INFO"
         response = self.client.get(f"/contents/?code={code}")
         self.assertEqual(response.data[0]["code"], code)
+        self.assertEqual(response.data[0]["is_editable"], True)
+
+        response = self.client.get("/contents/?is_editable=false")
+        self.assertEqual(response.data[0]["is_editable"], False)
+        self.assertNotEqual(response.data[0]["code"], code)
 
     def test_get_unexisting_content(self):
         """
@@ -146,6 +152,17 @@ class ContentsViewsTests(TestCase):
         patch_data = {"body": "Déposez vos chartes Site Alsace, FSDIE, IdEx et Culture-ActionS sur Opaline."}
         response = self.institution_client.patch("/contents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_patch_uneditable_content(self):
+        """
+        PATCH /contents/{id} .
+
+        - A user with proper permissions can execute this request.
+        - Content must be editable.
+        """
+        patch_data = {"body": "Veuillez confirmer la création de votre compte avant de le faire valider ou rejeter."}
+        response = self.general_client.patch("/contents/29", data=patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_contents_success(self):
         """

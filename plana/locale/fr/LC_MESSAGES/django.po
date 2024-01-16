@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 09:27+0100\n"
+"POT-Creation-Date: 2024-01-16 14:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -553,14 +553,18 @@ msgstr "Logo"
 msgid "Logos"
 msgstr "Logos"
 
-#: plana/apps/contents/views/content.py:67
-#: plana/apps/contents/views/content.py:97
+#: plana/apps/contents/views/content.py:90
+#: plana/apps/contents/views/content.py:120
 msgid "Content does not exist."
 msgstr "Le contenu n'existe pas."
 
-#: plana/apps/contents/views/content.py:112
+#: plana/apps/contents/views/content.py:135
 msgid "Not allowed to edit this content."
 msgstr "Non autorisé à modifier ce contenu."
+
+#: plana/apps/contents/views/content.py:141
+msgid "This content is not editable."
+msgstr "Ce contenu ne peut être modifié."
 
 #: plana/apps/documents/models/document.py:39
 msgid "Charter for Association"

@@ -706,6 +706,11 @@ paths:
         schema:
           type: string
         description: Content code.
+      - in: query
+        name: is_editable
+        schema:
+          type: boolean
+        description: Is editable.
       tags:
       - contents
       security:
@@ -760,16 +765,15 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedContentRequest'
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedContentRequest'
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedContentRequest'
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
       security:
       - jwtAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -3799,6 +3803,7 @@ components:
           title: Barre annexe
         is_editable:
           type: boolean
+          title: Est modifiable
       required:
       - body
       - code
@@ -3810,21 +3815,12 @@ components:
       properties:
         header:
           type: string
-          nullable: true
-          title: En-tête
         body:
           type: string
-          title: Corps du message
         footer:
           type: string
-          nullable: true
-          title: Pied de page
         aside:
           type: string
-          nullable: true
-          title: Barre annexe
-      required:
-      - body
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -4589,41 +4585,18 @@ components:
         is_open_to_projects:
           type: boolean
           title: Peut recevoir des projets
-    PatchedContentRequest:
+    PatchedContentUpdateRequest:
       type: object
-      description: Main serializer.
+      description: Serializer for fields that can be updated as manager.
       properties:
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
-        label:
-          type: string
-          minLength: 1
-          maxLength: 128
-        title:
-          type: string
-          nullable: true
-          title: Titre
-          maxLength: 512
         header:
           type: string
-          nullable: true
-          title: En-tête
         body:
           type: string
-          minLength: 1
-          title: Corps du message
         footer:
           type: string
-          nullable: true
-          title: Pied de page
         aside:
           type: string
-          nullable: true
-          title: Barre annexe
-        is_editable:
-          type: boolean
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

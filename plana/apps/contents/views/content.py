@@ -12,6 +12,7 @@ from plana.apps.contents.serializers.content import (
     ContentSerializer,
     ContentUpdateSerializer,
 )
+from plana.utils import to_bool
 
 
 class ContentList(generics.ListAPIView):
@@ -28,7 +29,13 @@ class ContentList(generics.ListAPIView):
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="Content code.",
-            )
+            ),
+            OpenApiParameter(
+                "is_editable",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="Is editable.",
+            ),
         ],
         responses={
             status.HTTP_200_OK: ContentSerializer,
@@ -37,9 +44,13 @@ class ContentList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         """List all contents."""
         code = request.query_params.get("code")
+        is_editable = request.query_params.get("is_editable")
 
         if code is not None and code != "":
             self.queryset = self.queryset.filter(code=code)
+
+        if is_editable is not None and is_editable != "":
+            self.queryset = self.queryset.filter(is_editable=to_bool(is_editable))
 
         return self.list(request, *args, **kwargs)
 
@@ -103,7 +114,7 @@ class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """Update association details (president and manager only, restricted fields for president)."""
         try:
             content_id = kwargs["pk"]
-            Content.objects.get(id=content_id)
+            content = Content.objects.get(id=content_id)
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Content does not exist.")},
@@ -123,6 +134,12 @@ class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
             return response.Response(
                 {"error": _("Not allowed to edit this content.")},
                 status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if content.is_editable is False:
+            return response.Response(
+                {"error": _("This content is not editable.")},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         return self.partial_update(request, *args, **kwargs)
