@@ -365,9 +365,9 @@ djangorestframework-simplejwt==5.3.1 ; python_version >= "3.8" and python_versio
 djangorestframework==3.14.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8 \
     --hash=sha256:eb63f58c9f218e1a7d064d17a70751f528ed4e1d35547fdade9aaf4cd103fd08
-drf-spectacular==0.26.5 ; python_version >= "3.8" and python_version < "3.12" \
-    --hash=sha256:aee55330a774ba8a9cbdb125714d1c9ee05a8aafd3ce3be8bfd26527649aeb44 \
-    --hash=sha256:c0002a820b11771fdbf37853deb371947caf0159d1afeeffe7598e964bc1db94
+drf-spectacular==0.27.0 ; python_version >= "3.8" and python_version < "3.12" \
+    --hash=sha256:18d7ae74b2b5d533fd31f1c591ebaa5cce1447e0976ced927401e3163040dea9 \
+    --hash=sha256:6ab2d20674244e8c940c2883f744b43c34fc68c70ea3aefa802f574108c9699b
 et-xmlfile==1.1.0 ; python_version >= "3.8" and python_version < "3.12" \
     --hash=sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c \
     --hash=sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada
