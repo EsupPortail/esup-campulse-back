@@ -3410,9 +3410,10 @@ components:
           title: Est site
         path_logo:
           type: object
-          additionalProperties: {}
+          additionalProperties:
+            type: string
+          description: Return cached logo URL instead of calculated one which is slower.
           readOnly: true
-          description: Lien pour chaque taille de miniature
         charter_status:
           allOf:
           - $ref: '#/components/schemas/CharterStatusEnum'
@@ -4279,6 +4280,10 @@ components:
         id:
           type: integer
           readOnly: true
+        path_logo:
+          type: string
+          description: Return cached logo URL instead of calculated one which is slower.
+          readOnly: true
         acronym:
           type: string
           title: Acronyme
@@ -4288,11 +4293,6 @@ components:
         url:
           type: string
           title: URL du site
-        path_logo:
-          type: string
-          format: uri
-          nullable: true
-          title: Miniatures dynamiques pour le logo
         row:
           type: integer
           maximum: 2147483647
@@ -4308,6 +4308,7 @@ components:
           title: Est visible
       required:
       - id
+      - path_logo
     PasswordChangeRequest:
       type: object
       description: Overrided PasswordChangeSerializer to prevent CAS users to change
