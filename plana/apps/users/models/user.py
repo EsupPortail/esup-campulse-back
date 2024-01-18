@@ -248,9 +248,14 @@ class User(AbstractUser):
     def get_user_default_manager_emails(self):
         """Return a list of manager email addresses affected to a user."""
         assos_user = AssociationUser.objects.filter(user_id=self.pk)
-        funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk)
+        funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id__isnull=False)
+        institutions_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id__isnull=False)
         managers_emails = []
-        if assos_user.count() > 0 or funds_user.count() > 0:
+        if institutions_user.count() > 0:
+            for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
+                if user_to_check.has_perm("users.add_groupinstitutionfunduser_any_group"):
+                    managers_emails.append(user_to_check.email)
+        elif assos_user.count() > 0 or funds_user.count() > 0:
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
@@ -309,12 +314,12 @@ class User(AbstractUser):
             AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
-                    can_be_president_from__gte=now,
+                    can_be_president_from__lte=now,
                     can_be_president_to__isnull=True,
                 )
                 | models.Q(
                     can_be_president_from__isnull=True,
-                    can_be_president_to__lte=now,
+                    can_be_president_to__gte=now,
                 )
                 | models.Q(
                     can_be_president_from__lte=now,
