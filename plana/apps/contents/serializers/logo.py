@@ -10,7 +10,7 @@ class LogoSerializer(serializers.ModelSerializer):
 
     path_logo = serializers.SerializerMethodField("cached_logo_url")
 
-    def cached_logo_url(self, logo):
+    def cached_logo_url(self, logo) -> str:
         """Return cached logo URL instead of calculated one which is slower."""
         return f"{settings.AWS_S3_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{logo.path_logo.name}"
 
