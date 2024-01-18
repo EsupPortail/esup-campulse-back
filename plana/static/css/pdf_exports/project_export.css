@@ -31,10 +31,11 @@ h2 {
     display: flex;
 }
 
-.flex > * {
+.flex>* {
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
+    /* overflow: auto; */
 }
 
 .flex-direction-column {
@@ -47,6 +48,10 @@ h2 {
 
 .flex-space-between {
     justify-content: space-between;
+}
+
+.half-width {
+    max-width: 50%;
 }
 
 .margin-bottom {
