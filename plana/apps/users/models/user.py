@@ -267,7 +267,6 @@ class User(AbstractUser):
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                 if user_to_check.has_perm("users.change_user_misc"):
                     managers_emails.append(user_to_check.email)
-        print(managers_emails)
         return managers_emails
 
     def has_validated_email_user(self):
@@ -315,12 +314,12 @@ class User(AbstractUser):
             AssociationUser.objects.filter(
                 models.Q(is_president=True)
                 | models.Q(
-                    can_be_president_from__gte=now,
+                    can_be_president_from__lte=now,
                     can_be_president_to__isnull=True,
                 )
                 | models.Q(
                     can_be_president_from__isnull=True,
-                    can_be_president_to__lte=now,
+                    can_be_president_to__gte=now,
                 )
                 | models.Q(
                     can_be_president_from__lte=now,
