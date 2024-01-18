@@ -1,6 +1,7 @@
 """Serializers describing fields used on associations."""
 import re
 
+from django.conf import settings
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
@@ -86,7 +87,17 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
     institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
     institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
     activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
-    path_logo = ThumbnailField(sizes=["list"])
+    # path_logo = ThumbnailField(sizes=["list"])
+    path_logo = serializers.SerializerMethodField("cached_logo_url")
+
+    def cached_logo_url(self, association) -> dict[str, str]:
+        """Return cached logo URL instead of calculated one which is slower."""
+        if association.path_logo.name != '':
+            logo_name = f"{association.path_logo.name.split('.')[0]}_list.{association.path_logo.name.split('.')[1]}"
+            return {
+                "list": f"{settings.AWS_S3_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/thumbnails/{logo_name}"
+            }
+        return None
 
     class Meta:
         model = Association
