@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 14:40+0100\n"
+"POT-Creation-Date: 2024-01-18 09:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -647,7 +647,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:137
 #: plana/apps/projects/models/project_comment.py:23
 #: plana/apps/users/models/user.py:23 plana/apps/users/models/user.py:60
-#: plana/apps/users/models/user.py:351
+#: plana/apps/users/models/user.py:356
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1423,7 +1423,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Is student"
 msgstr "Est étudiant"
 
-#: plana/apps/users/models/user.py:352
+#: plana/apps/users/models/user.py:357
 msgid "Users"
 msgstr "Utilisateurs"
 
