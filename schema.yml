@@ -706,6 +706,11 @@ paths:
         schema:
           type: string
         description: Content code.
+      - in: query
+        name: is_editable
+        schema:
+          type: boolean
+        description: Is editable.
       tags:
       - contents
       security:
@@ -742,6 +747,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/Content'
           description: ''
+        '404':
+          description: No response body
+    patch:
+      operationId: contents_partial_update
+      description: Update association details (president and manager only, restricted
+        fields for president).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - contents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentUpdate'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
         '404':
           description: No response body
   /contents/logos:
@@ -3757,11 +3802,26 @@ components:
           type: string
           nullable: true
           title: Barre annexe
+        is_editable:
+          type: boolean
+          title: Est modifiable
       required:
       - body
       - code
       - id
       - label
+    ContentUpdate:
+      type: object
+      description: Serializer for fields that can be updated as manager.
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        aside:
+          type: string
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -4526,6 +4586,18 @@ components:
         is_open_to_projects:
           type: boolean
           title: Peut recevoir des projets
+    PatchedContentUpdateRequest:
+      type: object
+      description: Serializer for fields that can be updated as manager.
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        aside:
+          type: string
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

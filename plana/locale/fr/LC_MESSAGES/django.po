@@ -512,11 +512,15 @@ msgstr "Pied de page"
 msgid "Sidebar"
 msgstr "Barre annexe"
 
-#: plana/apps/contents/models/content.py:21
+#: plana/apps/contents/models/content.py:16
+msgid "Is editable"
+msgstr "Est modifiable"
+
+#: plana/apps/contents/models/content.py:22
 msgid "Content"
 msgstr "Contenu"
 
-#: plana/apps/contents/models/content.py:22
+#: plana/apps/contents/models/content.py:23
 msgid "Contents"
 msgstr "Contenus"
 
@@ -549,9 +553,18 @@ msgstr "Logo"
 msgid "Logos"
 msgstr "Logos"
 
-#: plana/apps/contents/views/content.py:63
+#: plana/apps/contents/views/content.py:90
+#: plana/apps/contents/views/content.py:120
 msgid "Content does not exist."
 msgstr "Le contenu n'existe pas."
+
+#: plana/apps/contents/views/content.py:135
+msgid "Not allowed to edit this content."
+msgstr "Non autorisé à modifier ce contenu."
+
+#: plana/apps/contents/views/content.py:141
+msgid "This content is not editable."
+msgstr "Ce contenu ne peut être modifié."
 
 #: plana/apps/documents/models/document.py:39
 msgid "Charter for Association"
