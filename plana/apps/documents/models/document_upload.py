@@ -74,7 +74,7 @@ class DocumentUpload(models.Model):
         permissions = [
             (
                 "add_documentupload_all",
-                "Can add a link from any document to any project or anu association.",
+                "Can add a link from any document to any project or any association.",
             ),
             (
                 "delete_documentupload_all",

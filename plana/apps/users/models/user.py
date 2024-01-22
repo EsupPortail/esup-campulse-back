@@ -34,8 +34,8 @@ class AssociationUser(models.Model):
         return f"{self.user} - {self.association}"
 
     class Meta:
-        verbose_name = _("Association")
-        verbose_name_plural = _("Associations")
+        verbose_name = _("User Association")
+        verbose_name_plural = _("Users Associations")
         permissions = [
             (
                 "change_associationuser_any_institution",
