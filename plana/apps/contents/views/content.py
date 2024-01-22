@@ -19,7 +19,7 @@ class ContentList(generics.ListAPIView):
     """/contents/ route."""
 
     permission_classes = [AllowAny]
-    queryset = Content.objects.all()
+    queryset = Content.objects.all().order_by("id")
     serializer_class = ContentSerializer
 
     @extend_schema(
