@@ -36,7 +36,6 @@ class Command(BaseCommand):
                     "loaddata",
                     [
                         "associations_activityfield",
-                        "associations_association_real",
                         "commissions_fund",
                         "contents_content",
                         "contents_logo",

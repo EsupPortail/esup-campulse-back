@@ -935,6 +935,7 @@ PERMISSIONS_GROUPS = {
         "delete_user_misc",
         "view_user",
         "view_user_misc",
+        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
