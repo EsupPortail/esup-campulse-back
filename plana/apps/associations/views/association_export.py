@@ -58,18 +58,15 @@ class AssociationListExport(generics.RetrieveAPIView):
         mode = request.query_params.get("mode")
         associations = request.query_params.get("associations")
 
-        if request.user.has_perm("associations.change_association_any_institution"):
-            queryset = self.get_queryset()
-        else:
-            institutions = GroupInstitutionFundUser.objects.filter(
-                user_id=request.user.id, institution_id__isnull=False
-            ).values_list("institution_id")
-            if len(institutions) == 0:
-                return response.Response(
-                    {"error": _("Not allowed to export associations list CSV.")},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
-            queryset = self.get_queryset().exclude(~Q(institution_id__in=institutions))
+        institutions = GroupInstitutionFundUser.objects.filter(
+            user_id=request.user.id, institution_id__isnull=False
+        ).values_list("institution_id")
+        if len(institutions) == 0:
+            return response.Response(
+                {"error": _("Not allowed to export associations list CSV.")},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        queryset = self.get_queryset().exclude(~Q(institution_id__in=institutions))
 
         if associations is not None and associations != "":
             association_ids = [int(association) for association in associations.split(",")]
