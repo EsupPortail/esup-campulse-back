@@ -48,7 +48,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
         user_funds_ids = []
         user_institutions_ids = []
-        if not request.user.has_perm("projects.view_projectcategory_any_commission"):
+        if not request.user.has_perm("projects.view_projectcategory_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
             if managed_funds.count() > 0:
                 user_funds_ids = managed_funds
@@ -57,7 +57,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         if not request.user.has_perm("projects.view_projectcategory_any_institution"):
             user_institutions_ids = request.user.get_user_managed_institutions()
 
-        if not request.user.has_perm("projects.view_projectcategory_any_commission") or not request.user.has_perm(
+        if not request.user.has_perm("projects.view_projectcategory_any_fund") or not request.user.has_perm(
             "projects.view_projectcategory_any_institution"
         ):
             user_associations_ids = request.user.get_user_associations()
@@ -171,7 +171,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_projectcategory_any_commission")
+            not request.user.has_perm("projects.view_projectcategory_any_fund")
             and not request.user.has_perm("projects.view_projectcategory_any_institution")
             and not request.user.can_access_project(project)
         ):

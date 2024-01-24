@@ -41,7 +41,7 @@ class ProjectCommissionFund(models.Model):
                 "Can update validator fields (amount earned) between a project and a commission fund.",
             ),
             (
-                "view_projectcommissionfund_any_commission",
+                "view_projectcommissionfund_any_fund",
                 "Can view all commission funds linked to all projects for a commission.",
             ),
             (

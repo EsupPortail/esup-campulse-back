@@ -1256,7 +1256,7 @@
     "fields": {
       "name": "Can view all commission funds linked to all projects for a commission.",
       "content_type": 30,
-      "codename": "view_projectcommissionfund_any_commission"
+      "codename": "view_projectcommissionfund_any_fund"
     }
   },
   {
@@ -1409,7 +1409,7 @@
     "fields": {
       "name": "Can view all categories linked to all projects for a commission.",
       "content_type": 32,
-      "codename": "view_projectcategory_any_commission"
+      "codename": "view_projectcategory_any_fund"
     }
   },
   {
