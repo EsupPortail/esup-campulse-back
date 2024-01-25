@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 09:23+0100\n"
+"POT-Creation-Date: 2024-01-25 10:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: plana/apps/associations/models/activity_field.py:9
 #: plana/apps/associations/models/association.py:36
-#: plana/apps/associations/views/association_export.py:79
+#: plana/apps/associations/views/association_export.py:76
 #: plana/apps/commissions/models/commission.py:12
 #: plana/apps/commissions/models/fund.py:12
 #: plana/apps/documents/models/document.py:62
@@ -34,7 +34,7 @@ msgstr "Nom"
 
 #: plana/apps/associations/models/activity_field.py:15
 #: plana/apps/associations/models/association.py:102
-#: plana/apps/associations/views/association_export.py:82
+#: plana/apps/associations/views/association_export.py:79
 msgid "Activity field"
 msgstr "Domaine d'activité"
 
@@ -43,13 +43,13 @@ msgid "Activity fields"
 msgstr "Domaines d'activités"
 
 #: plana/apps/associations/models/association.py:37
-#: plana/apps/associations/views/association_export.py:86
+#: plana/apps/associations/views/association_export.py:83
 #: plana/apps/users/admin.py:24 plana/apps/users/models/user.py:100
 msgid "Email"
 msgstr "Courriel"
 
 #: plana/apps/associations/models/association.py:38
-#: plana/apps/associations/views/association_export.py:80
+#: plana/apps/associations/views/association_export.py:77
 #: plana/apps/commissions/models/fund.py:13
 #: plana/apps/contents/models/logo.py:33
 #: plana/apps/documents/models/document.py:63
@@ -170,7 +170,7 @@ msgid "Charter Expired"
 msgstr "Charte Expirée"
 
 #: plana/apps/associations/models/association.py:80
-#: plana/apps/associations/views/association_export.py:84
+#: plana/apps/associations/views/association_export.py:81
 msgid "Charter date"
 msgstr "Date de la charte"
 
@@ -186,7 +186,7 @@ msgid "Approval date"
 msgstr "Date d'agrément"
 
 #: plana/apps/associations/models/association.py:83
-#: plana/apps/associations/views/association_export.py:85
+#: plana/apps/associations/views/association_export.py:82
 msgid "Last GOA date"
 msgstr "Date de la dernière AGO"
 
@@ -195,7 +195,7 @@ msgid "CGA date"
 msgstr "Date de dernière AG constitutive"
 
 #: plana/apps/associations/models/association.py:88
-#: plana/apps/associations/views/association_export.py:81
+#: plana/apps/associations/views/association_export.py:78
 #: plana/apps/commissions/models/fund.py:17
 #: plana/apps/documents/models/document.py:83
 #: plana/apps/institutions/models/institution.py:36
@@ -204,7 +204,7 @@ msgid "Institution"
 msgstr "Établissement"
 
 #: plana/apps/associations/models/association.py:95
-#: plana/apps/associations/views/association_export.py:83
+#: plana/apps/associations/views/association_export.py:80
 #: plana/apps/institutions/models/institution_component.py:22
 msgid "Institution component"
 msgstr "Composante"
@@ -212,13 +212,11 @@ msgstr "Composante"
 #: plana/apps/associations/models/association.py:111
 #: plana/apps/documents/models/document_upload.py:50
 #: plana/apps/projects/models/project.py:138 plana/apps/users/models/user.py:24
-#: plana/apps/users/models/user.py:37
 msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:112
-#: plana/apps/users/admin.py:148 plana/apps/users/models/user.py:38
-#: plana/apps/users/models/user.py:112
+#: plana/apps/users/admin.py:148 plana/apps/users/models/user.py:112
 msgid "Associations"
 msgstr "Associations"
 
@@ -258,7 +256,7 @@ msgstr "Nom d'association déjà enregistré."
 #: plana/apps/associations/views/association.py:371
 #: plana/apps/associations/views/association.py:512
 #: plana/apps/associations/views/association.py:660
-#: plana/apps/associations/views/association_export.py:170
+#: plana/apps/associations/views/association_export.py:167
 #: plana/apps/documents/views/document_upload.py:202
 #: plana/apps/projects/views/project.py:278
 msgid "Association does not exist."
@@ -320,13 +318,13 @@ msgstr "Choisir ce statut n'est pas autorisé."
 msgid "Missing documents : {missing_documents_names_string}."
 msgstr "Documents manquants : {missing_documents_names_string}"
 
-#: plana/apps/associations/views/association_export.py:69
+#: plana/apps/associations/views/association_export.py:66
 msgid "Not allowed to export associations list CSV."
 msgstr ""
 "Vous n'avez pas la permission d'exporter la liste des associations au format "
 "CSV."
 
-#: plana/apps/associations/views/association_export.py:180
+#: plana/apps/associations/views/association_export.py:177
 msgid "Not allowed to retrieve this association."
 msgstr "Aucun droit de voir cette association."
 
@@ -743,8 +741,8 @@ msgstr ""
 #: plana/apps/projects/views/project.py:658
 #: plana/apps/projects/views/project_category.py:169
 #: plana/apps/projects/views/project_category.py:212
-#: plana/apps/projects/views/project_comment.py:48
-#: plana/apps/projects/views/project_comment.py:124
+#: plana/apps/projects/views/project_comment.py:49
+#: plana/apps/projects/views/project_comment.py:125
 #: plana/apps/projects/views/project_commission_fund.py:237
 #: plana/apps/projects/views/project_export.py:47
 #: plana/apps/projects/views/project_export.py:134
@@ -1186,8 +1184,8 @@ msgstr "Non autorisé à récupérer ce projet."
 
 #: plana/apps/projects/views/project.py:509
 #: plana/apps/projects/views/project.py:664
-#: plana/apps/projects/views/project_comment.py:212
-#: plana/apps/projects/views/project_comment.py:250
+#: plana/apps/projects/views/project_comment.py:213
+#: plana/apps/projects/views/project_comment.py:251
 #: plana/apps/projects/views/project_commission_fund.py:147
 #: plana/apps/projects/views/project_commission_fund.py:327
 #: plana/apps/projects/views/project_commission_fund.py:587
@@ -1240,17 +1238,17 @@ msgstr "Ce projet est déjà lié à cette catégorie."
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:64
-#: plana/apps/projects/views/project_comment.py:218
-#: plana/apps/projects/views/project_comment.py:256
+#: plana/apps/projects/views/project_comment.py:65
+#: plana/apps/projects/views/project_comment.py:219
+#: plana/apps/projects/views/project_comment.py:257
 msgid "Cannot manage comments on a validated project/review."
 msgstr "Impossible de gérer les commentaires d'un projet/bilan validé."
 
-#: plana/apps/projects/views/project_comment.py:134
+#: plana/apps/projects/views/project_comment.py:135
 msgid "Not allowed to retrieve these project comments."
 msgstr "Non autorisé à récupérer les commentaires de ce projet."
 
-#: plana/apps/projects/views/project_comment.py:206
+#: plana/apps/projects/views/project_comment.py:207
 msgid "Link between this comment and project does not exist."
 msgstr "Ce commentaire de projet n'existe pas."
 
@@ -1402,6 +1400,14 @@ msgstr "Est secrétaire"
 #: plana/apps/users/models/user.py:31
 msgid "Is treasurer"
 msgstr "Est trésorier"
+
+#: plana/apps/users/models/user.py:37
+msgid "User Association"
+msgstr "Association de l'utilisateur"
+
+#: plana/apps/users/models/user.py:38
+msgid "Users Associations"
+msgstr "Associations des utilisateurs"
 
 #: plana/apps/users/models/user.py:69
 msgid "User Institution Fund Groups"
@@ -1846,7 +1852,7 @@ msgstr "Spécifier sans valeur si les contenus doivent être ajoutés."
 msgid "Set without value if testing data should be added."
 msgstr "Spécifier sans valeur si les données de test doivent être ajoutés."
 
-#: plana/management/commands/initial_import.py:59
+#: plana/management/commands/initial_import.py:58
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 

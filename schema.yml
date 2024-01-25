@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.4
+  version: 1.1.0-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -3189,9 +3189,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
       required:
       - activity_field
       - creation_date
@@ -3315,9 +3313,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
       required:
       - creation_date
       - id
@@ -4526,9 +4522,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
     PatchedAssociationStatusRequest:
       type: object
       description: Serializer for status field.
