@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.0.4
+  version: 1.1.0-beta
   description: API for PlanA
 paths:
   /associations/:
@@ -706,6 +706,11 @@ paths:
         schema:
           type: string
         description: Content code.
+      - in: query
+        name: is_editable
+        schema:
+          type: boolean
+        description: Is editable.
       tags:
       - contents
       security:
@@ -742,6 +747,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/Content'
           description: ''
+        '404':
+          description: No response body
+    patch:
+      operationId: contents_partial_update
+      description: Update association details (president and manager only, restricted
+        fields for president).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - contents
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContentUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentUpdate'
+          description: ''
+        '400':
+          description: No response body
+        '401':
+          description: No response body
+        '403':
+          description: No response body
         '404':
           description: No response body
   /contents/logos:
@@ -3144,9 +3189,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
       required:
       - activity_field
       - creation_date
@@ -3270,9 +3313,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
       required:
       - creation_date
       - id
@@ -3410,9 +3451,10 @@ components:
           title: Est site
         path_logo:
           type: object
-          additionalProperties: {}
+          additionalProperties:
+            type: string
+          description: Return cached logo URL instead of calculated one which is slower.
           readOnly: true
-          description: Lien pour chaque taille de miniature
         charter_status:
           allOf:
           - $ref: '#/components/schemas/CharterStatusEnum'
@@ -3756,11 +3798,26 @@ components:
           type: string
           nullable: true
           title: Barre annexe
+        is_editable:
+          type: boolean
+          title: Est modifiable
       required:
       - body
       - code
       - id
       - label
+    ContentUpdate:
+      type: object
+      description: Serializer for fields that can be updated as manager.
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        aside:
+          type: string
     CustomRegisterRequest:
       type: object
       description: Used for the user registration form (to parse the phone field).
@@ -4279,6 +4336,10 @@ components:
         id:
           type: integer
           readOnly: true
+        path_logo:
+          type: string
+          description: Return cached logo URL instead of calculated one which is slower.
+          readOnly: true
         acronym:
           type: string
           title: Acronyme
@@ -4288,11 +4349,6 @@ components:
         url:
           type: string
           title: URL du site
-        path_logo:
-          type: string
-          format: uri
-          nullable: true
-          title: Miniatures dynamiques pour le logo
         row:
           type: integer
           maximum: 2147483647
@@ -4308,6 +4364,7 @@ components:
           title: Est visible
       required:
       - id
+      - path_logo
     PasswordChangeRequest:
       type: object
       description: Overrided PasswordChangeSerializer to prevent CAS users to change
@@ -4465,9 +4522,7 @@ components:
           format: date
           nullable: true
           title: Date de dernière AG constitutive
-        social_networks:
-          type: object
-          additionalProperties: {}
+        social_networks: {}
     PatchedAssociationStatusRequest:
       type: object
       description: Serializer for status field.
@@ -4525,6 +4580,18 @@ components:
         is_open_to_projects:
           type: boolean
           title: Peut recevoir des projets
+    PatchedContentUpdateRequest:
+      type: object
+      description: Serializer for fields that can be updated as manager.
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        aside:
+          type: string
     PatchedDocumentUpdateRequest:
       type: object
       description: Serializer for document update.

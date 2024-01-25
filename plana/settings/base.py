@@ -15,7 +15,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.0.4"
+APP_VERSION = "1.1.0-beta"
 
 ######################
 # Path configuration #
@@ -781,7 +781,6 @@ PERMISSIONS_GROUPS = {
         "delete_document",
         "delete_document_any_fund",
         "delete_document_any_institution",
-        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -796,7 +795,7 @@ PERMISSIONS_GROUPS = {
         "view_project_any_institution",
         "view_project_any_status",
         "view_projectcategory",
-        "view_projectcategory_any_commission",
+        "view_projectcategory_any_fund",
         "view_projectcategory_any_institution",
         "add_projectcomment",
         "change_projectcomment",
@@ -808,7 +807,7 @@ PERMISSIONS_GROUPS = {
         "change_projectcommissionfund",
         "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
-        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_fund",
         "view_projectcommissionfund_any_institution",
         # users
         "add_user",
@@ -849,7 +848,6 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
-        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -870,7 +868,7 @@ PERMISSIONS_GROUPS = {
         "change_projectcommissionfund",
         "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
-        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_fund",
         "view_projectcommissionfund_any_institution",
         # users
         "add_user",
@@ -902,7 +900,6 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
-        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -923,7 +920,7 @@ PERMISSIONS_GROUPS = {
         "change_projectcommissionfund",
         "change_projectcommissionfund_as_validator",
         "view_projectcommissionfund",
-        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_fund",
         "view_projectcommissionfund_any_institution",
         # users
         "add_user",
@@ -935,6 +932,7 @@ PERMISSIONS_GROUPS = {
         "delete_user_misc",
         "view_user",
         "view_user_misc",
+        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
@@ -958,7 +956,7 @@ PERMISSIONS_GROUPS = {
         "view_projectcomment",
         "view_projectcomment_not_visible",
         "view_projectcommissionfund",
-        "view_projectcommissionfund_any_commission",
+        "view_projectcommissionfund_any_fund",
         "view_projectcommissionfund_any_institution",
         # users
         "view_user",
@@ -971,7 +969,6 @@ PERMISSIONS_GROUPS = {
         # associations
         "change_association",
         # documents
-        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects
@@ -999,7 +996,6 @@ PERMISSIONS_GROUPS = {
     ],
     "STUDENT_MISC": [
         # documents
-        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects

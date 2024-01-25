@@ -16,7 +16,8 @@ weight: 116
 
 - `$ python manage.py flush` : vider le contenu de la base de données.
 - `$ python manage.py migrate` : mettre à jour la structure de la base de données (à précéder de `$ python manage.py makemigrations` pour créer les fichiers de migrations au besoin).
-- `$ python manage.py initial_import [--test]` : ajouter les jeux de données de test (utilisateurs, associations, projets, ...) et liées aux templates de mails.
+- `$ python manage.py loaddata plana/apps/*/fixtures/*.json plana/libs/*/fixtures/*.json` : mettre à jour la structure de la base de données (à précéder de `$ python manage.py makemigrations` pour créer les fichiers de migrations au besoin).
+- `$ python manage.py initial_import [--test]` : ajouter les jeux de données de test obligatoires (sauf utilisateurs, commissions, projets, ...) et liées aux templates de mails, `--test` importe toutes les fixtures (équivalent de `loaddata`).
 - `$ python manage.py flush_storages` : vide le contenu du bucket S3 de l'environnement courant.
 - `$ python manage.py loaddata_storages` : ajoute de premiers documents au bucket S3 de l'environnement courant.
 - `$ python manage.py clean_database` : équivalent des commandes `flush`, `migrate`, `loaddata`, `flush_storages`, `loaddata_storages` en une seule commande.

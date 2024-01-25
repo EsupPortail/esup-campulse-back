@@ -25,7 +25,7 @@ class ProjectCategory(models.Model):
         verbose_name_plural = _("Projects categories")
         permissions = [
             (
-                "view_projectcategory_any_commission",
+                "view_projectcategory_any_fund",
                 "Can view all categories linked to all projects for a commission.",
             ),
             (

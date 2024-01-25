@@ -13,6 +13,7 @@ class Content(models.Model):
     body = models.TextField(_("Body"), blank=False, null=False)
     footer = models.TextField(_("Footer"), default="", blank=True, null=True)
     aside = models.TextField(_("Sidebar"), default="", blank=True, null=True)
+    is_editable = models.BooleanField(_("Is editable"), default=False)
 
     def __str__(self):
         return self.code

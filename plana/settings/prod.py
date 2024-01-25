@@ -82,7 +82,7 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 ########
 
 MIGRATION_SITE_DOMAIN = "etu-campulse.fr"
-DEFAULT_FROM_EMAIL = "no-reply@etu-campulse.fr"
+DEFAULT_FROM_EMAIL = "no-reply@unistra.fr"
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"

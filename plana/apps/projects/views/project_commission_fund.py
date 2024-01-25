@@ -65,7 +65,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         project_id = request.query_params.get("project_id")
         commission_id = request.query_params.get("commission_id")
 
-        if not request.user.has_perm("projects.view_projectcommissionfund_any_commission"):
+        if not request.user.has_perm("projects.view_projectcommissionfund_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
             if managed_funds.count() > 0:
                 user_funds_ids = managed_funds
@@ -78,9 +78,9 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         else:
             user_institutions_ids = Institution.objects.all().values_list("id")
 
-        if not request.user.has_perm(
-            "projects.view_projectcommissionfund_any_commission"
-        ) or not request.user.has_perm("projects.view_projectcommissionfund_any_institution"):
+        if not request.user.has_perm("projects.view_projectcommissionfund_any_fund") or not request.user.has_perm(
+            "projects.view_projectcommissionfund_any_institution"
+        ):
             user_associations_ids = request.user.get_user_associations()
             user_projects_ids = Project.visible_objects.filter(
                 models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
@@ -239,7 +239,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
             )
 
         if (
-            not request.user.has_perm("projects.view_projectcommissionfund_any_commission")
+            not request.user.has_perm("projects.view_projectcommissionfund_any_fund")
             and not request.user.has_perm("projects.view_projectcommissionfund_any_institution")
             and not request.user.can_access_project(project)
         ):
