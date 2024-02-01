@@ -18,7 +18,7 @@
 - Champs NULL autorisés sur la table Content.
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.
 - Correction de la sélection des adresses mail de gestionnaires affichées par défaut dans les templates de mail.
-- Changement de l'adresse no-reply pour un domaine évitant les erreurs de 
+- Changement de l'adresse no-reply des emails pour éviter les non-réceptions de mails.
 
 ### Autres changements
 
