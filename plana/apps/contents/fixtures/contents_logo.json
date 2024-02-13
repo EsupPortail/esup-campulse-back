@@ -118,5 +118,17 @@
       "column": 3,
       "visible": true
     }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 11,
+    "fields": {
+      "acronym": "nextgenerationeu",
+      "title": "Financé par l'Union européenne NextGenerationEU",
+      "url": "https://next-generation-eu.europa.eu/index_fr",
+      "row": 2,
+      "column": 4,
+      "visible": true
+    }
   }
 ]
