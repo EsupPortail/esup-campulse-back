@@ -15,6 +15,7 @@ weight: 101
 - [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) (gestion de l'environnement virtuel)
 - [Poetry](https://python-poetry.org/) (gestionnaire de dépendances)
 - [age](https://github.com/FiloSottile/age) (chiffrement des documents privés)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) (gestion du stockage S3)
 
 ## Technologies de développement
 
