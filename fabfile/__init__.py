@@ -67,7 +67,7 @@ env.chaussette_backend = (
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
-    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; connect-src \'self\'; font-src \'self\' https://stackpath.bootstrapcdn.com; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://code.jquery.com https://stackpath.bootstrapcdn.com; style-src \'self\' \'unsafe-inline\' https://stackpath.bootstrapcdn.com;"',
+    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; connect-src \'self\'; font-src \'self\' https://stackpath.bootstrapcdn.com; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\' https://cdn.jsdelivr.net; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://cdn.jsdelivr.net https://code.jquery.com https://stackpath.bootstrapcdn.com; style-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;"',
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
