@@ -1,4 +1,5 @@
 """Base configuration for all environments."""
+
 from datetime import timedelta
 from os import environ
 from os.path import join, normpath
@@ -696,6 +697,9 @@ RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 # External APIs.
 ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
 ACCOUNTS_API_CONF = {}
+
+# Enable adding a LDAP account though Spore.
+LDAP_ENABLED = True
 
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]

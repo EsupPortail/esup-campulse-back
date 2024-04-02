@@ -22,7 +22,7 @@ export AWS_SECRET_ACCESS_KEY=secREtaCCEsskeY
 export AWS_STORAGE_BUCKET_NAME=bucket_name
 export AWS_S3_ENDPOINT_URL=https://s3.domain.example
 
-# Recherche d'un compte sur un annuaire LDAP d'université.
+# Recherche d'un compte sur un annuaire LDAP (optionnel, mais à désactiver plus loin dans l'installation via les variables Django).
 export ACCOUNTS_API_SPORE_DESCRIPTION_FILE="https://rest-api-domain.tld/path/description.json"
 export ACCOUNTS_API_SPORE_BASE_URL="https://ldapws-domain.tld"
 export ACCOUNTS_API_SPORE_TOKEN="t0k3n"
