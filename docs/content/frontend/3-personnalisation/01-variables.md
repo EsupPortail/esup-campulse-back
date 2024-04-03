@@ -11,19 +11,6 @@ Le but du fichier _custom.scss est de permettre aux utilisateurs de personnalise
 
 Pour personnaliser le style de l'application, les utilisateurs peuvent modifier les variables suivantes définies dans le fichier _custom.scss
 
-## Polices
-```scss
-$baseFont   // Spécifie la famille de polices de base utilisée dans toute l'application.
-$titleFont  // Spécifie la famille de polices pour les titres et les en-têtes.
-```
-
-### Tailles de Police
-```scss
-$fontSize              // Définit la taille de police de base pour le contenu textuel général.
-$headTitleMobileSize   // Définit la taille de police pour les titres et les en-têtes sur les appareils mobiles.
-$headTitleComputerSize // Définit la taille de police pour les titres et les en-têtes sur les écrans d'ordinateur.
-$titleSize             // Définit la taille de police pour les titres principaux et les en-têtes.
-```
 
 ## Couleurs
 
