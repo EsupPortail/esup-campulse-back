@@ -67,11 +67,28 @@ env.chaussette_backend = (
     'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
 )
 
+env.csp_settings = {
+    'default_src': "'none'",
+    'base_uri': "'self'",
+    'connect_src': "'self'",
+    'font_src': "'self' https://stackpath.bootstrapcdn.com",
+    'frame_ancestors': "'self'",
+    'frame_src': "'self'",
+    'img_src': "'self' data: https://cdn.jsdelivr.net",
+    'manifest_src': "'none'",
+    'media_src': "'none'",
+    'object_src': "'none'",
+    'script_src': "'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://code.jquery.com https://stackpath.bootstrapcdn.com",
+    'style_src': "'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;",
+    'worker_src': "'none'",
+}
 
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
-    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; connect-src \'self\'; font-src \'self\' https://stackpath.bootstrapcdn.com; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\' data: https://cdn.jsdelivr.net; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://cdn.jsdelivr.net https://code.jquery.com https://stackpath.bootstrapcdn.com; style-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;"',
+    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src {default_src}; base-uri {base_uri}; connect-src {connect_src}; font-src {font_src}; frame-ancestors {frame_ancestors}; frame-src {frame_src}; img-src {img-src}; manifest-src {manifest_src}; media-src {media_src}; object-src {object_src}; script-src {script_src}; style-src {style_src}; worker-src {worker_src};"'.format(
+        **env.csp_settings
+    ),
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
