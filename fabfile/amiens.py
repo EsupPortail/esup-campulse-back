@@ -9,7 +9,7 @@ def build_env():
 
 @task
 def preprod_amiens():
-    """Define preprod stage"""
+    """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-amiens-plana-pprd-1.srv.unistra.fr', 'saas-amiens-plana-pprd-2.srv.unistra.fr'],
         'lb': ['saas-amiens-plana-pprd-1.srv.unistra.fr', 'saas-amiens-plana-pprd-2.srv.unistra.fr'],
@@ -45,7 +45,7 @@ def preprod_amiens():
 
 @task
 def prod_amiens():
-    """Define prod stage"""
+    """Define prod stage."""
     env.roledefs = {
         'web': ['saas-amiens-plana-prod-1.srv.unistra.fr', 'saas-amiens-plana-prod-2.srv.unistra.fr'],
         'lb': ['saas-amiens-plana-prod-1.srv.unistra.fr', 'saas-amiens-plana-prod-2.srv.unistra.fr'],

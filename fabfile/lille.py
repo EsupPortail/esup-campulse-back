@@ -9,7 +9,7 @@ def build_env():
 
 @task
 def preprod_lille():
-    """Define preprod stage"""
+    """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-lille-plana-pprd-1.srv.unistra.fr', 'saas-lille-plana-pprd-2.srv.unistra.fr'],
         'lb': ['saas-lille-plana-pprd-1.srv.unistra.fr', 'saas-lille-plana-pprd-2.srv.unistra.fr'],
@@ -45,7 +45,7 @@ def preprod_lille():
 
 @task
 def prod_lille():
-    """Define prod stage"""
+    """Define prod stage."""
     env.roledefs = {
         'web': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],
         'lb': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],

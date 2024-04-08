@@ -9,7 +9,7 @@ def build_env():
 
 @task
 def preprod_montpellier3():
-    """Define preprod stage"""
+    """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-montpellier3-plana-pprd-1.srv.unistra.fr', 'saas-montpellier3-plana-pprd-2.srv.unistra.fr'],
         'lb': ['saas-montpellier3-plana-pprd-1.srv.unistra.fr', 'saas-montpellier3-plana-pprd-2.srv.unistra.fr'],
@@ -45,7 +45,7 @@ def preprod_montpellier3():
 
 @task
 def prod_montpellier3():
-    """Define prod stage"""
+    """Define prod stage."""
     env.roledefs = {
         'web': ['saas-montpellier3-plana-prod-1.srv.unistra.fr', 'saas-montpellier3-plana-prod-2.srv.unistra.fr'],
         'lb': ['saas-montpellier3-plana-prod-1.srv.unistra.fr', 'saas-montpellier3-plana-prod-2.srv.unistra.fr'],

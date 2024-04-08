@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-"""
-
 from os.path import join
 
 import pydiploy
@@ -82,7 +79,6 @@ env.csp_settings = {
     'style_src': "'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;",
     'worker_src': "'none'",
 }
-
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
@@ -97,7 +93,7 @@ env.sentry_project_name = 'plan-a-back'
 
 @task
 def dev():
-    """Define dev stage"""
+    """Define dev stage."""
     env.roledefs = {
         'web': ['192.168.1.2'],
         'lb': ['192.168.1.2'],
@@ -118,7 +114,7 @@ def dev():
 
 @task
 def test():
-    """Define test stage"""
+    """Define test stage."""
     env.roledefs = {
         'web': ['django-test2.u-strasbg.fr'],
         'lb': ['django-test2.u-strasbg.fr'],
@@ -154,7 +150,7 @@ def test():
 
 @task
 def preprod():
-    """Define preprod stage"""
+    """Define preprod stage."""
     env.roledefs = {
         'web': ['django-pprd-w3.di.unistra.fr', 'django-pprd-w4.di.unistra.fr'],
         'lb': ['rp-dip-pprd-public.di.unistra.fr'],
@@ -190,7 +186,7 @@ def preprod():
 
 @task
 def prod():
-    """Define prod stage"""
+    """Define prod stage."""
     env.roledefs = {
         'web': ['django-w7.di.unistra.fr', 'django-w8.di.unistra.fr'],
         'lb': ['rp-dip-public-m.di.unistra.fr', 'rp-dip-public-s.di.unistra.fr'],
@@ -240,7 +236,7 @@ def build_env():
 
 @task
 def pre_install():
-    """Pre install of backend & frontend"""
+    """Pre install of backend & frontend."""
     execute(pre_install_backend)
     execute(pre_install_frontend)
 
@@ -248,20 +244,20 @@ def pre_install():
 @roles('web')
 @task
 def pre_install_backend():
-    """Setup server for backend"""
+    """Setup server for backend."""
     execute(pydiploy.django.pre_install_backend, commands='/usr/bin/rsync')
 
 
 @roles('lb')
 @task
 def pre_install_frontend():
-    """Setup server for frontend"""
+    """Setup server for frontend."""
     execute(pydiploy.django.pre_install_frontend)
 
 
 @task
 def deploy(update_pkg=False):
-    """Deploy code on server"""
+    """Deploy code on server."""
     execute(deploy_backend, update_pkg)
     execute(declare_release_to_sentry)
     execute(deploy_frontend)
@@ -270,27 +266,27 @@ def deploy(update_pkg=False):
 @roles('web')
 @task
 def deploy_backend(update_pkg=False):
-    """Deploy code on server"""
+    """Deploy code on server."""
     execute(pydiploy.django.deploy_backend, update_pkg)
 
 
 @roles('lb')
 @task
 def deploy_frontend():
-    """Deploy static files on load balancer"""
+    """Deploy static files on load balancer."""
     execute(pydiploy.django.deploy_frontend)
 
 
 @roles('web')
 @task
 def rollback():
-    """Rollback code (current-1 release)"""
+    """Rollback code (current-1 release)."""
     execute(pydiploy.django.rollback)
 
 
 @task
 def post_install():
-    """post install for backend & frontend"""
+    """Post install for backend & frontend."""
     execute(post_install_backend)
     execute(post_install_frontend)
 
@@ -298,21 +294,21 @@ def post_install():
 @roles('web')
 @task
 def post_install_backend():
-    """Post installation of backend"""
+    """Post installation of backend."""
     execute(pydiploy.django.post_install_backend)
 
 
 @roles('lb')
 @task
 def post_install_frontend():
-    """Post installation of frontend"""
+    """Post installation of frontend."""
     execute(pydiploy.django.post_install_frontend)
 
 
 @roles('web')
 @task
 def install_postgres(user=None, dbname=None, password=None):
-    """Install Postgres on remote"""
+    """Install Postgres on remote."""
     execute(
         pydiploy.django.install_postgres_server,
         user=user,
@@ -323,7 +319,7 @@ def install_postgres(user=None, dbname=None, password=None):
 
 @task
 def reload():
-    """Reload backend & frontend"""
+    """Reload backend & frontend."""
     execute(reload_frontend)
     execute(reload_backend)
 
@@ -348,28 +344,28 @@ def reload_backend():
 @roles('lb')
 @task
 def set_down():
-    """Set app to maintenance mode"""
+    """Set app to maintenance mode."""
     execute(pydiploy.django.set_app_down)
 
 
 @roles('lb')
 @task
 def set_up():
-    """Set app to up mode"""
+    """Set app to up mode."""
     execute(pydiploy.django.set_app_up)
 
 
 @roles('web')
 @task
 def custom_manage_cmd(cmd):
-    """Execute custom command in manage.py"""
+    """Execute custom command in manage.py."""
     execute(pydiploy.django.custom_manage_command, cmd)
 
 
 @roles("web")
 @task
 def update_python_version():
-    """Update python version"""
+    """Update python version."""
     execute(pydiploy.django.update_python_version)
 
 
