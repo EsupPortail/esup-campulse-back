@@ -9,6 +9,10 @@ import pydiploy
 from fabric.api import env, execute, roles, task
 
 from . import sentry
+from .amiens import preprod_amiens, prod_amiens
+from .lille import preprod_lille, prod_lille
+from .montpellier3 import preprod_montpellier3, prod_montpellier3
+from .rouen import preprod_rouen, prod_rouen
 
 # edit config here !
 
@@ -350,3 +354,21 @@ def custom_manage_cmd(cmd):
 def update_python_version():
     """Update python version"""
     execute(pydiploy.django.update_python_version)
+
+
+@task
+def deploy_all_preprod():
+    preprod()
+    preprod_amiens()
+    preprod_lille()
+    preprod_montpellier3()
+    preprod_rouen()
+
+
+@task
+def deploy_all_prod():
+    prod()
+    prod_amiens()
+    prod_lille()
+    prod_montpellier3()
+    prod_rouen()
