@@ -1,4 +1,5 @@
 """Configuration for unit tests environment."""
+
 from os import environ
 from os.path import normpath
 

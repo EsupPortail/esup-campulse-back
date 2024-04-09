@@ -1,4 +1,5 @@
 """Configuration for pre-production server environment."""
+
 from .base import *
 
 ##########################
@@ -66,6 +67,12 @@ CAS_AUTHORIZED_SERVICES = [
 ##########
 # Emails #
 ##########
+
+EMAIL_HOST = "{{ email_host }}"
+EMAIL_PORT = "{{ email_port }}"
+EMAIL_HOST_USER = "{{ email_host_user }}"
+EMAIL_HOST_PASSWORD = "{{ email_host_password }}"
+EMAIL_USE_TLS = "{{ email_use_tls }}".lower() == "true"
 
 EMAIL_TEMPLATE_FRONTEND_URL = "https://plana-pprd.app.unistra.fr/"
 
