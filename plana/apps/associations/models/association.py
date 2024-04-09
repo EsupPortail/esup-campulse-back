@@ -1,4 +1,5 @@
 """Models describing associations and most of its details."""
+
 import datetime
 import os
 

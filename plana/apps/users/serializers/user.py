@@ -1,4 +1,5 @@
 """Serializers describing fields used on users and related forms."""
+
 import re
 
 from allauth.account.adapter import get_adapter

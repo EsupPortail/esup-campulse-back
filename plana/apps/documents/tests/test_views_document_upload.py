@@ -1,4 +1,5 @@
 """List of tests done on documents views."""
+
 import json
 from unittest.mock import Mock
 

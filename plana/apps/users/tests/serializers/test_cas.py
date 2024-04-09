@@ -1,4 +1,5 @@
 """List of tests done on CAS server serializer."""
+
 from unittest.mock import patch
 
 from allauth.socialaccount.models import SocialAccount

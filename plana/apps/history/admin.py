@@ -1,4 +1,5 @@
 """Admin view for History models."""
+
 from django.contrib import admin
 
 from .models import History

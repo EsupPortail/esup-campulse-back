@@ -1,4 +1,5 @@
 """Admin view for Institution models."""
+
 from django.contrib import admin
 
 from .models import Institution, InstitutionComponent

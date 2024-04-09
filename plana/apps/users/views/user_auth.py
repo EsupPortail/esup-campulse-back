@@ -1,4 +1,5 @@
 """dj-rest-auth overrided views."""
+
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
@@ -64,9 +65,9 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
             if request.user.is_validated_by_admin is False:
                 user_id = request.user.pk
-                context[
-                    "account_url"
-                ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
+                context["account_url"] = (
+                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
+                )
                 History.objects.create(action_title="USER_REGISTERED", action_user_id=request.user.pk)
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LDAP_CREATION")
                 send_mail(

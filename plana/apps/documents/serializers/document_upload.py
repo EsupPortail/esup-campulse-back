@@ -1,4 +1,5 @@
 """Serializers describing fields used on documents-association-user relations."""
+
 from django.urls import reverse
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field

@@ -1,4 +1,5 @@
 """Admin view for User models."""
+
 import secrets
 import string
 

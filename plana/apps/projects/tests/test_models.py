@@ -1,4 +1,5 @@
 """List of tests done on projects models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.projects.models.category import Category

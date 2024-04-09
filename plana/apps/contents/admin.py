@@ -1,4 +1,5 @@
 """Admin view for Content models."""
+
 from django.contrib import admin
 
 from .models import Content, Logo

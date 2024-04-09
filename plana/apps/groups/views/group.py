@@ -1,4 +1,5 @@
 """Views directly linked to auth groups."""
+
 from django.contrib.auth.models import Group
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema

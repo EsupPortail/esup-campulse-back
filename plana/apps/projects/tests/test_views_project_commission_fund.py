@@ -1,4 +1,5 @@
 """List of tests done on links between projects and commission funds views."""
+
 import json
 
 from django.core import mail

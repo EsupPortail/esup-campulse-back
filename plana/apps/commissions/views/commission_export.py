@@ -1,4 +1,5 @@
 """Views directly linked to commission exports."""
+
 import csv
 from tempfile import NamedTemporaryFile
 

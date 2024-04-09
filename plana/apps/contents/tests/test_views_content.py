@@ -1,4 +1,5 @@
 """List of tests done on contents views."""
+
 import json
 
 from django.test import Client, TestCase

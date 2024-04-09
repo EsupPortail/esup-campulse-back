@@ -1,4 +1,5 @@
 """Views directly linked to projects."""
+
 import datetime
 
 from django.conf import settings

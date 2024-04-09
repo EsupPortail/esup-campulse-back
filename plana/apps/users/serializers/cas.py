@@ -1,4 +1,5 @@
 """Special serializers used to interact with CAS."""
+
 from __future__ import annotations
 
 import typing

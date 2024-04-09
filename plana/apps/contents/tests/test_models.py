@@ -1,4 +1,5 @@
 """List of tests done on contents models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.contents.models.content import Content

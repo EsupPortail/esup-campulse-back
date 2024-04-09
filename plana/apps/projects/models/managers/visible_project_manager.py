@@ -1,4 +1,5 @@
 """Outside of django-admin, the app only uses projects where edition_date is lower than 5 years old."""
+
 import datetime
 
 from django.conf import settings

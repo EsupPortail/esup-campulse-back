@@ -1,4 +1,5 @@
 """dj-rest-auth overrided serializers."""
+
 import datetime
 
 from dj_rest_auth.serializers import LoginSerializer as DJRestAuthLoginSerializer

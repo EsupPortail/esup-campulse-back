@@ -1,4 +1,5 @@
 """List of tests done on projects views."""
+
 import datetime
 import json
 

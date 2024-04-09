@@ -1,4 +1,5 @@
 """Models describing comments left on a project by managers."""
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 

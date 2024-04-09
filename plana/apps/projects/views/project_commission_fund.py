@@ -1,4 +1,5 @@
 """Views linked to project commission funds links."""
+
 import datetime
 import locale
 

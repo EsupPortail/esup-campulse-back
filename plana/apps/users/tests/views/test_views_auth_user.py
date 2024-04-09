@@ -1,4 +1,5 @@
 """List of tests done on user views related to auth."""
+
 import json
 
 from allauth.account.forms import default_token_generator

@@ -1,4 +1,5 @@
 """Models describing users and most of its details."""
+
 import datetime
 
 from allauth.account.models import EmailAddress

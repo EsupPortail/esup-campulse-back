@@ -1,4 +1,5 @@
 """Views directly linked to projects comments."""
+
 import datetime
 
 from django.conf import settings

@@ -1,4 +1,5 @@
 """Models describing footer logos."""
+
 import datetime
 import os
 

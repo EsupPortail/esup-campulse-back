@@ -1,4 +1,5 @@
 """Test commands in management folder."""
+
 import datetime
 
 from django.conf import settings
