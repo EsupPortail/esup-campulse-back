@@ -59,7 +59,6 @@ sentry_init(STAGE)
 # AUTHENTICATION #
 ##################
 
-CAS_ID = "{{ cas_id }}"  # "cas"
 CAS_NAME = "{{ cas_name }}"  # "CAS Unistra"
 CAS_SERVER = "{{ cas_server }}"  # "https://cas-dev.unistra.fr/cas/"
 CAS_VERSION = int("{{ cas_version }}")  # 3
@@ -111,7 +110,7 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = int("{{ cron_days_before_history_expiratio
 ########
 
 MIGRATION_SITE_DOMAIN = "{{ migration_site_domain }}"  # "plana-test.app.unistra.fr"
-MIGRATION_SITE_NAME = "{{ migration_site_name }}"  # "PlanA"
+MIGRATION_SITE_NAME = "{{ migration_site_name }}"  # "Campulse"
 DEFAULT_FROM_EMAIL = "{{ default_from_email }}"  # "appli-plana-test@unistra.fr"
 
 APP_DOCUMENTATION_URL = "{{ app_documentation_url }}"  # "https://ernest.unistra.fr/"
