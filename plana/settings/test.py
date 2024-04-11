@@ -72,11 +72,11 @@ CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # Emails #
 ##########
 
-# EMAIL_HOST = "{{ email_host }}"
-# EMAIL_PORT = "{{ email_port }}"
-# EMAIL_HOST_USER = "{{ email_host_user }}"
-# EMAIL_HOST_PASSWORD = "{{ email_host_password }}"
-# EMAIL_USE_TLS = "{{ email_use_tls }}".lower() == "true"
+EMAIL_HOST = "{{ email_host }}"  # '127.0.0.1'
+EMAIL_PORT = "{{ email_port }}"  # 25
+EMAIL_HOST_USER = "{{ email_host_user }}"  # ''
+EMAIL_HOST_PASSWORD = "{{ email_host_password }}"  # ''
+EMAIL_USE_TLS = "{{ email_use_tls }}".lower() == "true"  # False
 
 EMAIL_TEMPLATE_FRONTEND_URL = "{{ email_template_frontend_url }}"  # "https://plana-test.app.unistra.fr/"
 
@@ -111,7 +111,7 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = "{{ cron_days_before_history_expiration }}
 ########
 
 MIGRATION_SITE_DOMAIN = "{{ migration_site_domain }}"  # "plana-test.app.unistra.fr"
-MIGRATION_SITE_NAME = "{{ migration_site_name }}"  # PlanA
+MIGRATION_SITE_NAME = "{{ migration_site_name }}"  # "PlanA"
 DEFAULT_FROM_EMAIL = "{{ default_from_email }}"  # "appli-plana-test@unistra.fr"
 
 APP_DOCUMENTATION_URL = "{{ app_documentation_url }}"  # "https://ernest.unistra.fr/"
