@@ -66,6 +66,5 @@ Les tâches CRON envoient de multiples emails dont des relances dépendant de no
 - `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
 - `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités de l'application côté association (utilisé pour définir si une association a signé la Charte Site Alsace de l'Université de Strasbourg par exemple), laisser à `True` pour désactiver la validation.
 - `NEW_YEAR_MONTH_INDEX` : index du mois auquel une année scolaire débute (9 pour Septembre).
-- `TEMPLATES_NOTIFICATIONS` : chemins des fichiers utilisés pour les templates PDF de notifications.
 - `AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY` : nombre d'années durant lesquelles un projet est visible dans l'application (avant d'être uniquement visible sur l'interface d'administration de Django).
 - `AMOUNT_YEARS_BEFORE_PROJECT_DELETION` : nombre d'années durant lesquelles un projet est stocké dans l'application (avant d'être supprimé).

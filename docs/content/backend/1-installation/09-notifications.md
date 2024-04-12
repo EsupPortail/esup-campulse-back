@@ -18,10 +18,6 @@ Nous avons ainsi 4 types de notifications, formatés comme suit :
 Ces différents types de notifications sont configurables dans les paramètres du projet afin d'en personnaliser les intitulés en fonction des différents fonds gérés par l'application.
 L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l'acronyme en base de données du fonds concerné en majuscules.
 
-## Lien entres les types de notifications et les templates PDF
-
-La variable `TEMPLATES_NOTIFICATIONS` contient les noms de notifications reliés aux templates HTML présents dans le répertoire `templates` du projet. Ces templates servent au formatage des données sur le document final, et permettent une personnalisation totale avec du CSS et quelques variables par défaut.
-
 ## Spécificités des templates PDF
 
 Les templates PDF sont ceux utilisés par Django, ils utilisent donc jinja2 et des templatetags.

@@ -409,13 +409,12 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 request.data["new_commission_fund_id"],
             )
             template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_POSTPONED")
-            templates_name = f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED"
             attachment = None
             # Creating context for notifications attachments
-            if templates_name in settings.TEMPLATES_NOTIFICATIONS:
-                content = Content.objects.get(code=templates_name)
+            if fund.postpone_template_path != "":
+                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED")
                 attachment = {
-                    "template_name": settings.TEMPLATES_NOTIFICATIONS[templates_name],
+                    "template_name": f"./{settings.TEMPLATES_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
                     "filename": f"{slugify(content.title)}.pdf",
                     "context_attach": {
                         "project_name": project.name,
@@ -442,13 +441,12 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             managers_emails = []
             if int(request.data["amount_earned"]) == 0:
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_FUND_REJECTION")
-                templates_name = f"NOTIFICATION_{fund.acronym.upper()}_REJECTION"
-                if templates_name in settings.TEMPLATES_NOTIFICATIONS:
+                if fund.rejection_template_path != "":
                     # Creating context for notifications attachments
-                    content = Content.objects.get(code=templates_name)
+                    content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION")
                     attachments.append(
                         {
-                            "template_name": settings.TEMPLATES_NOTIFICATIONS[templates_name],
+                            "template_name": f"./{settings.TEMPLATES_NOTIFICATIONS_FOLDER}/{fund.rejection_template_path}",
                             "filename": f"{slugify(content.title)}.pdf",
                             "context_attach": {
                                 "project_name": project.name,
@@ -467,16 +465,16 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
             else:
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_FUND_CONFIRMATION")
-                for templates_name in [
-                    f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION",
-                    f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION",
-                ]:
-                    if templates_name in settings.TEMPLATES_NOTIFICATIONS:
+                for template_path, template_name in {
+                    fund.decision_attribution_template_path: f"NOTIFICATION_{fund.acronym.upper()}_DECISION_ATTRIBUTION",
+                    fund.attribution_template_path: f"NOTIFICATION_{fund.acronym.upper()}_ATTRIBUTION",
+                }.items():
+                    if template_path != "":
                         # Creating context for notifications attachments
-                        content = Content.objects.get(code=templates_name)
+                        content = Content.objects.get(code=template_name)
                         attachments.append(
                             {
-                                "template_name": settings.TEMPLATES_NOTIFICATIONS[templates_name],
+                                "template_name": f"./{settings.TEMPLATES_NOTIFICATIONS_FOLDER}/{template_path}",
                                 "filename": f"{slugify(content.title)}.pdf",
                                 "context_attach": {
                                     "amount_earned": request.data["amount_earned"],

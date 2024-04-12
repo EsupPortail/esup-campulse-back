@@ -65,15 +65,16 @@ def send_mail(
     # Attachments for generated files
     if temp_attachments is not None:
         for temp_attachment in temp_attachments:
-            mail.attach(
-                temp_attachment["filename"],
-                create_pdf(
-                    temp_attachment["context_attach"],
-                    temp_attachment["request"],
-                    temp_attachment["template_name"],
-                ),
-                temp_attachment["mimetype"],
-            )
+            if temp_attachment is not None:
+                mail.attach(
+                    temp_attachment["filename"],
+                    create_pdf(
+                        temp_attachment["context_attach"],
+                        temp_attachment["request"],
+                        temp_attachment["template_name"],
+                    ),
+                    temp_attachment["mimetype"],
+                )
 
     logger = logging.getLogger(__name__)
     try:

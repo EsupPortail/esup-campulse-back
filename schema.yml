@@ -4169,6 +4169,26 @@ components:
         is_site:
           type: boolean
           title: Est site
+        decision_attribution_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de décision d'attribution
+          maxLength: 250
+        attribution_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template d'attribution
+          maxLength: 250
+        rejection_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de rejet
+          maxLength: 250
+        postpone_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de report
+          maxLength: 250
         institution:
           type: integer
           title: Établissement
