@@ -642,6 +642,7 @@ TEMPLATES_PDF = {
 
 # Notifications pdf templates used as mail attachments.
 # Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
+"""
 TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
     "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
@@ -654,6 +655,7 @@ TEMPLATES_NOTIFICATIONS = {
     "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
     "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
 }
+"""
 
 
 ########
