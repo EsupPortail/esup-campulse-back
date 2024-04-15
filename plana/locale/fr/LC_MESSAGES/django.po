@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-12 15:55+0200\n"
+"POT-Creation-Date: 2024-04-15 15:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,10 +92,10 @@ msgstr "Pays"
 
 #: plana/apps/associations/models/association.py:54
 #: plana/apps/users/models/user.py:108
-#: plana/templates/pdf_exports/project_review_summary.html:109
-#: plana/templates/pdf_exports/project_review_summary.html:123
-#: plana/templates/pdf_exports/project_summary.html:100
-#: plana/templates/pdf_exports/project_summary.html:114
+#: plana/templates/pdf/exports/project_review_summary.html:109
+#: plana/templates/pdf/exports/project_review_summary.html:123
+#: plana/templates/pdf/exports/project_summary.html:100
+#: plana/templates/pdf/exports/project_summary.html:114
 msgid "Phone"
 msgstr "Téléphone"
 
@@ -428,8 +428,8 @@ msgid "Project name"
 msgstr "Nom du projet"
 
 #: plana/apps/commissions/views/commission_export.py:117
-#: plana/templates/pdf_exports/project_review_summary.html:64
-#: plana/templates/pdf_exports/project_summary.html:55
+#: plana/templates/pdf/exports/project_review_summary.html:64
+#: plana/templates/pdf/exports/project_summary.html:55
 msgid "Association name"
 msgstr "Nom de l'association"
 
@@ -1022,7 +1022,7 @@ msgid "Planned prevention and safety actions"
 msgstr "Actions de prévention et de sécurité prévues"
 
 #: plana/apps/projects/models/project.py:161
-#: plana/templates/pdf_exports/project_summary.html:227
+#: plana/templates/pdf/exports/project_summary.html:227
 msgid "Marketing campaign"
 msgstr "Campagne de communication"
 
@@ -1041,12 +1041,12 @@ msgid "Processing date"
 msgstr "Date de dépôt de projet"
 
 #: plana/apps/projects/models/project.py:172
-#: plana/templates/pdf_exports/project_review_summary.html:53
+#: plana/templates/pdf/exports/project_review_summary.html:53
 msgid "Outcome"
 msgstr "Dépenses"
 
 #: plana/apps/projects/models/project.py:173
-#: plana/templates/pdf_exports/project_review_summary.html:55
+#: plana/templates/pdf/exports/project_review_summary.html:55
 msgid "Income"
 msgstr "Recettes"
 
@@ -1124,8 +1124,8 @@ msgid "Amount earned on previous edition"
 msgstr "Montant obtenu à l'édition précédente"
 
 #: plana/apps/projects/models/project_commission_fund.py:25
-#: plana/templates/pdf_exports/project_review_summary.html:41
-#: plana/templates/pdf_exports/project_summary.html:29
+#: plana/templates/pdf/exports/project_review_summary.html:41
+#: plana/templates/pdf/exports/project_summary.html:29
 msgid "Amount asked"
 msgstr "Montant demandé"
 
@@ -1458,12 +1458,12 @@ msgstr "Vue non définie, passez-là dans une variable de contexte"
 msgid "CAS server doesn't validate the ticket"
 msgstr "Le serveur CAS n'a pas validé le ticket"
 
-#: plana/apps/users/serializers/cas.py:89
+#: plana/apps/users/serializers/cas.py:93
 #, python-brace-format
 msgid "{value} is not a valid service"
 msgstr "{value} n'est pas un service valide"
 
-#: plana/apps/users/serializers/cas.py:117
+#: plana/apps/users/serializers/cas.py:121
 #: plana/apps/users/tests/serializers/test_cas.py:48
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
@@ -1904,220 +1904,220 @@ msgstr "Page non trouvée"
 msgid "Error"
 msgstr "Erreur"
 
-#: plana/templates/pdf_exports/commission_projects_list.html:6
-#: plana/templates/pdf_exports/commission_projects_list.html:24
+#: plana/templates/pdf/exports/commission_projects_list.html:6
+#: plana/templates/pdf/exports/commission_projects_list.html:24
 msgid "Commission project list"
 msgstr "Liste des projets de la commission"
 
-#: plana/templates/pdf_exports/project_review_summary.html:18
-#: plana/templates/pdf_exports/project_review_summary.html:37
-#: plana/templates/pdf_exports/project_summary.html:21
+#: plana/templates/pdf/exports/project_review_summary.html:18
+#: plana/templates/pdf/exports/project_review_summary.html:37
+#: plana/templates/pdf/exports/project_summary.html:21
 msgid "Case number"
 msgstr "Numéro de dossier"
 
-#: plana/templates/pdf_exports/project_review_summary.html:21
-#: plana/templates/pdf_exports/project_summary.html:41
+#: plana/templates/pdf/exports/project_review_summary.html:21
+#: plana/templates/pdf/exports/project_summary.html:41
 msgid "Student project assistance commitee"
 msgstr "Commission d'aide aux projets étudiants"
 
-#: plana/templates/pdf_exports/project_review_summary.html:21
+#: plana/templates/pdf/exports/project_review_summary.html:21
 msgid "Summary of moral and financial report"
 msgstr "Résumé du bilan moral et financier"
 
-#: plana/templates/pdf_exports/project_review_summary.html:27
-#: plana/templates/pdf_exports/project_summary.html:44
+#: plana/templates/pdf/exports/project_review_summary.html:27
+#: plana/templates/pdf/exports/project_summary.html:44
 msgid "Associative project"
 msgstr "Projet associatif"
 
-#: plana/templates/pdf_exports/project_review_summary.html:30
-#: plana/templates/pdf_exports/project_summary.html:47
+#: plana/templates/pdf/exports/project_review_summary.html:30
+#: plana/templates/pdf/exports/project_summary.html:47
 msgid "Individual holder project"
 msgstr "Projet porteur individuel"
 
-#: plana/templates/pdf_exports/project_review_summary.html:35
-#: plana/templates/pdf_exports/project_summary.html:19
+#: plana/templates/pdf/exports/project_review_summary.html:35
+#: plana/templates/pdf/exports/project_summary.html:19
 msgid "SPAC date"
 msgstr "Date de la CAPE"
 
-#: plana/templates/pdf_exports/project_review_summary.html:47
-#: plana/templates/pdf_exports/project_summary.html:35
+#: plana/templates/pdf/exports/project_review_summary.html:47
+#: plana/templates/pdf/exports/project_summary.html:35
 msgid "Amount granted"
 msgstr "Montant alloué"
 
-#: plana/templates/pdf_exports/project_review_summary.html:64
-#: plana/templates/pdf_exports/project_summary.html:55
+#: plana/templates/pdf/exports/project_review_summary.html:64
+#: plana/templates/pdf/exports/project_summary.html:55
 msgid "Individual holder name"
 msgstr "Nom du porteur individuel"
 
-#: plana/templates/pdf_exports/project_review_summary.html:69
-#: plana/templates/pdf_exports/project_summary.html:60
+#: plana/templates/pdf/exports/project_review_summary.html:69
+#: plana/templates/pdf/exports/project_summary.html:60
 msgid "Co-holder association name"
 msgstr "Nom de l'association co-porteuse"
 
-#: plana/templates/pdf_exports/project_review_summary.html:74
-#: plana/templates/pdf_exports/project_summary.html:65
+#: plana/templates/pdf/exports/project_review_summary.html:74
+#: plana/templates/pdf/exports/project_summary.html:65
 msgid "Project title"
 msgstr "Intitulé du projet"
 
-#: plana/templates/pdf_exports/project_review_summary.html:78
-#: plana/templates/pdf_exports/project_summary.html:69
+#: plana/templates/pdf/exports/project_review_summary.html:78
+#: plana/templates/pdf/exports/project_summary.html:69
 msgid "Project dates"
 msgstr "Dates du projet"
 
-#: plana/templates/pdf_exports/project_review_summary.html:82
-#: plana/templates/pdf_exports/project_summary.html:73
+#: plana/templates/pdf/exports/project_review_summary.html:82
+#: plana/templates/pdf/exports/project_summary.html:73
 msgid "Project locations"
 msgstr "Lieux du projet"
 
-#: plana/templates/pdf_exports/project_review_summary.html:88
-#: plana/templates/pdf_exports/project_summary.html:79
+#: plana/templates/pdf/exports/project_review_summary.html:88
+#: plana/templates/pdf/exports/project_summary.html:79
 msgid "Association postal address"
 msgstr "Adresse postale de l'association"
 
-#: plana/templates/pdf_exports/project_review_summary.html:88
-#: plana/templates/pdf_exports/project_summary.html:79
+#: plana/templates/pdf/exports/project_review_summary.html:88
+#: plana/templates/pdf/exports/project_summary.html:79
 msgid "Individual holder postal address"
 msgstr "Adresse postale du porteur individuel"
 
-#: plana/templates/pdf_exports/project_review_summary.html:94
-#: plana/templates/pdf_exports/project_summary.html:85
+#: plana/templates/pdf/exports/project_review_summary.html:94
+#: plana/templates/pdf/exports/project_summary.html:85
 msgid "Association phone"
 msgstr "Téléphone de l'association"
 
-#: plana/templates/pdf_exports/project_review_summary.html:94
-#: plana/templates/pdf_exports/project_summary.html:85
+#: plana/templates/pdf/exports/project_review_summary.html:94
+#: plana/templates/pdf/exports/project_summary.html:85
 msgid "Individual holder phone"
 msgstr "Téléphone du porteur individuel"
 
-#: plana/templates/pdf_exports/project_review_summary.html:98
-#: plana/templates/pdf_exports/project_summary.html:89
+#: plana/templates/pdf/exports/project_review_summary.html:98
+#: plana/templates/pdf/exports/project_summary.html:89
 msgid "Association email"
 msgstr "Mail de l'association"
 
-#: plana/templates/pdf_exports/project_review_summary.html:98
-#: plana/templates/pdf_exports/project_summary.html:89
+#: plana/templates/pdf/exports/project_review_summary.html:98
+#: plana/templates/pdf/exports/project_summary.html:89
 msgid "Individual holder email"
 msgstr "Mail du porteur individuel"
 
-#: plana/templates/pdf_exports/project_review_summary.html:105
-#: plana/templates/pdf_exports/project_summary.html:96
+#: plana/templates/pdf/exports/project_review_summary.html:105
+#: plana/templates/pdf/exports/project_summary.html:96
 msgid "Association president name"
 msgstr "Nom de la présidente ou du président de l'association"
 
-#: plana/templates/pdf_exports/project_review_summary.html:113
-#: plana/templates/pdf_exports/project_review_summary.html:127
-#: plana/templates/pdf_exports/project_summary.html:104
-#: plana/templates/pdf_exports/project_summary.html:118
+#: plana/templates/pdf/exports/project_review_summary.html:113
+#: plana/templates/pdf/exports/project_review_summary.html:127
+#: plana/templates/pdf/exports/project_summary.html:104
+#: plana/templates/pdf/exports/project_summary.html:118
 msgid "Mail"
 msgstr "Mail"
 
-#: plana/templates/pdf_exports/project_review_summary.html:119
-#: plana/templates/pdf_exports/project_summary.html:110
+#: plana/templates/pdf/exports/project_review_summary.html:119
+#: plana/templates/pdf/exports/project_summary.html:110
 msgid "Association project holder name"
 msgstr "Nom de la porteuse ou du porteur de projet de l'association"
 
-#: plana/templates/pdf_exports/project_review_summary.html:136
+#: plana/templates/pdf/exports/project_review_summary.html:136
 msgid "Progress of the project"
 msgstr "Déroulement du projet"
 
-#: plana/templates/pdf_exports/project_review_summary.html:140
+#: plana/templates/pdf/exports/project_review_summary.html:140
 msgid "Moral report"
 msgstr "Bilan moral"
 
-#: plana/templates/pdf_exports/project_review_summary.html:145
+#: plana/templates/pdf/exports/project_review_summary.html:145
 msgid "Difficulties encountered"
 msgstr "Difficultés rencontrées"
 
-#: plana/templates/pdf_exports/project_review_summary.html:149
+#: plana/templates/pdf/exports/project_review_summary.html:149
 msgid "Points to improve"
 msgstr "Points à améliorer"
 
-#: plana/templates/pdf_exports/project_review_summary.html:154
+#: plana/templates/pdf/exports/project_review_summary.html:154
 msgid "Spinoffs for students"
 msgstr "Retombées pour les étudiantes et étudiants"
 
-#: plana/templates/pdf_exports/project_review_summary.html:161
-#: plana/templates/pdf_exports/project_summary.html:242
+#: plana/templates/pdf/exports/project_review_summary.html:161
+#: plana/templates/pdf/exports/project_summary.html:242
 msgid "Documents sent"
 msgstr "Documents envoyés"
 
-#: plana/templates/pdf_exports/project_summary.html:25
+#: plana/templates/pdf/exports/project_summary.html:25
 msgid "Filing date"
 msgstr "Date de dépôt"
 
-#: plana/templates/pdf_exports/project_summary.html:41
+#: plana/templates/pdf/exports/project_summary.html:41
 msgid "Summary of grant applications"
 msgstr "Résumé de la demande de subventions"
 
-#: plana/templates/pdf_exports/project_summary.html:127
+#: plana/templates/pdf/exports/project_summary.html:127
 msgid "Project type"
 msgstr "Nature du projet"
 
-#: plana/templates/pdf_exports/project_summary.html:148
+#: plana/templates/pdf/exports/project_summary.html:148
 msgid "First issue"
 msgstr "Première édition"
 
-#: plana/templates/pdf_exports/project_summary.html:151
+#: plana/templates/pdf/exports/project_summary.html:151
 msgid "Reissue"
 msgstr "Réédition"
 
-#: plana/templates/pdf_exports/project_summary.html:157
+#: plana/templates/pdf/exports/project_summary.html:157
 msgid "Grants requested for the previous edition"
 msgstr "Subventions demandées pour l'édition précédente"
 
-#: plana/templates/pdf_exports/project_summary.html:163
+#: plana/templates/pdf/exports/project_summary.html:163
 msgid "Grants earned"
 msgstr "Montants obtenus"
 
-#: plana/templates/pdf_exports/project_summary.html:169
+#: plana/templates/pdf/exports/project_summary.html:169
 msgid "Real project budget (expenses)"
 msgstr "Budget réel du projet (dépenses)"
 
-#: plana/templates/pdf_exports/project_summary.html:179
+#: plana/templates/pdf/exports/project_summary.html:179
 msgid "Target audience for the project"
 msgstr "Public visé par le projet"
 
-#: plana/templates/pdf_exports/project_summary.html:181
+#: plana/templates/pdf/exports/project_summary.html:181
 msgid "Targeted audience type"
 msgstr "Type de public visé"
 
-#: plana/templates/pdf_exports/project_summary.html:186
+#: plana/templates/pdf/exports/project_summary.html:186
 msgid "Number of people targeted"
 msgstr "Nombre de personnes visées"
 
-#: plana/templates/pdf_exports/project_summary.html:190
+#: plana/templates/pdf/exports/project_summary.html:190
 msgid "Including students"
 msgstr "Dont étudiantes et étudiants"
 
-#: plana/templates/pdf_exports/project_summary.html:197
+#: plana/templates/pdf/exports/project_summary.html:197
 msgid "Participation per person"
 msgstr "Participation par personne"
 
-#: plana/templates/pdf_exports/project_summary.html:201
+#: plana/templates/pdf/exports/project_summary.html:201
 msgid "Special student rate"
 msgstr "Tarif préférentiel pour étudiante ou étudiant"
 
-#: plana/templates/pdf_exports/project_summary.html:206
+#: plana/templates/pdf/exports/project_summary.html:206
 msgid "Cost per person"
 msgstr "Coût par personne"
 
-#: plana/templates/pdf_exports/project_summary.html:215
+#: plana/templates/pdf/exports/project_summary.html:215
 msgid "Aims of the project"
 msgstr "Objectifs visés par le projet"
 
-#: plana/templates/pdf_exports/project_summary.html:219
+#: plana/templates/pdf/exports/project_summary.html:219
 msgid "Summary of the project"
 msgstr "Résumé du projet"
 
-#: plana/templates/pdf_exports/project_summary.html:223
+#: plana/templates/pdf/exports/project_summary.html:223
 msgid "Prevention and safety programme"
 msgstr "Programme de prévention et de sécurité"
 
-#: plana/templates/pdf_exports/project_summary.html:231
+#: plana/templates/pdf/exports/project_summary.html:231
 msgid "Programme of planned activities"
 msgstr "Programme des activités prévues"
 
-#: plana/templates/pdf_exports/project_summary.html:235
+#: plana/templates/pdf/exports/project_summary.html:235
 msgid "Actions relating to sustainable development and social responsibility"
 msgstr ""
 "Actions en rapport avec le DDRS (Développement Durable et Responsabilité "

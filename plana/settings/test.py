@@ -66,15 +66,11 @@ CAS_INSTITUTION_ID = int("{{ cas_institution_id }}")  # 2
 CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # ["https://plana-test.app.unistra.fr/cas-login", "https://plana-test.app.unistra.fr/cas-register"]
 
-CAS_ATTRIBUTES_NAMES = {
-    "email": "{{ cas_attribute_email }}",  # mail
-    "first_name": "{{ cas_attribute_first_name }}",  # first_name
-    "last_name": "{{ cas_attribute_last_name }}",  # last_name
-    "is_student": "{{ cas_attribute_is_student }}",  # affiliation
-}
-CAS_ATTRIBUTES_VALUES = {
-    "is_student": "{{ cas_value_is_student }}",  # student
-}
+CAS_ATTRIBUTES_NAMES["email"] = "{{ cas_attribute_email }}"  # mail
+CAS_ATTRIBUTES_NAMES["first_name"] = "{{ cas_attribute_first_name }}"  # first_name
+CAS_ATTRIBUTES_NAMES["last_name"] = "{{ cas_attribute_last_name }}"  # last_name
+CAS_ATTRIBUTES_NAMES["is_student"] = "{{ cas_attribute_is_student }}"  # affiliation
+CAS_ATTRIBUTES_VALUES["is_student"] = "{{ cas_value_is_student }}"  # student
 
 ##########
 # Emails #
