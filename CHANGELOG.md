@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 (Q1 2024)
+## 1.1.0 (Q2 2024)
 
 ### Fonctionnalités
 
@@ -9,11 +9,16 @@
 ### Changements critiques
 
 - Permissions `view_project*_any_commission` renommées en `view_project*_any_fund`.
+- Variables de personnalisation usuelles désormais chargées dynamiquement via le Fabfile dans les configurations de déploiement.
+- Changement du mode de rendu des templates de notifications PDF envoyées dans les mails :
+  - Suppression de la variable `TEMPLATES_NOTIFICATIONS`.
+  - Nouveaux champs `*_template_path` dans le modèle `Fund` (migration nécessaire).
 
 ### Corrections de bugs
 
 - Correction des droits accordés à la délégation de présidence si une seule date est donnée.
 - Correction des droits d'accès à un projet par un gestionnaire.
+- Correction du non-envoi de mail de report de projet si aucun template n'est défini.
 - Correction du bug d'affichage des blocs de texte sur le PDF de récap de bilan de projet.
 - Champs NULL autorisés sur la table Content.
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.
@@ -24,6 +29,8 @@
 
 - Changement du mode de rendu des URLs des logos du pied de page et des associations.
 - Modification des templates de mails relatifs à l'envoi d'un bilan de projet.
+- Ajout du paramètre LDAP_ENABLED pour activer ou non l'ajout de compte via LDAP.
+- Ressources statiques chargées par la documentation Swagger autorisées dans la Content-Security-Policy.
 
 ## 1.0.0 (16 Novembre 2023)
 
