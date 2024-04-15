@@ -51,7 +51,7 @@ class AccountExpirationCommandTest(TestCase):
     def test_account_without_connection_expiration_mail(self):
         """User without login should be warned."""
         self.user.date_joined = timezone.now() - datetime.timedelta(
-            days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+            days=int(settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING)
         )
         self.user.save()
         call_command('cron_account_expiration')
@@ -61,7 +61,7 @@ class AccountExpirationCommandTest(TestCase):
     def test_account_without_recent_connection_expiration_mail(self):
         """User without recent login should be warned."""
         self.user.last_login = timezone.now() - datetime.timedelta(
-            days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+            days=int(settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING)
         )
         self.user.save()
         call_command('cron_account_expiration')
@@ -103,7 +103,7 @@ class AssociationExpirationCommandTest(TestCase):
         """An email is sent if charter expires in WARNING days."""
         self.associations.update(
             charter_date=(
-                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING)
+                self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING))
             )
         )
         call_command("cron_association_expiration")
@@ -113,7 +113,7 @@ class AssociationExpirationCommandTest(TestCase):
         """Nothing should change if charter expires in WARNING - 1 days."""
         self.associations.update(
             charter_date=(
-                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING - 1)
+                self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING) - 1)
             )
         )
         call_command("cron_association_expiration")
@@ -123,7 +123,7 @@ class AssociationExpirationCommandTest(TestCase):
         """Association charter status expires today."""
         self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
         self.associations.update(
-            charter_date=(self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION))
+            charter_date=(self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION)))
         )
         call_command("cron_association_expiration")
         self.assertEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
@@ -224,7 +224,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING)
+                    days=(self.days_before_expiration - int(settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING))
                 )
             )
         )
@@ -237,7 +237,7 @@ class DocumentExpirationCommandTest(TestCase):
             validated_date=(
                 self.today
                 - datetime.timedelta(
-                    days=(self.days_before_expiration - settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING - 1)
+                    days=(self.days_before_expiration - int(settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING) - 1)
                 )
             )
         )
@@ -334,7 +334,7 @@ class PasswordExpirationCommandTest(TestCase):
         """An email is sent if password is WARNING months old."""
         self.users.update(
             password_last_change_date=(
-                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING)
+                self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING))
             )
         )
         call_command("cron_password_expiration")
@@ -344,7 +344,7 @@ class PasswordExpirationCommandTest(TestCase):
         """Nothing should change if password is WARNING + 1 months old."""
         self.users.update(
             password_last_change_date=(
-                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING + 1)
+                self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING) + 1)
             )
         )
         call_command("cron_password_expiration")
@@ -354,7 +354,7 @@ class PasswordExpirationCommandTest(TestCase):
         """An email is sent if password is EXPIRATION months old."""
         self.users.update(
             password_last_change_date=(
-                self.today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION)
+                self.today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION))
             )
         )
         call_command("cron_password_expiration")
@@ -436,7 +436,7 @@ class ReviewExpirationCommandTest(TestCase):
         today = datetime.date.today()
         mail_sending_due_date = timezone.make_aware(
             datetime.datetime.combine(
-                today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_REVIEW_EXPIRATION),
+                today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_REVIEW_EXPIRATION)),
                 datetime.datetime.min.time(),
             )
         )

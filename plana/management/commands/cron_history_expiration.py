@@ -16,7 +16,8 @@ class Command(BaseCommand):
             expired_history = History.objects.filter(
                 creation_date__lt=(
                     timezone.make_aware(
-                        datetime.datetime.now() - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_HISTORY_EXPIRATION)
+                        datetime.datetime.now()
+                        - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_HISTORY_EXPIRATION))
                     )
                 )
             )

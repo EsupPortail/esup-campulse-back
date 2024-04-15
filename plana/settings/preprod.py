@@ -59,8 +59,8 @@ sentry_init(STAGE)
 
 CAS_NAME = "{{ cas_name }}"
 CAS_SERVER = "{{ cas_server }}"  # "https://cas-pprd.unistra.fr/cas/"
-CAS_VERSION = int("{{ cas_version }}")
-CAS_INSTITUTION_ID = int("{{ cas_institution_id }}")
+CAS_VERSION = "{{ cas_version }}"
+CAS_INSTITUTION_ID = "{{ cas_institution_id }}"
 CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # ["https://plana-pprd.app.unistra.fr/cas-login", "https://plana-pprd.app.unistra.fr/cas-register"]
 
@@ -97,15 +97,15 @@ AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 # CRON #
 ########
 
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = int("{{ cron_days_before_account_expiration_warning }}")
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = int("{{ cron_days_before_account_expiration }}")
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = int("{{ cron_days_before_password_expiration_warning }}")
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = int("{{ cron_days_before_password_expiration }}")
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = int("{{ cron_days_before_association_expiration_warning }}")
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = int("{{ cron_days_before_association_expiration }}")
-CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING = int("{{ cron_days_before_document_expiration_warning }}")
-CRON_DAYS_BEFORE_REVIEW_EXPIRATION = int("{{ cron_days_before_review_expiration }}")
-CRON_DAYS_BEFORE_HISTORY_EXPIRATION = int("{{ cron_days_before_history_expiration }}")
+CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = "{{ cron_days_before_account_expiration_warning }}"
+CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = "{{ cron_days_before_account_expiration }}"
+CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = "{{ cron_days_before_password_expiration_warning }}"
+CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = "{{ cron_days_before_password_expiration }}"
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = "{{ cron_days_before_association_expiration_warning }}"
+CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = "{{ cron_days_before_association_expiration }}"
+CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING = "{{ cron_days_before_document_expiration_warning }}"
+CRON_DAYS_BEFORE_REVIEW_EXPIRATION = "{{ cron_days_before_review_expiration }}"
+CRON_DAYS_BEFORE_HISTORY_EXPIRATION = "{{ cron_days_before_history_expiration }}"
 
 
 ########
@@ -120,16 +120,16 @@ APP_DOCUMENTATION_URL = "{{ app_documentation_url }}"
 
 ASSOCIATION_IS_SITE_DEFAULT = "{{ association_is_site_default }}".lower() == "true"
 
-ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = int("{{ association_default_amount_members_allowed }}")
+ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = "{{ association_default_amount_members_allowed }}"
 
-NEW_YEAR_MONTH_INDEX = int("{{ new_year_month_index }}")
+NEW_YEAR_MONTH_INDEX = "{{ new_year_month_index }}"
 
 RESTRICTED_DOMAINS = "{{ restricted_domains }}".split()
 
 LDAP_ENABLED = "{{ ldap_enabled }}".lower() == "true"
 
-AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = int("{{ amount_years_before_project_invisibility }}")
-AMOUNT_YEARS_BEFORE_PROJECT_DELETION = int("{{ amount_years_before_project_deletion }}")
+AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = "{{ amount_years_before_project_invisibility }}"
+AMOUNT_YEARS_BEFORE_PROJECT_DELETION = "{{ amount_years_before_project_deletion }}"
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"

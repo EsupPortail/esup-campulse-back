@@ -63,7 +63,7 @@ class Association(models.Model):
     is_site = models.BooleanField(_("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT)
     amount_members_allowed = models.PositiveIntegerField(
         _("Amount of members allowed"),
-        default=settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED,
+        default=int(settings.ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED),
     )
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     charter_status = models.CharField(

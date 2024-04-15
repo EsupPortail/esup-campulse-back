@@ -19,7 +19,7 @@ class VisibleProjectManager(models.Manager):
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
                 ) > project.edition_date + datetime.timedelta(
-                    days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY))
+                    days=(365 * int(int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY)))
                 ):
                     invisible_projects_ids.append(project.id)
             queryset = queryset.exclude(id__in=invisible_projects_ids)
