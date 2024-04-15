@@ -21,7 +21,7 @@ L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l
 ## Spécificités des templates PDF
 
 Les templates PDF sont ceux utilisés par Django, ils utilisent donc jinja2 et des templatetags.
-Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données comme dans le modèle d'exemple mis à disposition : `templates/notifications/example/example.html`. C'est à dire en important les données avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
+Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données comme dans les modèles d'exemples mis à disposition : `templates/notifications/**/*.html`. C'est à dire en important les données avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
 
 ## Stockage des textes de contenus
 
@@ -44,7 +44,6 @@ Communes à tous les contenus :
 
 Variables spécifiques à certains contenus uniquement : 
 - `amount_earned` : Uniquement pour les notifications d'attribution, montant alloué au projet par le fonds désigné. (int)
-- `amount_earned_litteral` : Uniquement pour les notifications d'attribution, montant alloué au projet par le fonds désigné, en toutes lettres (langue définie selon la locale système). (string)
 - `comment` : Uniquement pour les notifications de refus et de report, dernier commentaire laissé sur le projet, sensé indiquer pourquoi un report ou un refus a été décidé. (string)
 
 ## Format des contenus
