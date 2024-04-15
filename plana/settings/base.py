@@ -512,7 +512,16 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
-ACCOUNT_USERNAME_BLACKLIST = ["admin", "unistra", "plana", "plan-a", "plan_a"]
+ACCOUNT_USERNAME_BLACKLIST = [
+    "admin",
+    "unistra",
+    "plana",
+    "plan-a",
+    "plan_a",
+    "campulse",
+    "etu-campulse",
+    "campulse-etu",
+]
 
 SOCIALACCOUNT_ADAPTER = "plana.apps.users.adapter.SocialAccountAdapter"
 SOCIALACCOUNT_EMAIL_VERIFICATION = False
@@ -628,34 +637,16 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 # Templates folders #
 #####################
 
-# Names of the folders where templates are stored (used to store multiple templates, like themes).
-TEMPLATES_PDF_FOLDER = "pdf_exports"
-TEMPLATES_NOTIFICATIONS_FOLDER = "notifications"
+# Names of the folders where templates are stored (used to store PDF exports and notifications).
+TEMPLATES_PDF_EXPORTS_FOLDER = "pdf/exports"
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "pdf/notifications"
 
-# Generic PDF templates.
 TEMPLATES_PDF = {
-    "association_charter_summary": f"./{TEMPLATES_PDF_FOLDER}/association_charter_summary.html",
-    "commission_projects_list": f"./{TEMPLATES_PDF_FOLDER}/commission_projects_list.html",
-    "project_summary": f"./{TEMPLATES_PDF_FOLDER}/project_summary.html",
-    "project_review_summary": f"./{TEMPLATES_PDF_FOLDER}/project_review_summary.html",
+    "association_charter_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
 }
-
-# Notifications pdf templates used as mail attachments.
-# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
-"""
-TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
-    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
-    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
-    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
-    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
-    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/rejection.html",
-    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/rejection.html",
-    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
-    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
-    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
-}
-"""
 
 
 ########
