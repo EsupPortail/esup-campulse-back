@@ -30,6 +30,7 @@
 - Changement du mode de rendu des URLs des logos du pied de page et des associations.
 - Modification des templates de mails relatifs à l'envoi d'un bilan de projet.
 - Ajout du paramètre LDAP_ENABLED pour activer ou non l'ajout de compte via LDAP.
+- Ajout des paramètres CAS_ATTRIBUTES_NAMES et CAS_ATTRIBUTES_VALUES pour gérer le mapping entre BDD et CAS.
 - Ressources statiques chargées par la documentation Swagger autorisées dans la Content-Security-Policy.
 
 ## 1.0.0 (16 Novembre 2023)
