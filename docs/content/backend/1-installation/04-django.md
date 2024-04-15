@@ -12,6 +12,8 @@ Plusieurs variables permettent d'intégrer le serveur CAS pour authentifier des 
 - `CAS_SERVER` : URL du serveur CAS.
 - `CAS_VERSION` : version du service CAS.
 - `CAS_AUTHORIZED_SERVICES` : URLs des clients frontend autorisées à communiquer avec le serveur pour valider les tickets.
+- `CAS_ATTRIBUTES_NAMES`: clés-valeurs des champs de la table User correspondant aux noms des champs envoyés par CAS.
+- `CAS_ATTRIBUTES_VALUES`: clés-valeurs des champs de la table User correspondant aux valeurs des champs envoyés par CAS.
 
 ## Stockage
 

@@ -500,6 +500,18 @@ CAS_VERSION = 3
 CAS_INSTITUTION_ID = 2
 CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
+# Keys are User model fields, values are CAS fields.
+CAS_ATTRIBUTES_NAMES = {
+    "email": "mail",
+    "first_name": "first_name",
+    "last_name": "last_name",
+    "is_student": "affiliation",
+}
+# Keys are User model fields, values are CAS values waited for those model fields.
+CAS_ATTRIBUTES_VALUES = {
+    "is_student": "student",
+}
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
