@@ -68,7 +68,7 @@ def send_mail(
             if temp_attachment is not None:
                 mail.attach(
                     temp_attachment["filename"],
-                    create_pdf(
+                    generate_pdf_binary(
                         temp_attachment["context_attach"],
                         temp_attachment["request"],
                         temp_attachment["template_name"],
@@ -106,17 +106,17 @@ def valid_date_format(date):
     return True
 
 
-def generate_pdf(filename, dict_data, type_doc, base_url):
-    """Generate a PDF file depending on the process."""
+def generate_pdf_response(filename, dict_data, type_doc, base_url):
+    """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
     html = render_to_string(settings.TEMPLATES_PDF[type_doc], dict_data)
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
-    weasyprint.HTML(string=html, base_url=base_url).write_pdf(response)
-    return response
+    pdf_response = HttpResponse(content_type="application/pdf")
+    pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
+    weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
+    return pdf_response
 
 
-def create_pdf(context, request, template_name):
-    """Create a PDF file."""
+def generate_pdf_binary(context, request, template_name):
+    """Generate a PDF file as a binary (used for all PDF notifications attached in emails)."""
     template = get_template(template_name)
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
