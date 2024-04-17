@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-15 15:13+0200\n"
+"POT-Creation-Date: 2024-04-17 11:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2123,7 +2123,7 @@ msgstr ""
 "Actions en rapport avec le DDRS (Développement Durable et Responsabilité "
 "Sociétale)"
 
-#: plana/utils.py:23
+#: plana/utils.py:25
 msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "

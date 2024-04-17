@@ -10,9 +10,10 @@
 
 - Permissions `view_project*_any_commission` renommées en `view_project*_any_fund`.
 - Variables de personnalisation usuelles désormais chargées dynamiquement via le Fabfile dans les configurations de déploiement.
-- Changement du mode de rendu des templates de notifications PDF envoyées dans les mails :
+- Changement du mode de rendu des templates PDF :
   - Suppression de la variable `TEMPLATES_NOTIFICATIONS`.
   - Nouveaux champs `*_template_path` dans le modèle `Fund` (migration nécessaire).
+  - Stockage des templates et de leurs fichiers statiques dans un dépôt séparé sur S3.
 
 ### Corrections de bugs
 

@@ -4,10 +4,12 @@ import ast
 import datetime
 import logging
 
+import boto3
 import weasyprint
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
+from django.template import Context, Template
 from django.template.loader import get_template, render_to_string
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -106,9 +108,28 @@ def valid_date_format(date):
     return True
 
 
+def get_s3_client():
+    return boto3.client(
+        "s3",
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+    )
+
+
 def generate_pdf_response(filename, dict_data, type_doc, base_url):
     """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
-    html = render_to_string(settings.TEMPLATES_PDF_FULL_PATHS[type_doc], dict_data)
+    if settings.USE_S3 == True:
+        s3 = get_s3_client()
+        data = s3.get_object(
+            Bucket=settings.S3_STATIC_FILES_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc]
+        )
+        template = Template(data['Body'].read().decode('utf-8'))
+        context = Context(dict_data)
+        html = template.render(context)
+    else:
+        # TODO Case not working since S3 PDF refactoring.
+        html = render_to_string(settings.TEMPLATES_PDF_FILEPATHS[type_doc], dict_data)
     pdf_response = HttpResponse(content_type="application/pdf")
     pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
@@ -117,7 +138,14 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
 
 def generate_pdf_binary(context, request, template_name):
     """Generate a PDF file as a binary (used for all PDF notifications attached in emails)."""
-    template = get_template(template_name)
+    if settings.USE_S3 == True:
+        s3 = get_s3_client()
+        data = s3.get_object(Bucket=settings.S3_STATIC_FILES_BUCKET_NAME, Key=template_name)
+        template = Template(data['Body'].read().decode('utf-8'))
+        context = Context(context)
+    else:
+        # TODO Case not working since S3 PDF refactoring.
+        template = get_template(template_name)
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
     return pdf_binary

@@ -16,12 +16,16 @@ Nous avons ainsi 4 types de notifications, formatés comme suit :
 - `NOTIFICATION_{FUND_ACRONYM}_PROJECT_POSTPONED` : Document informant les concernés que leur demande de subventionnement a été reportée à une commission future pour leur projet par le fonds désigné.
 
 Ces différents types de notifications sont configurables dans les paramètres du projet afin d'en personnaliser les intitulés en fonction des différents fonds gérés par l'application.
+
 L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l'acronyme en base de données du fonds concerné en majuscules.
 
 ## Spécificités des templates PDF
 
-Les templates PDF sont ceux utilisés par Django, ils utilisent donc jinja2 et des templatetags.
-Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données comme dans les modèles d'exemples mis à disposition : `templates/notifications/**/*.html`. C'est à dire en important les données avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
+Les templates PDF sont ceux utilisés par Django, ils utilisent donc jinja2 et des templatetags. Si S3 est activé, ils doivent être hébergés sur un dépôt distant.
+
+Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données comme dans les modèles d'exemples mis à disposition : `templates/pdf/notifications/**/*.html`. C'est à dire en important les données avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
+
+Pour rendre le template compatible avec S3, modifier les champs `{% load static %}` en `{% load plana_tags %}` et les appels à `{% static NOM_DU_FICHIER %}` par `{% s3static NOM_DU_FICHIER %}`.
 
 ## Stockage des textes de contenus
 
