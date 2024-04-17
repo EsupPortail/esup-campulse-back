@@ -435,10 +435,10 @@ AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
-LOGOS_FILEPATH = "logos"
-ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
-TEMPLATES_FILEPATH = "associations_documents_templates"
-DOCUMENTS_FILEPATH = "associations_documents"
+S3_LOGOS_FILEPATH = "logos"
+S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
+S3_TEMPLATES_FILEPATH = "associations_documents_templates"
+S3_DOCUMENTS_FILEPATH = "associations_documents"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
 AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
@@ -650,14 +650,14 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 #####################
 
 # Names of the folders where templates are stored (used to store PDF exports and notifications).
-TEMPLATES_PDF_EXPORTS_FOLDER = "pdf/exports"
-TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "pdf/notifications"
+TEMPLATES_PDF_EXPORTS_FOLDER = "./pdf/exports"
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "./pdf/notifications"
 
 TEMPLATES_PDF = {
-    "association_charter_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
-    "commission_projects_list": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
-    "project_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
-    "project_review_summary": f"./{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
+    "association_charter_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
 }
 
 

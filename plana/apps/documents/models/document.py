@@ -22,7 +22,7 @@ def get_template_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.TEMPLATES_FILEPATH if hasattr(settings, 'TEMPLATES_FILEPATH') else '',
+            settings.S3_TEMPLATES_FILEPATH if hasattr(settings, 'TEMPLATES_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
