@@ -651,7 +651,7 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 
 # S3 configuration for PDF templates (used to store PDF exports and notifications).
 UNIVERSITY_NAME = "strasbourg"
-S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{UNIVERSITY_NAME}-plana-local-back/"
+S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{UNIVERSITY_NAME}-plana-local-back"
 TEMPLATES_PDF_EXPORTS_FOLDER = "./pdf/exports"
 TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "./pdf/notifications"
 

@@ -93,7 +93,7 @@ AWS_STORAGE_BUCKET_NAME = "{{ s3_bucket }}"
 AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 
 UNIVERSITY_NAME = "{{ university_name }}"
-S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{UNIVERSITY_NAME}-plana-preprod-back/"
+S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{UNIVERSITY_NAME}-plana-preprod-back"
 
 
 ########
