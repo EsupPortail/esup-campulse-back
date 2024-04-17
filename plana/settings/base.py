@@ -645,15 +645,17 @@ CRON_DAYS_BEFORE_REVIEW_EXPIRATION = 30
 CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 
 
-#####################
-# Templates folders #
-#####################
+#################
+# PDF Templates #
+#################
 
-# Names of the folders where templates are stored (used to store PDF exports and notifications).
+# S3 configuration for PDF templates (used to store PDF exports and notifications).
+UNIVERSITY_NAME = "strasbourg"
+S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{UNIVERSITY_NAME}-plana-local-back/"
 TEMPLATES_PDF_EXPORTS_FOLDER = "./pdf/exports"
 TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "./pdf/notifications"
 
-TEMPLATES_PDF = {
+TEMPLATES_PDF_FULL_PATHS = {
     "association_charter_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
     "commission_projects_list": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
     "project_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",

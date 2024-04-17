@@ -108,7 +108,7 @@ def valid_date_format(date):
 
 def generate_pdf_response(filename, dict_data, type_doc, base_url):
     """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
-    html = render_to_string(settings.TEMPLATES_PDF[type_doc], dict_data)
+    html = render_to_string(settings.TEMPLATES_PDF_FULL_PATHS[type_doc], dict_data)
     pdf_response = HttpResponse(content_type="application/pdf")
     pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
