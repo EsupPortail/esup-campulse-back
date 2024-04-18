@@ -19,7 +19,7 @@ def get_logo_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.S3_LOGOS_FILEPATH if hasattr(settings, 'LOGOS_FILEPATH') else '',
+            settings.S3_LOGOS_FILEPATH if hasattr(settings, 'S3_LOGOS_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )
