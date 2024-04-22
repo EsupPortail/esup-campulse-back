@@ -3,7 +3,8 @@ title: Variables Django
 weight: 104
 ---
 
-Les fichiers situés dans `plana/settings` comportent des variables paramétrant le comportement de l'application selon l'environnement utilisé.
+Les fichiers situés dans `plana/settings` comportent des variables paramétrant le comportement de l'application selon l'environnement utilisé.  
+Certaines de ces variables doivent être paramétrées différemment pour le déploiement distant (voir section `Personnalisation`).
 
 ## Authentification via CAS
 
