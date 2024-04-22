@@ -21,7 +21,9 @@ class Command(BaseCommand):
                     endpoint_url=settings.AWS_S3_ENDPOINT_URL,
                 )
                 bucket = resource.Bucket(bucket_name)
-                bucket.objects.all().delete()
+                for s3_object in bucket.objects.all():
+                    if not s3_object.key.startswith(settings.S3_PDF_FILEPATH):
+                        s3_object.delete()
 
                 self.stdout.write(self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned.")))
             else:
