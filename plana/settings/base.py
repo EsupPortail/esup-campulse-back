@@ -650,17 +650,15 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 #################
 
 # S3 configuration for PDF templates (used to store PDF exports and notifications).
-UNIVERSITY_NAME = "strasbourg"
-S3_STATIC_FILES_BUCKET_NAME = f"{UNIVERSITY_NAME}-plana-local-back"
-S3_TEMPLATES_PDF_FILEPATH = f"{AWS_S3_ENDPOINT_URL}/{S3_STATIC_FILES_BUCKET_NAME}"
-TEMPLATES_PDF_EXPORTS_FOLDER = "pdf/exports"
-TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "pdf/notifications"
+S3_PDF_FILEPATH = "pdf"
+TEMPLATES_PDF_EXPORTS_FOLDER = "templates/exports"
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "templates/notifications"
 
 TEMPLATES_PDF_FILEPATHS = {
-    "association_charter_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
-    "commission_projects_list": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
-    "project_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
-    "project_review_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
+    "association_charter_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
 }
 
 

@@ -12,5 +12,5 @@ register = template.Library()
 def s3static(object_key):
     """Call with {% s3static 'file/path' %}."""
     return get_s3_client().generate_presigned_url(
-        'get_object', Params={'Bucket': settings.S3_STATIC_FILES_BUCKET_NAME, 'Key': object_key}, ExpiresIn=3600
+        'get_object', Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': object_key}, ExpiresIn=3600
     )

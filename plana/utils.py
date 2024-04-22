@@ -121,9 +121,7 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
     """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(
-            Bucket=settings.S3_STATIC_FILES_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc]
-        )
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc])
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(dict_data)
         html = template.render(context)
@@ -140,7 +138,7 @@ def generate_pdf_binary(context, request, template_name):
     """Generate a PDF file as a binary (used for all PDF notifications attached in emails)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(Bucket=settings.S3_STATIC_FILES_BUCKET_NAME, Key=template_name)
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=template_name)
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(context)
     else:

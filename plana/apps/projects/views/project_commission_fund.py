@@ -414,7 +414,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             if fund.postpone_template_path != "":
                 content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED")
                 attachment = {
-                    "template_name": f"{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
+                    "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
                     "filename": f"{slugify(content.title)}.pdf",
                     "context_attach": {
                         "project_name": project.name,
@@ -446,7 +446,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION")
                     attachments.append(
                         {
-                            "template_name": f"{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.rejection_template_path}",
+                            "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.rejection_template_path}",
                             "filename": f"{slugify(content.title)}.pdf",
                             "context_attach": {
                                 "project_name": project.name,
@@ -474,7 +474,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         content = Content.objects.get(code=template_name)
                         attachments.append(
                             {
-                                "template_name": f"{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{template_path}",
+                                "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{template_path}",
                                 "filename": f"{slugify(content.title)}.pdf",
                                 "context_attach": {
                                     "amount_earned": request.data["amount_earned"],

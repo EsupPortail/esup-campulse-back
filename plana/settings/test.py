@@ -94,9 +94,6 @@ AWS_SECRET_ACCESS_KEY = "{{ s3_secret_key }}"
 AWS_STORAGE_BUCKET_NAME = "{{ s3_bucket }}"
 AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 
-UNIVERSITY_NAME = "{{ university_name }}"  # strasbourg
-S3_STATIC_FILES_BUCKET_NAME = f"{UNIVERSITY_NAME}-plana-test-back"
-
 
 ########
 # CRON #
