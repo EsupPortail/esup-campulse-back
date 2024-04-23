@@ -650,9 +650,9 @@ CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
 #################
 
 # S3 configuration for PDF templates (used to store PDF exports and notifications).
-S3_PDF_FILEPATH = "pdf"
-TEMPLATES_PDF_EXPORTS_FOLDER = "templates/exports"
-TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "templates/notifications"
+S3_PDF_FILEPATH = "pdf"  # "." if local
+TEMPLATES_PDF_EXPORTS_FOLDER = "templates/exports"  # "pdf/exports" if local
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "templates/notifications"  # "pdf/notifications" if local
 
 TEMPLATES_PDF_FILEPATHS = {
     "association_charter_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",

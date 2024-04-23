@@ -15,7 +15,7 @@ add_header Content-Security-Policy "upgrade-insecure-requests; default-src 'none
 
 ## Mise en place du serveur S3
 
-Un serveur S3 est utilisé pour stocker quatre types de documents :
+Un bucket S3 est utilisé pour stocker quatre types de documents :
 - Les logos des associations.
 - Les logos présents dans le pied de page du site.
 - Les documents de la bibliothèque (modèles à remplir).
@@ -30,3 +30,13 @@ Un bucket distinct doit ensuite être crée par environnement de déploiement.
 ```sh
 $ aws s3api create-bucket --bucket AWS_STORAGE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME
 ```
+
+### Ressources statiques (fichiers PDF)
+
+Les templates PDF (et leurs fichiers statiques liés) utilisés pour la génération d'exports et de notifications (voir partie "Personnalisation / Exports et notifications PDF") sont stockés dans le même bucket.
+
+Les templates PDF sont ceux utilisés par Django, ils utilisent donc Jinja2 et des templatetags. Des modèles d'exemples sont mis à disposition dans le dossier `templates/pdf/**/*.html`.
+
+Si S3 est activé, les modèles stockés localement ne sont plus utilisés.
+
+Dans les fichiers HTML, il est nécessaire de modifier les champs `{% load static %}` en `{% load plana_tags %}` et les appels à `{% static CHEMIN_DU_FICHIER %}` par `{% s3static CHEMIN_DU_FICHIER %}` (penser également à changer les chemins des fichiers pour refléter les routes utilisées sur S3).

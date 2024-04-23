@@ -1,41 +1,38 @@
 ---
-title: Notifications de subvention
-weight: 109
+title: Exports et notifications PDF
+weight: 123
 ---
 
-Les notifications de subventions sont des fichiers pdf présents en pièces jointes des mails informant les utilisateurs d'un succès, d'un refus, ou d'un report d'une demande de subventionnement.
+Les fichiers utilisés pour la génération de PDF sont externalisés dans un dépôt distinct du projet PlanA. Ils sont hébergés dans la section du bucket S3 au nom défini par la variable de configuration `S3_PDF_FILEPATH`.
 
-## Types de notifications
+Au sein de cette section, l'arborescence suivante est suggérée :
+- `css` : feuilles de styles statiques appliquées aux templates
+- `fonts` : polices d'écriture statiques utilisées
+- `img` : images statiques (logos affichés)
+- `templates/exports` : templates HTML d'exports (récap de projet, récap de charte, ...).
+- `templates/notifications` : templates HTML de notifications attachées aux emails (attribution ou refus d'une aide, ...).
+
+Les variables de configuration `TEMPLATES_PDF_EXPORTS_FOLDER` et `TEMPLATES_PDF_NOTIFICATIONS_FOLDER` permettent de modifier les chemins des deux derniers dossiers au besoin.
+
+## Notifications d'attribution / de refus envoyées par email
+
+Les notifications de subventions sont des fichiers PDF présents en pièces jointes des mails informant les utilisateurs d'un succès, d'un refus, ou d'un report d'une demande de subventionnement.
+
+### Types de notifications
 
 Ces notifications sont reliées intrinsèquement aux différents organismes de fonds qui vont traiter les demandes de subventionnement.
 
-Nous avons ainsi 4 types de notifications, formatés comme suit :
+Nous avons ainsi 4 types de notifications, aux codes formatés comme suit :
 - `NOTIFICATION_{FUND_ACRONYM}_DECISION_ATTRIBUTION` : Document présentant l'aspect légal de l'attribution de la subvention par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_ATTRIBUTION` : Document visant à prévenir les concernés que leur demande de subventionnement a été acceptée par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_REJECTION` : Document informant les concernés que leur demande de subventionnement a été refusée par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_PROJECT_POSTPONED` : Document informant les concernés que leur demande de subventionnement a été reportée à une commission future pour leur projet par le fonds désigné.
 
-Ces différents types de notifications sont configurables dans les paramètres du projet afin d'en personnaliser les intitulés en fonction des différents fonds gérés par l'application.
-
 L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l'acronyme en base de données du fonds concerné en majuscules.
 
-## Spécificités des templates PDF
+Ce code est ensuite stocké dans la table `contents_content`, avec les textes des contenus qui constituent le corps du PDF de notification renvoyé.
 
-Les templates PDF sont ceux utilisés par Django, ils utilisent donc jinja2 et des templatetags. Si S3 est activé, ils doivent être hébergés sur un dépôt distant.
-
-Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données comme dans les modèles d'exemples mis à disposition : `templates/pdf/notifications/**/*.html`. C'est à dire en important les données avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
-
-Pour rendre le template compatible avec S3, modifier les champs `{% load static %}` en `{% load plana_tags %}` et les appels à `{% static NOM_DU_FICHIER %}` par `{% s3static NOM_DU_FICHIER %}`.
-
-## Stockage des textes de contenus
-
-Les textes des contenus qui constituent le corps du PDF de notification renvoyé sont stockés en base de données dans la table `content`.
-
-Ils doivent être renseignés avec l'attribut `code` similaire au code de notification présent dans le fichier de settings expliqué plus haut.
-
-Les contenus peuvent être vides mais ils doivent au moins être créés en base de données en amont avec le bon code.
-
-## Variables présentes dans les contenus
+### Variables présentes dans les contenus
 
 Différentes variables par défaut sont présentes dans les différents contenus renvoyés et sont alors utilisables dans les différents templates de contenus.
 
@@ -50,10 +47,12 @@ Variables spécifiques à certains contenus uniquement :
 - `amount_earned` : Uniquement pour les notifications d'attribution, montant alloué au projet par le fonds désigné. (int)
 - `comment` : Uniquement pour les notifications de refus et de report, dernier commentaire laissé sur le projet, sensé indiquer pourquoi un report ou un refus a été décidé. (string)
 
-## Format des contenus
+### Format des contenus
 
 Les contenus sont par défaut sous format texte, cependant il est recommandé d'y ajouter des balises HTML inline (comme des `<h1>`, des `<p>` etc). A contrario, il n'est pas recommandé d'utiliser des balises block (comme des `<div>`) et de privilégier leur utilisation directement dans le template HTML au besoin.
 
 Pour utiliser les variables ci-dessus, il suffit de les intégrer au texte de contenu sous le format `{{ var_name }}`. Elles seront alors reconnues et interprétées par le système de templating Django.
 
 Pour chaque type de notification il n'y a qu'un seul objet Content lié, composé lui-même d'un `header`, d'un `body`, d'un `footer`, et d'un `aside` qui peuvent être utilisés pour ajouter du contenu supplémentaire au document.
+
+Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données de Content avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.

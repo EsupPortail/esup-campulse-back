@@ -105,9 +105,10 @@ AWS_S3_ENDPOINT_URL = "FAKE"
 S3_PDF_FILEPATH = "."
 TEMPLATES_PDF_EXPORTS_FOLDER = "pdf/exports"
 TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "pdf/notifications"
+
 TEMPLATES_PDF_FILEPATHS = {
-    "association_charter_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
-    "commission_projects_list": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
-    "project_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
-    "project_review_summary": f"{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
+    "association_charter_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
 }
