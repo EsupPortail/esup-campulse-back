@@ -60,7 +60,7 @@ sentry_init(STAGE)
 CAS_NAME = "{{ cas_name }}"
 CAS_SERVER = "{{ cas_server }}"  # "https://cas-pprd.unistra.fr/cas/"
 CAS_VERSION = "{{ cas_version }}"
-CAS_INSTITUTION_ID = "{{ cas_institution_id }}"
+CAS_INSTITUTION_ACRONYM = "{{ cas_institution_acronym }}"
 CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # ["https://plana-pprd.app.unistra.fr/cas-login", "https://plana-pprd.app.unistra.fr/cas-register"]
 

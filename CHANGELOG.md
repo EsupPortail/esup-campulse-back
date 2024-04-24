@@ -9,6 +9,7 @@
 ### Changements critiques
 
 - Permissions `view_project*_any_commission` renommées en `view_project*_any_fund`.
+- Variable `CAS_INSTITUTION_ID` renommée en `CAS_INSTITUTION_ACRONYM` (renseigner désormais l'acronyme de l'établissement et non son identifiant).
 - Variables de personnalisation usuelles désormais chargées dynamiquement via le Fabfile dans les configurations de déploiement.
 - Changement du mode de rendu des templates PDF :
   - Suppression de la variable `TEMPLATES_NOTIFICATIONS`.

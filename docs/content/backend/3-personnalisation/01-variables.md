@@ -11,7 +11,7 @@ Plusieurs variables de l'application peuvent être customisées au déploiement 
 - `cas_attribute_first_name` : nom de l'attribut CAS renvoyant le prénom d'un compte (`first_name`)
 - `cas_attribute_is_student` : nom de l'attribut CAS renvoyant la valeur déterminant si le compte est celui d'un étudiant ou non (`affiliation`)
 - `cas_attribute_last_name` : nom de l'attribut CAS renvoyant le nom d'un compte (`last_name`)
-- `cas_institution_id` : identifiant en base de données de l'établissement dont les gestionnaires sont chargés de valider les comptes CAS
+- `cas_institution_acronym` : acronyme de l'établissement dont les gestionnaires sont chargés de valider les comptes CAS
 - `cas_name` : nom du CAS (`CAS`)
 - `cas_server` : URL du CAS
 - `cas_value_is_student` : valeur de l'attribut CAS déterminant si le compte est celui d'un étudiant ou non (`student`)

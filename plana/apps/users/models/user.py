@@ -261,7 +261,7 @@ class User(AbstractUser):
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         elif self.is_cas_user() is True:
-            institution = Institution.objects.get(id=int(settings.CAS_INSTITUTION_ID))
+            institution = Institution.objects.get(acronym=settings.CAS_INSTITUTION_ACRONYM)
             managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         else:
