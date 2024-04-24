@@ -56,3 +56,145 @@ Pour utiliser les variables ci-dessus, il suffit de les intégrer au texte de co
 Pour chaque type de notification il n'y a qu'un seul objet Content lié, composé lui-même d'un `header`, d'un `body`, d'un `footer`, et d'un `aside` qui peuvent être utilisés pour ajouter du contenu supplémentaire au document.
 
 Pour que l'export PDF des notifications se fasse correctement, il faut obligatoirement importer les données de Content avec la syntaxe `{% resolve %}{{ content.body|safe }}{% endresolve %}` afin de traduire le contenu du texte en HTML et d'interpréter les variables qui y sont situées.
+
+## Exports de récapitulatifs
+
+Les exports sont des fichiers PDF générés par l'application après une action manuelle d'un utilisateur.
+
+### Types d'exports
+
+Les exports sont liés à des fonctionnalités de l'application. Par défaut, les fichiers sont nommés ainsi :
+- `association_charter_summary` : récapitulatif des données d'une association et des noms de documents déposés dans l'optique d'un renouvellement de charte.
+- `commission_projects_list` : liste des projets rattachés à une commission.
+- `project_review_summary` : récapitulatif du dépôt d'un bilan d'un projet ayant été subventionné.
+- `project_summary` : récapitulatif du dépôt d'une demande de subventions pour un projet.
+
+### Variables présentes dans les exports
+
+#### commission_projects_list
+
+- `name` : nom de la commission (string)
+- `fields` : liste des noms des champs d'une demande de subventions (array)
+- `projects` : liste des demandes de subventions (array), chaque demande contient la liste des données (array)
+
+Champs rendus :
+- Identifiant
+- Nom du projet
+- Nom de l'association
+- Nom et prénom de l'étudiant porteur individuel
+- Date de début du projet
+- Date de fin du projet
+- Est la première édition du projet
+- Catégories du projet
+
+#### association_charter_summary (données d'une association)
+
+- `name` : nom (string)
+- `email` : adresse email (string)
+- `acronyme` : acronyme (string)
+- `social_object` : objet social (string)
+- `current_projects` : projets en cours (string)
+- `address` : adresse postale (string)
+- `zipcode` : code postal (string)
+- `city` : ville (string)
+- `country` : pays (string)
+- `phone` : numéro de téléphone (string)
+- `siret` : numéro SIRET (string)
+- `website` : site web (string)
+- `student_count` : nombre d'étudiants (int)
+- `charter_date` : date de dernière mise à jour de la charte (date)
+- `last_goa_date` : date de la dernière assemblée générale ordinaire (date)
+- `president_names` : nom et prénom de la personne présidant (string)
+- `president_phone` : numéro de téléphone de la personne présidant (string)
+- `president_email` : adresse email de la personne présidant (string)=
+- `institution` : nom de l'établissement de rattachement (string)
+- `institution_component` : nom de la composante de établissement de rattachement (string)
+- `activity_field` : nom du domaine d'activité (string)
+- `documents` : liste des documents (array), chaque document contient ces propriétés (object) :
+  - `document__name` : nom standard du document (string)
+  - `name` : nom du fichier (string)
+
+#### project_summary et project_review_summary (données d'une demande de subventions pour un projet)
+
+- `name` : nom (string)
+- `manual_identifier` : identifiant généré (string)
+- `planned_start_date` : date prévue de début (date)
+- `planned_end_date` : date prévue de fin (date)
+- `planned_location` : lieu prévu (date)
+- `partner_association` : nom de l'association co-organisatrice (string)
+- `budget_previous_edition` : budget de l'édition précédente (int) 
+- `target_audience` : public visé (string)
+- `amount_students_audience` : nombre de personnes attendues dans le public étudiant (int)
+- `amount_all_audience` : nombre de personnes attendues au total (int)
+- `ticket_price` : prix d'entrée (int)
+- `student_ticket_price` : prix d'entrée pour le public étudiant (int)
+- `individual_cost` : coût du projet par personne attendue (int)
+- `goals` : objectifs (string)
+- `summary` : résumé (string)
+- `planned_activities` : activités prévues (string)
+- `prevention_safety` : actions de préventions et de sécurité prévues (string)
+- `marketing_campaign` : campagne de communication (string)
+- `sustainable_development` : actions en faveur du Développement Durable et de la Responsabilité Sociétale (string)
+- `processing_date` : date de dépôt du projet (date)
+- `outcome` : dépenses (int)
+- `income` : recettes (int)
+- `real_start_date` : date réelle de début (date)
+- `real_end_date` : date réelle de fin (date)
+- `real_location` : lieu réel (date)
+- `review` : bilan (string)
+- `impact_students` : impact sur la population étudiante (string)
+- `description` : description, activités réalisées, changements par rapport au planning (string)
+- `difficulties` : difficultés rencontrées (string)
+- `improvements` : améliorations possibles (string)
+- `is_first_edition` : est la première édition du projet (bool)
+- `commission_name` : nom de la commission (string)
+- `commission_date` : date du déroulé physique de la commission (date)
+- `categories` : liste de toutes les catégories (array), chaque catégorie contient ces propriétés (object) :
+  - `id` : identifiant (int)
+  - `name` : nom (string)
+- `project_categories` : liste (array) de tous les identifiants de catégories liés à la demande (int).
+- `project_commission_funds` : liste de tous les fonds liés à une demande (array), chaque fonds contient ces propriétés (object) :
+  - `commission_fund_id` : identifiant (int)
+  - `is_first_edition` : est la première édition du projet (bool)
+  - `amount_asked_previous_edition` : montant demandé à la précédente édition du projet (int)
+  - `amount_earned_previous_edition` : montant reçu à la précédente édition du projet (int)
+  - `amount_asked` : montant demandé (int)
+  - `amount_earned` : montant reçu (int)
+  - `commission_data` : données de la commission (object) :
+    - `name` : nom (string)
+    - `submission_date` : date de clôture de la soumission de nouvelles demandes (date)
+    - `commission_date` : date du déroulé physique de la commission (date)
+  - `fund_data` : données du fonds (object) :
+    - `name` : nom (string)
+    - `acronym` : acronyme (string)
+- `association` : données de l'association (object) :
+  - `name` : nom (string)
+  - `email` : adresse email (string)
+  - `acronyme` : acronyme (string)
+  - `social_object` : objet social (string)
+  - `current_projects` : projets en cours (string)
+  - `address` : adresse postale (string)
+  - `zipcode` : code postal (string)
+  - `city` : ville (string)
+  - `country` : pays (string)
+  - `phone` : numéro de téléphone (string)
+  - `siret` : numéro SIRET (string)
+  - `website` : site web (string)
+  - `student_count` : nombre d'étudiants (int)
+  - `charter_date` : date de dernière mise à jour de la charte (date)
+  - `last_goa_date` : date de la dernière assemblée générale ordinaire (date)
+  - `president_names` : nom et prénom de la personne présidant (string)
+  - `president_phone` : numéro de téléphone de la personne présidant (string)
+  - `president_email` : adresse email de la personne présidant (string)
+- `user` : données du responsable de projet ou du porteur individuel (object) :
+  - `email` : adresse email (string)
+  - `first_name` : prénom (string)
+  - `last_name` : nom de famille (string)
+  - `address` : adresse postale (string)
+  - `zipcode` : code postal (string)
+  - `city` : ville (string)
+  - `country` : pays (string)
+  - `phone` : numéro de téléphone (string)
+- `documents` : liste des documents (array), chaque document contient ces propriétés (object) :
+  - `document__name` : nom standard du document (string)
+  - `name` : nom du fichier (string)

@@ -26,4 +26,4 @@ Application web pour la gestion des associations étudiantes et de leurs projets
 Cette documentation est segmentée en deux parties (correspondant au back et au front de l'application), comportant chacune trois sections, destinées à des publics distincts :
 - Installation : pour les personnes souhaitant installer l'application de zéro (développeuses et développeurs, universités déployant l'application sans intervention de l'Université de Strasbourg).
 - Développement : pour les personnes souhaitant effectuer des actions sur le code source de l'application (développeuses et développeurs).
-- Personnalisation : pour les personnes souhaitant personnaliser l'application individuellement (universités utilisant une instance déployée par l'Université de Strasbourg).
+- Personnalisation : pour les personnes souhaitant personnaliser l'application individuellement sur leur copie (universités utilisant une instance déployée par l'Université de Strasbourg).
