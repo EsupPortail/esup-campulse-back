@@ -78,14 +78,14 @@ Les exports sont liés à des fonctionnalités de l'application. Par défaut, le
 - `projects` : liste des demandes de subventions (array), chaque demande contient la liste des données (array)
 
 Champs rendus :
-- Identifiant
-- Nom du projet
-- Nom de l'association
-- Nom et prénom de l'étudiant porteur individuel
-- Date de début du projet
-- Date de fin du projet
-- Est la première édition du projet
-- Catégories du projet
+- Identifiant (string)
+- Nom du projet (string)
+- Nom de l'association (string)
+- Nom et prénom de l'étudiant porteur individuel (string)
+- Date de début du projet (date)
+- Date de fin du projet (date)
+- Est la première édition du projet (bool)
+- Catégories du projet (string)
 
 #### association_charter_summary (données d'une association)
 
