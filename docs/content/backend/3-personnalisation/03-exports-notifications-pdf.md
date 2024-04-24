@@ -64,10 +64,10 @@ Les exports sont des fichiers PDF générés par l'application après une action
 ### Types d'exports
 
 Les exports sont liés à des fonctionnalités de l'application. Par défaut, les fichiers sont nommés ainsi :
-- `association_charter_summary` : récapitulatif des données d'une association et des noms de documents déposés dans l'optique d'un renouvellement de charte.
 - `commission_projects_list` : liste des projets rattachés à une commission.
-- `project_review_summary` : récapitulatif du dépôt d'un bilan d'un projet ayant été subventionné.
+- `association_charter_summary` : récapitulatif des données d'une association et des noms de documents déposés dans l'optique d'un renouvellement de charte.
 - `project_summary` : récapitulatif du dépôt d'une demande de subventions pour un projet.
+- `project_review_summary` : récapitulatif du dépôt d'un bilan d'un projet ayant été subventionné.
 
 ### Variables présentes dans les exports
 
@@ -104,15 +104,15 @@ Champs rendus :
 - `student_count` : nombre d'étudiants (int)
 - `charter_date` : date de dernière mise à jour de la charte (date)
 - `last_goa_date` : date de la dernière assemblée générale ordinaire (date)
-- `president_names` : nom et prénom de la personne présidant (string)
-- `president_phone` : numéro de téléphone de la personne présidant (string)
-- `president_email` : adresse email de la personne présidant (string)=
+- `president_names` : nom et prénom de la personne présidant l'association (string)
+- `president_phone` : numéro de téléphone de la personne présidant l'association (string)
+- `president_email` : adresse email de la personne présidant l'association (string)
 - `institution` : nom de l'établissement de rattachement (string)
 - `institution_component` : nom de la composante de établissement de rattachement (string)
 - `activity_field` : nom du domaine d'activité (string)
 - `documents` : liste des documents (array), chaque document contient ces propriétés (object) :
-  - `document__name` : nom standard du document (string)
-  - `name` : nom du fichier (string)
+  - `document__name` : nom du document de base (string)
+  - `name` : nom donné au fichier (string)
 
 #### project_summary et project_review_summary (données d'une demande de subventions pour un projet)
 
@@ -132,7 +132,7 @@ Champs rendus :
 - `goals` : objectifs (string)
 - `summary` : résumé (string)
 - `planned_activities` : activités prévues (string)
-- `prevention_safety` : actions de préventions et de sécurité prévues (string)
+- `prevention_safety` : actions de prévention et de sécurité prévues (string)
 - `marketing_campaign` : campagne de communication (string)
 - `sustainable_development` : actions en faveur du Développement Durable et de la Responsabilité Sociétale (string)
 - `processing_date` : date de dépôt du projet (date)
@@ -183,10 +183,10 @@ Champs rendus :
   - `student_count` : nombre d'étudiants (int)
   - `charter_date` : date de dernière mise à jour de la charte (date)
   - `last_goa_date` : date de la dernière assemblée générale ordinaire (date)
-  - `president_names` : nom et prénom de la personne présidant (string)
-  - `president_phone` : numéro de téléphone de la personne présidant (string)
-  - `president_email` : adresse email de la personne présidant (string)
-- `user` : données du responsable de projet ou du porteur individuel (object) :
+  - `president_names` : nom et prénom de la personne présidant l'association (string)
+  - `president_phone` : numéro de téléphone de la personne présidant l'association (string)
+  - `president_email` : adresse email de la personne présidant l'association (string)
+- `user` : données du responsable de projet dans l'association ou du porteur individuel (object) :
   - `email` : adresse email (string)
   - `first_name` : prénom (string)
   - `last_name` : nom de famille (string)
@@ -196,5 +196,5 @@ Champs rendus :
   - `country` : pays (string)
   - `phone` : numéro de téléphone (string)
 - `documents` : liste des documents (array), chaque document contient ces propriétés (object) :
-  - `document__name` : nom standard du document (string)
-  - `name` : nom du fichier (string)
+  - `document__name` : nom du document de base (string)
+  - `name` : nom donné au fichier (string)

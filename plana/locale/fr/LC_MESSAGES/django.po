@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-17 11:24+0200\n"
+"POT-Creation-Date: 2024-04-24 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1807,7 +1807,7 @@ msgstr ""
 msgid "Removes S3 bucket content."
 msgstr "Vide le contenu d'un bucket S3."
 
-#: plana/management/commands/flush_storages.py:26
+#: plana/management/commands/flush_storages.py:28
 #, python-brace-format
 msgid "S3 bucket {bucket_name} content cleaned."
 msgstr "Le contenu du bucket S3 {bucket_name} a été supprimé."

@@ -7,15 +7,15 @@ Plusieurs variables de l'application peuvent être customisées au déploiement 
 
 ## CAS et LDAP
 
-- `cas_attribute_email` : nom de l'attribut CAS renvoyant l'adresse email d'un compte (`mail`)
-- `cas_attribute_first_name` : nom de l'attribut CAS renvoyant le prénom d'un compte (`first_name`)
-- `cas_attribute_is_student` : nom de l'attribut CAS renvoyant la valeur déterminant si le compte est celui d'un étudiant ou non (`affiliation`)
-- `cas_attribute_last_name` : nom de l'attribut CAS renvoyant le nom d'un compte (`last_name`)
-- `cas_institution_acronym` : acronyme de l'établissement dont les gestionnaires sont chargés de valider les comptes CAS
 - `cas_name` : nom du CAS (`CAS`)
 - `cas_server` : URL du CAS
-- `cas_value_is_student` : valeur de l'attribut CAS déterminant si le compte est celui d'un étudiant ou non (`student`)
 - `cas_version` : version du protocole CAS (`3`)
+- `cas_attribute_email` : nom de l'attribut CAS renvoyant l'adresse email d'un compte (`mail`)
+- `cas_attribute_first_name` : nom de l'attribut CAS renvoyant le prénom d'un compte (`first_name`)
+- `cas_attribute_last_name` : nom de l'attribut CAS renvoyant le nom d'un compte (`last_name`)
+- `cas_attribute_is_student` : nom de l'attribut CAS renvoyant la valeur déterminant si le compte est celui d'un étudiant ou non (`affiliation`)
+- `cas_value_is_student` : valeur de l'attribut CAS déterminant si le compte est celui d'un étudiant ou non (`student`)
+- `cas_institution_acronym` : acronyme de l'établissement dont les gestionnaires sont chargés de valider les comptes CAS
 - `ldap_enabled` : True s'il est possible d'ajouter un compte côté gestionnaire via une recherche sur le LDAP (`True`)
 - `accounts_api_spore_base_url` : URL d'accès au LDAP (facultatif si `ldap_enabled` est à `False`)
 - `accounts_api_spore_description_file` : URL d'accès au fichier JSON du LDAP (facultatif si `ldap_enabled` est à `False`)
@@ -42,15 +42,15 @@ Plusieurs variables de l'application peuvent être customisées au déploiement 
 - `cron_days_before_association_expiration` : nombre de jours depuis la dernière mise à jour de la charte d’une association après lequel un mail est envoyé pour prévenir de l’expiration de cette charte (`365`)
 - `cron_days_before_document_expiration_warning` : nombre de jours avant la date d’expiration d’un document après lequel un mail est envoyé pour prévenir de l’expiration future de ce document (`10`)
 - `cron_days_before_review_expiration` : nombre de jours avant la date d’expiration d’un bilan après lequel un mail est envoyé pour prévenir de l’expiration future de ce bilan (`30`)
-- `cron_days_before_history_expiration` : nombre de jours avant la date d’expiration d’une ligne d’historique (`90`)
-- `amount_years_before_project_deletion` : nombre d'années avant qu'un projet ne soit automatiquement supprimé de la base de données (`10`)
+- `cron_days_before_history_expiration` : nombre de jours avant la date de suppression d’une ligne d’historique (`90`)
 - `amount_years_before_project_invisibility` : nombre d'années avant qu'un projet ne soit rendu invisible sur l'interface du site hors espace d'administration (`5`)
+- `amount_years_before_project_deletion` : nombre d'années avant qu'un projet ne soit automatiquement supprimé de la base de données (`10`)
 
 ## Divers
 
 - `migration_site_domain` : nom de domaine de l'application
 - `migration_site_name` : nom de l'application (`Campulse`)
-- `restricted_domains` : noms de domaine séparées par des espaces des domaines d'adresse email ne pouvant pas créer de compte local
+- `restricted_domains` : noms de domaine séparés par des espaces des adresses email ne pouvant pas créer de compte local
 - `association_is_site_default` : booléen par défaut définissant si une association ou un fonds de commission est Site Alsace (`True` pour désactiver les fonctionnalités Site Alsace)
 - `association_default_amount_members_allowed` : nombre par défaut de comptes maximum pouvant se rattacher à une association (`4`)
 - `new_year_month_index` : chiffre du mois à partir duquel l'année scolaire débute (utilisé pour la génération des identifiants de projets) (`9`)

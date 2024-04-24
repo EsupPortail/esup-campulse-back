@@ -8,7 +8,7 @@ Un ensemble de données minimal doit être ajouté en base de données pour assu
   - nom
   - prénom
   - adresse email
-  - groupe de gestionnaire
+  - groupe de gestionnaire (général, établissement, divers)
 - Établissements auxquels peuvent se rattacher les associations (`Institution`)
   - nom
   - acronyme
@@ -21,20 +21,24 @@ Un ensemble de données minimal doit être ajouté en base de données pour assu
   - nom
   - acronyme
   - établissement de rattachement
+- Catégories dans lesquelles peut s'inscrire un projet (`ProjectCategory`)
+  - nom
 - Documents attendus dans les différents process (`Document`)
+  - processus de rattachement (aucun, charte d'association, charte de fonds, justificatif d'association, justificatif de personne, demande de subvention, bilan de projet)
   - type de fichier (image, PDF, tableur, ...)
-  - plusieurs fichiers autorisés pour ce document ou non
+  - plusieurs fichiers autorisés pour ce type de document ou non
   - dépôt obligatoire ou non
   - fonds de rattachement ou non
-  - date d’expiration ou non
+  - date d’expiration ou non (fixée à un jour de l'année ou après un délai de jours)
 - Contenus textuels (`Content`)
   - tous les paragraphes visibles sur le site sans être connecté
+  - contenus des notifications PDF envoyées par email
 - Liste des logos du pied de page (`Logo`)
   - image
-  - titre
+  - description
   - acronyme
-  - URL de redirection
-  - position
+  - URL s'ouvrant au clic sur le logo
+  - position dans le footer (ligne, colonne)
 - Sujets et corps de texte des emails envoyés (`MailTemplate`)
   - nom
   - sujet
