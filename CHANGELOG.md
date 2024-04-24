@@ -13,7 +13,7 @@
 - Changement du mode de rendu des templates PDF :
   - Suppression de la variable `TEMPLATES_NOTIFICATIONS`.
   - Nouveaux champs `*_template_path` dans le modèle `Fund` (migration nécessaire).
-  - Stockage des templates et de leurs fichiers statiques dans un dépôt séparé sur S3.
+  - Stockage des templates et de leurs fichiers statiques sur S3 et dans un dépôt Git distinct.
 
 ### Corrections de bugs
 
