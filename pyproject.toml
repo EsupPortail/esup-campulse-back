@@ -66,7 +66,7 @@ dj-rest-auth = "^5.1.0"
 drf-spectacular = "^0.27.2"
 britney = "^0.5.1"
 openpyxl = "^3.1.2"
-psycopg2-binary = "^2.9.9"
+psycopg = {extras = ["binary"], version = "^3.1.18"}
 pyrage = "^1.1.2"
 urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and botocore
 weasyprint = "^61.2"

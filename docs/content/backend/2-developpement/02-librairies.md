@@ -22,7 +22,7 @@ weight: 112
 - [drf-spectacular](https://pypi.org/project/drf-spectacular/) : génération du fichier de documentation d'API.
 - [britney](https://pypi.org/project/britney/) : communication avec un annuaire LDAP.
 - [openpyxl](https://pypi.org/project/openpyxl/) : génération de fichiers Excel.
-- [psycopg2-binary](https://pypi.org/project/psycopg2-binary/) : communication avec la base de données PostgreSQL
+- [psycopg](https://pypi.org/project/psycopg/) : communication avec la base de données PostgreSQL.
 - [pyrage](https://pypi.org/project/pyrage/) : chiffrement des documents.
 - [weasyprint](https://pypi.org/project/weasyprint/) : génération de fichiers PDF.
 - [zxcvbn](https://pypi.org/project/zxcvbn/) : vérificateur de robustesse de mots de passe.
