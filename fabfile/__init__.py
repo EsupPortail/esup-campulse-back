@@ -20,7 +20,7 @@ env.application_name = 'plana'  # name of webapp
 env.root_package_name = 'plana'  # name of app in webapp
 
 env.remote_home = '/home/django'  # remote home root
-env.remote_python_version = '3.9'  # python version
+env.remote_python_version = '3.12'  # python version
 env.remote_virtualenv_root = join(env.remote_home, '.virtualenvs')  # venv root
 env.remote_virtualenv_dir = join(env.remote_virtualenv_root, env.application_name)  # venv for webapp dir
 # git repository url
