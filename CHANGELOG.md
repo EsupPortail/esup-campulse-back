@@ -15,6 +15,7 @@
   - Suppression de la variable `TEMPLATES_NOTIFICATIONS`.
   - Nouveaux champs `*_template_path` dans le modèle `Fund` (migration nécessaire).
   - Stockage des templates et de leurs fichiers statiques sur S3 et dans un dépôt Git distinct.
+- Retrait du support de Python 3.8, ajout du support de Python 3.12.
 
 ### Corrections de bugs
 
