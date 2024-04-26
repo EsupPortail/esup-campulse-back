@@ -1,4 +1,5 @@
 """Serializers describing fields used on project commission fund table."""
+
 from rest_framework import serializers
 
 from plana.apps.commissions.models import CommissionFund

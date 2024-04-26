@@ -1,4 +1,5 @@
 """List of tests done on users views with a CAS user."""
+
 from unittest.mock import patch
 
 from allauth.account.models import EmailAddress

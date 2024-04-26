@@ -1,4 +1,5 @@
 """Models describing institutions components (faculté de médecine, IUT, ...)."""
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 

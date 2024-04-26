@@ -1,4 +1,5 @@
 """Serializers describing fields used on logos."""
+
 from django.conf import settings
 from rest_framework import serializers
 

@@ -1,4 +1,5 @@
 """Views directly linked to projects categories."""
+
 import datetime
 
 from django.core.exceptions import ObjectDoesNotExist

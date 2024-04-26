@@ -1,4 +1,5 @@
 """List of tests done on user_group views."""
+
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status

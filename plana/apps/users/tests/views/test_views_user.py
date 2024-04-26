@@ -1,4 +1,5 @@
 """List of tests done on user views."""
+
 import json
 
 from allauth.socialaccount.models import SocialAccount

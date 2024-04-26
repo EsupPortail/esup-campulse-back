@@ -1,4 +1,5 @@
 """Serializers describing fields used on links between users and associations."""
+
 from rest_framework import serializers
 
 from plana.apps.associations.models.association import Association

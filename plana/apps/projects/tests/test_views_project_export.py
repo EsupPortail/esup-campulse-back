@@ -1,4 +1,5 @@
 """List of tests done on project PDF generation."""
+
 from unittest.mock import Mock
 
 from django.core.files.storage import default_storage

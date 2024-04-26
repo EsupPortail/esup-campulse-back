@@ -1,4 +1,5 @@
 """Models describing associations activity fields (culture, international, santé, sport, ...)."""
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 

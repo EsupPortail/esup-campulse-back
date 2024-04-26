@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-"""
-"""
-
 from os.path import join
 
 import pydiploy
 from fabric.api import env, execute, roles, task
 
 from . import sentry
+from .amiens import preprod_amiens, prod_amiens
+from .lille import preprod_lille, prod_lille
+from .montpellier3 import preprod_montpellier3, prod_montpellier3
+from .rouen import preprod_rouen, prod_rouen
 
 # edit config here !
 
@@ -63,11 +64,27 @@ env.chaussette_backend = (
     'waitress'  # name of chaussette backend to use. You need to add this backend in the app requirement file.
 )
 
-
+env.csp_settings = {
+    'default_src': "'none'",
+    'base_uri': "'self'",
+    'connect_src': "'self'",
+    'font_src': "'self' https://stackpath.bootstrapcdn.com",
+    'frame_ancestors': "'self'",
+    'frame_src': "'self'",
+    'img_src': "'self' data: https://cdn.jsdelivr.net",
+    'manifest_src': "'none'",
+    'media_src': "'none'",
+    'object_src': "'none'",
+    'script_src': "'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://code.jquery.com https://stackpath.bootstrapcdn.com",
+    'style_src': "'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;",
+    'worker_src': "'none'",
+}
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
-    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src \'none\'; base-uri \'self\'; connect-src \'self\'; font-src \'self\' https://stackpath.bootstrapcdn.com; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\' data: https://cdn.jsdelivr.net; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://cdn.jsdelivr.net https://code.jquery.com https://stackpath.bootstrapcdn.com; style-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com;"',
+    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src {default_src}; base-uri {base_uri}; connect-src {connect_src}; font-src {font_src}; frame-ancestors {frame_ancestors}; frame-src {frame_src}; img-src {img_src}; manifest-src {manifest_src}; media-src {media_src}; object-src {object_src}; script-src {script_src}; style-src {style_src}; worker-src {worker_src};"'.format(
+        **env.csp_settings
+    ),
 ]  # add directive(s) to nginx config file in location part
 # env.nginx_start_confirmation = True # if True when nginx is not started
 # needs confirmation to start it.
@@ -76,7 +93,7 @@ env.sentry_project_name = 'plan-a-back'
 
 @task
 def dev():
-    """Define dev stage"""
+    """Define dev stage."""
     env.roledefs = {
         'web': ['192.168.1.2'],
         'lb': ['192.168.1.2'],
@@ -97,7 +114,7 @@ def dev():
 
 @task
 def test():
-    """Define test stage"""
+    """Define test stage."""
     env.roledefs = {
         'web': ['django-test2.u-strasbg.fr'],
         'lb': ['django-test2.u-strasbg.fr'],
@@ -116,24 +133,60 @@ def test():
     env.socket_port = '8038'
     env.socket_host = '127.0.0.1'
     env.map_settings = {
-        'default_db_host': 'DATABASES["default"]["HOST"]',
-        'default_db_user': 'DATABASES["default"]["USER"]',
-        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
-        'default_db_name': 'DATABASES["default"]["NAME"]',
-        's3_access_key': "AWS_ACCESS_KEY_ID",
-        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
-        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
-        's3_endpoint': "AWS_S3_ENDPOINT_URL",
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
+        'amount_years_before_project_deletion': 'AMOUNT_YEARS_BEFORE_PROJECT_DELETION',
+        'amount_years_before_project_invisibility': 'AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY',
+        'app_documentation_url': 'APP_DOCUMENTATION_URL',
+        'association_default_amount_members_allowed': 'ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED',
+        'association_is_site_default': 'ASSOCIATION_IS_SITE_DEFAULT',
+        'cas_attribute_email': 'CAS_ATTRIBUTES_NAMES["email"]',
+        'cas_attribute_first_name': 'CAS_ATTRIBUTES_NAMES["first_name"]',
+        'cas_attribute_is_student': 'CAS_ATTRIBUTES_NAMES["is_student"]',
+        'cas_attribute_last_name': 'CAS_ATTRIBUTES_NAMES["last_name"]',
+        'cas_authorized_services': 'CAS_AUTHORIZED_SERVICES',
+        'cas_institution_acronym': 'CAS_INSTITUTION_ACRONYM',
+        'cas_name': 'CAS_NAME',
+        'cas_server': 'CAS_SERVER',
+        'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
+        'cas_version': 'CAS_VERSION',
+        'cron_days_before_account_expiration': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION',
+        'cron_days_before_account_expiration_warning': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING',
+        'cron_days_before_association_expiration': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION',
+        'cron_days_before_association_expiration_warning': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING',
+        'cron_days_before_document_expiration_warning': 'CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING',
+        'cron_days_before_history_expiration': 'CRON_DAYS_BEFORE_HISTORY_EXPIRATION',
+        'cron_days_before_password_expiration': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION',
+        'cron_days_before_password_expiration_warning': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING',
+        'cron_days_before_review_expiration': 'CRON_DAYS_BEFORE_REVIEW_EXPIRATION',
+        'default_db_host': 'DATABASES["default"]["HOST"]',
+        'default_db_name': 'DATABASES["default"]["NAME"]',
+        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
+        'default_db_user': 'DATABASES["default"]["USER"]',
+        'default_from_email': 'DEFAULT_FROM_EMAIL',
+        'email_host': 'EMAIL_HOST',
+        'email_host_password': 'EMAIL_HOST_PASSWORD',
+        'email_host_user': 'EMAIL_HOST_USER',
+        'email_port': 'EMAIL_PORT',
+        'email_template_frontend_url': 'EMAIL_TEMPLATE_FRONTEND_URL',
+        'email_use_tls': 'EMAIL_USE_TLS',
+        'ldap_enabled': 'LDAP_ENABLED',
+        'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
+        'migration_site_name': 'MIGRATION_SITE_NAME',
+        'new_year_month_index': 'NEW_YEAR_MONTH_INDEX',
+        'restricted_domains': 'RESTRICTED_DOMAINS',
+        's3_access_key': 'AWS_ACCESS_KEY_ID',
+        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_endpoint': 'AWS_S3_ENDPOINT_URL',
+        's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
     }
     execute(build_env)
 
 
 @task
 def preprod():
-    """Define preprod stage"""
+    """Define preprod stage."""
     env.roledefs = {
         'web': ['django-pprd-w3.di.unistra.fr', 'django-pprd-w4.di.unistra.fr'],
         'lb': ['rp-dip-pprd-public.di.unistra.fr'],
@@ -151,25 +204,61 @@ def preprod():
     env.goal = 'preprod'
     env.socket_port = '8056'
     env.map_settings = {
-        'default_db_host': 'DATABASES["default"]["HOST"]',
-        'default_db_user': 'DATABASES["default"]["USER"]',
-        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
-        'default_db_name': 'DATABASES["default"]["NAME"]',
-        's3_access_key': "AWS_ACCESS_KEY_ID",
-        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
-        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
-        's3_endpoint': "AWS_S3_ENDPOINT_URL",
-        'secret_key': 'SECRET_KEY',
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
+        'amount_years_before_project_deletion': 'AMOUNT_YEARS_BEFORE_PROJECT_DELETION',
+        'amount_years_before_project_invisibility': 'AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY',
+        'app_documentation_url': 'APP_DOCUMENTATION_URL',
+        'association_default_amount_members_allowed': 'ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED',
+        'association_is_site_default': 'ASSOCIATION_IS_SITE_DEFAULT',
+        'cas_attribute_email': 'CAS_ATTRIBUTES_NAMES["email"]',
+        'cas_attribute_first_name': 'CAS_ATTRIBUTES_NAMES["first_name"]',
+        'cas_attribute_is_student': 'CAS_ATTRIBUTES_NAMES["is_student"]',
+        'cas_attribute_last_name': 'CAS_ATTRIBUTES_NAMES["last_name"]',
+        'cas_authorized_services': 'CAS_AUTHORIZED_SERVICES',
+        'cas_institution_acronym': 'CAS_INSTITUTION_ACRONYM',
+        'cas_name': 'CAS_NAME',
+        'cas_server': 'CAS_SERVER',
+        'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
+        'cas_version': 'CAS_VERSION',
+        'cron_days_before_account_expiration': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION',
+        'cron_days_before_account_expiration_warning': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING',
+        'cron_days_before_association_expiration': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION',
+        'cron_days_before_association_expiration_warning': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING',
+        'cron_days_before_document_expiration_warning': 'CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING',
+        'cron_days_before_history_expiration': 'CRON_DAYS_BEFORE_HISTORY_EXPIRATION',
+        'cron_days_before_password_expiration': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION',
+        'cron_days_before_password_expiration_warning': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING',
+        'cron_days_before_review_expiration': 'CRON_DAYS_BEFORE_REVIEW_EXPIRATION',
+        'default_db_host': 'DATABASES["default"]["HOST"]',
+        'default_db_name': 'DATABASES["default"]["NAME"]',
+        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
+        'default_db_user': 'DATABASES["default"]["USER"]',
+        'default_from_email': 'DEFAULT_FROM_EMAIL',
+        'email_host': 'EMAIL_HOST',
+        'email_host_password': 'EMAIL_HOST_PASSWORD',
+        'email_host_user': 'EMAIL_HOST_USER',
+        'email_port': 'EMAIL_PORT',
+        'email_template_frontend_url': 'EMAIL_TEMPLATE_FRONTEND_URL',
+        'email_use_tls': 'EMAIL_USE_TLS',
+        'ldap_enabled': 'LDAP_ENABLED',
+        'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
+        'migration_site_name': 'MIGRATION_SITE_NAME',
+        'new_year_month_index': 'NEW_YEAR_MONTH_INDEX',
+        'restricted_domains': 'RESTRICTED_DOMAINS',
+        's3_access_key': 'AWS_ACCESS_KEY_ID',
+        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_endpoint': 'AWS_S3_ENDPOINT_URL',
+        's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
+        'secret_key': 'SECRET_KEY',
     }
     execute(build_env)
 
 
 @task
 def prod():
-    """Define prod stage"""
+    """Define prod stage."""
     env.roledefs = {
         'web': ['django-w7.di.unistra.fr', 'django-w8.di.unistra.fr'],
         'lb': ['rp-dip-public-m.di.unistra.fr', 'rp-dip-public-s.di.unistra.fr'],
@@ -187,18 +276,54 @@ def prod():
     env.goal = 'prod'
     env.socket_port = '8014'
     env.map_settings = {
-        'default_db_host': 'DATABASES["default"]["HOST"]',
-        'default_db_user': 'DATABASES["default"]["USER"]',
-        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
-        'default_db_name': 'DATABASES["default"]["NAME"]',
-        's3_access_key': "AWS_ACCESS_KEY_ID",
-        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
-        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
-        's3_endpoint': "AWS_S3_ENDPOINT_URL",
-        'secret_key': 'SECRET_KEY',
-        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
         'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
+        'amount_years_before_project_deletion': 'AMOUNT_YEARS_BEFORE_PROJECT_DELETION',
+        'amount_years_before_project_invisibility': 'AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY',
+        'app_documentation_url': 'APP_DOCUMENTATION_URL',
+        'association_default_amount_members_allowed': 'ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED',
+        'association_is_site_default': 'ASSOCIATION_IS_SITE_DEFAULT',
+        'cas_attribute_email': 'CAS_ATTRIBUTES_NAMES["email"]',
+        'cas_attribute_first_name': 'CAS_ATTRIBUTES_NAMES["first_name"]',
+        'cas_attribute_is_student': 'CAS_ATTRIBUTES_NAMES["is_student"]',
+        'cas_attribute_last_name': 'CAS_ATTRIBUTES_NAMES["last_name"]',
+        'cas_authorized_services': 'CAS_AUTHORIZED_SERVICES',
+        'cas_institution_acronym': 'CAS_INSTITUTION_ACRONYM',
+        'cas_name': 'CAS_NAME',
+        'cas_server': 'CAS_SERVER',
+        'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
+        'cas_version': 'CAS_VERSION',
+        'cron_days_before_account_expiration': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION',
+        'cron_days_before_account_expiration_warning': 'CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING',
+        'cron_days_before_association_expiration': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION',
+        'cron_days_before_association_expiration_warning': 'CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING',
+        'cron_days_before_document_expiration_warning': 'CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING',
+        'cron_days_before_history_expiration': 'CRON_DAYS_BEFORE_HISTORY_EXPIRATION',
+        'cron_days_before_password_expiration': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION',
+        'cron_days_before_password_expiration_warning': 'CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING',
+        'cron_days_before_review_expiration': 'CRON_DAYS_BEFORE_REVIEW_EXPIRATION',
+        'default_db_host': 'DATABASES["default"]["HOST"]',
+        'default_db_name': 'DATABASES["default"]["NAME"]',
+        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
+        'default_db_user': 'DATABASES["default"]["USER"]',
+        'default_from_email': 'DEFAULT_FROM_EMAIL',
+        'email_host': 'EMAIL_HOST',
+        'email_host_password': 'EMAIL_HOST_PASSWORD',
+        'email_host_user': 'EMAIL_HOST_USER',
+        'email_port': 'EMAIL_PORT',
+        'email_template_frontend_url': 'EMAIL_TEMPLATE_FRONTEND_URL',
+        'email_use_tls': 'EMAIL_USE_TLS',
+        'ldap_enabled': 'LDAP_ENABLED',
+        'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
+        'migration_site_name': 'MIGRATION_SITE_NAME',
+        'new_year_month_index': 'NEW_YEAR_MONTH_INDEX',
+        'restricted_domains': 'RESTRICTED_DOMAINS',
+        's3_access_key': 'AWS_ACCESS_KEY_ID',
+        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_endpoint': 'AWS_S3_ENDPOINT_URL',
+        's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
+        'secret_key': 'SECRET_KEY',
     }
     execute(build_env)
 
@@ -219,7 +344,7 @@ def build_env():
 
 @task
 def pre_install():
-    """Pre install of backend & frontend"""
+    """Pre install of backend & frontend."""
     execute(pre_install_backend)
     execute(pre_install_frontend)
 
@@ -227,20 +352,20 @@ def pre_install():
 @roles('web')
 @task
 def pre_install_backend():
-    """Setup server for backend"""
+    """Setup server for backend."""
     execute(pydiploy.django.pre_install_backend, commands='/usr/bin/rsync')
 
 
 @roles('lb')
 @task
 def pre_install_frontend():
-    """Setup server for frontend"""
+    """Setup server for frontend."""
     execute(pydiploy.django.pre_install_frontend)
 
 
 @task
 def deploy(update_pkg=False):
-    """Deploy code on server"""
+    """Deploy code on server."""
     execute(deploy_backend, update_pkg)
     execute(declare_release_to_sentry)
     execute(deploy_frontend)
@@ -249,27 +374,27 @@ def deploy(update_pkg=False):
 @roles('web')
 @task
 def deploy_backend(update_pkg=False):
-    """Deploy code on server"""
+    """Deploy code on server."""
     execute(pydiploy.django.deploy_backend, update_pkg)
 
 
 @roles('lb')
 @task
 def deploy_frontend():
-    """Deploy static files on load balancer"""
+    """Deploy static files on load balancer."""
     execute(pydiploy.django.deploy_frontend)
 
 
 @roles('web')
 @task
 def rollback():
-    """Rollback code (current-1 release)"""
+    """Rollback code (current-1 release)."""
     execute(pydiploy.django.rollback)
 
 
 @task
 def post_install():
-    """post install for backend & frontend"""
+    """Post install for backend & frontend."""
     execute(post_install_backend)
     execute(post_install_frontend)
 
@@ -277,21 +402,21 @@ def post_install():
 @roles('web')
 @task
 def post_install_backend():
-    """Post installation of backend"""
+    """Post installation of backend."""
     execute(pydiploy.django.post_install_backend)
 
 
 @roles('lb')
 @task
 def post_install_frontend():
-    """Post installation of frontend"""
+    """Post installation of frontend."""
     execute(pydiploy.django.post_install_frontend)
 
 
 @roles('web')
 @task
 def install_postgres(user=None, dbname=None, password=None):
-    """Install Postgres on remote"""
+    """Install Postgres on remote."""
     execute(
         pydiploy.django.install_postgres_server,
         user=user,
@@ -302,7 +427,7 @@ def install_postgres(user=None, dbname=None, password=None):
 
 @task
 def reload():
-    """Reload backend & frontend"""
+    """Reload backend & frontend."""
     execute(reload_frontend)
     execute(reload_backend)
 
@@ -327,26 +452,44 @@ def reload_backend():
 @roles('lb')
 @task
 def set_down():
-    """Set app to maintenance mode"""
+    """Set app to maintenance mode."""
     execute(pydiploy.django.set_app_down)
 
 
 @roles('lb')
 @task
 def set_up():
-    """Set app to up mode"""
+    """Set app to up mode."""
     execute(pydiploy.django.set_app_up)
 
 
 @roles('web')
 @task
 def custom_manage_cmd(cmd):
-    """Execute custom command in manage.py"""
+    """Execute custom command in manage.py."""
     execute(pydiploy.django.custom_manage_command, cmd)
 
 
 @roles("web")
 @task
 def update_python_version():
-    """Update python version"""
+    """Update python version."""
     execute(pydiploy.django.update_python_version)
+
+
+@task
+def deploy_all_preprod():
+    preprod()
+    preprod_amiens()
+    preprod_lille()
+    preprod_montpellier3()
+    preprod_rouen()
+
+
+@task
+def deploy_all_prod():
+    prod()
+    prod_amiens()
+    prod_lille()
+    prod_montpellier3()
+    prod_rouen()

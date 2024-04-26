@@ -1,4 +1,5 @@
 """Serializers describing fields used on project reviews."""
+
 from rest_framework import serializers
 
 from plana.apps.commissions.serializers.commission import CommissionSerializer

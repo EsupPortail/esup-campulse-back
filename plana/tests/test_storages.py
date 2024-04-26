@@ -3,6 +3,7 @@ Storage tests from octant.
 
 https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/tests/test_storages.py
 """
+
 from unittest.mock import Mock
 
 from django.core.files.storage import default_storage

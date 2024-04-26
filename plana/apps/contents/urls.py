@@ -1,4 +1,5 @@
 """List of URLs directly linked to operations that can be done on contents."""
+
 from django.urls import path
 
 from .views.content import ContentList, ContentRetrieveUpdate

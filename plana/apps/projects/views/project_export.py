@@ -19,7 +19,7 @@ from plana.apps.projects.models.project_commission_fund import ProjectCommission
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.projects.serializers.project_review import ProjectReviewSerializer
 from plana.apps.users.models.user import AssociationUser, User
-from plana.utils import generate_pdf
+from plana.utils import generate_pdf_response
 
 
 class ProjectDataExport(generics.RetrieveAPIView):
@@ -106,7 +106,7 @@ class ProjectDataExport(generics.RetrieveAPIView):
             ).values("name", "document__name")
         )
 
-        return generate_pdf(data["name"], data, "project_summary", request.build_absolute_uri("/"))
+        return generate_pdf_response(data["name"], data, "project_summary", request.build_absolute_uri("/"))
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -187,7 +187,7 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
             ).values("name", "document__name")
         )
 
-        return generate_pdf(
+        return generate_pdf_response(
             data["name"],
             data,
             "project_review_summary",

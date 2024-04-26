@@ -1,4 +1,5 @@
 """List of tests done on associations models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.institutions.models.institution import Institution

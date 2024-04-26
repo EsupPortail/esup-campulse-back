@@ -1,4 +1,5 @@
 """Special serializers used to interact with CAS."""
+
 from __future__ import annotations
 
 import typing
@@ -71,8 +72,12 @@ class CASSerializer(LoginSerializer):
                 )
                 attrs["user"] = login.account.user
                 user = User.objects.get(email=attrs["user"].email)
+                # With base settings, if CAS sends `affiliation = "student"`, `is_student` will be set to True.
                 user.is_student = False
-                if extra.get("affiliation", "") == "student":
+                if (
+                    extra.get(settings.CAS_ATTRIBUTES_NAMES["is_student"], "")
+                    == settings.CAS_ATTRIBUTES_VALUES["is_student"]
+                ):
                     user.is_student = True
                 user.save()
             except IntegrityError:

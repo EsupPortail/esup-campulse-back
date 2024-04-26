@@ -1,4 +1,5 @@
 """Views directly linked to logos."""
+
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status

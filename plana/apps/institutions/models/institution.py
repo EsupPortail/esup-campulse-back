@@ -1,4 +1,5 @@
 """Models describing institutions (Crous, Unistra, UHA, ...)."""
+
 from django.apps import apps
 from django.db import models
 from django.utils.translation import gettext_lazy as _

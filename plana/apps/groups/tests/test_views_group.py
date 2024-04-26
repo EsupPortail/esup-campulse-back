@@ -1,4 +1,5 @@
 """List of tests done on auth groups views."""
+
 import json
 
 from django.contrib.auth.models import Group

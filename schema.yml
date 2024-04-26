@@ -4038,6 +4038,10 @@ components:
           type: string
           description: Return a link to DocumentUploadFileRetrieve view.
           readOnly: true
+        calculated_expiration_date:
+          type: string
+          description: Return real expiration date based on expiration_day or days_before_expiration.
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -4070,6 +4074,7 @@ components:
           nullable: true
           title: Projet
       required:
+      - calculated_expiration_date
       - document
       - id
       - path_file
@@ -4089,6 +4094,10 @@ components:
           type: integer
           description: Return file size.
           readOnly: true
+        calculated_expiration_date:
+          type: string
+          description: Return real expiration date based on expiration_day or days_before_expiration.
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -4121,6 +4130,7 @@ components:
           nullable: true
           title: Projet
       required:
+      - calculated_expiration_date
       - document
       - id
       - path_file
@@ -4169,6 +4179,26 @@ components:
         is_site:
           type: boolean
           title: Est site
+        decision_attribution_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de décision d'attribution
+          maxLength: 250
+        attribution_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template d'attribution
+          maxLength: 250
+        rejection_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de rejet
+          maxLength: 250
+        postpone_template_path:
+          type: string
+          nullable: true
+          title: Chemin du template de report
+          maxLength: 250
         institution:
           type: integer
           title: Établissement

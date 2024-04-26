@@ -1,4 +1,5 @@
 """Serializers describing fields used on contents."""
+
 from rest_framework import serializers
 
 from plana.apps.contents.models.content import Content

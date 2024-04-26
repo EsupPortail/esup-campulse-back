@@ -3,6 +3,7 @@ Storage field from octant.
 
 https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/serializers/fields.py
 """
+
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes

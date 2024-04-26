@@ -1,4 +1,5 @@
 """Serializers describing fields used on project category table."""
+
 from rest_framework import serializers
 
 from plana.apps.projects.models.category import Category

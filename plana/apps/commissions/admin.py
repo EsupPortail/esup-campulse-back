@@ -1,4 +1,5 @@
 """Admin view for Commission models."""
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 

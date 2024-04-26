@@ -3,21 +3,27 @@ title: Variables Django
 weight: 104
 ---
 
-Les fichiers situés dans `plana/settings` comportent des variables paramétrant le comportement de l'application selon l'environnement utilisé.
+Les fichiers situés dans `plana/settings` comportent des variables paramétrant le comportement de l'application selon l'environnement utilisé.  
+Certaines de ces variables doivent être paramétrées différemment pour le déploiement distant (voir section `Personnalisation`).
 
 ## Authentification via CAS
 
 Plusieurs variables permettent d'intégrer le serveur CAS pour authentifier des comptes universitaires :
+- `CAS_NAME` : nom du serveur CAS.
 - `CAS_SERVER` : URL du serveur CAS.
+- `CAS_VERSION` : version du service CAS.
 - `CAS_AUTHORIZED_SERVICES` : URLs des clients frontend autorisées à communiquer avec le serveur pour valider les tickets.
+- `CAS_ATTRIBUTES_NAMES`: clés-valeurs des champs de la table User correspondant aux noms des champs envoyés par CAS.
+- `CAS_ATTRIBUTES_VALUES`: clés-valeurs des champs de la table User correspondant aux valeurs des champs envoyés par CAS.
 
 ## Stockage
 
-Le stockage des fichiers est optimisé pour un serveur S3 découpé en trois buckets :
-- `LOGOS_FILEPATH` : nom du bucket pour stocker les logos du footer (voir modèle `Logo`).
-- `ASSOCIATIONS_LOGOS_FILEPATH` : nom du bucket pour stocker les logos des associations (voir modèle `Association`).
-- `TEMPLATES_FILEPATH` : nom du bucket pour stocker les modèles de documents publics (voir modèle `Document`).
-- `DOCUMENTS_FILEPATH` : nom du bucket pour stocker les documents des étudiantes et étudiants de manière chiffrée (voir modèle `DocumentUpload`).
+Le stockage des fichiers est optimisé pour un bucket S3 découpé en cinq sections :
+- `S3_LOGOS_FILEPATH` : nom de la section pour stocker les logos du footer (voir modèle `Logo`).
+- `S3_ASSOCIATIONS_LOGOS_FILEPATH` : nom de la section pour stocker les logos des associations (voir modèle `Association`).
+- `S3_TEMPLATES_FILEPATH` : nom de la section pour stocker les modèles de documents publics (voir modèle `Document`).
+- `S3_DOCUMENTS_FILEPATH` : nom de la section pour stocker les documents des étudiantes et étudiants de manière chiffrée (voir modèle `DocumentUpload`).
+- `S3_PDF_FILEPATH` : nom de la section pour stocker les fichiers liés à la génération des PDF des notifications et exports (pas de modèle).
 
 ## Logos des associations
 
@@ -41,15 +47,15 @@ Certains emails renvoyés par l'API intègrent des liens menant à des pages du 
 - `EMAIL_TEMPLATE_ACCOUNT_VALIDATE_URL` : chemin menant à la page de validation d'une charte pour un gestionnaire connecté.
 - `APP_DOCUMENTATION_URL` : URL menant vers la documentation utilisateur.
 
-## Nombre de jours attendus dans les tâches CRON.
+## Nombre de jours attendus dans les tâches CRON
 
 Les tâches CRON envoient de multiples emails dont des relances dépendant de nombres de jours.
 - `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING` : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression future de ce compte.
-- `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION` :  : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression de ce compte.
+- `CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION` : nombre de jours depuis la dernière connexion d'un compte après lequel un mail est envoyé pour prévenir de la suppression de ce compte.
 - `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration future de ce mot de passe.
 - `CRON_DAYS_BEFORE_PASSWORD_EXPIRATION` : nombre de jours depuis le dernier changement de mot de passe d'un compte après lequel un mail est envoyé pour prévenir de l'expiration de ce mot de passe.
 - `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING` : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration future de cette charte.
-- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION ` : : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration de cette charte.
+- `CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION ` : nombre de jours depuis la dernière mise à jour de la charte d'une association après lequel un mail est envoyé pour prévenir de l'expiration de cette charte.
 - `CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING` : nombre de jours avant la date d'expiration d'un document après lequel un mail est envoyé pour prévenir de l'expiration future de ce document.
 - `CRON_DAYS_BEFORE_REVIEW_EXPIRATION` : nombre de jours avant la date d'expiration d'un bilan après lequel un mail est envoyé pour prévenir de l'expiration future de ce bilan.
 - `CRON_DAYS_BEFORE_HISTORY_EXPIRATION` : nombre de jours avant la date d'expiration d'une ligne d'historique.
@@ -59,7 +65,7 @@ Les tâches CRON envoient de multiples emails dont des relances dépendant de no
 - `DEFAULT_PASSWORD_LENGTH` : taille des mots de passe générés.
 - `DEFAULT_FROM_EMAIL` : adresse mail "noreply" par défaut renseignée dans les emails envoyés par l'appli.
 - `RESTRICTED_DOMAINS` : domaines d'adresses mail non autorisés pour les comptes locaux (généralement, les domaines utilisés par les comptes se connectant via le CAS paramétré).
-- `CAS_INSTITUTION_ID` : identifiant de l'établissement en charge de gérer les comptes CAS.
+- `CAS_INSTITUTION_ACRONYM` : acronyme de l'établissement en charge de gérer les comptes CAS.
 - `LDAP_ENABLED` : active ou non la possibilité d'ajouter des comptes via un annuaire LDAP.
 - `ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED` : nombre de comptes autorisés à se relier à une même association.
 - `ASSOCIATION_IS_SITE_DEFAULT` : définit un degré de validation supplémentaire pour accéder à l'ensemble des fonctionnalités de l'application côté association (utilisé pour définir si une association a signé la Charte Site Alsace de l'Université de Strasbourg par exemple), laisser à `True` pour désactiver la validation.

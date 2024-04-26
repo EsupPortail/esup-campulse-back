@@ -1,4 +1,5 @@
 """Admin view for Association models."""
+
 from django.contrib import admin
 
 from .models import ActivityField, Association

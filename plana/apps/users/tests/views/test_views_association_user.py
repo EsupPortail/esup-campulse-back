@@ -1,4 +1,5 @@
 """List of tests done on association_user views."""
+
 import datetime
 import json
 

@@ -1,4 +1,5 @@
 """Views directly linked to commission exports."""
+
 import csv
 from tempfile import NamedTemporaryFile
 
@@ -23,7 +24,7 @@ from plana.apps.projects.models import (
 )
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
-from plana.utils import generate_pdf
+from plana.utils import generate_pdf_response
 
 
 class CommissionExport(generics.RetrieveAPIView):
@@ -227,7 +228,7 @@ class CommissionExport(generics.RetrieveAPIView):
             http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
             return http_response
         if mode == "pdf":
-            return generate_pdf(
+            return generate_pdf_response(
                 data["name"],
                 data,
                 "commission_projects_list",

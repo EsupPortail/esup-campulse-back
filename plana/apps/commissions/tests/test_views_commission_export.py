@@ -1,4 +1,5 @@
 """List of tests done on commission exports views."""
+
 import csv
 import io
 
