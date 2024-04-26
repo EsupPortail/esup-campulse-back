@@ -32,6 +32,8 @@ L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l
 
 Ce code est ensuite stocké dans la table `contents_content`, avec les textes des contenus qui constituent le corps du PDF de notification renvoyé.
 
+Chaque type de notification est facultatif, il est possible de n'en renseigner que certains, voire aucun.
+
 ### Variables présentes dans les contenus
 
 Différentes variables par défaut sont présentes dans les différents contenus renvoyés et sont alors utilisables dans les différents templates de contenus.

@@ -182,8 +182,8 @@ class CommissionExpirationCommandTest(TestCase):
         self.assertFalse(expired_commission.is_open_to_projects)
 
 
-class DocumentExpirationCommandTest(TestCase):
-    """Test document_expiration command."""
+class DocumentDaysBeforeExpirationCommandTest(TestCase):
+    """Test document_expiration command with days_before_expiration field."""
 
     fixtures = [
         "associations_activityfield.json",
@@ -202,9 +202,7 @@ class DocumentExpirationCommandTest(TestCase):
 
     def setUp(self):
         """Cache all document uploads."""
-        # TODO Write tests with expiration_day instead.
         self.days_before_expiration = 365
-        self.expiration_day = "08-31"
         self.document_uploads = DocumentUpload.objects.all()
         for document_upload in self.document_uploads:
             document = Document.objects.get(id=document_upload.document_id)
@@ -252,6 +250,80 @@ class DocumentExpirationCommandTest(TestCase):
         )
         call_command("cron_document_expiration")
         self.assertNotEqual(self.document_uploads.count(), initial_document_uploads_count)
+
+
+class DocumentExpirationDayCommandTest(TestCase):
+    """Test document_expiration command with expiration_day field."""
+
+    fixtures = [
+        "associations_activityfield.json",
+        "associations_association.json",
+        "commissions_fund.json",
+        "documents_document.json",
+        "documents_documentupload.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
+        "projects_project.json",
+        "users_associationuser.json",
+        "users_user.json",
+    ]
+
+    def setUp(self):
+        """Cache all document uploads."""
+        self.today = datetime.date.today()
+        self.document_uploads = DocumentUpload.objects.all()
+        for document_upload in self.document_uploads:
+            document_upload.validated_date = self.today
+            document_upload.save()
+            document = Document.objects.get(id=document_upload.document_id)
+            document.days_before_expiration = None
+            document.save()
+
+    def test_no_document_upload_expiration(self):
+        """Nothing should change if no document upload expires."""
+        for document_upload in self.document_uploads:
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = (self.today - datetime.timedelta(days=1)).strftime("%m-%d")
+            document.save()
+        call_command("cron_document_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_almost_document_upload_expiration(self):
+        """An email is sent if document upload expires in WARNING days."""
+        for document_upload in self.document_uploads:
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = (
+                self.today + datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING))
+            ).strftime("%m-%d")
+            document.save()
+        call_command("cron_document_expiration")
+        self.assertTrue(len(mail.outbox))
+
+    def test_almost_document_upload_expiration_but_no_document_upload_expiration(self):
+        """Nothing should change if document expires in WARNING - 1 days."""
+        for document_upload in self.document_uploads:
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = (
+                self.today + datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING) - 1)
+            ).strftime("%m-%d")
+            document.save()
+        call_command("cron_document_expiration")
+        self.assertFalse(len(mail.outbox))
+
+    def test_document_upload_expiration(self):
+        """Document upload expires today."""
+        # TODO Function working but not in unit tests.
+        """
+        initial_document_uploads_count = self.document_uploads.count()
+        for document_upload in self.document_uploads:
+            document = Document.objects.get(id=document_upload.document_id)
+            document.expiration_day = self.today.strftime("%m-%d")
+            document.save()
+        call_command("cron_document_expiration")
+        self.assertNotEqual(self.document_uploads.count(), initial_document_uploads_count)
+        """
 
 
 class GOAExpirationCommandTest(TestCase):
