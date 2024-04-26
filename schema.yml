@@ -4038,6 +4038,10 @@ components:
           type: string
           description: Return a link to DocumentUploadFileRetrieve view.
           readOnly: true
+        calculated_expiration_date:
+          type: string
+          description: Return real expiration date based on expiration_day or days_before_expiration.
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -4070,6 +4074,7 @@ components:
           nullable: true
           title: Projet
       required:
+      - calculated_expiration_date
       - document
       - id
       - path_file
@@ -4089,6 +4094,10 @@ components:
           type: integer
           description: Return file size.
           readOnly: true
+        calculated_expiration_date:
+          type: string
+          description: Return real expiration date based on expiration_day or days_before_expiration.
+          readOnly: true
         name:
           type: string
           title: Nom
@@ -4121,6 +4130,7 @@ components:
           nullable: true
           title: Projet
       required:
+      - calculated_expiration_date
       - document
       - id
       - path_file

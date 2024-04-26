@@ -1,5 +1,7 @@
 """Serializers describing fields used on documents-association-user relations."""
 
+import datetime
+
 from django.urls import reverse
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
@@ -13,6 +15,23 @@ class DocumentUploadListSerializer(serializers.ModelSerializer):
     """Main serializer without file size."""
 
     path_file = serializers.SerializerMethodField()
+    calculated_expiration_date = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_calculated_expiration_date(self, document):
+        """Return real expiration date based on expiration_day or days_before_expiration."""
+        if document.validated_date is not None:
+            if document.document.expiration_day is not None:
+                if document.document.expiration_day <= document.validated_date.strftime("%m-%d"):
+                    return datetime.datetime.strptime(
+                        f"{document.validated_date.year + 1}-{document.document.expiration_day}", "%Y-%m-%d"
+                    )
+                return datetime.datetime.strptime(
+                    f"{document.validated_date.year}-{document.document.expiration_day}", "%Y-%m-%d"
+                )
+            if document.document.days_before_expiration is not None:
+                return document.validated_date + document.document.days_before_expiration
+        return None
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_path_file(self, document):
@@ -29,6 +48,23 @@ class DocumentUploadRetrieveSerializer(serializers.ModelSerializer):
 
     path_file = serializers.SerializerMethodField()
     size = serializers.SerializerMethodField()
+    calculated_expiration_date = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_calculated_expiration_date(self, document):
+        """Return real expiration date based on expiration_day or days_before_expiration."""
+        if document.validated_date is not None:
+            if document.document.expiration_day is not None:
+                if document.document.expiration_day <= document.validated_date.strftime("%m-%d"):
+                    return datetime.datetime.strptime(
+                        f"{document.validated_date.year + 1}-{document.document.expiration_day}", "%Y-%m-%d"
+                    )
+                return datetime.datetime.strptime(
+                    f"{document.validated_date.year}-{document.document.expiration_day}", "%Y-%m-%d"
+                )
+            if document.document.days_before_expiration is not None:
+                return document.validated_date + document.document.days_before_expiration
+        return None
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_path_file(self, document):

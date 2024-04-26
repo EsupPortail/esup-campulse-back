@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 11:33+0200\n"
+"POT-Creation-Date: 2024-04-26 11:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1774,7 +1774,7 @@ msgstr ""
 "Supprime toutes les ProjectCommissionFunds entre les Projets avec un statut "
 "PROJECT_DRAFT et les Fonds de Commission avec une submission_date expirée."
 
-#: plana/management/commands/cron_document_expiration.py:17
+#: plana/management/commands/cron_document_expiration.py:18
 msgid "Checks statuses of documents uploads."
 msgstr "Vérifie les statuts des documents téléversés."
 
