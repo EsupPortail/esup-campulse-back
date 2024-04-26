@@ -22,6 +22,7 @@
 - Correction des droits accordés à la délégation de présidence si une seule date est donnée.
 - Correction des droits d'accès à un projet par un gestionnaire.
 - Correction du non-envoi de mail de report de projet si aucun template n'est défini.
+- Correction du bug de non-envoi de mail d'expiration des documents après un certain délai.
 - Correction du bug d'affichage des blocs de texte sur le PDF de récap de bilan de projet.
 - Champs NULL autorisés sur la table Content.
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.

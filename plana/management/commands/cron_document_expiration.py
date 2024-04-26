@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from plana.apps.associations.models.association import Association
@@ -19,7 +20,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             document_uploads_with_expiration = DocumentUpload.objects.filter(
-                document_id__in=Document.objects.filter(days_before_expiration__isnull=False).values_list("id")
+                document_id__in=Document.objects.filter(
+                    Q(days_before_expiration__isnull=False) ^ Q(expiration_day__isnull=False)
+                ).values_list("id")
             )
             for document_upload in document_uploads_with_expiration:
                 document = Document.objects.get(id=document_upload.document_id)
