@@ -938,9 +938,9 @@ urllib3==1.26.18 ; python_version >= "3.9" and python_version < "3.13" \
 waitress==2.1.2 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:7500c9625927c8ec60f54377d590f67b30c8e70ef4b8894214ac6e4cad233d2a \
     --hash=sha256:780a4082c5fbc0fde6a2fcfe5e26e6efc1e8f425730863c04085769781f51eba
-weasyprint==61.2 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:47df6cfeeff8c6c28cf2e4caf837cde17715efe462708ada74baa2eb391b6059 \
-    --hash=sha256:76c6dc0e75e09182d5645d92c66ddf86b1b992c9420235b723fb374b584e5bf4
+weasyprint==62.0 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:021b2fcde720756dd496645f251e40240b742e91a85f446f612f4666fdca316d \
+    --hash=sha256:9f56eaefdaafcf35ae568c56eee5dba189af1272a46f4d205bd12936315f9481
 webencodings==0.5.1 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78 \
     --hash=sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923
