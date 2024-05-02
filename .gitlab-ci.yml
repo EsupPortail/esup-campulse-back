@@ -50,6 +50,5 @@ pages:
     paths:
     - public
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "feature/only-ci-attribute-deprecated"' # TODO Remove after testing.
     - if: '$CI_COMMIT_REF_NAME == "develop"'
     - if: '$CI_COMMIT_REF_NAME == "main"'
