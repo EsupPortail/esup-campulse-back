@@ -362,24 +362,34 @@ class GOAExpirationCommandTest(TestCase):
 class HistoryExpirationCommandTest(TestCase):
     """Test history_expiration command."""
 
-    fixtures = []
+    fixtures = ["users_user.json"]
 
     def setUp(self):
         """Cache all history."""
         self.history = History.objects.all()
         self.now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=0)))
+        History.objects.create(
+            action_title="USER_LOGGED",
+            creation_date=self.now,
+            action_user_id=3,
+        )
 
     def test_no_history_expiration(self):
         """Nothing should change if no History date expires."""
-        self.history.update(creation_date=self.now)
+        history_cnt_before = History.objects.all().count()
         call_command("cron_history_expiration")
-        self.assertFalse(len(mail.outbox))
+        history_cnt_after = History.objects.all().count()
+        self.assertEqual(history_cnt_before, history_cnt_after)
 
     def test_goa_expiration(self):
         """History date expires today."""
+        self.history.update(
+            creation_date=(self.now - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_HISTORY_EXPIRATION + 1))
+        )
+        history_cnt_before = History.objects.all().count()
         call_command("cron_history_expiration")
-        # TODO Create History fixtures for this test.
-        # self.assertTrue(len(mail.outbox))
+        history_cnt_after = History.objects.all().count()
+        self.assertNotEqual(history_cnt_before, history_cnt_after)
 
 
 class PasswordExpirationCommandTest(TestCase):

@@ -126,7 +126,7 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
         context = Context(dict_data)
         html = template.render(context)
     else:
-        # TODO Case not working since S3 PDF refactoring.
+        # May not work anymore since S3 PDF refactoring.
         html = render_to_string(settings.TEMPLATES_PDF_FILEPATHS[type_doc], dict_data)
     pdf_response = HttpResponse(content_type="application/pdf")
     pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
@@ -142,7 +142,7 @@ def generate_pdf_binary(context, request, template_name):
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(context)
     else:
-        # TODO Case not working since S3 PDF refactoring.
+        # May not work anymore since S3 PDF refactoring.
         template = get_template(template_name)
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
