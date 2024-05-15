@@ -16,6 +16,13 @@ Modifier le fichier `bin/postactivate` de l'environnement virtuel dédié à l'a
 # Fichier de configuration `plana/settings/*.py` utilisé.
 export DJANGO_SETTINGS_MODULE=plana.settings.[ENVIRONNEMENT] 
 
+# Base de données
+export DEFAULT_DB_HOST="localhost"
+export DEFAULT_DB_PORT="5432"
+export DEFAULT_DB_NAME="plana"
+export DEFAULT_DB_USER="plana"
+export DEFAULT_DB_PASSWORD="plana"
+
 # Upload d'images et de documents sur le stockage S3.
 export AWS_ACCESS_KEY_ID=AccESSkeyId
 export AWS_SECRET_ACCESS_KEY=secREtaCCEsskeY
