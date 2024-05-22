@@ -55,8 +55,8 @@ django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/
 django-cleanup = "^8.1.0"
 django-cors-headers = "^4.3.1"
 django-extensions = "^3.2.3"
-django-health-check = "^3.18.1"
-django-storages = {extras = ["boto3"], version = "^1.14.2"}
+django-health-check = "^3.18.2"
+django-storages = {extras = ["boto3"], version = "^1.14.3"}
 django-summernote = "<0.9"
 django-thumbnails = "^0.7.0"
 djangorestframework = "^3.15.1"
@@ -66,18 +66,18 @@ dj-rest-auth = "^6.0.0"
 drf-spectacular = "^0.27.2"
 britney = "^0.5.1"
 openpyxl = "^3.1.2"
-psycopg = {extras = ["binary"], version = "^3.1.18"}
+psycopg = {extras = ["binary"], version = "^3.1.19"}
 pyrage = "^1.1.2"
 urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and botocore
-weasyprint = "^62.0"
+weasyprint = "^62.1"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
 coverage = "^7.5.0"
 django-debug-toolbar = "^4.3.0"
-pre-commit = "^3.7.0"
-pylint = "^3.1.0"
+pre-commit = "^3.7.1"
+pylint = "^3.2.2"
 pylint-django = "^2.5.5"
 safety = "^3.2.0"
 sentry-sdk = "^1.45.0"
