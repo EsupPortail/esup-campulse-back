@@ -12,6 +12,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
+from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.libs.mail_template.models import MailTemplate
@@ -77,7 +78,10 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     message=template.parse_vars(request.user, request, context),
                 )
         elif "email" in request.data:
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if (
+                request.data["email"].split('@')[1]
+                in Setting.objects.get(setting="RESTRICTED_DOMAINS").parameters["value"]
+            ):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,

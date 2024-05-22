@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.contents.models.setting import Setting
 from plana.apps.institutions.models.institution import Institution
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
@@ -22,7 +23,11 @@ class Command(BaseCommand):
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING))
+                    + datetime.timedelta(
+                        days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING").parameters[
+                            "value"
+                        ]
+                    )
                 ):
                     template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED")
                     current_site = get_current_site(None)
@@ -44,7 +49,9 @@ class Command(BaseCommand):
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION))
+                    + datetime.timedelta(
+                        days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION").parameters["value"]
+                    )
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.save()

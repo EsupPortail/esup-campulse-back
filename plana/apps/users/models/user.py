@@ -4,7 +4,6 @@ import datetime
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -13,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.contents.models.setting import Setting
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.users.provider import CASProvider
@@ -261,7 +261,9 @@ class User(AbstractUser):
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         elif self.is_cas_user() is True:
-            institution = Institution.objects.get(acronym=settings.CAS_INSTITUTION_ACRONYM)
+            institution = Institution.objects.get(
+                acronym=Setting.objects.get(setting="CAS_INSTITUTION_ACRONYM").parameters["value"]
+            )
             managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
         else:

@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 
 
@@ -17,7 +18,9 @@ class Command(BaseCommand):
                 creation_date__lt=(
                     timezone.make_aware(
                         datetime.datetime.now()
-                        - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_HISTORY_EXPIRATION))
+                        - datetime.timedelta(
+                            days=Setting.objects.get(setting="CRON_DAYS_BEFORE_HISTORY_EXPIRATION").parameters["value"]
+                        )
                     )
                 )
             )

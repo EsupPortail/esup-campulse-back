@@ -21,9 +21,11 @@ weight: 112
 - [dj-rest-auth](https://pypi.org/project/dj-rest-auth/) : génération des routes d'API liées à l'authentification.
 - [drf-spectacular](https://pypi.org/project/drf-spectacular/) : génération du fichier de documentation d'API.
 - [britney](https://pypi.org/project/britney/) : communication avec un annuaire LDAP.
+- [jsonschema](https://pypi.org/project/jsonschema/) : implantation de la norme JSON Schema utilisée pour valider les champs JSONField de la base de données.
 - [openpyxl](https://pypi.org/project/openpyxl/) : génération de fichiers Excel.
 - [psycopg](https://pypi.org/project/psycopg/) : communication avec la base de données PostgreSQL.
 - [pyrage](https://pypi.org/project/pyrage/) : chiffrement des documents.
+- [referencing](https://pypi.org/project/referencing/) : implantation du validateur de la norme JSON Schema utilisée pour valider les champs JSONField de la base de données.
 - [weasyprint](https://pypi.org/project/weasyprint/) : génération de fichiers PDF.
 - [zxcvbn](https://pypi.org/project/zxcvbn/) : vérificateur de robustesse de mots de passe.
 

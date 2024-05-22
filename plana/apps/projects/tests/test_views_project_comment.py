@@ -24,6 +24,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_setting.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",

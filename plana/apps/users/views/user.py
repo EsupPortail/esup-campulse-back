@@ -21,6 +21,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
@@ -227,7 +228,10 @@ class UserListCreate(generics.ListCreateAPIView):
         is_cas = True
         if not "is_cas" in request.data or ("is_cas" in request.data and request.data["is_cas"] is False):
             is_cas = False
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if (
+                request.data["email"].split('@')[1]
+                in Setting.objects.get(setting="RESTRICTED_DOMAINS").parameters["value"]
+            ):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -256,7 +260,7 @@ class UserListCreate(generics.ListCreateAPIView):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "manager_email_address": request.user.email,
-            "documentation_url": settings.APP_DOCUMENTATION_URL,
+            "documentation_url": Setting.objects.get(setting="APP_DOCUMENTATION_URL").parameters["value"],
         }
 
         template = None
@@ -394,7 +398,10 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 request.data.pop(restricted_field, False)
         elif "email" in request.data:
             request.data.update({"email": request.data["email"].lower()})
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if (
+                request.data["email"].split('@')[1]
+                in Setting.objects.get(setting="RESTRICTED_DOMAINS").parameters["value"]
+            ):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -425,7 +432,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context["username"] = user.username
             context["first_name"] = user.first_name
             context["last_name"] = user.last_name
-            context["documentation_url"] = settings.APP_DOCUMENTATION_URL
+            context["documentation_url"] = Setting.objects.get(setting="APP_DOCUMENTATION_URL").parameters["value"]
             if user.is_cas_user():
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_CONFIRMATION")
             else:

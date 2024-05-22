@@ -1,6 +1,6 @@
 ---
 title: Base de données
-weight: 122
+weight: 121
 ---
 
 Un ensemble de données minimal doit être ajouté en base de données pour assurer le bon fonctionnement de l'application. Ces données peuvent être modifiées par le superutilisateur de l'application :
@@ -39,6 +39,8 @@ Un ensemble de données minimal doit être ajouté en base de données pour assu
   - acronyme
   - URL s'ouvrant au clic sur le logo
   - position dans le footer (ligne, colonne)
+- Variables de configuration (`Setting`)
+  - paramètres de divers types utilisées par l'application, accompagnés de leurs descriptions
 - Sujets et corps de texte des emails envoyés (`MailTemplate`)
   - nom
   - sujet

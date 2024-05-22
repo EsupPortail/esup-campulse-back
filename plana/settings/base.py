@@ -497,7 +497,6 @@ CAS_ID = "cas"
 CAS_NAME = "CAS Unistra"
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
-CAS_INSTITUTION_ACRONYM = "Unistra"
 CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
 # Keys are User model fields, values are CAS fields.
@@ -630,22 +629,7 @@ EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
-########
-# CRON #
-########
-
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = 335
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = 365
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = 335
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = 355
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = 365
-CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING = 10
-CRON_DAYS_BEFORE_REVIEW_EXPIRATION = 30
-CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
-
-
-#################
+################
 # PDF Templates #
 #################
 
@@ -679,9 +663,6 @@ APPEND_SLASH = False
 MIGRATION_SITE_DOMAIN = "localhost:3000"
 MIGRATION_SITE_NAME = "Campulse"
 
-# Documentation URL sent in emails.
-APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
-
 # Random password are generated with this length.
 DEFAULT_PASSWORD_LENGTH = 16
 
@@ -690,12 +671,6 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 
 # Default amount of users allowed in an association (None if no limit).
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
-
-# Index of the month when scholar year is resetted.
-NEW_YEAR_MONTH_INDEX = 9
-
-# Avoid registration with following email domains.
-RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
 
 # External APIs.
 ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
@@ -706,10 +681,6 @@ LDAP_ENABLED = True
 
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
-
-# Amount of years before an archived project is hidden, then deleted.
-AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = 5
-AMOUNT_YEARS_BEFORE_PROJECT_DELETION = 10
 
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {

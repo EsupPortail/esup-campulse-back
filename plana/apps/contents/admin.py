@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import Content, Logo
+from .models import Content, Logo, Setting
 
 
 @admin.register(Content)
@@ -20,3 +20,10 @@ class LogoAdmin(admin.ModelAdmin):
     list_display = ["acronym", "title", "url", "visible"]
     list_filter = ["visible"]
     search_fields = ["acronym", "title"]
+
+
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    """List view for settings."""
+
+    list_display = ["setting", "parameters"]

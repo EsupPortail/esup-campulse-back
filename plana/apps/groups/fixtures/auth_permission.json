@@ -255,7 +255,7 @@
     "model": "auth.permission",
     "pk": 29,
     "fields": {
-      "name": "Can add token",
+      "name": "Can add Token",
       "content_type": 8,
       "codename": "add_tokenproxy"
     }
@@ -264,7 +264,7 @@
     "model": "auth.permission",
     "pk": 30,
     "fields": {
-      "name": "Can change token",
+      "name": "Can change Token",
       "content_type": 8,
       "codename": "change_tokenproxy"
     }
@@ -273,7 +273,7 @@
     "model": "auth.permission",
     "pk": 31,
     "fields": {
-      "name": "Can delete token",
+      "name": "Can delete Token",
       "content_type": 8,
       "codename": "delete_tokenproxy"
     }
@@ -282,7 +282,7 @@
     "model": "auth.permission",
     "pk": 32,
     "fields": {
-      "name": "Can view token",
+      "name": "Can view Token",
       "content_type": 8,
       "codename": "view_tokenproxy"
     }
@@ -1776,71 +1776,107 @@
     "model": "auth.permission",
     "pk": 198,
     "fields": {
-      "name": "Can add Template variable",
+      "name": "Can add General setting",
       "content_type": 39,
-      "codename": "add_mailtemplatevar"
+      "codename": "add_setting"
     }
   },
   {
     "model": "auth.permission",
     "pk": 199,
     "fields": {
-      "name": "Can change Template variable",
+      "name": "Can change General setting",
       "content_type": 39,
-      "codename": "change_mailtemplatevar"
+      "codename": "change_setting"
     }
   },
   {
     "model": "auth.permission",
     "pk": 200,
     "fields": {
-      "name": "Can delete Template variable",
+      "name": "Can delete General setting",
       "content_type": 39,
-      "codename": "delete_mailtemplatevar"
+      "codename": "delete_setting"
     }
   },
   {
     "model": "auth.permission",
     "pk": 201,
     "fields": {
-      "name": "Can view Template variable",
+      "name": "Can view General setting",
       "content_type": 39,
-      "codename": "view_mailtemplatevar"
+      "codename": "view_setting"
     }
   },
   {
     "model": "auth.permission",
     "pk": 202,
     "fields": {
-      "name": "Can add Mail template",
+      "name": "Can add Template variable",
       "content_type": 40,
-      "codename": "add_mailtemplate"
+      "codename": "add_mailtemplatevar"
     }
   },
   {
     "model": "auth.permission",
     "pk": 203,
     "fields": {
-      "name": "Can change Mail template",
+      "name": "Can change Template variable",
       "content_type": 40,
-      "codename": "change_mailtemplate"
+      "codename": "change_mailtemplatevar"
     }
   },
   {
     "model": "auth.permission",
     "pk": 204,
     "fields": {
-      "name": "Can delete Mail template",
+      "name": "Can delete Template variable",
       "content_type": 40,
-      "codename": "delete_mailtemplate"
+      "codename": "delete_mailtemplatevar"
     }
   },
   {
     "model": "auth.permission",
     "pk": 205,
     "fields": {
-      "name": "Can view Mail template",
+      "name": "Can view Template variable",
       "content_type": 40,
+      "codename": "view_mailtemplatevar"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 206,
+    "fields": {
+      "name": "Can add Mail template",
+      "content_type": 41,
+      "codename": "add_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 207,
+    "fields": {
+      "name": "Can change Mail template",
+      "content_type": 41,
+      "codename": "change_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 208,
+    "fields": {
+      "name": "Can delete Mail template",
+      "content_type": 41,
+      "codename": "delete_mailtemplate"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 209,
+    "fields": {
+      "name": "Can view Mail template",
+      "content_type": 41,
       "codename": "view_mailtemplate"
     }
   }

@@ -2,9 +2,10 @@
 
 import datetime
 
-from django.conf import settings
 from django.db import models
 from django.db.utils import ProgrammingError
+
+from plana.apps.contents.models.setting import Setting
 
 
 class VisibleProjectManager(models.Manager):
@@ -19,7 +20,10 @@ class VisibleProjectManager(models.Manager):
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
                 ) > project.edition_date + datetime.timedelta(
-                    days=(365 * int(int(settings.AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY)))
+                    days=(
+                        365
+                        * Setting.objects.get(setting="AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY").parameters["value"]
+                    )
                 ):
                     invisible_projects_ids.append(project.id)
             queryset = queryset.exclude(id__in=invisible_projects_ids)

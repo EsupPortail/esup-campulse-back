@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
+from plana.apps.contents.models.setting import Setting
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -26,7 +27,7 @@ class Command(BaseCommand):
 
             # Send emails to accounts with nearly expired password (not changed in 11 months)
             mail_sending_due_date = today - datetime.timedelta(
-                days=int(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING)
+                days=Setting.objects.get(setting="CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING").parameters["value"]
             )
             mail_sending_queryset = queryset.filter(password_last_change_date=mail_sending_due_date)
 
@@ -37,7 +38,9 @@ class Command(BaseCommand):
                 self.send_password_mail(user, context, template)
 
             # Invalidate expired passwords (not changed in 12 months)
-            change_due_date = today - datetime.timedelta(days=int(settings.CRON_DAYS_BEFORE_PASSWORD_EXPIRATION))
+            change_due_date = today - datetime.timedelta(
+                days=Setting.objects.get(setting="CRON_DAYS_BEFORE_PASSWORD_EXPIRATION").parameters["value"]
+            )
             change_password_queryset = queryset.filter(password_last_change_date=change_due_date)
 
             template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET_SCHEDULED")

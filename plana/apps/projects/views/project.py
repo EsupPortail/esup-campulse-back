@@ -15,6 +15,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
@@ -774,7 +775,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
             ):
                 now = datetime.datetime.now()
-                if now.month >= int(settings.NEW_YEAR_MONTH_INDEX):
+                if now.month >= Setting.objects.get(setting="NEW_YEAR_MONTH_INDEX").parameters["value"]:
                     year = now.year
                 else:
                     year = now.year - 1
