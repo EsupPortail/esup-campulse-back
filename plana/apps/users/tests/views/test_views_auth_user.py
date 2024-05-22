@@ -187,7 +187,7 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": f"gaufre-a-la-menthe@{Setting.objects.get(setting='RESTRICTED_DOMAINS').parameters['value'][0]}",
+                "email": f"gaufre-a-la-menthe@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
                 "first_name": "Gaufre",
                 "last_name": "Menthe",
             },
@@ -396,9 +396,7 @@ class AuthUserViewsTests(TestCase):
 
         - A student user cannot update his email address with domain-restricted email address.
         """
-        new_email = (
-            f"mon-esprit-est-mortadelle@{Setting.objects.get(setting='RESTRICTED_DOMAINS').parameters['value'][0]}"
-        )
+        new_email = f"mon-esprit-est-mortadelle@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"email": new_email},

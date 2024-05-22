@@ -51,7 +51,7 @@ class AccountExpirationCommandTest(TestCase):
     def test_account_without_connection_expiration_mail(self):
         """User without login should be warned."""
         self.user.date_joined = timezone.now() - datetime.timedelta(
-            days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING").parameters["value"]
+            days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING")
         )
         self.user.save()
         call_command('cron_account_expiration')
@@ -61,7 +61,7 @@ class AccountExpirationCommandTest(TestCase):
     def test_account_without_recent_connection_expiration_mail(self):
         """User without recent login should be warned."""
         self.user.last_login = timezone.now() - datetime.timedelta(
-            days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING").parameters["value"]
+            days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING")
         )
         self.user.save()
         call_command('cron_account_expiration')
@@ -105,11 +105,7 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                )
+                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
             )
         )
         call_command("cron_association_expiration")
@@ -120,12 +116,7 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                    - 1
-                )
+                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING") - 1)
             )
         )
         call_command("cron_association_expiration")
@@ -136,10 +127,7 @@ class AssociationExpirationCommandTest(TestCase):
         self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
         self.associations.update(
             charter_date=(
-                self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION").parameters["value"]
-                )
+                self.today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
             )
         )
         call_command("cron_association_expiration")
@@ -243,9 +231,7 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
                 - datetime.timedelta(
                     days=(
                         self.days_before_expiration
-                        - Setting.objects.get(setting="CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING").parameters[
-                            "value"
-                        ]
+                        - Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING")
                     )
                 )
             )
@@ -261,9 +247,7 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
                 - datetime.timedelta(
                     days=(
                         self.days_before_expiration
-                        - Setting.objects.get(setting="CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING").parameters[
-                            "value"
-                        ]
+                        - Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING")
                         - 1
                     )
                 )
@@ -327,11 +311,7 @@ class DocumentExpirationDayCommandTest(TestCase):
             document = Document.objects.get(id=document_upload.document_id)
             document.expiration_day = (
                 self.today
-                + datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING"))
             ).strftime("%m-%d")
             document.save()
         call_command("cron_document_expiration")
@@ -343,12 +323,7 @@ class DocumentExpirationDayCommandTest(TestCase):
             document = Document.objects.get(id=document_upload.document_id)
             document.expiration_day = (
                 self.today
-                + datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                    - 1
-                )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING") - 1)
             ).strftime("%m-%d")
             document.save()
         call_command("cron_document_expiration")
@@ -427,10 +402,7 @@ class HistoryExpirationCommandTest(TestCase):
         """History date expires today."""
         self.history.update(
             creation_date=(
-                self.now
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_HISTORY_EXPIRATION").parameters["value"] + 1
-                )
+                self.now - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_HISTORY_EXPIRATION") + 1)
             )
         )
         history_cnt_before = History.objects.all().count()
@@ -465,11 +437,7 @@ class PasswordExpirationCommandTest(TestCase):
         self.users.update(
             password_last_change_date=(
                 self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                )
+                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING"))
             )
         )
         call_command("cron_password_expiration")
@@ -480,12 +448,7 @@ class PasswordExpirationCommandTest(TestCase):
         self.users.update(
             password_last_change_date=(
                 self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING").parameters[
-                        "value"
-                    ]
-                    + 1
-                )
+                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING") + 1)
             )
         )
         call_command("cron_password_expiration")
@@ -495,10 +458,7 @@ class PasswordExpirationCommandTest(TestCase):
         """An email is sent if password is EXPIRATION months old."""
         self.users.update(
             password_last_change_date=(
-                self.today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_PASSWORD_EXPIRATION").parameters["value"]
-                )
+                self.today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_PASSWORD_EXPIRATION"))
             )
         )
         call_command("cron_password_expiration")
@@ -582,10 +542,7 @@ class ReviewExpirationCommandTest(TestCase):
         today = datetime.date.today()
         mail_sending_due_date = timezone.make_aware(
             datetime.datetime.combine(
-                today
-                - datetime.timedelta(
-                    days=Setting.objects.get(setting="CRON_DAYS_BEFORE_REVIEW_EXPIRATION").parameters["value"]
-                ),
+                today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION")),
                 datetime.datetime.min.time(),
             )
         )

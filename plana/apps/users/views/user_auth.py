@@ -78,10 +78,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     message=template.parse_vars(request.user, request, context),
                 )
         elif "email" in request.data:
-            if (
-                request.data["email"].split('@')[1]
-                in Setting.objects.get(setting="RESTRICTED_DOMAINS").parameters["value"]
-            ):
+            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,

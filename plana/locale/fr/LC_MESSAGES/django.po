@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 14:01+0200\n"
+"POT-Creation-Date: 2024-05-22 15:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -575,17 +575,19 @@ msgstr "Nom du paramètre"
 msgid "Setting configuration"
 msgstr "Configuration du paramètre"
 
-#: plana/apps/contents/models/setting.py:29
+#: plana/apps/contents/models/setting.py:30
 #, python-format
 msgid ""
 "General setting '%s' is missing or incorrect. Please check your settings."
-msgstr "Le paramètre général '%s' est manquant ou incorrect. Merci de vérifier vos paramètres"
+msgstr ""
+"Le paramètre général '%s' est manquant ou incorrect. Merci de vérifier vos "
+"paramètres"
 
-#: plana/apps/contents/models/setting.py:36
+#: plana/apps/contents/models/setting.py:37
 msgid "General setting"
 msgstr "Paramètre général"
 
-#: plana/apps/contents/models/setting.py:37
+#: plana/apps/contents/models/setting.py:38
 msgid "General settings"
 msgstr "Paramètres généraux"
 
@@ -683,7 +685,7 @@ msgstr "Documents"
 #: plana/apps/projects/models/project.py:137
 #: plana/apps/projects/models/project_comment.py:24
 #: plana/apps/users/models/user.py:24 plana/apps/users/models/user.py:61
-#: plana/apps/users/models/user.py:359
+#: plana/apps/users/models/user.py:357
 msgid "User"
 msgstr "Utilisateur"
 
@@ -800,8 +802,8 @@ msgstr "Non autorisé à ajouter un document si non président."
 #: plana/apps/documents/views/document_upload.py:223
 #: plana/apps/users/views/association_user.py:262
 #: plana/apps/users/views/group_institution_fund_user.py:202
-#: plana/apps/users/views/user.py:332 plana/apps/users/views/user.py:379
-#: plana/apps/users/views/user.py:487
+#: plana/apps/users/views/user.py:329 plana/apps/users/views/user.py:376
+#: plana/apps/users/views/user.py:481
 msgid "User does not exist."
 msgstr "Cet utilisateur n'existe pas."
 
@@ -1467,7 +1469,7 @@ msgstr "Est validé par l'équipe d'administration"
 msgid "Is student"
 msgstr "Est étudiant"
 
-#: plana/apps/users/models/user.py:360
+#: plana/apps/users/models/user.py:358
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1490,7 +1492,7 @@ msgstr "{value} n'est pas un service valide"
 msgid "Can not find adapter_class attribute on view"
 msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 
-#: plana/apps/users/serializers/user.py:218
+#: plana/apps/users/serializers/user.py:215
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -1636,20 +1638,20 @@ msgstr "L'utilisateur doit avoir au moins un groupe."
 msgid "Not allowed to delete this link between user and group."
 msgstr "Non autorisé à supprimer ce lien entre utilisateur et groupe."
 
-#: plana/apps/users/views/user.py:236 plana/apps/users/views/user.py:406
-#: plana/apps/users/views/user_auth.py:86
+#: plana/apps/users/views/user.py:233 plana/apps/users/views/user.py:400
+#: plana/apps/users/views/user_auth.py:83
 msgid "This email address cannot be used for a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour un compte local."
 
-#: plana/apps/users/views/user.py:340
+#: plana/apps/users/views/user.py:337
 msgid "Not allowed to retrieve this user."
 msgstr "Non autorisé à récupérer cet utilisateur."
 
-#: plana/apps/users/views/user.py:387
+#: plana/apps/users/views/user.py:384
 msgid "Cannot edit superuser."
 msgstr "Modification de superutilisateur impossible."
 
-#: plana/apps/users/views/user.py:493
+#: plana/apps/users/views/user.py:487
 msgid "Cannot delete superuser."
 msgstr "Suppression de superutilisateur impossible."
 

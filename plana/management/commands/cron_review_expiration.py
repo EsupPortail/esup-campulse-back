@@ -23,7 +23,7 @@ class Command(BaseCommand):
         try:
             today = datetime.date.today()
             mail_sending_due_date = today - datetime.timedelta(
-                days=Setting.objects.get(setting="CRON_DAYS_BEFORE_REVIEW_EXPIRATION").parameters["value"]
+                days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION")
             )
             projects_needing_reviews = Project.visible_objects.filter(
                 project_status__in=Project.ProjectStatus.get_review_needed_project_statuses(),

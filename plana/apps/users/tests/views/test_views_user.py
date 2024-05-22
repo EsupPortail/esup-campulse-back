@@ -299,7 +299,7 @@ class UserViewsTests(TestCase):
             {
                 "first_name": "Poin-Poin-Poin-Poin-Poin",
                 "last_name": "Vicetone",
-                "email": f"astronomia@{Setting.objects.get(setting='RESTRICTED_DOMAINS').parameters['value'][0]}",
+                "email": f"astronomia@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -483,9 +483,7 @@ class UserViewsTests(TestCase):
         """
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
-            data={
-                "email": f"camping-paradis-cest-mieux-que-la-vie@{Setting.objects.get(setting='RESTRICTED_DOMAINS').parameters['value'][0]}"
-            },
+            data={"email": f"camping-paradis-cest-mieux-que-la-vie@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)

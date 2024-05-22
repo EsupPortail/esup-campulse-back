@@ -775,7 +775,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
             ):
                 now = datetime.datetime.now()
-                if now.month >= Setting.objects.get(setting="NEW_YEAR_MONTH_INDEX").parameters["value"]:
+                if now.month >= Setting.get_setting("NEW_YEAR_MONTH_INDEX"):
                     year = now.year
                 else:
                     year = now.year - 1

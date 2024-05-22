@@ -19,9 +19,7 @@ class Command(BaseCommand):
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
                 ) > project.edition_date + datetime.timedelta(
-                    days=(
-                        365 * Setting.objects.get(setting="AMOUNT_YEARS_BEFORE_PROJECT_DELETION").parameters["value"]
-                    )
+                    days=(365 * Setting.get_setting("AMOUNT_YEARS_BEFORE_PROJECT_DELETION"))
                 ):
                     archived_projects_ids.append(project.id)
             projects = projects.filter(id__in=archived_projects_ids)

@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
             # Send emails to nearly expired accounts (not connected since 11 months)
             mail_sending_due_date = today - datetime.timedelta(
-                days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING").parameters["value"]
+                days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING")
             )
             mail_sending_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date=mail_sending_due_date)
@@ -48,7 +48,7 @@ class Command(BaseCommand):
 
             # Delete expired accounts (not connected since 1 year)
             deletion_due_date = today - datetime.timedelta(
-                days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION").parameters["value"]
+                days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION")
             )
             deletion_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date__lte=deletion_due_date)

@@ -18,9 +18,7 @@ class Command(BaseCommand):
                 creation_date__lt=(
                     timezone.make_aware(
                         datetime.datetime.now()
-                        - datetime.timedelta(
-                            days=Setting.objects.get(setting="CRON_DAYS_BEFORE_HISTORY_EXPIRATION").parameters["value"]
-                        )
+                        - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_HISTORY_EXPIRATION"))
                     )
                 )
             )

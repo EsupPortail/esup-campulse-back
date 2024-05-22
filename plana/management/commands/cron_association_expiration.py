@@ -23,11 +23,7 @@ class Command(BaseCommand):
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(
-                        days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING").parameters[
-                            "value"
-                        ]
-                    )
+                    + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
                 ):
                     template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED")
                     current_site = get_current_site(None)
@@ -49,9 +45,7 @@ class Command(BaseCommand):
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(
-                        days=Setting.objects.get(setting="CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION").parameters["value"]
-                    )
+                    + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.save()
