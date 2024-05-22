@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         ('contents', '0011_content_is_editable'),
     ]
 
-    schema_path = join(dirname(dirname(__file__)), 'schemas', 'setting.json')
+    schema_path = join(dirname(dirname(__file__)), '../models', 'schemas', 'setting.json')
 
     operations = [
         migrations.CreateModel(
