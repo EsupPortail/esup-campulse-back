@@ -211,9 +211,10 @@ def demo():
         'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
+    env.application_name = 'campulse-api-demo'
     env.backends = env.roledefs['web']
     env.server_name = 'campulse-api-demo.unistra.fr'
-    env.short_server_name = 'plana-api'
+    env.short_server_name = 'plana-demo'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
