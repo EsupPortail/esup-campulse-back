@@ -215,7 +215,7 @@ def demo():
     env.server_name = 'campulse-api-demo.unistra.fr'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
-    env.server_ip = '77.72.44.196'
+    env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
