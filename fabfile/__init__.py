@@ -29,7 +29,7 @@ env.remote_static_root = '/var/www/static/'  # root of static files
 env.locale = 'fr_FR.UTF-8'  # locale to use on remote
 env.timezone = 'Europe/Paris'  # timezone for remote
 env.keep_releases = 2  # number of old releases to keep before cleaning
-env.extra_goals = ['preprod']  # add extra goal(s) to defaults (test,dev,prod)
+env.extra_goals = ['preprod', 'demo']  # add extra goal(s) to defaults (test,dev,prod)
 env.dipstrap_version = 'latest'
 env.verbose_output = False  # True for verbose output
 
@@ -39,7 +39,7 @@ env.verbose_output = False  # True for verbose output
 # env.excluded_files = ['pron.jpg'] # file(s) that rsync should exclude when deploying app
 # env.extra_ppa_to_install = ['ppa:vincent-c/ponysay'] # extra ppa source(s) to use
 # extra debian/ubuntu package(s) to install on remote
-env.extra_pkg_to_install = []
+env.extra_pkg_to_install = ['python-dev-is-python3', 'python3.9-distutils']
 # env.cfg_shared_files = ['config','/app/path/to/config/config_file'] # config files to be placed in shared config dir
 # dirs to be symlinked in shared directory
 env.extra_symlink_dirs = ['keys']
@@ -186,6 +186,43 @@ def prod():
     env.path_to_cert_key = '/etc/ssl/private/etu-campulse.fr.key'
     env.goal = 'prod'
     env.socket_port = '8014'
+    env.map_settings = {
+        'default_db_host': 'DATABASES["default"]["HOST"]',
+        'default_db_user': 'DATABASES["default"]["USER"]',
+        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
+        'default_db_name': 'DATABASES["default"]["NAME"]',
+        's3_access_key': "AWS_ACCESS_KEY_ID",
+        's3_secret_key': "AWS_SECRET_ACCESS_KEY",
+        's3_bucket': "AWS_STORAGE_BUCKET_NAME",
+        's3_endpoint': "AWS_S3_ENDPOINT_URL",
+        'secret_key': 'SECRET_KEY',
+        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
+        'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
+    }
+    execute(build_env)
+
+
+@task
+def demo():
+    """Define demo stage"""
+    env.roledefs = {
+        'web': ['saas-unistra-plana-test-1.srv.unistra.fr'],
+        'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
+    }
+    # env.user = 'root'  # user for ssh
+    env.application_name = 'campulse-api-demo'
+    env.backends = env.roledefs['web']
+    env.server_name = 'campulse-api-demo.unistra.fr'
+    env.short_server_name = 'plana-demo'
+    env.static_folder = '/site_media/'
+    env.server_ip = '77.72.45.206'
+    env.no_shared_sessions = False
+    env.server_ssl_on = True
+    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
+    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
+    env.goal = 'demo'
+    env.socket_port = '8001'
     env.map_settings = {
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_user': 'DATABASES["default"]["USER"]',
