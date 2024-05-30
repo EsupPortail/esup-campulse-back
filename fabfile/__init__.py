@@ -30,7 +30,7 @@ env.remote_static_root = '/var/www/static/'  # root of static files
 env.locale = 'fr_FR.UTF-8'  # locale to use on remote
 env.timezone = 'Europe/Paris'  # timezone for remote
 env.keep_releases = 2  # number of old releases to keep before cleaning
-env.extra_goals = ['preprod']  # add extra goal(s) to defaults (test,dev,prod)
+env.extra_goals = ['preprod', 'demo']  # add extra goal(s) to defaults (test,dev,prod)
 env.dipstrap_version = 'latest'
 env.verbose_output = False  # True for verbose output
 
@@ -40,7 +40,7 @@ env.verbose_output = False  # True for verbose output
 # env.excluded_files = ['pron.jpg'] # file(s) that rsync should exclude when deploying app
 # env.extra_ppa_to_install = ['ppa:vincent-c/ponysay'] # extra ppa source(s) to use
 # extra debian/ubuntu package(s) to install on remote
-env.extra_pkg_to_install = []
+env.extra_pkg_to_install = ['python-dev-is-python3', 'python3.9-distutils']
 # env.cfg_shared_files = ['config','/app/path/to/config/config_file'] # config files to be placed in shared config dir
 # dirs to be symlinked in shared directory
 env.extra_symlink_dirs = ['keys']
@@ -245,6 +245,64 @@ def prod():
     env.path_to_cert_key = '/etc/ssl/private/etu-campulse.fr.key'
     env.goal = 'prod'
     env.socket_port = '8014'
+    env.map_settings = {
+        'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
+        'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
+        'accounts_api_spore_token': 'ACCOUNTS_API_CONF["TOKEN"]',
+        'association_default_amount_members_allowed': 'ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED',
+        'association_is_site_default': 'ASSOCIATION_IS_SITE_DEFAULT',
+        'cas_attribute_email': 'CAS_ATTRIBUTES_NAMES["email"]',
+        'cas_attribute_first_name': 'CAS_ATTRIBUTES_NAMES["first_name"]',
+        'cas_attribute_is_student': 'CAS_ATTRIBUTES_NAMES["is_student"]',
+        'cas_attribute_last_name': 'CAS_ATTRIBUTES_NAMES["last_name"]',
+        'cas_authorized_services': 'CAS_AUTHORIZED_SERVICES',
+        'cas_name': 'CAS_NAME',
+        'cas_server': 'CAS_SERVER',
+        'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
+        'cas_version': 'CAS_VERSION',
+        'default_db_host': 'DATABASES["default"]["HOST"]',
+        'default_db_name': 'DATABASES["default"]["NAME"]',
+        'default_db_password': 'DATABASES["default"]["PASSWORD"]',
+        'default_db_user': 'DATABASES["default"]["USER"]',
+        'default_from_email': 'DEFAULT_FROM_EMAIL',
+        'email_host': 'EMAIL_HOST',
+        'email_host_password': 'EMAIL_HOST_PASSWORD',
+        'email_host_user': 'EMAIL_HOST_USER',
+        'email_port': 'EMAIL_PORT',
+        'email_template_frontend_url': 'EMAIL_TEMPLATE_FRONTEND_URL',
+        'email_use_tls': 'EMAIL_USE_TLS',
+        'ldap_enabled': 'LDAP_ENABLED',
+        'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
+        'migration_site_name': 'MIGRATION_SITE_NAME',
+        's3_access_key': 'AWS_ACCESS_KEY_ID',
+        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_endpoint': 'AWS_S3_ENDPOINT_URL',
+        's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
+        'secret_key': 'SECRET_KEY',
+    }
+    execute(build_env)
+
+
+@task
+def demo():
+    """Define demo stage."""
+    env.roledefs = {
+        'web': ['saas-unistra-plana-test-1.srv.unistra.fr'],
+        'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
+    }
+    # env.user = 'root'  # user for ssh
+    env.application_name = 'campulse-api-demo'
+    env.backends = env.roledefs['web']
+    env.server_name = 'campulse-api-demo.unistra.fr'
+    env.short_server_name = 'plana-demo'
+    env.static_folder = '/site_media/'
+    env.server_ip = '77.72.45.206'
+    env.no_shared_sessions = False
+    env.server_ssl_on = True
+    env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
+    env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
+    env.goal = 'demo'
+    env.socket_port = '8001'
     env.map_settings = {
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
         'accounts_api_spore_description_file': 'ACCOUNTS_API_CONF["DESCRIPTION_FILE"]',
