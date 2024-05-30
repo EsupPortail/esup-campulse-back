@@ -3,7 +3,7 @@
 echo "📦️ generating common.txt"
 poetry export -o requirements/common.txt --without-hashes
 
-for env in test preprod prod;
+for env in demo test preprod prod;
 do
 echo "📦️ generating $env.txt"
 poetry export -o requirements/$env.txt --with $env
