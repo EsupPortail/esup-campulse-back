@@ -15,6 +15,7 @@ def preprod_amiens():
         'lb': ['saas-amiens-plana-pprd-1.srv.unistra.fr', 'saas-amiens-plana-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
+    env.application_name = 'plana_amiens'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api-pprd'
@@ -72,6 +73,7 @@ def prod_amiens():
         'lb': ['saas-amiens-plana-prod-1.srv.unistra.fr', 'saas-amiens-plana-prod-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
+    env.application_name = 'plana_amiens'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api'

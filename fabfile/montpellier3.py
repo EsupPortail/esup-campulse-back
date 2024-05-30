@@ -15,6 +15,7 @@ def preprod_montpellier3():
         'lb': ['saas-montpellier3-plana-pprd-1.srv.unistra.fr', 'saas-montpellier3-plana-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
+    env.application_name = 'plana_montpellier3'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api-pprd'
@@ -73,6 +74,7 @@ def prod_montpellier3():
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
+    env.application_name = 'plana_montpellier3'
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
