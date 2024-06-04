@@ -12,15 +12,15 @@ def preprod_montpellier3():
     """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-montpellier3-plana-pprd-1.srv.unistra.fr', 'saas-montpellier3-plana-pprd-2.srv.unistra.fr'],
-        'lb': ['saas-montpellier3-plana-pprd-1.srv.unistra.fr', 'saas-montpellier3-plana-pprd-2.srv.unistra.fr'],
+        'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_montpellier3'
+    env.application_name = 'plana_montpellier3_pprd'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'plana-api-pprd'
+    env.server_name = 'api-campulse-pprod.univ-montp3.fr'
+    env.short_server_name = 'api-campulse-pprod'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.212'
+    env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
@@ -75,8 +75,8 @@ def prod_montpellier3():
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
     env.application_name = 'plana_montpellier3'
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'plana-api'
+    env.server_name = 'api-campulse.univ-montp3.fr'
+    env.short_server_name = 'api-campulse'
     env.static_folder = '/site_media/'
     env.server_ip = '130.79.245.214'
     env.no_shared_sessions = False
