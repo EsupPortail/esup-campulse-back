@@ -15,7 +15,7 @@ def preprod_montpellier3():
         'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_montpellier3_pprd'
+    env.application_name = 'api-montpellier3-pprd'
     env.backends = env.roledefs['web']
     env.server_name = 'api-campulse-pprod.univ-montp3.fr'
     env.short_server_name = 'api-campulse-pprod'
