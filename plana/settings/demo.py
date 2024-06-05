@@ -20,6 +20,10 @@ ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://campulse-api-demo.unistra.fr'
+]
+
 
 #####################
 # Log configuration #
