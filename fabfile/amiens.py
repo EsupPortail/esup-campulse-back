@@ -12,15 +12,15 @@ def preprod_amiens():
     """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-amiens-plana-pprd-1.srv.unistra.fr', 'saas-amiens-plana-pprd-2.srv.unistra.fr'],
-        'lb': ['saas-amiens-plana-pprd-1.srv.unistra.fr', 'saas-amiens-plana-pprd-2.srv.unistra.fr'],
+        'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_amiens'
+    env.application_name = 'api-amiens-pprd'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api-pprd'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.212'
+    env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
@@ -73,12 +73,12 @@ def prod_amiens():
         'lb': ['saas-amiens-plana-prod-1.srv.unistra.fr', 'saas-amiens-plana-prod-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_amiens'
+    env.application_name = 'api-amiens-prod'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.214'
+    env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'

@@ -12,15 +12,15 @@ def preprod_rouen():
     """Define preprod stage."""
     env.roledefs = {
         'web': ['saas-rouen-plana-pprd-1.srv.unistra.fr', 'saas-rouen-plana-pprd-2.srv.unistra.fr'],
-        'lb': ['saas-rouen-plana-pprd-1.srv.unistra.fr', 'saas-rouen-plana-pprd-2.srv.unistra.fr'],
+        'lb': ['rp-shib3-pprd-1.srv.unistra.fr', 'rp-shib3-pprd-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_rouen'
+    env.application_name = 'api-rouen-pprd'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api-pprd'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.212'
+    env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
@@ -73,12 +73,12 @@ def prod_rouen():
         'lb': ['saas-rouen-plana-prod-1.srv.unistra.fr', 'saas-rouen-plana-prod-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
-    env.application_name = 'plana_rouen'
+    env.application_name = 'api-rouen-prod'
     env.backends = env.roledefs['web']
     env.server_name = 'TODO_DOMAIN_NAME'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.214'
+    env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'

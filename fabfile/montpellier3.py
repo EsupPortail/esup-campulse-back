@@ -74,11 +74,11 @@ def prod_montpellier3():
     }
     # env.user = 'root'  # user for ssh
     env.backends = env.roledefs['web']
-    env.application_name = 'plana_montpellier3'
+    env.application_name = 'api-montpellier3-prod'
     env.server_name = 'api-campulse.univ-montp3.fr'
     env.short_server_name = 'api-campulse'
     env.static_folder = '/site_media/'
-    env.server_ip = '130.79.245.214'
+    env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
