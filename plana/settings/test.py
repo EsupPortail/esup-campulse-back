@@ -28,6 +28,10 @@ ALLOWED_HOSTS = [
     ".unistra.fr",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://plana-api-test.app.unistra.fr'
+]
+
 
 #####################
 # Log configuration #
