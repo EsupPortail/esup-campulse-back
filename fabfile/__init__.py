@@ -40,7 +40,7 @@ env.verbose_output = False  # True for verbose output
 # env.excluded_files = ['pron.jpg'] # file(s) that rsync should exclude when deploying app
 # env.extra_ppa_to_install = ['ppa:vincent-c/ponysay'] # extra ppa source(s) to use
 # extra debian/ubuntu package(s) to install on remote
-env.extra_pkg_to_install = ['python-dev-is-python3', 'python3.9-distutils']
+env.extra_pkg_to_install = ['libpango-1.0-0', 'libpangoft2-1.0-0', 'python-dev-is-python3', 'python3.9-distutils']
 # env.cfg_shared_files = ['config','/app/path/to/config/config_file'] # config files to be placed in shared config dir
 # dirs to be symlinked in shared directory
 env.extra_symlink_dirs = ['keys']
