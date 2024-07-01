@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-22 15:33+0200\n"
+"POT-Creation-Date: 2024-07-01 13:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -575,7 +575,7 @@ msgstr "Nom du paramètre"
 msgid "Setting configuration"
 msgstr "Configuration du paramètre"
 
-#: plana/apps/contents/models/setting.py:30
+#: plana/apps/contents/models/setting.py:29
 #, python-format
 msgid ""
 "General setting '%s' is missing or incorrect. Please check your settings."
@@ -583,11 +583,11 @@ msgstr ""
 "Le paramètre général '%s' est manquant ou incorrect. Merci de vérifier vos "
 "paramètres"
 
-#: plana/apps/contents/models/setting.py:37
+#: plana/apps/contents/models/setting.py:36
 msgid "General setting"
 msgstr "Paramètre général"
 
-#: plana/apps/contents/models/setting.py:38
+#: plana/apps/contents/models/setting.py:37
 msgid "General settings"
 msgstr "Paramètres généraux"
 
