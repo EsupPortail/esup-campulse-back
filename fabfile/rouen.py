@@ -1,6 +1,8 @@
 import pydiploy
 from fabric.api import env, execute, roles, task
 
+env.csp_settings = {}
+env.nginx_location_extra_directives = []
 
 @roles(['web', 'lb'])
 def build_env():
