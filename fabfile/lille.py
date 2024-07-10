@@ -19,7 +19,7 @@ def preprod_lille():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-lille-pprd'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
+    env.server_name = 'api-campulse-test.univ-lille.fr'
     env.short_server_name = 'plana-api-pprd'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
@@ -77,7 +77,7 @@ def prod_lille():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-lille-prod'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
+    env.server_name = 'api-campulse.univ-lille.fr'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.44.196'

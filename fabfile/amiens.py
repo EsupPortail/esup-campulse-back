@@ -19,7 +19,7 @@ def preprod_amiens():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-amiens-pprd'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
+    env.server_name = 'campulse-preprod-api.u-picardie.fr'
     env.short_server_name = 'plana-api-pprd'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
@@ -77,7 +77,7 @@ def prod_amiens():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-amiens-prod'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
+    env.server_name = 'campulse-api.u-picardie.fr'
     env.short_server_name = 'plana-api'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.44.196'
