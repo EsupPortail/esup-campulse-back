@@ -24,6 +24,7 @@
 - Correction du non-envoi de mail de report de projet si aucun template n'est défini.
 - Correction du bug de non-envoi de mail d'expiration des documents après un certain délai.
 - Correction du bug d'affichage des blocs de texte sur le PDF de récap de bilan de projet.
+- Correction du bug d'impossibilité de reporter les dates de projet d'une commission passée.
 - Champs NULL autorisés sur la table Content.
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.
 - Correction de la sélection des adresses mail de gestionnaires affichées par défaut dans les templates de mail.
