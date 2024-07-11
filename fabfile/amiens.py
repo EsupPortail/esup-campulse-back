@@ -20,7 +20,7 @@ def preprod_amiens():
     env.application_name = 'api-amiens-pprd'
     env.backends = env.roledefs['web']
     env.server_name = 'campulse-preprod-api.u-picardie.fr'
-    env.short_server_name = 'plana-api-pprd'
+    env.short_server_name = 'campulse-preprod-api'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
@@ -78,7 +78,7 @@ def prod_amiens():
     env.application_name = 'api-amiens-prod'
     env.backends = env.roledefs['web']
     env.server_name = 'campulse-api.u-picardie.fr'
-    env.short_server_name = 'plana-api'
+    env.short_server_name = 'campulse-api'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
