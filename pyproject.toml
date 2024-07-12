@@ -76,7 +76,7 @@ zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
-coverage = "^7.5.4"
+coverage = "^7.6.0"
 django-debug-toolbar = "^4.4.6"
 pre-commit = "^3.7.1"
 pylint = "^3.2.5"
