@@ -70,7 +70,7 @@ Elle se situe à la racine du dépôt.
 
 ## Textes du thème
 
-Les textes du thème sont disponibles dans le dossier `/locales`, dans le fichier `fr.json`.
+Les textes du thème sont disponibles [ici](https://git.unistra.fr/di/plan_a/front/-/blob/main/src/locales/fr.json?ref_type=heads).
 
 Il est possible de modifier les textes (uniquement les valeurs, pas les clés).
 
@@ -82,8 +82,7 @@ Commencez par vérifier et personnaliser si besoin les textes suivants :
 ```txt
 university-name
 charter.site.name
-forms.gdpr-accept
-forms.gdpr-data-controller
+forms.gdpr-consent
 cape
 project.recap
 accessibility-declaration
@@ -92,7 +91,7 @@ accessibility-declaration
 Assurez-vous également de contrôler les références à ces textes.
 Les références sont appelées ainsi : `@:voici-une-référence`.
 
-Pour écraser un texte, créez un fichier `custom.txt` que vous placerez dans le dossier `locales`.
+Pour écraser un texte, ajoutez-le dans `locales/custom.txt`.
 
 Attention à bien respecter cette syntaxe (clé=texte, sans guillemets et saut de ligne) : 
 
