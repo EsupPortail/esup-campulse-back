@@ -568,5 +568,24 @@
       "process_type": "NO_PROCESS",
       "edition_date": "2023-03-15T10:18:47.000Z"
     }
+  },
+  {
+    "model": "documents.document",
+    "pk": 32,
+    "fields": {
+      "name": "Attestation de suivi de formation relative à la lutte contre les discriminations et le bizutage",
+      "acronym": "ATTESTATION_SUIVI_FORMATION_LUTTE_CONTRE_DISCRIMINATIONS_BIZUTAGE",
+      "description": "Attestation de suivi de formation relative à la lutte contre les discriminations et le bizutage",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
   }
 ]
