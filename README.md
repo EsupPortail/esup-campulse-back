@@ -1,4 +1,4 @@
-# PlanA / Opaline
+# PlanA / Campulse
 
 ## Health
 
@@ -15,7 +15,7 @@ Dépôt du front accessible à l'adresse [https://github.com/EsupPortail/esup-ca
 
 ### Instances en ligne
 
-- Strasbourg [https://etu-campulse.fr/](https://etu-campulse.fr/)
+- Université de Strasbourg & Crous de Strasbourg [https://etu-campulse.fr/](https://etu-campulse.fr/)
 
 ## Technologies requises
 

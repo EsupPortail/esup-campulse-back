@@ -1,4 +1,5 @@
 """List of root URLs, some linking to subapps."""
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin

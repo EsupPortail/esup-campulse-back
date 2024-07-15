@@ -1,4 +1,5 @@
 """Special serializer to interact with CAS."""
+
 import requests
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView

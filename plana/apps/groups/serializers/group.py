@@ -1,4 +1,5 @@
 """Serializers describing fields used on auth groups."""
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from drf_spectacular.types import OpenApiTypes

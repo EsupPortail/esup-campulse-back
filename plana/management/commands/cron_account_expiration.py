@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
+from plana.apps.contents.models.setting import Setting
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -25,7 +26,7 @@ class Command(BaseCommand):
 
             # Send emails to nearly expired accounts (not connected since 11 months)
             mail_sending_due_date = today - datetime.timedelta(
-                days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING
+                days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING")
             )
             mail_sending_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date=mail_sending_due_date)
@@ -46,7 +47,9 @@ class Command(BaseCommand):
                 )
 
             # Delete expired accounts (not connected since 1 year)
-            deletion_due_date = today - datetime.timedelta(days=settings.CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION)
+            deletion_due_date = today - datetime.timedelta(
+                days=Setting.get_setting("CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION")
+            )
             deletion_queryset = queryset.filter(
                 Q(last_login__isnull=True, date_joined__date__lte=deletion_due_date)
                 | Q(last_login__isnull=False, last_login__date__lte=deletion_due_date)

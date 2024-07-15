@@ -1,4 +1,5 @@
 """List of tests done on projects models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.projects.models.category import Category
@@ -21,6 +22,7 @@ class ProjectsModelsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_setting.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",

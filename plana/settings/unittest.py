@@ -1,4 +1,5 @@
 """Configuration for unit tests environment."""
+
 from os import environ
 from os.path import normpath
 
@@ -100,3 +101,14 @@ AWS_ACCESS_KEY_ID = "FAKE"
 AWS_SECRET_ACCESS_KEY = "FAKE"
 AWS_STORAGE_BUCKET_NAME = "FAKE"
 AWS_S3_ENDPOINT_URL = "FAKE"
+
+S3_PDF_FILEPATH = "."
+TEMPLATES_PDF_EXPORTS_FOLDER = "pdf/exports"
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "pdf/notifications"
+
+TEMPLATES_PDF_FILEPATHS = {
+    "association_charter_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
+}

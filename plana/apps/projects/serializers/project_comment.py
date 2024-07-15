@@ -1,4 +1,5 @@
 """Serializer describing fields used on project's comments"""
+
 from rest_framework import serializers
 
 from plana.apps.projects.models.project import Project

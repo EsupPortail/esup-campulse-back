@@ -1,0 +1,47 @@
+---
+title: Base de données
+weight: 121
+---
+
+Un ensemble de données minimal doit être ajouté en base de données pour assurer le bon fonctionnement de l'application. Ces données peuvent être modifiées par le superutilisateur de l'application :
+- Comptes gestionnaires à ajouter à l’application (`User`)
+  - nom
+  - prénom
+  - adresse email
+  - groupe de gestionnaire (général, établissement, divers)
+- Établissements auxquels peuvent se rattacher les associations (`Institution`)
+  - nom
+  - acronyme
+- Composantes de ces établissements (`InstitutionComponent`)
+  - nom
+  - établissement de rattachement
+- Domaines d’activité que peut avoir une association (`ActivityField`)
+  - nom
+- Fonds de subventionnement (`Fund`)
+  - nom
+  - acronyme
+  - établissement de rattachement
+- Catégories dans lesquelles peut s'inscrire un projet (`ProjectCategory`)
+  - nom
+- Documents attendus dans les différents process (`Document`)
+  - processus de rattachement (aucun, charte d'association, charte de fonds, justificatif d'association, justificatif de personne, demande de subvention, bilan de projet)
+  - type de fichier (image, PDF, tableur, ...)
+  - plusieurs fichiers autorisés pour ce type de document ou non
+  - dépôt obligatoire ou non
+  - fonds de rattachement ou non
+  - date d’expiration ou non (fixée à un jour de l'année ou après un délai de jours)
+- Contenus textuels (`Content`)
+  - tous les paragraphes visibles sur le site sans être connecté
+  - contenus des notifications PDF envoyées par email
+- Liste des logos du pied de page (`Logo`)
+  - image
+  - description
+  - acronyme
+  - URL s'ouvrant au clic sur le logo
+  - position dans le footer (ligne, colonne)
+- Variables de configuration (`Setting`)
+  - paramètres de divers types utilisées par l'application, accompagnés de leurs descriptions
+- Sujets et corps de texte des emails envoyés (`MailTemplate`)
+  - nom
+  - sujet
+  - corps de texte

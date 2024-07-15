@@ -1,4 +1,5 @@
 """Testers for health check."""
+
 from health_check.backends import BaseHealthCheckBackend
 from health_check.exceptions import HealthCheckException
 

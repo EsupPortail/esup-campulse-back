@@ -1,4 +1,5 @@
 """List of tests done on project PDF generation."""
+
 from unittest.mock import Mock
 
 from django.core.files.storage import default_storage
@@ -24,6 +25,7 @@ class ProjectsViewsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_setting.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",

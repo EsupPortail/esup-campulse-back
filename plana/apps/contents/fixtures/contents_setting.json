@@ -1,0 +1,185 @@
+[
+  {
+    "model": "contents.setting",
+    "pk": 1,
+    "fields": {
+      "setting": "AMOUNT_YEARS_BEFORE_PROJECT_DELETION",
+      "parameters": {
+        "description": "Nombre d’années avant qu’un projet ne soit automatiquement supprimé de la base de données.",
+        "type": "integer",
+        "value": 10
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 2,
+    "fields": {
+      "setting": "AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY",
+      "parameters": {
+        "description": "Nombre d’années avant qu’un projet ne soit rendu invisible sur l’interface du site hors espace d’administration.",
+        "type": "integer",
+        "value": 5
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 3,
+    "fields": {
+      "setting": "APP_DOCUMENTATION_URL",
+      "parameters": {
+        "description": "URL d’accès à la documentation de l’appli, affichée dans les mails.",
+        "type": "text",
+        "value": "https://ernest.unistra.fr/"
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 4,
+    "fields": {
+      "setting": "CAS_INSTITUTION_ACRONYM",
+      "parameters": {
+        "description": "Acronyme de l’établissement dont les gestionnaires sont chargés de valider les comptes CAS.",
+        "type": "text",
+        "value": "Unistra"
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 5,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION",
+      "parameters": {
+        "description": "Nombre de jours depuis la dernière connexion d’un compte après lequel un mail est envoyé pour prévenir de la suppression de ce compte.",
+        "type": "integer",
+        "value": 365
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 6,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING",
+      "parameters": {
+        "description": "Nombre de jours depuis le dernier changement de mot de passe d’un compte après lequel un mail est envoyé pour prévenir de l’expiration future de ce mot de passe.",
+        "type": "integer",
+        "value": 335
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 7,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION",
+      "parameters": {
+        "description": "Nombre de jours depuis la dernière mise à jour de la charte d’une association après lequel un mail est envoyé pour prévenir de l’expiration de cette charte.",
+        "type": "integer",
+        "value": 365
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 8,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING",
+      "parameters": {
+        "description": "Nombre de jours depuis la dernière mise à jour de la charte d’une association après lequel un mail est envoyé pour prévenir de l’expiration future de cette charte.",
+        "type": "integer",
+        "value": 355
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 9,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING",
+      "parameters": {
+        "description": "Nombre de jours avant la date d’expiration d’un document après lequel un mail est envoyé pour prévenir de l’expiration future de ce document.",
+        "type": "integer",
+        "value": 10
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 10,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_HISTORY_EXPIRATION",
+      "parameters": {
+        "description": "Nombre de jours avant la date de suppression d’une ligne d’historique.",
+        "type": "integer",
+        "value": 90
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 11,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_PASSWORD_EXPIRATION",
+      "parameters": {
+        "description": "Nombre de jours depuis le dernier changement de mot de passe d’un compte après lequel un mail est envoyé pour prévenir de l’expiration de ce mot de passe.",
+        "type": "integer",
+        "value": 365
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 12,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING",
+      "parameters": {
+        "description": "Nombre de jours depuis le dernier changement de mot de passe d’un compte après lequel un mail est envoyé pour prévenir de l’expiration future de ce mot de passe.",
+        "type": "integer",
+        "value": 335
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 13,
+    "fields": {
+      "setting": "CRON_DAYS_BEFORE_REVIEW_EXPIRATION",
+      "parameters": {
+        "description": "Nombre de jours avant la date d’expiration d’un bilan après lequel un mail est envoyé pour prévenir de l’expiration future de ce bilan.",
+        "type": "integer",
+        "value": 30
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 14,
+    "fields": {
+      "setting": "NEW_YEAR_MONTH_INDEX",
+      "parameters": {
+        "description": "Chiffre du mois à partir duquel l’année scolaire débute (utilisé pour la génération des identifiants de projets).",
+        "type": "integer",
+        "value": 9
+      }
+    }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 15,
+    "fields": {
+      "setting": "RESTRICTED_DOMAINS",
+      "parameters": {
+        "description": "Noms de domaine séparés des adresses email ne pouvant pas créer de compte local (devant utiliser CAS).",
+        "type": "array",
+        "value": [
+          "unistra.fr",
+          "etu.unistra.fr"
+        ]
+      }
+    }
+  }
+]

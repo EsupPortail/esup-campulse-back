@@ -1,4 +1,5 @@
 """Tests for generic functions."""
+
 from django.test import TestCase
 
 from plana.utils import to_bool, valid_date_format

@@ -1,4 +1,5 @@
 """Models describing documents uploaded by an association or a user."""
+
 import datetime
 import os
 
@@ -21,7 +22,7 @@ def get_file_path(instance, filename):
     year = datetime.datetime.now().strftime('%Y')
     return (
         os.path.join(
-            settings.DOCUMENTS_FILEPATH if hasattr(settings, 'DOCUMENTS_FILEPATH') else '',
+            settings.S3_DOCUMENTS_FILEPATH if hasattr(settings, 'S3_DOCUMENTS_FILEPATH') else '',
             year,
             f'{file_basename}{extension}',
         )

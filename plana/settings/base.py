@@ -1,4 +1,5 @@
 """Base configuration for all environments."""
+
 from datetime import timedelta
 from os import environ
 from os.path import join, normpath
@@ -15,7 +16,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.1.0-beta"
+APP_VERSION = "1.2.0"
 
 ######################
 # Path configuration #
@@ -434,10 +435,10 @@ AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
-LOGOS_FILEPATH = "logos"
-ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
-TEMPLATES_FILEPATH = "associations_documents_templates"
-DOCUMENTS_FILEPATH = "associations_documents"
+S3_LOGOS_FILEPATH = "logos"
+S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
+S3_TEMPLATES_FILEPATH = "associations_documents_templates"
+S3_DOCUMENTS_FILEPATH = "associations_documents"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
 AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
@@ -496,11 +497,19 @@ CAS_ID = "cas"
 CAS_NAME = "CAS Unistra"
 CAS_SERVER = "https://cas.unistra.fr/cas/"
 CAS_VERSION = 3
-CAS_INSTITUTION_ID = 2
+CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
-CAS_AUTHORIZED_SERVICES = [
-    "http://localhost:8000/users/auth/cas_verify/",
-]
+# Keys are User model fields, values are CAS fields.
+CAS_ATTRIBUTES_NAMES = {
+    "email": "mail",
+    "first_name": "first_name",
+    "last_name": "last_name",
+    "is_student": "affiliation",
+}
+# Keys are User model fields, values are CAS values waited for those model fields.
+CAS_ATTRIBUTES_VALUES = {
+    "is_student": "student",
+}
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -514,7 +523,16 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
-ACCOUNT_USERNAME_BLACKLIST = ["admin", "unistra", "plana", "plan-a", "plan_a"]
+ACCOUNT_USERNAME_BLACKLIST = [
+    "admin",
+    "unistra",
+    "plana",
+    "plan-a",
+    "plan_a",
+    "campulse",
+    "etu-campulse",
+    "campulse-etu",
+]
 
 SOCIALACCOUNT_ADAPTER = "plana.apps.users.adapter.SocialAccountAdapter"
 SOCIALACCOUNT_EMAIL_VERIFICATION = False
@@ -611,50 +629,20 @@ EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
-########
-# CRON #
-########
+################
+# PDF Templates #
+#################
 
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING = 335
-CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION = 365
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING = 335
-CRON_DAYS_BEFORE_PASSWORD_EXPIRATION = 365
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING = 355
-CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION = 365
-CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING = 10
-CRON_DAYS_BEFORE_REVIEW_EXPIRATION = 30
-CRON_DAYS_BEFORE_HISTORY_EXPIRATION = 90
+# S3 configuration for PDF templates (used to store PDF exports and notifications).
+S3_PDF_FILEPATH = "pdf"  # "." if local
+TEMPLATES_PDF_EXPORTS_FOLDER = "templates/exports"  # "pdf/exports" if local
+TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "templates/notifications"  # "pdf/notifications" if local
 
-
-#####################
-# Templates folders #
-#####################
-
-# Names of the folders where templates are stored (used to store multiple templates, like themes).
-TEMPLATES_PDF_FOLDER = "pdf_exports"
-TEMPLATES_NOTIFICATIONS_FOLDER = "notifications"
-
-# Generic PDF templates.
-TEMPLATES_PDF = {
-    "association_charter_summary": f"./{TEMPLATES_PDF_FOLDER}/association_charter_summary.html",
-    "commission_projects_list": f"./{TEMPLATES_PDF_FOLDER}/commission_projects_list.html",
-    "project_summary": f"./{TEMPLATES_PDF_FOLDER}/project_summary.html",
-    "project_review_summary": f"./{TEMPLATES_PDF_FOLDER}/project_review_summary.html",
-}
-
-# Notifications pdf templates used as mail attachments.
-# Keys are in the same name format than in contents.code db models (NOTIFICATION_{FUND}_UTILITY) .
-TEMPLATES_NOTIFICATIONS = {
-    "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/decision_attribution.html",
-    "NOTIFICATION_IDEX_DECISION_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/decision_attribution.html",
-    "NOTIFICATION_FSDIE_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/attribution.html",
-    "NOTIFICATION_IDEX_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/attribution.html",
-    "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/attribution.html",
-    "NOTIFICATION_FSDIE_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/rejection.html",
-    "NOTIFICATION_IDEX_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/rejection.html",
-    "NOTIFICATION_CULTURE-ACTIONS_REJECTION": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/Culture-ActionS/rejection.html",
-    "NOTIFICATION_FSDIE_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/FSDIE/postpone.html",
-    "NOTIFICATION_IDEX_PROJECT_POSTPONED": f"./{TEMPLATES_NOTIFICATIONS_FOLDER}/IdEx/postpone.html",
+TEMPLATES_PDF_FILEPATHS = {
+    "association_charter_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/association_charter_summary.html",
+    "commission_projects_list": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/commission_projects_list.html",
+    "project_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_summary.html",
+    "project_review_summary": f"{S3_PDF_FILEPATH}/{TEMPLATES_PDF_EXPORTS_FOLDER}/project_review_summary.html",
 }
 
 
@@ -675,9 +663,6 @@ APPEND_SLASH = False
 MIGRATION_SITE_DOMAIN = "localhost:3000"
 MIGRATION_SITE_NAME = "Campulse"
 
-# Documentation URL sent in emails.
-APP_DOCUMENTATION_URL = "https://ernest.unistra.fr/"
-
 # Random password are generated with this length.
 DEFAULT_PASSWORD_LENGTH = 16
 
@@ -687,22 +672,15 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 # Default amount of users allowed in an association (None if no limit).
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 
-# Index of the month when scholar year is resetted.
-NEW_YEAR_MONTH_INDEX = 9
-
-# Avoid registration with following email domains.
-RESTRICTED_DOMAINS = ["unistra.fr", "etu.unistra.fr"]
-
 # External APIs.
 ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
 ACCOUNTS_API_CONF = {}
 
+# Enable adding a LDAP account though Spore.
+LDAP_ENABLED = True
+
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
-
-# Amount of years before an archived project is hidden, then deleted.
-AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY = 5
-AMOUNT_YEARS_BEFORE_PROJECT_DELETION = 10
 
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {

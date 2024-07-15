@@ -1,9 +1,9 @@
 import datetime
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
+from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
                 ) > project.edition_date + datetime.timedelta(
-                    days=(365 * int(settings.AMOUNT_YEARS_BEFORE_PROJECT_DELETION))
+                    days=(365 * Setting.get_setting("AMOUNT_YEARS_BEFORE_PROJECT_DELETION"))
                 ):
                     archived_projects_ids.append(project.id)
             projects = projects.filter(id__in=archived_projects_ids)

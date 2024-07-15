@@ -1,4 +1,5 @@
 """Views linked to institution components."""
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny

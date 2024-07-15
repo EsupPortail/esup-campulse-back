@@ -5,7 +5,7 @@ weight: 103
 
 L'application dépend de nombreuses librairies installables via deux méthodes différentes.
 
-## Installaion manuelle
+## Installation manuelle
 
 Les dépendances sont listées dans le répertoire `requirements`.
 - Activer l'environnement virtuel.

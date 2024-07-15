@@ -1,4 +1,5 @@
 """dj-rest-auth overrided views."""
+
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
@@ -11,6 +12,7 @@ from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
+from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.libs.mail_template.models import MailTemplate
@@ -64,9 +66,9 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
             if request.user.is_validated_by_admin is False:
                 user_id = request.user.pk
-                context[
-                    "account_url"
-                ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
+                context["account_url"] = (
+                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
+                )
                 History.objects.create(action_title="USER_REGISTERED", action_user_id=request.user.pk)
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LDAP_CREATION")
                 send_mail(
@@ -76,7 +78,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                     message=template.parse_vars(request.user, request, context),
                 )
         elif "email" in request.data:
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,

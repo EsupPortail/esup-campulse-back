@@ -1,4 +1,5 @@
 """Views directly linked to projects."""
+
 import datetime
 
 from django.conf import settings
@@ -14,6 +15,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
@@ -544,7 +546,11 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 )
             ).values_list("id"),
         ).count()
-        if expired_project_commission_dates_count > 0:
+        if (
+            expired_project_commission_dates_count > 0
+            and "planned_start_date" not in request.data
+            and "planned_end_date" not in request.data
+        ):
             return response.Response(
                 {"error": _("Project is linked to expired commissions.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -773,7 +779,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
             ):
                 now = datetime.datetime.now()
-                if now.month >= settings.NEW_YEAR_MONTH_INDEX:
+                if now.month >= Setting.get_setting("NEW_YEAR_MONTH_INDEX"):
                     year = now.year
                 else:
                     year = now.year - 1

@@ -1,4 +1,5 @@
 """List of URLs linked to operations that can be done on users and users related models."""
+
 from django.conf import settings
 from django.urls import include, path, re_path
 
@@ -77,8 +78,12 @@ urlpatterns = [
         GroupInstitutionFundUserDestroyWithInstitution.as_view(),
         name="group_institution_fund_user_destroy_with_institution",
     ),
-    path("external/", ExternalUserList.as_view(), name="external_user_list"),
 ]
+
+if settings.LDAP_ENABLED is True:
+    urlpatterns += [
+        path("external/", ExternalUserList.as_view(), name="external_user_list"),
+    ]
 
 if settings.DEBUG:  # pragma: no cover
     urlpatterns += [

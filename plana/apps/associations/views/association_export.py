@@ -1,4 +1,5 @@
 """Views directly linked to association exports."""
+
 import csv
 from tempfile import NamedTemporaryFile
 
@@ -21,7 +22,7 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.institutions.models import Institution, InstitutionComponent
 from plana.apps.users.models import GroupInstitutionFundUser
-from plana.utils import generate_pdf
+from plana.utils import generate_pdf_response
 
 
 class AssociationListExport(generics.RetrieveAPIView):
@@ -195,7 +196,7 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
             ).values("name", "document__name")
         )
 
-        return generate_pdf(
+        return generate_pdf_response(
             data["name"],
             data,
             "association_charter_summary",

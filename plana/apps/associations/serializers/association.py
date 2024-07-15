@@ -1,4 +1,5 @@
 """Serializers describing fields used on associations."""
+
 import re
 
 from django.conf import settings

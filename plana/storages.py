@@ -3,6 +3,7 @@ Storage management from octant.
 
 https://git.unistra.fr/di/cesar/octant/back/-/blob/develop/octant/apps/api/storages.py
 """
+
 from io import BytesIO
 
 from django.conf import settings

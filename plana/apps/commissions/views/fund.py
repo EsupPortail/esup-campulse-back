@@ -1,4 +1,5 @@
 """Views directly linked to commissions."""
+
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, status

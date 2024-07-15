@@ -1,4 +1,5 @@
 """Views linked to commissions."""
+
 import datetime
 import unicodedata
 

@@ -1,4 +1,5 @@
 """Views linked to links between users and associations."""
+
 import datetime
 
 from django.conf import settings

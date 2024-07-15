@@ -1,4 +1,5 @@
 """Describes the used CAS service and the fields retrieved from it."""
+
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth_cas.providers import CASProvider as AllAuthCASProvider
 from django.conf import settings
@@ -23,9 +24,9 @@ class CASProvider(AllAuthCASProvider):
         uid, extra = data
         fields = {
             "username": uid,
-            "email": extra.get("mail", ""),
-            "first_name": extra.get("first_name", ""),
-            "last_name": extra.get("last_name", ""),
+            "email": extra.get(settings.CAS_ATTRIBUTES_NAMES["email"], ""),
+            "first_name": extra.get(settings.CAS_ATTRIBUTES_NAMES["first_name"], ""),
+            "last_name": extra.get(settings.CAS_ATTRIBUTES_NAMES["last_name"], ""),
         }
         return fields
 

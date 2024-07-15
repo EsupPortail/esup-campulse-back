@@ -1,4 +1,5 @@
 """List of tests done on password serializers."""
+
 from allauth.socialaccount.models import SocialAccount
 from django.test import TestCase
 from django.urls import reverse

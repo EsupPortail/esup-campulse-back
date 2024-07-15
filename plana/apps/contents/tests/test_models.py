@@ -1,8 +1,10 @@
 """List of tests done on contents models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.contents.models.content import Content
 from plana.apps.contents.models.logo import Logo
+from plana.apps.contents.models.setting import Setting
 
 
 class ContentsModelsTests(TestCase):
@@ -11,6 +13,7 @@ class ContentsModelsTests(TestCase):
     fixtures = [
         "contents_content.json",
         "contents_logo.json",
+        "contents_setting.json",
     ]
 
     def setUp(self):
@@ -26,3 +29,8 @@ class ContentsModelsTests(TestCase):
         """There's at least one logo in the database."""
         logo = Logo.objects.first()
         self.assertEqual(str(logo), logo.acronym)
+
+    def test_setting_model(self):
+        """There's at least one setting in the database."""
+        setting = Setting.objects.first()
+        self.assertEqual(str(setting), setting.setting)

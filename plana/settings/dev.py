@@ -1,4 +1,5 @@
 """Configuration for local dev environment."""
+
 from os import environ
 from os.path import normpath
 

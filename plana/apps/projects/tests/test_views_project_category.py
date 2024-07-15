@@ -1,4 +1,5 @@
 """List of tests done on projects categories links views."""
+
 import json
 
 from django.test import Client, TestCase
@@ -25,6 +26,7 @@ class ProjectCategoryLinksViewsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_setting.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",

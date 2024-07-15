@@ -1,4 +1,5 @@
 """Links the CAS provider to the CAS views."""
+
 import re
 
 from allauth.account.adapter import DefaultAccountAdapter
@@ -39,18 +40,18 @@ class PlanAAdapter(DefaultAccountAdapter):
             elif template_prefix == "account/email/email_confirmation":
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_EMAIL_RECONFIRMATION")
             key = context["key"]
-            context[
-                "activate_url"
-            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"
+            context["activate_url"] = (
+                f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH}?key={key}"
+            )
 
         elif template_prefix == "account/email/password_reset_key":
             template = MailTemplate.objects.get(code="USER_ACCOUNT_PASSWORD_RESET")
             password_reset_url_parts = re.match(r"^(.*)/(.*)/(.*)/$", context["password_reset_url"])
             uid = password_reset_url_parts.group(2)
             token = password_reset_url_parts.group(3)
-            context[
-                "password_reset_url"
-            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
+            context["password_reset_url"] = (
+                f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
+            )
 
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
@@ -69,7 +70,7 @@ class CASAdapter(AllAuthCASAdapter):
 
     provider_id = CASProvider.id
     url = settings.CAS_SERVER
-    version = settings.CAS_VERSION
+    version = int(settings.CAS_VERSION)
 
     def get_provider(self, request):
         """Get the provider."""

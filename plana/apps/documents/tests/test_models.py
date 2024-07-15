@@ -1,4 +1,5 @@
 """List of tests done on documents models."""
+
 from django.test import Client, TestCase
 
 from plana.apps.documents.models.document import Document

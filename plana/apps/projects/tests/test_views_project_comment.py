@@ -1,4 +1,5 @@
 """List of tests done on projects comments links views."""
+
 import json
 
 from django.core import mail
@@ -23,6 +24,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         "commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
+        "contents_setting.json",
         "institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",

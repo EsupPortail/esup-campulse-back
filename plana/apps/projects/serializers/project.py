@@ -1,4 +1,5 @@
 """Serializers describing fields used on projects."""
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from drf_spectacular.types import OpenApiTypes

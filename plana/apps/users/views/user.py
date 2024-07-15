@@ -1,4 +1,5 @@
 """Views directly linked to users and their links with other models."""
+
 import datetime
 import secrets
 import string
@@ -20,6 +21,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.fund import Fund
+from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
@@ -226,7 +228,7 @@ class UserListCreate(generics.ListCreateAPIView):
         is_cas = True
         if not "is_cas" in request.data or ("is_cas" in request.data and request.data["is_cas"] is False):
             is_cas = False
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -255,7 +257,7 @@ class UserListCreate(generics.ListCreateAPIView):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "manager_email_address": request.user.email,
-            "documentation_url": settings.APP_DOCUMENTATION_URL,
+            "documentation_url": Setting.get_setting("APP_DOCUMENTATION_URL"),
         }
 
         template = None
@@ -267,9 +269,9 @@ class UserListCreate(generics.ListCreateAPIView):
             user.password_last_change_date = datetime.datetime.today()
             user.save(update_fields=["password", "password_last_change_date"])
             context["password"] = password
-            context[
-                "password_change_url"
-            ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
+            context["password_change_url"] = (
+                f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
+            )
             template = MailTemplate.objects.get(code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION")
         else:
             SocialAccount.objects.create(
@@ -393,7 +395,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 request.data.pop(restricted_field, False)
         elif "email" in request.data:
             request.data.update({"email": request.data["email"].lower()})
-            if request.data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
                 return response.Response(
                     {"error": _("This email address cannot be used for a local account.")},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -424,16 +426,16 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context["username"] = user.username
             context["first_name"] = user.first_name
             context["last_name"] = user.last_name
-            context["documentation_url"] = settings.APP_DOCUMENTATION_URL
+            context["documentation_url"] = Setting.get_setting("APP_DOCUMENTATION_URL")
             if user.is_cas_user():
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_CONFIRMATION")
             else:
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_CONFIRMATION")
                 uid = user_pk_to_url_str(user)
                 token = default_token_generator.make_token(user)
-                context[
-                    "password_reset_url"
-                ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
+                context["password_reset_url"] = (
+                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
+                )
             History.objects.create(action_title="USER_VALIDATED", action_user_id=request.user.pk, user_id=user.id)
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -445,9 +447,9 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             unvalidated_assos_user = AssociationUser.objects.filter(user_id=user.id, is_validated_by_admin=False)
             if unvalidated_assos_user.count() > 0:
                 for unvalidated_asso_user in unvalidated_assos_user:
-                    context[
-                        "user_association_url"
-                    ] = f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
+                    context["user_association_url"] = (
+                        f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
+                    )
                     template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,

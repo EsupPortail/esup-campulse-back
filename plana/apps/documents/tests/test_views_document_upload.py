@@ -1,4 +1,5 @@
 """List of tests done on documents views."""
+
 import json
 from unittest.mock import Mock
 
@@ -26,6 +27,7 @@ class DocumentsViewsTests(TestCase):
         "auth_group_permissions.json",
         "auth_permission.json",
         "commissions_fund.json",
+        "contents_setting.json",
         "documents_document.json",
         "documents_documentupload.json",
         "institutions_institution.json",
@@ -92,7 +94,7 @@ class DocumentsViewsTests(TestCase):
         }
         cls.response = cls.student_president_client.post(url_login, data_student_president)
 
-        documents = Document.objects.filter(acronym__in=["RIB", "BILAN_FINANCIER"])
+        documents = Document.objects.filter(id__in=[19, 22])
         documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",
@@ -216,7 +218,7 @@ class DocumentsViewsTests(TestCase):
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        document = Document.objects.get(acronym="CERTIFICAT_SCOLARITE_USER")
+        document = Document.objects.get(id=16)
         field = Mock()
         field.storage = default_storage
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
@@ -320,7 +322,7 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by any authenticated user.
         - Serializer fields must be valid.
         """
-        document = Document.objects.get(acronym="DOCUMENT_EDITE")
+        document = Document.objects.get(id=20)
         project_id = 1
         post_data = {
             "path_file": False,
@@ -379,7 +381,7 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is not created if field is not is_multiple.
         """
-        document = Document.objects.get(acronym="RIB")
+        document = Document.objects.get(id=19)
         post_data = {
             "path_file": "",
             "project": 1,
@@ -397,7 +399,7 @@ class DocumentsViewsTests(TestCase):
         - The authenticated user must be authorized to update the project.
         - Object is not created if validation is set by a student.
         """
-        document = Document.objects.get(acronym="DOCUMENT_EDITE")
+        document = Document.objects.get(id=20)
         post_data = {
             "path_file": "",
             "project": 1,
@@ -422,7 +424,7 @@ class DocumentsViewsTests(TestCase):
         file = DynamicStorageFieldFile(Mock(), field=field, name="filename.ext")
         file.storage = Mock()
 
-        document = Document.objects.get(acronym="DOCUMENT_EDITE")
+        document = Document.objects.get(id=20)
         project_id = 1
         post_data = {
             "path_file": file,
@@ -433,7 +435,7 @@ class DocumentsViewsTests(TestCase):
         response = self.student_misc_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-        documents = Document.objects.filter(acronym__in=["RGPD_SITE_ALSACE", "CHARTE_FSDIE", "DOCUMENT_EDITE"])
+        documents = Document.objects.filter(id__in=[2, 3, 20])
         documents.update(
             mime_types=[
                 "application/vnd.novadigm.ext",

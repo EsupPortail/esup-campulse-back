@@ -1,4 +1,5 @@
 """Serializers describing fields used on users and related forms."""
+
 import re
 
 from allauth.account.adapter import get_adapter
@@ -12,6 +13,7 @@ from rest_framework import exceptions, serializers
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
+from plana.apps.contents.models.setting import Setting
 from plana.apps.users.models.user import GroupInstitutionFundUser, User
 
 
@@ -208,7 +210,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     def save(self, request):
         """Save the user."""
         self.cleaned_data = request.data
-        if self.cleaned_data["email"].split('@')[1] in settings.RESTRICTED_DOMAINS:
+        if self.cleaned_data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
             raise exceptions.ValidationError(
                 {"detail": [_("This email address cannot be used to create a local account.")]}
             )

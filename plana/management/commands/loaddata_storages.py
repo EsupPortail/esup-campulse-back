@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 for file in pathlib.Path().glob("plana/apps/contents/fixtures/files/logos/*.*"):
                     with file.open(mode="rb") as logo_file:
                         bucket_object = bucket.put_object(
-                            Key=f"{settings.LOGOS_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
+                            Key=f"{settings.S3_LOGOS_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
                             Body=logo_file,
                         )
                         logo_object = Logo.objects.get(id=int(file.name.split("_")[0]))
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 for file in pathlib.Path().glob("plana/apps/documents/fixtures/files/documents/*.*"):
                     with file.open(mode="rb") as document_file:
                         bucket_object = bucket.put_object(
-                            Key=f"{settings.TEMPLATES_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
+                            Key=f"{settings.S3_TEMPLATES_FILEPATH}/{datetime.datetime.now().year}/{file.name}",
                             Body=document_file,
                         )
                         document_object = Document.objects.get(id=int(file.name.split("_")[0]))

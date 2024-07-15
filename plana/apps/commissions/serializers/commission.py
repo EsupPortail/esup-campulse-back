@@ -1,4 +1,5 @@
 """Serializers describing fields used on commissions."""
+
 from rest_framework import serializers
 
 from plana.apps.commissions.models.commission import Commission
