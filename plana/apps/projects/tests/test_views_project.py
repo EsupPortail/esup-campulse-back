@@ -965,7 +965,7 @@ class ProjectsViewsTests(TestCase):
         - The route can be accessed by a student president.
         - Project cannot be updated if documents are missing.
         """
-        document = Document.objects.get(acronym="RIB")
+        document = Document.objects.get(id=19)
         DocumentUpload.objects.get(document=document.id, project_id=2).delete()
         ProjectCommissionFund.objects.create(project_id=2, commission_fund_id=3)
         patch_data = {"project_status": "PROJECT_PROCESSING"}

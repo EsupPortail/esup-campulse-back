@@ -1065,7 +1065,7 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by a student president.
         - Association cannot be updated if documents are missing.
         """
-        document = Document.objects.get(acronym="COPIE_STATUTS_ASSOCIATION")
+        document = Document.objects.get(id=11)
         association_id = 2
         DocumentUpload.objects.get(document_id=document.id, association_id=2).delete()
         patch_data = {"charter_status": "CHARTER_PROCESSING"}
