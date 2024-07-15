@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 (Q3 2024)
+## 1.2.0 (15 Juillet 2024)
 
 ### Fonctionnalités
 
