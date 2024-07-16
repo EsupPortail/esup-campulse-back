@@ -1,4 +1,4 @@
-"""Configuration for demonstration server environment."""
+"""Configuration for SaaS server environment."""
 
 from .base import *
 
@@ -20,7 +20,7 @@ ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 
-CSRF_TRUSTED_ORIGINS = ["https://campulse-api-demo.unistra.fr"]
+CSRF_TRUSTED_ORIGINS = "{{ cas_authorized_services }}".split() # ["https://campulse-api-demo.unistra.fr"]
 
 
 #####################

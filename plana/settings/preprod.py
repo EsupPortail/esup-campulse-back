@@ -46,6 +46,7 @@ DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 ##########
 # Sentry #
 ##########
+
 STAGE = "{{ goal }}"
 sentry_init(STAGE)
 
@@ -65,6 +66,7 @@ CAS_ATTRIBUTES_NAMES["first_name"] = "{{ cas_attribute_first_name }}"
 CAS_ATTRIBUTES_NAMES["last_name"] = "{{ cas_attribute_last_name }}"
 CAS_ATTRIBUTES_NAMES["is_student"] = "{{ cas_attribute_is_student }}"
 CAS_ATTRIBUTES_VALUES["is_student"] = "{{ cas_value_is_student }}"
+
 
 ##########
 # Emails #
