@@ -1,0 +1,16 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "plana [local]",
+            "Group": "Servers",
+            "Host": "db",
+            "Port": 5432,
+            "Comment": "BDD locale plana",
+            "Username": "plana",
+            "PassFile": "/var/lib/pgadmin/pgpass",
+            "PasswordExecCommand": "echo -n \"${DATABASE_PASSWORD:-plzchangeme}\"",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}

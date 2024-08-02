@@ -1,0 +1,57 @@
+
+http:
+  routers:
+    back:
+      rule: >
+        PathPrefix(`/api`)
+        || PathPrefix(`/admin`)
+        || PathPrefix(`/site_media`)
+      priority: 4
+      service: back-local
+    front: 
+      rule: >
+        !( PathPrefix(`/api`)
+        || PathPrefix(`/admin`)
+        || PathPrefix(`/site_media`) )
+      priority: 3
+      middlewares: [ front-csp ]
+      service: front-local
+  middlewares:
+    front-csp:
+      headers:
+        contentSecurityPolicy: >
+          upgrade-insecure-requests;
+          default-src 'none';
+          base-uri 'self';
+          connect-src 'self';
+          font-src 'self';
+          frame-ancestors 'none';
+          frame-src 'none';
+          img-src 'self' data: https://s3.unistra.fr;
+          manifest-src 'self';
+          media-src 'self';
+          object-src 'none';
+          script-src 'self' 'unsafe-inline';
+          style-src 'self';
+          worker-src 'self';
+  services:
+    front-local:
+      loadBalancer:
+        servers:
+          - url: http://host.docker.internal:3000
+        healthCheck:
+          path: /index.html
+          headers:
+            Accept: application/json
+          interval: 30s
+          timeout: 3s
+    back-local:
+      loadBalancer:
+        servers:
+          - url: http://host.docker.internal:8000
+        healthCheck:
+          path: /_hc/
+          headers:
+            Accept: application/json
+          interval: 30s
+          timeout: 3s
