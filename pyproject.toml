@@ -46,6 +46,52 @@ description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+bump = false
+#style = "semver"
+# pattern = "(?P<base>\\d+(\\.\\d+)*)"
+pattern = "default-unprefixed"
+format-jinja = """
+    {%- if distance == 0 -%}
+      {#- conserver les tags -#}
+      {{ serialize_semver(base, pre=[stage~revision|d('',true)] if stage else None) }}
+    {%- elif branch is none -%}
+      {{ version.bump() }}
+    {%- elif branch is in [ 'develop', 'dev' ] -%}
+      {#- version de dev incrémentée avec nb commits -#}
+      {%- set version = version.bump() -%}
+      {{ serialize_semver(version.base, pre=['dev', distance]) }}
+    {%- elif branch is in [ 'main', 'master' ] -%}
+      {#- version de prod incrémentée (d>0) avec nb commits et stage (beta,rc…) du dernier tag -#}
+      {%- set version = version.bump() -%}
+      {{ serialize_semver(version.base, pre=['pre'~distance if version.stage is none else version.stage~version.revision|d('',true)], metadata=['r'~distance] if version.stage is not none else []) }}
+    {%- elif branch.startswith('release/') or branch.startswith('hotfix/') -%}
+      {#- version de support incrémentée (d>0) avec stage (beta,rc…) du dernier tag -#}
+      {%- set version = version.bump() -%}
+      {%- if branch.split('/',1)[-1].replace('x',base.rpartition('.')[-1]) != base -%}
+        {%- set release = version.parse(branch.split('/',1)[-1].replace('x','0')) -%}
+        {%- set version = version.parse('v'+release.base+'-'+release.stage|d('hf' if branch.startswith('hotfix/') else 'rc',true)~release.revision|d('0',true)+'+d'~distance+'.g'~commit+'.dirty' if dirty else '') -%}
+      {%- endif -%}
+      {{ serialize_semver(version.base, pre=[version.stage~version.revision|d('',true)] if version.stage is not none else [], metadata=[distance]) }}
+    {%- else -%}
+      {#- version de branche de feature incrémentée et nommée -#}
+      {%- if branch.startswith('bugfix/') -%}
+        {%- set branch = branch.removeprefix('bugfix/') -%}
+        {%- set stage = 'post' -%}
+      {%- else -%}
+        {%- set base = bump_version(base) -%}
+        {%- set branch = branch.removeprefix('feature/') -%}
+        {%- set stage = 'dev' -%}
+      {%- endif -%}
+      {%- set feature_escaped = branch.translate(''.maketrans('/ ','--')).strip('-') -%}
+      {#- serialize_semver(base, pre=[stage,distance], metadata=[feature_escaped]) -#}
+      {{ base~'-'~stage~'.'~distance~'+'~feature_escaped }}
+    {%- endif -%}
+"""
+#latest-tag = true
+
 [[tool.poetry.source]]
 name = "GitLab django-allauth-cas"
 url = "https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple"
@@ -119,3 +165,7 @@ waitress = "^2.1.2"
 chaussette-backport = "^1.3.1"
 sentry-sdk = "^2.16.0"
 waitress = "^2.1.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
