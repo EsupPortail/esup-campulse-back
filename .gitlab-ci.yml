@@ -1,16 +1,14 @@
 stages:
+  - build
   - test
   - deploy
-
-services:
-  - postgres:latest
 
 variables:
   POSTGRES_DB: plana_test
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
-  PYTHON_VERSION: "3.9"
+  PYTHON_VERSION: "3.12"
 
 workflow:
   # trigger pipelines on :
@@ -31,14 +29,48 @@ workflow:
     # ok otherwise
     - when: always
 
-
-before_script:
-  - apt-get update && apt-get install -y age
+build:
+  stage: build
+  image: python:${PYTHON_VERSION}-slim
+  tags:
+    - cluster
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "0"
+    PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+    POETRY_CACHE_DIR: $CI_PROJECT_DIR/.cache/pypoetry
+  cache:
+    - key: cache-python
+      paths:
+        - .cache/pip
+        - .cache/pypoetry
+  before_script:
+    - apt -qy update && DEBIAN_FRONTEND=noninteractive apt -qqy install --no-install-recommends git
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - mkdir -p "$PIP_CACHE_DIR" "$POETRY_CACHE_DIR"
+    - pip install --root-user-action ignore poetry "poetry-dynamic-versioning[plugin]"
+    # restore git branch when CI_MERGE_REQUEST_SOURCE_BRANCH_NAME and detached head (dynamic-versioning)
+    - '[ -n "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" ] && ! git branch --show-current | grep -q ^ && git checkout -B "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"'
+  script:
+    - rm -rf dist
+    - echo VERSION=$(poetry version -s) > .dotenv
+    - poetry build --format=wheel
+  artifacts:
+    when: on_success
+    expire_in: 1 days
+    paths:
+      - dist/*
+    reports:
+      dotenv: .dotenv
 
 unittest:
   stage: test
   tags:
     - python3.9
+  services:
+    - postgres:latest
+  before_script:
+    - apt-get update && apt-get install -y age
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
@@ -50,6 +82,87 @@ unittest:
     - touch keys/age-private-key.key
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+publish:
+  stage: deploy
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}-slim
+  tags:
+    - cluster
+  variables:
+    PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+    POETRY_DYNAMIC_VERSIONING_BYPASS: $VERSION
+  needs:
+    - job: build
+      artifacts: true
+  cache:
+    - key: cache-python
+      paths:
+        - .cache/pip
+        - .cache/pypoetry
+  before_script:
+    - apt -qy update && DEBIAN_FRONTEND=noninteractive apt -qqy install --no-install-recommends
+    - pip install --root-user-action ignore poetry "poetry-dynamic-versioning[plugin]"
+  script:
+    - poetry config repositories.gitlab "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi"
+    - poetry publish --repository gitlab --username=gitlab-ci-token --password="${CI_JOB_TOKEN}"
+
+deploy:
+  stage: deploy
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [ "/bin/sh" ]
+  tags:
+    - kubernetes
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      variables:
+        EXTRA: latest
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        EXTRA: ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_BRANCH =~ /[a-zA-Z\d_][a-zA-Z\d-_.]{1,127}/
+      variables:
+        EXTRA: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_SHA
+      when: manual
+  needs:
+    - job: build
+      artifacts: true
+  cache:
+    - key: cache-python
+      paths:
+        - .cache/pip
+        - .cache/pypoetry
+    - key: cache-kaniko
+      paths:
+        - .cache/kaniko
+  script:
+    - VERSION="$(echo -n "$VERSION" | sed 's/[^[:alnum:]._-]/_/g')"
+    - EXTRA="${EXTRA:+$(echo -n "$EXTRA" | sed 's/^feature\///;s/[^[:alnum:]._-]/_/g')}"
+    - set -x
+    - for step in back admin static; do
+        /kaniko/executor
+        --context "dir://${CI_PROJECT_DIR}"
+        --dockerfile Dockerfile --target plana-$step
+        --skip-unused-stages
+        --build-arg PIP_CACHE_DIR="$CI_PROJECT_DIR/.cache/pip"
+        --cache=true --cache-dir $CI_PROJECT_DIR/.cache/kaniko/
+        --cache-repo "${CI_REGISTRY_IMAGE}/cache"
+        --label org.opencontainers.image.title="$CI_PROJECT_TITLE [$step]"
+        --label org.opencontainers.image.version="${VERSION}"
+        --label org.opencontainers.image.revision="$CI_COMMIT_SHA"
+        --label org.opencontainers.image.created="$CI_JOB_STARTED_AT"
+        --label org.opencontainers.image.authors="Unistra-DNum-DIP"
+        --label maintainer="Unistra-DNum-DIP"
+        --label org.opencontainers.image.licenses="GPL-3.0-or-later"
+        --label org.opencontainers.image.documentation="https://di.pages.unistra.fr/plan_a/plana/backend"
+        --label org.opencontainers.image.source="https://github.com/EsupPortail/esup-campulse-back"
+        --destination "${CI_REGISTRY_IMAGE}/$step:$VERSION"
+        ${EXTRA:+--destination "${CI_REGISTRY_IMAGE}/$step:$EXTRA"}
+        ${KANIKO_NO_PUSH:+--cache-repo oci:${CI_PROJECT_DIR}/.cache/kaniko/ --skip-push-permission-check --tar-path ${CI_PROJECT_DIR}/dist/plana-$step.tar}
+      ; done
 
 include:
   - project: docker/template
