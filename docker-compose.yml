@@ -1,29 +1,285 @@
 version: "3"
+
+x-env: &env
+  environment:
+    DATABASE_NAME: ${DATABASE_NAME:-plana}
+    DATABASE_USER: ${DATABASE_USER:-plana}
+    DATABASE_PASSWORD: ${DATABASE_PASSWORD:-plzchangeme}
+    AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-data}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-changemeplz}
+    SECRET_KEY: ${SECRET_KEY:-94a5@7gp*n&k_+-fbt=&69==sg%@evqfk8^kzztw2514f97y%0}
+    DATABASE_URL: postgres://${DATABASE_USER:-plana}:${DATABASE_PASSWORD-plzchangeme}@db/${DATABASE_NAME:-plana}
+    SITE_DOMAIN: localhost
+    EMAIL_HOST: maildev
+    EMAIL_PORT: "1025"
+    EMAIL_TEMPLATE_FRONTEND_URL: maildev:3000/
+    AWS_S3_ENDPOINT_URL: http://s3:9000
+    AWS_S3_PUBLIC_URL: http://localhost/${AWS_STORAGE_BUCKET_NAME:-data}/
+    AWS_S3_USE_SSL: "false"
+    AWS_USE_OBJECT_ACL: "false"
+    DEBUG: ${DEBUG}
+  volumes:
+    - type: bind
+      source: ./keys
+      target: /app/keys
+      read_only: true
+
 services:
+
+  ingress:
+    image: traefik:v3
+    command:
+    - --entryPoints.http.address=:80
+    - --entryPoints.http.forwardedHeaders.insecure=true
+    - --providers.file.filename=/ingress.yml
+    - --providers.docker
+    - --providers.docker.exposedByDefault=false
+    - --log=true
+    - --accessLog=true
+    - --accesslog.addinternals=true
+    - --api.disabledashboardad=true
+    ports:
+      - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.traefik-api.rule: Host(`localhost`) && PathPrefix(`/api`) && Header(`Referer`,`http://localhost/dashboard/`)
+      traefik.http.routers.traefik-api.service: api@internal
+      traefik.http.routers.traefik-api.priority: 999
+      traefik.http.routers.traefik-dashboard.rule: Host(`localhost`) && PathPrefix(`/dashboard`)
+      traefik.http.routers.traefik-dashboard.service: dashboard@internal
+      traefik.http.routers.traefik-dashboard.middlewares: dashboard_stripprefix
+      traefik.http.middlewares.dashboard_stripprefix.stripprefix.prefixes: /dashboard/
+      traefik.http.routers.traefik-dashboard.priority: 999
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      # Config file
+      - type: bind
+        source: ./docker/ingress.yml
+        target: /ingress.yml
+        read_only: true
+    deploy:
+      resources:
+        limits:
+          memory: 60M
+        reservations:
+          memory: 30M
+
   db:
     image: "postgres_12_fr"
     build: ./docker
     container_name: plana_db
     restart: unless-stopped
     environment:
-      - POSTGRES_PASSWORD=plana
-      - POSTGRES_USER=plana
-      - POSTGRES_DB=plana
+      - POSTGRES_DB=${DATABASE_NAME:-plana}
+      - POSTGRES_USER=${DATABASE_USER:-plana}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-plzchangeme}
     ports:
       - "5432:5432"
     volumes:
       - plana_db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready --quiet --username=${DATABASE_USER:-plana}
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pgadmin.rule: Host(`db.localhost`)
+      traefik.http.routers.pgadmin.middlewares: pgadmin-auth
+      traefik.http.middlewares.pgadmin-auth.headers.customrequestheaders.Remote-User: ${PGADMIN_DEFAULT_EMAIL:-dnum-dip@unistra.fr}
+    environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-dnum-dip@unistra.fr}
+        PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD:-plzchangeme}
+        DATABASE_PASSWORD: ${DATABASE_PASSWORD:-plzchangeme}
+        PGADMIN_CONFIG_AUTHENTICATION_SOURCES: "['webserver', 'internal']"
+        PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+        PGADMIN_CONFIG_MAX_LOGIN_ATTEMPTS: "0"
+        PGADMIN_CONFIG_MAIL_SERVER: '''maildev'''
+        PGADMIN_CONFIG_MAIL_PORT: "1025"
+        PGADMIN_DISABLE_POSTFIX: "True"
+        PGADMIN_CONFIG_ENABLE_SERVER_PASS_EXEC_CMD: "True"
+    depends_on:
+        db:
+          condition: service_started
+    volumes:
+      - type: bind
+        source: ./docker/servers.json
+        target: /pgadmin4/servers.json
+        read_only: true
+      - type: volume
+        source: pgadmin-data
+        target: /var/lib/pgadmin
+      - type: bind
+        source: ./
+        target: /var/lib/pgadmin/storage_dnum-dip_unistra.fr
+        read_only: false
 
   maildev:
     image: "maildev/maildev:2.0.5"
     container_name: maildev
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.maildev.rule: Host(`mail.localhost`)
+      traefik.http.services.maildev.loadbalancer.server.port: 1080
     restart: unless-stopped
+    healthcheck:
+      test: wget -qO/dev/null http://127.0.0.1:1080/healthz || exit 1
+
+  s3:
+    image: minio/minio:latest
+    command: minio server --console-address=":9001" /data
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.s3-storage.rule: PathPrefix(`/${AWS_STORAGE_BUCKET_NAME:-data}`)
+      traefik.http.routers.s3-storage.priority: 8
+      traefik.http.routers.s3-storage.service: s3-storage
+      traefik.http.services.s3-storage.loadbalancer.server.port: 9000
+      traefik.http.routers.s3-admin.rule: Host(`s3.localhost`)
+      traefik.http.routers.s3-admin.service: s3-admin
+      traefik.http.services.s3-admin.loadbalancer.server.port: 9001
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-minio}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY:-changemeplz}
+    volumes:
+      - s3-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: mc ready local
+
+  s3-init:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-minio}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY-changemeplz}
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+        mc alias set local http://s3:9000 "$${MINIO_ROOT_USER:-minio}" "$${MINIO_ROOT_PASSWORD-changemeplz}"
+        mc mb --ignore-existing local/${AWS_STORAGE_BUCKET_NAME:-data}
+        for prefix in logos associations_logos associations_documents_templates pdf
+        do
+          mc anonymous set download local/${AWS_STORAGE_BUCKET_NAME:-data}/$$prefix
+        done
+    depends_on:
+      s3:
+        condition: service_healthy
+
+  manage.py:
+    << : *env
+    profiles: [ "back" ]
+    image: ${CI_REGISTRY:-registry.app.unistra.fr}${CI_PROJECT_NAMESPACE:-/di/plan_a}/plana/admin:${VERSION:-latest}
+    #build:
+    #  context: .
+    #  target: plana-admin
+
+  migrate:
+    profiles: [ "back", "test" ]
+    extends: manage.py
+    command: migrate --no-input
+    depends_on:
+      db:
+        condition: service_healthy
+
+  initial_import:
+    profiles: [ "back" ]
+    extends: manage.py
+    command: initial_import --storages
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
+      s3-init:
+        condition: service_completed_successfully
+
+  test_import:
+    profiles: [ "test" ]
+    extends: manage.py
+    command: initial_import --test --storages
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
+
+  back-static:
+    profiles: [ "back" ]
+    image: ${CI_REGISTRY:-registry.app.unistra.fr}${CI_PROJECT_NAMESPACE:-/di/plan_a}/plana/static:${VERSION:-latest}
+    #build:
+    #  context: .
+    #  target: plana-static
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.back-static.rule: PathPrefix(`/site_media`)
+      traefik.http.routers.back-static.priority: 7
+
+  back:
+    << : *env
+    profiles: [ "back" ]
+    image: ${CI_REGISTRY:-registry.app.unistra.fr}${CI_PROJECT_NAMESPACE:-/di/plan_a}/plana/back:${VERSION:-latest}
+    #build:
+    #  context: .
+    #  target: plana-back
+    ports:
+      - 8003:8000
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.back.rule: >
+        PathPrefix(`/api`)
+        || PathPrefix(`/admin`)
+        || PathPrefix(`/site_media`)
+      traefik.http.routers.back.priority: 6
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      back-static:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      maildev:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
+
+  front:
+    profiles: [ "front" ]
+    image: ${CI_REGISTRY:-registry.app.unistra.fr}${CI_PROJECT_NAMESPACE:-/di/plan_a}/front:${FRONT_VERSION:-latest}
+    ports: [ "80" ]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.front.rule: >
+        !( PathPrefix(`/api`)
+        || PathPrefix(`/admin`)
+        || PathPrefix(`/site_media`) )
+      traefik.http.routers.front.priority: 5
+      traefik.http.routers.front.middlewares: front-csp@file
+    environment:
+      VITE_APP_SITE_NAME: ${VITE_APP_SITE_NAME:-PlanA Local}
+      VITE_APP_FRONT_URL: http://localhost
+      VITE_APP_BASE_URL: http://localhost/api/
+      VITE_APP_HOME_TEST_MESSAGE: ${VITE_APP_HOME_TEST_MESSAGE:-⚠ VERSION DE DEV (docker-compose local) ⚠}
+      VITE_APP_ENABLE_BACKEND_ERRORS: "true"
 
 volumes:
   plana_db:
     driver: local
-
-
+  s3-data: { }
+  pgadmin-data: { }
