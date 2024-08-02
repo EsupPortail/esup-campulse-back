@@ -358,6 +358,9 @@ django-cleanup==9.0.0 ; python_version >= "3.9" and python_version < "3.13" \
 django-cors-headers==4.5.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:28c1ded847aa70208798de3e42422a782f427b8b720e8d7319d34b654b5978e6 \
     --hash=sha256:6c01a85cf1ec779a7bde621db853aa3ce5c065a5ba8e27df7a9f9e8dac310f4f
+django-environ==0.11.2 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:0ff95ab4344bfeff693836aa978e6840abef2e2f1145adff7735892711590c05 \
+    --hash=sha256:f32a87aa0899894c27d4e1776fa6b477e8164ed7f6b3e410a62a6d72caaf64be
 django-extensions==3.2.3 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a \
     --hash=sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401
