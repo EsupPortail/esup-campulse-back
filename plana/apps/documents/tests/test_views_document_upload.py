@@ -237,6 +237,22 @@ class DocumentsViewsTests(TestCase):
         response = self.client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_post_document_upload_project_wrong_process(self):
+        """
+        POST /documents/uploads .
+
+        - The route can be accessed by any authenticated user.
+        - The document must have a process related to projects.
+        """
+        document = Document.objects.get(acronym="JUSTIFICATIF_ASSOCIATION_1")
+        post_data = {
+            "path_file": "",
+            "project": 1,
+            "document": document.id,
+        }
+        response = self.general_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post_document_upload_project_not_found(self):
         """
         POST /documents/uploads .

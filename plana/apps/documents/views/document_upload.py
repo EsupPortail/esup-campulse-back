@@ -176,6 +176,11 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         project = None
         if "project" in request.data and request.data["project"] != "":
+            if document.process_type not in Document.ProcessType.get_project_documents():
+                return response.Response(
+                    {"error": _("Project document not allowed for this process.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             try:
                 project = Project.visible_objects.get(id=request.data["project"])
             except ObjectDoesNotExist:
