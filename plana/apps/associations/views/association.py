@@ -708,6 +708,13 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             ),
         }
         if request.data["charter_status"] == "CHARTER_PROCESSING":
+            charter_documents = DocumentUpload.objects.filter(
+                association_id=association.id,
+                document_id__in=Document.objects.filter(process_type="CHARTER_ASSOCIATION"),
+            )
+            for charter_document in charter_documents:
+                charter_document.comment = None
+                charter_document.save()
             template = MailTemplate.objects.get(code="MANAGER_ASSOCIATION_CHARTER_CREATION")
             institution = Institution.objects.get(id=association.institution_id)
             managers_emails = list(institution.default_institution_managers().values_list("email", flat=True))
