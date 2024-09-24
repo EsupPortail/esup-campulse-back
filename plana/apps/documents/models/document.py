@@ -60,6 +60,11 @@ class Document(models.Model):
             """Documents with those processes have to be validated to be used."""
             return ["CHARTER_ASSOCIATION"]
 
+        @staticmethod
+        def get_project_documents():
+            """Documents with those processes can be linked to a project ID."""
+            return ["DOCUMENT_PROJECT", "DOCUMENT_PROJECT_REVIEW"]
+
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")

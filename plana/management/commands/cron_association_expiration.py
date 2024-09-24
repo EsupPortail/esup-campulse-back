@@ -48,6 +48,7 @@ class Command(BaseCommand):
                     + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
+                    association.is_site = False
                     association.save()
 
         except Exception as error:
