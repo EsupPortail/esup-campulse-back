@@ -19,8 +19,8 @@ def preprod_rouen():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-rouen-pprd'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'TODO_SHORT_SERVER_NAME'
+    env.server_name = 'api.campulse-preprod.univ-rouen.fr'
+    env.short_server_name = 'api.campulse-preprod'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
@@ -78,8 +78,8 @@ def prod_rouen():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-rouen-prod'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'TODO_SHORT_SERVER_NAME'
+    env.server_name = 'api.campulse.univ-rouen.fr'
+    env.short_server_name = 'api.campulse'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
