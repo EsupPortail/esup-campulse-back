@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 (24 Septembre 2024)
+
+### Corrections de bugs
+
+- Vérification du fait qu'un document de projet ne peut pas être lié à un processus autre que celui d'un projet.
+- Suppression du statut is_site à l'expiration d'une charte via la tâche Cron dédiée.
+
 ## 1.2.0 (17 Juillet 2024)
 
 ### Fonctionnalités
