@@ -41,7 +41,7 @@ setup(
     maintainer_email='dnum-dip@unistra.fr',
     url='',
     download_url='',
-    license='PSF',
+    license='GPL-3.0-or-later',
     keywords=['django', 'Université de Strasbourg'],
     include_package_data=True,
 )
