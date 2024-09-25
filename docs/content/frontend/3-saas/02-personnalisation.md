@@ -67,7 +67,7 @@ $baseFont   // Spécifie la famille de polices de base utilisée dans toute l'ap
 $titleFont  // Spécifie la famille de polices pour les titres et les en-têtes.
 ```
 
-### Ajout d'une Police Personnalisée
+### Ajout d'une police personnalisée
 
 Pour utiliser une police personnalisée, elle doit être importée dans le fichier `_fonts.scss`.
 Exemple ci-dessous :
@@ -100,7 +100,7 @@ Exemple ci-dessous :
 $baseFont: 'Titillium Web', sans-serif;
 ```
 
-### Tailles de Police
+### Tailles de police
 
 Veillez à vérifier la taille de votre police sur différentes tailles d'appareil.
 
@@ -143,7 +143,7 @@ Elle se situe à la racine du dépôt.
 
 ## Textes du thème
 
-Les textes du thème sont disponibles [ici](https://git.unistra.fr/di/plan_a/front/-/blob/main/src/locales/fr.json?ref_type=heads).
+Les textes du thème sont disponibles sur le [portail ESUP](https://github.com/EsupPortail/esup-campulse-front/blob/main/src/locales/fr.json).
 
 Il est possible de modifier les textes (uniquement les valeurs, pas les clés).
 
