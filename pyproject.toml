@@ -49,9 +49,10 @@ license = "GPL-3.0-or-later"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 django = "<5.0"
-django-allauth = "<0.55" # higher versions break django-allauth-cas
+django-allauth = "^65.0.2" # higher versions break django-allauth-cas
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a pull request
-django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
+# django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" } # does not work for django-allauth >= 0.55
+django-allauth-cas = { git = "git@git.unistra.fr:cspiga/django-allauth-cas.git" }
 django-cleanup = "^8.1.0"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
