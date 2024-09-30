@@ -67,8 +67,10 @@ env.chaussette_backend = (
 env.csp_settings = {
     'default_src': "'none'",
     'base_uri': "'self'",
+    'child_src': "'self'",
     'connect_src': "'self'",
     'font_src': "'self' https://stackpath.bootstrapcdn.com",
+    'form_action': "'self'",
     'frame_ancestors': "'self'",
     'frame_src': "'self'",
     'img_src': "'self' data: https://cdn.jsdelivr.net",
@@ -82,7 +84,7 @@ env.csp_settings = {
 env.nginx_location_extra_directives = [
     'client_max_body_size 8M',
     'add_header Strict-Transport-Security "max-age=63072000"',
-    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src {default_src}; base-uri {base_uri}; connect-src {connect_src}; font-src {font_src}; frame-ancestors {frame_ancestors}; frame-src {frame_src}; img-src {img_src}; manifest-src {manifest_src}; media-src {media_src}; object-src {object_src}; script-src {script_src}; style-src {style_src}; worker-src {worker_src};"'.format(
+    'add_header Content-Security-Policy "upgrade-insecure-requests; default-src {default_src}; base-uri {base_uri}; child-src {child_src}; connect-src {connect_src}; form-action {form_action}; font-src {font_src}; frame-ancestors {frame_ancestors}; frame-src {frame_src}; img-src {img_src}; manifest-src {manifest_src}; media-src {media_src}; object-src {object_src}; script-src {script_src}; style-src {style_src}; worker-src {worker_src};"'.format(
         **env.csp_settings
     ),
 ]  # add directive(s) to nginx config file in location part
