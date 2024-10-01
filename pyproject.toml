@@ -52,7 +52,7 @@ django = "<5.0"
 django-allauth = "^65.0.2" # higher versions break django-allauth-cas
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a pull request
 # django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" } # does not work for django-allauth >= 0.55
-django-allauth-cas = { git = "git@git.unistra.fr:cspiga/django-allauth-cas.git", rev = "7cd762d761ecef784d7af95869b14780fe0a25c6" }
+allauth_cas = { url = "https://repodipory.u-strasbg.fr/lib/python/allauth_cas-1.0.2.tar.gz" }
 django-cleanup = "^8.1.0"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
@@ -105,3 +105,7 @@ waitress = "^2.1.2"
 chaussette-backport = "^1.3.1"
 sentry-sdk = "^2.14.0"
 waitress = "^2.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
