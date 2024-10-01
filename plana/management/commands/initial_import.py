@@ -1,6 +1,6 @@
 import pathlib
 
-from django.core.management import call_command
+from django.core.management import call_command, CommandError
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
@@ -58,5 +58,7 @@ class Command(BaseCommand):
 
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 
+        except CommandError:
+            raise
         except Exception as error:
-            self.stdout.write(self.style.ERROR(f"Error : {error}"))
+            raise CommandError(error) from error

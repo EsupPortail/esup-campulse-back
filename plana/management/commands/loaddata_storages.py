@@ -5,7 +5,7 @@ import shutil
 
 import boto3
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation import gettext as _
 
 from plana.apps.contents.models.logo import Logo
@@ -50,4 +50,4 @@ class Command(BaseCommand):
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))
 
         except Exception as error:
-            self.stdout.write(self.style.ERROR(f"Error : {error}"))
+            raise CommandError(error) from error
