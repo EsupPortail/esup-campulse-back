@@ -318,19 +318,23 @@ REST_FRAMEWORK = base.REST_FRAMEWORK
 
 STORAGES = base.STORAGES
 
-USE_S3 = env('USE_S3', cast=bool, default=True)  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
+USE_S3 = env.bool('USE_S3', default=True)  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
 if USE_S3:
     AWS_S3_FILE_OVERWRITE = True
     AWS_DEFAULT_ACL = None
     AWS_USE_OBJECT_ACL = env.bool("AWS_USE_OBJECT_ACL", default=True)
-    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=REQUIRED)
-    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=REQUIRED)
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default=REQUIRED)
-    AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default=REQUIRED)
-    S3_LOGOS_FILEPATH = base.S3_LOGOS_FILEPATH
-    S3_ASSOCIATIONS_LOGOS_FILEPATH = base.S3_ASSOCIATIONS_LOGOS_FILEPATH
-    S3_TEMPLATES_FILEPATH = base.S3_TEMPLATES_FILEPATH
-    S3_DOCUMENTS_FILEPATH = base.S3_DOCUMENTS_FILEPATH
+    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID", default=REQUIRED)
+    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY", default=REQUIRED)
+    AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", default=REQUIRED)
+    AWS_S3_ENDPOINT_URL = env.str("AWS_S3_ENDPOINT_URL", default=REQUIRED)
+    AWS_S3_PUBLIC_URL = env.str("AWS_S3_PUBLIC_URL", default=AWS_S3_ENDPOINT_URL+'/'+AWS_STORAGE_BUCKET_NAME)
+else:
+    AWS_USE_OBJECT_ACL = False
+
+S3_LOGOS_FILEPATH = base.S3_LOGOS_FILEPATH
+S3_ASSOCIATIONS_LOGOS_FILEPATH = base.S3_ASSOCIATIONS_LOGOS_FILEPATH
+S3_TEMPLATES_FILEPATH = base.S3_TEMPLATES_FILEPATH
+S3_DOCUMENTS_FILEPATH = base.S3_DOCUMENTS_FILEPATH
 
 AGE_PRIVATE_KEY = env.bytes('AGE_PRIVATE_KEY', default=REQUIRED)
 AGE_PUBLIC_KEY = env.bytes('AGE_PUBLIC_KEY', default=None)
@@ -467,7 +471,7 @@ EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = base.EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PA
 #################
 
 # S3 configuration for PDF templates (used to store PDF exports and notifications).
-S3_PDF_FILEPATH = "pdf"  # "." if local
+S3_PDF_FILEPATH = "pdf" if USE_S3 else "." # if local
 TEMPLATES_PDF_EXPORTS_FOLDER = "templates/exports"  # "pdf/exports" if local
 TEMPLATES_PDF_NOTIFICATIONS_FOLDER = "templates/notifications"  # "pdf/notifications" if local
 
