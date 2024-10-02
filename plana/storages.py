@@ -37,9 +37,10 @@ class UpdateACLStorage(S3Boto3Storage):
     """https://medium.com/@hiteshgarg14/how-to-dynamically-select-storage-in-django-filefield-bc2e8f5883fd"""
 
     def update_acl(self, name, acl=None):
-        acl = acl or self.default_acl
-        name = self._normalize_name(clean_name(name))
-        self.bucket.Object(name).Acl().put(ACL=acl)
+        if settings.AWS_USE_OBJECT_ACL:
+            acl = acl or self.default_acl
+            name = self._normalize_name(clean_name(name))
+            self.bucket.Object(name).Acl().put(ACL=acl)
 
 
 class PublicFileStorage(UpdateACLStorage):
