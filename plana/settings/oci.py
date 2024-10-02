@@ -25,6 +25,7 @@ SITE_ROOT = env('SITE_ROOT',cast=Path, default=DJANGO_ROOT.parent)
 
 REQUIRED=env.NOTSET
 
+API_PREFIX = env.str("API_PREFIX",default="api/")
 
 #######################
 # Debug configuration #
