@@ -9,7 +9,7 @@ from io import BytesIO
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.db import models
+from django.db import models, DataError
 from django.db.models.fields.files import FieldFile
 from pyrage import decrypt, encrypt, x25519
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -126,7 +126,10 @@ class DynamicStorageFieldFile(FieldFile):
         # the presence of self._file
         if hasattr(self, "_file"):
             self.close()  # This update_acl method we have already defined in UpdateACLStorage
-        self.storage.update_acl(self.name)
+        try:
+            self.storage.update_acl(self.name)
+        except Exception as error:
+            raise DataError(f"Cannot update ACL for {repr(self.name)} : {error}") from error
 
 
 class DynamicStorageThumbnailedFieldFile(ThumbnailedImageFile):
