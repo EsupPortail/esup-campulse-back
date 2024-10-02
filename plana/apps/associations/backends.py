@@ -16,8 +16,6 @@ class AssociationCheckBackend(BaseHealthCheckBackend):
             association_count = Association.objects.count()
         except Exception as error:
             raise HealthCheckException(error) from error
-        if association_count < 1:
-            raise HealthCheckException('Seems to have no Association')
 
     def identifier(self):
         return self.__class__.__name__
