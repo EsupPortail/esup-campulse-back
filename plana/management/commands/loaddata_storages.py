@@ -15,6 +15,9 @@ from plana.apps.documents.models.document import Document
 class Command(BaseCommand):
     help = _("Loads S3 bucket initial content.")
 
+    def add_arguments(self, parser):
+        parser.set_defaults(traceback=settings.DEBUG)
+
     def handle(self, *args, **options):
         try:
             if settings.USE_S3 is True:

@@ -2,6 +2,7 @@ import pathlib
 
 from django.core.management import call_command, CommandError
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from django.utils.translation import gettext as _
 
 
@@ -9,6 +10,7 @@ class Command(BaseCommand):
     help = _("Import application initial datas.")
 
     def add_arguments(self, parser):
+        parser.set_defaults(traceback=settings.DEBUG)
         parser.add_argument(
             "--storages",
             help=_("Set without value if storages should be added."),
