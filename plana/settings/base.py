@@ -29,6 +29,7 @@ DJANGO_ROOT = Path(__file__).resolve(strict=True).parent.parent
 SITE_ROOT = DJANGO_ROOT.parent
 SITE_NAME = DJANGO_ROOT.name
 
+API_PREFIX = ''
 
 #######################
 # Debug configuration #

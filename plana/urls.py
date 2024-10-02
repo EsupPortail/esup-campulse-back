@@ -20,8 +20,7 @@ handler403 = forbidden
 handler404 = not_found
 handler500 = server_error
 
-urlpatterns = [
-    path("", ok, name="home"),
+apipatterns = [
     # re_path(r'^media/(?P<path>.*)$', serve, kwargs={'document_root': settings.MEDIA_ROOT}),
     path("associations/", include("plana.apps.associations.urls")),
     path("commissions/", include("plana.apps.commissions.urls")),
@@ -31,6 +30,13 @@ urlpatterns = [
     path("institutions/", include("plana.apps.institutions.urls")),
     path("projects/", include("plana.apps.projects.urls")),
     path("users/", include("plana.apps.users.urls")),
+    path("summernote/", include("django_summernote.urls")),
+    path("mail_template/", include("plana.libs.mail_template.urls")),
+]
+
+urlpatterns = [
+    path("", ok, name="home"),
+    path(settings.API_PREFIX, include(apipatterns)),
     path("admin/", admin.site.urls),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),  # Downloads schema.yml
     path(
@@ -43,8 +49,6 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path("summernote/", include("django_summernote.urls")),
-    path("mail_template/", include("plana.libs.mail_template.urls")),
     path("_hc/", include("health_check.urls")),
 ]
 
