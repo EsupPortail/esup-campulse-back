@@ -1,8 +1,8 @@
 --extra-index-url https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple
 
-allauth-cas==1.0.2 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:45f29c16a70757501104febdd45c49b2e480e8753dab6bb0af82c28265828ef9 \
-    --hash=sha256:c4f560f04214bac6bbd0efa674e7f62eda0bd68e2a942b5861438247e5cfd6c4
+allauth-cas==1.0.3 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:0db2f7fbb29671080f9974f9fcbad46ea528cf28e15575d3dc5562566e4688a6 \
+    --hash=sha256:f0b09fad4266ef93d25d523474b1f4a931544974cd572fddb7034dc084ab8f3a
 asgiref==3.8.1 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590

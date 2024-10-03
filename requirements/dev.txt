@@ -1,6 +1,6 @@
 --extra-index-url https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple
 
-allauth-cas==1.0.2 ; python_version >= "3.9" and python_version < "3.13"
+allauth-cas==1.0.3 ; python_version >= "3.9" and python_version < "3.13"
 annotated-types==0.7.0 ; python_version >= "3.9" and python_version < "3.13"
 asgiref==3.8.1 ; python_version >= "3.9" and python_version < "3.13"
 astroid==3.3.4 ; python_version >= "3.9" and python_version < "3.13"
