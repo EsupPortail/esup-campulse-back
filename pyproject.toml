@@ -47,7 +47,7 @@ authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
 
 [[tool.poetry.source]]
-name = "repodipory"
+name = "GitLab"
 url = "https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple"
 priority = "supplemental"
 
@@ -78,10 +78,10 @@ openpyxl = "^3.1.5"
 psycopg = {extras = ["binary"], version = "^3.2.3"}
 pyrage = "^1.2.1"
 referencing = "^0.35.1"
+setuptools = ">=65.5.1"
 urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and botocore
 weasyprint = "^62.3"
 zxcvbn = "^4.4.28"
-setuptools = ">=65.5.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
