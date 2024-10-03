@@ -6,6 +6,7 @@ weight: 112
 ## Librairies et frameworks
 
 - [Django](https://pypi.org/project/Django/) : framework général (en version 4).
+- [cryptography](https://pypi.org/project/cryptography/) : chiffrement pour l'authentification.
 - [django-allauth](https://pypi.org/project/django-allauth/) : gestion des moyens d'authentification externes.
 - [django-allauth-cas](https://pypi.org/project/django-allauth-cas/) : intégration de CAS aux moyens d'authentification externes.
 - [django-cleanup](https://pypi.org/project/django-cleanup/) : suppression automatique des fichiers liés à des champs en cours de suppression en base de données.
@@ -20,12 +21,13 @@ weight: 112
 - [djangorestframework-simplejwt](https://pypi.org/project/djangorestframework-simplejwt/) : utilisation de l'authentification par JWT.
 - [dj-rest-auth](https://pypi.org/project/dj-rest-auth/) : génération des routes d'API liées à l'authentification.
 - [drf-spectacular](https://pypi.org/project/drf-spectacular/) : génération du fichier de documentation d'API.
-- [britney](https://pypi.org/project/britney/) : communication avec un annuaire LDAP.
+- [britney](https://pypi.org/project/britney/) : communication avec un annuaire LDAP et le protocole SPORE.
 - [jsonschema](https://pypi.org/project/jsonschema/) : implantation de la norme JSON Schema utilisée pour valider les champs JSONField de la base de données.
 - [openpyxl](https://pypi.org/project/openpyxl/) : génération de fichiers Excel.
 - [psycopg](https://pypi.org/project/psycopg/) : communication avec la base de données PostgreSQL.
 - [pyrage](https://pypi.org/project/pyrage/) : chiffrement des documents.
 - [referencing](https://pypi.org/project/referencing/) : implantation du validateur de la norme JSON Schema utilisée pour valider les champs JSONField de la base de données.
+- [setuptools](https://pypi.org/project/setuptools/) : installation de packages externes (pour django-allauth-cas).
 - [weasyprint](https://pypi.org/project/weasyprint/) : génération de fichiers PDF.
 - [zxcvbn](https://pypi.org/project/zxcvbn/) : vérificateur de robustesse de mots de passe.
 

@@ -12,6 +12,7 @@ brotlicffi==1.1.0.0 ; platform_python_implementation != "CPython" and python_ver
 certifi==2024.8.30 ; python_version >= "3.9" and python_version < "3.13"
 cffi==1.17.1 ; python_version >= "3.9" and python_version < "3.13"
 charset-normalizer==3.3.2 ; python_version >= "3.9" and python_version < "3.13"
+cryptography==43.0.1 ; python_version >= "3.9" and python_version < "3.13"
 cssselect2==0.7.0 ; python_version >= "3.9" and python_version < "3.13"
 da-vinci==0.4.0 ; python_version >= "3.9" and python_version < "3.13"
 dj-rest-auth==6.0.0 ; python_version >= "3.9" and python_version < "3.13"
