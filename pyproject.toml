@@ -52,7 +52,7 @@ django = "<5.0"
 django-allauth = "<0.55" # higher versions break django-allauth-cas
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a pull request
 django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
-django-cleanup = "^8.1.0"
+django-cleanup = "^9.0.0"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
 django-health-check = "^3.18.3"

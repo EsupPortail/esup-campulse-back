@@ -336,9 +336,9 @@ django-allauth-cas @ https://github.com/thejoeejoee/django-allauth-cas/archive/5
     --hash=sha256:7e68300b6905c7da0b21925795e0b2055f86575308db37cd505033689b018a77
 django-allauth==0.54.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
-django-cleanup==8.1.0 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:70df905076a44e7a111b31198199af633dee08876e199e6dce36ca8dd6b8b10f \
-    --hash=sha256:7903873ea73b3f7e61e055340d27dba49b70634f60c87a573ad748e172836458
+django-cleanup==9.0.0 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:19f8b0e830233f9f0f683b17181f414672a0f48afe3ea3cc80ba47ae40ad880c \
+    --hash=sha256:bb9fb560aaf62959c81e31fa40885c36bbd5854d5aa21b90df2c7e4ba633531e
 django-cors-headers==4.4.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:5c6e3b7fe870876a1efdfeb4f433782c3524078fa0dc9e0195f6706ce7a242f6 \
     --hash=sha256:92cf4633e22af67a230a1456cb1b7a02bb213d6536d2dcb2a4a24092ea9cebc2
