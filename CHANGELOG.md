@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2 (2024)
+
+### Corrections de bugs
+
+- Vérification supplémentaire de la casse de l'adresse mail à l'envoi du formulaire d'inscription.
+
 ## 1.2.1 (24 Septembre 2024)
 
 ### Corrections de bugs
