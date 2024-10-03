@@ -47,15 +47,13 @@ authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
 
 [[tool.poetry.source]]
-name = "django-viewflow-pro"
+name = "repodipory"
 url = "https://repodipory.u-strasbg.fr/lib/"
 priority = "supplemental"
-
 
 [[tool.poetry.source]]
 name = "PyPI"
 priority = "primary"
-
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
