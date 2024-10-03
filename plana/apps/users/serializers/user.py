@@ -220,6 +220,8 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
         user.email = self.cleaned_data["email"].lower()
         user.username = self.cleaned_data["email"]
+        if User.objects.filter(username__iexact=user.username, email__iexact=user.username).exists():
+            raise exceptions.ValidationError({"detail": [_("A local account already exists with the email address.")]})
         if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
 
