@@ -15,9 +15,9 @@ boto3==1.35.33 ; python_version >= "3.9" and python_version < "3.13" \
 botocore==1.35.33 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:b149940c59aa318e020191c9e5644361b2371e77d0346a3819728b49d3fa2e4e \
     --hash=sha256:b7b1ed59a224616912c7546fa19ffd542c745818179ee0640a8a00b155bcd9cd
-britney==0.5.2 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:3e499e8071734ff15c7ddd0f0329997de9d8240e2742164d533b31dd8c135b63 \
-    --hash=sha256:5fe56ad713598b8d5b7b394ad48b3c5505639c78e2cbea5e496bc0a663ec9124
+britney==0.5.4 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:6bce8aadd90fcf231ba51d9a9edafbd0d7bdcb2bee3c7c7ea7ab374d0d996158 \
+    --hash=sha256:bed17d38066f9f73b95966afe6c6304903da522b34f92b98b834136d912b2854
 brotli==1.1.0 ; platform_python_implementation == "CPython" and python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:03d20af184290887bdea3f0f78c4f737d126c74dc2f3ccadf07e54ceca3bf208 \
     --hash=sha256:0541e747cce78e24ea12d69176f6a7ddb690e62c425e01d31cc065e69ce55b48 \
