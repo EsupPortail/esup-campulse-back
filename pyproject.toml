@@ -46,6 +46,15 @@ description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
 
+[[tool.poetry.source]]
+name = "GitLab"
+url = "https://git.unistra.fr/api/v4/projects/43267/packages/pypi/simple"
+priority = "supplemental"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 django = "<5.0"
@@ -65,7 +74,7 @@ djangorestframework-camel-case = "^1.4.2"
 djangorestframework-simplejwt = "^5.3.1"
 dj-rest-auth = "^6.0.0"
 drf-spectacular = "^0.27.2"
-britney = "^0.5.1"
+britney = "^0.5.2"
 jsonschema = "^4.23.0"
 openpyxl = "^3.1.5"
 psycopg = {extras = ["binary"], version = "^3.2.3"}

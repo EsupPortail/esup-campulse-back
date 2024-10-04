@@ -182,18 +182,23 @@ crt = ["awscrt (==0.22.0)"]
 
 [[package]]
 name = "britney"
-version = "0.5.1"
-description = "Python implementation of SPORE"
+version = "0.5.2"
+description = "Fork of agrausem/britney to add support for higher Python versions."
 optional = false
-python-versions = "*"
+python-versions = ">=3.9,<4.0"
 files = [
-    {file = "britney-0.5.1-py2.py3-none-any.whl", hash = "sha256:680faf36f00865ab77dbb7a092d34ed3bbf7f3da018a37e6eb8207aebd01a942"},
-    {file = "britney-0.5.1.tar.gz", hash = "sha256:6e2c461ede290246b777dc1444fcf5823234825d7746f6d6aabc4793340d2e3b"},
+    {file = "britney-0.5.2-py3-none-any.whl", hash = "sha256:5fe56ad713598b8d5b7b394ad48b3c5505639c78e2cbea5e496bc0a663ec9124"},
+    {file = "britney-0.5.2.tar.gz", hash = "sha256:3e499e8071734ff15c7ddd0f0329997de9d8240e2742164d533b31dd8c135b63"},
 ]
 
 [package.dependencies]
-requests = "*"
-requests-testadapter = "*"
+requests = ">=2.32.3,<3.0.0"
+requests-testadapter = ">=0.3.0,<0.4.0"
+
+[package.source]
+type = "legacy"
+url = "https://git.unistra.fr/api/v4/projects/43267/packages/pypi/simple"
+reference = "GitLab"
 
 [[package]]
 name = "brotli"
@@ -3100,4 +3105,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "a96f55e21c51b606e5c32165a217442c78b6d0560c07c84fc981563f8b4eb468"
+content-hash = "348ec1bd2d8aa5d13ffb7cab919424121a992110a50da0cdf9b2d87fe9033e64"
