@@ -19,7 +19,7 @@ six = ">=1.16.0,<2.0.0"
 [package.source]
 type = "legacy"
 url = "https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple"
-reference = "GitLab django-allatuh-cas"
+reference = "GitLab django-allauth-cas"
 
 [[package]]
 name = "annotated-types"
@@ -3040,4 +3040,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "304a4e6e1dd60b2e291a844ce8bc7f3da832c923337b74f6f5b35af700994e6e"
+content-hash = "06c94dbbc6312485349c8758dcd920d669dc864ef5abd7251af260765d104c29"

@@ -47,7 +47,7 @@ authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
 
 [[tool.poetry.source]]
-name = "GitLab django-allatuh-cas"
+name = "GitLab django-allauth-cas"
 url = "https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple"
 priority = "supplemental"
 
