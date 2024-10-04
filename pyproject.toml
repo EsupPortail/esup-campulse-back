@@ -78,7 +78,7 @@ djangorestframework-camel-case = "^1.4.2"
 djangorestframework-simplejwt = "^5.3.1"
 dj-rest-auth = "^6.0.0"
 drf-spectacular = "^0.27.2"
-britney = "^0.5.2"
+britney = "^0.5.4"
 jsonschema = "^4.23.0"
 openpyxl = "^3.1.5"
 psycopg = {extras = ["binary"], version = "^3.2.3"}
