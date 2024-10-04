@@ -1,5 +1,9 @@
+--extra-index-url https://git.unistra.fr/api/v4/projects/43157/packages/pypi/simple
 --extra-index-url https://git.unistra.fr/api/v4/projects/43267/packages/pypi/simple
 
+allauth-cas==1.0.3 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:0db2f7fbb29671080f9974f9fcbad46ea528cf28e15575d3dc5562566e4688a6 \
+    --hash=sha256:f0b09fad4266ef93d25d523474b1f4a931544974cd572fddb7034dc084ab8f3a
 asgiref==3.8.1 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -329,15 +333,10 @@ cssselect2==0.7.0 ; python_version >= "3.9" and python_version < "3.13" \
 da-vinci==0.4.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:130bc0dd7ff69294917eec867ef0d55a19d6006afa63b2b9101570153372dd33 \
     --hash=sha256:2039c67fa8e2338f8457362a0a8d672a4e19c970a41a86fc87240f6702ead762
-defusedxml==0.7.1 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
-    --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
 dj-rest-auth==6.0.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:760b45f3a07cd6182e6a20fe07d0c55230c5f950167df724d7914d0dd8c50133
-django-allauth-cas @ https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:7e68300b6905c7da0b21925795e0b2055f86575308db37cd505033689b018a77
-django-allauth==0.54.0 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:120e265f802b65738899c6cb627b827fde46a4d03067034c633f516c2adf3e3e
+django-allauth==65.0.2 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:6b5b3a7a65b1c28078b6eb0dd234310b58a44e8addfd187dc30437b0b2bc41a5
 django-cleanup==9.0.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:19f8b0e830233f9f0f683b17181f414672a0f48afe3ea3cc80ba47ae40ad880c \
     --hash=sha256:bb9fb560aaf62959c81e31fa40885c36bbd5854d5aa21b90df2c7e4ba633531e
@@ -581,9 +580,6 @@ lxml==5.3.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:f7d4a670107d75dfe5ad080bed6c341d18c4442f9378c9f58e5851e86eb79965 \
     --hash=sha256:f914c03e6a31deb632e2daa881fe198461f4d06e57ac3d0e05bbcab8eae01945 \
     --hash=sha256:fb66442c2546446944437df74379e9cf9e9db353e61301d1a0e26482f43f0dd8
-oauthlib==3.2.2 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca \
-    --hash=sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918
 openpyxl==3.1.5 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2 \
     --hash=sha256:cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050
@@ -745,9 +741,6 @@ pydyf==0.11.0 ; python_version >= "3.9" and python_version < "3.13" \
 pyjwt==2.9.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:3b02fb0f44517787776cf48f2ae25d8e14f300e6d7545a4315cee571a415e850 \
     --hash=sha256:7e1e5b56cc735432a7369cbfa0efe50fa113ebecdc04ae6922deba8b84582d0c
-pyjwt[crypto]==2.9.0 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:3b02fb0f44517787776cf48f2ae25d8e14f300e6d7545a4315cee571a415e850 \
-    --hash=sha256:7e1e5b56cc735432a7369cbfa0efe50fa113ebecdc04ae6922deba8b84582d0c
 pyphen==0.16.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:2c006b3ddf072c9571ab97606d9ab3c26a92eaced4c0d59fd1d26988f308f413 \
     --hash=sha256:b4a4c6d7d5654b698b5fc68123148bb799b3debe0175d1d5dc3edfe93066fc4c
@@ -762,9 +755,6 @@ python-cas==1.6.0 ; python_version >= "3.9" and python_version < "3.13" \
 python-dateutil==2.9.0.post0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
-python3-openid==3.2.0 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:33fbf6928f401e0b790151ed2b5290b02545e8775f982485205a066f874aaeaf \
-    --hash=sha256:6626f771e0417486701e0b4daff762e7212e820ca5b29fcc0d05f6f8736dfa6b
 pyyaml==6.0.2 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:01179a4a8559ab5de078078f37e5c1a30d76bb88519906844fd7bdea1b7729ff \
     --hash=sha256:0833f8694549e586547b576dcfaba4a6b55b9e96098b36cdc7ebefe667dfed48 \
@@ -822,9 +812,6 @@ pyyaml==6.0.2 ; python_version >= "3.9" and python_version < "3.13" \
 referencing==0.35.1 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:25b42124a6c8b632a425174f24087783efb348a6f1e0008e63cd4466fedf703c \
     --hash=sha256:eda6d3234d62814d1c64e305c1331c9a3a6132da475ab6382eaa997b21ee75de
-requests-oauthlib==2.0.0 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36 \
-    --hash=sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9
 requests-testadapter==0.3.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:0a9f824acc995753ca6f2e306fbbdb16015c8c44c1d14c9060717e32b99318b0
 requests==2.32.3 ; python_version >= "3.9" and python_version < "3.13" \
@@ -940,6 +927,9 @@ s3transfer==0.10.2 ; python_version >= "3.9" and python_version < "3.13" \
 sentry-sdk==2.15.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:8fb0d1a4e1a640172f31502e4503543765a1fe8a9209779134a4ac52d4677303 \
     --hash=sha256:a599e7d3400787d6f43327b973e55a087b931ba2c592a7a7afa691f8eb5e75e2
+setuptools==75.1.0 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:35ab7fd3bcd95e6b7fd704e4a1539513edad446c097797f2985e0e4b960772f2 \
+    --hash=sha256:d59a21b17a275fb872a9c3dae73963160ae079f1049ed956880cd7c09b120538
 shortuuid==1.0.13 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:3bb9cf07f606260584b1df46399c0b87dd84773e7b25912b7e391e30797c5e72 \
     --hash=sha256:a482a497300b49b4953e15108a7913244e1bb0d41f9d332f5e9925dba33a3c5a
