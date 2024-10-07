@@ -10,7 +10,7 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
-  PYTHON_VERSION: "3.9"
+  PYTHON_VERSION: "3.10"
 
 before_script:
   - apt-get update && apt-get install -y age
@@ -18,7 +18,7 @@ before_script:
 unittest:
   stage: test
   tags:
-    - python3.9
+    - python3.10
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
