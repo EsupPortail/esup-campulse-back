@@ -7,12 +7,12 @@ attrs==24.2.0 ; python_version >= "3.9" and python_version < "3.13" \
 bleach==6.1.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe \
     --hash=sha256:3225f354cfc436b9789c66c4ee030194bee0568fbf9cbdad3bc8b5c26c5f12b6
-boto3==1.35.33 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:4064e95d4035d4d3dd4eb59eaa5908d14d194b512d1dc1d271647b0c661fbdbb \
-    --hash=sha256:d206e8295e856ded7c8fab086784dc17863ed9d735458145c2ef5b25604aef69
-botocore==1.35.33 ; python_version >= "3.9" and python_version < "3.13" \
-    --hash=sha256:b149940c59aa318e020191c9e5644361b2371e77d0346a3819728b49d3fa2e4e \
-    --hash=sha256:b7b1ed59a224616912c7546fa19ffd542c745818179ee0640a8a00b155bcd9cd
+boto3==1.35.34 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:291e7b97a34967ed93297e6171f1bebb8529e64633dd48426760e3fdef1cdea8 \
+    --hash=sha256:57e6ee8504e7929bc094bb2afc879943906064179a1e88c23b4812e2c6f61532
+botocore==1.35.34 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:789b6501a3bb4a9591c1fe10da200cc315c1fa5df5ada19c720d8ef06439b3e3 \
+    --hash=sha256:ccb0fe397b11b81c9abc0c87029d17298e17bf658d8db5c0c5a551a12a207e7a
 britney==0.5.1 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:680faf36f00865ab77dbb7a092d34ed3bbf7f3da018a37e6eb8207aebd01a942 \
     --hash=sha256:6e2c461ede290246b777dc1444fcf5823234825d7746f6d6aabc4793340d2e3b
