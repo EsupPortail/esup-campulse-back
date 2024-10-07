@@ -51,13 +51,13 @@ tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
 name = "astroid"
-version = "3.3.4"
+version = "3.3.5"
 description = "An abstract syntax tree for Python with inference support."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "astroid-3.3.4-py3-none-any.whl", hash = "sha256:5eba185467253501b62a9f113c263524b4f5d55e1b30456370eed4cdbd6438fd"},
-    {file = "astroid-3.3.4.tar.gz", hash = "sha256:e73d0b62dd680a7c07cb2cd0ce3c22570b044dd01bd994bc3a2dd16c6cbba162"},
+    {file = "astroid-3.3.5-py3-none-any.whl", hash = "sha256:a9d1c946ada25098d790e079ba2a1b112157278f3fb7e718ae6a9252f5835dc8"},
+    {file = "astroid-3.3.5.tar.gz", hash = "sha256:5cfc40ae9f68311075d27ef68a4841bdc5cc7f6cf86671b49f00607d30188e2d"},
 ]
 
 [package.dependencies]
@@ -162,17 +162,17 @@ css = ["tinycss2 (>=1.1.0,<1.3)"]
 
 [[package]]
 name = "boto3"
-version = "1.35.33"
+version = "1.35.34"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.35.33-py3-none-any.whl", hash = "sha256:4064e95d4035d4d3dd4eb59eaa5908d14d194b512d1dc1d271647b0c661fbdbb"},
-    {file = "boto3-1.35.33.tar.gz", hash = "sha256:d206e8295e856ded7c8fab086784dc17863ed9d735458145c2ef5b25604aef69"},
+    {file = "boto3-1.35.34-py3-none-any.whl", hash = "sha256:291e7b97a34967ed93297e6171f1bebb8529e64633dd48426760e3fdef1cdea8"},
+    {file = "boto3-1.35.34.tar.gz", hash = "sha256:57e6ee8504e7929bc094bb2afc879943906064179a1e88c23b4812e2c6f61532"},
 ]
 
 [package.dependencies]
-botocore = ">=1.35.33,<1.36.0"
+botocore = ">=1.35.34,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -181,13 +181,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.33"
+version = "1.35.34"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.33-py3-none-any.whl", hash = "sha256:b7b1ed59a224616912c7546fa19ffd542c745818179ee0640a8a00b155bcd9cd"},
-    {file = "botocore-1.35.33.tar.gz", hash = "sha256:b149940c59aa318e020191c9e5644361b2371e77d0346a3819728b49d3fa2e4e"},
+    {file = "botocore-1.35.34-py3-none-any.whl", hash = "sha256:ccb0fe397b11b81c9abc0c87029d17298e17bf658d8db5c0c5a551a12a207e7a"},
+    {file = "botocore-1.35.34.tar.gz", hash = "sha256:789b6501a3bb4a9591c1fe10da200cc315c1fa5df5ada19c720d8ef06439b3e3"},
 ]
 
 [package.dependencies]
@@ -934,13 +934,13 @@ test = ["boto3", "celery", "django-storages", "pytest", "pytest-cov", "pytest-dj
 
 [[package]]
 name = "django-storages"
-version = "1.14.4"
+version = "1.14.3"
 description = "Support for many storage backends in Django"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "django-storages-1.14.4.tar.gz", hash = "sha256:69aca94d26e6714d14ad63f33d13619e697508ee33ede184e462ed766dc2a73f"},
-    {file = "django_storages-1.14.4-py3-none-any.whl", hash = "sha256:d61930acb4a25e3aebebc6addaf946a3b1df31c803a6bf1af2f31c9047febaa3"},
+    {file = "django-storages-1.14.3.tar.gz", hash = "sha256:95a12836cd998d4c7a4512347322331c662d9114c4344f932f5e9c0fce000608"},
+    {file = "django_storages-1.14.3-py3-none-any.whl", hash = "sha256:31f263389e95ce3a1b902fb5f739a7ed32895f7d8b80179fe7453ecc0dfe102e"},
 ]
 
 [package.dependencies]
@@ -3040,4 +3040,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "f8aeb6cfd6ad16cf789b542d9bdd52521297912b365405f23eb403f3b2d70024"
+content-hash = "1c5fe7e4b145f83fa54f4fe58ac1d37684cbcf9188f6219e8dbc1bb2d0224edf"
