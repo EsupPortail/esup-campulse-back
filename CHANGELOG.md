@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.2 (08 Octobre 2024)
+
+### Corrections de bugs
+
+- Vérification supplémentaire de la casse de l'adresse mail à l'envoi du formulaire d'inscription.
+
+### Autres changements
+
+- Meilleure gestion des erreurs avec Sentry.
+- Nettoyage des librairies pour préparer une mise à jour majeure de django-allauth-cas et de britney.
+
 ## 1.2.1 (24 Septembre 2024)
 
 ### Corrections de bugs

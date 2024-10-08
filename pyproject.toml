@@ -41,7 +41,7 @@ multi_line_output = 3
 
 [tool.poetry]
 name = "plana"
-version = "1.2.1"
+version = "1.2.2"
 description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
@@ -49,14 +49,15 @@ license = "GPL-3.0-or-later"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 django = "<5.0"
+cryptography = "^43.0.1"
 django-allauth = "<0.55" # higher versions break django-allauth-cas
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a pull request
 django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
-django-cleanup = "^8.1.0"
+django-cleanup = "^9.0.0"
 django-cors-headers = "^4.4.0"
 django-extensions = "^3.2.3"
 django-health-check = "^3.18.3"
-django-storages = {extras = ["boto3"], version = "^1.14.4"}
+django-storages = {extras = ["boto3"], version = "1.14.3"} # 1.14.4 triggers an error on django-health-check
 django-summernote = "<0.9"
 django-thumbnails = "^0.8.0"
 djangorestframework = "^3.15.2"
@@ -75,32 +76,32 @@ weasyprint = "^62.3"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.8.0"
+black = "^24.10.0"
 coverage = "^7.6.1"
 django-debug-toolbar = "^4.4.6"
 pre-commit = "^3.8.0"
 pylint = "^3.3.1"
 pylint-django = "^2.5.5"
 safety = "^3.2.8"
-sentry-sdk = "^2.14.0"
-tox = "^4.11.4"
+sentry-sdk = "^2.15.0"
+tox = "<4.12" # needed to avoid dependency problems with safety
 
 [tool.poetry.group.saas.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.14.0"
+sentry-sdk = "^2.15.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.preprod.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.14.0"
+sentry-sdk = "^2.15.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.prod.dependencies]
 chaussette-backport = "1.3.1"
-sentry-sdk = "^2.14.0"
+sentry-sdk = "^2.15.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.test.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.14.0"
+sentry-sdk = "^2.15.0"
 waitress = "^2.1.2"

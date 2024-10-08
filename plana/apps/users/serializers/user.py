@@ -214,6 +214,10 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError(
                 {"detail": [_("This email address cannot be used to create a local account.")]}
             )
+        if User.objects.filter(
+            username__iexact=self.cleaned_data["email"], email__iexact=self.cleaned_data["email"]
+        ).exists():
+            raise exceptions.ValidationError({"detail": [_("A local account already exists with the email address.")]})
         adapter = get_adapter()
         user = adapter.new_user(request)
         adapter.save_user(request, user, self)

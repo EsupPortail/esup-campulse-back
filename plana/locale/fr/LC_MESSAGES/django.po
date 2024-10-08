@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 10:57+0200\n"
+"POT-Creation-Date: 2024-10-03 09:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1499,6 +1499,10 @@ msgstr "L'attribut adapter_class n'a pas été trouvé dans la vue"
 #: plana/apps/users/serializers/user.py:215
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
+
+#: plana/apps/users/serializers/user.py:220
+msgid "A local account already exists with the email address."
+msgstr "Un compte local existe déjà avec cette adresse email."
 
 #: plana/apps/users/serializers/user_auth.py:45
 msgid "Unable to change the password of a CAS account."
