@@ -5,6 +5,9 @@ from os import environ
 from os.path import join, normpath
 from pathlib import Path
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 def load_key(keyfile):
     """Load JWT and AGE keys."""
@@ -16,7 +19,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.2.1"
+APP_VERSION = "1.2.2"
 
 ######################
 # Path configuration #
@@ -579,9 +582,6 @@ SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 def sentry_init(environment):
     """Init Sentry service."""
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[
@@ -590,6 +590,7 @@ def sentry_init(environment):
         environment=environment,
         release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
         send_default_pii=True,
+        traces_sample_rate=1.0,
     )
 
 
