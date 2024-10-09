@@ -25,6 +25,9 @@ class Command(BaseCommand):
                     Q(days_before_expiration__isnull=False) ^ Q(expiration_day__isnull=False)
                 ).values_list("id")
             )
+            cron_days_before_document_expiration_warning = Setting.get_setting(
+                "CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING"
+            )
             for document_upload in document_uploads_with_expiration:
                 document = Document.objects.get(id=document_upload.document_id)
                 expiration_date = None
@@ -42,7 +45,7 @@ class Command(BaseCommand):
                     if document.days_before_expiration is not None:
                         expiration_date = document_upload.validated_date + document.days_before_expiration
                 if expiration_date is not None and datetime.date.today() == expiration_date - datetime.timedelta(
-                    days=Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING")
+                    days=cron_days_before_document_expiration_warning
                 ):
                     template = MailTemplate.objects.get(
                         code="USER_OR_ASSOCIATION_DOCUMENT_EXPIRATION_WARNING_SCHEDULED"

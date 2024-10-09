@@ -18,12 +18,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             associations = Association.objects.all()
+            cron_days_before_association_expiration_warning = Setting.get_setting(
+                "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"
+            )
+            cron_days_before_association_expiration = Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION")
             for association in associations:
                 if (
                     association.charter_date is not None
                     and datetime.date.today()
                     == association.charter_date
-                    + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
+                    + datetime.timedelta(days=cron_days_before_association_expiration_warning)
                 ):
                     template = MailTemplate.objects.get(code="ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED")
                     current_site = get_current_site(None)
@@ -44,8 +48,7 @@ class Command(BaseCommand):
                 elif (
                     association.charter_date is not None
                     and datetime.date.today()
-                    == association.charter_date
-                    + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
+                    == association.charter_date + datetime.timedelta(days=cron_days_before_association_expiration)
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.is_site = False
