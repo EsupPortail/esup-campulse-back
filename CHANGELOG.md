@@ -1,10 +1,11 @@
 # Changelog
 
-## 1.2.2 (08 Octobre 2024)
+## 1.2.2 (09 Octobre 2024)
 
 ### Corrections de bugs
 
 - Vérification supplémentaire de la casse de l'adresse mail à l'envoi du formulaire d'inscription.
+- Optimisation des temps de réponse à l'appel des fonctions liées aux projets.
 
 ### Autres changements
 

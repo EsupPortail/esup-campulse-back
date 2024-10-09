@@ -15,13 +15,18 @@ class VisibleProjectManager(models.Manager):
         """Override queryset to get project younger than defined amount of years."""
         queryset = super().get_queryset()
         invisible_projects_ids = []
+        amount_years_before_project_invisibility = None
         try:
+            for project in queryset:
+                # TODO Tests break if this variable is set before this loop instruction. (???)
+                amount_years_before_project_invisibility = Setting.get_setting(
+                    "AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY"
+                )
+                break
             for project in queryset:
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
-                ) > project.edition_date + datetime.timedelta(
-                    days=(365 * Setting.get_setting("AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY"))
-                ):
+                ) > project.edition_date + datetime.timedelta(days=(365 * amount_years_before_project_invisibility)):
                     invisible_projects_ids.append(project.id)
             queryset = queryset.exclude(id__in=invisible_projects_ids)
         except ProgrammingError:

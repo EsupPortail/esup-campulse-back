@@ -81,7 +81,7 @@ class CASSerializer(LoginSerializer):
                     user.is_student = True
                 user.save()
             except IntegrityError as e:
-                raise IntegrityError(e)
+                pass
         else:
             attrs["user"] = login.account.user
 
