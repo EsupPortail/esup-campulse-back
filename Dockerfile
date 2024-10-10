@@ -5,7 +5,7 @@ LABEL maintainer="DNum DIP - Université de Strasbourg <dnum-dip@unistra.fr>" \
 
 EXPOSE 8080
 
-RUN useradd -m -s /bin/bash django
+WORKDIR /app
 
 # Install the application
 RUN set -ex \
@@ -23,19 +23,17 @@ RUN set -ex \
 
 ENV LANG fr_FR.UTF-8
 
-COPY --chown=django:django . /app
-COPY --chown=django:django uwsgi.ini /etc/uwsgi/uwsgi.ini
-COPY --chown=django:django --chmod=755 prestart.sh /prestart.sh
-
-WORKDIR /app
-
-USER django
+COPY . .
+COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
 
 RUN set -ex \
     && mkdir -p assets logs \
-    && pip install --trusted-host pypi.python.org -r /app/requirements/prod.txt \
+    && pip install --trusted-host pypi.python.org -r requirements/prod.txt \
     && pip cache purge
 
-ENTRYPOINT ["sh", "/prestart.sh"]
+RUN chgrp -R 0 /app && \
+    chmod -R g+rwX /app
 
-CMD ["uwsgi", "--uid", "django", "--ini", "/etc/uwsgi/uwsgi.ini", "--protocol", "http"]
+ENTRYPOINT ["sh", "/app/prestart.sh"]
+
+CMD ["uwsgi", "--ini", "/etc/uwsgi/uwsgi.ini", "--protocol", "http"]
