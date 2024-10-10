@@ -19,7 +19,7 @@ before_script:
   - apt-get update && apt-get install -y age
 
 unittest:
-  stage: test
+  # stage: test
   tags:
     - python3.9
   script:
@@ -39,7 +39,7 @@ include:
     file: python-licenses.gitlab-ci.yml
   
 pages:
-  stage: deploy
+  # stage: deploy
   image: registry.gitlab.com/pages/hugo:latest
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
