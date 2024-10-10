@@ -23,7 +23,7 @@ RUN set -ex \
 
 ENV LANG fr_FR.UTF-8
 
-COPY --chown=django:django app /app
+COPY --chown=django:django . /app
 COPY --chown=django:django uwsgi.ini /etc/uwsgi/uwsgi.ini
 COPY --chown=django:django --chmod=755 prestart.sh /prestart.sh
 
