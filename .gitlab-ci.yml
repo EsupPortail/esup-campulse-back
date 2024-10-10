@@ -1,6 +1,9 @@
 stages:
   - test
   - deploy
+  - build
+  - scan
+  - release
 
 services:
   - postgres:latest
@@ -52,3 +55,23 @@ pages:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
     - if: '$CI_COMMIT_REF_NAME == "main"'
+
+# You must define these variables :
+# CONTAINER_TEST_IMAGE
+# CONTAINER_RELEASE_IMAGE
+# EXTRA_ARGS args to pass to the kaniko executor
+#
+# Optional variables to have in your CI :
+# CI_REGISTRY
+# CI_REGISTRY_USER
+# CI_REGISTRY_PASSWORD
+# CI_PROJECT_DIR_PATH
+
+include:
+  - project: "docker/template"
+    file: "docker-scan.gitlab-ci.yml"
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-backend:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
+  EXTRA_ARGS: ""
