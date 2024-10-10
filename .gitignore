@@ -60,3 +60,5 @@ keys/*
 
 # Docker
 docker/**/.env.dev
+
+.env

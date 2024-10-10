@@ -32,7 +32,7 @@ WORKDIR /app
 USER django
 
 RUN set -ex \
-    && mkdir assets logs \
+    && mkdir -p assets logs \
     && pip install --trusted-host pypi.python.org -r /app/requirements/prod.txt \
     && pip cache purge
 
