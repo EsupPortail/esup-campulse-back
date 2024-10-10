@@ -16,6 +16,7 @@ stages:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}${CI_PROJECT_DIR_PATH}/Dockerfile"
       --destination "${DESTINATION}" ${EXTRA_ARGS}
+      --registry-mirror quay.apps.mgmt.paas.unistra.fr/dnum
   tags:
     - cluster
     - kubernetes
@@ -36,6 +37,6 @@ r:docker:
   #   - main
 
 variables:
-  CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-frontend:$CI_COMMIT_REF_NAME
-  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-frontend:latest
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-backend:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
   EXTRA_ARGS: ""
