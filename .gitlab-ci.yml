@@ -1,37 +1,7 @@
 stages:
-  # - test
-  - deploy
   - build
   - scan
   - release
-
-services:
-  - postgres:latest
-
-variables:
-  POSTGRES_DB: plana_test
-  POSTGRES_USER: plana
-  POSTGRES_PASSWORD: plana
-  DJANGO_SETTINGS_MODULE: plana.settings.unittest
-  PYTHON_VERSION: "3.9"
-
-before_script:
-  - apt-get update && apt-get install -y age
-
-include:
-  - project: docker/template
-    file: python-licenses.gitlab-ci.yml
-  
-# You must define these variables :
-# CONTAINER_TEST_IMAGE
-# CONTAINER_RELEASE_IMAGE
-# EXTRA_ARGS args to pass to the kaniko executor
-#
-# Optional variables to have in your CI :
-# CI_REGISTRY
-# CI_REGISTRY_USER
-# CI_REGISTRY_PASSWORD
-# CI_PROJECT_DIR_PATH
 
 include:
   - project: "docker/template"
