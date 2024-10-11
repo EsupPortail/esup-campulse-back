@@ -4,7 +4,7 @@ from .base import *
 # Database configuration #
 ##########################
 
-DATABASES['default']['HOST'] = environ.get('DEFAULT_DB_HOST', 'postgres')
+DATABASES['default']['HOST'] = environ.get('DEFAULT_DB_HOST', 'localhost')
 DATABASES['default']['USER'] = environ.get('DEFAULT_DB_USER', 'plana')
 DATABASES['default']['PASSWORD'] = environ.get('DEFAULT_DB_PASSWORD', 'plana')
 DATABASES['default']['NAME'] = environ.get('DEFAULT_DB_NAME', 'plana')

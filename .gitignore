@@ -62,3 +62,4 @@ keys/*
 docker/**/.env.dev
 
 .env
+logs
