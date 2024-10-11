@@ -19,6 +19,7 @@ then
 fi
 
 python manage.py initial_import --test
-python manage.py loaddata_storages
+# python manage.py loaddata_storages
+env
 
 exec "$@"
