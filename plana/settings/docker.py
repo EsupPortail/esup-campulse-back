@@ -49,8 +49,8 @@ DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 # Sentry #
 ##########
 
-STAGE = "docker"
-sentry_init(STAGE)
+# STAGE = "docker"
+# sentry_init(STAGE)
 
 
 ##################
