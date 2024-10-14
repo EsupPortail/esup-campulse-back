@@ -20,6 +20,8 @@ ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 
+# CSRF_TRUSTED_ORIGINS = "{{ csrf_trusted_origins }}".split()
+
 
 #####################
 # Log configuration #
@@ -52,7 +54,7 @@ sentry_init(STAGE)
 
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_NAME = "{{ cas_name }}"

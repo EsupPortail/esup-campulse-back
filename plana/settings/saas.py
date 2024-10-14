@@ -1,4 +1,4 @@
-"""Configuration for SaaS server environment."""
+"""Configuration for old SaaS server environment."""
 
 from .base import *
 
@@ -44,6 +44,7 @@ SECRET_KEY = "{{ secret_key }}"
 DIPSTRAP_VERSION = "{{ dipstrap_version }}"
 DIPSTRAP_STATIC_URL += f"{DIPSTRAP_VERSION}/"
 
+
 ##########
 # Sentry #
 ##########
@@ -53,7 +54,7 @@ sentry_init(STAGE)
 
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_NAME = "{{ cas_name }}"

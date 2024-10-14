@@ -43,6 +43,10 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["*"]
 
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
+# CSRF_TRUSTED_ORIGINS = "".split()
+
 
 #####################
 # Log configuration #
@@ -84,6 +88,18 @@ MIDDLEWARE += [
 INTERNAL_IPS = ["127.0.0.1", "0.0.0.0"]
 
 
+##################
+# Authentication #
+##################
+
+CAS_SERVER = "https://cas-dev.unistra.fr/cas/"
+CAS_AUTHORIZED_SERVICES = [
+    "http://localhost:8000/users/auth/cas_verify/",
+    "http://localhost:3000/cas-login",
+    "http://localhost:3000/cas-register",
+]
+
+
 ##########
 # Emails #
 ##########
@@ -98,7 +114,7 @@ EMAIL_TEMPLATE_FRONTEND_URL = "http://localhost:3000/"
 
 
 #########################
-# DJANGO REST FRAMEWORK #
+# Django REST Framework #
 #########################
 
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
@@ -107,23 +123,9 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
 ]
 
 
-##################
-# AUTHENTICATION #
-##################
-
-CAS_SERVER = "https://cas-dev.unistra.fr/cas/"
-CAS_AUTHORIZED_SERVICES = [
-    "http://localhost:8000/users/auth/cas_verify/",
-    "http://localhost:3000/cas-login",
-    "http://localhost:3000/cas-register",
-]
-
-
 ########
 # Misc #
 ########
-
-MIGRATION_SITE_NAME = "Opaline"
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get('ACCOUNTS_API_SPORE_DESCRIPTION_FILE')

@@ -76,13 +76,17 @@ DATABASES = {
 }
 
 
-######################
-# Site configuration #
-######################
+############################
+# Allowed hosts & Security #
+############################
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
+
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
+# CSRF_TRUSTED_ORIGINS = "".split()
 
 
 #########################
@@ -163,23 +167,6 @@ STATICFILES_FINDERS = [
 ]
 
 
-############
-# Dipstrap #
-############
-
-DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
-
-
-##############
-# Secret key #
-##############
-
-# Make this unique, and don't share it with anybody.
-# Only for dev and test environnement. Should be redefined for production
-# environnement
-SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
-
-
 ##########################
 # Template configuration #
 ##########################
@@ -241,7 +228,7 @@ MIDDLEWARE = [
 
 
 #####################
-# Url configuration #
+# URL configuration #
 #####################
 
 ROOT_URLCONF = f"{SITE_NAME}.urls"
@@ -394,8 +381,48 @@ LOGGING = {
 }
 
 
+###############
+# Secret keys #
+###############
+
+# Make this unique, and don't share it with anybody.
+# Only for dev and test environnement. Should be redefined for production
+# environnement
+SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
+
+
+############
+# Dipstrap #
+############
+
+DIPSTRAP_VERSION = ""
+DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
+
+
+##########
+# Sentry #
+##########
+
+STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
+
+
+def sentry_init(environment):
+    """Init Sentry service."""
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+        ],
+        environment=environment,
+        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+    )
+
+
 #########################
-# DJANGO REST FRAMEWORK #
+# Django REST Framework #
 #########################
 
 REST_FRAMEWORK = {
@@ -447,7 +474,7 @@ AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 
 #####################
-# DJANGO THUMBNAILS #
+# Django Thumbnails #
 #####################
 
 THUMBNAILS = {
@@ -493,7 +520,7 @@ THUMBNAILS = {
 }
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_ID = "cas"
@@ -571,28 +598,6 @@ REST_AUTH = {
 }
 
 
-##########
-# Sentry #
-##########
-
-STAGE = None
-SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
-
-
-def sentry_init(environment):
-    """Init Sentry service."""
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(),
-        ],
-        environment=environment,
-        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
-        send_default_pii=True,
-        traces_sample_rate=1.0,
-    )
-
-
 ###############
 # Spectacular #
 ###############
@@ -630,7 +635,7 @@ EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
-################
+#################
 # PDF Templates #
 #################
 

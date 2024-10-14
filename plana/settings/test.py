@@ -28,6 +28,8 @@ ALLOWED_HOSTS = [
     ".unistra.fr",
 ]
 
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
 CSRF_TRUSTED_ORIGINS = ["https://plana-api-test.app.unistra.fr"]
 
 
@@ -39,6 +41,13 @@ LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log
 
 for logger in LOGGING["loggers"]:
     LOGGING["loggers"][logger]["level"] = "DEBUG"
+
+
+###############
+# Secret keys #
+###############
+
+SECRET_KEY = ""
 
 
 ############
@@ -58,7 +67,7 @@ sentry_init(STAGE)
 
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_NAME = "{{ cas_name }}"  # "CAS Unistra"
