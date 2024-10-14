@@ -1,5 +1,6 @@
 import pathlib
 
+from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
@@ -22,7 +23,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            if options["test"] is True:
+            if Group.objects.all().count() > 0:
+                self.stdout.write(self.style.WARNING(_("Initial data already present.")))
+            elif options["test"] is True:
                 apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
                 # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
                 for app_fixture in apps_fixtures:

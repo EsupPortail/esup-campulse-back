@@ -19,8 +19,7 @@ then
 fi
 
 # TODO Trigger only on initial image build.
-# python manage.py initial_import --test
-# python manage.py loaddata_storages
+python manage.py initial_import --test --storages
 # env
 
 exec "$@"

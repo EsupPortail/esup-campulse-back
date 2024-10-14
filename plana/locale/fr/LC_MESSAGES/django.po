@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-03 09:46+0200\n"
+"POT-Creation-Date: 2024-10-14 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1893,19 +1893,23 @@ msgstr ""
 "Génère une paire de clés RSA 256 publique et privée pour signer et vérifier "
 "les jetons JWT."
 
-#: plana/management/commands/initial_import.py:9
+#: plana/management/commands/initial_import.py:10
 msgid "Import application initial datas."
 msgstr "Importe les données initiales de l'application."
 
-#: plana/management/commands/initial_import.py:14
+#: plana/management/commands/initial_import.py:15
 msgid "Set without value if storages should be added."
 msgstr "Spécifier sans valeur si les contenus doivent être ajoutés."
 
-#: plana/management/commands/initial_import.py:19
+#: plana/management/commands/initial_import.py:20
 msgid "Set without value if testing data should be added."
 msgstr "Spécifier sans valeur si les données de test doivent être ajoutés."
 
-#: plana/management/commands/initial_import.py:59
+#: plana/management/commands/initial_import.py:27
+msgid "Initial data already present."
+msgstr "Données initiales déjà présentes."
+
+#: plana/management/commands/initial_import.py:62
 msgid "Initial datas import - done"
 msgstr "Import des données initiales - fait"
 
@@ -1913,7 +1917,11 @@ msgstr "Import des données initiales - fait"
 msgid "Loads S3 bucket initial content."
 msgstr "Ajoute de premiers fichiers à un bucket S3."
 
-#: plana/management/commands/loaddata_storages.py:48
+#: plana/management/commands/loaddata_storages.py:30
+msgid "Initial storages data already present."
+msgstr "Données de stockage initiales déjà présentes."
+
+#: plana/management/commands/loaddata_storages.py:51
 #, python-brace-format
 msgid "S3 bucket {bucket_name} content loaded."
 msgstr "Le contenu du bucket S3 {bucket_name} a été chargé."
