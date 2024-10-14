@@ -18,7 +18,6 @@ then
     python manage.py generate_age_keys
 fi
 
-# TODO Trigger only on initial image build.
 python manage.py initial_import --test --storages
 # env
 
