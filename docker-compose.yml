@@ -3,9 +3,8 @@ services:
     build: .
     env_file: .env
     volumes:
-      - static:/app/assets
-      - ./logs:/app/logs
-    network_mode: host
+      - plana-static:/var/www/plana-backend
+      - ./logs:/var/log/plana-backend
 
 volumes:
-  static:
+  plana-static:
