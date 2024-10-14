@@ -79,7 +79,7 @@ EMAIL_HOST_USER = environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = environ.get("EMAIL_USE_TLS", "False").lower() == "true"
 
-EMAIL_TEMPLATE_FRONTEND_URL = environ.get("EMAIL_TEMPLATE_FRONTEND_URL", "http://front-url.tld/")
+EMAIL_TEMPLATE_FRONTEND_URL = environ.get("EMAIL_TEMPLATE_FRONTEND_URL", "https://front-url.tld/")
 
 
 #####################
