@@ -1,7 +1,65 @@
 stages:
+  - test
+  - deploy
   - build
   - scan
   - release
+
+variables:
+  POSTGRES_DB: plana_test
+  POSTGRES_USER: plana
+  POSTGRES_PASSWORD: plana
+  DJANGO_SETTINGS_MODULE: plana.settings.unittest
+  PYTHON_VERSION: "3.9"
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-backend:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
+  EXTRA_ARGS: ""
+
+services:
+  - postgres:latest
+
+before_script:
+  - apt-get update && apt-get install -y age
+
+unittest:
+  stage: test
+  tags:
+    - python3.9
+  script:
+    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
+    - pip3 install -r requirements/dev.txt
+    - python manage.py generate_jwt_keys
+    - touch keys/jwt-public-key.pem
+    - touch keys/jwt-private-key.pem
+    - python manage.py generate_age_keys
+    - touch keys/age-public-key.key
+    - touch keys/age-private-key.key
+    - tox
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  rules:
+    - when: never # TODO remove this line when tests with Docker are finished
+
+include:
+  - project: docker/template
+    file: python-licenses.gitlab-ci.yml
+  
+pages:
+  stage: deploy
+  image: registry.gitlab.com/pages/hugo:latest
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - cd docs
+    - hugo
+    - cp -r public ..
+  tags:
+    - cluster
+  artifacts:
+    paths:
+    - public
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+    - if: '$CI_COMMIT_REF_NAME == "main"'
 
 .build-image:
   image:
@@ -35,8 +93,3 @@ r:docker:
   # only:
   #   - master
   #   - main
-
-variables:
-  CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-backend:$CI_COMMIT_REF_NAME
-  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
-  EXTRA_ARGS: ""
