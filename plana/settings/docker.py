@@ -34,7 +34,7 @@ LOGGING["handlers"]["file"]["filename"] = environ.get("LOG_PATH", "/tmp/log")
 # Secret keys #
 ###############
 
-SECRET_KEY = ""
+SECRET_KEY = environ.get("SECRET_KEY", "")
 
 
 ############
