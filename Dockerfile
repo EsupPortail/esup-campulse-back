@@ -34,6 +34,6 @@ RUN set -ex \
 RUN chgrp -R 0 /app && \
     chmod -R g+rwX /app
 
-ENTRYPOINT ["sh", "/app/prestart.sh"]
+ENTRYPOINT ["sh", "/app/docker-prestart.sh"]
 
 CMD ["uwsgi", "--ini", "/etc/uwsgi/uwsgi.ini", "--protocol", "http"]

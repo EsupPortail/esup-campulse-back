@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 set -e
-echo "Running inside /app/prestart.sh"
+echo "Running inside /app/docker-prestart.sh"
 
 # Don't stop building when compilemessages fail
 cd /app
@@ -18,8 +18,9 @@ then
     python manage.py generate_age_keys
 fi
 
-python manage.py initial_import --test
-python manage.py loaddata_storages
-env
+# TODO Trigger only on initial image build.
+# python manage.py initial_import --test
+# python manage.py loaddata_storages
+# env
 
 exec "$@"
