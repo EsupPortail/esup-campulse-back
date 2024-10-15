@@ -5,6 +5,7 @@ services:
     volumes:
       - plana-static:/var/www/plana-backend
       - ./logs:/var/log/plana-backend
+    network_mode: host
 
 volumes:
   plana-static:
