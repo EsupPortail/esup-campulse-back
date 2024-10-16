@@ -718,7 +718,20 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
-            association.charter_date = datetime.date.today()
+            # TODO Very imperfect solution to get charter expiration date, please refactor when charter module will be refactored.
+            charter_expiration_day = (
+                Document.objects.filter(process_type__in=Document.ProcessType.get_charter_documents())
+                .first()
+                .expiration_day
+            )
+            if charter_expiration_day <= datetime.date.today().strftime("%m-%d"):
+                association.charter_date = datetime.datetime.strptime(
+                    f"{datetime.date.today().year + 1}-{charter_expiration_day}", "%Y-%m-%d"
+                )
+            else:
+                association.charter_date = datetime.datetime.strptime(
+                    f"{datetime.date.today().year}-{charter_expiration_day}", "%Y-%m-%d"
+                )
             association.save()
 
         mail_templates_codes_by_status = {
