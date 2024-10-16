@@ -54,7 +54,7 @@ django-allauth = "<0.55" # higher versions break django-allauth-cas
 # django-allauth-cas = "^1.0.0" # deprecated package for Django 4, need to use a pull request
 django-allauth-cas = { url = "https://github.com/thejoeejoee/django-allauth-cas/archive/5db34b546eb32524a3a1a4b90f411e370ac7ad9b.zip" }
 django-cleanup = "^9.0.0"
-django-cors-headers = "^4.4.0"
+django-cors-headers = "^4.5.0"
 django-extensions = "^3.2.3"
 django-health-check = "^3.18.3"
 django-storages = {extras = ["boto3"], version = "1.14.3"} # 1.14.4 triggers an error on django-health-check
@@ -77,11 +77,11 @@ zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
-coverage = "^7.6.2"
+coverage = "^7.6.3"
 django-debug-toolbar = "^4.4.6"
 pre-commit = "^3.8.0"
 pylint = "^3.3.1"
-pylint-django = "^2.5.5"
+pylint-django = "^2.6.1"
 safety = "^3.2.8"
 sentry-sdk = "^2.16.0"
 tox = "<4.12" # needed to avoid dependency problems with safety
