@@ -61,6 +61,11 @@ class Document(models.Model):
             return ["CHARTER_ASSOCIATION"]
 
         @staticmethod
+        def get_charter_documents():
+            """Documents with those processes designate a charter."""
+            return ["CHARTER_ASSOCIATION"]
+
+        @staticmethod
         def get_project_documents():
             """Documents with those processes can be linked to a project ID."""
             return ["DOCUMENT_PROJECT", "DOCUMENT_PROJECT_REVIEW"]
