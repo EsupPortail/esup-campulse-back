@@ -16,9 +16,11 @@ def recursive_requirements(requirement_file, libs, links, path=''):
                 if not path:
                     path = requirement_file.rsplit('/', 1)[0]
                 recursive_requirements(requirement_file, libs, links, path=path)
-            elif requirement.startswith('-f'):
-                links.append(requirement.split()[1])
-            elif requirement.startswith('-e'):
+            elif (
+                requirement.startswith('-f')
+                or requirement.startswith('-e')
+                or requirement.startswith('--extra-index-url')
+            ):
                 links.append(requirement.split()[1])
             else:
                 libs.append(requirement)
@@ -29,7 +31,7 @@ recursive_requirements('requirements.txt', libraries, dependency_links)
 
 setup(
     name='plana',
-    version='1.2.2',
+    version='1.2.3',
     packages=find_packages(),
     install_requires=libraries,
     dependency_links=dependency_links,

@@ -139,7 +139,7 @@ class Project(models.Model):
     association_user = models.ForeignKey(
         AssociationUser,
         verbose_name=_("Association User"),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
     )
     partner_association = models.TextField(_("Partner association"), default="")
