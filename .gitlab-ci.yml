@@ -31,7 +31,7 @@ workflow:
 
 build:
   stage: build
-  image: python:${PYTHON_VERSION}-slim
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}-slim
   tags:
     - cluster
   variables:
@@ -65,6 +65,7 @@ build:
 
 unittest:
   stage: test
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}-slim
   tags:
     - python3.9
   services:
@@ -138,6 +139,11 @@ deploy:
     - key: cache-kaniko
       paths:
         - .cache/kaniko
+  variables:
+    KANIKO_REGISTRY_MIRROR: $CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX
+  before_script:
+    # add auth for docker.io proxy
+    - test -n "${CI_DEPENDENCY_PROXY_PASSWORD}" && echo "{\"auths\":{\"$CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX\":{\"auth\":\"$(echo -n ${CI_DEPENDENCY_PROXY_USER}:${CI_DEPENDENCY_PROXY_PASSWORD} | base64)\"}}}" > /kaniko/.docker/config.json
   script:
     - VERSION="$(echo -n "$VERSION" | sed 's/[^[:alnum:]._-]/_/g')"
     - EXTRA="${EXTRA:+$(echo -n "$EXTRA" | sed 's/^feature\///;s/[^[:alnum:]._-]/_/g')}"
