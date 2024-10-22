@@ -67,22 +67,38 @@ unittest:
   stage: test
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}-slim
   tags:
-    - python3.9
+    - cluster
+  variables:
+    PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+    POETRY_CACHE_DIR: $CI_PROJECT_DIR/.cache/pypoetry
+    POETRY_DYNAMIC_VERSIONING_BYPASS: $VERSION
+    DATABASE_URL: postgres://test@postgres/test
+    POSTGRES_DB: test
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: changeme
+    POSTGRES_HOST_AUTH_METHOD: trust
+  cache:
+    - key: cache-python
+      paths:
+        - .cache/pip
+        - .cache/pypoetry
   services:
     - postgres:latest
   before_script:
-    - apt-get update && apt-get install -y age
+    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 git
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - pip install --root-user-action ignore poetry "poetry-dynamic-versioning[plugin]"
   script:
-    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
-    - pip3 install -r requirements/dev.txt
-    - python manage.py generate_jwt_keys
-    - touch keys/jwt-public-key.pem
-    - touch keys/jwt-private-key.pem
-    - python manage.py generate_age_keys
-    - touch keys/age-public-key.key
-    - touch keys/age-private-key.key
-    - tox
+    - poetry install --only=dev
+    - poetry run -- tox run -e ci
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    when: always
+    reports:
+      junit: test-results/**/TEST-*.xml
+      coverage_report:
+        path: coverage.xml
+        coverage_format: cobertura
 
 publish:
   stage: deploy
