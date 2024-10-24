@@ -6,6 +6,8 @@ from django.conf import settings
 from django.core.management import BaseCommand, CommandError
 from django.utils.translation import gettext as _
 
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
 
 class Command(BaseCommand):
     help = _("Generate pair of RSA 256 private and public keys to sign and verify JWT tokens.")
@@ -41,12 +43,24 @@ class Command(BaseCommand):
             else:
                 raise CommandError(_("Key already exists"), returncode=1)
 
-        cmd = f"ssh-keygen -t rsa -b 4096 -m PEM -f {str(private_key)} -N ''"
-        output = os.popen(cmd)
-        self.stdout.write(output.read())
+        rsa_generated_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=4096,
+        )
+
+        private_key.write_bytes(
+            rsa_generated_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption(),
+            )
+        )
         self.stdout.write(self.style.SUCCESS(_(f"Key {str(private_key)} created")))
 
-        cmd = f"openssl rsa -in {str(private_key)} -pubout -outform PEM -out {str(public_key)}"
-        output = os.popen(cmd)
-        self.stdout.write(output.read())
+        public_key.write_bytes(
+            rsa_generated_key.public_key().public_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PublicFormat.SubjectPublicKeyInfo
+            )
+        )
         self.stdout.write(self.style.SUCCESS(_(f"Key {str(public_key)} created")))
