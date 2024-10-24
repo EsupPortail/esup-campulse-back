@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.management import BaseCommand, CommandError
 from django.utils.translation import gettext as _
 
+from pyrage import x25519
 
 class Command(BaseCommand):
     help = _("Generate pair of AGE private and public keys to encrypt file uploads.")
@@ -29,7 +30,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        global_keys = self._key_path("age-globals-keys.key")
         private_key = self._key_path("age-private-key.key")
         public_key = self._key_path("age-public-key.key")
         if private_key.exists() and private_key.is_file():
@@ -42,12 +42,10 @@ class Command(BaseCommand):
             else:
                 raise CommandError(_("Key already exists"), returncode=1)
 
-        cmd = f"age-keygen > {str(global_keys)} && tail -n +3 {str(global_keys)} > {str(private_key)} && rm {str(global_keys)}"
-        output = os.popen(cmd)
-        self.stdout.write(output.read())
+        age = x25519.Identity.generate()
+
+        private_key.write_text(str(age))
         self.stdout.write(self.style.SUCCESS(_(f"Key {str(private_key)} created")))
 
-        cmd = f"age-keygen -y {str(private_key)} > {str(public_key)}"
-        output = os.popen(cmd)
-        self.stdout.write(output.read())
+        public_key.write_text(str(age.to_public()))
         self.stdout.write(self.style.SUCCESS(_(f"Key {str(public_key)} created")))
