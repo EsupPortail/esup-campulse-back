@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-14 10:20+0200\n"
+"POT-Creation-Date: 2024-10-16 15:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: plana/apps/associations/views/association_export.py:77
 #: plana/apps/commissions/models/commission.py:13
 #: plana/apps/commissions/models/fund.py:13
-#: plana/apps/documents/models/document.py:68
+#: plana/apps/documents/models/document.py:73
 #: plana/apps/documents/models/document_upload.py:37
 #: plana/apps/institutions/models/institution.py:11
 #: plana/apps/institutions/models/institution_component.py:10
@@ -52,7 +52,7 @@ msgstr "Courriel"
 #: plana/apps/associations/views/association_export.py:78
 #: plana/apps/commissions/models/fund.py:14
 #: plana/apps/contents/models/logo.py:34
-#: plana/apps/documents/models/document.py:69
+#: plana/apps/documents/models/document.py:74
 #: plana/apps/institutions/models/institution.py:12
 msgid "Acronym"
 msgstr "Acronyme"
@@ -197,7 +197,7 @@ msgstr "Date de dernière AG constitutive"
 #: plana/apps/associations/models/association.py:89
 #: plana/apps/associations/views/association_export.py:79
 #: plana/apps/commissions/models/fund.py:30
-#: plana/apps/documents/models/document.py:89
+#: plana/apps/documents/models/document.py:94
 #: plana/apps/institutions/models/institution.py:37
 #: plana/apps/institutions/models/institution_component.py:13
 msgid "Institution"
@@ -355,7 +355,7 @@ msgstr "Commissions"
 
 #: plana/apps/commissions/models/commission_fund.py:17
 #: plana/apps/commissions/models/fund.py:38
-#: plana/apps/documents/models/document.py:95
+#: plana/apps/documents/models/document.py:100
 msgid "Fund"
 msgstr "Fonds"
 
@@ -632,52 +632,52 @@ msgstr "Document pour Bilan de Subvention"
 msgid "Document not linked to a process"
 msgstr "Document non lié à un processus"
 
-#: plana/apps/documents/models/document.py:70
+#: plana/apps/documents/models/document.py:75
 #: plana/libs/mail_template/models.py:9 plana/libs/mail_template/models.py:37
 #: plana/libs/mail_template/templates/admin/mail_template/mailtemplate/modals/modal_template_vars.html:7
 msgid "Description"
 msgstr "Description"
 
-#: plana/apps/documents/models/document.py:71
+#: plana/apps/documents/models/document.py:76
 msgid "Contact address"
 msgstr "Adresse de contact"
 
-#: plana/apps/documents/models/document.py:72
+#: plana/apps/documents/models/document.py:77
 msgid "Is multiple"
 msgstr "Est multiple"
 
-#: plana/apps/documents/models/document.py:73
+#: plana/apps/documents/models/document.py:78
 msgid "Is required in process"
 msgstr "Est requis dans son processus"
 
-#: plana/apps/documents/models/document.py:74
+#: plana/apps/documents/models/document.py:79
 msgid "Days before document expiration"
 msgstr "Nombre de jours avant expiration du document"
 
-#: plana/apps/documents/models/document.py:76
+#: plana/apps/documents/models/document.py:81
 msgid "Document expiration day of the year in %m-%d format"
 msgstr "Jour d'expiration du document au format %m-%d"
 
-#: plana/apps/documents/models/document.py:81
+#: plana/apps/documents/models/document.py:86
 msgid "Example template file"
 msgstr "Template de fichier d'exemple"
 
-#: plana/apps/documents/models/document.py:100
+#: plana/apps/documents/models/document.py:105
 msgid "Document Status"
 msgstr "Statut du Document"
 
-#: plana/apps/documents/models/document.py:105
+#: plana/apps/documents/models/document.py:110
 #: plana/apps/projects/models/project.py:170
 #: plana/apps/projects/models/project_comment.py:15
 msgid "Edition date"
 msgstr "Date de dernière mise à jour"
 
-#: plana/apps/documents/models/document.py:111
+#: plana/apps/documents/models/document.py:116
 #: plana/apps/documents/models/document_upload.py:40
 msgid "Document"
 msgstr "Document"
 
-#: plana/apps/documents/models/document.py:112
+#: plana/apps/documents/models/document.py:117
 msgid "Documents"
 msgstr "Documents"
 

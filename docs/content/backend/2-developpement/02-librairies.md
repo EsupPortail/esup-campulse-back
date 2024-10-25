@@ -27,6 +27,7 @@ weight: 112
 - [psycopg](https://pypi.org/project/psycopg/) : communication avec la base de données PostgreSQL.
 - [pyrage](https://pypi.org/project/pyrage/) : chiffrement des documents.
 - [referencing](https://pypi.org/project/referencing/) : implantation du validateur de la norme JSON Schema utilisée pour valider les champs JSONField de la base de données.
+- [setuptools](https://pypi.org/project/setuptools/) : installation de packages externes (pour django-allauth-cas).
 - [weasyprint](https://pypi.org/project/weasyprint/) : génération de fichiers PDF.
 - [zxcvbn](https://pypi.org/project/zxcvbn/) : vérificateur de robustesse de mots de passe.
 

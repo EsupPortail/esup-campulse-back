@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.3 (17 Octobre 2024)
+
+### Changements critiques
+
+- Bascule sur un dépôt interne pour les packages `allauth_cas` et `britney`.
+
+### Corrections de bugs
+
+- Un projet peut ne plus avoir de responsable attitré si le responsable quitte l'association.
+- Uniformisation du mode de calcul de la date de la charte.
+
+### Autres changements
+
+- Mise à jour du thème de la documentation technique (changement du submodule de `hugo-theme-learn` vers `hugo-theme-relearn`).
+
 ## 1.2.2 (09 Octobre 2024)
 
 ### Corrections de bugs

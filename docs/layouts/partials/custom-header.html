@@ -24,17 +24,32 @@
         font-family: "Unistra A", Arial, sans-serif;
     }
 
+    #R-sidebar .signature-unistra :is(a, span) {
+        color: #000000;
+    }
+
     .signature-unistra .sun-row a.sun-hover-primary:hover {
         background-color: #025827;
     }
 
-    .signature-unistra .sun-row a.sun-hover-light:hover {
+    .signature-unistra .sun-row a.sun-hover-light:hover,
+    #R-homelinks {
         background-color: #87e0a9;
     }
 
-    #header-wrapper {
+    #R-header-wrapper {
         background-color: #4da172;
-        border-color: #87e0a9;
+    }
+
+    #R-sidebar li.active>a,
+    .topbar-button button,
+    a,
+    a:hover,
+    .anchor,
+    .anchor:hover,
+    code,
+    .copy-to-clipboard-button {
+        color: #87e0a9;
     }
 
     .searchbox {
