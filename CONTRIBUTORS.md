@@ -5,6 +5,7 @@ Le projet _Plateforme de Liaison et ANnuaire Associatif_ a été développé par
 ## Organisation du développement
 
 - Marie Didienne
+- Khalid Ziani
 - Virgile Gerecke
 - Christophe Boccheciampe
 
@@ -24,3 +25,4 @@ Le projet _Plateforme de Liaison et ANnuaire Associatif_ a été développé par
 - Jean Rabreau
 - Daniel Bessey
 - Thomas Baguet
+- Léa Рая Décornod

@@ -63,9 +63,9 @@ priority = "primary"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 django = "<5.0"
-cryptography = "^43.0.1"
-django-allauth = "^65.0.2"
 allauth_cas = "^1.0.3"
+cryptography = "^43.0.3"
+django-allauth = "^65.1.0"
 django-cleanup = "^9.0.0"
 django-cors-headers = "^4.5.0"
 django-extensions = "^3.2.3"
@@ -91,31 +91,31 @@ zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
-coverage = "^7.6.3"
+coverage = "^7.6.4"
 django-debug-toolbar = "^4.4.6"
 pre-commit = "^3.8.0"
 pylint = "^3.3.1"
 pylint-django = "^2.6.1"
-safety = "^3.2.8"
-sentry-sdk = "^2.16.0"
+safety = "^3.2.9"
+sentry-sdk = "^2.17.0"
 tox = "<4.12" # needed to avoid dependency problems with safety
 
 [tool.poetry.group.saas.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.16.0"
+sentry-sdk = "^2.17.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.preprod.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.16.0"
+sentry-sdk = "^2.17.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.prod.dependencies]
 chaussette-backport = "1.3.1"
-sentry-sdk = "^2.16.0"
+sentry-sdk = "^2.17.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.test.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.16.0"
+sentry-sdk = "^2.17.0"
 waitress = "^2.1.2"
