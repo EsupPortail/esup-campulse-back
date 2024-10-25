@@ -90,6 +90,7 @@ AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "back-url.tld")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "https://domain.tld")
+AWS_USE_OBJECT_ACL = False
 
 
 ########
