@@ -3,17 +3,6 @@ title: Personnalisation
 weight: 312
 ---
 
-Le dépôt de personnalisation se présente sous cette forme :
-
-```txt
-├── css
-├── favicon.ico
-├── fonts
-├── images
-├── locales
-└── opengraph-image.jpg
-```
-
 ## CSS
 
 Il est possible de personnaliser les **couleurs**, les **polices** et les **tailles de police**.
@@ -148,7 +137,7 @@ Les textes du thème sont disponibles sur le [portail ESUP](https://github.com/E
 Il est possible de modifier les textes (uniquement les valeurs, pas les clés).
 
 Les textes ont été initialement rédigés pour l'Université de Strasbourg.
-Bien qu'un travail d'unification a été réalisé, il est possible qu'il reste des tournures qui pourraient ne pas correspondre à tous les établissements.
+Bien qu'un travail d'unification ait été réalisé, il est possible qu'il reste des tournures qui pourraient ne pas correspondre à tous les établissements.
 
 Commencez par vérifier et personnaliser si besoin les textes suivants : 
 
