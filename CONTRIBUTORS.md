@@ -2,12 +2,23 @@
 
 Le projet _Plateforme de Liaison et ANnuaire Associatif_ a été développé par [la Direction du Numérique de l'Université de Strasbourg](https://www.unistra.fr/dnum).
 
-## Organisation du développement
+## Product Owners
 
 - Marie Didienne
+- Laurence Moindrot
 - Khalid Ziani
+
+## Accompagnement des gestionnaires
+
+- Khalid Ziani
+- Armelle Mathis
+- Annick Meyer
+
+## Scrum Masters
+
 - Virgile Gerecke
 - Christophe Boccheciampe
+- Pauline Gilg
 
 ## Équipe principale de développement
 

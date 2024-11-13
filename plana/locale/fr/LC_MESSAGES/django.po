@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-16 15:49+0200\n"
+"POT-Creation-Date: 2024-11-13 09:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,8 +254,8 @@ msgstr "Nom d'association déjà enregistré."
 
 #: plana/apps/associations/views/association.py:311
 #: plana/apps/associations/views/association.py:372
-#: plana/apps/associations/views/association.py:513
-#: plana/apps/associations/views/association.py:661
+#: plana/apps/associations/views/association.py:519
+#: plana/apps/associations/views/association.py:667
 #: plana/apps/associations/views/association_export.py:168
 #: plana/apps/documents/views/document_upload.py:208
 #: plana/apps/projects/views/project.py:280
@@ -275,44 +275,48 @@ msgid "Association not public."
 msgstr "Association non publique."
 
 #: plana/apps/associations/views/association.py:391
-#: plana/apps/associations/views/association.py:671
+#: plana/apps/associations/views/association.py:677
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:405
+#: plana/apps/associations/views/association.py:397
+msgid "Email address is already used for another association."
+msgstr "L'adresse email est déjà utilisée pour une autre association."
+
+#: plana/apps/associations/views/association.py:411
 msgid "Wrong social_networks parameters"
 msgstr "Erreur de paramètres de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:410
+#: plana/apps/associations/views/association.py:416
 msgid "Wrong social_networks values"
 msgstr "Erreur de valeurs de réseaux sociaux"
 
-#: plana/apps/associations/views/association.py:416
+#: plana/apps/associations/views/association.py:422
 msgid "Error on social networks format."
 msgstr "Erreur de format de réseaux sociaux."
 
-#: plana/apps/associations/views/association.py:426
+#: plana/apps/associations/views/association.py:432
 msgid "Wrong media type for images."
 msgstr "Mauvais format d'image."
 
-#: plana/apps/associations/views/association.py:441
+#: plana/apps/associations/views/association.py:447
 msgid "Cannot set lower amount of members in this association."
 msgstr "Impossible d'abaisser le nombre de membres de cette association."
 
-#: plana/apps/associations/views/association.py:519
+#: plana/apps/associations/views/association.py:525
 msgid "Can't delete an enabled association."
 msgstr "Une association activée ne peut être supprimée."
 
-#: plana/apps/associations/views/association.py:527
+#: plana/apps/associations/views/association.py:533
 msgid "Not allowed to delete an association for this institution."
 msgstr "Non autorisé à supprimer une association pour cet établissement."
 
-#: plana/apps/associations/views/association.py:680
+#: plana/apps/associations/views/association.py:686
 #: plana/apps/projects/views/project.py:684
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:697
+#: plana/apps/associations/views/association.py:703
 #: plana/apps/projects/views/project.py:773
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."

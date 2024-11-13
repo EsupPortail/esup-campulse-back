@@ -1,6 +1,6 @@
 ---
 title: Exports et notifications PDF
-weight: 122
+weight: 123
 ---
 
 Les fichiers utilisés pour la génération de PDF sont externalisés dans un dépôt distinct du projet PlanA. Ils sont hébergés dans la section du bucket S3 au nom défini par la variable de configuration `S3_PDF_FILEPATH`.

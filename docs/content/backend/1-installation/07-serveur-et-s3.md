@@ -23,12 +23,12 @@ Un bucket S3 est utilisé pour stocker quatre types de documents :
 
 Il est recommandé d'utiliser le [client AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) en créant un profil de connexion pour gérer le compte utilisé.
 ```sh
-$ aws configure --profile PROFILE_NAME # utilitaire pour créer un nouveau profil (spécifier Access et Secret Keys)
+aws configure --profile PROFILE_NAME # utilitaire pour créer un nouveau profil (spécifier Access et Secret Keys)
 ```
 
 Un bucket distinct doit ensuite être crée par environnement de déploiement.
 ```sh
-$ aws s3api create-bucket --bucket AWS_STORAGE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME
+aws s3api create-bucket --bucket AWS_STORAGE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME
 ```
 
 ### Ressources statiques (fichiers PDF)
