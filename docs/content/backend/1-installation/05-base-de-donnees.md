@@ -6,20 +6,20 @@ weight: 105
 ## Activation des extensions
 
 L'extension PostgreSQL `unaccent` est nécessaire pour gérer les caractères accentués pour les fonctionnalités de recherche de contenu.
-- Se connecter à la base de données via `$ psql -U NOM_UTILISATEUR -h localhost`.
-- Activer l'extension avec `# CREATE EXTENSION unaccent;`.
+- Se connecter à la base de données via `psql -U NOM_UTILISATEUR -h localhost`.
+- Activer l'extension avec `CREATE EXTENSION unaccent;`.
 
 ## Import initial des données
 
 Après avoir activé l'environnement virtuel :
-- Exécuter `$ python manage.py migrate` pour initialiser la structure de la base de données.
-- Exécuter `$ python manage.py initial_import [--test]` pour ajouter le jeu de données initial minimal au bon fonctionnement de l'application (spécifier l'option `--test` pour ajouter des données de test pour le développement).
+- Exécuter `python manage.py migrate` pour initialiser la structure de la base de données.
+- Exécuter `python manage.py initial_import [--test]` pour ajouter le jeu de données initial minimal au bon fonctionnement de l'application (spécifier l'option `--test` pour ajouter des données de test pour le développement).
 
 ## Création de comptes à privilèges élevés
 
 Des comptes avec des droits élevés peuvent être crées via la commande suivante :  
 ```sh
-$ python manage.py createmanageruser \
+python manage.py createmanageruser \
   --email EMAIL \
   --firstname FIRST_NAME \
   --lastname LAST_NAME \

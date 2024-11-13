@@ -14,4 +14,4 @@ Les différentes commandes exécutables via des tâches CRON se trouvent dans le
 - `project_expiration` (suppression des projets vieux de dix ans).
 - `review_expiration` (rappel de soumettre le bilan d'un projet subventionné).
 
-Il est également possible de lancer ces commandes manuellement via `$ python manage.py NOM_DE_LA_COMMANDE`.
+Il est également possible de lancer ces commandes manuellement via `python manage.py NOM_DE_LA_COMMANDE`.
