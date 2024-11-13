@@ -392,6 +392,12 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).count() > 0:
+            return response.Response(
+                {"error": _("Email address is already used for another association.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             social_networks_data = request.data["social_networks"] if "social_networks" in request.data else []
             social_networks = (
