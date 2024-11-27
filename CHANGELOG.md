@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.4 (???)
+## 1.2.4 (27 Novembre 2024)
 
 ### Corrections de bugs
 
