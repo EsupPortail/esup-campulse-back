@@ -670,6 +670,20 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(len(mail.outbox))
 
+    def test_patch_association_duplicate_email(self):
+        """
+        PATCH /associations/{id} .
+
+        - Same email address can't be used for two associations.
+        """
+        association_id = 2
+        response_wrong_email = self.president_client.patch(
+            f"/associations/{association_id}",
+            {"email": "asso-hors-site@unistra.fr"},
+            content_type="application/json",
+        )
+        self.assertEqual(response_wrong_email.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_patch_association_by_its_members_success(self):
         """
         PATCH /associations/{id} .

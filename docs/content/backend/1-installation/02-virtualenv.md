@@ -5,8 +5,8 @@ weight: 102
 
 ## Gérer l'environnement virtuel avec virtualenvwrapper
 
-- Création : `$ mkvirtualenv plana`
-- Lancement : `$ workon plana`
+- Création : `mkvirtualenv plana`
+- Lancement : `workon plana`
 
 ## Variables d'environnement nécessaires
 

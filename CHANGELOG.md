@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.4 (27 Novembre 2024)
+
+### Corrections de bugs
+
+- Une adresse email ne peut pas être utilisée comme adresse de contact pour deux associations distinctes.
+
 ## 1.2.3 (17 Octobre 2024)
 
 ### Changements critiques

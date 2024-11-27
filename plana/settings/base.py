@@ -19,7 +19,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.2.3"
+APP_VERSION = "1.2.4"
 
 ######################
 # Path configuration #
@@ -435,6 +435,7 @@ STORAGES = {
 USE_S3 = True  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
+AWS_USE_OBJECT_ACL = True
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")

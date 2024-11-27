@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PlanA API
-  version: 1.2.3
+  version: 1.2.4
   description: API for PlanA
 paths:
   /associations/:
@@ -2782,6 +2782,10 @@ paths:
   /users/auth/registration/:
     post:
       operationId: users_auth_registration_create
+      description: |-
+        Registers a new user.
+
+        Accepts the following POST parameters: username, email, password1, password2.
       tags:
       - users
       requestBody:
@@ -2809,6 +2813,10 @@ paths:
   /users/auth/registration/resend-email/:
     post:
       operationId: users_auth_registration_resend_email_create
+      description: |-
+        Resends another email to an unverified email.
+
+        Accepts the following POST parameter: email.
       tags:
       - users
       requestBody:
