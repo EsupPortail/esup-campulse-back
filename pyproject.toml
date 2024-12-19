@@ -41,7 +41,7 @@ multi_line_output = 3
 
 [tool.poetry]
 name = "plana"
-version = "1.2.3"
+version = "1.2.4"
 description = ""
 authors = ["DIP - Université de Strasbourg <dnum-dip@unistra.fr>"]
 license = "GPL-3.0-or-later"
@@ -65,7 +65,7 @@ python = ">=3.9,<3.13"
 django = "<5.0"
 allauth_cas = "^1.0.3"
 cryptography = "^43.0.3"
-django-allauth = "^65.1.0"
+django-allauth = "^65.2.0"
 django-cleanup = "^9.0.0"
 django-cors-headers = "^4.6.0"
 django-extensions = "^3.2.3"
@@ -76,46 +76,46 @@ django-thumbnails = "^0.8.0"
 djangorestframework = "^3.15.2"
 djangorestframework-camel-case = "^1.4.2"
 djangorestframework-simplejwt = "^5.3.1"
-dj-rest-auth = "^6.0.0"
+dj-rest-auth = "^7.0.0"
 drf-spectacular = "^0.27.2"
 britney = "^0.5.4"
 jsonschema = "^4.23.0"
 openpyxl = "^3.1.5"
 psycopg = {extras = ["binary"], version = "^3.2.3"}
-pyrage = "^1.2.1"
+pyrage = "^1.2.2"
 referencing = "^0.35.1"
 setuptools = ">=65.5.1"
 urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and botocore
-weasyprint = "^62.3"
+weasyprint = "^63.0"
 zxcvbn = "^4.4.28"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
-coverage = "^7.6.4"
+coverage = "^7.6.8"
 django-debug-toolbar = "^4.4.6"
 pre-commit = "^4.0.1"
 pylint = "^3.3.1"
 pylint-django = "^2.6.1"
-safety = "^3.2.10"
-sentry-sdk = "^2.17.0"
+safety = "^3.2.11"
+sentry-sdk = "^2.19.0"
 tox = "<4.12" # needed to avoid dependency problems with safety
 
 [tool.poetry.group.saas.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.17.0"
+sentry-sdk = "^2.19.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.preprod.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.17.0"
+sentry-sdk = "^2.19.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.prod.dependencies]
 chaussette-backport = "1.3.1"
-sentry-sdk = "^2.17.0"
+sentry-sdk = "^2.19.0"
 waitress = "^2.1.2"
 
 [tool.poetry.group.test.dependencies]
 chaussette-backport = "^1.3.1"
-sentry-sdk = "^2.17.0"
+sentry-sdk = "^2.19.0"
 waitress = "^2.1.2"
