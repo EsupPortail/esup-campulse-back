@@ -4,7 +4,8 @@ stages:
   - deploy
 
 services:
-  - postgres:latest
+  - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
+    alias: postgres
 
 variables:
   POSTGRES_DB: plana_test
