@@ -412,7 +412,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             attachment = None
             # Creating context for notifications attachments
             if fund.postpone_template_path != "":
-                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED")
+                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
                 attachment = {
                     "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
                     "filename": f"{slugify(content.title)}.pdf",
