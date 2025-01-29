@@ -412,7 +412,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             attachment = None
             # Creating context for notifications attachments
             if fund.postpone_template_path != "":
-                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED")
+                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
                 # Retrieving last comment of the project or None
                 comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
                 attachment = {
