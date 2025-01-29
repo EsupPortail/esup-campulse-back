@@ -412,7 +412,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             attachment = None
             # Creating context for notifications attachments
             if fund.postpone_template_path != "":
-                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
+                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_PROJECT_POSTPONED")
+                # Retrieving last comment of the project or None
+                comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
                 attachment = {
                     "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
                     "filename": f"{slugify(content.title)}.pdf",
@@ -422,7 +424,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         "date_commission": commission.commission_date,
                         "owner": owner,
                         "content": content,
-                        "comment": ProjectComment.objects.filter(project=project.id).latest("creation_date").text,
+                        "comment": "" if not comment else comment.text,
                     },
                     "mimetype": "application/pdf",
                     "request": request,
@@ -441,6 +443,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             managers_emails = []
             if int(request.data["amount_earned"]) == 0:
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_FUND_REJECTION")
+                # Retrieving last comment of the project or None
+                comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
                 if fund.rejection_template_path != "":
                     # Creating context for notifications attachments
                     content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_REJECTION")
@@ -455,9 +459,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 "date_commission": commission.commission_date.strftime('%d %B %Y'),
                                 "owner": owner,
                                 "content": content,
-                                "comment": ProjectComment.objects.filter(project=project.id)
-                                .latest("creation_date")
-                                .text,
+                                "comment": "" if not comment else comment.text,
                             },
                             "mimetype": "application/pdf",
                             "request": request,
