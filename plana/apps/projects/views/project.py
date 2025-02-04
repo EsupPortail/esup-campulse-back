@@ -546,7 +546,11 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 )
             ).values_list("id"),
         ).count()
-        if expired_project_commission_dates_count > 0:
+        if (
+            expired_project_commission_dates_count > 0
+            and "planned_start_date" not in request.data
+            and "planned_end_date" not in request.data
+        ):
             return response.Response(
                 {"error": _("Project is linked to expired commissions.")},
                 status=status.HTTP_400_BAD_REQUEST,

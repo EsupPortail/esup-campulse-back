@@ -1,6 +1,8 @@
 import pydiploy
 from fabric.api import env, execute, roles, task
 
+env.csp_settings = {}
+env.nginx_location_extra_directives = []
 
 @roles(['web', 'lb'])
 def build_env():
@@ -25,7 +27,7 @@ def preprod_montpellier3():
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
     env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
-    env.goal = 'preprod'
+    env.goal = 'saas'
     env.socket_port = '8002'
     env.map_settings = {
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
@@ -42,6 +44,7 @@ def preprod_montpellier3():
         'cas_server': 'CAS_SERVER',
         'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
         'cas_version': 'CAS_VERSION',
+        'csrf_trusted_origins': 'CSRF_TRUSTED_ORIGINS',
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',
@@ -83,7 +86,7 @@ def prod_montpellier3():
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
     env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
-    env.goal = 'prod'
+    env.goal = 'saas'
     env.socket_port = '8002'
     env.map_settings = {
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
@@ -100,6 +103,7 @@ def prod_montpellier3():
         'cas_server': 'CAS_SERVER',
         'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
         'cas_version': 'CAS_VERSION',
+        'csrf_trusted_origins': 'CSRF_TRUSTED_ORIGINS',
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',

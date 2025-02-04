@@ -15,6 +15,7 @@ class CASProvider(AllAuthCASProvider):
     id = settings.CAS_ID
     name = settings.CAS_NAME
     account_class = CASAccount
+    uses_apps = False
 
     def extract_uid(self, data) -> str:
         uid = super().extract_uid(data)

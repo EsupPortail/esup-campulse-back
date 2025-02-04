@@ -1,6 +1,8 @@
 import pydiploy
 from fabric.api import env, execute, roles, task
 
+env.csp_settings = {}
+env.nginx_location_extra_directives = []
 
 @roles(['web', 'lb'])
 def build_env():
@@ -17,15 +19,15 @@ def preprod_rouen():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-rouen-pprd'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'plana-api-pprd'
+    env.server_name = 'api.campulse-preprod.univ-rouen.fr'
+    env.short_server_name = 'api.campulse-preprod'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.45.206'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
     env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
-    env.goal = 'preprod'
+    env.goal = 'saas'
     env.socket_port = '8002'
     env.map_settings = {
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
@@ -42,6 +44,7 @@ def preprod_rouen():
         'cas_server': 'CAS_SERVER',
         'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
         'cas_version': 'CAS_VERSION',
+        'csrf_trusted_origins': 'CSRF_TRUSTED_ORIGINS',
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',
@@ -75,15 +78,15 @@ def prod_rouen():
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-rouen-prod'
     env.backends = env.roledefs['web']
-    env.server_name = 'TODO_DOMAIN_NAME'
-    env.short_server_name = 'plana-api'
+    env.server_name = 'api.campulse.univ-rouen.fr'
+    env.short_server_name = 'api.campulse'
     env.static_folder = '/site_media/'
     env.server_ip = '77.72.44.196'
     env.no_shared_sessions = False
     env.server_ssl_on = True
     env.path_to_cert = '/etc/ssl/certs/mega_wildcard.pem'
     env.path_to_cert_key = '/etc/ssl/private/mega_wildcard.key'
-    env.goal = 'prod'
+    env.goal = 'saas'
     env.socket_port = '8002'
     env.map_settings = {
         'accounts_api_spore_base_url': 'ACCOUNTS_API_CONF["BASE_URL"]',
@@ -100,6 +103,7 @@ def prod_rouen():
         'cas_server': 'CAS_SERVER',
         'cas_value_is_student': 'CAS_ATTRIBUTES_VALUES["is_student"]',
         'cas_version': 'CAS_VERSION',
+        'csrf_trusted_origins': 'CSRF_TRUSTED_ORIGINS',
         'default_db_host': 'DATABASES["default"]["HOST"]',
         'default_db_name': 'DATABASES["default"]["NAME"]',
         'default_db_password': 'DATABASES["default"]["PASSWORD"]',

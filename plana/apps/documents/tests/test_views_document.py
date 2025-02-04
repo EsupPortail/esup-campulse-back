@@ -101,7 +101,7 @@ class DocumentsViewsTests(TestCase):
         document_1 = content[0]
         self.assertTrue(document_1.get("name"))
 
-        acronym = "CHARTE_SITE_ALSACE"
+        acronym = "CHARTE_SITE"
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
 

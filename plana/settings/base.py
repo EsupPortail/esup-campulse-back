@@ -5,6 +5,9 @@ from os import environ
 from os.path import join, normpath
 from pathlib import Path
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 def load_key(keyfile):
     """Load JWT and AGE keys."""
@@ -16,7 +19,7 @@ def load_key(keyfile):
         return b""
 
 
-APP_VERSION = "1.1.0-beta"
+APP_VERSION = "1.2.4"
 
 ######################
 # Path configuration #
@@ -234,6 +237,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware"
 ]
 
 
@@ -431,6 +435,7 @@ STORAGES = {
 USE_S3 = True  # TODO FileSystemStorage implementation not finished (encryption not available, migrations errors).
 AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
+AWS_USE_OBJECT_ACL = True
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
@@ -578,9 +583,6 @@ SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 def sentry_init(environment):
     """Init Sentry service."""
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[
@@ -589,6 +591,7 @@ def sentry_init(environment):
         environment=environment,
         release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
         send_default_pii=True,
+        traces_sample_rate=1.0,
     )
 
 

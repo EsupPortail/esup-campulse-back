@@ -1,6 +1,46 @@
 # Changelog
 
-## 1.1.0 (Q2 2024)
+## 1.2.4 (27 Novembre 2024)
+
+### Corrections de bugs
+
+- Une adresse email ne peut pas être utilisée comme adresse de contact pour deux associations distinctes.
+
+## 1.2.3 (17 Octobre 2024)
+
+### Changements critiques
+
+- Bascule sur un dépôt interne pour les packages `allauth_cas` et `britney`.
+
+### Corrections de bugs
+
+- Un projet peut ne plus avoir de responsable attitré si le responsable quitte l'association.
+- Uniformisation du mode de calcul de la date de la charte.
+
+### Autres changements
+
+- Mise à jour du thème de la documentation technique (changement du submodule de `hugo-theme-learn` vers `hugo-theme-relearn`).
+
+## 1.2.2 (09 Octobre 2024)
+
+### Corrections de bugs
+
+- Vérification supplémentaire de la casse de l'adresse mail à l'envoi du formulaire d'inscription.
+- Optimisation des temps de réponse à l'appel des fonctions liées aux projets.
+
+### Autres changements
+
+- Meilleure gestion des erreurs avec Sentry.
+- Nettoyage des librairies pour préparer une mise à jour majeure de django-allauth-cas et de britney.
+
+## 1.2.1 (24 Septembre 2024)
+
+### Corrections de bugs
+
+- Vérification du fait qu'un document de projet ne peut pas être lié à un processus autre que celui d'un projet.
+- Suppression du statut is_site à l'expiration d'une charte via la tâche Cron dédiée.
+
+## 1.2.0 (17 Juillet 2024)
 
 ### Fonctionnalités
 
@@ -24,6 +64,7 @@
 - Correction du non-envoi de mail de report de projet si aucun template n'est défini.
 - Correction du bug de non-envoi de mail d'expiration des documents après un certain délai.
 - Correction du bug d'affichage des blocs de texte sur le PDF de récap de bilan de projet.
+- Correction du bug d'impossibilité de reporter les dates de projet d'une commission passée.
 - Champs NULL autorisés sur la table Content.
 - E-mails d'attribution des subventions envoyés uniquement aux gestionnaires concernés.
 - Correction de la sélection des adresses mail de gestionnaires affichées par défaut dans les templates de mail.

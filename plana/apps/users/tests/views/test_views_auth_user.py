@@ -230,6 +230,12 @@ class AuthUserViewsTests(TestCase):
         response = self.anonymous_client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        user = {
+            "email": "Georges.Saucisse@georgeslasaucisse.fr",
+            "first_name": "Georges",
+            "last_name": "La Saucisse",
+        }
+
         response = self.anonymous_client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

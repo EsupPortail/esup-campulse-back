@@ -19,40 +19,40 @@
     "model": "institutions.institution",
     "pk": 3,
     "fields": {
-      "name": "Université de Haute-Alsace",
-      "acronym": "UHA"
+      "name": "Institution 3",
+      "acronym": "Ins3"
     }
   },
   {
     "model": "institutions.institution",
     "pk": 4,
     "fields": {
-      "name": "Institut National des Sciences Appliquées Strasbourg",
-      "acronym": "INSA"
+      "name": "Institution 4",
+      "acronym": "Ins4"
     }
   },
   {
     "model": "institutions.institution",
     "pk": 5,
     "fields": {
-      "name": "Haute École des Arts du Rhin",
-      "acronym": "HEAR"
+      "name": "Institution 5",
+      "acronym": "Ins5"
     }
   },
   {
     "model": "institutions.institution",
     "pk": 6,
     "fields": {
-      "name": "École Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
-      "acronym": "ENGEES"
+      "name": "Institution 6",
+      "acronym": "Ins6"
     }
   },
   {
     "model": "institutions.institution",
     "pk": 7,
     "fields": {
-      "name": "École Nationale Supérieure d'Architecture de Strasbourg",
-      "acronym": "ENSAS"
+      "name": "Institution 7",
+      "acronym": "Ins7"
     }
   }
 ]
