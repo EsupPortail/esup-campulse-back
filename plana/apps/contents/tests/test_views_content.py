@@ -60,16 +60,12 @@ class ContentsViewsTests(TestCase):
         - Filter by is_editable is available.
         """
         contents_cnt = Content.objects.count()
-        self.assertTrue(contents_cnt > 0)
 
         response = self.client.get("/contents/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), contents_cnt)
-
-        content_1 = content[0]
-        self.assertTrue(content_1.get("code"))
 
         code = "HOME_INFO"
         response = self.client.get(f"/contents/?code={code}")

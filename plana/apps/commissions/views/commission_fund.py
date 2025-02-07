@@ -66,11 +66,11 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commission_funds_count = CommissionFund.objects.filter(
+        commission_funds = CommissionFund.objects.filter(
             commission_id=request.data["commission"],
             fund_id=request.data["fund"],
-        ).count()
-        if commission_funds_count > 0:
+        ).exists()
+        if commission_funds:
             return response.Response(
                 {"error": _("This commission is already linked to this fund.")},
                 status=status.HTTP_400_BAD_REQUEST,

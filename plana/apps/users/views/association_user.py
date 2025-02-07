@@ -189,7 +189,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             )
 
         association_user = AssociationUser.objects.filter(user_id=user.id, association_id=association_id)
-        if association_user.count() > 0:
+        if association_user.exists():
             return response.Response(
                 {"error": _("User already in association.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -199,7 +199,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             association_user_president = AssociationUser.objects.filter(
                 association_id=association_id, is_president=True
             )
-            if association_user_president.count() > 0:
+            if association_user_president.exists():
                 return response.Response(
                     {"error": _("President already in association.")},
                     status=status.HTTP_400_BAD_REQUEST,

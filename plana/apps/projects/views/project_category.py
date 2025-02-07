@@ -51,7 +51,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -129,11 +129,11 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project_categories_count = ProjectCategory.objects.filter(
+        project_categories = ProjectCategory.objects.filter(
             project_id=request.data["project"],
             category_id=request.data["category"],
-        ).count()
-        if project_categories_count > 0:
+        )
+        if project_categories.exists():
             return response.Response(
                 {"error": _("This project is already linked to this category.")},
                 status=status.HTTP_400_BAD_REQUEST,

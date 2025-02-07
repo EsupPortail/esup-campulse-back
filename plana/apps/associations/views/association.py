@@ -392,7 +392,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).count() > 0:
+        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).exists():
             return response.Response(
                 {"error": _("Email address is already used for another association.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -697,7 +697,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             )
             .values_list("name")
         )
-        if missing_documents_names.count() > 0:
+        if missing_documents_names.exists():
             missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
             return response.Response(
                 {"error": _(f"Missing documents : {missing_documents_names_string}.")},

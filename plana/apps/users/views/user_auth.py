@@ -145,7 +145,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             }
             managers_emails = user.get_user_default_manager_emails()
             History.objects.create(action_title="USER_REGISTERED", action_user_id=user.id)
-            if assos_user.count() > 0 or funds_user.count() > 0:
+            if assos_user.exists() or funds_user.exists():
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_CREATION")
             else:
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION")

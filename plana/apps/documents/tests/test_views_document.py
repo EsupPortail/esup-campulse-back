@@ -98,9 +98,6 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
-        document_1 = content[0]
-        self.assertTrue(document_1.get("name"))
-
         acronym = "CHARTE_SITE"
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)

@@ -151,7 +151,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -208,13 +208,13 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     )
                 )
 
-        if user is not None and user != "":
+        if user:
             queryset = queryset.filter(user_id=user)
 
-        if association is not None and association != "":
+        if association:
             queryset = queryset.filter(association_id=association)
 
-        if project_statuses is not None and project_statuses != "":
+        if project_statuses:
             all_project_statuses = [c[0] for c in Project.project_status.field.choices]
             project_statuses_codes = project_statuses.split(",")
             project_statuses_codes = [
@@ -362,11 +362,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if "association" in request.data and "association_user" in request.data:
-            association_user_count = AssociationUser.objects.filter(
+            association_user = AssociationUser.objects.filter(
                 id=request.data["association_user"],
                 association_id=request.data["association"],
-            ).count()
-            if association_user_count == 0:
+            )
+            if not association_user.exists():
                 return response.Response(
                     {"error": _("Link between association and user does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -538,16 +538,17 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-        expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        expired_project_commission_dates = ProjectCommissionFund.objects.filter(
             project_id=project.id,
             commission_fund_id__in=CommissionFund.objects.filter(
                 commission_id__in=Commission.objects.filter(submission_date__lt=datetime.datetime.today()).values_list(
                     "id"
                 )
             ).values_list("id"),
-        ).count()
+        ).exists()
+
         if (
-            expired_project_commission_dates_count > 0
+            expired_project_commission_dates
             and "planned_start_date" not in request.data
             and "planned_end_date" not in request.data
         ):
@@ -767,7 +768,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                         user_id=project.user_id,
                     ).values_list("document_id")
                 ).values_list("name")
-            if missing_documents_names.count() > 0:
+            if missing_documents_names.exists():
                 missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
                 return response.Response(
                     {"error": _(f"Missing documents : {missing_documents_names_string}.")},
@@ -787,7 +788,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 projects_year = Project.visible_objects.filter(
                     manual_identifier__isnull=False, manual_identifier__startswith=year
                 )
-                if projects_year.count() > 0:
+                if projects_year.exists():
                     last_identifier = (
                         int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
                     )
@@ -795,7 +796,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 project.save()
 
             managers_emails = project.get_project_default_manager_emails()
-            if project.association_id is not None:
+            if project.association_id:
                 association = Association.objects.get(id=project.association_id)
                 funds_misc_used = Fund.objects.filter(
                     id__in=CommissionFund.objects.filter(
@@ -807,11 +808,11 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 )
                 context["association_name"] = association.name
                 template = MailTemplate.objects.get(code=association_email_template_code)
-                if funds_misc_used.count() > 0:
+                if funds_misc_used.exists():
                     for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                         if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
-            elif project.user_id is not None:
+            elif project.user_id:
                 context["first_name"] = request.user.first_name
                 context["last_name"] = request.user.last_name
                 template = MailTemplate.objects.get(code=user_email_template_code)

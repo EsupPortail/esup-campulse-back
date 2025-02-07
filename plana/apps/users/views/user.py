@@ -445,7 +445,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
             unvalidated_assos_user = AssociationUser.objects.filter(user_id=user.id, is_validated_by_admin=False)
-            if unvalidated_assos_user.count() > 0:
+            if unvalidated_assos_user.exists():
                 for unvalidated_asso_user in unvalidated_assos_user:
                     context["user_association_url"] = (
                         f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"

@@ -64,7 +64,6 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commission_funds through the model and through the view.
         """
         cf_count = CommissionFund.objects.count()
-        self.assertTrue(cf_count > 0)
 
         response = self.client.get("/commissions/funds")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

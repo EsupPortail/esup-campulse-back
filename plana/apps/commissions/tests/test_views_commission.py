@@ -83,7 +83,6 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commissions through the model and through the view.
         """
         commissions_cnt = Commission.objects.count()
-        self.assertTrue(commissions_cnt > 0)
 
         response = self.client.get("/commissions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

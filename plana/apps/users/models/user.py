@@ -118,7 +118,7 @@ class User(AbstractUser):
         related_name="group_institution_fund_set",
     )
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self, perm, obj=None) -> bool:
         """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
@@ -128,8 +128,7 @@ class User(AbstractUser):
                     id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("group_id")
                 ).values_list("id"),
                 codename=perm.split(".")[1],
-            ).count()
-            > 0
+            ).exists()
         )
 
     def can_access_project(self, project_obj):
@@ -252,11 +251,11 @@ class User(AbstractUser):
         funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id__isnull=False)
         institutions_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id__isnull=False)
         managers_emails = []
-        if institutions_user.count() > 0:
+        if institutions_user.exists():
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                 if user_to_check.has_perm("users.add_groupinstitutionfunduser_any_group"):
                     managers_emails.append(user_to_check.email)
-        elif assos_user.count() > 0 or funds_user.count() > 0:
+        elif assos_user.exists() or funds_user.exists():
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
@@ -286,7 +285,7 @@ class User(AbstractUser):
         except SocialAccount.DoesNotExist:
             return False
 
-    def is_in_association(self, association_id):
+    def is_in_association(self, association_id) -> bool:
         """Check if a user can read an association."""
         try:
             AssociationUser.objects.get(
@@ -298,17 +297,16 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
-    def is_member_in_fund(self, fund_id):
+    def is_member_in_fund(self, fund_id) -> bool:
         """Check if a user is linked as member to a fund."""
         return (
             GroupInstitutionFundUser.objects.filter(
                 models.Q(user_id=self.pk, fund_id=fund_id)
                 | models.Q(user_id=self.pk, institution_id=Fund.objects.get(id=fund_id).institution_id)
-            ).count()
-            > 0
+            ).exists()
         )
 
-    def is_president_in_association(self, association_id):
+    def is_president_in_association(self, association_id) -> bool:
         """Check if a user can write in an association."""
         try:
             now = datetime.date.today()

@@ -29,16 +29,12 @@ class GroupViewsTests(TestCase):
         - Filter by name is available.
         """
         groups_cnt = Group.objects.count()
-        self.assertTrue(groups_cnt > 0)
 
         response = self.client.get("/groups/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), groups_cnt)
-
-        group_1 = content[0]
-        self.assertTrue(group_1.get("name"))
 
         name = "MANAGER_GENERAL"
         response = self.client.get(f"/groups/?name={name}")

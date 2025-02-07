@@ -89,8 +89,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 group_id=group_id,
                 institution_id=institution_id,
                 fund_id=fund_id,
-            ).count()
-            > 0
+            ).exists()
         ):
             return response.Response(
                 {"error": _("Link between user and group does exist.")},
@@ -128,7 +127,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (group_structure["REGISTRATION_ALLOWED"] is False and user.get_user_groups().count() > 0) or (
+        if (group_structure["REGISTRATION_ALLOWED"] is False and user.get_user_groups().exists()) or (
             group_structure["REGISTRATION_ALLOWED"] is True and user.is_staff is True
         ):
             return response.Response(
@@ -252,7 +251,7 @@ class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
         group_name = Group.objects.get(id=kwargs["group_id"]).name
         if (
             settings.GROUPS_STRUCTURE[group_name]["ASSOCIATIONS_POSSIBLE"] is True
-            and AssociationUser.objects.filter(user_id=user).count() > 0
+            and AssociationUser.objects.filter(user_id=user).exists()
         ):
             return response.Response(
                 {"error": _("User is still linked to an association.")},

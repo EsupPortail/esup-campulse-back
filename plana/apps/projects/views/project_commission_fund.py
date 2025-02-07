@@ -68,7 +68,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
 
         if not request.user.has_perm("projects.view_projectcommissionfund_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -190,8 +190,8 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
         pcf = ProjectCommissionFund.objects.filter(
             project_id=request.data["project"],
             commission_fund_id=request.data["commission_fund"],
-        ).count()
-        if pcf > 0:
+        )
+        if pcf.exists():
             return response.Response(
                 {"error": _("This project is already submitted to this commission fund.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -436,7 +436,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         if "amount_earned" in request.data:
-            locale.setlocale(locale.LC_ALL, "")
+            # locale.setlocale(locale.LC_ALL, "")
             attachments = []
             managers_emails = []
             if int(request.data["amount_earned"]) == 0:
@@ -506,10 +506,10 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         project_commission_fund.save()
 
         if "amount_earned" in request.data:
-            remaining_project_commission_funds_count = ProjectCommissionFund.objects.filter(
+            remaining_project_commission_funds = ProjectCommissionFund.objects.filter(
                 project_id=project.id, amount_earned__isnull=True, is_validated_by_admin=True
-            ).count()
-            if remaining_project_commission_funds_count == 0 and "is_validated_by_admin" not in request.data:
+            )
+            if not remaining_project_commission_funds.exists() and "is_validated_by_admin" not in request.data:
                 total_amounts_earned = ProjectCommissionFund.objects.filter(project_id=project.id).aggregate(
                     total_amounts_earned=Sum("amount_earned")
                 )["total_amounts_earned"]
@@ -529,9 +529,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "is_validated_by_admin" in request.data
             and project.project_status in Project.ProjectStatus.get_validated_fund_project_statuses()
-            and unchecked_project_commission_funds.count() == 0
+            and not unchecked_project_commission_funds.exists()
         ):
-            if validated_project_commission_funds.count() > 0:
+            if validated_project_commission_funds.exists():
                 project.project_status = "PROJECT_VALIDATED"
                 project.save()
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_CONFIRMATION")
