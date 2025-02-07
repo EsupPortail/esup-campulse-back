@@ -135,7 +135,8 @@ class CommissionDatesViewsTests(TestCase):
         - The route returns a 404 if a wrong commission id is given.
         """
         response = self.client.get("/commissions/99999/funds")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data)
 
     def test_get_commission_funds_by_id(self):
         """

@@ -25,6 +25,8 @@ from plana.apps.users.serializers.association_user import (
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
+from plana.decorators import capture_queries
+
 
 class AssociationUserListCreate(generics.ListCreateAPIView):
     """/users/associations/ route."""
@@ -73,6 +75,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         },
         tags=["users/associations"],
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all associations linked to a user, or all associations of all users (manager)."""
         association_id = request.query_params.get("association_id")
@@ -279,31 +282,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = AssociationUser.objects.all()
     serializer_class = AssociationUserUpdateSerializer
-
-    def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    http_method_names = ["patch", "delete"]
 
     @extend_schema(
         responses={

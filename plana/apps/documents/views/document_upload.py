@@ -33,6 +33,8 @@ from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
+from plana.decorators import capture_queries
+
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route."""
@@ -93,6 +95,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         },
         tags=["documents/uploads"],
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all documents uploads."""
         user = request.query_params.get("user_id")

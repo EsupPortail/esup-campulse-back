@@ -2,6 +2,8 @@
 
 from rest_framework import serializers
 
+from django.utils.translation import gettext_lazy as _
+
 from plana.apps.contents.models.content import Content
 
 
@@ -29,3 +31,9 @@ class ContentUpdateSerializer(serializers.ModelSerializer):
             "footer",
             "aside",
         ]
+
+    def validate(self, data):
+        instance = self.instance
+        if instance and not instance.is_editable:
+            raise serializers.ValidationError(_("This content is not editable."))
+        return super().validate(data)

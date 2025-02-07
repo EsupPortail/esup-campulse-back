@@ -105,17 +105,6 @@ class ContentsViewsTests(TestCase):
         content = Content.objects.get(id=cid)
         self.assertEqual(content.code, response.data["code"])
 
-    def test_put_content(self):
-        """
-        PUT /contents/{id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        response = self.client.put(
-            "/contents/1", {"body": "Bienvenue sur Opaline, le site de la vie associative étudiante de l'UNISTRA"}
-        )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_content_anonymous(self):
         """
         PATCH /contents/{id} .

@@ -15,6 +15,8 @@ from plana.apps.documents.serializers.document import (
     DocumentUpdateSerializer,
 )
 
+from plana.decorators import capture_queries
+
 
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route."""
@@ -60,6 +62,7 @@ class DocumentList(generics.ListCreateAPIView):
             status.HTTP_200_OK: DocumentSerializer,
         },
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all documents types."""
         acronym = request.query_params.get("acronym")
@@ -130,9 +133,10 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route."""
 
     queryset = Document.objects.all()
+    http_method_names = ["get", "post", "patch", "delete", "head", "options", "trace"]
 
     def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -144,32 +148,6 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = DocumentSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: DocumentSerializer,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve a document type with all its details."""
-        try:
-            self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={

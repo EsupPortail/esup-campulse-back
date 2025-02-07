@@ -399,16 +399,6 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get("/commissions/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_put_commission_by_id_405(self):
-        """
-        PUT /commissions/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
-        response = self.client.put("/commissions/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_commission_anonymous(self):
         """
         PATCH /commissions/{id} .

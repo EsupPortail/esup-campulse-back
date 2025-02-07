@@ -13,6 +13,9 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission_fund import CommissionFundSerializer
 
 
+@extend_schema(
+    tags=["commissions/funds"],
+)
 class CommissionFundListCreate(generics.ListCreateAPIView):
     """/commissions/funds route"""
 
@@ -28,23 +31,12 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: CommissionFundSerializer,
-        },
-        tags=["commissions/funds"],
-    )
-    def get(self, request, *args, **kwargs):
-        """List all links between commissions and funds."""
-        return self.list(request, *args, **kwargs)
-
-    @extend_schema(
-        responses={
             status.HTTP_201_CREATED: CommissionFundSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
             status.HTTP_404_NOT_FOUND: None,
         },
-        tags=["commissions/funds"],
     )
     def post(self, request, *args, **kwargs):
         """Create a link between a commission and a fund."""
@@ -79,32 +71,18 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class CommissionFundRetrieve(generics.RetrieveAPIView):
+@extend_schema(
+    tags=["commissions/funds"]
+)
+class CommissionFundRetrieve(generics.ListAPIView):
     """/commissions/{commission_id}/funds route."""
 
     permission_classes = [AllowAny]
     queryset = CommissionFund.objects.all()
     serializer_class = CommissionFundSerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: CommissionFundSerializer,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["commissions/funds"],
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve all funds linked to a commission."""
-        try:
-            Commission.objects.get(id=kwargs["commission_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        serializer = self.serializer_class(self.queryset.filter(commission_id=kwargs["commission_id"]), many=True)
-        return response.Response(serializer.data)
+    def get_queryset(self):
+        return self.queryset.filter(commission_id=self.kwargs["commission_id"])
 
 
 class CommissionFundDestroy(generics.DestroyAPIView):

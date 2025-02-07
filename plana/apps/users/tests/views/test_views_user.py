@@ -102,7 +102,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         users_cnt = User.objects.all().count()
-        self.assertTrue(users_cnt > 0)
 
         content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)

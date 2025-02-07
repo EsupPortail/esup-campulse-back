@@ -276,9 +276,10 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Commission.objects.all().order_by("submission_date")
     serializer_class = CommissionSerializer
+    http_method_names = ["get", "post", "patch", "delete", "head", "options", "trace"]
 
     def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -290,33 +291,6 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = CommissionSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: CommissionSerializer,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve a commission date with all its details."""
-        try:
-            self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={
