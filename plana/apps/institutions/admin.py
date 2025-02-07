@@ -30,3 +30,6 @@ class InstitutionComponentAdmin(admin.ModelAdmin):
 
     list_display = ["name", "institution"]
     search_fields = ["name", "institution__acronym", "institution__name"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('institution')

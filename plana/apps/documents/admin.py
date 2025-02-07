@@ -30,6 +30,9 @@ class DocumentAdmin(admin.ModelAdmin):
         "process_type",
     ]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('fund', 'institution')
+
 
 @admin.register(DocumentUpload)
 class DocumentUploadAdmin(admin.ModelAdmin):
@@ -46,3 +49,9 @@ class DocumentUploadAdmin(admin.ModelAdmin):
         "association__name",
         "project__name",
     ]
+
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .select_related('document', 'user', 'association', 'project')
+        )

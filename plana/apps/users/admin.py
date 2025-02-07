@@ -127,6 +127,16 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ["is_validated_by_admin", "can_submit_projects"]
     search_fields = ["email", "first_name", "last_name"]
 
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .prefetch_related(
+                'groupinstitutionfunduser_set__group',
+                'associations',
+                'emailaddress_set'
+            )
+        )
+
     def get_form(self, request, obj=None, **kwargs):
         """Route correct form if user is created or changed."""
         if not obj:
@@ -140,17 +150,13 @@ class UserAdmin(admin.ModelAdmin):
     @admin.display(ordering="groups_institutions_funds")
     def get_groups(self, obj):
         """Get groups linked to user."""
-        return list(
-            GroupInstitutionFundUser.objects.filter(user_id=obj.id)
-            .distinct('group__name')
-            .values_list("group__name", flat=True)
-        )
+        return list({gifu.group.name for gifu in obj.groupinstitutionfunduser_set.all()})
 
     @admin.display(description=_("Associations"))
     @admin.display(ordering="associationuser")
     def get_associations(self, obj):
         """Get associations linked to user."""
-        return list(AssociationUser.objects.filter(user_id=obj.id).values_list("association__acronym", flat=True))
+        return [asso.acronym for asso in obj.associations.all()]
 
     @admin.display(boolean=True)
     @admin.display(description=_("Has validated email address"))
@@ -202,3 +208,6 @@ class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
         "fund__acronym",
         "fund__name",
     ]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user', 'group', 'institution', 'fund')

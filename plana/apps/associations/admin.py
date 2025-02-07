@@ -30,3 +30,6 @@ class AssociationAdmin(admin.ModelAdmin):
     ]
     list_filter = ["is_enabled", "is_public", "is_site", "can_submit_projects"]
     search_fields = ["acronym", "name", "email", "institution__acronym", "institution__name", "charter_status"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('institution')
