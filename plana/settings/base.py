@@ -283,6 +283,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth_cas",
     "rest_framework_simplejwt",
+    'django_filters',
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "drf_spectacular",
@@ -406,6 +407,9 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
     ],
+    "DEFAULT_FILTER_BACKENDS": (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
