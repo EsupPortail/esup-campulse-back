@@ -98,11 +98,24 @@ class ManagerUserCreationForm(UserCreationForm):
         fields = ["email", "first_name", "last_name", "username", "is_superuser"]
 
 
+# FIXME : May be removed after cleanup
+class GroupInstitutionFundUserForm(forms.ModelForm):
+    """Custom form for GroupInstitutionFundUser StackedInline to make fields optional."""
+    class Meta:
+        model = GroupInstitutionFundUser
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["institution"].required = False
+
+
 class GroupInstitutionFundUserInline(admin.StackedInline):
     """Add GroupInstitutionFundUser sub-form."""
 
     model = GroupInstitutionFundUser
     fields = ["group", "institution"]
+    form = GroupInstitutionFundUserForm
 
 
 @admin.register(User)
