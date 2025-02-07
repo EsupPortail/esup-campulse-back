@@ -186,14 +186,14 @@ class Project(models.Model):
     def get_project_default_manager_emails(self, fund_id=None):
         """Return a list of manager email addresses affected to a project."""
         managers_emails = []
-        if fund_id is not None:
+        if fund_id:
             project_commission_funds = ProjectCommissionFund.objects.filter(
                 project_id=self.id,
                 commission_fund_id__in=CommissionFund.objects.filter(
                     fund_id=Fund.objects.get(id=fund_id).id
                 ).values_list("id"),
             )
-            if project_commission_funds.count() > 0:
+            if project_commission_funds.exists():
                 managers_emails = list(
                     Institution.objects.get(id=Fund.objects.get(id=fund_id).institution_id)
                     .default_institution_managers()
@@ -206,16 +206,23 @@ class Project(models.Model):
                     fund_id__in=Fund.objects.filter(is_site=False).values_list("id")
                 ).values_list("id"),
             )
-            if self.association_id is not None:
+            if self.association_id :
                 managers_emails = list(
                     Institution.objects.get(id=Association.objects.get(id=self.association_id).institution_id)
                     .default_institution_managers()
                     .values_list("email", flat=True)
                 )
-            if self.user_id is not None or misc_project_commission_funds.count() > 0:
-                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                    if user_to_check.has_perm("users.change_user_misc"):
-                        managers_emails.append(user_to_check.email)
+            if self.user_id or misc_project_commission_funds.exists():
+                managers_emails.extend(
+                    User.objects
+                    .filter(
+                        is_superuser=False,
+                        is_staff=True,
+                        # Check the permission "users.change_user_misc"
+                        groupinstitutionfunduser__group__permissions__content_type__app_label='users',
+                        groupinstitutionfunduser__group__permissions__codename='change_user_misc')
+                    .values_list('email', flat=True)
+                )
         return managers_emails
 
     def __str__(self):
