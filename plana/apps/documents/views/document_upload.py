@@ -6,7 +6,6 @@ import zipfile
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import FileResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -154,15 +153,10 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """Create a new document upload."""
-        if "document" not in request.data:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         try:
-            document = Document.objects.get(id=request.data["document"])
-        except ObjectDoesNotExist:
+            document = Document.objects.get(id=request.data.get("document"))
+        except Document.DoesNotExist:
             return response.Response(
                 {"error": _("Document does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -186,7 +180,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 )
             try:
                 project = Project.visible_objects.get(id=request.data["project"])
-            except ObjectDoesNotExist:
+            except Project.DoesNotExist:
                 return response.Response(
                     {"error": _("Project does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -206,7 +200,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         ):
             try:
                 association = Association.objects.get(id=request.data["association"])
-            except ObjectDoesNotExist:
+            except Association.DoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -226,7 +220,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         if "user" in request.data and request.data["user"] is not None and request.data["user"] != "":
             try:
                 user = User.objects.get(username=request.data["user"])
-            except ObjectDoesNotExist:
+            except User.DoesNotExist:
                 return response.Response(
                     {"error": _("User does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -360,13 +354,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a document uploaded by a user."""
-        try:
-            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document upload does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document_upload = self.get_object()
 
         if not request.user.has_perm("documents.view_documentupload_all") and (
             (
@@ -398,19 +386,14 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     )
     def patch(self, request, *args, **kwargs):
         """Update document upload details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        document_upload = self.get_object()
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         try:
-            document_upload = self.queryset.get(id=kwargs["pk"])
             document = Document.objects.get(id=document_upload.document_id)
-        except ObjectDoesNotExist:
+        except Document.DoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -475,10 +458,10 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     )
     def delete(self, request, *args, **kwargs):
         """Destroys an uploaded document."""
+        document_upload = self.get_object()
         try:
-            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
             Document.objects.get(id=document_upload.document_id)
-        except ObjectDoesNotExist:
+        except Document.DoesNotExist:
             return response.Response(
                 {"error": _("Document upload does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -615,13 +598,7 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a document uploaded by a user."""
-        try:
-            document_upload = DocumentUpload.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document upload does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document_upload = self.get_object()
 
         if not request.user.has_perm("documents.view_documentupload_all") and (
             (

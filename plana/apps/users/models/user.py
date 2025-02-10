@@ -5,7 +5,6 @@ import datetime
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -137,7 +136,7 @@ class User(AbstractUser):
             try:
                 AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
                 return True
-            except ObjectDoesNotExist:
+            except AssociationUser.DoesNotExist:
                 pass
 
         if project_obj.user is not None:
@@ -269,34 +268,22 @@ class User(AbstractUser):
                     managers_emails.append(user_to_check.email)
         return managers_emails
 
-    def has_validated_email_user(self):
+    def has_validated_email_user(self) -> bool:
         """Return True if the user account has a validated email."""
-        try:
-            EmailAddress.objects.get(user_id=self.pk, email=self.email, verified=True)
-            return True
-        except ObjectDoesNotExist:
-            return False
+        return EmailAddress.objects.filter(user_id=self.pk, email=self.email, verified=True).exists()
 
     @property
-    def is_cas_user(self):
+    def is_cas_user(self) -> bool:
         """Return True if the user account was generated through CAS on signup."""
-        try:
-            self.socialaccount_set.get(provider=CASProvider.id)
-            return True
-        except SocialAccount.DoesNotExist:
-            return False
+        return self.socialaccount_set.filter(provider=CASProvider.id).exists()
 
     def is_in_association(self, association_id) -> bool:
         """Check if a user can read an association."""
-        try:
-            AssociationUser.objects.get(
-                user_id=self.pk,
-                association_id=association_id,
-                is_validated_by_admin=True,
-            )
-            return True
-        except ObjectDoesNotExist:
-            return False
+        return AssociationUser.objects.filter(
+            user_id=self.pk,
+            association_id=association_id,
+            is_validated_by_admin=True,
+        ).exists()
 
     def is_member_in_fund(self, fund_id) -> bool:
         """Check if a user is linked as member to a fund."""
@@ -331,22 +318,22 @@ class User(AbstractUser):
                 is_validated_by_admin=True,
             )
             return True
-        except ObjectDoesNotExist:
+        except AssociationUser.DoesNotExist:
             return False
 
-    def is_staff_for_association(self, association_id):
+    def is_staff_for_association(self, association_id) -> bool:
         """Check if a user is linked as manager for an association."""
         if self.is_staff:
             return GroupInstitutionFundUser.objects.filter(
                 user_id=self.pk,
                 institution_id=Association.objects.get(id=association_id).institution_id,
-            )
+            ).exists()
         return False
 
-    def is_staff_in_institution(self, institution_id):
+    def is_staff_in_institution(self, institution_id) -> bool:
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id)
+            return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id).exists()
         return False
 
     def __str__(self):

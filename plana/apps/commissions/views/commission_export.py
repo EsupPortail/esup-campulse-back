@@ -3,7 +3,6 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -61,15 +60,8 @@ class CommissionExport(generics.RetrieveAPIView):
         project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
+        commission = self.get_object()
         commission_id = kwargs["pk"]
-
-        try:
-            commission = Commission.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
@@ -201,7 +193,7 @@ class CommissionExport(generics.RetrieveAPIView):
                     )
                     fields.append(pcf.amount_asked)
                     fields.append(pcf.amount_earned)
-                except ObjectDoesNotExist:
+                except ProjectCommissionFund.DoesNotExist:
                     fields.append(0)
                     fields.append(0)
 

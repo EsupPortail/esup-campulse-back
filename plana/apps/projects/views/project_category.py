@@ -9,6 +9,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -114,14 +115,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -163,13 +158,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all categories linked to a project."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_fund")
@@ -192,6 +181,13 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
+    def get_object(self):
+        return get_object_or_404(
+            self.get_queryset(),
+            project_id=self.kwargs["project_id"],
+            category_id=self.kwargs["category_id"]
+        )
+
     @extend_schema(
         responses={
             status.HTTP_204_NO_CONTENT: ProjectCategorySerializer,
@@ -203,12 +199,11 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
+        project_category = self.get_object()
+
         try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_category = ProjectCategory.objects.get(
-                project_id=kwargs["project_id"], category_id=kwargs["category_id"]
-            )
-        except ObjectDoesNotExist:
+            project = Project.visible_objects.get(id=project_category.pk)
+        except Project.DoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,

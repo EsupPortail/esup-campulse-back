@@ -3,7 +3,6 @@
 import datetime
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -44,13 +43,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a project review with all its details."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -75,22 +68,10 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project review details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.has_perm("projects.change_project_as_bearer"):
             return response.Response(

@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.commissions.models.commission import Commission
@@ -49,14 +50,8 @@ class CommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         commission_funds = CommissionFund.objects.filter(
             commission_id=request.data["commission"],
@@ -92,27 +87,8 @@ class CommissionFundDestroy(generics.DestroyAPIView):
     queryset = CommissionFund.objects.all()
     serializer_class = CommissionFundSerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: CommissionFundSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["commissions/funds"],
-    )
-    def delete(self, request, *args, **kwargs):
-        """Destroys a link between commission and fund."""
-        try:
-            Commission.objects.get(id=kwargs["commission_id"])
-            commission_fund = CommissionFund.objects.get(
-                commission_id=kwargs["commission_id"], fund_id=kwargs["fund_id"]
-            )
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Link between commission and fund does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        commission_fund.delete()
-        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+    def get_object(self):
+        return get_object_or_404(
+            self.get_queryset(),
+            commission_id=self.kwargs["commission_id"],
+            fund_id=self.kwargs["fund_id"])

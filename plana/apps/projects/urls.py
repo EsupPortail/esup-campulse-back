@@ -68,7 +68,7 @@ urlpatterns = [
         name="project_comment_list_create",
     ),
     path(
-        "<int:project_id>/comments/<int:comment_id>",
+        "<int:project_id>/comments/<int:pk>",
         ProjectCommentUpdateDestroy.as_view(),
         name="project_comment_update_destroy",
     ),

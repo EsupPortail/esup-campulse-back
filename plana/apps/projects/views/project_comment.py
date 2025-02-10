@@ -4,11 +4,11 @@ import datetime
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -43,23 +43,12 @@ class ProjectCommentCreate(generics.CreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         """Create a link between a comment and a project."""
-        try:
-            project = Project.visible_objects.get(id=request.data["project"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
+        project = get_object_or_404(Project.visible_objects.all(), id=request.data["project"])
         request.data["user"] = request.user.id
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
 
         if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
             return response.Response(
@@ -121,7 +110,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
         """Retrieve all comments linked to a project."""
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
-        except ObjectDoesNotExist:
+        except Project.DoesNotExist:
             return response.Response(
                 {"error": _("Project does not exist.")},
                 status=status.HTTP_404_NOT_FOUND,
@@ -149,7 +138,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
 
 
 class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/projects/{project_id}/comments/{comment_id} route."""
+    """/projects/{project_id}/comments/{pk} route."""
 
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentUpdateSerializer
@@ -168,23 +157,15 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update comments of the project."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Link between this comment and project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project_comment = get_object_or_404(
+            self.get_queryset(),
+            project_id=kwargs["project_id"],
+            id=kwargs["pk"]
+        )
+        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -215,14 +196,13 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys comments of a project."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_comment = ProjectComment.objects.get(project_id=kwargs["project_id"], id=kwargs["comment_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": "Link between this comment and project does not exist."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+
+        project_comment = get_object_or_404(
+            self.get_queryset(),
+            project_id=kwargs["project_id"],
+            id=kwargs["pk"]
+        )
+        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
 
         if not request.user.can_edit_project(project):
             return response.Response(

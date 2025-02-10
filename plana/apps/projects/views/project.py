@@ -4,7 +4,6 @@ import datetime
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -275,7 +274,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         ):
             try:
                 association = Association.objects.get(id=request.data["association"])
-            except ObjectDoesNotExist:
+            except Association.DoesNotExist:
                 return response.Response(
                     {"error": _("Association does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -295,7 +294,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                             {"error": _("User not allowed to create a new project for this association.")},
                             status=status.HTTP_403_FORBIDDEN,
                         )
-                except ObjectDoesNotExist:
+                except AssociationUser.DoesNotExist:
                     return response.Response(
                         {"error": _("User not allowed in this association.")},
                         status=status.HTTP_403_FORBIDDEN,
@@ -431,13 +430,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a project with all its details."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -475,22 +468,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -577,13 +558,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys a project."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -620,22 +595,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project status."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(

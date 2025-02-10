@@ -11,6 +11,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -258,13 +259,7 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all associations linked to a user (manager)."""
-        try:
-            User.objects.get(id=kwargs["user_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("User does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        get_object_or_404(User, id=kwargs["user_id"])
 
         if request.user.has_perm("users.view_associationuser_anyone") or kwargs["user_id"] == request.user.pk:
             serializer = self.serializer_class(self.queryset.filter(user_id=kwargs["user_id"]), many=True)
@@ -314,19 +309,17 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        try:
-            asso_user = self.queryset.get(user_id=kwargs["user_id"], association_id=kwargs["association_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Link between this user and association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        asso_user = get_object_or_404(
+            self.get_queryset(),
+            user_id=kwargs["user_id"],
+            association_id=kwargs["association_id"]
+        )
 
         try:
             president = AssociationUser.objects.get(
                 association_id=kwargs["association_id"], user_id=request.user.pk
             ).is_president
-        except ObjectDoesNotExist:
+        except AssociationUser.DoesNotExist:
             president = False
 
         if (

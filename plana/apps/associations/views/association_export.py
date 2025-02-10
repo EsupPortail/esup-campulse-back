@@ -3,7 +3,6 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -160,14 +159,8 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
-        try:
-            association = self.queryset.get(id=kwargs["pk"])
-            data = association.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
+        data = association.__dict__
 
         if (
             not request.user.has_perm("associations.view_association_not_enabled")
@@ -179,13 +172,20 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        data["institution"] = Institution.objects.get(id=association.institution_id).name
-        data["institution_component"] = (
-            None
-            if association.institution_component_id is None
-            else InstitutionComponent.objects.get(id=association.institution_component_id).name
+        data["institution"] = (
+            association.institution.name
+            if association.institution_id
+            else None
         )
-        data["activity_field"] = ActivityField.objects.get(id=association.activity_field_id).name
+        data["institution_component"] = (
+            association.institution_component.name
+            if association.institution_component_id
+            else None
+        )
+        data["activity_field"] = (
+            association.activity_field.name
+            if association.activity_field_id
+            else None)
 
         data["documents"] = list(
             DocumentUpload.objects.filter(

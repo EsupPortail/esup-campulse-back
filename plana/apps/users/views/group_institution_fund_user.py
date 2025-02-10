@@ -7,6 +7,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.commissions.models.fund import Fund
@@ -194,13 +195,7 @@ class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """List all groups linked to a user (manager)."""
-        try:
-            User.objects.get(id=kwargs["user_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("User does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        get_object_or_404(User, id=kwargs["user_id"])
 
         if not request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
             return response.Response(
@@ -310,6 +305,7 @@ class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        # The user can only delete an assignation if he still has at least 1 group after deletion
         if user_groups.count() <= 1:
             return response.Response(
                 {"error": _("User should have at least one group.")},

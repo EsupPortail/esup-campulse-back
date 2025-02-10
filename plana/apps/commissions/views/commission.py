@@ -3,7 +3,6 @@
 import datetime
 import unicodedata
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -303,22 +302,6 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update commission date details."""
-        # try:
-        #     serializer = self.get_serializer(data=request.data)
-        #     serializer.is_valid(raise_exception=True)
-        # except ValidationError as error:
-        #     return response.Response(
-        #         {"error": error.detail},
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
-
-        try:
-            self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         if "name" in request.data and request.data["name"] != "" and request.data["name"] is not None:
             new_commission_name = (
@@ -395,13 +378,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire commission (manager only)."""
-        try:
-            commission = self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        commission = self.get_object()
 
         if commission.commission_date < datetime.date.today():
             return response.Response(

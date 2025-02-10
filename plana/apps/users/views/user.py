@@ -10,7 +10,6 @@ from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -317,13 +316,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a user with all details."""
-        try:
-            self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("User does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         if not request.user.has_perm("users.view_user_anyone") and not self.request.user.has_perm(
             "users.view_user_misc"
@@ -346,22 +338,10 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update a user field (with a restriction on CAS auto-generated fields)."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        user = self.get_object()
 
-        try:
-            user = User.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("User does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         request.data.pop("username", False)
 
@@ -460,22 +440,16 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys a user from the database (with a restriction on manager users)."""
-        try:
-            user = User.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("User does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        user = self.get_object()
 
-        if user.is_superuser is True or user.is_staff is True:
+        if user.is_superuser or user.is_staff:
             return response.Response(
                 {"error": _("Cannot delete superuser.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
         current_site = get_current_site(request)
-        if user.is_validated_by_admin is False:
+        if not user.is_validated_by_admin:
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,

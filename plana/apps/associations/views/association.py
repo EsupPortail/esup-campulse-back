@@ -6,7 +6,6 @@ import unicodedata
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -192,7 +191,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         if "institution" in request.data and request.data["institution"] != "":
             try:
                 Institution.objects.get(id=request.data["institution"])
-            except ObjectDoesNotExist:
+            except Institution.DoesNotExist:
                 return response.Response(
                     {"error": _("Institution does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -304,14 +303,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve an association with all its details."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
 
         if request.user.is_anonymous and (not association.is_enabled or not association.is_public):
             return response.Response(
@@ -322,7 +314,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             not request.user.is_anonymous
             and not association.is_enabled
-            and not request.user.is_in_association(association_id)
+            and not request.user.is_in_association(association.pk)
             and not request.user.has_perm("associations.view_association_not_enabled")
         ):
             return response.Response(
@@ -333,7 +325,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             not request.user.is_anonymous
             and not association.is_public
-            and not request.user.is_in_association(association_id)
+            and not request.user.is_in_association(association.pk)
             and not request.user.has_perm("associations.view_association_not_public")
         ):
             return response.Response(
@@ -356,26 +348,13 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update association details (president and manager only, restricted fields for president)."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
-            not request.user.is_president_in_association(association_id)
+            not request.user.is_president_in_association(association.id)
             and not request.user.has_perm("associations.change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
@@ -503,16 +482,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire association (manager only)."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
 
-        if association.is_enabled is True:
+        if association.is_enabled:
             return response.Response(
                 {"error": _("Can't delete an enabled association.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -629,22 +601,10 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update association charter status."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        association = self.get_object()
 
-        try:
-            association = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
             not request.user.is_president_in_association(association.id)
