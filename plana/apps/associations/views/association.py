@@ -279,9 +279,10 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/associations/{id} route."""
 
     queryset = Association.objects.all()
+    http_method_names = ["get", "patch", "delete"]
 
     def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -341,15 +342,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     @extend_schema(
@@ -623,22 +615,8 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
 
     queryset = Association.objects.all()
     serializer_class = AssociationStatusSerializer
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["patch"]
 
     @extend_schema(
         responses={

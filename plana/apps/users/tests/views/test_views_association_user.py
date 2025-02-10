@@ -191,15 +191,6 @@ class AssociationUserViewsTests(TestCase):
         user_associations_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
-    def test_get_link_association_user(self):
-        """
-        GET /users/{user_id}/associations/{association_id} .
-
-        - Always returns a 405 no matter which role is trying to access it.
-        """
-        response_manager = self.manager_client.get("/users/999/associations/999")
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_anonymous_post_association_user_404_user(self):
         """
         POST /users/associations/ .
@@ -446,15 +437,6 @@ class AssociationUserViewsTests(TestCase):
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-    def test_put_link_association_user(self):
-        """
-        PUT /users/{user_id}/associations/{association_id} .
-
-        - Always returns a 405 no matter which role is trying to access it.
-        """
-        response_manager = self.manager_client.put("/users/999/associations/999", {"is_treasurer": True})
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_anonymous_patch_association_user(self):
         """

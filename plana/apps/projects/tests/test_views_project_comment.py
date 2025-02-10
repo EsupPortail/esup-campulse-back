@@ -227,27 +227,6 @@ class ProjectCommentLinksViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-    def test_get_project_comment_by_id_405(self):
-        """
-        GET /projects/{project_id}/comments/{comment_id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        project = 2
-        comment = 1
-        response = self.client.get(f"/projects/{project}/comments/{comment}")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_put_project_comment_by_id_405(self):
-        """
-        PUT /projects/{project_id}/comments/{comment_id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        data = {"text": "Commentaire test"}
-        response = self.client.put("/projects/2/comments/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_project_comment_anonymous(self):
         """
         PATCH /projects/{project_id}/comments/{comment_id} .

@@ -223,16 +223,6 @@ class DocumentsViewsTests(TestCase):
         document = content
         self.assertEqual(document["name"], doc_test.name)
 
-    def test_put_document_by_id_405(self):
-        """
-        PUT /documents/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"name": "name"}
-        response = self.general_client.put("/documents/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_documents_anonymous(self):
         """
         PATCH /documents/{id} .

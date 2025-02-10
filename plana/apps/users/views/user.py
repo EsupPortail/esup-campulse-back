@@ -297,13 +297,8 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["get", "patch", "delete"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -339,15 +334,6 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={

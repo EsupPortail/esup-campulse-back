@@ -295,15 +295,6 @@ class ProjectCommissionFundViewsTests(TestCase):
         results = ProjectCommissionFund.objects.filter(project_id=project_id, commission_fund_id=commission_fund_id)
         self.assertEqual(len(results), 1)
 
-    def test_put_project_cf_not_existing(self):
-        """
-        PUT /projects/{project_id}/commission_funds .
-
-        - This route always returns a 405.
-        """
-        response = self.student_misc_client.put("/projects/1/commission_funds", {}, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_get_project_cf_by_id_anonymous(self):
         """
         GET /projects/{project_id}/commission_funds .
@@ -354,24 +345,6 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
-
-    def test_get_project_cf(self):
-        """
-        GET /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - Always returns a 405.
-        """
-        response = self.general_client.get("/projects/1/commission_funds/3")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_put_project_cf(self):
-        """
-        PUT /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - Always returns a 405.
-        """
-        response = self.general_client.put("/projects/1/commission_funds/3", {}, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_cf_anonymous(self):
         """

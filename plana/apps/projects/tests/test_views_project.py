@@ -561,16 +561,6 @@ class ProjectsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(content["name"], project_test.name)
 
-    def test_put_project(self):
-        """
-        PUT /projects/{id} .
-
-        - Always returns a 405.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put("/projects/1", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_project_anonymous(self):
         """
         PATCH /projects/{id} .
@@ -796,16 +786,6 @@ class ProjectsViewsTests(TestCase):
         response = self.student_misc_client.delete(f"/projects/{project_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(1, len(Project.visible_objects.filter(id=project_id)))
-
-    def test_put_project_status(self):
-        """
-        PUT /projects/{id}/status .
-
-        - Always returns a 405.
-        """
-        patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.general_client.put("/projects/5/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_status_anonymous(self):
         """

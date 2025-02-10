@@ -402,13 +402,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
 class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["get", "patch", "delete"]
 
     def get_queryset(self):
         return Project.visible_objects.all()
@@ -468,15 +463,6 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={
@@ -616,27 +602,12 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route."""
-
     serializer_class = ProjectStatusSerializer
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["patch"]
 
     def get_queryset(self):
         return Project.visible_objects.all()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={

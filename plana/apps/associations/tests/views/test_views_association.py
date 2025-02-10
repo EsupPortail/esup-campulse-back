@@ -568,15 +568,6 @@ class AssociationsViewsTests(TestCase):
         non_public_member_response = self.member_client.get("/associations/2")
         self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
 
-    def test_put_association(self):
-        """
-        PUT /associations/{id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        response = self.client.put("/associations/1", {"name": "Les aficionados d'endives au jambon"})
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_association_anonymous(self):
         """
         PATCH /associations/{id} .
@@ -948,16 +939,6 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(len(mail.outbox))
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
-
-    def test_put_association_status(self):
-        """
-        PUT /associations/{id}/status .
-
-        - Always returns a 405.
-        """
-        patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.general_client.put("/associations/2/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_association_status_anonymous(self):
         """

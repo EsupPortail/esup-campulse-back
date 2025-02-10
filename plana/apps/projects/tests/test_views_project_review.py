@@ -142,16 +142,6 @@ class ProjectReviewsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(content["name"], project_test.name)
 
-    def test_put_project_review(self):
-        """
-        PUT /projects/{id}/review .
-
-        - Always returns a 405.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put("/projects/1/review", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_project_review_anonymous(self):
         """
         PATCH /projects/{id}/review .

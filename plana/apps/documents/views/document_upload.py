@@ -340,6 +340,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
+    http_method_names = ["get", "patch", "delete"]
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -384,15 +385,6 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
             )
 
         return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @extend_schema(
         responses={

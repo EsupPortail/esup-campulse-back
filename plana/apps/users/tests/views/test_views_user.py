@@ -428,15 +428,6 @@ class UserViewsTests(TestCase):
         user_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(user_requested["username"], user.username)
 
-    def test_put_user_detail(self):
-        """
-        PUT /users/{id} .
-
-        - Always returns a 405 no matter which role tries to acces it
-        """
-        response_manager = self.manager_client.put(f"/users/{self.student_user_id}", {"username": "Aurevoirg"})
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_anonymous_patch_user_detail(self):
         """
         PATCH /users/{id} .

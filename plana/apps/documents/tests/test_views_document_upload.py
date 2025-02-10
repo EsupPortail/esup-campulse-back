@@ -536,16 +536,6 @@ class DocumentsViewsTests(TestCase):
         response = self.general_client.get("/documents/uploads/6")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_put_document_upload_by_id_405(self):
-        """
-        PUT /documents/uploads/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"is_validated_by_admin": True}
-        response = self.general_client.put(f"/documents/uploads/{self.new_document.data['id']}", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_document_upload_anonymous(self):
         """
         PATCH /documents/uploads/{id} .

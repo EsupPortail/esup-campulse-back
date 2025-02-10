@@ -153,31 +153,8 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentUpdateSerializer
-
-    def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["patch", "delete"]
 
     @extend_schema(
         responses={
