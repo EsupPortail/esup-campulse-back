@@ -168,7 +168,7 @@ class UserAdmin(admin.ModelAdmin):
     @admin.display(description=_("Is CAS user"))
     @admin.display(ordering="socialaccount")
     def is_cas(self, obj):
-        return obj.is_cas_user()
+        return obj.is_cas_user
 
 
 @admin.register(AssociationUser)

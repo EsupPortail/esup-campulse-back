@@ -53,7 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
-        return user.is_cas_user()
+        return user.is_cas_user
 
     def has_validated_email_user(self, user) -> bool:
         """Calculate field "has_validated_email" (True if user finished registration)."""
@@ -132,7 +132,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
-        return user.is_cas_user()
+        return user.is_cas_user
 
     def has_validated_email_user(self, user) -> bool:
         """Calculate field "has_validated_email" (True if user finished registration)."""

@@ -371,7 +371,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if user.is_cas_user():
+        if user.is_cas_user:
             for restricted_field in [
                 "email",
                 "first_name",
@@ -413,7 +413,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context["first_name"] = user.first_name
             context["last_name"] = user.last_name
             context["documentation_url"] = Setting.get_setting("APP_DOCUMENTATION_URL")
-            if user.is_cas_user():
+            if user.is_cas_user:
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_CONFIRMATION")
             else:
                 template = MailTemplate.objects.get(code="USER_ACCOUNT_CONFIRMATION")

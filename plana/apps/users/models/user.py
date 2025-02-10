@@ -259,7 +259,7 @@ class User(AbstractUser):
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
-        elif self.is_cas_user() is True:
+        elif self.is_cas_user:
             institution = Institution.objects.get(acronym=Setting.get_setting("CAS_INSTITUTION_ACRONYM"))
             managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
@@ -277,6 +277,7 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return False
 
+    @property
     def is_cas_user(self):
         """Return True if the user account was generated through CAS on signup."""
         try:
