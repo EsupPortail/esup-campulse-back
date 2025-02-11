@@ -9,7 +9,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.contents.models.setting import Setting
@@ -117,14 +116,8 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
 
     def post(self, request, *args, **kwargs):
         """Send an email to a manager on email validation."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         self.kwargs['key'] = serializer.validated_data['key']
         confirmation = self.get_object()
