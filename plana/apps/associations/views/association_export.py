@@ -66,11 +66,11 @@ class AssociationListExport(generics.RetrieveAPIView):
                 {"error": _("Not allowed to export associations list CSV.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        queryset = self.get_queryset().exclude(~Q(institution_id__in=institutions))
+        queryset = self.get_queryset().filter(institution_id__in=institutions)
 
         if associations is not None and associations != "":
             association_ids = [int(association) for association in associations.split(",")]
-            queryset = queryset.exclude(~Q(id__in=association_ids))
+            queryset = queryset.filter(id__in=association_ids)
 
         fields = [
             str(_("Name")),

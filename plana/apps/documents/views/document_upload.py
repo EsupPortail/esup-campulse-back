@@ -13,6 +13,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -154,13 +155,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Create a new document upload."""
 
-        try:
-            document = Document.objects.get(id=request.data.get("document"))
-        except Document.DoesNotExist:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document = get_object_or_404(Document, id=request.data.get("document"))
         existing_document = DocumentUpload.objects.filter(document_id=document.id)
 
         if request.user.is_anonymous and (
@@ -178,13 +173,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     {"error": _("Project document not allowed for this process.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            try:
-                project = Project.visible_objects.get(id=request.data["project"])
-            except Project.DoesNotExist:
-                return response.Response(
-                    {"error": _("Project does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            project = get_object_or_404(Project.visible_objects, id=request.data["project"])
             existing_document = existing_document.filter(project_id=project.id)
             if not request.user.can_edit_project(project):
                 return response.Response(
@@ -198,13 +187,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             and request.data["association"] is not None
             and request.data["association"] != ""
         ):
-            try:
-                association = Association.objects.get(id=request.data["association"])
-            except Association.DoesNotExist:
-                return response.Response(
-                    {"error": _("Association does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            association = get_object_or_404(Association, id=request.data["association"])
             existing_document = existing_document.filter(association_id=association.id)
             if (
                 not request.user.has_perm("documents.add_documentupload_all")
@@ -218,13 +201,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         user = None
         if "user" in request.data and request.data["user"] is not None and request.data["user"] != "":
-            try:
-                user = User.objects.get(username=request.data["user"])
-            except User.DoesNotExist:
-                return response.Response(
-                    {"error": _("User does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            user = get_object_or_404(User, username=request.data["user"])
             existing_document = existing_document.filter(user_id=request.user.pk)
             if (request.user.is_anonymous and user.is_validated_by_admin is True) or (
                 not request.user.is_anonymous
@@ -391,13 +368,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            document = Document.objects.get(id=document_upload.document_id)
-        except Document.DoesNotExist:
-            return response.Response(
-                {"error": _("Document upload does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document = get_object_or_404(Document, id=document_upload.document_id)
 
         if (
             document.institution_id is not None
@@ -459,13 +430,7 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     def delete(self, request, *args, **kwargs):
         """Destroys an uploaded document."""
         document_upload = self.get_object()
-        try:
-            Document.objects.get(id=document_upload.document_id)
-        except Document.DoesNotExist:
-            return response.Response(
-                {"error": _("Document upload does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        get_object_or_404(Document, id=document_upload.document_id)
 
         if not request.user.has_perm("documents.delete_documentupload_all") and (
             (

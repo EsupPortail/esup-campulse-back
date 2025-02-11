@@ -22,9 +22,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch"]
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
+    queryset = Project.visible_objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

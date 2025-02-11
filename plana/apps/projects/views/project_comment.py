@@ -44,7 +44,7 @@ class ProjectCommentCreate(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         """Create a link between a comment and a project."""
 
-        project = get_object_or_404(Project.visible_objects.all(), id=request.data["project"])
+        project = get_object_or_404(Project.visible_objects, id=request.data["project"])
         request.data["user"] = request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -108,13 +108,7 @@ class ProjectCommentRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all comments linked to a project."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-        except Project.DoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcomment_any_fund")
@@ -165,7 +159,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project_id=kwargs["project_id"],
             id=kwargs["pk"]
         )
-        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -202,7 +196,7 @@ class ProjectCommentUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             project_id=kwargs["project_id"],
             id=kwargs["pk"]
         )
-        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if not request.user.can_edit_project(project):
             return response.Response(

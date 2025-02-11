@@ -11,6 +11,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -189,13 +190,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         """Create a new association with mandatory informations (manager only)."""
         if "institution" in request.data and request.data["institution"] != "":
-            try:
-                Institution.objects.get(id=request.data["institution"])
-            except Institution.DoesNotExist:
-                return response.Response(
-                    {"error": _("Institution does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            get_object_or_404(Institution, id=request.data["institution"])
 
         if not "institution" in request.data and request.user.get_user_managed_institutions().count() == 1:
             request.data["institution"] = request.user.get_user_managed_institutions().first().id

@@ -232,7 +232,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all commission dates linked to a project."""
-        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcommissionfund_any_fund")

@@ -158,7 +158,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all categories linked to a project."""
-        project = get_object_or_404(Project.visible_objects.all(), id=kwargs["project_id"])
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_fund")
@@ -200,14 +200,7 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
         project_category = self.get_object()
-
-        try:
-            project = Project.visible_objects.get(id=project_category.pk)
-        except Project.DoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = get_object_or_404(Project.visible_objects, id=project_category.pk)
 
         if not request.user.can_edit_project(project):
             return response.Response(

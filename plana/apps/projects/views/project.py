@@ -10,6 +10,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -272,13 +273,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["association"] is not None
             and request.data["association"] != ""
         ):
-            try:
-                association = Association.objects.get(id=request.data["association"])
-            except Association.DoesNotExist:
-                return response.Response(
-                    {"error": _("Association does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            association = get_object_or_404(Association, id=request.data["association"])
 
             if association.can_submit_projects and association.is_enabled:
                 try:
@@ -403,9 +398,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
+    queryset = Project.visible_objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -579,10 +572,8 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route."""
     serializer_class = ProjectStatusSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Project.visible_objects.all()
     http_method_names = ["patch"]
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
 
     @extend_schema(
         responses={
