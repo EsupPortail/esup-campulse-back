@@ -442,30 +442,21 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+        }
         if not user.is_validated_by_admin:
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-                "manager_email_address": request.user.email,
-            }
+            context["manager_email_address"] = request.user.email
             template = MailTemplate.objects.get(code="USER_ACCOUNT_REJECTION")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=user.email,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
         else:
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
             template = MailTemplate.objects.get(code="USER_ACCOUNT_DELETION")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=user.email,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
+
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=user.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
 
         return self.destroy(request, *args, **kwargs)
