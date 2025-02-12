@@ -113,7 +113,7 @@ class ContentsViewsTests(TestCase):
         """
         response_anonymous = self.client.patch(
             "/contents/1",
-            {"body": "L'application Opaline a vu le jour en Septembre 2023."},
+            {"body": "L'application Campulse a vu le jour en Septembre 2023."},
             content_type="application/json",
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -135,7 +135,7 @@ class ContentsViewsTests(TestCase):
 
         - A user without permission can't execute this request.
         """
-        patch_data = {"body": "Déposez vos chartes Site Alsace, FSDIE, IdEx et Culture-ActionS sur Opaline."}
+        patch_data = {"body": "Déposez vos chartes Site Alsace, FSDIE, IdEx et Culture-ActionS sur Campulse."}
         response = self.institution_client.patch("/contents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

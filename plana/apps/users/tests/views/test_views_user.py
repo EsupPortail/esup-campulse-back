@@ -355,13 +355,13 @@ class UserViewsTests(TestCase):
         - The CAS user has been created.
         - An email is received if creation is successful.
         """
-        username = "opaline"
-        email = "opaline@unistra.fr"
+        username = "campulse"
+        email = "campulse@unistra.fr"
         response_manager = self.manager_client.post(
             "/users/",
             {
-                "first_name": "Opaline",
-                "last_name": "Gropif",
+                "first_name": "Campulse",
+                "last_name": "Campulse",
                 "username": username,
                 "email": email,
                 "is_cas": True,
