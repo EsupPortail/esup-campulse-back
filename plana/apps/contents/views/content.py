@@ -8,6 +8,7 @@ from plana.apps.contents.serializers.content import (
     ContentSerializer,
     ContentUpdateSerializer,
 )
+from .. import filters
 
 
 class ContentList(generics.ListAPIView):
@@ -16,7 +17,7 @@ class ContentList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Content.objects.all().order_by("id")
     serializer_class = ContentSerializer
-    filterset_fields = ["code", "is_editable"]
+    filterset_class = filters.ContentFilter
 
 
 class ContentRetrieveUpdate(generics.RetrieveUpdateAPIView):
