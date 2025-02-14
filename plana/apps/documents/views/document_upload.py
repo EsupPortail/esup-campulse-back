@@ -39,7 +39,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = DocumentUpload.objects.all()
+    queryset = DocumentUpload.objects.all().select_related('document')
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -264,7 +264,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     .default_institution_managers()
                     .values_list("email", flat=True)
                 )
-            if user is not None:
+            if user:
                 for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                     if user_to_check.has_perm("users.change_user_misc"):
                         managers_emails.append(user_to_check.email)
@@ -277,9 +277,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
             template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_DOCUMENT_CREATION")
             email = ""
-            if association is not None:
+            if association:
                 email = association.email
-            if user is not None:
+            if user:
                 email = user.email
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,

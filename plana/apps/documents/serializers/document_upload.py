@@ -15,26 +15,9 @@ class DocumentUploadListSerializer(serializers.ModelSerializer):
     """Main serializer without file size."""
 
     path_file = serializers.SerializerMethodField()
-    calculated_expiration_date = serializers.SerializerMethodField()
+    calculated_expiration_date = serializers.ReadOnlyField()
 
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_calculated_expiration_date(self, document):
-        """Return real expiration date based on expiration_day or days_before_expiration."""
-        if document.validated_date is not None:
-            if document.document.expiration_day is not None:
-                if document.document.expiration_day <= document.validated_date.strftime("%m-%d"):
-                    return datetime.datetime.strptime(
-                        f"{document.validated_date.year + 1}-{document.document.expiration_day}", "%Y-%m-%d"
-                    )
-                return datetime.datetime.strptime(
-                    f"{document.validated_date.year}-{document.document.expiration_day}", "%Y-%m-%d"
-                )
-            if document.document.days_before_expiration is not None:
-                return document.validated_date + document.document.days_before_expiration
-        return None
-
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_path_file(self, document):
+    def get_path_file(self, document) -> str:
         """Return a link to DocumentUploadFileRetrieve view."""
         return reverse('document_upload_file_retrieve', args=[document.id])
 

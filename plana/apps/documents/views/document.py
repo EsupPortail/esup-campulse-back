@@ -12,7 +12,7 @@ from plana.apps.documents.serializers.document import (
     DocumentSerializer,
     DocumentUpdateSerializer,
 )
-
+from ..filters import DocumentFilter
 from plana.decorators import capture_queries
 
 
@@ -20,6 +20,7 @@ class DocumentList(generics.ListCreateAPIView):
     """/documents/ route."""
 
     queryset = Document.objects.all().order_by("name")
+    filterset_class = DocumentFilter
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -36,61 +37,8 @@ class DocumentList(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document acronym.",
-            ),
-            OpenApiParameter(
-                "fund_ids",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Document fund IDs.",
-            ),
-            OpenApiParameter(
-                "process_types",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document process type.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: DocumentSerializer,
-        },
-    )
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List all documents types."""
-        acronym = request.query_params.get("acronym")
-        fund_ids = request.query_params.get("fund_ids")
-        process_types = request.query_params.get("process_types")
-
-        if acronym is not None and acronym != "":
-            self.queryset = self.queryset.filter(acronym=acronym)
-
-        if fund_ids is not None and fund_ids != "":
-            self.queryset = self.queryset.filter(fund_id__in=fund_ids.split(","))
-
-        if process_types is not None and process_types != "":
-            all_process_types = [c[0] for c in Document.process_type.field.choices]
-            process_types_codes = process_types.split(",")
-            process_types_codes = [
-                project_type_code
-                for project_type_code in process_types_codes
-                if project_type_code != "" and project_type_code in all_process_types
-            ]
-            self.queryset = self.queryset.filter(process_type__in=process_types_codes)
-
-        return self.list(request, *args, **kwargs)
-
-    @extend_schema(
         responses={
             status.HTTP_201_CREATED: DocumentSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
         }
     )
     def post(self, request, *args, **kwargs):
