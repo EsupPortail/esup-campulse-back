@@ -213,7 +213,7 @@ class AssociationsViewsTests(TestCase):
         """
         response = self.client.get("/associations/?institution_component=1")
         for association in response.data:
-            self.assertEqual(association["institution_component"], 1)
+            self.assertEqual(association["institution_component"]["id"], 1)
 
         response = self.client.get("/associations/?institution_component=")
         for association in response.data:
@@ -228,7 +228,7 @@ class AssociationsViewsTests(TestCase):
         """
         response = self.client.get("/associations/?activity_field=3")
         for association in response.data:
-            self.assertEqual(association["activity_field"], 3)
+            self.assertEqual(association["activity_field"]["id"], 3)
 
     def test_get_associations_list_filter_user_anonymous(self):
         """
@@ -520,7 +520,7 @@ class AssociationsViewsTests(TestCase):
         - A non-public association can't be seen by a student user who's not in it.
         """
         non_public_response = self.client.get("/associations/3")
-        self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(non_public_response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         association = Association.objects.get(id=5)
         association.is_enabled = False

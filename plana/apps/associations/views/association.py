@@ -29,13 +29,20 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
+from .. import permissions
+
+from plana.decorators import capture_queries
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route."""
 
     filter_backends = [filters.SearchFilter]
-    queryset = Association.objects.all().order_by("name")
+    queryset = (
+        Association.objects.all()
+        .select_related('institution', 'institution_component', 'activity_field')
+        .order_by("name")
+    )
     search_fields = [
         "name__nospaces__unaccent",
         "acronym__nospaces__unaccent",
@@ -119,6 +126,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             status.HTTP_200_OK: AssociationPartialDataSerializer,
         },
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all associations with many filters."""
         name = request.query_params.get("name")
@@ -265,12 +273,18 @@ class AssociationListCreate(generics.ListCreateAPIView):
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/associations/{id} route."""
 
-    queryset = Association.objects.all()
+    queryset = (
+        Association.objects.all()
+        .select_related('institution', 'institution_component', 'activity_field')
+    )
     http_method_names = ["get", "patch", "delete"]
 
     def get_permissions(self):
         if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
+            self.permission_classes = [
+                AllowAny,
+                permissions.AssociationRetrieveUpdateDestroyPermission
+            ]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
@@ -281,47 +295,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationAllDataReadSerializer,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve an association with all its details."""
-        association = self.get_object()
-
-        if request.user.is_anonymous and (not association.is_enabled or not association.is_public):
-            return response.Response(
-                {"error": _("Association not visible.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            not request.user.is_anonymous
-            and not association.is_enabled
-            and not request.user.is_in_association(association.pk)
-            and not request.user.has_perm("associations.view_association_not_enabled")
-        ):
-            return response.Response(
-                {"error": _("Association not enabled.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            not request.user.is_anonymous
-            and not association.is_public
-            and not request.user.is_in_association(association.pk)
-            and not request.user.has_perm("associations.view_association_not_public")
-        ):
-            return response.Response(
-                {"error": _("Association not public.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return self.retrieve(request, *args, **kwargs)
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     @extend_schema(
@@ -376,7 +349,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
         except Exception as ex:
-            print(ex)
             return response.Response(
                 {"error": _("Error on social networks format.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -539,6 +511,7 @@ class AssociationNameList(generics.ListAPIView):
             status.HTTP_200_OK: AssociationNameSerializer,
         },
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """List minimal details for all associations with many filters."""
         institutions = request.query_params.get("institutions")

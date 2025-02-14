@@ -1,27 +1,20 @@
 """Views directly linked to association exports."""
 
-import csv
-from tempfile import NamedTemporaryFile
-
-from django.db.models import Q
-from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from openpyxl import Workbook
 from rest_framework import generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.association import (
     AssociationAllDataReadSerializer,
 )
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
-from plana.apps.institutions.models import Institution, InstitutionComponent
 from plana.apps.users.models import GroupInstitutionFundUser
 from plana.utils import generate_pdf_response
+from ..utils import generate_associations_export
 
 
 class AssociationListExport(generics.RetrieveAPIView):
@@ -72,73 +65,7 @@ class AssociationListExport(generics.RetrieveAPIView):
             association_ids = [int(association) for association in associations.split(",")]
             queryset = queryset.filter(id__in=association_ids)
 
-        fields = [
-            str(_("Name")),
-            str(_("Acronym")),
-            str(_("Institution")),
-            str(_("Activity field")),
-            str(_("Institution component")),
-            str(_("Charter date")),
-            str(_("Last GOA date")),
-            str(_("Email")),
-        ]
-
-        http_response = None
-        writer = None
-        workbook = None
-        worksheet = None
-        filename = "associations_export"
-
-        if mode is None or mode == "csv":
-            http_response = HttpResponse(content_type="application/csv")
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
-            writer = csv.writer(http_response, delimiter=";")
-            writer.writerow([field for field in fields])
-        elif mode == "xlsx":
-            workbook = Workbook()
-            worksheet = workbook.active
-            for index_field, field in enumerate(fields):
-                worksheet.cell(row=1, column=index_field + 1).value = field
-
-        # Write CSV file content
-        for index_association, association in enumerate(queryset):
-            institution_component = (
-                None
-                if association.institution_component_id is None
-                else InstitutionComponent.objects.get(id=association.institution_component_id).name
-            )
-
-            fields = [
-                association.name,
-                association.acronym,
-                Institution.objects.get(id=association.institution_id).name,
-                str(association.activity_field),
-                institution_component,
-                association.charter_date,
-                association.last_goa_date,
-                association.email,
-            ]
-
-            if mode is None or mode == "csv":
-                # Write CSV file content
-                writer.writerow([field for field in fields])
-            elif mode == "xlsx":
-                for index_field, field in enumerate(fields):
-                    worksheet.cell(row=index_association + 2, column=index_field + 1).value = field
-
-        if mode is None or mode == "csv":
-            return http_response
-        if mode == "xlsx":
-            with NamedTemporaryFile() as tmp:
-                workbook.save(tmp.name)
-                tmp.seek(0)
-                stream = tmp.read()
-            http_response = HttpResponse(
-                content=stream,
-                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            )
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
-            return http_response
+        return generate_associations_export(queryset, mode)
 
 
 class AssociationRetrieveExport(generics.RetrieveAPIView):

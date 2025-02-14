@@ -140,6 +140,26 @@ class Association(models.Model):
             ("view_association_not_public", "Can view a not public association."),
         ]
 
+    @property
+    def calculated_expiration_date(self) -> str:
+        """Return real expiration date based on expiration_day or days_before_expiration."""
+        document_upload = (
+            self.documentupload_set
+            .filter(document__process_type='CHARTER_ASSOCIATION', document__acronym='CHARTE_SITE')
+            .order_by('-validated_date')
+            .first()
+        )
+        if (document := (document_upload.document if document_upload else None)):
+            if document_upload.validated_date:
+                if document.expiration_day:
+                    year = document_upload.validated_date.year
+                    if document.expiration_day <= document_upload.validated_date.strftime("%m-%d"):
+                        year += 1
+                    return datetime.datetime.strptime(f"{year}-{document.expiration_day}", "%Y-%m-%d")
+                if document.days_before_expiration:
+                    return document_upload.validated_date + document.days_before_expiration
+        return ''
+
 
 class SpaceRemovedValue(models.Transform):
     """

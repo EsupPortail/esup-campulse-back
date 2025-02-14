@@ -7,19 +7,23 @@ from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
+from plana.apps.institutions.serializers.institution import InstitutionSerializer
+from plana.apps.institutions.serializers.institution_component import InstitutionComponentSerializer
 from plana.apps.users.models.user import AssociationUser
 
 
 class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
-    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
+    institution = InstitutionSerializer(read_only=True)
+    institution_component = InstitutionComponentSerializer(read_only=True)
+    activity_field = ActivityFieldSerializer(read_only=True)
     path_logo = ThumbnailField(sizes=["detail"])
+    calculated_expiration_date = serializers.ReadOnlyField()
 
     def to_representation(self, obj):
         """Don't send confidential values depending on the user doing the request."""
@@ -85,10 +89,9 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """Smaller serializer to return only some of the informations of an association."""
 
-    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
-    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
-    # path_logo = ThumbnailField(sizes=["list"])
+    institution = InstitutionSerializer(read_only=True)
+    institution_component = InstitutionComponentSerializer(read_only=True)
+    activity_field = ActivityFieldSerializer(read_only=True)
     path_logo = serializers.SerializerMethodField("cached_logo_url")
 
     def cached_logo_url(self, association) -> dict[str, str]:
