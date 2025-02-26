@@ -6,7 +6,7 @@
       "code": "{{ site_domain }}",
       "description": "URL du site.",
       "fake_vars": [
-        "plana.domain.fr"
+        "plana.unistra.fr"
       ]
     }
   },

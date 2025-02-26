@@ -10,9 +10,9 @@ class CommissionsModelsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "commissions_fund.json",
+        "tests/commissions_fund.json",
         "commissions_commission.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
     ]
 
     def setUp(self):

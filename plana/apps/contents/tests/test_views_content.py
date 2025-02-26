@@ -14,12 +14,12 @@ class ContentsViewsTests(TestCase):
 
     fixtures = [
         "account_emailaddress.json",
-        "commissions_fund.json",
-        "contents_content.json",
+        "tests/commissions_fund.json",
+        "tests/contents_content.json",
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "users_user.json",
         "users_groupinstitutionfunduser.json",
     ]

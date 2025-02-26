@@ -3,16 +3,16 @@
     "model": "institutions.institution",
     "pk": 1,
     "fields": {
-      "name": "Institution 1",
-      "acronym": "Ins1"
+      "name": "Centre régional des œuvres universitaires et scolaires",
+      "acronym": "Crous"
     }
   },
   {
     "model": "institutions.institution",
     "pk": 2,
     "fields": {
-      "name": "Institution 2",
-      "acronym": "Ins2"
+      "name": "Université de Strasbourg",
+      "acronym": "Unistra"
     }
   },
   {

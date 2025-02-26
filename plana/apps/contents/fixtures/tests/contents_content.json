@@ -30,7 +30,7 @@
     "pk": 3,
     "fields": {
       "code": "HOME_CHARTER",
-      "label": "Paragraphe de la page d'accueil lié aux chartes Site.",
+      "label": "Paragraphe de la page d'accueil lié aux chartes du site Alsace.",
       "header": "Titre : Lorem ipsum",
       "body": "Description : Lorem ipsum",
       "footer": "Bouton : Lorem ipsum",
@@ -316,7 +316,7 @@
     "pk": 25,
     "fields": {
       "code": "ABOUT_CHARTER",
-      "label": "Paragraphe de la page à propos lié aux chartes Site.",
+      "label": "Paragraphe de la page à propos lié aux chartes du site Alsace.",
       "header": "Titre : Lorem ipsum",
       "body": "Description : Lorem ipsum",
       "footer": "",
@@ -367,13 +367,13 @@
     "model": "contents.content",
     "pk": 29,
     "fields": {
-      "code": "NOTIFICATION_FPEX_DECISION_ATTRIBUTION",
-      "label": "PDF de notification de décision de subventionnement FPEX (Fonds Principal d'Exemple).",
-      "title": "Décision de subvention FPEX (Fonds Principal d'Exemple)",
+      "code": "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION",
+      "label": "PDF de notification de décision de subventionnement FSDIE.",
+      "title": "Décision de subvention FSDIE",
       "header": "<p>Lorem ipsum</p>",
-      "body": "<h1>Décision de subvention</h1><p>Ville, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite <strong>{{ owner.name }}</strong> dans le cadre de l'opération :<br><strong>{{ project_name }}</strong></p><h2>ARTICLE 2</h2><p>Lorem ipsum.</p><h2>ARTICLE 3</h2><p>Lorem ipsum.</p>",
+      "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite <strong>{{ owner.name }}</strong> dans le cadre de l'opération :<br><strong>{{ project_name }}</strong></p><h2>ARTICLE 2</h2><p>Lorem ipsum.</p><h2>ARTICLE 3</h2><p>Lorem ipsum.</p>",
       "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
-      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
       "is_editable": false
     }
   },
@@ -381,13 +381,13 @@
     "model": "contents.content",
     "pk": 30,
     "fields": {
-      "code": "NOTIFICATION_FPEX_ATTRIBUTION",
-      "label": "PDF de notification de subventionnement FPEX (Fonds Principal d'Exemple).",
-      "title": "Notification d'attribution FPEX (Fonds Principal d'Exemple)",
+      "code": "NOTIFICATION_FSDIE_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement FSDIE.",
+      "title": "Notification d'attribution FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
-      "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement FPEX de l'Université de Test a le plaisir de vous annoncer qu'un montant de <strong>{{ amount_earned }} euros</strong> vous a été attribué.</p>",
+      "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de <strong>{{ amount_earned }} euros</strong> vous a été attribué.</p>",
       "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
-      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
       "is_editable": false
     }
   },
@@ -395,13 +395,13 @@
     "model": "contents.content",
     "pk": 31,
     "fields": {
-      "code": "NOTIFICATION_FPEX_PROJECT_POSTPONED",
-      "label": "PDF de notification de report de subventionnement FPEX (Fonds Principal d'Exemple).",
-      "title": "Notification de report FPEX (Fonds Principal d'Exemple)",
+      "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
+      "label": "PDF de notification de report de subventionnement FSDIE.",
+      "title": "Notification de report FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
-      "body": "<h1>Notification de report</h1><p>Ville, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FPEX de l'Université de Test souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
       "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
-      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
       "is_editable": false
     }
   },
@@ -409,19 +409,103 @@
     "model": "contents.content",
     "pk": 32,
     "fields": {
-      "code": "NOTIFICATION_FPEX_REJECTION",
-      "label": "PDF de notification de refus de subventionnement FPEX (Fonds Principal d'Exemple).",
-      "title": "Notification de refus FPEX (Fonds Principal d'Exemple)",
+      "code": "NOTIFICATION_FSDIE_REJECTION",
+      "label": "PDF de notification de refus de subventionnement FSDIE.",
+      "title": "Notification de refus FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
-      "body": "<h1>Notification de refus</h1><p>Ville, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FPEX de l'Université de Test a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
       "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
-      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.02.03.04.05<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
       "is_editable": false
     }
   },
   {
     "model": "contents.content",
     "pk": 33,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_DECISION_ATTRIBUTION",
+      "label": "PDF de notification de décision de subventionnement IdEx.",
+      "title": "Décision de subvention IdEx",
+      "header": "<p>Lorem ipsum</p>",
+      "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre du programme IdEx «Creative Thinkers» pour l'organisation de l'opération :<br><strong>{{ project_name }}</strong>.</p><h2>ARTICLE 2</h2><p>Lorem ipsum.</p><h2>ARTICLE 3</h2><p>Lorem ipsum.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 34,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement IdEx.",
+      "title": "Notification d'attribution IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé <strong>{{ project_name }}</strong>.</p><p>Cette subvention d'un montant de <strong>{{ amount_earned }} euros</strong> au titre de l'année {{ year }}, est mise en oeuvre dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx, programme dédié aux projets étudiants.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 35,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
+      "label": "PDF de notification de report de subventionnement IdEx.",
+      "title": "Notification de report IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 36,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_REJECTION",
+      "label": "PDF de notification de refus de subventionnement IdEx.",
+      "title": "Notification de refus IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande pour le motif suivant : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 37,
+    "fields": {
+      "code": "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement Culture-ActionS.",
+      "title": "Notification d'attribution Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le plaisir de vous informer qu'après délibération, la Commission Culture-ActionS du Crous a décidé de vous attribuer une <strong class='underline'>aide financière de {{ amount_earned }} euros</strong>.</p>",
+      "footer": "<p>Fonction</p><p>Prénom NOM</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Fonction<br>Tél. 01.23.45.67.89<br><span class='underline'>no-reply@mail.tld</span></p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 38,
+    "fields": {
+      "code": "NOTIFICATION_CULTURE-ACTIONS_REJECTION",
+      "label": "PDF de notification de refus de subventionnement Culture-ActionS.",
+      "title": "Notification de refus Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le regret de vous informer que la Commission Culture-ActionS, après examen de votre dossier, ne peut répondre favorablement à votre demande d’aide financière.</p><p class='border'><span class='underline'>Motif du refus</span> :<br><br>{{ comment }}</p>",
+      "footer": "<p>Fonction</p><p>Prénom NOM</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Fonction<br>Tél. 01.23.45.67.89<br><span class='underline'>no-reply@mail.tld</span></p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 39,
     "fields": {
       "code": "LEGAL_NOTICE",
       "label": "Page de Mentions Légales.",
@@ -434,7 +518,7 @@
   },
   {
     "model": "contents.content",
-    "pk": 34,
+    "pk": 40,
     "fields": {
       "code": "PRIVACY_POLICY",
       "label": "Page de Politique de Confidentialité.",
@@ -447,7 +531,7 @@
   },
   {
     "model": "contents.content",
-    "pk": 35,
+    "pk": 41,
     "fields": {
       "code": "ACCESSIBILITY_DECLARATION",
       "label": "Page de Déclaration d'Accessibilité.",
@@ -460,7 +544,7 @@
   },
   {
     "model": "contents.content",
-    "pk": 36,
+    "pk": 42,
     "fields": {
       "code": "MULTIANNUAL_ACCESSIBILITY_PLAN",
       "label": "Page de Schéma Pluriannuel de Mise en Accessibilité.",

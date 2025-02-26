@@ -31,7 +31,7 @@
       "parameters": {
         "description": "URL d’accès à la documentation de l’appli, affichée dans les mails.",
         "type": "text",
-        "value": "https://documentation.domain.fr/"
+        "value": "https://ernest.unistra.fr/"
       }
     }
   },
@@ -43,7 +43,7 @@
       "parameters": {
         "description": "Acronyme de l’établissement dont les gestionnaires sont chargés de valider les comptes CAS.",
         "type": "text",
-        "value": "Ins2"
+        "value": "Unistra"
       }
     }
   },
@@ -176,8 +176,8 @@
         "description": "Noms de domaine séparés des adresses email ne pouvant pas créer de compte local (devant utiliser CAS).",
         "type": "array",
         "value": [
-          "domain.fr",
-          "domain.other.fr"
+          "unistra.fr",
+          "etu.unistra.fr"
         ]
       }
     }

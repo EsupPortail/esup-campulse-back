@@ -41,8 +41,8 @@
       "code": "MANAGER_ACCOUNT_LOCAL_MISC_CREATION",
       "label": "Manager Account Local Misc Creation",
       "description": "Demande de création de compte local hors site envoyée à un gestionnaire",
-      "subject": "{{ site_name }} – Demande de création de compte local hors Site",
-      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local non lié à une association appartenant au Site vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
+      "subject": "{{ site_name }} – Demande de création de compte local hors Site Alsace",
+      "body": "Bonjour,<br/><br/>Une nouvelle demande de création de compte local non lié à une association appartenant au Site Alsace vient d'être déposée.<br/>Vous pouvez la consulter avant validation à l'adresse <a href='{{ account_url }}'>{{ account_url }}</a>.<br/><br/>Cordialement,<br/>L’équipe d'administration {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -418,7 +418,7 @@
     "fields": {
       "code": "ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED",
       "label": "Association Charter Expiration Warning Scheduled",
-      "description": "Tâche automatisée prévenant de l'expiration de la charte Site envoyée à une association",
+      "description": "Tâche automatisée prévenant de l'expiration de la charte Site Alsace envoyée à une association",
       "subject": "{{ site_name }} – La charte de votre association va bientôt expirer",
       "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace. En cas de problème sur le renouvellement de la charte, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -434,7 +434,7 @@
     "fields": {
       "code": "ASSOCIATION_CHARTER_CREATION",
       "label": "Association Charter Creation",
-      "description": "Confirmation de l'envoi d'une nouvelle charte Site envoyée à une association",
+      "description": "Confirmation de l'envoi d'une nouvelle charte Site Alsace envoyée à une association",
       "subject": "{{ site_name }} – Votre nouvelle charte a bien été déposée",
       "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été déposée. Un gestionnaire l'étudiera dans les meilleurs délais.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -449,7 +449,7 @@
     "fields": {
       "code": "MANAGER_ASSOCIATION_CHARTER_CREATION",
       "label": "Manager Association Charter Creation",
-      "description": "Confirmation du dépôt d'une nouvelle charte Site envoyée à un gestionnaire",
+      "description": "Confirmation du dépôt d'une nouvelle charte Site Alsace envoyée à un gestionnaire",
       "subject": "{{ site_name }} – Une association vient de déposer une charte",
       "body": "Bonjour,<br/><br/>Une association vient de déposer une nouvelle charte, vous pouvez la vérifier sur votre espace personnel.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -464,7 +464,7 @@
     "fields": {
       "code": "ASSOCIATION_CHARTER_REJECTION",
       "label": "Association Charter Rejection",
-      "description": "Rejet du dépôt de la charte Site envoyé à une association",
+      "description": "Rejet du dépôt de la charte Site Alsace envoyé à une association",
       "subject": "{{ site_name }} – Votre nouvelle charte a été rejetée",
       "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a été rejetée. Merci de faire le nécessaire pour régulariser la situation ou de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
@@ -480,7 +480,7 @@
     "fields": {
       "code": "ASSOCIATION_CHARTER_CONFIRMATION",
       "label": "Association Charter Confirmation",
-      "description": "Confirmation de la mise à jour de la charte Site envoyée à une association",
+      "description": "Confirmation de la mise à jour de la charte Site Alsace envoyée à une association",
       "subject": "{{ site_name }} – Votre nouvelle charte a bien été validée",
       "body": "Bonjour,<br/><br/>Votre nouvelle charte d'association a bien été validée.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,

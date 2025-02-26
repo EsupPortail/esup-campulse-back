@@ -12,8 +12,8 @@ class FundsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "commissions_fund.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/institutions_institution.json",
     ]
 
     @classmethod

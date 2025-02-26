@@ -3,9 +3,9 @@
     "model": "contents.logo",
     "pk": 1,
     "fields": {
-      "acronym": "Main acronym 1",
-      "title": "LOGO Title 1",
-      "url": "https://www.relatedsite.domain.fr/",
+      "acronym": "crous",
+      "title": "Le Centre régional des œuvres universitaires et scolaires",
+      "url": "https://www.crous-strasbourg.fr/",
       "row": 1,
       "column": 2,
       "visible": true
@@ -15,9 +15,9 @@
     "model": "contents.logo",
     "pk": 2,
     "fields": {
-      "acronym": "Main acronym 2",
-      "title": "LOGO Title 2",
-      "url": "https://www.relatedsite.domain.fr/",
+      "acronym": "unistra",
+      "title": "L'Université de Strasbourg",
+      "url": "https://www.unistra.fr/",
       "row": 1,
       "column": 1,
       "visible": true
