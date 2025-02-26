@@ -428,6 +428,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     },
                     "mimetype": "application/pdf",
                     "request": request,
+                    "pcf_obj": project_commission_fund
                 }
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -463,6 +464,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             },
                             "mimetype": "application/pdf",
                             "request": request,
+                            "pcf_obj": project_commission_fund
                         }
                     )
             else:
@@ -490,6 +492,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 },
                                 "mimetype": "application/pdf",
                                 "request": request,
+                                "pcf_obj": project_commission_fund
                             }
                         )
             managers_emails = project.get_project_default_manager_emails(fund.id)

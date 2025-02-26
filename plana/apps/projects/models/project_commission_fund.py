@@ -1,9 +1,32 @@
 """Models describing commissions dates linked to projects."""
+import datetime
+import os
 
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.commissions.models.commission_fund import CommissionFund
+from plana.storages import DynamicStorageFileField
+
+if settings.USE_S3 is False:
+    DynamicStorageFileField = models.FileField
+
+
+def get_file_path(instance, filename):
+    """Is used by ProjectCommissionFund last_notification_file field."""
+    file_basename, extension = os.path.splitext(filename)
+    year = datetime.datetime.now().strftime('%Y')
+    return (
+        os.path.join(
+            settings.S3_DOCUMENTS_FILEPATH if hasattr(settings, 'S3_DOCUMENTS_FILEPATH') else '',
+            year,
+            f'{file_basename}{extension}',
+        )
+        .lower()
+        .replace(' ', '_')
+    )
 
 
 class ProjectCommissionFund(models.Model):
@@ -25,6 +48,7 @@ class ProjectCommissionFund(models.Model):
     amount_asked = models.PositiveIntegerField(_("Amount asked"), default=0)
     amount_earned = models.PositiveIntegerField(_("Amount earned"), default=None, null=True)
     is_validated_by_admin = models.BooleanField(_("Is validated by admin"), default=None, null=True)
+    last_notification_file = DynamicStorageFileField(_("Last notification file"), blank=True, validators=[FileExtensionValidator(["pdf"])])
 
     def __str__(self):
         return f"{self.project} - {self.commission_fund}"

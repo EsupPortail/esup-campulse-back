@@ -8,6 +8,7 @@ import boto3
 import weasyprint
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.template import Context, Template
 from django.template.loader import get_template, render_to_string
@@ -68,13 +69,16 @@ def send_mail(
     if temp_attachments is not None:
         for temp_attachment in temp_attachments:
             if temp_attachment is not None:
-                mail.attach(
-                    temp_attachment["filename"],
-                    generate_pdf_binary(
+                binary = generate_pdf_binary(
                         temp_attachment["context_attach"],
                         temp_attachment["request"],
                         temp_attachment["template_name"],
-                    ),
+                )
+                if "pcf_obj" in temp_attachment:
+                    temp_attachment["pcf_obj"].last_notification_file.save("test.pdf", ContentFile(binary.get_value()), save=True)
+                mail.attach(
+                    temp_attachment["filename"],
+                    binary,
                     temp_attachment["mimetype"],
                 )
 
