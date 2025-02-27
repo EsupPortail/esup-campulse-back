@@ -87,7 +87,7 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,
-      "fund_id": 3,
+      "fund_id": 2,
       "process_type": "DOCUMENT_PROJECT",
       "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
@@ -105,7 +105,7 @@
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": true,
-      "fund_id": 3,
+      "fund_id": 2,
       "process_type": "DOCUMENT_PROJECT",
       "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
