@@ -6,7 +6,6 @@ echo "Running inside /app/docker-prestart.sh"
 cd /app
 python manage.py migrate
 python manage.py compilemessages || true
-python manage.py collectstatic --no-input --clear
 
 if [ ! -f keys/jwt-private-key.pem ]
 then
@@ -18,7 +17,7 @@ then
     python manage.py generate_age_keys
 fi
 
-python manage.py initial_import --test --storages
+python manage.py initial_import --storages
 # env
 
 exec "$@"

@@ -15,25 +15,26 @@ class Command(BaseCommand):
             help=_("Set without value if storages should be added."),
             action="store_true",
         )
-        parser.add_argument(
-            "--test",
-            help=_("Set without value if testing data should be added."),
-            action="store_true",
-        )
+        #parser.add_argument(
+        #    "--test",
+        #    help=_("Set without value if testing data should be added."),
+        #    action="store_true",
+        #)
 
     def handle(self, *args, **options):
         try:
             if Group.objects.all().count() > 0:
                 self.stdout.write(self.style.WARNING(_("Initial data already present.")))
-            elif options["test"] is True:
-                apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
-                # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
-                for app_fixture in apps_fixtures:
-                    if app_fixture.name.endswith("documents_documentupload.json"):
-                        apps_fixtures.remove(app_fixture)
-                call_command("loaddata", *apps_fixtures)
-                libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
-                call_command("loaddata", *libs_fixtures)
+            # FIXME : May be boken due to fixtures changes
+            #elif options["test"] is True:
+            #    apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
+            #    # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
+            #    for app_fixture in apps_fixtures:
+            #        if app_fixture.name.endswith("documents_documentupload.json"):
+            #            apps_fixtures.remove(app_fixture)
+            #    call_command("loaddata", *apps_fixtures)
+            #    libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
+            #    call_command("loaddata", *libs_fixtures)
             else:
                 call_command(
                     "loaddata",
