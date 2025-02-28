@@ -96,7 +96,7 @@ class AssociationPartialDataSerializer(serializers.ModelSerializer):
         if association.path_logo.name != '':
             logo_name = f"{association.path_logo.name.split('.')[0]}_list.{association.path_logo.name.split('.')[1]}"
             return {
-                "list": f"{settings.AWS_S3_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/thumbnails/{logo_name}"
+                "list": f"{settings.AWS_S3_ENDPOINT_URL}/{settings.AWS_STORAGE_PUBLIC_BUCKET_NAME}/thumbnails/{logo_name}"
             }
         return None
 

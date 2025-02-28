@@ -49,6 +49,7 @@ class PublicFileStorage(UpdateACLStorage):
     default_acl = PUBLIC_ACL
     file_overwrite = False
     querystring_auth = False
+    bucket_name = settings.AWS_STORAGE_PUBLIC_BUCKET_NAME
 
 
 class PrivateFileStorage(UpdateACLStorage):
@@ -58,6 +59,7 @@ class PrivateFileStorage(UpdateACLStorage):
     file_overwrite = False
     custom_domain = False
     querystring_auth = True
+    bucket_name = settings.AWS_STORAGE_PRIVATE_BUCKET_NAME
 
 
 class EncryptedPrivateFileStorage(PrivateFileStorage):
