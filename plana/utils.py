@@ -75,7 +75,11 @@ def send_mail(
                         temp_attachment["template_name"],
                 )
                 if "pcf_obj" in temp_attachment:
-                    temp_attachment["pcf_obj"].last_notification_file.save("test.pdf", ContentFile(binary.get_value()), save=True)
+                    temp_attachment["pcf_obj"].last_notification_file.save(
+                        f"notification_{temp_attachment['context_attach']['project_name']}.pdf",
+                        ContentFile(binary),
+                        save=True
+                    )
                 mail.attach(
                     temp_attachment["filename"],
                     binary,

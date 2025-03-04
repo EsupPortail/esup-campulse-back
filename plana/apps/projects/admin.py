@@ -108,7 +108,6 @@ class GeneratePDFAction:
             fund = obj.commission_fund.fund
             project = obj.project
             commission = obj.commission_fund.commission
-            print(f"NOTIFICATION_{fund.acronym.upper()}_{self.template_name}")
             content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_{self.template_name}")
             owner = {
                 "name": "PRENOM NOM",
