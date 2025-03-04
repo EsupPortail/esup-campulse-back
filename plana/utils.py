@@ -7,8 +7,8 @@ import logging
 import boto3
 import weasyprint
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
-from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.template import Context, Template
 from django.template.loader import get_template, render_to_string
@@ -75,9 +75,10 @@ def send_mail(
                         temp_attachment["template_name"],
                 )
                 if "pcf_obj" in temp_attachment:
+                    filename = f"notification_{temp_attachment['context_attach']['project_name']}.pdf"
                     temp_attachment["pcf_obj"].last_notification_file.save(
-                        f"notification_{temp_attachment['context_attach']['project_name']}.pdf",
-                        ContentFile(binary),
+                        filename,
+                        SimpleUploadedFile(filename, binary, content_type="application/pdf"),
                         save=True
                     )
                 mail.attach(

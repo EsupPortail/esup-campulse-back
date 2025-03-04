@@ -444,6 +444,7 @@ S3_LOGOS_FILEPATH = "logos"
 S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 S3_TEMPLATES_FILEPATH = "associations_documents_templates"
 S3_DOCUMENTS_FILEPATH = "associations_documents"
+S3_NOTIFICATIONS_FILEPATH = "projects_notifications"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
 AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
