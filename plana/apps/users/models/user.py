@@ -84,6 +84,18 @@ class GroupInstitutionFundUser(models.Model):
             ),
         ]
 
+    def save(self, *args, **kwargs):
+        group_name = "MANAGER_GENERAL"
+        if self.group.name == group_name and not self.user.groups.filter(name=group_name).exists():
+            self.user.groups.add(self.group)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        group_name = "MANAGER_GENERAL"
+        if self.group.name == group_name and not self._meta.model.objects.filter(user=self.user, group__name=group_name).exists():
+            self.user.groups.remove(self.group)
+
 
 class User(AbstractUser):
     """

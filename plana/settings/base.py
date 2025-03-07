@@ -750,6 +750,7 @@ PERMISSIONS_GROUPS = {
         "delete_commission",
         "add_commissionfund",
         "delete_commissionfund",
+        "view_commissionfund",
         # contents
         "change_content",
         # documents

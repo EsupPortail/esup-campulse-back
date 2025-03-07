@@ -17,6 +17,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
 from .models import AssociationUser, GroupInstitutionFundUser, User
+from ...admin import SecuredModelAdmin, SecuredInlineAdmin
 
 
 class ManagerUserCreationForm(UserCreationForm):
@@ -110,7 +111,7 @@ class GroupInstitutionFundUserForm(forms.ModelForm):
         self.fields["institution"].required = False
 
 
-class GroupInstitutionFundUserInline(admin.StackedInline):
+class GroupInstitutionFundUserInline(SecuredInlineAdmin):
     """Add GroupInstitutionFundUser sub-form."""
 
     model = GroupInstitutionFundUser
@@ -202,7 +203,7 @@ class AssociationUserAdmin(admin.ModelAdmin):
 
 
 @admin.register(GroupInstitutionFundUser)
-class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
+class GroupInstitutionFundUserAdmin(SecuredModelAdmin):
     """List view for group users."""
 
     list_display = ["user", "group", "institution", "fund"]
