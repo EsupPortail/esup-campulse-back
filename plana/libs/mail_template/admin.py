@@ -7,17 +7,28 @@ from .admin_forms import MailTemplateForm
 from .models import MailTemplate, MailTemplateVar
 
 
+class AdminWithRequest:
+    """
+    Class used to pass request object to admin form
+    """
+
+    def get_form(self, request, obj=None, **kwargs):
+        AdminForm = super().get_form(request, obj, **kwargs)
+
+        class AdminFormWithRequest(AdminForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return AdminForm(*args, **kwargs)
+
+        return AdminFormWithRequest
+
+
 @admin.register(MailTemplate)
-class MailTemplateAdmin(SummernoteModelAdmin):
+class MailTemplateAdmin(AdminWithRequest, SummernoteModelAdmin):
     form = MailTemplateForm
     list_display = ('code', 'subject', 'active')
     filter_horizontal = ('available_vars',)
     summernote_fields = ('body',)
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.request = request
-        return form
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
