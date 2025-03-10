@@ -686,6 +686,9 @@ LDAP_ENABLED = True
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
 
+# Enables admin tests features such as PDF document generation testing
+ADMIN_TEST_FEATURES = True
+
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {

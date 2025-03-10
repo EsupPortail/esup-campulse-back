@@ -159,7 +159,6 @@ class GeneratePDFAction:
 
 
 # Defining PDF actions for ProjectCommissionFund admin
-# TODO : limit to test and preprod envs
 generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution")
 generate_pdf_rejection = GeneratePDFAction("REJECTION", "Générer une notification de rejet")
 generate_pdf_postpone = GeneratePDFAction("POSTPONE", "Générer une notification de report")
@@ -169,12 +168,13 @@ generate_pdf_decision_attribution = GeneratePDFAction("DECISION_ATTRIBUTION", "G
 @admin.register(ProjectCommissionFund)
 class ProjectCommissionFundAdmin(admin.ModelAdmin):
     """List view for project commission funds."""
-    actions = [
-        generate_pdf_attribution,
-        generate_pdf_rejection,
-        generate_pdf_postpone,
-        generate_pdf_decision_attribution,
-    ]
+    if settings.ADMIN_TEST_FEATURES:
+        actions = [
+            generate_pdf_attribution,
+            generate_pdf_rejection,
+            generate_pdf_postpone,
+            generate_pdf_decision_attribution,
+        ]
 
     list_display = ["project", "commission_fund", "is_validated_by_admin"]
     list_filter = ["is_validated_by_admin"]
