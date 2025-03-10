@@ -1,6 +1,9 @@
 """Admin view for Project models."""
-
+import datetime
+from django.conf import settings
 from django.contrib import admin
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.models.user import AssociationUser, User
@@ -12,6 +15,9 @@ from .models import (
     ProjectComment,
     ProjectCommissionFund,
 )
+from ..contents.models import Content
+from ...libs.mail_template.models import MailTemplate
+from ...utils import send_mail
 
 
 @admin.register(Category)
@@ -85,9 +91,90 @@ class ProjectCommentAdmin(admin.ModelAdmin):
     search_fields = ["text", "project__name", "user__first_name", "user__last_name"]
 
 
+class GeneratePDFAction:
+    def __init__(self, template_name, description):
+        self.template_name = template_name
+        self.short_description = description
+
+    @property
+    def __name__(self):
+        return f"generate_pdf_{self.template_name}"
+
+    # TODO : Add info and error messages
+    def __call__(self, modeladmin, request, queryset):
+        attachments = []
+        for obj in queryset:
+            # Retrieving data from ProjectCommissionFund object
+            fund = obj.commission_fund.fund
+            project = obj.project
+            commission = obj.commission_fund.commission
+            content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_{self.template_name}")
+            owner = {
+                "name": "PRENOM NOM",
+                "address": "1 Rue du Test STRASBOURG - 67000, FRANCE",
+            }
+            # Initializing data for PDF attachment
+            attachments.append(
+                {
+                    "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{getattr(fund, f'{self.template_name.lower()}_template_path')}",
+                    "filename": f"{slugify(content.title)}.pdf",
+                    "context_attach": {
+                        "amount_earned": obj.amount_earned,
+                        "project_name": project.name,
+                        "project_manual_identifier": project.manual_identifier,
+                        "date": datetime.date.today().strftime('%d %B %Y'),
+                        "year": datetime.date.today().strftime('%Y'),
+                        "date_commission": commission.commission_date.strftime('%d %B %Y'),
+                        "owner": owner,
+                        "content": content,
+                    },
+                    "mimetype": "application/pdf",
+                    "request": request,
+                }
+
+            )
+
+        # Setting up data to send email
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": f"https://{current_site.domain}",
+            "site_name": current_site.name,
+        }
+
+        code_templates = {
+            "ATTRIBUTION": "FUND_CONFIRMATION",
+            "REJECTION": "FUND_REJECTION",
+            "POSTPONE": "POSTPONED",
+            "DECISION_ATTRIBUTION": "FUND_CONFIRMATION",
+        }
+        template = MailTemplate.objects.get(code=f"USER_OR_ASSOCIATION_PROJECT_{code_templates[self.template_name]}")
+        # Send email with all generated PDF attachments
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=request.user.email,
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+            temp_attachments=attachments,
+        )
+
+
+# Defining PDF actions for ProjectCommissionFund admin
+generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution")
+generate_pdf_rejection = GeneratePDFAction("REJECTION", "Générer une notification de rejet")
+generate_pdf_postpone = GeneratePDFAction("POSTPONE", "Générer une notification de report")
+generate_pdf_decision_attribution = GeneratePDFAction("DECISION_ATTRIBUTION", "Générer une notification de décision d'attribution")
+
+
 @admin.register(ProjectCommissionFund)
 class ProjectCommissionFundAdmin(admin.ModelAdmin):
     """List view for project commission funds."""
+    if settings.ADMIN_TEST_FEATURES:
+        actions = [
+            generate_pdf_attribution,
+            generate_pdf_rejection,
+            generate_pdf_postpone,
+            generate_pdf_decision_attribution,
+        ]
 
     list_display = ["project", "commission_fund", "is_validated_by_admin"]
     list_filter = ["is_validated_by_admin"]
