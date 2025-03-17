@@ -757,6 +757,10 @@ PERMISSIONS_GROUPS = {
         "view_commissionfund",
         # contents
         "change_content",
+        "add_logo",
+        "change_logo",
+        "delete_logo",
+        "view_logo",
         # documents
         "add_document",
         "add_document_any_fund",

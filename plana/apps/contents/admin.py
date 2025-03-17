@@ -21,6 +21,18 @@ class LogoAdmin(admin.ModelAdmin):
     list_filter = ["visible"]
     search_fields = ["acronym", "title"]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.exclude(row=2)
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request))
+        if not request.user.is_superuser:
+            fields.append("row")
+        return fields
+
 
 @admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
