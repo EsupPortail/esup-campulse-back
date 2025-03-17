@@ -12,6 +12,20 @@ class ContentAdmin(admin.ModelAdmin):
     list_display = ["code", "label"]
     search_fields = ["code", "label", "title", "header", "body", "footer", "aside"]
 
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request))
+        if not request.user.is_superuser:
+            fields.extend(["is_editable"])
+            if not obj.code.startswith("NOTIFICATION_"):
+                fields.extend(["code", "label"])
+        return fields
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.exclude(is_editable=True)
+
 
 @admin.register(Logo)
 class LogoAdmin(admin.ModelAdmin):
