@@ -16,6 +16,7 @@ from .models import (
     ProjectCommissionFund,
 )
 from ..contents.models import Content
+from ...admin import SecuredModelAdmin
 from ...libs.mail_template.models import MailTemplate
 from ...utils import send_mail
 
@@ -29,7 +30,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(SecuredModelAdmin):
     """List view for projects."""
 
     list_display = [
@@ -75,7 +76,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectCategory)
-class ProjectCategoryAdmin(admin.ModelAdmin):
+class ProjectCategoryAdmin(SecuredModelAdmin):
     """List view for project categories."""
 
     list_display = ["category", "project"]
@@ -83,7 +84,7 @@ class ProjectCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectComment)
-class ProjectCommentAdmin(admin.ModelAdmin):
+class ProjectCommentAdmin(SecuredModelAdmin):
     """List view for project comments."""
 
     list_display = ["text", "is_visible", "project", "user"]
@@ -184,3 +185,8 @@ class ProjectCommissionFundAdmin(admin.ModelAdmin):
         "commission_fund__fund__acronym",
         "commission_fund__fund__name",
     ]
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser and not settings.ADMIN_TEST_FEATURES:
+            return [field.name for field in self.model._meta.fields]
+        return list(super().get_readonly_fields(request))

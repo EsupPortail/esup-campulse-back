@@ -30,6 +30,12 @@ class MailTemplateAdmin(AdminWithRequest, SummernoteModelAdmin):
     filter_horizontal = ('available_vars',)
     summernote_fields = ('body',)
 
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request))
+        if not request.user.is_superuser:
+            fields.append("code")
+        return fields
+
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
 

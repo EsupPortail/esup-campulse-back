@@ -737,6 +737,10 @@ GROUPS_STRUCTURE = {
 PERMISSIONS_GROUPS = {
     "MANAGER_GENERAL": [
         # associations
+        "add_activityfield",
+        "change_activityfield",
+        "delete_activityfield",
+        "view_activityfield",
         "add_association",
         "add_association_any_institution",
         "add_association_all_fields",
@@ -778,6 +782,10 @@ PERMISSIONS_GROUPS = {
         "view_documentupload",
         "view_documentupload_all",
         # projects
+        "add_category",
+        "change_category",
+        "delete_category",
+        "view_category",
         "change_project",
         "change_project_as_validator",
         "view_project",
@@ -821,6 +829,9 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        # mail templates
+        "change_mailtemplate",
+        "view_mailtemplate",
     ],
     "MANAGER_INSTITUTION": [
         # associations
