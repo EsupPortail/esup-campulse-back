@@ -60,6 +60,8 @@ class Command(BaseCommand):
             if options["storages"] is True:
                 call_command("loaddata_storages")
 
+            call_command("createsuperuser", "--no-input")
+
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 
         except Exception as error:

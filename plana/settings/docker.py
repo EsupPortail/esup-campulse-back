@@ -112,3 +112,8 @@ LDAP_ENABLED = environ.get("LDAP_ENABLED", "False").lower() == "true"
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get("ACCOUNTS_API_SPORE_DESCRIPTION_FILE", "https://domain.tld")
 ACCOUNTS_API_CONF["BASE_URL"] = environ.get("ACCOUNTS_API_SPORE_BASE_URL", "https://domain.tld/description.json")
 ACCOUNTS_API_CONF["TOKEN"] = environ.get("ACCOUNTS_API_SPORE_TOKEN", "70K3N")
+
+# Initial superuser account
+DJANGO_SUPERUSER_EMAIL = environ.get("DJANGO_SUPERUSER_EMAIL", "")
+DJANGO_SUPERUSER_USERNAME = environ.get("DJANGO_SUPERUSER_EMAIL", "")
+DJANGO_SUPERUSER_PASSWORD = environ.get("DJANGO_SUPERUSER_PASSWORD", "")
