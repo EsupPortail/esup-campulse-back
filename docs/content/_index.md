@@ -2,8 +2,6 @@
 title: "Campulse"
 ---
 
-# Campulse
-
 Dès 2019, le Service de la Vie Universitaire (SVU) de l'Université de Strasbourg a souhaité mettre en place une gestion automatisée des démarches liées à la vie associative. C'est ainsi que les premières réflexions ont été menées en collaboration avec des associations étudiantes. En 2021, le Service de la Vie Universitaire a conçu et développé un cahier des charges détaillé qui donnera naissance à la future plateforme. Ces travaux minutieux ont permis de présenter ce dossier à la candidature de l'appel à projets "Services numériques aux étudiants" du Ministère de l'Enseignement Supérieur et de la Recherche en décembre 2021. En mars 2022, le projet retient l'attention et devient lauréat de l'appel à projets. Conjointement piloté par le Service de la Vie Universitaire et la Direction du Numérique de l'Université de Strasbourg, avec le concours du Crous de Strasbourg, l'application voit le jour en septembre 2023.
 
 ## Public concerné
