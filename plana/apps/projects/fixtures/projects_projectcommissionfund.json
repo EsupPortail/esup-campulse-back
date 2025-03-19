@@ -8,7 +8,8 @@
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
-      "amount_asked": 1000
+      "amount_asked": 1000,
+      "last_notification_file": ""
     }
   },
   {
@@ -20,7 +21,8 @@
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
-      "amount_asked": 1000
+      "amount_asked": 1000,
+      "last_notification_file": ""
     }
   },
   {
@@ -32,7 +34,8 @@
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
-      "amount_asked": 1000
+      "amount_asked": 1000,
+      "last_notification_file": ""
     }
   },
   {
@@ -44,7 +47,8 @@
       "is_first_edition": false,
       "amount_asked_previous_edition": 1000,
       "amount_earned_previous_edition": 800,
-      "amount_asked": 900
+      "amount_asked": 900,
+      "last_notification_file": ""
     }
   },
   {
@@ -56,7 +60,8 @@
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
-      "amount_asked": 200
+      "amount_asked": 200,
+      "last_notification_file": ""
     }
   },
   {
@@ -70,7 +75,8 @@
       "amount_earned_previous_edition": 800,
       "amount_asked": 900,
       "amount_earned": 2,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -84,7 +90,8 @@
       "amount_earned_previous_edition": 0,
       "amount_asked": 200,
       "amount_earned": 1000,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -98,7 +105,8 @@
       "amount_earned_previous_edition": 800,
       "amount_asked": 900,
       "amount_earned": 2,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -112,7 +120,8 @@
       "amount_earned_previous_edition": 0,
       "amount_asked": 200,
       "amount_earned": 1000,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -126,7 +135,8 @@
       "amount_earned_previous_edition": 0,
       "amount_asked": 2,
       "amount_earned": 1,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -139,7 +149,8 @@
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
       "amount_asked": 200,
-      "is_validated_by_admin": true
+      "is_validated_by_admin": true,
+      "last_notification_file": ""
     }
   },
   {
@@ -151,7 +162,8 @@
       "is_first_edition": true,
       "amount_asked_previous_edition": 0,
       "amount_earned_previous_edition": 0,
-      "amount_asked": 200
+      "amount_asked": 200,
+      "last_notification_file": ""
     }
   }
 ]

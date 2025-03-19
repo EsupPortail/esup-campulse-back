@@ -21,7 +21,7 @@ PUBLIC_ACL = "public-read"
 PRIVATE_ACL = "private"
 
 PUBLIC_CLASSES_NAMES = ["Logo", "Association", "Document"]
-PRIVATE_CLASSES_NAMES = ["DocumentUpload"]
+PRIVATE_CLASSES_NAMES = ["DocumentUpload", "ProjectCommissionFund"]
 
 
 class MediaStorage(S3Boto3Storage):
