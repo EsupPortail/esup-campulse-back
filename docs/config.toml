@@ -1,7 +1,7 @@
 baseURL = 'https://di.pages.unistra.fr/plan_a/plana'
 languageCode = 'fr-FR'
 defaultContentLanguage = "fr"
-title = 'PlanA - Documentation'
+title = 'Campulse - Documentation'
 theme = 'hugo-theme-relearn'
 
 [params]
