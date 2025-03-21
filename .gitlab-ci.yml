@@ -74,7 +74,7 @@ pages:
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}${CI_PROJECT_DIR_PATH}/Dockerfile"
-      --destination "${DESTINATION}" ${EXTRA_ARGS}
+      --destination "${DESTINATION}:${CI_COMMIT_TAG}" ${EXTRA_ARGS}
       --registry-mirror quay.apps.mgmt.paas.unistra.fr/dnum
   tags:
     - cluster
@@ -85,12 +85,18 @@ b:docker:
   stage: build
   variables:
     DESTINATION: $CONTAINER_TEST_IMAGE
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: always
 
 r:docker:
   extends: .build-image
   stage: release
   variables:
     DESTINATION: $CONTAINER_RELEASE_IMAGE
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: always
   # only:
   #   - master
   #   - main
