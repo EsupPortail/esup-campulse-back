@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.0 (24/03/2025)
+
+### Corrections de bugs
+
+- Erreur 500 au report d'un projet dans une autre commission quand celui-ci n'avait pas de commentaire associé
+
+### Features
+
+- MAJ de la documentation de l'application
+- Génération de PDF de notifications de test dans l'admin django
+- Sauvegarde des vrais PDF de notifications dans S3
+- Django admin adapté pour les utilisateurs du groupe Manager General
+
 ## 1.2.4 (27 Novembre 2024)
 
 ### Corrections de bugs

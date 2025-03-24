@@ -444,6 +444,7 @@ S3_LOGOS_FILEPATH = "logos"
 S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 S3_TEMPLATES_FILEPATH = "associations_documents_templates"
 S3_DOCUMENTS_FILEPATH = "associations_documents"
+S3_NOTIFICATIONS_FILEPATH = "projects_notifications"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
 AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
@@ -685,6 +686,9 @@ LDAP_ENABLED = True
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
 
+# Enables admin tests features such as PDF document generation testing
+ADMIN_TEST_FEATURES = True
+
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
@@ -733,6 +737,10 @@ GROUPS_STRUCTURE = {
 PERMISSIONS_GROUPS = {
     "MANAGER_GENERAL": [
         # associations
+        "add_activityfield",
+        "change_activityfield",
+        "delete_activityfield",
+        "view_activityfield",
         "add_association",
         "add_association_any_institution",
         "add_association_all_fields",
@@ -750,8 +758,27 @@ PERMISSIONS_GROUPS = {
         "delete_commission",
         "add_commissionfund",
         "delete_commissionfund",
+        "view_commissionfund",
+        "add_fund",
+        "change_fund",
+        "delete_fund",
+        "view_fund",
+        "add_institution",
+        "change_institution",
+        "delete_institution",
+        "view_institution",
+        "add_institutioncomponent",
+        "change_institutioncomponent",
+        "delete_institutioncomponent",
+        "view_institutioncomponent",
         # contents
         "change_content",
+        "add_logo",
+        "change_logo",
+        "delete_logo",
+        "view_logo",
+        "change_setting",
+        "view_setting",
         # documents
         "add_document",
         "add_document_any_fund",
@@ -769,6 +796,10 @@ PERMISSIONS_GROUPS = {
         "view_documentupload",
         "view_documentupload_all",
         # projects
+        "add_category",
+        "change_category",
+        "delete_category",
+        "view_category",
         "change_project",
         "change_project_as_validator",
         "view_project",
@@ -812,6 +843,9 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        # mail templates
+        "change_mailtemplate",
+        "view_mailtemplate",
     ],
     "MANAGER_INSTITUTION": [
         # associations

@@ -395,7 +395,7 @@
     "model": "contents.content",
     "pk": 31,
     "fields": {
-      "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
+      "code": "NOTIFICATION_FSDIE_POSTPONE",
       "label": "PDF de notification de report de subventionnement FSDIE.",
       "title": "Notification de report FSDIE",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
@@ -451,7 +451,7 @@
     "model": "contents.content",
     "pk": 35,
     "fields": {
-      "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
+      "code": "NOTIFICATION_IDEX_POSTPONE",
       "label": "PDF de notification de report de subventionnement IdEx.",
       "title": "Notification de report IdEx",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",

@@ -105,6 +105,8 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = "{{ association_default_amount_memb
 
 LDAP_ENABLED = "{{ ldap_enabled }}".lower() == "true"
 
+ADMIN_TEST_FEATURES = False
+
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"
 ACCOUNTS_API_CONF["BASE_URL"] = "{{ accounts_api_spore_base_url }}"
