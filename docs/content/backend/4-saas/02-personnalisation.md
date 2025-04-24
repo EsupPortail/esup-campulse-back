@@ -25,8 +25,12 @@ Ces différents templates doivent être répartis en fonction des différents fo
         ├── postpone.html
         └── rejection.html
 ```
-Où FEEX et FPEX représentent les **codes** des fonds définis au sein de l'application.
-Chaque fonds peut disposer de 4 templates correspondants aux différentes actions : attribution (`attribution.html`), décision d'attribution (`decision_attribution.html`), report (`postpone.html`) et rejet (`rejection.html`).
+Où FEEX et FPEX représentent les **acronymes** des fonds définis au sein de l'application.
+Chaque fonds peut disposer de 4 templates correspondants aux différentes actions : 
+- attribution (`attribution.html`)
+- décision d'attribution (`decision_attribution.html`)
+- report (`postpone.html`) 
+- rejet (`rejection.html`)
 Il est vivement conseillé d'avoir un template pour chaque situation, le bon fonctionnement de l'application ne peut être garanti autrement.
 
 > [!WARNING]
@@ -37,7 +41,7 @@ Il est vivement conseillé d'avoir un template pour chaque situation, le bon fon
 ### Balises jinja
 
 Les templates de PDF utilisent tous des balises jinja pour la gestion des contenus.
-Merci de ne pas retirer ou modifier les balises suivantes ainsi que leur contenu, elles sont essentielles à la génération des documents :
+Merci de ne pas retirer ou modifier les balises suivantes ainsi que leur contenu, car elles sont essentielles à la génération des documents :
 - `{% load ... %}` présentes en début de templates, elles permettent de charger les différents modules nécessaires à la génération des documents.
 - `{% resolve %} {% endresolve %}` qui sont utilisées pour interpréter le contenu HTML présent en base de données.
 - `{% if ... %} {% endif %}` qui servent aux conditions.
@@ -48,23 +52,24 @@ Merci de ne pas retirer ou modifier les balises suivantes ainsi que leur contenu
 
 Au sein des différents templates se trouvent beaucoup de balises comme suit : 
 ```html
-    {% trans 'Associative project' %}
+{% trans 'Associative project' %}
 ```
-Ces balises sont des balises utilisées pour les traductions des différents templates dans d'autres langues. 
-La personnalisation des traductions n'étant pas encore disponibles, si l'une des correspondances ne convient il est possible de changer le texte en effaçant complètement la balise et en la remplaçant par le texte brut souhaité.
+Ces balises sont utilisées pour les traductions des différents templates dans d'autres langues. 
+La personnalisation des traductions n'étant pas encore disponibles, si l'une des correspondances ne convient pas, il est possible de changer le texte en effaçant complètement la balise et en la remplaçant par le texte brut souhaité.
+
 A l'heure actuelle, seul le français est supporté, et s'il y a modification d'une traduction directement sur le template, elle ne tiendra pas compte de la locale utilisée.
 
 Un tableau de correspondances des traductions sera bientôt mis à disposition au sein de la documentation.
 
 ### CSS
 
-Les imports de différents fichiers CSS se présentent de la manière suivante au sein des templates : 
+Les imports des différents fichiers CSS se présentent de la manière suivante au sein des templates : 
 ```html
 <link rel="stylesheet" href="{% s3static 'css/exports/project_export.css' %}" type="text/css"/>
 ```
 Il est tout à fait possible de modifier les fichiers CSS importés ou d'en ajouter de nouveaux, tant que le format de balise ci-dessus est strictement respecté (uniquement modifier le chemin vers le fichier CSS voulu).
 
-Du moment que le lien vers le fichier de CSS existe dans le répertoire `css` de l'arborescence, il n'y a aucun nommage particulier à respecter, si ce n'est qu'il ne doit pas contenir d'espaces ou de caractères spéciaux.
+Du moment que le lien vers le fichier de CSS existe dans le répertoire `css` de l'arborescence, il n'y a aucun nommage de fichier particulier à respecter, si ce n'est qu'il ne doit pas contenir d'espaces ou de caractères spéciaux.
 
 Il est tout à fait possible d'adapter les différentes classes CSS utilisées sur les différents éléments du template si celles-ci on été définies dans le CSS customisé.
 
@@ -90,7 +95,7 @@ Des imports d'images (à l'heure actuelle des logos) sont également présents d
 De la même manière que pour l'import de fichiers CSS, il est tout à fait possible d'en ajouter ou d'en modifier, tant que le format de balise ci-dessus est strictement respecté (chemin vers l'image uniquement).
 Il ne faut pas oublier de modifier l'alt des images en conséquence.
 
-Du moment que le lien vers le fichier image existe dans le répertoire `img` de l'arborescence, il n'y a aucun nommage particulier à respecter, si ce n'est qu'il ne doit pas contenir d'espaces ou de caractères spéciaux.
+Du moment que le lien vers le fichier image existe dans le répertoire `img` de l'arborescence, il n'y a aucun nommage de fichier particulier à respecter, si ce n'est qu'il ne doit pas contenir d'espaces ou de caractères spéciaux.
 
 ### Spécificités des notifications
 
@@ -99,4 +104,4 @@ Pour le bon fonctionnement de l'application, il faudra créer ces objets `Conten
 ```txt
 NOTIFICATION_CODEFONDS_ACTION
 ```
-Où `CODEFONDS` représente l'acronyme du fonds désiré en MAJUSCULES, et où `ACTION` peut être remplacé par le nom du template en MAJUSCULES lui aussi et sans l'extension (`ATTRIBUTION` par exemple).
+Où `CODEFONDS` représente l'acronyme du fonds désiré en MAJUSCULES, et où `ACTION` peut être remplacé par le nom du template en MAJUSCULES et sans l'extension (`ATTRIBUTION` par exemple).
