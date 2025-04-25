@@ -45,19 +45,19 @@ class Association(models.Model):
         pregenerated_sizes=["list", "detail"],
         upload_to=get_logo_path,
     )
-    social_object = models.TextField(_("Social object"), default="")
-    current_projects = models.TextField(_("Current projects"), default="")
-    address = models.TextField(_("Address"), default="")
-    zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
-    city = models.CharField(_("City"), max_length=128, default="")
-    country = models.CharField(_("Country"), max_length=128, default="")
-    phone = models.CharField(_("Phone"), default="", max_length=32)
-    siret = models.CharField(_("SIRET"), default="", max_length=14)
+    social_object = models.TextField(_("Social object"), blank=True)
+    current_projects = models.TextField(_("Current projects"), blank=True)
+    address = models.TextField(_("Address"), blank=True)
+    zipcode = models.CharField(_("Zipcode"), max_length=32, blank=True)
+    city = models.CharField(_("City"), max_length=128, blank=True)
+    country = models.CharField(_("Country"), max_length=128, blank=True)
+    phone = models.CharField(_("Phone"), blank=True, max_length=32)
+    siret = models.CharField(_("SIRET"), blank=True, max_length=14)
     website = models.URLField(_("Website"), default="", max_length=200)
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
-    president_names = models.CharField(_("President names"), default="", max_length=256)
-    president_phone = models.CharField(_("President phone"), default="", max_length=32)
-    president_email = models.EmailField(_("President email"), default="", max_length=256)
+    president_names = models.CharField(_("President names"), blank=True, max_length=256)
+    president_phone = models.CharField(_("President phone"), blank=True, max_length=32)
+    president_email = models.EmailField(_("President email"), blank=True, max_length=256)
     is_enabled = models.BooleanField(_("Is enabled"), default=False)
     is_public = models.BooleanField(_("Is public"), default=False)
     is_site = models.BooleanField(_("Is site"), default=settings.ASSOCIATION_IS_SITE_DEFAULT)
@@ -78,12 +78,12 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
-    charter_date = models.DateField(_("Charter date"), null=True)  # date de dernier dépôt de charte
+    charter_date = models.DateField(_("Charter date"), blank=True, null=True)  # date de dernier dépôt de charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
-    approval_date = models.DateField(_("Approval date"), null=True)  # date d'agrément
-    last_goa_date = models.DateField(_("Last GOA date"), null=True)  # date de dernière AGO
-    cga_date = models.DateField(_("CGA date"), null=True)  # date d'AG constitutive
-    social_networks = models.JSONField(default=list)  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
+    approval_date = models.DateField(_("Approval date"), blank=True, null=True)  # date d'agrément
+    last_goa_date = models.DateField(_("Last GOA date"), blank=True, null=True)  # date de dernière AGO
+    cga_date = models.DateField(_("CGA date"), blank=True, null=True)  # date d'AG constitutive
+    social_networks = models.JSONField(default=list, blank=True)  # JSON format : [{"type": "sn_name", "location": "sn_url"}]
     institution = models.ForeignKey(
         Institution,
         verbose_name=_("Institution"),
