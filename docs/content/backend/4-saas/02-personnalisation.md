@@ -31,10 +31,11 @@ Chaque fonds peut disposer de 4 templates correspondants aux différentes action
 - décision d'attribution (`decision_attribution.html`)
 - report (`postpone.html`) 
 - rejet (`rejection.html`)
+
 Il est vivement conseillé d'avoir un template pour chaque situation, le bon fonctionnement de l'application ne peut être garanti autrement.
 
 > [!WARNING]
-> Les chemins de templates de notifications doivent être renseignés dans les objets fonds correspondants en base de données (champs de chemins) sous le format suivant : `FONDS/action.html` en fonction de l'arborescence définie au dessus.
+> Les chemins de templates de notifications doivent être renseignés dans les objets fonds correspondants en base de données (champs de chemins) qui est disponible dans l'admin Django (Accueil › Commissions › Fonds) sous le format suivant : `FONDS/action.html` en fonction de l'arborescence définie au dessus.
 
 ## Contenus des différents PDFs et modification de ceux-ci
 
@@ -55,7 +56,7 @@ Au sein des différents templates se trouvent beaucoup de balises comme suit :
 {% trans 'Associative project' %}
 ```
 Ces balises sont utilisées pour les traductions des différents templates dans d'autres langues. 
-La personnalisation des traductions n'étant pas encore disponibles, si l'une des correspondances ne convient pas, il est possible de changer le texte en effaçant complètement la balise et en la remplaçant par le texte brut souhaité.
+La personnalisation des traductions n'étant pas encore disponible, si l'une des correspondances ne convient pas, il est possible de changer le texte en effaçant complètement la balise et en la remplaçant par le texte brut souhaité.
 
 A l'heure actuelle, seul le français est supporté, et s'il y a modification d'une traduction directement sur le template, elle ne tiendra pas compte de la locale utilisée.
 
@@ -100,7 +101,9 @@ Du moment que le lien vers le fichier image existe dans le répertoire `img` de 
 ### Spécificités des notifications
 
 Ces fichiers se servent majoritairement de contenus html déjà stockés en base de données : objets `Contenu` dont le code commence par `NOTIFICATION_`.
-Pour le bon fonctionnement de l'application, il faudra créer ces objets `Contenu` en fonction des différents fonds et actions. Leur code doit être formatté comme suit : 
+Pour le bon fonctionnement de l'application, il faudra créer ces objets `Contenu` en fonction des différents fonds et actions souhaités dans l'application (FPEX et FEEX sont des données d'initialisation de l'application, merci de ne pas les utiliser en production sans modifications préalables). 
+Ces contenus sont disponibles dans l'admin Django (Accueil › Commissions › Fonds).
+Leur code doit être formatté comme suit : 
 ```txt
 NOTIFICATION_CODEFONDS_ACTION
 ```
