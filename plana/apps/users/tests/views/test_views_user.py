@@ -265,9 +265,9 @@ class UserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/",
             {
-                "first_name": "Bourvil",
-                "last_name": "André",
-                "email": "bourvil@splatoon.com",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@doe.com",
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -281,9 +281,9 @@ class UserViewsTests(TestCase):
         response_student = self.student_client.post(
             "/users/",
             {
-                "first_name": "Bourvil",
-                "last_name": "André",
-                "email": "bourvil@splatoon.com",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@doe.com",
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
@@ -297,9 +297,9 @@ class UserViewsTests(TestCase):
         response_manager = self.manager_client.post(
             "/users/",
             {
-                "first_name": "Poin-Poin-Poin-Poin-Poin",
-                "last_name": "Vicetone",
-                "email": f"astronomia@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": f"jd@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -315,13 +315,13 @@ class UserViewsTests(TestCase):
         self.manager_client.post(
             "/users/",
             {
-                "first_name": "Didier",
-                "last_name": "Serveur",
-                "email": "serveur-didier@gmail.com",
-                "phone": "serveur didier",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@doe.com",
+                "phone": "phone"
             },
         )
-        user_cnt = User.objects.filter(email="serveur-didier@gmail.com").count()
+        user_cnt = User.objects.filter(email="john@doe.com").count()
         self.assertEqual(user_cnt, 0)
 
     def test_manager_post_user(self):
@@ -332,14 +332,14 @@ class UserViewsTests(TestCase):
         - The user has been created.
         - An email is received if creation is successful.
         """
-        username = "bourvil@splatoon.com"
+        username = "john@doe.com"
         response_manager = self.manager_client.post(
             "/users/",
             {
-                "first_name": "Bourvil",
-                "last_name": "André",
+                "first_name": "John",
+                "last_name": "Doe",
                 "email": username,
-                "phone": "0836656565",
+                "phone": "1234567890"
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
@@ -356,13 +356,13 @@ class UserViewsTests(TestCase):
         - The CAS user has been created.
         - An email is received if creation is successful.
         """
-        username = "opaline"
-        email = "opaline@unistra.fr"
+        username = "campulse"
+        email = "campulse@unistra.fr"
         response_manager = self.manager_client.post(
             "/users/",
             {
-                "first_name": "Opaline",
-                "last_name": "Gropif",
+                "first_name": "Campulse",
+                "last_name": "Plana",
                 "username": username,
                 "email": email,
                 "is_cas": True,
@@ -435,7 +435,7 @@ class UserViewsTests(TestCase):
 
         - Always returns a 405 no matter which role tries to acces it
         """
-        response_manager = self.manager_client.put(f"/users/{self.student_user_id}", {"username": "Aurevoirg"})
+        response_manager = self.manager_client.put(f"/users/{self.student_user_id}", {"username": "NotAllowed"})
         self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_anonymous_patch_user_detail(self):
@@ -445,7 +445,7 @@ class UserViewsTests(TestCase):
         - An anonymous user cannot execute this request.
         """
         response_anonymous = self.anonymous_client.patch(
-            f"/users/{self.unvalidated_user_id}", {"username": "Bienvenueg"}
+            f"/users/{self.unvalidated_user_id}", {"username": "Unauthorized"}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -457,7 +457,7 @@ class UserViewsTests(TestCase):
         """
         response_student = self.student_client.patch(
             f"/users/{self.unvalidated_user_id}",
-            data={"username": "Bienvenueg"},
+            data={"username": "Forbidden"},
             content_type="application/json",
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
@@ -470,7 +470,7 @@ class UserViewsTests(TestCase):
         """
         response_manager = self.manager_client.patch(
             "/users/9999",
-            data={"username": "Joséphine Ange Gardien"},
+            data={"username": "Not Found"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_404_NOT_FOUND)
@@ -483,7 +483,7 @@ class UserViewsTests(TestCase):
         """
         response_manager = self.manager_client.patch(
             f"/users/{self.student_user_id}",
-            data={"email": f"camping-paradis-cest-mieux-que-la-vie@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"},
+            data={"email": f"campulse@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -497,7 +497,7 @@ class UserViewsTests(TestCase):
         user_manager = User.objects.get(email=self.manager_misc_user_name)
         response_manager = self.manager_client.patch(
             f"/users/{user_manager.pk}",
-            data={"email": "gestionnaire-saucisse@mail.tld"},
+            data={"email": "gestionnaire-forbidden@mail.tld"},
             content_type="application/json",
         )
         user_manager = User.objects.get(email=self.manager_misc_user_name)
@@ -513,7 +513,7 @@ class UserViewsTests(TestCase):
         """
         response_manager = self.manager_client.patch(
             f"/users/{self.unvalidated_user_id}",
-            data={"phone": "oui"},
+            data={"phone": "phone"},
             content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
@@ -541,8 +541,8 @@ class UserViewsTests(TestCase):
         self.manager_client.patch(
             f"/users/{user_cas.pk}",
             data={
-                "username": "JesuisCASg",
-                "email": "coincoincoing@zut.com",
+                "username": "UserCAS",
+                "email": "user@cas.fr",
                 "is_validated_by_admin": True,
             },
             content_type="application/json",
@@ -565,8 +565,8 @@ class UserViewsTests(TestCase):
         response_manager = self.manager_client.patch(
             f"/users/{self.unvalidated_user_id}",
             data={
-                "email": "aymar-venceslas@oui.org",
-                "phone": "0836656565",
+                "email": "campulse@plana.org",
+                "phone": "0102030405",
                 "is_validated_by_admin": True,
                 "can_submit_projects": False,
             },
@@ -575,8 +575,8 @@ class UserViewsTests(TestCase):
         user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         self.assertEqual(History.objects.filter(action_title="USER_VALIDATED").count(), 1)
-        self.assertEqual(user.phone, "0836656565")
-        self.assertEqual(user.username, "aymar-venceslas@oui.org")
+        self.assertEqual(user.phone, "0102030405")
+        self.assertEqual(user.username, "campulse@plana.org")
         self.assertEqual(user.can_submit_projects, False)
         self.assertTrue(len(mail.outbox))
 

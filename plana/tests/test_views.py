@@ -26,5 +26,5 @@ class RootViewsTests(TestCase):
 
     def test_not_found(self):
         """404 test."""
-        response = self.client.get("/saucisse")
+        response = self.client.get("/nothinghere")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
