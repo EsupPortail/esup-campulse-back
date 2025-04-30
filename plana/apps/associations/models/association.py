@@ -53,7 +53,7 @@ class Association(models.Model):
     country = models.CharField(_("Country"), max_length=128, blank=True)
     phone = models.CharField(_("Phone"), blank=True, max_length=32)
     siret = models.CharField(_("SIRET"), blank=True, max_length=14)
-    website = models.URLField(_("Website"), default="", max_length=200)
+    website = models.URLField(_("Website"), blank=True, max_length=200)
     student_count = models.PositiveIntegerField(_("Student count"), default=0)
     president_names = models.CharField(_("President names"), blank=True, max_length=256)
     president_phone = models.CharField(_("President phone"), blank=True, max_length=32)
