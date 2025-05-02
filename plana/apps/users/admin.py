@@ -119,12 +119,19 @@ class GroupInstitutionFundUserInline(SecuredInlineAdmin):
     form = GroupInstitutionFundUserForm
 
 
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+        exclude = ('password',)
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """List view for users, and define new way to manage user."""
 
     add_form = ManagerUserCreationForm
-    change_form = UserChangeForm
+    change_form = CustomUserChangeForm
     inlines = [GroupInstitutionFundUserInline]
 
     list_display = [

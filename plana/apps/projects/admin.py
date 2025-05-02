@@ -169,13 +169,6 @@ generate_pdf_decision_attribution = GeneratePDFAction("DECISION_ATTRIBUTION", "G
 @admin.register(ProjectCommissionFund)
 class ProjectCommissionFundAdmin(admin.ModelAdmin):
     """List view for project commission funds."""
-    if settings.ADMIN_TEST_FEATURES:
-        actions = [
-            generate_pdf_attribution,
-            generate_pdf_rejection,
-            generate_pdf_postpone,
-            generate_pdf_decision_attribution,
-        ]
 
     list_display = ["project", "commission_fund", "is_validated_by_admin"]
     list_filter = ["is_validated_by_admin"]
@@ -190,3 +183,20 @@ class ProjectCommissionFundAdmin(admin.ModelAdmin):
         if not request.user.is_superuser and not settings.ADMIN_TEST_FEATURES:
             return [field.name for field in self.model._meta.fields]
         return list(super().get_readonly_fields(request))
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if request.user.is_superuser or settings.ADMIN_TEST_FEATURES:
+            custom_actions = {
+                'generate_pdf_attribution': (
+                    generate_pdf_attribution, 'generate_pdf_attribution', generate_pdf_attribution.short_description),
+                'generate_pdf_rejection': (
+                    generate_pdf_rejection, 'generate_pdf_rejection', generate_pdf_rejection.short_description),
+                'generate_pdf_postpone': (
+                    generate_pdf_postpone, 'generate_pdf_postpone', generate_pdf_postpone.short_description),
+                'generate_pdf_decision_attribution': (
+                    generate_pdf_decision_attribution, 'generate_pdf_decision_attribution',
+                    generate_pdf_decision_attribution.short_description),
+            }
+            actions.update(custom_actions)
+        return actions

@@ -72,12 +72,12 @@ class AuthUserViewsTests(TestCase):
         - Password must respect some rules.
         """
         fake_passwords = [
-            "ah",
-            "saucisse",
-            "SAUCISSE",
-            "Saucisse",
-            "Saucisse123",
-            "Sociss123+",
+            "oops",
+            "wrong",
+            "THISISWRONG",
+            "WrongToo",
+            "123Failed",
+            "++Nicetry",
         ]
         for fake_password in fake_passwords:
             response_student = self.student_client.post(
@@ -99,8 +99,8 @@ class AuthUserViewsTests(TestCase):
         response_student = self.student_client.post(
             "/users/auth/password/change/",
             {
-                "new_password1": "Saucisse123+",
-                "new_password2": "Saucisse123+",
+                "new_password1": "!StudentTest123+Hello!",
+                "new_password2": "!StudentTest123+Hello!",
             },
         )
         self.assertEqual(response_student.status_code, status.HTTP_200_OK)
@@ -113,7 +113,7 @@ class AuthUserViewsTests(TestCase):
         - Nothing happens if email is wrong.
         """
         response_anonymous = self.anonymous_client.post(
-            "/users/auth/password/reset/", {"email": "auguste-cornouailles@melun.fr"}
+            "/users/auth/password/reset/", {"email": "voidmail@void.fr"}
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
         self.assertFalse(len(mail.outbox))
@@ -138,12 +138,12 @@ class AuthUserViewsTests(TestCase):
         - Password must respect some rules.
         """
         fake_passwords = [
-            "ah",
-            "saucisse",
-            "SAUCISSE",
-            "Saucisse",
-            "Saucisse123",
-            "Sociss123+",
+            "oops",
+            "wrong",
+            "THISISWRONG",
+            "WrongToo",
+            "123Failed",
+            "++Nicetry",
         ]
         user = User.objects.get(id=self.student_user_id)
         for fake_password in fake_passwords:
@@ -169,8 +169,8 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/auth/password/reset/confirm/",
             {
-                "new_password1": "Saucisse123+",
-                "new_password2": "Saucisse123+",
+                "new_password1": "!StudentTest123+Hello!",
+                "new_password2": "!StudentTest123+Hello!",
                 "uid": user_pk_to_url_str(user),
                 "token": default_token_generator.make_token(user),
             },
@@ -187,9 +187,9 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": f"gaufre-a-la-menthe@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
-                "first_name": "Gaufre",
-                "last_name": "Menthe",
+                "email": f"john-doe@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
+                "first_name": "John",
+                "last_name": "Doe",
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
@@ -205,9 +205,9 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": "gaufre-a-la-menthe@jean-michmail.fr",
-                "first_name": "Gaufre",
-                "last_name": "Menthe",
+                "email": "john@doe.fr",
+                "first_name": "John",
+                "last_name": "Doe",
                 "phone": "36 30",
             },
         )
@@ -222,18 +222,18 @@ class AuthUserViewsTests(TestCase):
         - The same user can't be created twice.
         """
         user = {
-            "email": "georges.saucisse@georgeslasaucisse.fr",
-            "first_name": "Georges",
-            "last_name": "La Saucisse",
+            "email": "john.doe@johndoe.fr",
+            "first_name": "John",
+            "last_name": "Doe",
         }
 
         response = self.anonymous_client.post("/users/auth/registration/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = {
-            "email": "Georges.Saucisse@georgeslasaucisse.fr",
-            "first_name": "Georges",
-            "last_name": "La Saucisse",
+            "email": "john.doe@johndoe.fr",
+            "first_name": "John",
+            "last_name": "Doe",
         }
 
         response = self.anonymous_client.post("/users/auth/registration/", user)
@@ -254,25 +254,25 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
-                "email": "michel.moutarde@jaime-le-raisin-de-table.org",
-                "first_name": "Michel",
-                "last_name": "Moutarde",
+                "email": "john2@doe2.com",
+                "first_name": "John2",
+                "last_name": "Doe2",
             },
         )
-        email_address = EmailAddress.objects.get(email="michel.moutarde@jaime-le-raisin-de-table.org")
+        email_address = EmailAddress.objects.get(email="john2@doe2.com")
         key = EmailConfirmationHMAC(email_address=email_address).key
         response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
         self.assertEqual(History.objects.filter(action_title="USER_REGISTERED").count(), 1)
         self.assertTrue(len(mail.outbox))
 
-        email = "damien.mayonnaise@je-prefere-les-crackers-au-sel.org"
+        email = "toto@tutu.fr"
         response_anonymous = self.anonymous_client.post(
             "/users/auth/registration/",
             {
                 "email": email,
-                "first_name": "Damien",
-                "last_name": "Mayonnaise",
+                "first_name": "Toto",
+                "last_name": "Tutu",
             },
         )
         user = User.objects.get(email=email)
@@ -289,7 +289,7 @@ class AuthUserViewsTests(TestCase):
         response_anonymous = self.anonymous_client.post("/users/auth/registration/verify-email/", {"key": key})
         self.assertEqual(response_anonymous.status_code, status.HTTP_200_OK)
 
-        new_email = "philippe.bearnaise@meme-si-je-crache-pas-sur-les-chips-au-vinaigre.org"
+        new_email = "titi@tata.fr"
         user.email = new_email
         user.save()
         new_email_address = EmailAddress.objects.create(user_id=user.id, email=new_email)
@@ -339,7 +339,7 @@ class AuthUserViewsTests(TestCase):
 
         - Always returns a 405 no matter which role tries to access it.
         """
-        response_manager = self.manager_client.put("/users/auth/user/", {"username": "Coucouw"})
+        response_manager = self.manager_client.put("/users/auth/user/", {"username": "NotAllowed"})
         self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_anonymous_patch_auth_user_detail(self):
@@ -348,7 +348,7 @@ class AuthUserViewsTests(TestCase):
 
         - An anonymous user cannot execute this request.
         """
-        response_anonymous = self.anonymous_client.patch("/users/auth/user/", {"username": "Bienvenueg"})
+        response_anonymous = self.anonymous_client.patch("/users/auth/user/", {"username": "Anonymous"})
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_patch_auth_user_detail_restricted_fields(self):
@@ -370,7 +370,7 @@ class AuthUserViewsTests(TestCase):
 
         response_student = self.student_client.patch(
             "/users/auth/user/",
-            data={"username": "jesuisunusurpateur"},
+            data={"username": "im.forbidden"},
             content_type="application/json",
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
@@ -402,7 +402,7 @@ class AuthUserViewsTests(TestCase):
 
         - A student user cannot update his email address with domain-restricted email address.
         """
-        new_email = f"mon-esprit-est-mortadelle@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"
+        new_email = f"johndoe@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}"
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"email": new_email},
@@ -418,7 +418,7 @@ class AuthUserViewsTests(TestCase):
         - A student user can update his email address.
         - Updating the email address doesn't change the username without validation.
         """
-        new_email = "cle-a-molette@ok-motors.com"
+        new_email = "john@doe.com"
         response_student = self.student_client.patch(
             "/users/auth/user/",
             data={"email": new_email},

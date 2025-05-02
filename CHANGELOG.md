@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.1 (02/05/2025)
+
+### Corrections de bugs
+- Champs blankables dans l'admin django pour les associations
+
+### Features et évolutions
+- Génération de notifications d'attribution depuis l'admin django possible sur tous les environnements en tant que superuser
+- MAJ de la documentation pour la personnalisation SaaS de l'application
+
 ## 1.3.0 (24/03/2025)
 
 ### Corrections de bugs
