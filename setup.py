@@ -31,7 +31,7 @@ recursive_requirements('requirements.txt', libraries, dependency_links)
 
 setup(
     name='plana',
-    version='1.3.0',
+    version='1.3.1',
     packages=find_packages(),
     install_requires=libraries,
     dependency_links=dependency_links,
