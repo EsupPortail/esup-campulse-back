@@ -783,6 +783,8 @@ PERMISSIONS_GROUPS = {
         "change_logo",
         "delete_logo",
         "view_logo",
+        "change_setting",
+        "view_setting",
         # documents
         "add_document",
         "add_document_any_fund",

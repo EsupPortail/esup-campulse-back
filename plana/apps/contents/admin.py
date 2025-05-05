@@ -55,3 +55,9 @@ class SettingAdmin(admin.ModelAdmin):
     """List view for settings."""
 
     list_display = ["setting", "parameters"]
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super().get_readonly_fields(request))
+        if not request.user.is_superuser:
+            fields.append("setting")
+        return fields

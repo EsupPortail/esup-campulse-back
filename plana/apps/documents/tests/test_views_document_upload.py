@@ -322,7 +322,7 @@ class DocumentsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         document_data.pop("association", None)
-        document_data["user"] = "bernard-mortadelle@miam.tld"
+        document_data["user"] = "john@doe.tld"
         response = self.student_site_client.post("/documents/uploads", document_data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -628,7 +628,7 @@ class DocumentsViewsTests(TestCase):
         - A user with proper permissions can execute this request.
         - Serializers fields must be valid.
         """
-        patch_data = {"validated_date": "saucisse"}
+        patch_data = {"validated_date": "test"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
@@ -644,14 +644,14 @@ class DocumentsViewsTests(TestCase):
         - Document object is successfully changed in db.
         """
         self.assertFalse(len(mail.outbox))
-        patch_data = {"validated_date": "2023-03-15", "comment": "Cuisse de poulet"}
+        patch_data = {"validated_date": "2023-03-15", "comment": "Comment"}
         response = self.general_client.patch(
             f"/documents/uploads/{self.new_document.data['id']}",
             data=patch_data,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["comment"], "Cuisse de poulet")
+        self.assertEqual(response.data["comment"], "Comment")
         self.assertTrue(len(mail.outbox))
 
         response = self.general_client.patch(
@@ -660,7 +660,7 @@ class DocumentsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["comment"], "Cuisse de poulet")
+        self.assertEqual(response.data["comment"], "Comment")
 
         document_upload = DocumentUpload.objects.get(id=self.new_document.data['id'])
         self.assertNotEqual(document_upload.validated_date, None)

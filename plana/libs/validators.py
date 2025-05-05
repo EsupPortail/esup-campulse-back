@@ -14,8 +14,6 @@ from referencing import Registry
 class JsonSchemaValidator:
     """Validate JSON fields in database."""
 
-    # Scandal : some parts here are from ThierrYxxxxxx
-
     messages = {'invalid': _('Error : %(exception)s')}
 
     def __init__(self, schema_path):

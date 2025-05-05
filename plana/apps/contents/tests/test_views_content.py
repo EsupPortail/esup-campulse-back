@@ -116,7 +116,7 @@ class ContentsViewsTests(TestCase):
         - Always returns a 405 no matter which user tries to access it.
         """
         response = self.client.put(
-            "/contents/1", {"body": "Bienvenue sur Opaline, le site de la vie associative étudiante de l'UNISTRA"}
+            "/contents/1", {"body": "Bienvenue sur Campulse, le site de la vie associative étudiante de l'UNISTRA"}
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -128,7 +128,7 @@ class ContentsViewsTests(TestCase):
         """
         response_anonymous = self.client.patch(
             "/contents/1",
-            {"body": "L'application Opaline a vu le jour en Septembre 2023."},
+            {"body": "L'application Campulse a vu le jour en Septembre 2023."},
             content_type="application/json",
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -150,7 +150,7 @@ class ContentsViewsTests(TestCase):
 
         - A user without permission can't execute this request.
         """
-        patch_data = {"body": "Déposez vos chartes Site Alsace, FSDIE, IdEx et Culture-ActionS sur Opaline."}
+        patch_data = {"body": "Déposez vos chartes Site Alsace, FSDIE, IdEx et Culture-ActionS sur Campulse."}
         response = self.institution_client.patch("/contents/1", data=patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -172,10 +172,10 @@ class ContentsViewsTests(TestCase):
         - A general manager can edit contents.
         """
         content_id = 1
-        patch_data = {"body": "C'est le nom du projet."}
+        patch_data = {"body": "Campulse"}
         response = self.general_client.patch(
             f"/contents/{content_id}", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = Content.objects.get(id=content_id)
-        self.assertEqual(content.body, "C'est le nom du projet.")
+        self.assertEqual(content.body, "Campulse")

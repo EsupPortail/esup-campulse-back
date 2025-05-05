@@ -20,8 +20,8 @@ class TestLocalUserPasswordChangeSerializer(TestCase):
     def setUpTestData(cls):
         """Defalut data to test password change."""
         user = User.objects.create_user(
-            username="Georges",
-            email="georges@saucisse.fr",
+            username="JohnDoe",
+            email="john@doe.fr",
             is_validated_by_admin=True,
         )
 
@@ -51,13 +51,13 @@ class TestLocalUserPasswordResetSerializer(TestCase):
     def setUpTestData(cls):
         """Defalut data to test password reset."""
         user = User.objects.create_user(
-            username="Georges",
-            email="georges@saucisse.fr",
+            username="JohnDoe",
+            email="john@doe.fr",
             is_validated_by_admin=True,
         )
 
         request = APIRequestFactory().post({}, format="json")
-        request.data = {"email": "georges@saucisse.fr"}
+        request.data = {"email": "john@doe.fr"}
 
         cls.request = request
         cls.user = user
@@ -86,11 +86,11 @@ class TestCASUserPasswordChangeSerializer(TestCase):
     def setUpTestData(cls):
         """Defalut data to test password change with CAS."""
         user = User.objects.create_user(
-            username="GeorgesCAS",
-            email="georges-cas@unistra.fr",
+            username="PatriciaCAS",
+            email="patricia-cas@unistra.fr",
             is_validated_by_admin=True,
         )
-        SocialAccount.objects.create(provider="cas", uid="GeorgesCAS", user_id=user.id)
+        SocialAccount.objects.create(provider="cas", uid="PatriciaCAS", user_id=user.id)
 
         request = APIRequestFactory().post({}, format="json")
         force_authenticate(request, user)
@@ -120,14 +120,14 @@ class TestCASUserPasswordResetSerializer(TestCase):
     def setUpTestData(cls):
         """Defalut data to test password reset with CAS."""
         user = User.objects.create_user(
-            username="GeorgesCAS",
-            email="georges-cas@unistra.fr",
+            username="GeorgeLuCAS",
+            email="george-lucas@unistra.fr",
             is_validated_by_admin=True,
         )
-        SocialAccount.objects.create(provider="cas", uid="GeorgesCAS", user_id=user.id)
+        SocialAccount.objects.create(provider="cas", uid="GeorgeLuCAS", user_id=user.id)
 
         request = APIRequestFactory().post({}, format="json")
-        request.data = {"email": "georges-cas@unistra.fr"}
+        request.data = {"email": "george-lucas@unistra.fr"}
 
         cls.request = request
         cls.user = user

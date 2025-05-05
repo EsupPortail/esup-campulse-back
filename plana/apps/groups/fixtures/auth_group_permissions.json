@@ -2038,5 +2038,21 @@
       "group": 6,
       "permission": 186
     }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 256,
+    "fields": {
+      "group": 1,
+      "permission": 201
+    }
+  },
+  {
+    "model": "auth.group_permissions",
+    "pk": 257,
+    "fields": {
+      "group": 1,
+      "permission": 199
+    }
   }
 ]
