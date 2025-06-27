@@ -74,7 +74,7 @@ def prod_lille():
     """Define prod stage."""
     env.roledefs = {
         'web': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],
-        'lb': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],
+        'lb': ['rp-shib3-prod-1.srv.unistra.fr', 'rp-shib3-prod-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-lille-prod'

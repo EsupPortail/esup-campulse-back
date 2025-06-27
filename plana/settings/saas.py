@@ -80,7 +80,7 @@ EMAIL_HOST_USER = "{{ email_host_user }}"
 EMAIL_HOST_PASSWORD = "{{ email_host_password }}"
 EMAIL_USE_TLS = "{{ email_use_tls }}".lower() == "true"
 
-EMAIL_TEMPLATE_FRONTEND_URL = "https://campulse-demo.unistra.fr/"
+EMAIL_TEMPLATE_FRONTEND_URL = "{{ email_template_frontend_url }}"
 
 
 #####################
