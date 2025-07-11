@@ -14,12 +14,12 @@ class ContentsViewsTests(TestCase):
 
     fixtures = [
         "account_emailaddress.json",
-        "commissions_fund.json",
-        "contents_content.json",
+        "tests/commissions_fund.json",
+        "tests/contents_content.json",
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "users_user.json",
         "users_groupinstitutionfunduser.json",
     ]
@@ -157,10 +157,10 @@ class ContentsViewsTests(TestCase):
         - A general manager can edit contents.
         """
         content_id = 1
-        patch_data = {"body": "C'est le nom du projet."}
+        patch_data = {"body": "Campulse"}
         response = self.general_client.patch(
             f"/contents/{content_id}", data=patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = Content.objects.get(id=content_id)
-        self.assertEqual(content.body, "C'est le nom du projet.")
+        self.assertEqual(content.body, "Campulse")

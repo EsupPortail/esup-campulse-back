@@ -36,6 +36,10 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["*"]
 
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
+# CSRF_TRUSTED_ORIGINS = "{{ csrf_trusted_origins }}".split()
+
 
 #####################
 # Log configuration #
@@ -48,6 +52,29 @@ for logger in LOGGING["loggers"]:
     LOGGING["loggers"][logger]["level"] = "DEBUG"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
+
+
+#########################
+# Django REST Framework #
+#########################
+
+REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = [
+    "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+]
+
+
+##################
+# Authentication #
+##################
+
+SIMPLE_JWT = {
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": settings.SECRET_KEY,
+    "VERIFYING_KEY": "",
+}
+
+REST_AUTH["JWT_AUTH_COOKIE"] = "plana-auth"
+REST_AUTH["JWT_AUTH_REFRESH_COOKIE"] = "plana-refresh-auth"
 
 
 ##########
@@ -70,36 +97,14 @@ THUMBNAILS["METADATA"]["BACKEND"] = "thumbnails.backends.metadata.DatabaseBacken
 THUMBNAILS["STORAGE"]["BACKEND"] = "thumbnails.tests.storage.TemporaryStorage"
 
 
-#########################
-# DJANGO REST FRAMEWORK #
-#########################
-
-REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = [
-    "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-]
-
-
-##################
-# AUTHENTICATION #
-##################
-
-SIMPLE_JWT = {
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": settings.SECRET_KEY,
-    "VERIFYING_KEY": "",
-}
-
-REST_AUTH["JWT_AUTH_COOKIE"] = "plana-auth"
-REST_AUTH["JWT_AUTH_REFRESH_COOKIE"] = "plana-refresh-auth"
-
-
 #####################
 # S3 storage config #
 #####################
 
 AWS_ACCESS_KEY_ID = "FAKE"
 AWS_SECRET_ACCESS_KEY = "FAKE"
-AWS_STORAGE_BUCKET_NAME = "FAKE"
+AWS_STORAGE_PUBLIC_BUCKET_NAME = "FAKE"
+AWS_STORAGE_PRIVATE_BUCKET_NAME = "FAKEPRIVATE"
 AWS_S3_ENDPOINT_URL = "FAKE"
 
 S3_PDF_FILEPATH = "."

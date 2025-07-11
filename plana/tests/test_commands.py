@@ -23,7 +23,7 @@ User = get_user_model()
 class AccountExpirationCommandTest(TestCase):
     """Test account_expiration command."""
 
-    fixtures = ['auth_group', 'mailtemplatevars', 'mailtemplates', 'contents_setting']
+    fixtures = ['auth_group', 'mailtemplatevars', 'mailtemplates', 'tests/contents_setting']
 
     def setUp(self):
         """Cache users."""
@@ -83,8 +83,8 @@ class AssociationExpirationCommandTest(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -141,11 +141,11 @@ class CommissionExpirationCommandTest(TestCase):
         "account_emailaddress.json",
         "associations_activityfield.json",
         "associations_association.json",
-        "commissions_fund.json",
+        "tests/commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_project.json",
         "projects_projectcommissionfund.json",
@@ -194,11 +194,11 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "commissions_fund.json",
-        "contents_setting.json",
-        "documents_document.json",
+        "tests/commissions_fund.json",
+        "tests/contents_setting.json",
+        "tests/documents_document.json",
         "documents_documentupload.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -272,11 +272,11 @@ class DocumentExpirationDayCommandTest(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "commissions_fund.json",
-        "contents_setting.json",
-        "documents_document.json",
+        "tests/commissions_fund.json",
+        "tests/contents_setting.json",
+        "tests/documents_document.json",
         "documents_documentupload.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -350,8 +350,8 @@ class GOAExpirationCommandTest(TestCase):
         "associations_activityfield.json",
         "associations_association.json",
         "auth_group.json",
-        "commissions_fund.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -379,7 +379,7 @@ class GOAExpirationCommandTest(TestCase):
 class HistoryExpirationCommandTest(TestCase):
     """Test history_expiration command."""
 
-    fixtures = ["contents_setting.json", "users_user.json"]
+    fixtures = ["tests/contents_setting.json", "users_user.json"]
 
     def setUp(self):
         """Cache all history."""
@@ -415,7 +415,7 @@ class PasswordExpirationCommandTest(TestCase):
     """Test password_expiration command."""
 
     fixtures = [
-        "contents_setting.json",
+        "tests/contents_setting.json",
         "mailtemplates",
         "mailtemplatevars",
         "users_user.json",
@@ -475,11 +475,11 @@ class ProjectExpirationCommandTest(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
+        "tests/commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -517,11 +517,11 @@ class ReviewExpirationCommandTest(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
+        "tests/commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",

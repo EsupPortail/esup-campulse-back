@@ -21,9 +21,9 @@ class DocumentsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "documents_document.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/documents_document.json",
+        "tests/institutions_institution.json",
         "users_groupinstitutionfunduser.json",
         "users_user.json",
     ]

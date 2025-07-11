@@ -12,7 +12,7 @@ class AssociationsModelsTests(TestCase):
     fixtures = [
         "associations_activityfield.json",
         "associations_association.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
     ]
 

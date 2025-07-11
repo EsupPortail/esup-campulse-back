@@ -1,0 +1,552 @@
+[
+  {
+    "model": "documents.document",
+    "pk": 1,
+    "fields": {
+      "name": "Charte Site",
+      "acronym": "CHARTE_SITE",
+      "description": "Charte signée par le président d'une association Site",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "expiration_day": "08-31",
+      "process_type": "CHARTER_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 2,
+    "fields": {
+      "name": "RGPD Site",
+      "acronym": "RGPD_SITE",
+      "description": "Charte RGPD signée par le président d'une association Site",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "expiration_day": "08-31",
+      "process_type": "CHARTER_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 3,
+    "fields": {
+      "name": "Charte FSDIE",
+      "acronym": "CHARTE_FSDIE",
+      "description": "Charte Fonds de Solidarité et de Développement des Initiatives Étudiantes",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "expiration_day": "08-31",
+      "fund_id": 1,
+      "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 4,
+    "fields": {
+      "name": "Charte IdEx",
+      "acronym": "CHARTE_IDEX",
+      "description": "Charte Initiative d'Excellence « Creative Thinkers »",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "expiration_day": "08-31",
+      "fund_id": 2,
+      "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 5,
+    "fields": {
+      "name": "RGPD FSDIE",
+      "acronym": "RGPD_FSDIE",
+      "description": "Charte RGPD Fonds de Solidarité et de Développement des Initiatives Étudiantes",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "expiration_day": "08-31",
+      "fund_id": 1,
+      "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 6,
+    "fields": {
+      "name": "RGPD IdEx",
+      "acronym": "RGPD_IDEX",
+      "description": "Charte RGPD Initiative d'Excellence « Creative Thinkers »",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "expiration_day": "08-31",
+      "fund_id": 2,
+      "process_type": "CHARTER_PROJECT_FUND",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 7,
+    "fields": {
+      "name": "Charte Culture-ActionS",
+      "acronym": "CHARTE_CULTURE_ACTIONS",
+      "description": "Charte Culture-ActionS",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "fund_id": 3,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 8,
+    "fields": {
+      "name": "RGPD Culture-ActionS",
+      "acronym": "RGPD_CULTURE_ACTIONS",
+      "description": "Charte RGPD Culture-ActionS",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "fund_id": 3,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 9,
+    "fields": {
+      "name": "Complément IdEx",
+      "acronym": "COMPLEMENT_IDEX",
+      "description": "Complément IdEx du formulaire de demande de subventions",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "fund_id": 2,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 10,
+    "fields": {
+      "name": "Budget Prévisionnel",
+      "acronym": "BUDGET_PREVISIONNEL",
+      "description": "Budget Prévisionnel",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 11,
+    "fields": {
+      "name": "Justificatif d'association 1",
+      "acronym": "JUSTIFICATIF_ASSOCIATION_1",
+      "description": "Description du justificatif d'association 1",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 12,
+    "fields": {
+      "name": "Justificatif d'association 2",
+      "acronym": "JUSTIFICATIF_ASSOCIATION_2",
+      "description": "Description du justificatif d'association 2",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 13,
+    "fields": {
+      "name": "Justificatifs d'association 3",
+      "acronym": "JUSTIFICATIFS_ASSOCIATION_3",
+      "description": "Description des justificatifs d'association 3",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 14,
+    "fields": {
+      "name": "Justificatif d'association 4",
+      "acronym": "JUSTIFICATIF_ASSOCIATION_4",
+      "description": "Description du justificatif d'association 4",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 15,
+    "fields": {
+      "name": "Justificatif facultatif d'association 5",
+      "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_5",
+      "description": "Description du justificatif facultatif d'association 5",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 16,
+    "fields": {
+      "name": "Justificatif d'inscription 1",
+      "acronym": "JUSTIFICATIF_INSCRIPTION_1",
+      "description": "Premier justificatif demandé à l'inscription d'un compte étudiant",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_USER",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 17,
+    "fields": {
+      "name": "Justificatif d'inscription 2",
+      "acronym": "JUSTIFICATIF_INSCRIPTION_2",
+      "description": "Second justificatif demandé à l'inscription d'un compte étudiant",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_USER",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 18,
+    "fields": {
+      "name": "Justificatif de projet 1",
+      "acronym": "JUSTIFICATIF_PROJET_1",
+      "description": "Description du justificatif de projet 1",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 19,
+    "fields": {
+      "name": "Justificatif de projet 2",
+      "acronym": "JUSTIFICATIF_PROJET_2",
+      "description": "Description du justificatif de projet 2",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 20,
+    "fields": {
+      "name": "Justificatifs facultatifs de projet 3",
+      "acronym": "JUSTIFICATIFS_FACULTATIFS_PROJET_3",
+      "description": "Description des justificatifs facultatifs de projet 3",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.oasis.opendocument.text",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/x-7z-compressed",
+        "application/x-bzip2",
+        "application/x-rar-compressed",
+        "application/x-tar",
+        "application/zip",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 21,
+    "fields": {
+      "name": "Justificatifs facultatifs de projet 4",
+      "acronym": "JUSTIFICATIFS_FACULTATIFS_PROJET_4",
+      "description": "Description des justificatifs facultatifs de projet 4",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 22,
+    "fields": {
+      "name": "Justificatif de bilan 1",
+      "acronym": "JUSTIFICATIF_BILAN_1",
+      "description": "Description du justificatif de bilan 1",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/vnd.ms-excel",
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 23,
+    "fields": {
+      "name": "Justificatif facultatifs de bilan 2",
+      "acronym": "JUSTIFICATIF_FACULTATIFS_BILAN_2",
+      "description": "Description des justificatifs facultatifs de bilan 2",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 24,
+    "fields": {
+      "name": "Justificatifs facultatifs de bilan 3",
+      "acronym": "JUSTIFICATIFS_FACULTATIFS_BILAN_3",
+      "description": "Description des justificatifs facultatifs de bilan 3",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 25,
+    "fields": {
+      "name": "Justificatif facultatif de bilan 4",
+      "acronym": "JUSTIFICATIF_FACULTATIF_BILAN_4",
+      "description": "Description du justificatif facultatif de bilan 4",
+      "contact": "???",
+      "is_multiple": true,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_PROJECT_REVIEW",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 27,
+    "fields": {
+      "name": "Justificatif d'association 6",
+      "acronym": "JUSTIFICATIF_ASSOCIATION_6",
+      "description": "Description du justificatif d'association 6",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 28,
+    "fields": {
+      "name": "Justificatif facultatif d'association 7",
+      "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_7",
+      "description": "Description du justificatif facultatif d'association 7",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 29,
+    "fields": {
+      "name": "Justificatif facultatif d'association 8",
+      "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_8",
+      "description": "Description du justificatif facultatif d'association 8",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": false,
+      "process_type": "DOCUMENT_ASSOCIATION",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    }
+  }
+]

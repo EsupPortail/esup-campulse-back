@@ -60,7 +60,8 @@ def preprod_lille():
         'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
         'migration_site_name': 'MIGRATION_SITE_NAME',
         's3_access_key': 'AWS_ACCESS_KEY_ID',
-        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_bucket': 'AWS_STORAGE_PUBLIC_BUCKET_NAME',
+        's3_bucket_private': 'AWS_STORAGE_PRIVATE_BUCKET_NAME',
         's3_endpoint': 'AWS_S3_ENDPOINT_URL',
         's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
         'secret_key': 'SECRET_KEY',
@@ -73,7 +74,7 @@ def prod_lille():
     """Define prod stage."""
     env.roledefs = {
         'web': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],
-        'lb': ['saas-lille-plana-prod-1.srv.unistra.fr', 'saas-lille-plana-prod-2.srv.unistra.fr'],
+        'lb': ['rp-shib3-prod-1.srv.unistra.fr', 'rp-shib3-prod-2.srv.unistra.fr'],
     }
     # env.user = 'root'  # user for ssh
     env.application_name = 'api-lille-prod'
@@ -119,7 +120,8 @@ def prod_lille():
         'migration_site_domain': 'MIGRATION_SITE_DOMAIN',
         'migration_site_name': 'MIGRATION_SITE_NAME',
         's3_access_key': 'AWS_ACCESS_KEY_ID',
-        's3_bucket': 'AWS_STORAGE_BUCKET_NAME',
+        's3_bucket': 'AWS_STORAGE_PUBLIC_BUCKET_NAME',
+        's3_bucket_private': 'AWS_STORAGE_PRIVATE_BUCKET_NAME',
         's3_endpoint': 'AWS_S3_ENDPOINT_URL',
         's3_secret_key': 'AWS_SECRET_ACCESS_KEY',
         'secret_key': 'SECRET_KEY',

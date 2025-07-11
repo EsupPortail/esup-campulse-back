@@ -32,10 +32,10 @@ class AssociationsViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "documents_document.json",
+        "tests/commissions_fund.json",
+        "tests/documents_document.json",
         "documents_documentupload.json",
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -313,7 +313,7 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les Fans de Georges la Saucisse",
+                "name": "Les Fans de Campulse",
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
@@ -327,7 +327,7 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les Fans de Georges la Saucisse",
+                "name": "Les Fans de Campulse",
                 "institution": 2,
             },
         )
@@ -354,7 +354,7 @@ class AssociationsViewsTests(TestCase):
         response = self.client.post(
             "/associations/",
             {
-                "name": "Quelle chanteuse se connecte sans compte à l'application ? Patricia CAS",
+                "name": "Unauthorized Association",
                 "institution": 2,
             },
         )
@@ -371,7 +371,7 @@ class AssociationsViewsTests(TestCase):
         response_institution = self.institution_client.post(
             "/associations/",
             {
-                "name": "Le réalisateur de Star Wars c'est George LuCAS.",
+                "name": "Forbidden association",
                 "institution": 2,
             },
         )
@@ -380,7 +380,7 @@ class AssociationsViewsTests(TestCase):
         response_misc = self.misc_client.post(
             "/associations/",
             {
-                "name": "Quand Brice de Nice se connecte via CAS, c'est CASsé.",
+                "name": "Also forbidden association",
                 "institution": 2,
             },
         )
@@ -388,7 +388,7 @@ class AssociationsViewsTests(TestCase):
 
         response_misc = self.misc_client.post(
             "/associations/",
-            {"name": "Dans mes gâteaux je mets de la CASsonnade.", "is_public": True},
+            {"name": "Another forbidden association", "is_public": True},
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -403,18 +403,18 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les Fans de Georges la Saucisse",
+                "name": "Les Fans de Campulse",
                 "institution": 2,
                 "email": "mail@mail.tld",
             },
         )
 
         similar_names = [
-            "Les Fans de Georges la Saucisse",
-            "LesFansdeGeorgeslaSaucisse",
-            "lesfansdegeorgeslasaucisse",
-            " Les Fans de Georges la Saucisse ",
-            "Lés Fàns dè Gêörgës lâ Säùcîsse",
+            "Les Fans de Campulse",
+            "LesFansdeCampulse",
+            "lesfansdecampulse",
+            " Les Fans de Campulse ",
+            "Lés Fàns dè Câmpülsé",
         ]
         for similar_name in similar_names:
             response_general = self.general_client.post(
@@ -446,8 +446,8 @@ class AssociationsViewsTests(TestCase):
         response_institution = self.institution_client.post(
             "/associations/",
             {
-                "name": "Le plat phare du sud-ouest de la France c'est le CASsoulet.",
-                "email": "cassoulet@toulouse.fr",
+                "name": "Successful association.",
+                "email": "success@association.fr",
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
@@ -467,8 +467,8 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les Fans de Georges la Saucisse",
-                "email": "fan-2-georges@mail.tld",
+                "name": "Les Fans de Campulse",
+                "email": "fan-2-campulse@mail.tld",
                 "institution": 2,
             },
         )
@@ -479,8 +479,8 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les gens qui savent imiter Bourvil",
-                "email": "ah-bah-mon-velo@mail.tld",
+                "name": "Team Campulse n°1",
+                "email": "team-campulse1@mail.tld",
                 "institution": 2,
                 "is_public": True,
             },
@@ -492,8 +492,8 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.post(
             "/associations/",
             {
-                "name": "Les gens qui savent imiter Philippe Risoli",
-                "email": "cuitas-les-bananas@mail.tld",
+                "name": "Team Campulse n°2",
+                "email": "team-campulse2@mail.tld",
                 "institution": 2,
                 "is_site": True,
             },
@@ -576,7 +576,7 @@ class AssociationsViewsTests(TestCase):
         """
         response_anonymous = self.client.patch(
             "/associations/1",
-            {"name": "La Grande Confrérie du Cassoulet de Castelnaudary"},
+            {"name": "Cannot patch this"},
             content_type="application/json",
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -591,12 +591,12 @@ class AssociationsViewsTests(TestCase):
         association_id = 2
         response_president = self.president_client.patch(
             f"/associations/{association_id}",
-            {"phone": "Waluigi"},
+            {"phone": "thisisaphonenumber"},
             content_type="application/json",
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
         association = Association.objects.get(id=association_id)
-        self.assertNotEqual(association.phone, "Waluigi")
+        self.assertNotEqual(association.phone, "thisisaphonenumber")
 
     def test_patch_association_manager_misc(self):
         """
@@ -606,7 +606,7 @@ class AssociationsViewsTests(TestCase):
         """
         response_misc = self.misc_client.patch(
             "/associations/1",
-            {"name": "L'assaucissiation"},
+            {"name": "L'association"},
             content_type="application/json",
         )
         self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
@@ -620,7 +620,7 @@ class AssociationsViewsTests(TestCase):
         association_id = 99
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
-            {"name": "La singularité de l'espace-temps."},
+            {"name": "The Big Bang Theory fanclub."},
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
@@ -655,7 +655,7 @@ class AssociationsViewsTests(TestCase):
         association_id = 2
         response_correct_member = self.member_client.patch(
             f"/associations/{association_id}",
-            {"name": "Ah et bah moi je suis de l'asso mais je peux pas l'éditer c'est terrible."},
+            {"name": "Je suis de l'asso mais je ne peux pas l'éditer."},
             content_type="application/json",
         )
         self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
@@ -687,7 +687,7 @@ class AssociationsViewsTests(TestCase):
         response_correct_president = self.president_client.patch(
             f"/associations/{association_id}",
             {
-                "name": "Moi je peux vraiment éditer l'asso, nananère.",
+                "name": "Je peux éditer l'asso.",
                 "phone": "0836656565",
             },
             content_type="application/json",
@@ -697,7 +697,7 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(
             association.name,
-            "Moi je peux vraiment éditer l'asso, nananère.",
+            "Je peux éditer l'asso.",
         )
         self.assertTrue(len(mail.outbox))
 
@@ -716,7 +716,7 @@ class AssociationsViewsTests(TestCase):
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {
-                "name": "Association Amicale des Amateurs d'Andouillette Authentique",
+                "name": "Association name",
                 "institution": 1,
                 "can_submit_projects": False,
             },
@@ -727,7 +727,7 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(
             association.name,
-            "Association Amicale des Amateurs d'Andouillette Authentique",
+            "Association name",
         )
         self.assertEqual(association.institution_id, 1)
         self.assertEqual(association.can_submit_projects, False)
@@ -770,8 +770,8 @@ class AssociationsViewsTests(TestCase):
                 "social_networks": json.dumps(
                     [
                         {
-                            "typeeee": "Mastodon",
-                            "location": "https://framapiaf.org/@Framasoft",
+                            "typeeee": "SocialNetwork",
+                            "location": "https://socialnetwork.random",
                         }
                     ]
                 )
@@ -782,7 +782,7 @@ class AssociationsViewsTests(TestCase):
 
         response_general_string = self.general_client.patch(
             f"/associations/{association_id}",
-            {"social_networks": json.dumps([{"type": "Mastodon", "location": 1234}])},
+            {"social_networks": json.dumps([{"type": "SocialNetwork", "location": 1234}])},
             content_type="application/json",
         )
         self.assertEqual(response_general_string.status_code, status.HTTP_400_BAD_REQUEST)
@@ -796,7 +796,7 @@ class AssociationsViewsTests(TestCase):
         - Association's social networks are correctly updated with provided data.
         """
         association_id = 2
-        social_networks_json = json.dumps([{"type": "Mastodon", "location": "https://framapiaf.org/@Framasoft"}])
+        social_networks_json = json.dumps([{"type": "SocialNetwork", "location": "https://socialnetwork.random"}])
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {"social_networks": social_networks_json},
@@ -854,28 +854,26 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.is_public, False)
 
-    def test_patch_association_logo(self):
-        """
-        PATCH /associations/{id} .
-
-        - Association's logo can be updated.
-        - Returns 415 if MIME type is wrong.
-        """
-        # TODO Find how to mock images.
-        """
-        association_id = 1
-        data = encode_multipart(data={"path_logo": file}, boundary=BOUNDARY)
-        response = self.general_client.patch(
-            f"/associations/{association_id}", data=data, content_type=MULTIPART_CONTENT
-        )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-
-        settings.ALLOWED_IMAGE_MIME_TYPES = ["application/vnd.novadigm.ext"]
-        response = self.general_client.patch(
-            f"/associations/{association_id}", data, content_type=MULTIPART_CONTENT
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        """
+#    def test_patch_association_logo(self):
+#        """
+#        PATCH /associations/{id} .
+#
+#        - Association's logo can be updated.
+#        - Returns 415 if MIME type is wrong.
+#        """
+#        # TODO Find how to mock images.
+#        association_id = 1
+#        data = encode_multipart(data={"path_logo": file}, boundary=BOUNDARY)
+#        response = self.general_client.patch(
+#            f"/associations/{association_id}", data=data, content_type=MULTIPART_CONTENT
+#        )
+#        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+#
+#        settings.ALLOWED_IMAGE_MIME_TYPES = ["application/vnd.novadigm.ext"]
+#        response = self.general_client.patch(
+#            f"/associations/{association_id}", data, content_type=MULTIPART_CONTENT
+#        )
+#        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_association_anonymous(self):
         """

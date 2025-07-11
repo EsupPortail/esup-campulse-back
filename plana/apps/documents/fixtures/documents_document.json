@@ -41,9 +41,9 @@
     "model": "documents.document",
     "pk": 3,
     "fields": {
-      "name": "Charte FSDIE",
-      "acronym": "CHARTE_FSDIE",
-      "description": "Charte Fonds de Solidarité et de Développement des Initiatives Étudiantes",
+      "name": "Charte FPEX",
+      "acronym": "CHARTE_FPEX",
+      "description": "Charte Fonds Principal d'Exemple",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
@@ -60,28 +60,9 @@
     "model": "documents.document",
     "pk": 4,
     "fields": {
-      "name": "Charte IdEx",
-      "acronym": "CHARTE_IDEX",
-      "description": "Charte Initiative d'Excellence « Creative Thinkers »",
-      "contact": "???",
-      "is_multiple": false,
-      "is_required_in_process": false,
-      "expiration_day": "08-31",
-      "fund_id": 2,
-      "process_type": "CHARTER_PROJECT_FUND",
-      "edition_date": "2023-03-15T10:18:47.000Z",
-      "mime_types": [
-        "application/pdf"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 5,
-    "fields": {
-      "name": "RGPD FSDIE",
-      "acronym": "RGPD_FSDIE",
-      "description": "Charte RGPD Fonds de Solidarité et de Développement des Initiatives Étudiantes",
+      "name": "RGPD FPEX",
+      "acronym": "RGPD_FPEX",
+      "description": "Charte RGPD Fonds Principal d'Exemple",
       "contact": "???",
       "is_multiple": false,
       "is_required_in_process": false,
@@ -98,17 +79,34 @@
   },
   {
     "model": "documents.document",
-    "pk": 6,
+    "pk": 5,
     "fields": {
-      "name": "RGPD IdEx",
-      "acronym": "RGPD_IDEX",
-      "description": "Charte RGPD Initiative d'Excellence « Creative Thinkers »",
+      "name": "Charte FEEX",
+      "acronym": "CHARTE_FEEX",
+      "description": "Charte Fonds Externe d'Exemple",
       "contact": "???",
       "is_multiple": false,
-      "is_required_in_process": false,
-      "expiration_day": "08-31",
+      "is_required_in_process": true,
       "fund_id": 2,
-      "process_type": "CHARTER_PROJECT_FUND",
+      "process_type": "DOCUMENT_PROJECT",
+      "edition_date": "2023-03-15T10:18:47.000Z",
+      "mime_types": [
+        "application/pdf"
+      ]
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 6,
+    "fields": {
+      "name": "RGPD FEEX",
+      "acronym": "RGPD_FEEX",
+      "description": "Charte RGPD Fonds Externe d'Exemple",
+      "contact": "???",
+      "is_multiple": false,
+      "is_required_in_process": true,
+      "fund_id": 2,
+      "process_type": "DOCUMENT_PROJECT",
       "edition_date": "2023-03-15T10:18:47.000Z",
       "mime_types": [
         "application/pdf",
@@ -120,65 +118,6 @@
   {
     "model": "documents.document",
     "pk": 7,
-    "fields": {
-      "name": "Charte Culture-ActionS",
-      "acronym": "CHARTE_CULTURE_ACTIONS",
-      "description": "Charte Culture-ActionS",
-      "contact": "???",
-      "is_multiple": false,
-      "is_required_in_process": true,
-      "fund_id": 3,
-      "process_type": "DOCUMENT_PROJECT",
-      "edition_date": "2023-03-15T10:18:47.000Z",
-      "mime_types": [
-        "application/pdf"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 8,
-    "fields": {
-      "name": "RGPD Culture-ActionS",
-      "acronym": "RGPD_CULTURE_ACTIONS",
-      "description": "Charte RGPD Culture-ActionS",
-      "contact": "???",
-      "is_multiple": false,
-      "is_required_in_process": true,
-      "fund_id": 3,
-      "process_type": "DOCUMENT_PROJECT",
-      "edition_date": "2023-03-15T10:18:47.000Z",
-      "mime_types": [
-        "application/pdf",
-        "image/jpeg",
-        "image/png"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 9,
-    "fields": {
-      "name": "Complément IdEx",
-      "acronym": "COMPLEMENT_IDEX",
-      "description": "Complément IdEx du formulaire de demande de subventions",
-      "contact": "???",
-      "is_multiple": false,
-      "is_required_in_process": true,
-      "fund_id": 2,
-      "process_type": "DOCUMENT_PROJECT",
-      "edition_date": "2023-03-15T10:18:47.000Z",
-      "mime_types": [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.oasis.opendocument.text",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      ]
-    }
-  },
-  {
-    "model": "documents.document",
-    "pk": 10,
     "fields": {
       "name": "Budget Prévisionnel",
       "acronym": "BUDGET_PREVISIONNEL",
@@ -197,7 +136,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 11,
+    "pk": 8,
     "fields": {
       "name": "Justificatif d'association 1",
       "acronym": "JUSTIFICATIF_ASSOCIATION_1",
@@ -216,7 +155,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 12,
+    "pk": 9,
     "fields": {
       "name": "Justificatif d'association 2",
       "acronym": "JUSTIFICATIF_ASSOCIATION_2",
@@ -235,7 +174,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 13,
+    "pk": 10,
     "fields": {
       "name": "Justificatifs d'association 3",
       "acronym": "JUSTIFICATIFS_ASSOCIATION_3",
@@ -254,7 +193,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 14,
+    "pk": 11,
     "fields": {
       "name": "Justificatif d'association 4",
       "acronym": "JUSTIFICATIF_ASSOCIATION_4",
@@ -273,7 +212,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 15,
+    "pk": 12,
     "fields": {
       "name": "Justificatif facultatif d'association 5",
       "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_5",
@@ -292,7 +231,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 16,
+    "pk": 13,
     "fields": {
       "name": "Justificatif d'inscription 1",
       "acronym": "JUSTIFICATIF_INSCRIPTION_1",
@@ -311,7 +250,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 17,
+    "pk": 14,
     "fields": {
       "name": "Justificatif d'inscription 2",
       "acronym": "JUSTIFICATIF_INSCRIPTION_2",
@@ -330,7 +269,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 18,
+    "pk": 15,
     "fields": {
       "name": "Justificatif de projet 1",
       "acronym": "JUSTIFICATIF_PROJET_1",
@@ -350,7 +289,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 19,
+    "pk": 16,
     "fields": {
       "name": "Justificatif de projet 2",
       "acronym": "JUSTIFICATIF_PROJET_2",
@@ -369,7 +308,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 20,
+    "pk": 17,
     "fields": {
       "name": "Justificatifs facultatifs de projet 3",
       "acronym": "JUSTIFICATIFS_FACULTATIFS_PROJET_3",
@@ -399,7 +338,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 21,
+    "pk": 18,
     "fields": {
       "name": "Justificatifs facultatifs de projet 4",
       "acronym": "JUSTIFICATIFS_FACULTATIFS_PROJET_4",
@@ -418,7 +357,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 22,
+    "pk": 19,
     "fields": {
       "name": "Justificatif de bilan 1",
       "acronym": "JUSTIFICATIF_BILAN_1",
@@ -437,7 +376,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 23,
+    "pk": 20,
     "fields": {
       "name": "Justificatif facultatifs de bilan 2",
       "acronym": "JUSTIFICATIF_FACULTATIFS_BILAN_2",
@@ -456,7 +395,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 24,
+    "pk": 21,
     "fields": {
       "name": "Justificatifs facultatifs de bilan 3",
       "acronym": "JUSTIFICATIFS_FACULTATIFS_BILAN_3",
@@ -475,7 +414,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 25,
+    "pk": 22,
     "fields": {
       "name": "Justificatif facultatif de bilan 4",
       "acronym": "JUSTIFICATIF_FACULTATIF_BILAN_4",
@@ -494,7 +433,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 27,
+    "pk": 23,
     "fields": {
       "name": "Justificatif d'association 6",
       "acronym": "JUSTIFICATIF_ASSOCIATION_6",
@@ -513,7 +452,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 28,
+    "pk": 24,
     "fields": {
       "name": "Justificatif facultatif d'association 7",
       "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_7",
@@ -532,7 +471,7 @@
   },
   {
     "model": "documents.document",
-    "pk": 29,
+    "pk": 25,
     "fields": {
       "name": "Justificatif facultatif d'association 8",
       "acronym": "JUSTIFICATIF_FACULTATIF_ASSOCIATION_8",

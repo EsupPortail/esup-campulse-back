@@ -76,13 +76,17 @@ DATABASES = {
 }
 
 
-######################
-# Site configuration #
-######################
+############################
+# Allowed hosts & Security #
+############################
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
+
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
+# CSRF_TRUSTED_ORIGINS = "".split()
 
 
 #########################
@@ -163,23 +167,6 @@ STATICFILES_FINDERS = [
 ]
 
 
-############
-# Dipstrap #
-############
-
-DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
-
-
-##############
-# Secret key #
-##############
-
-# Make this unique, and don't share it with anybody.
-# Only for dev and test environnement. Should be redefined for production
-# environnement
-SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
-
-
 ##########################
 # Template configuration #
 ##########################
@@ -242,7 +229,7 @@ MIDDLEWARE = [
 
 
 #####################
-# Url configuration #
+# URL configuration #
 #####################
 
 ROOT_URLCONF = f"{SITE_NAME}.urls"
@@ -396,8 +383,48 @@ LOGGING = {
 }
 
 
+###############
+# Secret keys #
+###############
+
+# Make this unique, and don't share it with anybody.
+# Only for dev and test environnement. Should be redefined for production
+# environnement
+SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
+
+
+############
+# Dipstrap #
+############
+
+DIPSTRAP_VERSION = ""
+DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
+
+
+##########
+# Sentry #
+##########
+
+STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
+
+
+def sentry_init(environment):
+    """Init Sentry service."""
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+        ],
+        environment=environment,
+        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+    )
+
+
 #########################
-# DJANGO REST FRAMEWORK #
+# Django REST Framework #
 #########################
 
 REST_FRAMEWORK = {
@@ -442,18 +469,20 @@ AWS_DEFAULT_ACL = None
 AWS_USE_OBJECT_ACL = True
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
-AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_STORAGE_PUBLIC_BUCKET_NAME = environ.get("AWS_STORAGE_PUBLIC_BUCKET_NAME", "")
+AWS_STORAGE_PRIVATE_BUCKET_NAME = environ.get("AWS_STORAGE_PRIVATE_BUCKET_NAME", "")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
 S3_LOGOS_FILEPATH = "logos"
 S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 S3_TEMPLATES_FILEPATH = "associations_documents_templates"
 S3_DOCUMENTS_FILEPATH = "associations_documents"
+S3_NOTIFICATIONS_FILEPATH = "projects_notifications"
 AGE_PUBLIC_KEY = load_key("age-public-key.key")
 AGE_PRIVATE_KEY = load_key("age-private-key.key")
 
 
 #####################
-# DJANGO THUMBNAILS #
+# Django Thumbnails #
 #####################
 
 THUMBNAILS = {
@@ -499,7 +528,7 @@ THUMBNAILS = {
 }
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_ID = "cas"
@@ -577,28 +606,6 @@ REST_AUTH = {
 }
 
 
-##########
-# Sentry #
-##########
-
-STAGE = None
-SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
-
-
-def sentry_init(environment):
-    """Init Sentry service."""
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(),
-        ],
-        environment=environment,
-        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
-        send_default_pii=True,
-        traces_sample_rate=1.0,
-    )
-
-
 ###############
 # Spectacular #
 ###############
@@ -636,7 +643,7 @@ EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
-################
+#################
 # PDF Templates #
 #################
 
@@ -689,6 +696,9 @@ LDAP_ENABLED = True
 # MIME types allowed for image uploads.
 ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png"]
 
+# Enables admin tests features such as PDF document generation testing
+ADMIN_TEST_FEATURES = True
+
 # Special permissions for user_groups links.
 GROUPS_STRUCTURE = {
     "MANAGER_GENERAL": {
@@ -737,6 +747,10 @@ GROUPS_STRUCTURE = {
 PERMISSIONS_GROUPS = {
     "MANAGER_GENERAL": [
         # associations
+        "add_activityfield",
+        "change_activityfield",
+        "delete_activityfield",
+        "view_activityfield",
         "add_association",
         "add_association_any_institution",
         "add_association_all_fields",
@@ -754,8 +768,27 @@ PERMISSIONS_GROUPS = {
         "delete_commission",
         "add_commissionfund",
         "delete_commissionfund",
+        "view_commissionfund",
+        "add_fund",
+        "change_fund",
+        "delete_fund",
+        "view_fund",
+        "add_institution",
+        "change_institution",
+        "delete_institution",
+        "view_institution",
+        "add_institutioncomponent",
+        "change_institutioncomponent",
+        "delete_institutioncomponent",
+        "view_institutioncomponent",
         # contents
         "change_content",
+        "add_logo",
+        "change_logo",
+        "delete_logo",
+        "view_logo",
+        "change_setting",
+        "view_setting",
         # documents
         "add_document",
         "add_document_any_fund",
@@ -773,6 +806,10 @@ PERMISSIONS_GROUPS = {
         "view_documentupload",
         "view_documentupload_all",
         # projects
+        "add_category",
+        "change_category",
+        "delete_category",
+        "view_category",
         "change_project",
         "change_project_as_validator",
         "view_project",
@@ -816,6 +853,9 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        # mail templates
+        "change_mailtemplate",
+        "view_mailtemplate",
     ],
     "MANAGER_INSTITUTION": [
         # associations

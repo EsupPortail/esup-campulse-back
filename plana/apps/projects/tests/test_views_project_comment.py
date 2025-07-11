@@ -21,11 +21,11 @@ class ProjectCommentLinksViewsTests(TestCase):
         "auth_group.json",
         "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
+        "tests/commissions_fund.json",
         "commissions_commission.json",
         "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
@@ -117,7 +117,7 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         - The route cannot be accessed by a student user.
         """
-        post_data = {"project": 1, "text": "Le chiffre 6 c'est comme saucisse"}
+        post_data = {"project": 1, "text": "Forbidden comment"}
         response = self.student_offsite_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -135,7 +135,7 @@ class ProjectCommentLinksViewsTests(TestCase):
 
         post_data = {
             "project": project_id,
-            "text": "Finalement non je veux pas aider ce projet.",
+            "text": "Project rejection.",
         }
         response = self.general_client.post("/projects/comments", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -290,7 +290,7 @@ class ProjectCommentLinksViewsTests(TestCase):
         project.project_status = "PROJECT_REJECTED"
         project.save()
 
-        patch_data = {"text": "Finalement non je veux pas aider ce projet."}
+        patch_data = {"text": "Project rejected."}
         response = self.general_client.patch(
             f"/projects/{project_id}/comments/{comment_id}",
             data=patch_data,

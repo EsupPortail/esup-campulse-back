@@ -13,7 +13,7 @@ class AssociationsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "institutions_institution.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
     ]
 

@@ -83,6 +83,18 @@ class GroupInstitutionFundUser(models.Model):
             ),
         ]
 
+    def save(self, *args, **kwargs):
+        group_name = "MANAGER_GENERAL"
+        if self.group.name == group_name and not self.user.groups.filter(name=group_name).exists():
+            self.user.groups.add(self.group)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        group_name = "MANAGER_GENERAL"
+        if self.group.name == group_name and not self._meta.model.objects.filter(user=self.user, group__name=group_name).exists():
+            self.user.groups.remove(self.group)
+
 
 class User(AbstractUser):
     """
@@ -100,10 +112,10 @@ class User(AbstractUser):
     email = models.EmailField(_("Email"), unique=True)
     first_name = models.CharField(_("First name"), max_length=150, blank=False)
     last_name = models.CharField(_("Last name"), max_length=150, blank=False)
-    address = models.TextField(_("Address"), default="")
-    zipcode = models.CharField(_("Zipcode"), max_length=32, default="")
-    city = models.CharField(_("City"), max_length=128, default="")
-    country = models.CharField(_("Country"), max_length=128, default="")
+    address = models.TextField(_("Address"), blank=True)
+    zipcode = models.CharField(_("Zipcode"), max_length=32, blank=True)
+    city = models.CharField(_("City"), max_length=128, blank=True)
+    country = models.CharField(_("Country"), max_length=128, blank=True)
     phone = models.CharField(_("Phone"), default="", max_length=32, null=True)
     can_submit_projects = models.BooleanField(_("Can submit projects"), default=True)
     password_last_change_date = models.DateField(_("Password last change date"), null=True)

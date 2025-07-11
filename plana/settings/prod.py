@@ -20,6 +20,8 @@ ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
 
+# CSRF_TRUSTED_ORIGINS = "{{ csrf_trusted_origins }}".split()
+
 
 #####################
 # Log configuration #
@@ -52,7 +54,7 @@ sentry_init(STAGE)
 
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_NAME = "{{ cas_name }}"
@@ -87,7 +89,8 @@ EMAIL_TEMPLATE_FRONTEND_URL = "{{ email_template_frontend_url }}"  # "https://et
 
 AWS_ACCESS_KEY_ID = "{{ s3_access_key }}"
 AWS_SECRET_ACCESS_KEY = "{{ s3_secret_key }}"
-AWS_STORAGE_BUCKET_NAME = "{{ s3_bucket }}"
+AWS_STORAGE_PUBLIC_BUCKET_NAME = "{{ s3_bucket }}"
+AWS_STORAGE_PRIVATE_BUCKET_NAME = "{{ s3_bucket_private }}"
 AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 
 
@@ -104,6 +107,8 @@ ASSOCIATION_IS_SITE_DEFAULT = "{{ association_is_site_default }}".lower() == "tr
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = "{{ association_default_amount_members_allowed }}"
 
 LDAP_ENABLED = "{{ ldap_enabled }}".lower() == "true"
+
+ADMIN_TEST_FEATURES = False
 
 # External APIs
 ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = "{{ accounts_api_spore_description_file }}"

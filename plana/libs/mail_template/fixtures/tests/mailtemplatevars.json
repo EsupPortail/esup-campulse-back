@@ -1,0 +1,177 @@
+[
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 1,
+    "fields": {
+      "code": "{{ site_domain }}",
+      "description": "URL du site.",
+      "fake_vars": [
+        "plana.unistra.fr"
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 2,
+    "fields": {
+      "code": "{{ site_name }}",
+      "description": "Nom du site.",
+      "fake_vars": [
+        "plana"
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 3,
+    "fields": {
+      "code": "{{ username }}",
+      "description": "Nom de compte de l'utilisateur.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 4,
+    "fields": {
+      "code": "{{ first_name }}",
+      "description": "Nom de l'utilisateur.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 5,
+    "fields": {
+      "code": "{{ last_name }}",
+      "description": "Prénom de l'utilisateur.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 6,
+    "fields": {
+      "code": "{{ manager_email_address }}",
+      "description": "Addresse email de contact du gestionnaire.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 7,
+    "fields": {
+      "code": "{{ documentation_url }}",
+      "description": "Lien de la documentation du site.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 8,
+    "fields": {
+      "code": "{{ activate_url }}",
+      "description": "Lien de confirmation d'adresse email post-inscription.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 9,
+    "fields": {
+      "code": "{{ password_reset_url }}",
+      "description": "Lien de réinitialisation de mot de passe.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 10,
+    "fields": {
+      "code": "{{ account_url }}",
+      "description": "Lien menant à un compte utilisateur côté gestionnaire.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 11,
+    "fields": {
+      "code": "{{ password }}",
+      "description": "Mot de passe temporaire.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 12,
+    "fields": {
+      "code": "{{ password_change_url }}",
+      "description": "Lien menant à la page de modification de mot de passe.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 13,
+    "fields": {
+      "code": "{{ association_name }}",
+      "description": "Nom d'une association.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 14,
+    "fields": {
+      "code": "{{ user_association_url }}",
+      "description": "URL menant vers une page de validation de lien entre association et utilisateur.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 15,
+    "fields": {
+      "code": "{{ project_name }}",
+      "description": "Nom du projet.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 16,
+    "fields": {
+      "code": "{{ associations_goa_list }}",
+      "description": "Liste des dates de dernières Assemblées Générales Ordinaires des associations.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 17,
+    "fields": {
+      "code": "{{ document_url }}",
+      "description": "URL menant vers une page de validation de document.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 18,
+    "fields": {
+      "code": "{{ fund_name }}",
+      "description": "Nom d'un fonds.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 19,
+    "fields": {
+      "code": "{{ commission_name }}",
+      "description": "Nom d'une commission.",
+      "fake_vars": []
+    }
+  }
+]

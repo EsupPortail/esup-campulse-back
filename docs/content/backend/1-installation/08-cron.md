@@ -13,5 +13,6 @@ Les différentes commandes exécutables via des tâches CRON se trouvent dans le
 - `password_expiration` (réinitialisation des mots de passe après un an sans changement).
 - `project_expiration` (suppression des projets vieux de dix ans).
 - `review_expiration` (rappel de soumettre le bilan d'un projet subventionné).
+- `cron_daily` (exécution de toutes les commandes précédemment citées, à faire tourner quotidiennement)
 
 Il est également possible de lancer ces commandes manuellement via `python manage.py NOM_DE_LA_COMMANDE`.

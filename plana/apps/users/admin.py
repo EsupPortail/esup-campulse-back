@@ -17,6 +17,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
 from .models import AssociationUser, GroupInstitutionFundUser, User
+from ...admin import SecuredModelAdmin, SecuredInlineAdmin
 
 
 class ManagerUserCreationForm(UserCreationForm):
@@ -98,11 +99,31 @@ class ManagerUserCreationForm(UserCreationForm):
         fields = ["email", "first_name", "last_name", "username", "is_superuser"]
 
 
-class GroupInstitutionFundUserInline(admin.StackedInline):
+# FIXME : May be removed after cleanup
+class GroupInstitutionFundUserForm(forms.ModelForm):
+    """Custom form for GroupInstitutionFundUser StackedInline to make fields optional."""
+    class Meta:
+        model = GroupInstitutionFundUser
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["institution"].required = False
+
+
+class GroupInstitutionFundUserInline(SecuredInlineAdmin):
     """Add GroupInstitutionFundUser sub-form."""
 
     model = GroupInstitutionFundUser
     fields = ["group", "institution"]
+    form = GroupInstitutionFundUserForm
+
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+        exclude = ('password',)
 
 
 @admin.register(User)
@@ -110,7 +131,7 @@ class UserAdmin(admin.ModelAdmin):
     """List view for users, and define new way to manage user."""
 
     add_form = ManagerUserCreationForm
-    change_form = UserChangeForm
+    change_form = CustomUserChangeForm
     inlines = [GroupInstitutionFundUserInline]
 
     list_display = [
@@ -195,7 +216,7 @@ class AssociationUserAdmin(admin.ModelAdmin):
 
 
 @admin.register(GroupInstitutionFundUser)
-class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
+class GroupInstitutionFundUserAdmin(SecuredModelAdmin):
     """List view for group users."""
 
     list_display = ["user", "group", "institution", "fund"]

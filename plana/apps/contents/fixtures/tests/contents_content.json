@@ -1,0 +1,558 @@
+[
+  {
+    "model": "contents.content",
+    "pk": 1,
+    "fields": {
+      "code": "HOME_INFO",
+      "label": "Paragraphe de la page d'accueil lié aux informations générales / bandeau d'informations.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 2,
+    "fields": {
+      "code": "HOME_ASSOCIATION",
+      "label": "Paragraphe de la page d'accueil lié aux associations.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "Bouton : Lorem ipsum",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 3,
+    "fields": {
+      "code": "HOME_CHARTER",
+      "label": "Paragraphe de la page d'accueil lié aux chartes du site Alsace.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "Bouton : Lorem ipsum",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 4,
+    "fields": {
+      "code": "HOME_PROJECT",
+      "label": "Paragraphe de la page d'accueil lié aux demandes de subventions.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "Bouton : Lorem ipsum",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 5,
+    "fields": {
+      "code": "SITE_FOOTER",
+      "label": "Footer général du site.",
+      "header": "",
+      "body": "Description : Lorem ipsum",
+      "footer": "2017-2024 - Unistra - Tous droits réservés",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 6,
+    "fields": {
+      "code": "ASSOCIATION_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation de l'annuaire des associations.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 7,
+    "fields": {
+      "code": "CHARTER_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation du module des chartes.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 8,
+    "fields": {
+      "code": "CHARTER_HOME_SECOND_BLOCK",
+      "label": "Deuxième paragraphe de la page de présentation du module des chartes.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 9,
+    "fields": {
+      "code": "CHARTER_HOME_THIRD_BLOCK",
+      "label": "Troisième paragraphe de la page de présentation du module des chartes.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 10,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_VALIDATE_CHARTERS",
+      "label": "Bloc action la page de présentation du module des chartes (validation des chartes par les gestionnaires).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 11,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_MANAGE_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des chartes (gestion des documents types par les gestionnaires).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 12,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_SIGN_CHARTERS",
+      "label": "Bloc action la page de présentation du module des chartes (signature des chartes par les étudiants).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 13,
+    "fields": {
+      "code": "CHARTER_HOME_ACTION_DOWNLOAD_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des chartes (téléchargement des documents pour les étudiants).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 14,
+    "fields": {
+      "code": "COMMISSION_HOME_FIRST_BLOCK",
+      "label": "Premier paragraphe de la page de présentation du module des demandes de subventionnement.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 15,
+    "fields": {
+      "code": "COMMISSION_HOME_SECOND_BLOCK",
+      "label": "Deuxième paragraphe de la page de présentation du module des demandes de subventionnement.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 16,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_PROJECTS",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des subventions par les gestionnaires).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 17,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_ARCHIVE",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des archives par les gestionnaires).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 18,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_MANAGE_COMMISSIONS",
+      "label": "Bloc action la page de présentation du module des commissions (gestion des commissions par les gestionnaires).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 19,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_SUBMIT_PROJECT",
+      "label": "Bloc action la page de présentation du module des commissions (soumission de projets par les étudiants).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 20,
+    "fields": {
+      "code": "COMMISSION_HOME_ACTION_DOWNLOAD_DOCUMENTS",
+      "label": "Bloc action la page de présentation du module des commissions (téléchargement des documents pour les étudiants).",
+      "header": "Bouton : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 21,
+    "fields": {
+      "code": "ABOUT_APP",
+      "label": "Paragraphe de la page à propos présentant les informations générales liées à la plateforme et sa création.",
+      "header": "Les origines de l'application",
+      "body": "Dès 2019, le Service de la Vie Universitaire (SVU) de l'Université de Strasbourg a souhaité mettre en place une gestion automatisée des démarches liées à la vie associative. C'est ainsi que les premières réflexions ont été menées en collaboration avec des associations étudiantes. En 2021, le Service de la Vie Universitaire a conçu et développé un cahier des charges détaillé qui donnera naissance à la future plateforme. Ces travaux minutieux ont permis de présenter ce dossier à la candidature de l'appel à projets \"Services numériques aux étudiants\" du Ministère de l'Enseignement Supérieur et de la Recherche en décembre 2021. En mars 2022, le projet retient l'attention et devient lauréat de l'appel à projets. Conjointement piloté par le Service de la Vie Universitaire et la Direction du Numérique de l'Université de Strasbourg, avec le concours du Crous de Strasbourg, l'application voit le jour en septembre 2023.",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 22,
+    "fields": {
+      "code": "ABOUT_PARTNERSHIP",
+      "label": "Paragraphe de la page à propos présentant les partenaires de la plateforme.",
+      "header": "Partenaires",
+      "body": "France Relance, le Ministère de l'Enseignement Supérieur et de la Recherche, le Crous de Strasbourg, l'Université de Rouen Normandie, l'Université de Caen-Normandie, l'Université Rennes 2, l'Université de Reims Champagne Ardennes, l'Université Bordeaux Montaigne, l'Université Picardie Jules Vernes, l'Université de Tours, l'Université Toulouse 2 Jean Jaurès, l'Université de Lille, l'Université Clermont Auvergne, le Crous d'Amiens.",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 23,
+    "fields": {
+      "code": "ABOUT_FUNDING",
+      "label": "Paragraphe de la page à propos donnant les modes de financement de la plateforme.",
+      "header": "Financements",
+      "body": "Le projet a été financé grâce aux dotations de l'appel à projets \"Services numériques aux étudiants\" et de la Contribution Vie Étudiante et de Campus (CVEC) de l'Université de Strasbourg et du Crous de Strasbourg.",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 24,
+    "fields": {
+      "code": "ABOUT_ASSOCIATION",
+      "label": "Paragraphe de la page à propos lié aux associations.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 25,
+    "fields": {
+      "code": "ABOUT_CHARTER",
+      "label": "Paragraphe de la page à propos lié aux chartes du site Alsace.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 26,
+    "fields": {
+      "code": "ABOUT_PROJECT",
+      "label": "Paragraphe de la page à propos lié aux demandes de subventions.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 27,
+    "fields": {
+      "code": "CONTACT_INFO",
+      "label": "Paragraphe de la page contact utilisé comme phrase d'accroche ou présentation de la page.",
+      "header": "Titre : Lorem ipsum",
+      "body": "Description : Lorem ipsum",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 28,
+    "fields": {
+      "code": "CONTACT_LIST",
+      "label": "Paragraphe de la page contact listant les contacts des gestionnaires établissements.",
+      "header": "",
+      "body": "<ul><li><h3>Contact 1</h3><p><span>Titre</span><br><a href='mailto:no-reply@mail.tld'>Email</a><br><span>Téléphone</span></p></li><li><h3>Contact 2</h3><p><span>Titre</span><br><a href='mailto:no-reply@mail.tld'>Email</a><br><span>Téléphone</span></p></li></ul>",
+      "footer": "",
+      "aside": "",
+      "is_editable": true
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 29,
+    "fields": {
+      "code": "NOTIFICATION_FSDIE_DECISION_ATTRIBUTION",
+      "label": "PDF de notification de décision de subventionnement FSDIE.",
+      "title": "Décision de subvention FSDIE",
+      "header": "<p>Lorem ipsum</p>",
+      "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite <strong>{{ owner.name }}</strong> dans le cadre de l'opération :<br><strong>{{ project_name }}</strong></p><h2>ARTICLE 2</h2><p>Lorem ipsum.</p><h2>ARTICLE 3</h2><p>Lorem ipsum.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 30,
+    "fields": {
+      "code": "NOTIFICATION_FSDIE_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement FSDIE.",
+      "title": "Notification d'attribution FSDIE",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le plaisir de vous annoncer qu'un montant de <strong>{{ amount_earned }} euros</strong> vous a été attribué.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 31,
+    "fields": {
+      "code": "NOTIFICATION_FSDIE_PROJECT_POSTPONED",
+      "label": "PDF de notification de report de subventionnement FSDIE.",
+      "title": "Notification de report FSDIE",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 32,
+    "fields": {
+      "code": "NOTIFICATION_FSDIE_REJECTION",
+      "label": "PDF de notification de refus de subventionnement FSDIE.",
+      "title": "Notification de refus FSDIE",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération {{ project_name }} à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}.</p><p>La Commission de subventionnement du FSDIE de l'Université de Strasbourg a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande, pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 33,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_DECISION_ATTRIBUTION",
+      "label": "PDF de notification de décision de subventionnement IdEx.",
+      "title": "Décision de subvention IdEx",
+      "header": "<p>Lorem ipsum</p>",
+      "body": "<h1>Décision de subvention</h1><p>Strasbourg, le {{ date }}</p><h2>ARTICLE 1</h2><p>Une subvention de <strong>{{ amount_earned }} euros</strong> est attribuée à l'association universitaire dite {{ owner.name }} dans le cadre du programme IdEx «Creative Thinkers» pour l'organisation de l'opération :<br><strong>{{ project_name }}</strong>.</p><h2>ARTICLE 2</h2><p>Lorem ipsum.</p><h2>ARTICLE 3</h2><p>Lorem ipsum.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 34,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement IdEx.",
+      "title": "Notification d'attribution IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification d'attribution</h1><p>Strasbourg, le {{ date }}</p><p>Je vous confirme que l'Initiative d'Excellence (IdEx) de l'Université de Strasbourg et de ses partenaires, apporte un soutien financier à l'organisation du projet intitulé <strong>{{ project_name }}</strong>.</p><p>Cette subvention d'un montant de <strong>{{ amount_earned }} euros</strong> au titre de l'année {{ year }}, est mise en oeuvre dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx, programme dédié aux projets étudiants.</p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 35,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_PROJECT_POSTPONED",
+      "label": "PDF de notification de report de subventionnement IdEx.",
+      "title": "Notification de report IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de report</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants souhaite ajourner sa décision concernant votre demande de subvention pour le(s) motif(s) suivant(s) : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 36,
+    "fields": {
+      "code": "NOTIFICATION_IDEX_REJECTION",
+      "label": "PDF de notification de refus de subventionnement IdEx.",
+      "title": "Notification de refus IdEx",
+      "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",
+      "body": "<h1>Notification de refus</h1><p>Strasbourg, le {{ date }}</p><p>Votre association a remis une demande de subvention concernant l'opération <strong>{{ project_name }}</strong> à la Commission d'Aide aux Projets Etudiants (CAPE) du {{ date_commission }}, dans le cadre du levier «Culture, sciences et société - Programme <em>Creative Thinkers</em>» de l'IdEx.</p><p>La Commission d'Aide aux Projets Etudiants a le regret de vous annoncer qu'elle ne peut donner une suite favorable à votre demande pour le motif suivant : </p><p><strong>{{ comment }}</strong></p>",
+      "footer": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p>",
+      "aside": "<p><strong>Prénom NOM</strong><br><strong>Fonction</strong></p><p><strong>Affaire suivie par</strong><br>Prénom NOM<br>Tél: 01.23.45.67.89<br>Mail: no-reply@mail.tld</p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 37,
+    "fields": {
+      "code": "NOTIFICATION_CULTURE-ACTIONS_ATTRIBUTION",
+      "label": "PDF de notification de subventionnement Culture-ActionS.",
+      "title": "Notification d'attribution Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le plaisir de vous informer qu'après délibération, la Commission Culture-ActionS du Crous a décidé de vous attribuer une <strong class='underline'>aide financière de {{ amount_earned }} euros</strong>.</p>",
+      "footer": "<p>Fonction</p><p>Prénom NOM</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Fonction<br>Tél. 01.23.45.67.89<br><span class='underline'>no-reply@mail.tld</span></p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 38,
+    "fields": {
+      "code": "NOTIFICATION_CULTURE-ACTIONS_REJECTION",
+      "label": "PDF de notification de refus de subventionnement Culture-ActionS.",
+      "title": "Notification de refus Culture-ActionS",
+      "header": "<p>Strasbourg, le {{ date }}</p>",
+      "body": "<h1><span class='underline'>Project n°{{ project_manual_identifier }} : {{ project_name }}</span><br>{{ owner.name }}</h1><p><span class='underline'>Objet</span> : Décision de la Commission Culture-ActionS du {{ date_commission }}</p><p>Madame, Monsieur,</p><p>J'ai le regret de vous informer que la Commission Culture-ActionS, après examen de votre dossier, ne peut répondre favorablement à votre demande d’aide financière.</p><p class='border'><span class='underline'>Motif du refus</span> :<br><br>{{ comment }}</p>",
+      "footer": "<p>Fonction</p><p>Prénom NOM</p>",
+      "aside": "<p><strong>Affaire suivie par<br>Prénom NOM</strong><br>Fonction<br>Tél. 01.23.45.67.89<br><span class='underline'>no-reply@mail.tld</span></p><p>Adresse</p>",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 39,
+    "fields": {
+      "code": "LEGAL_NOTICE",
+      "label": "Page de Mentions Légales.",
+      "header": "Mentions Légales",
+      "body": "<h2>Crédits</h2><ul><li>Directeur de la publication : Michel Deneken, Président de l'Université de Strasbourg</li><li>Coordination du projet (Service de la Vie Universitaire - Université de Strasbourg) :<ul><li>Luca Di Vagno</li><li>Diane Dupront</li><li>Anne Reymann</li></ul></li><li>Coordination du projet (Crous Strasbourg) :<ul><li>Clara Lebigre</li><li>Juliette Lacladère</li></ul></li><li>Conception et développement (Direction du Numérique - Université de Strasbourg) :<ul><li>Marie Didienne</li><li>Pauline Gilg</li><li>Carlo Spiga</li><li>Léa Stroh</li><li>Carolane Lefebvre</li><li>Thierry Schlecht</li><li>Christophe Boccheciampe</li><li>Virgile Gerecke</li></ul></li><li>Crédits photographiques :<ul><li>Catherine Schröder</li><li>Manu Grimm</li></ul></li></ul><h2>Technologies utilisées</h2><p>L'application est disponible sous licence libre GPLv3. Plus d'informations sur les frameworks et technologies utilisées sont mentionnées dans son code source.</p><ul><li><a href='https://github.com/EsupPortail/esup-campulse-front'>Interface web de l'application</a></li><li><a href='https://github.com/EsupPortail/esup-campulse-back'>API de l'application</a></li></ul><h2>Éditeur</h2><p><span>Service de la Vie Universitaire</span><br><span>Bâtiment Le Studium</span><br><span>4 rue Blaise Pascal</span><br><span>67081 Strasbourg Cedex</span><br><span>03.68.85.63.73</span><br><span>03.68.85.63.77</span></p><h2>Hébergeur</h2><p><span>Direction du Numérique</span><br><span>Bâtiment Le Portique</span><br><span>14 rue René Descartes</span><br><span>67084 Strasbourg Cedex</span><br><span>03.68.85.06.00</span></p>",
+      "footer": "",
+      "aside": "",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 40,
+    "fields": {
+      "code": "PRIVACY_POLICY",
+      "label": "Page de Politique de Confidentialité.",
+      "header": "Politique de Confidentialité",
+      "body": "<p>Politique de Confidentialité</p>",
+      "footer": "",
+      "aside": "",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 41,
+    "fields": {
+      "code": "ACCESSIBILITY_DECLARATION",
+      "label": "Page de Déclaration d'Accessibilité.",
+      "header": "Déclaration d'Accessibilité",
+      "body": "<p>Déclaration d'Accessibilité</p>",
+      "footer": "",
+      "aside": "",
+      "is_editable": false
+    }
+  },
+  {
+    "model": "contents.content",
+    "pk": 42,
+    "fields": {
+      "code": "MULTIANNUAL_ACCESSIBILITY_PLAN",
+      "label": "Page de Schéma Pluriannuel de Mise en Accessibilité.",
+      "header": "Schéma Pluriannuel de Mise en Accessibilité",
+      "body": "<p>Schéma Pluriannuel de Mise en Accessibilité</p>",
+      "footer": "",
+      "aside": "",
+      "is_editable": false
+    }
+  }
+]

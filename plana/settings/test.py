@@ -28,6 +28,8 @@ ALLOWED_HOSTS = [
     ".unistra.fr",
 ]
 
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
 CSRF_TRUSTED_ORIGINS = ["https://plana-api-test.app.unistra.fr"]
 
 
@@ -39,6 +41,13 @@ LOGGING["handlers"]["file"]["filename"] = "{{ remote_current_path }}/log/app.log
 
 for logger in LOGGING["loggers"]:
     LOGGING["loggers"][logger]["level"] = "DEBUG"
+
+
+###############
+# Secret keys #
+###############
+
+SECRET_KEY = ""
 
 
 ############
@@ -58,7 +67,7 @@ sentry_init(STAGE)
 
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_NAME = "{{ cas_name }}"  # "CAS Unistra"
@@ -92,7 +101,8 @@ EMAIL_TEMPLATE_FRONTEND_URL = "{{ email_template_frontend_url }}"  # "https://pl
 
 AWS_ACCESS_KEY_ID = "{{ s3_access_key }}"
 AWS_SECRET_ACCESS_KEY = "{{ s3_secret_key }}"
-AWS_STORAGE_BUCKET_NAME = "{{ s3_bucket }}"
+AWS_STORAGE_PUBLIC_BUCKET_NAME = "{{ s3_bucket }}"
+AWS_STORAGE_PRIVATE_BUCKET_NAME = "{{ s3_bucket_private }}"
 AWS_S3_ENDPOINT_URL = "{{ s3_endpoint }}"
 
 

@@ -7,6 +7,7 @@ import logging
 import boto3
 import weasyprint
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.template import Context, Template
@@ -68,13 +69,21 @@ def send_mail(
     if temp_attachments is not None:
         for temp_attachment in temp_attachments:
             if temp_attachment is not None:
-                mail.attach(
-                    temp_attachment["filename"],
-                    generate_pdf_binary(
+                binary = generate_pdf_binary(
                         temp_attachment["context_attach"],
                         temp_attachment["request"],
                         temp_attachment["template_name"],
-                    ),
+                )
+                if "pcf_obj" in temp_attachment:
+                    filename = f"notification_{temp_attachment['context_attach']['project_name']}.pdf"
+                    temp_attachment["pcf_obj"].last_notification_file.save(
+                        filename,
+                        SimpleUploadedFile(filename, binary, content_type="application/pdf"),
+                        save=True
+                    )
+                mail.attach(
+                    temp_attachment["filename"],
+                    binary,
                     temp_attachment["mimetype"],
                 )
 
@@ -121,7 +130,7 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
     """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc])
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_PUBLIC_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc])
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(dict_data)
         html = template.render(context)
@@ -138,7 +147,7 @@ def generate_pdf_binary(context, request, template_name):
     """Generate a PDF file as a binary (used for all PDF notifications attached in emails)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=template_name)
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_PUBLIC_BUCKET_NAME, Key=template_name)
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(context)
     else:
