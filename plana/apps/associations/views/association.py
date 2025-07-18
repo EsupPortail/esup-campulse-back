@@ -6,6 +6,7 @@ import unicodedata
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Count, Exists, F, OuterRef
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -529,17 +530,16 @@ class AssociationNameList(generics.ListAPIView):
             self.queryset = self.queryset.filter(is_public=to_bool(is_public))
         if allow_new_users is not None and allow_new_users != "":
             assos_ids_with_all_members = []
-            for association in self.get_queryset():
-                association_users = AssociationUser.objects.filter(association_id=association.id)
-                if (
-                    not association.amount_members_allowed is None
-                    and association_users.count() >= association.amount_members_allowed
-                ):
-                    assos_ids_with_all_members.append(association.id)
+            self.queryset = self.queryset.alias(amount_members=Count('associationuser'))
             if to_bool(allow_new_users) is True:
-                self.queryset = self.queryset.exclude(id__in=assos_ids_with_all_members)
+                self.queryset = self.queryset.filter(amount_members_allowed__gt=F('amount_members'))
             else:
-                self.queryset = self.queryset.filter(id__in=assos_ids_with_all_members)
+                self.queryset = self.queryset.filter(amount_members_allowed__lte=F('amount_members'))
+
+        au_qs = AssociationUser.objects.filter(association_id=OuterRef('pk'), is_president=True)
+        self.queryset = self.queryset.annotate(
+            has_president=Exists(au_qs))
+
         return self.list(request, *args, **kwargs)
 
 
