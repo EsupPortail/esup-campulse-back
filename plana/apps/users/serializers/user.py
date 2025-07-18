@@ -5,6 +5,7 @@ import re
 from allauth.account.adapter import get_adapter
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.db import IntegrityError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
@@ -14,7 +15,7 @@ from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
 from plana.apps.contents.models.setting import Setting
-from plana.apps.users.models.user import GroupInstitutionFundUser, User
+from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -202,34 +203,133 @@ class UserNameSerializer(serializers.ModelSerializer):
         ]
 
 
+############################
+# REGISTRATION SERIALIZERS #
+############################
+
+
+class GroupInstitutionFundUserRegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GroupInstitutionFundUser
+        fields = ['group', 'institution', 'fund']
+
+    def validate_group(self, value):
+        if not settings.GROUPS_STRUCTURE.get(value.name, {}).get('REGISTRATION_ALLOWED'):
+            raise exceptions.ValidationError(
+                {"detail": [_("Registering in a private group is not allowed.")]}
+            )
+        return value
+
+    def validate(self, data):
+        if data.get('institution') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('INSTITUTION_ID_POSSIBLE'):
+            raise exceptions.ValidationError(
+                {"detail": [_("Linking this institution to this group is not allowed.")]}
+            )
+
+        if data.get('fund') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('FUND_ID_POSSIBLE'):
+            raise exceptions.ValidationError(
+                {"detail": [_("Linking this fund to this group is not allowed.")]}
+            )
+        return data
+
+
+class AssociationUserRegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AssociationUser
+        fields = [
+            "association",
+            "is_president",
+            "is_vice_president",
+            "is_secretary",
+            "is_treasurer",
+        ]
+
+
 class CustomRegisterSerializer(serializers.ModelSerializer):
     """Used for the user registration form (to parse the phone field)."""
 
     phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
+    gifus = GroupInstitutionFundUserRegisterSerializer(many=True)
+    associations = AssociationUserRegisterSerializer(many=True)
 
-    def save(self, request):
-        """Save the user."""
-        self.cleaned_data = request.data
-        if self.cleaned_data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
+    class Meta:
+        model = User
+        fields = ["email", "first_name", "last_name", "phone", "gifus", "associations"]
+
+    def validate_email(self, value):
+        if value.split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
             raise exceptions.ValidationError(
                 {"detail": [_("This email address cannot be used to create a local account.")]}
             )
-        if User.objects.filter(
-            username__iexact=self.cleaned_data["email"], email__iexact=self.cleaned_data["email"]
-        ).exists():
-            raise exceptions.ValidationError({"detail": [_("A local account already exists with the email address.")]})
+        return value
+
+    def create_links(self, validated_data, user):
+        """Create linked GIFU and AssociationUser objects"""
+
+        gifus = validated_data.get('gifus', [])
+        associations = validated_data.get('associations', [])
+
+        gifus_list = []
+        for gifu in gifus:
+            try:
+                gifus_list.append(GroupInstitutionFundUser.objects.create(user=user, **gifu))
+            # Check the uniqueness of the GIFU
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {"detail": [_("Cannot create a GroupInstitutionFundUser object that already exists.")]}
+                )
+        user.groupinstitutionfunduser_set.add(*gifus_list)
+
+        asso_users_list = []
+        self.validate_associations_users(associations, user)
+        for asso in associations:
+            self.validate_association_user(asso, user)
+            try:
+                asso_users_list.append(AssociationUser.objects.create(user=user, **asso))
+            # Check the uniqueness of the AssociationUser
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {"detail": [_("Cannot create an AssociationUser object that already exists.")]}
+                )
+        user.associationuser_set.add(*asso_users_list)
+        return user
+
+    def validate_associations_users(self, associations_data: list[dict], user):
+        # At least one group can be linked to an association
+        if not any(settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"]
+                   for group in user.get_user_groups()):
+            raise serializers.ValidationError(_("The user hasn't any group that can have associations."))
+
+    def validate_association_user(self, association_data: dict, user):
+        association = association_data['association']
+        au_count = AssociationUser.objects.filter(association=association).count()
+        if au_count >= association.amount_members_allowed:
+            raise serializers.ValidationError(_("Too many users in association."))
+
+        if (
+            association_data.get('is_president')
+            and AssociationUser.objects.filter(
+                association=association, is_president=True
+            ).exists()
+        ):
+            raise serializers.ValidationError(_("President already in association."))
+
+    def save(self, request):
+        """Save the user."""
+        # self.cleaned_data = request.data
+        self.cleaned_data = self.validated_data
         adapter = get_adapter()
         user = adapter.new_user(request)
         adapter.save_user(request, user, self)
 
-        user.email = self.cleaned_data["email"].lower()
-        user.username = self.cleaned_data["email"]
+        email = self.cleaned_data["email"]
+        user.email = email.lower()
+        user.username = email
         if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
 
         user.save()
+        self.create_links(self.cleaned_data, user)
         return user
-
-    class Meta:
-        model = User
-        fields = ["email", "first_name", "last_name", "phone"]

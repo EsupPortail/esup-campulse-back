@@ -4,8 +4,10 @@ from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
+from dj_rest_auth.registration.views import RegisterView as DJRestAutRegisterView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -24,6 +26,13 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
     https://dj-rest-auth.readthedocs.io/en/latest/faq.html
     """
+
+
+class RegisterView(DJRestAutRegisterView):
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
 
 
 @extend_schema(methods=["PUT"], exclude=True)

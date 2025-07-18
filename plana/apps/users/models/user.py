@@ -47,6 +47,12 @@ class AssociationUser(models.Model):
             ),
             ("view_associationuser_anyone", "Can view all associations for a user."),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'association'],
+                name='unique_association_user',
+            ),
+        ]
 
 
 class GroupInstitutionFundUser(models.Model):
@@ -80,6 +86,12 @@ class GroupInstitutionFundUser(models.Model):
             (
                 "view_groupinstitutionfunduser_any_group",
                 "Can view all groups for a user.",
+            ),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'group', 'institution', 'fund'],
+                name='unique_group_institution_fund_user',
             ),
         ]
 

@@ -18,7 +18,7 @@ from .views.group_institution_fund_user import (
     GroupInstitutionFundUserRetrieve,
 )
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
-from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
+from .views.user_auth import PasswordResetConfirm, RegisterView, UserAuthVerifyEmailView, UserAuthView
 
 urlpatterns = [
     path("", UserListCreate.as_view(), name="user_list_create"),
@@ -26,6 +26,7 @@ urlpatterns = [
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
+    path("auth/registration/", RegisterView.as_view(), name="rest_user_registration"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         r"auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
