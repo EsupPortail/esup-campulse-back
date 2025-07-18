@@ -139,11 +139,7 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
 class AssociationNameSerializer(serializers.ModelSerializer):
     """Smaller serializer used in a simple name list of all associations."""
 
-    has_president = serializers.SerializerMethodField("is_president_in_association")
-
-    def is_president_in_association(self, association) -> bool:
-        """Check if a president has been linked to an association."""
-        return AssociationUser.objects.filter(association_id=association.id, is_president=True).exists()
+    has_president = serializers.BooleanField()
 
     class Meta:
         model = Association
