@@ -26,23 +26,22 @@ class AssociationsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_user.json",
-        "users_groupinstitutionfunduser.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
+        "tests/users_groupinstitutionfunduser.json",
     ]
 
     @classmethod

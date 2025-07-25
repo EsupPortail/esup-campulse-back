@@ -11,7 +11,7 @@ class CommissionsModelsTests(TestCase):
 
     fixtures = [
         "tests/commissions_fund.json",
-        "commissions_commission.json",
+        "tests/commissions_commission.json",
         "tests/institutions_institution.json",
     ]
 
