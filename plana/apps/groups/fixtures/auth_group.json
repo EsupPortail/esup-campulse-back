@@ -1,6 +1,7 @@
 [
 {
   "model": "auth.group",
+  "pk": 1,
   "fields": {
     "name": "MANAGER_GENERAL",
     "permissions": [
@@ -524,6 +525,7 @@
 },
 {
   "model": "auth.group",
+  "pk": 2,
   "fields": {
     "name": "MANAGER_INSTITUTION",
     "permissions": [
@@ -762,6 +764,7 @@
 },
 {
   "model": "auth.group",
+  "pk": 3,
   "fields": {
     "name": "MANAGER_MISC",
     "permissions": [
@@ -1015,6 +1018,7 @@
 },
 {
   "model": "auth.group",
+  "pk": 4,
   "fields": {
     "name": "MEMBER_FUND",
     "permissions": [
@@ -1113,6 +1117,7 @@
 },
 {
   "model": "auth.group",
+  "pk": 5,
   "fields": {
     "name": "STUDENT_INSTITUTION",
     "permissions": [
@@ -1236,6 +1241,7 @@
 },
 {
   "model": "auth.group",
+  "pk": 6,
   "fields": {
     "name": "STUDENT_MISC",
     "permissions": [
