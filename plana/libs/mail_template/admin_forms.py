@@ -21,10 +21,10 @@ class MailTemplateForm(forms.ModelForm):
         #     if self.instance.id:
         #         self.fields['code'].disabled = True
 
-        #     if not request.user.is_superuser:
-        #         self.fields['available_vars'].widget = forms.MultipleHiddenInput()
-        #         self.fields['available_vars'].queryset = self.fields['available_vars'].queryset.order_by('code')
-        #     self.fields['available_vars'].required = False
+        if not request.user.is_superuser:
+            self.fields['available_vars'].widget = forms.MultipleHiddenInput()
+            self.fields['available_vars'].queryset = self.fields['available_vars'].queryset.order_by('code')
+        self.fields['available_vars'].required = False
 
     def clean(self):
         cleaned_data = super().clean()
@@ -35,7 +35,7 @@ class MailTemplateForm(forms.ModelForm):
 
         try:
             user = self.request.user
-            valid_user = user.is_superuser
+            valid_user = user.has_perm('mail_template.change_mailtemplate')
         except AttributeError:
             pass
 
