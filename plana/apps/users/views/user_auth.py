@@ -133,7 +133,8 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
-        email_addresses = EmailAddress.objects.filter(user_id=user.id)
+        # Important : return primary adresses first
+        email_addresses = EmailAddress.objects.filter(user_id=user.id).order_by('-primary')
 
         if email_addresses.count() == 1:
             assos_user = AssociationUser.objects.filter(user_id=user.id)

@@ -183,7 +183,7 @@ class UserAdmin(admin.ModelAdmin):
     @admin.display(description=_("Has validated email address"))
     @admin.display(ordering="emailaddress")
     def is_validated_by_email(self, obj):
-        return obj.has_validated_email_user()
+        return obj.has_validated_email_user
 
     @admin.display(boolean=True)
     @admin.display(description=_("Is CAS user"))

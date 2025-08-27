@@ -292,9 +292,10 @@ class User(AbstractUser):
                     managers_emails.append(user_to_check.email)
         return managers_emails
 
+    @property
     def has_validated_email_user(self) -> bool:
         """Return True if the user account has a validated email."""
-        return EmailAddress.objects.filter(user_id=self.pk, email=self.email, verified=True).exists()
+        return self.emailaddress_set.filter(verified=True).exists()
 
     @property
     def is_cas_user(self) -> bool:
