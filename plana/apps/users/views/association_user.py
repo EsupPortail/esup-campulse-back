@@ -31,7 +31,7 @@ from plana.decorators import capture_queries
 class AssociationUserListCreate(generics.ListCreateAPIView):
     """/users/associations/ route."""
 
-    queryset = AssociationUser.objects.all()
+    queryset = AssociationUser.objects.all().select_related('association', 'user')
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -238,7 +238,7 @@ class AssociationUserRetrieve(generics.RetrieveAPIView):
     """/users/{user_id}/associations/ route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = AssociationUser.objects.all()
+    queryset = AssociationUser.objects.all().select_related('association', 'user')
     serializer_class = AssociationUserSerializer
 
     @extend_schema(

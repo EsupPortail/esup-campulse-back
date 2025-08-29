@@ -3,14 +3,17 @@
 from rest_framework import serializers
 
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
 from plana.apps.users.models.user import AssociationUser, User
+from plana.apps.users.serializers.user import UserNameSerializer
+
 
 
 class AssociationUserSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    association = serializers.PrimaryKeyRelatedField(queryset=Association.objects.all())
+    user = UserNameSerializer(read_only=True)
+    association = AssociationMandatoryDataSerializer(read_only=True)
 
     class Meta:
         model = AssociationUser
