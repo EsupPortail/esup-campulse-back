@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
@@ -179,6 +180,7 @@ class Project(models.Model):
     description = models.TextField(_("Description (activities done, changes from planning, ...)"), default="")
     difficulties = models.TextField(_("Difficulties"), default="")
     improvements = models.TextField(_("Improvements"), default="")
+    categories = models.ManyToManyField("Category", through="ProjectCategory")
 
     objects = models.Manager()
     visible_objects = VisibleProjectManager()
@@ -224,6 +226,12 @@ class Project(models.Model):
                     .values_list('email', flat=True)
                 )
         return managers_emails
+
+    @property
+    def commissions(self):
+        return Commission.objects.filter(
+            commissionfund__projectcommissionfund__project=self
+        ).distinct()
 
     def __str__(self):
         return self.name
