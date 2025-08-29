@@ -10,7 +10,7 @@ from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -46,6 +46,16 @@ class UserListCreate(generics.ListCreateAPIView):
         "email__nospaces__unaccent",
         "associations__name__nospaces__unaccent",
     ]
+
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .annotate(
+                has_validated_email_user_annot=Exists(EmailAddress.objects.filter(user_id=OuterRef('pk'), verified=True)),
+                is_cas_user_annot=Exists(SocialAccount.objects.filter(user_id=OuterRef('pk'), provider=CASProvider.id)),
+            )
+            .prefetch_related('associations')
+        )
 
     def get_serializer_class(self):
         if not self.request.user.has_perm("users.view_user_anyone") and not self.request.user.has_perm(
