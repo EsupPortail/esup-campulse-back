@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Count, Exists, F, OuterRef
 from django.utils.translation import gettext_lazy as _
+from django_filters import rest_framework as drf_filters
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
@@ -31,6 +32,7 @@ from plana.apps.users.models.user import AssociationUser
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 from .. import permissions
+from ..filters import AssociationFilter, AssociationNameFilter
 
 from plana.decorators import capture_queries
 
@@ -38,7 +40,8 @@ from plana.decorators import capture_queries
 class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route."""
 
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    filterset_class = AssociationFilter
     queryset = (
         Association.objects.all()
         .select_related('institution', 'institution_component', 'activity_field')
@@ -67,126 +70,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association name.",
-            ),
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association acronym.",
-            ),
-            OpenApiParameter(
-                "is_enabled",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for non-validated associations.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "is_site",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations from site.",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution ID.",
-            ),
-            OpenApiParameter(
-                "institution_component",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution Component ID.",
-            ),
-            OpenApiParameter(
-                "activity_field",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Activity Field ID.",
-            ),
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: AssociationPartialDataSerializer,
-        },
-    )
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List all associations with many filters."""
-        name = request.query_params.get("name")
-        acronym = request.query_params.get("acronym")
-        is_enabled = request.query_params.get("is_enabled")
-        is_public = request.query_params.get("is_public")
-        is_site = request.query_params.get("is_site")
-        institutions = request.query_params.get("institutions")
-        institution_component = request.query_params.get("institution_component")
-        activity_field = request.query_params.get("activity_field")
-        user_id = request.query_params.get("user_id")
-
-        if request.user.is_anonymous:
-            is_enabled = True
-            is_public = True
-
-        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_enabled"):
-            is_enabled = True
-
-        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_public"):
-            is_public = True
-
-        if name is not None and name != "":
-            name = str(name).strip()
-            self.queryset = self.queryset.filter(name__nospaces__unaccent__icontains=name.replace(" ", ""))
-
-        if acronym is not None and acronym != "":
-            acronym = str(acronym).strip()
-            self.queryset = self.queryset.filter(acronym__icontains=acronym)
-
-        if is_enabled is not None and is_enabled != "":
-            self.queryset = self.queryset.filter(is_enabled=to_bool(is_enabled))
-
-        if is_public is not None and is_public != "":
-            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
-
-        if is_site is not None and is_site != "":
-            self.queryset = self.queryset.filter(is_site=to_bool(is_site))
-
-        if institutions is not None and institutions != "":
-            self.queryset = self.queryset.filter(institution_id__in=institutions.split(","))
-
-        if institution_component is not None:
-            if institution_component == "":
-                self.queryset = self.queryset.filter(institution_component_id__isnull=True)
-            else:
-                self.queryset = self.queryset.filter(institution_component_id=institution_component)
-
-        if activity_field is not None and activity_field != "":
-            self.queryset = self.queryset.filter(activity_field_id=activity_field)
-
-        if user_id is not None and user_id != "" and self.request.user.has_perm("users.view_user_anyone"):
-            self.queryset = self.queryset.filter(
-                id__in=AssociationUser.objects.filter(user_id=user_id).values_list("association_id")
-            )
-
-        return self.list(request, *args, **kwargs)
-
-    @extend_schema(
         responses={
             status.HTTP_201_CREATED: AssociationMandatoryDataSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -195,6 +78,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
             status.HTTP_404_NOT_FOUND: None,
         }
     )
+    @capture_queries()
     def post(self, request, *args, **kwargs):
         """Create a new association with mandatory informations (manager only)."""
         if "institution" in request.data and request.data["institution"] != "":
@@ -308,6 +192,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
         }
     )
+    @capture_queries()
     def patch(self, request, *args, **kwargs):
         """Update association details (president and manager only, restricted fields for president)."""
         association = self.get_object()
@@ -441,6 +326,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_404_NOT_FOUND: None,
         },
     )
+    @capture_queries()
     def delete(self, request, *args, **kwargs):
         """Destroys an entire association (manager only)."""
         association = self.get_object()
@@ -486,61 +372,14 @@ class AssociationNameList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Association.objects.all().order_by("name")
     serializer_class = AssociationNameSerializer
+    filterset_class = AssociationNameFilter
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "allow_new_users",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations where registration is possible.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: AssociationNameSerializer,
-        },
-    )
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List minimal details for all associations with many filters."""
-        institutions = request.query_params.get("institutions")
-        is_public = request.query_params.get("is_public")
-        allow_new_users = request.query_params.get("allow_new_users")
-        if institutions is not None and institutions != "":
-            institutions_ids = institutions.split(",")
-            institutions_ids = [
-                institution_id
-                for institution_id in institutions_ids
-                if institution_id != "" and institution_id.isdigit()
-            ]
-            self.queryset = self.queryset.filter(institution_id__in=institutions_ids)
-        if is_public is not None and is_public != "":
-            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
-        if allow_new_users is not None and allow_new_users != "":
-            assos_ids_with_all_members = []
-            self.queryset = self.queryset.alias(amount_members=Count('associationuser'))
-            if to_bool(allow_new_users) is True:
-                self.queryset = self.queryset.filter(amount_members_allowed__gt=F('amount_members'))
-            else:
-                self.queryset = self.queryset.filter(amount_members_allowed__lte=F('amount_members'))
-
-        au_qs = AssociationUser.objects.filter(association_id=OuterRef('pk'), is_president=True)
-        self.queryset = self.queryset.annotate(
-            has_president=Exists(au_qs))
-
-        return self.list(request, *args, **kwargs)
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            has_president=Exists(
+                AssociationUser.objects.filter(association_id=OuterRef('pk'), is_president=True)
+            )
+        )
 
 
 class AssociationStatusUpdate(generics.UpdateAPIView):
@@ -560,6 +399,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             status.HTTP_404_NOT_FOUND: None,
         }
     )
+    @capture_queries()
     def patch(self, request, *args, **kwargs):
         """Update association charter status."""
         association = self.get_object()

@@ -14,15 +14,19 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models import GroupInstitutionFundUser
 from plana.utils import generate_pdf_response
+from ..filters import AssociationExportFilter
 from ..utils import generate_associations_export
 
+from plana.decorators import capture_queries
 
-class AssociationListExport(generics.RetrieveAPIView):
+
+class AssociationListExport(generics.ListAPIView):
     """/associations/export route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Association.objects.all()
     serializer_class = AssociationAllDataReadSerializer
+    filterset_class = AssociationExportFilter
 
     @extend_schema(
         operation_id="associations_export_list",
@@ -33,12 +37,6 @@ class AssociationListExport(generics.RetrieveAPIView):
                 OpenApiParameter.QUERY,
                 description="Export mode (xlsx or csv, csv by default).",
             ),
-            OpenApiParameter(
-                "associations",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="IDs of selected associations, separated by a comma.",
-            ),
         ],
         responses={
             status.HTTP_200_OK: AssociationAllDataReadSerializer,
@@ -46,24 +44,21 @@ class AssociationListExport(generics.RetrieveAPIView):
             status.HTTP_403_FORBIDDEN: None,
         },
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """Associations list export."""
         mode = request.query_params.get("mode")
-        associations = request.query_params.get("associations")
+        # associations = request.query_params.get("associations")
 
         institutions = GroupInstitutionFundUser.objects.filter(
             user_id=request.user.id, institution_id__isnull=False
         ).values_list("institution_id")
-        if len(institutions) == 0:
+        if institutions.exists():
             return response.Response(
                 {"error": _("Not allowed to export associations list CSV.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
         queryset = self.get_queryset().filter(institution_id__in=institutions)
-
-        if associations is not None and associations != "":
-            association_ids = [int(association) for association in associations.split(",")]
-            queryset = queryset.filter(id__in=association_ids)
 
         return generate_associations_export(queryset, mode)
 
@@ -84,6 +79,7 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
             status.HTTP_404_NOT_FOUND: None,
         },
     )
+    @capture_queries()
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
         association = self.get_object()
