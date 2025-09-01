@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 elif (
                     association.charter_date is not None
                     and datetime.date.today()
-                    == association.charter_date + datetime.timedelta(days=cron_days_before_association_expiration)
+                    >= association.charter_date + datetime.timedelta(days=cron_days_before_association_expiration)
                 ):
                     association.charter_status = "CHARTER_EXPIRED"
                     association.is_site = False
