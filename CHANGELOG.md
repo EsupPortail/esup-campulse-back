@@ -1,6 +1,17 @@
 # Changelog
 
-## 1.3.1 (02/05/2025)
+## 1.3.2 - k8s-0.2.1 (02/09/2025)
+
+### Corrections de bugs
+- Correction des permissions de l'admin Django pour la modification des templates de mails
+
+### Features et évolutions
+- Ajout d'une route de stats globales pour l'application
+
+### Autres changements
+- Optimisation des performances SQL de l'application
+
+## 1.3.1 - k8s-0.2.0 (02/05/2025)
 
 ### Corrections de bugs
 - Champs blankables dans l'admin django pour les associations

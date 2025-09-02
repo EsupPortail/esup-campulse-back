@@ -38,10 +38,11 @@ class Command(BaseCommand):
                                 f"{document_upload.validated_date.year + 1}-{document.expiration_day}",
                                 "%Y-%m-%d",
                             ).date()
-                        expiration_date = datetime.datetime.strptime(
-                            f"{document_upload.validated_date.year}-{document.expiration_day}",
-                            "%Y-%m-%d",
-                        ).date()
+                        else:
+                            expiration_date = datetime.datetime.strptime(
+                                f"{document_upload.validated_date.year}-{document.expiration_day}",
+                                "%Y-%m-%d",
+                            ).date()
                     if document.days_before_expiration is not None:
                         expiration_date = document_upload.validated_date + document.days_before_expiration
                 if expiration_date is not None and datetime.date.today() == expiration_date - datetime.timedelta(
@@ -63,7 +64,7 @@ class Command(BaseCommand):
                         subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
-                elif expiration_date is not None and datetime.date.today() == expiration_date:
+                elif expiration_date is not None and datetime.date.today() >= expiration_date:
                     document_upload.delete()
 
         except Exception as error:

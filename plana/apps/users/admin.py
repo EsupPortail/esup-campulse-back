@@ -177,13 +177,13 @@ class UserAdmin(admin.ModelAdmin):
     @admin.display(description=_("Has validated email address"))
     @admin.display(ordering="emailaddress")
     def is_validated_by_email(self, obj):
-        return obj.has_validated_email_user()
+        return obj.has_validated_email_user
 
     @admin.display(boolean=True)
     @admin.display(description=_("Is CAS user"))
     @admin.display(ordering="socialaccount")
     def is_cas(self, obj):
-        return obj.is_cas_user()
+        return obj.is_cas_user
 
 
 @admin.register(AssociationUser)
