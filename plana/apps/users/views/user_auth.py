@@ -57,9 +57,9 @@ class UserAuthView(DJRestAuthUserDetailsView):
             "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
-        if "is_validated_by_admin" in request.data and not request.user.is_cas_user():
+        if "is_validated_by_admin" in request.data and not request.user.is_cas_user:
             request.data.pop("is_validated_by_admin", False)
-        if request.user.is_cas_user():
+        if request.user.is_cas_user:
             for restricted_field in ["email", "first_name", "last_name"]:
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
@@ -131,7 +131,8 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
         confirmation.confirm(self.request)
 
         user = User.objects.get(email=confirmation.email_address)
-        email_addresses = EmailAddress.objects.filter(user_id=user.id)
+        # Important : return primary adresses first
+        email_addresses = EmailAddress.objects.filter(user_id=user.id).order_by('-primary')
 
         if email_addresses.count() == 1:
             assos_user = AssociationUser.objects.filter(user_id=user.id)

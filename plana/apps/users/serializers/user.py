@@ -34,30 +34,24 @@ class UserSerializer(serializers.ModelSerializer):
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_permissions(self, user):
         """Return permissions linked to the user."""
-        permissions = []
-        groups = Group.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=user.id).values_list("group_id")
-        )
-        for group in groups:
-            permissions = [
-                *permissions,
-                *group.permissions.values_list("codename", flat=True),
-            ]
-        return permissions
-        # return user.get_group_permissions()
+        return user.groupinstitutionfunduser_set.all().values_list('group__permissions__codename', flat=True)
 
     @extend_schema_field(OpenApiTypes.OBJECT)
     def get_groups(self, user):
         """Return groups-institutions-users links."""
-        return GroupInstitutionFundUser.objects.filter(user_id=user.id).values()
+        return user.groupinstitutionfunduser_set.values()
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
-        return user.is_cas_user()
+        if hasattr(user, 'is_cas_user_annot'):
+            return user.is_cas_user_annot
+        return user.is_cas_user
 
     def has_validated_email_user(self, user) -> bool:
         """Calculate field "has_validated_email" (True if user finished registration)."""
-        return user.has_validated_email_user()
+        if hasattr(user, 'has_validated_email_user_annot'):
+            return user.has_validated_email_user_annot
+        return user.has_validated_email_user
 
     def validate_phone(self, value):
         """Check phone field with a regex."""
@@ -132,11 +126,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def is_cas_user(self, user) -> bool:
         """Calculate field "is_cas" (True if user registered through CAS)."""
-        return user.is_cas_user()
+        if hasattr(user, 'is_cas_user_annot'):
+            return user.is_cas_user_annot
+        return user.is_cas_user
 
     def has_validated_email_user(self, user) -> bool:
         """Calculate field "has_validated_email" (True if user finished registration)."""
-        return user.has_validated_email_user()
+        if hasattr(user, 'has_validated_email_user_annot'):
+            return user.has_validated_email_user_annot
+        return user.has_validated_email_user
 
     def validate_phone(self, value):
         """Check phone field with a regex."""

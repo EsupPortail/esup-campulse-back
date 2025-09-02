@@ -11,7 +11,7 @@ from drf_spectacular.views import (
 )
 from rest_framework.exceptions import bad_request, server_error
 
-from .views import forbidden, not_found, ok
+from .views import forbidden, not_found, ok, StatsView
 
 admin.autodiscover()
 
@@ -46,6 +46,8 @@ urlpatterns = [
     path("summernote/", include("django_summernote.urls")),
     path("mail_template/", include("plana.libs.mail_template.urls")),
     path("_hc/", include("health_check.urls")),
+
+    path("stats/", StatsView.as_view(), name="stats"),
 ]
 
 # debug toolbar for dev
