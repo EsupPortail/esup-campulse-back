@@ -71,13 +71,15 @@ class EncryptedPrivateFileStorage(PrivateFileStorage):
         self.age_private_key = settings.AGE_PRIVATE_KEY
 
         try:
-            self.identity = x25519.Identity.from_str(self.age_private_key.decode("utf-8").strip())
+            self.identity = x25519.Identity.from_str(self.age_private_key)
         except Exception as error:
+            print(error)
             raise ImproperlyConfigured(f"AGE private key not found : {error}") from error
 
         try:
-            self.recipient = x25519.Recipient.from_str(self.age_public_key.decode("utf-8").strip())
+            self.recipient = x25519.Recipient.from_str(self.age_public_key)
         except Exception as error:
+            print(error)
             raise ImproperlyConfigured(f"AGE public key not found : {error}") from error
 
     def _open(self, name, mode="rb"):
