@@ -9,6 +9,16 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
+def load_key(keyfile):
+    """Load JWT and AGE keys."""
+    try:
+        keyfile = SITE_ROOT / "keys" / keyfile
+        with open(keyfile, "r") as file:
+            return file.read()
+    except FileNotFoundError:
+        return ""
+
+
 APP_VERSION = "1.2.4"
 
 ######################
@@ -463,8 +473,8 @@ S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 S3_TEMPLATES_FILEPATH = "associations_documents_templates"
 S3_DOCUMENTS_FILEPATH = "associations_documents"
 S3_NOTIFICATIONS_FILEPATH = "projects_notifications"
-AGE_PUBLIC_KEY = environ.get("AGE_PUBLIC_KEY")
-AGE_PRIVATE_KEY = environ.get("AGE_PRIVATE_KEY")
+AGE_PUBLIC_KEY = environ.get("AGE_PUBLIC_KEY", load_key("age-public-key.key"))
+AGE_PRIVATE_KEY = environ.get("AGE_PRIVATE_KEY", load_key("age-private-key.key"))
 
 
 #####################
@@ -572,8 +582,8 @@ SOCIALACCOUNT_PROVIDERS = {
 SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=1),
     "ALGORITHM": "RS256",
-    "SIGNING_KEY": environ.get("JWT_SIGNING_KEY"),
-    "VERIFYING_KEY": environ.get("JWT_VERIFYING_KEY"),
+    "SIGNING_KEY": environ.get("JWT_SIGNING_KEY", load_key("jwt-private-key.pem")),
+    "VERIFYING_KEY": environ.get("JWT_VERIFYING_KEY", load_key("jwt-public-key.pem")),
     "AUDIENCE": "plan_a",
     "ISSUER": "plan_a",
     "USER_ID_FIELD": "id",
