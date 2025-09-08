@@ -1,7 +1,8 @@
 from django_filters import rest_framework as filters
 
-from plana.filters import ChoiceInFilter, NumberInFilter
 from plana.apps.institutions.models import InstitutionComponent
+from plana.filters import ChoiceInFilter, NumberInFilter
+
 from .models import Document
 
 

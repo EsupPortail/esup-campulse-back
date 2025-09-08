@@ -119,7 +119,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
 
         group_structure = settings.GROUPS_STRUCTURE[group.name]
         if (
-            group_structure["REGISTRATION_ALLOWED"] is False
+            not group_structure["REGISTRATION_ALLOWED"]
             and not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
             and (not request.user.is_staff or (request.user.is_staff and group in request.user.get_user_groups()))
         ):
@@ -128,8 +128,8 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if (group_structure["REGISTRATION_ALLOWED"] is False and user.get_user_groups().exists()) or (
-            group_structure["REGISTRATION_ALLOWED"] is True and user.is_staff is True
+        if (not group_structure["REGISTRATION_ALLOWED"] and user.get_user_groups().exists()) or (
+            group_structure["REGISTRATION_ALLOWED"] and user.is_staff
         ):
             return response.Response(
                 {"error": _("Cannot register in a public and a private group at the same time.")},
@@ -137,7 +137,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
             )
 
         if institution_id is not None:
-            if (group_structure["INSTITUTION_ID_POSSIBLE"] is False) or (
+            if (not group_structure["INSTITUTION_ID_POSSIBLE"]) or (
                 not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
                 and (not request.user.is_anonymous and not institution in request.user.get_user_managed_institutions())
             ):
@@ -147,7 +147,7 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
                 )
 
         if fund_id is not None:
-            if (group_structure["FUND_ID_POSSIBLE"] is False) or (
+            if (not group_structure["FUND_ID_POSSIBLE"]) or (
                 not request.user.has_perm("users.add_groupinstitutionfunduser_any_group")
                 and (
                     not request.user.is_anonymous
@@ -245,7 +245,7 @@ class GroupInstitutionFundUserDestroy(generics.DestroyAPIView):
 
         group_name = Group.objects.get(id=kwargs["group_id"]).name
         if (
-            settings.GROUPS_STRUCTURE[group_name]["ASSOCIATIONS_POSSIBLE"] is True
+            settings.GROUPS_STRUCTURE[group_name]["ASSOCIATIONS_POSSIBLE"]
             and AssociationUser.objects.filter(user_id=user).exists()
         ):
             return response.Response(

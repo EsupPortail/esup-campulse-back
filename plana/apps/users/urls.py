@@ -18,7 +18,12 @@ from .views.group_institution_fund_user import (
     GroupInstitutionFundUserRetrieve,
 )
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
-from .views.user_auth import PasswordResetConfirm, RegisterView, UserAuthVerifyEmailView, UserAuthView
+from .views.user_auth import (
+    PasswordResetConfirm,
+    RegisterView,
+    UserAuthVerifyEmailView,
+    UserAuthView,
+)
 
 urlpatterns = [
     path("", UserListCreate.as_view(), name="user_list_create"),
@@ -81,7 +86,7 @@ urlpatterns = [
     ),
 ]
 
-if settings.LDAP_ENABLED is True:
+if settings.LDAP_ENABLED:
     urlpatterns += [
         path("external/", ExternalUserList.as_view(), name="external_user_list"),
     ]

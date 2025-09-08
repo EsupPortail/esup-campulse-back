@@ -8,6 +8,7 @@ from plana.apps.contents.serializers.content import (
     ContentSerializer,
     ContentUpdateSerializer,
 )
+
 from .. import filters
 
 

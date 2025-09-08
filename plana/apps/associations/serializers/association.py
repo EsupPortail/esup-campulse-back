@@ -12,7 +12,9 @@ from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.institutions.serializers.institution import InstitutionSerializer
-from plana.apps.institutions.serializers.institution_component import InstitutionComponentSerializer
+from plana.apps.institutions.serializers.institution_component import (
+    InstitutionComponentSerializer,
+)
 from plana.apps.users.models.user import AssociationUser
 
 

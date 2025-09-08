@@ -22,10 +22,9 @@ from plana.apps.users.serializers.association_user import (
     AssociationUserSerializer,
     AssociationUserUpdateSerializer,
 )
+from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
-
-from plana.decorators import capture_queries
 
 
 class AssociationUserListCreate(generics.ListCreateAPIView):
@@ -153,7 +152,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             )
 
         if "is_validated_by_admin" in request.data and (
-            to_bool(request.data["is_validated_by_admin"]) is True
+            to_bool(request.data["is_validated_by_admin"])
             and request.user.is_anonymous
             or (
                 not request.user.has_perm("users.change_associationuser_any_institution")
@@ -167,7 +166,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
         has_associations_possible_group = False
         for group in user.get_user_groups():
-            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"] is True:
+            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"]:
                 has_associations_possible_group = True
         if not has_associations_possible_group:
             return response.Response(
@@ -192,7 +191,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "is_president" in request.data and to_bool(request.data["is_president"]) is True:
+        if "is_president" in request.data and to_bool(request.data["is_president"]):
             association_user_president = AssociationUser.objects.filter(
                 association_id=association_id, is_president=True
             )
@@ -210,8 +209,8 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
         if "is_validated_by_admin" not in request.data or (
             "is_validated_by_admin" in request.data
-            and (to_bool(request.data["is_validated_by_admin"]) is False)
-            and user.is_validated_by_admin is True
+            and (not to_bool(request.data["is_validated_by_admin"]))
+            and user.is_validated_by_admin
         ):
             current_site = get_current_site(request)
             context = {
@@ -372,17 +371,17 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if "can_be_president_to" in request.data and not "can_be_president_from" in request.data:
             request.data["can_be_president_from"] = datetime.date.today()
 
-        if "is_vice_president" in request.data and to_bool(request.data["is_vice_president"]) is True:
+        if "is_vice_president" in request.data and to_bool(request.data["is_vice_president"]):
             request.data["is_president"] = False
             request.data["is_secretary"] = False
             request.data["is_treasurer"] = False
 
-        if "is_secretary" in request.data and to_bool(request.data["is_secretary"]) is True:
+        if "is_secretary" in request.data and to_bool(request.data["is_secretary"]):
             request.data["is_president"] = False
             request.data["is_vice_president"] = False
             request.data["is_treasurer"] = False
 
-        if "is_treasurer" in request.data and to_bool(request.data["is_treasurer"]) is True:
+        if "is_treasurer" in request.data and to_bool(request.data["is_treasurer"]):
             request.data["is_president"] = False
             request.data["is_vice_president"] = False
             request.data["is_secretary"] = False
@@ -419,7 +418,7 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if (
             "is_validated_by_admin" in request.data
-            and request.data["is_validated_by_admin"] is True
+            and request.data["is_validated_by_admin"]
             and (
                 request.user.has_perm("users.change_associationuser_any_institution")
                 or request.user.is_staff_for_association(kwargs["association_id"])

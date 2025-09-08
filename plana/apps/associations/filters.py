@@ -1,6 +1,5 @@
-from django_filters import rest_framework as filters
-
 from django.db.models import Count, F
+from django_filters import rest_framework as filters
 
 from plana.apps.institutions.models import InstitutionComponent
 from plana.filters import EmptyNumberFilter, NumberInFilter

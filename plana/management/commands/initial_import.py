@@ -26,7 +26,7 @@ class Command(BaseCommand):
             if Group.objects.all().exists():
                 self.stdout.write(self.style.WARNING(_("Initial data already present.")))
             # FIXME : May be boken due to fixtures changes
-            #elif options["test"] is True:
+            #elif options["test"]:
             #    apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
             #    # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
             #    for app_fixture in apps_fixtures:
@@ -55,7 +55,7 @@ class Command(BaseCommand):
                     ],
                 )
 
-            if options["storages"] is True:
+            if options["storages"]:
                 call_command("loaddata_storages")
 
             call_command("createsuperuser", "--no-input")

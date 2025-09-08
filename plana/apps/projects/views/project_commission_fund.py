@@ -1,7 +1,6 @@
 """Views linked to project commission funds links."""
 
 import datetime
-import locale
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -155,11 +154,11 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                         status=status.HTTP_403_FORBIDDEN,
                     )
 
-        if fund.is_site is True and (
+        if fund.is_site and (
             project.user_id is not None
             or (
                 project.association_id is not None
-                and Association.objects.get(id=project.association_id).is_site is False
+                and not Association.objects.get(id=project.association_id).is_site
             )
         ):
             return response.Response(

@@ -1,5 +1,5 @@
-from functools import wraps
 import time
+from functools import wraps
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext

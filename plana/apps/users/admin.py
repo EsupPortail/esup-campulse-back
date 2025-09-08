@@ -16,8 +16,8 @@ from django.utils.translation import gettext_lazy as _
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
+from ...admin import SecuredInlineAdmin, SecuredModelAdmin
 from .models import AssociationUser, GroupInstitutionFundUser, User
-from ...admin import SecuredModelAdmin, SecuredInlineAdmin
 
 
 class ManagerUserCreationForm(UserCreationForm):
@@ -75,7 +75,7 @@ class ManagerUserCreationForm(UserCreationForm):
                 self.save_m2m()
 
         EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
-        if is_cas is True:
+        if is_cas:
             SocialAccount.objects.create(
                 user=user,
                 provider=CASProvider.id,
@@ -84,7 +84,7 @@ class ManagerUserCreationForm(UserCreationForm):
             )
 
         group = Group.objects.get(name="MANAGER_GENERAL")
-        if "is_manager_general" in self.changed_data and self.cleaned_data["is_manager_general"] is True:
+        if "is_manager_general" in self.changed_data and self.cleaned_data["is_manager_general"]:
             for institution_id in Institution.objects.values_list("id", flat=True):
                 GroupInstitutionFundUser.objects.create(
                     user_id=user.id,

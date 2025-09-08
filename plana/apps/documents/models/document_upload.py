@@ -12,7 +12,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import User
 from plana.storages import DynamicStorageFileField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicStorageFileField = models.FileField
 
 

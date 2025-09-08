@@ -12,8 +12,9 @@ from plana.apps.documents.serializers.document import (
     DocumentSerializer,
     DocumentUpdateSerializer,
 )
-from ..filters import DocumentFilter
 from plana.decorators import capture_queries
+
+from ..filters import DocumentFilter
 
 
 class DocumentList(generics.ListCreateAPIView):

@@ -3,10 +3,11 @@
 from rest_framework import serializers
 
 from plana.apps.associations.models.association import Association
-from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
+from plana.apps.associations.serializers.association import (
+    AssociationMandatoryDataSerializer,
+)
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.user import UserNameSerializer
-
 
 
 class AssociationUserSerializer(serializers.ModelSerializer):

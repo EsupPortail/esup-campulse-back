@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, generics, response, status
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.fund import Fund
@@ -206,7 +206,7 @@ class UserListCreate(generics.ListCreateAPIView):
                         ).values_list("user_id")
                     )
 
-                    if check_other_users is True:
+                    if check_other_users:
                         self.queryset = self.queryset.filter(
                             Q(id__in=assos_users_query.values_list("user_id"))
                             | Q(id__in=misc_users_query.values_list("id"))
@@ -234,7 +234,7 @@ class UserListCreate(generics.ListCreateAPIView):
         """Create an account for another person (manager only)."""
         request.data.update({"email": request.data["email"].lower()})
         is_cas = True
-        if not "is_cas" in request.data or ("is_cas" in request.data and request.data["is_cas"] is False):
+        if "is_cas" not in request.data or ("is_cas" in request.data and not request.data["is_cas"]):
             is_cas = False
             if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
                 return response.Response(
@@ -348,7 +348,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         request.data.pop("username", False)
 
-        if user.is_superuser is True or user.is_staff is True:
+        if user.is_superuser or user.is_staff:
             return response.Response(
                 {"error": _("Cannot edit superuser.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -380,9 +380,9 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         if "can_submit_projects" in request.data:
             template = None
-            if to_bool(request.data["can_submit_projects"]) is False:
+            if not to_bool(request.data["can_submit_projects"]):
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
-            elif to_bool(request.data["can_submit_projects"]) is True:
+            elif to_bool(request.data["can_submit_projects"]):
                 template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
@@ -391,7 +391,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
 
-        if "is_validated_by_admin" in request.data and to_bool(request.data["is_validated_by_admin"]) is True:
+        if "is_validated_by_admin" in request.data and to_bool(request.data["is_validated_by_admin"]):
             context["username"] = user.username
             context["first_name"] = user.first_name
             context["last_name"] = user.last_name

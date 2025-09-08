@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            if settings.USE_S3 is True:
+            if settings.USE_S3:
                 bucket_name = settings.AWS_STORAGE_PUBLIC_BUCKET_NAME
                 resource = boto3.resource(
                     "s3",

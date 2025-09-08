@@ -1,5 +1,6 @@
 """Admin view for Project models."""
 import datetime
+
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
@@ -8,6 +9,10 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.models.user import AssociationUser, User
 
+from ...admin import SecuredModelAdmin
+from ...libs.mail_template.models import MailTemplate
+from ...utils import send_mail
+from ..contents.models import Content
 from .models import (
     Category,
     Project,
@@ -15,10 +20,6 @@ from .models import (
     ProjectComment,
     ProjectCommissionFund,
 )
-from ..contents.models import Content
-from ...admin import SecuredModelAdmin
-from ...libs.mail_template.models import MailTemplate
-from ...utils import send_mail
 
 
 @admin.register(Category)

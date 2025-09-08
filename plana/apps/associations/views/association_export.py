@@ -13,11 +13,11 @@ from plana.apps.associations.serializers.association import (
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models import GroupInstitutionFundUser
+from plana.decorators import capture_queries
 from plana.utils import generate_pdf_response
+
 from ..filters import AssociationExportFilter
 from ..utils import generate_associations_export
-
-from plana.decorators import capture_queries
 
 
 class AssociationListExport(generics.ListAPIView):

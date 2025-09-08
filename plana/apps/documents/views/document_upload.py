@@ -29,10 +29,9 @@ from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, User
+from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
-
-from plana.decorators import capture_queries
 
 
 class DocumentUploadListCreate(generics.ListCreateAPIView):
@@ -202,7 +201,7 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         if "user" in request.data and request.data["user"] is not None and request.data["user"] != "":
             user = get_object_or_404(User, username=request.data["user"])
             existing_document = existing_document.filter(user_id=request.user.pk)
-            if (request.user.is_anonymous and user.is_validated_by_admin is True) or (
+            if (request.user.is_anonymous and user.is_validated_by_admin) or (
                 not request.user.is_anonymous
                 and not request.user.has_perm("documents.add_documentupload_all")
                 and user.id != request.user.pk

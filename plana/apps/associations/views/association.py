@@ -6,11 +6,10 @@ import unicodedata
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Count, Exists, F, OuterRef
+from django.db.models import Exists, OuterRef
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -29,12 +28,12 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
+from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
+
 from .. import permissions
 from ..filters import AssociationFilter, AssociationNameFilter
-
-from plana.decorators import capture_queries
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
@@ -102,7 +101,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         if (
             "is_public" in request.data
-            and to_bool(request.data["is_public"]) is True
+            and to_bool(request.data["is_public"])
             and not request.user.has_perm("associations.add_association_all_fields")
         ):
             return response.Response(
@@ -112,7 +111,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
 
         if (
             "is_site" in request.data
-            and to_bool(request.data["is_site"]) is True
+            and to_bool(request.data["is_site"])
             and not request.user.has_perm("associations.add_association_all_fields")
         ):
             return response.Response(
@@ -267,20 +266,20 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
             if "is_public" in request.data:
                 is_public = to_bool(request.data["is_public"])
-                if is_public is True and association.is_enabled is False:
+                if is_public and not association.is_enabled:
                     request.data["is_public"] = False
 
             if "is_enabled" in request.data:
                 is_enabled = to_bool(request.data["is_enabled"])
-                if is_enabled is False:
+                if not is_enabled:
                     request.data["is_public"] = False
 
             if "can_submit_projects" in request.data:
                 template = None
-                if to_bool(request.data["can_submit_projects"]) is False:
+                if not to_bool(request.data["can_submit_projects"]):
                     context["manager_email_address"] = request.user.email
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
-                elif to_bool(request.data["can_submit_projects"]) is True:
+                elif to_bool(request.data["can_submit_projects"]):
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,

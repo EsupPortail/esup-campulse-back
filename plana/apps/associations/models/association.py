@@ -12,7 +12,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicThumbnailImageField = ImageField
 
 

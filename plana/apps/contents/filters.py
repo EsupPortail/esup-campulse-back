@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 
 from plana.filters import CharInFilter
+
 from .models import Content
 
 

@@ -12,7 +12,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicStorageFileField = models.FileField
 
 

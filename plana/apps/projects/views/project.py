@@ -232,14 +232,14 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if with_comments is not None and with_comments != "":
             projects_ids_with_comments = ProjectComment.objects.all().values_list("project_id")
-            if to_bool(with_comments) is False:
+            if not to_bool(with_comments):
                 queryset = queryset.exclude(id__in=projects_ids_with_comments)
             else:
                 queryset = queryset.filter(id__in=projects_ids_with_comments)
 
         if active_projects is not None and active_projects != "":
             inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
-            if to_bool(active_projects) is False:
+            if not to_bool(active_projects):
                 queryset = queryset.filter(project_status__in=inactive_statuses)
             else:
                 queryset = queryset.exclude(project_status__in=inactive_statuses)
