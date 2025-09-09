@@ -36,8 +36,6 @@ unittest:
     - touch keys/age-private-key.key
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
-  rules:
-    - when: never # TODO remove this line when tests with Docker are finished
 
 include:
   - project: docker/template
