@@ -7,9 +7,29 @@ from rest_framework import status
 class RootViewsTests(TestCase):
     """Main tests class."""
 
+    fixtures = [
+        "associations_activityfield.json",
+        "associations_association.json",
+        "commissions_commission.json",
+        "commissions_fund.json",
+        "documents_document.json",
+        "institutions_institution.json",
+        "institutions_institutioncomponent.json",
+    ]
+
     def setUp(self):
         """Start default client."""
         self.client = Client()
+
+    def test_stats_view(self):
+        response = self.client.get("/stats/")
+        expected_stats = {
+            "association_count": 2,
+            "next_commission_date": "2099-10-20",
+            "last_charter_update": "2023-03-15"
+        }
+
+        self.assertEqual(response.data, expected_stats)
 
     def test_root(self):
         """Base request."""
