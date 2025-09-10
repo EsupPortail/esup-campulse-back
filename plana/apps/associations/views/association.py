@@ -68,6 +68,18 @@ class AssociationListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationMandatoryDataSerializer
         return super().get_serializer_class()
 
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return self.queryset.filter(is_enabled=True, is_public=True)
+
+        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_enabled"):
+            return self.queryset.filter(is_enabled=True)
+
+        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_public"):
+            return self.queryset.filter(is_public=True)
+
+        return self.queryset
+
     @extend_schema(
         responses={
             status.HTTP_201_CREATED: AssociationMandatoryDataSerializer,

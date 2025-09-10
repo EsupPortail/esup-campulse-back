@@ -28,6 +28,7 @@ from plana.utils import send_mail, to_bool
 
 
 class AssociationUserListCreate(generics.ListCreateAPIView):
+    # TODO : deprecated - association user post view must be auth only - no longer allowany
     """/users/associations/ route."""
 
     queryset = AssociationUser.objects.all().select_related('association', 'user')

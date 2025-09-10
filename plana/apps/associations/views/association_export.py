@@ -1,5 +1,4 @@
 """Views directly linked to association exports."""
-
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -49,16 +48,17 @@ class AssociationListExport(generics.ListAPIView):
         """Associations list export."""
         mode = request.query_params.get("mode")
         # associations = request.query_params.get("associations")
+        qs = self.filter_queryset(self.get_queryset())
 
         institutions = GroupInstitutionFundUser.objects.filter(
             user_id=request.user.id, institution_id__isnull=False
         ).values_list("institution_id")
-        if institutions.exists():
+        if not institutions.exists():
             return response.Response(
                 {"error": _("Not allowed to export associations list CSV.")},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        queryset = self.get_queryset().filter(institution_id__in=institutions)
+        queryset = qs.filter(institution_id__in=institutions)
 
         return generate_associations_export(queryset, mode)
 

@@ -395,7 +395,7 @@
     "model": "contents.content",
     "pk": 31,
     "fields": {
-      "code": "NOTIFICATION_FPEX_PROJECT_POSTPONE",
+      "code": "NOTIFICATION_FPEX_POSTPONE",
       "label": "PDF de notification de report de subventionnement FPEX (Fonds Principal d'Exemple).",
       "title": "Notification de report FPEX (Fonds Principal d'Exemple)",
       "header": "<p>{{ owner.name }}<br>{{ owner.address }}</p>",

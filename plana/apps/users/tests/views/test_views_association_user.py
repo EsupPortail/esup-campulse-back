@@ -191,6 +191,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
     def test_anonymous_post_association_user_404_user(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -215,6 +216,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_anonymous_post_association_user_404_association(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -239,6 +241,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_anonymous_post_association_user_forbidden_add(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -248,12 +251,13 @@ class AssociationUserViewsTests(TestCase):
             "/users/associations/",
             {
                 "user": self.student_user_name,
-                "association": 2,
+                "association": 3,
             },
         )
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_post_association_user_forbidden_validate(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -270,6 +274,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_post_association_user_multiple_presidents(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -286,6 +291,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_anonymous_post_association_user_wrong_group(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -302,6 +308,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_anonymous_post_association_user_max_members(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 
@@ -320,6 +327,7 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_anonymous_post_association_user_success(self):
+        # TODO : deprecated - association user post view must be auth only - no longer allowany
         """
         POST /users/associations/ .
 

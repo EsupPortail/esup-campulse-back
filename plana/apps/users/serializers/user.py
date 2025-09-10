@@ -280,18 +280,19 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
                 )
         user.groupinstitutionfunduser_set.add(*gifus_list)
 
-        asso_users_list = []
-        self.validate_associations_users(associations, user)
-        for asso in associations:
-            self.validate_association_user(asso, user)
-            try:
-                asso_users_list.append(AssociationUser.objects.create(user=user, **asso))
-            # Check the uniqueness of the AssociationUser
-            except IntegrityError:
-                raise serializers.ValidationError(
-                    {"detail": [_("Cannot create an AssociationUser object that already exists.")]}
-                )
-        user.associationuser_set.add(*asso_users_list)
+        if associations:
+            asso_users_list = []
+            self.validate_associations_users(associations, user)
+            for asso in associations:
+                self.validate_association_user(asso, user)
+                try:
+                    asso_users_list.append(AssociationUser.objects.create(user=user, **asso))
+                # Check the uniqueness of the AssociationUser
+                except IntegrityError:
+                    raise serializers.ValidationError(
+                        {"detail": [_("Cannot create an AssociationUser object that already exists.")]}
+                    )
+            user.associationuser_set.add(*asso_users_list)
         return user
 
     def validate_associations_users(self, associations_data: list[dict], user):
