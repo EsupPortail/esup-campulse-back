@@ -7,8 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -60,7 +59,10 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
     @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all associations linked to a user, or all associations of all users (manager)."""
-        self.queryset = self.filter_queryset(self.get_queryset())
+        qs = self.get_queryset()
+        #if not self.request.user.has_perm("users.view_associationuser_anyone"):
+        #    qs = qs.filter(user_id=self.request.user.pk)
+        self.queryset = self.filter_queryset(qs)
 
         return self.list(request, *args, **kwargs)
 
