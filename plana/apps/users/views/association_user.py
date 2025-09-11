@@ -16,6 +16,7 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.users.filters import AssociationUserFilter
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
@@ -31,7 +32,8 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
     # TODO : deprecated - association user post view must be auth only - no longer allowany
     """/users/associations/ route."""
 
-    queryset = AssociationUser.objects.all().select_related('association', 'user')
+    queryset = AssociationUser.objects.filter(user__is_validated_by_admin=True).select_related('association', 'user')
+    filterset_class = AssociationUserFilter
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -48,26 +50,6 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "is_validated_by_admin",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members not validated by an admin",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-        ],
         responses={
             status.HTTP_200_OK: AssociationUserSerializer,
             status.HTTP_401_UNAUTHORIZED: None,
@@ -78,35 +60,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
     @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all associations linked to a user, or all associations of all users (manager)."""
-        association_id = request.query_params.get("association_id")
-        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
-        institutions = request.query_params.get("institutions")
-
-        if (
-            association_id is not None
-            and association_id != ""
-            and (
-                request.user.has_perm("users.view_associationuser_anyone")
-                or request.user.is_president_in_association(association_id)
-            )
-        ):
-            self.queryset = self.queryset.filter(association_id=association_id)
-        elif not request.user.has_perm("users.view_associationuser_anyone"):
-            self.queryset = self.queryset.filter(user_id=request.user.pk)
-
-        if is_validated_by_admin is not None and is_validated_by_admin != "":
-            self.queryset = self.queryset.filter(is_validated_by_admin=to_bool(is_validated_by_admin))
-
-        if institutions is not None and institutions != "":
-            institutions_ids = institutions.split(",")
-            institutions_ids = [
-                institution_id
-                for institution_id in institutions_ids
-                if institution_id != "" and institution_id.isdigit()
-            ]
-            self.queryset = self.queryset.filter(
-                association_id__in=Association.objects.filter(institution_id__in=institutions_ids).values_list("id")
-            )
+        self.queryset = self.filter_queryset(self.get_queryset())
 
         return self.list(request, *args, **kwargs)
 
