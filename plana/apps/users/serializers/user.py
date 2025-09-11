@@ -249,8 +249,8 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     """Used for the user registration form (to parse the phone field)."""
 
     phone = serializers.CharField(required=False, allow_blank=True, max_length=32)
-    gifus = GroupInstitutionFundUserRegisterSerializer(many=True)
-    associations = AssociationUserRegisterSerializer(many=True)
+    gifus = GroupInstitutionFundUserRegisterSerializer(many=True, write_only=True)
+    associations = AssociationUserRegisterSerializer(many=True, write_only=True)
 
     class Meta:
         model = User
@@ -326,6 +326,33 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         email = self.cleaned_data["email"]
         user.email = email.lower()
         user.username = email
+        if "phone" in self.cleaned_data:
+            user.phone = self.cleaned_data["phone"]
+
+        user.save()
+        self.create_links(self.cleaned_data, user)
+        return user
+
+
+class CustomCASDataRegisterSerializer(CustomRegisterSerializer):
+    """
+    Used for the CAS user registration form (to parse the phone field).
+    Excluding CAS auto-filled fields
+    """
+
+    def get_fields(self):
+        fields = super().get_fields()
+        for field in ("last_name", "first_name", "email"):
+            fields.pop(field, None)
+        return fields
+
+    def save(self):
+        """Save the new data linked to CAS user."""
+        # self.cleaned_data = request.data
+        request = self.context.get("request")
+        self.cleaned_data = self.validated_data
+        user = request.user
+
         if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
 

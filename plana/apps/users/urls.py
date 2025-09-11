@@ -8,7 +8,7 @@ from .views.association_user import (
     AssociationUserRetrieve,
     AssociationUserUpdateDestroy,
 )
-from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
+from .views.cas import CASDataRegisterView, CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserList
 from .views.group_institution_fund_user import (
     GroupInstitutionFundUserDestroy,
@@ -32,6 +32,7 @@ urlpatterns = [
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
     path("auth/registration/", RegisterView.as_view(), name="rest_user_registration"),
+    path("auth/registration/cas/", CASDataRegisterView.as_view(), name="rest_user_registration_cas_data"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         r"auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
