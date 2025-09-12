@@ -7,8 +7,9 @@ stages:
   - release
 
 services:
-  - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
-    alias: postgres
+  # - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
+  #   alias: postgres
+  - postgres:latest
 
 variables:
   POSTGRES_DB: plana_test
