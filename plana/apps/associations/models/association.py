@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from thumbnails.fields import ImageField
 
+from plana.apps.associations.managers import AssociationQueryset
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
@@ -104,6 +105,8 @@ class Association(models.Model):
         on_delete=models.RESTRICT,
         null=True,
     )
+
+    objects = AssociationQueryset.as_manager()
 
     def __str__(self):
         return self.acronym

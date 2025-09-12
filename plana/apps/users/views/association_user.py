@@ -7,7 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -15,7 +15,6 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 from plana.apps.associations.models.association import Association
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.filters import AssociationUserFilter
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
@@ -27,12 +26,18 @@ from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
 
 
+@extend_schema_view(
+    list=extend_schema(tags=["users/associations"])
+)
 class AssociationUserListCreate(generics.ListCreateAPIView):
     # TODO : deprecated - association user post view must be auth only - no longer allowany
     """/users/associations/ route."""
 
     queryset = AssociationUser.objects.filter(user__is_validated_by_admin=True).select_related('association', 'user')
-    filterset_class = AssociationUserFilter
+    filterset_fields = ["is_validated_by_admin"]
+
+    def get_queryset(self):
+        return self.queryset.filter(association__in=Association.objects.managed_by_user(self.request.user))
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -47,24 +52,6 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         elif self.request.method == "GET":
             self.serializer_class = AssociationUserSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationUserSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-        tags=["users/associations"],
-    )
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List all associations linked to a user, or all associations of all users (manager)."""
-        qs = self.get_queryset()
-        #if not self.request.user.has_perm("users.view_associationuser_anyone"):
-        #    qs = qs.filter(user_id=self.request.user.pk)
-        self.queryset = self.filter_queryset(qs)
-
-        return self.list(request, *args, **kwargs)
 
     @extend_schema(
         responses={

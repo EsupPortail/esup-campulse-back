@@ -134,7 +134,6 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager user can execute this request.
         - Filter by is_validated_by_admin is possible.
-        - Filter by institutions is possible.
         """
         associations_user_validated_cnt = AssociationUser.objects.filter(
             user__is_validated_by_admin=True,
@@ -143,15 +142,6 @@ class AssociationUserViewsTests(TestCase):
         response_validated_asso = self.manager_client.get("/users/associations/?is_validated_by_admin=false")
         content_validated_asso = json.loads(response_validated_asso.content.decode("utf-8"))
         self.assertEqual(len(content_validated_asso), associations_user_validated_cnt)
-
-        institutions_ids = [2, 3]
-        associations_user_institutions_cnt = AssociationUser.objects.filter(
-            user__is_validated_by_admin=True,
-            association__institution_id__in=institutions_ids
-        ).count()
-        response_institutions_asso = self.manager_client.get("/users/associations/?institutions=2,3,")
-        content_institutions_asso = json.loads(response_institutions_asso.content.decode("utf-8"))
-        self.assertEqual(len(content_institutions_asso), associations_user_institutions_cnt)
 
     def test_anonymous_get_association_user_detail(self):
         """
