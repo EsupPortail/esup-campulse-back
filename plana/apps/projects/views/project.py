@@ -6,8 +6,8 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from django_filters import rest_framework as drf_filters
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -32,12 +32,17 @@ from plana.apps.projects.serializers.project import (
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
+from ..filters import ProjectFilter
+
+from plana.decorators import capture_queries
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route."""
 
-    filter_backends = [filters.SearchFilter]
+    queryset = Project.visible_objects.all().order_by("edition_date")
+    filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    filterset_class = ProjectFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     search_fields = [
         "name__nospaces__unaccent",
@@ -49,104 +54,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
     ]
 
     def get_queryset(self):
-        return Project.visible_objects.all().order_by("edition_date")
-
-    def get_serializer_class(self):
-        if self.request.method == "POST":
-            self.serializer_class = ProjectUpdateSerializer
-        else:
-            self.serializer_class = ProjectPartialDataSerializer
-        return super().get_serializer_class()
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by name.",
-            ),
-            OpenApiParameter(
-                "year",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by creation_date year.",
-            ),
-            OpenApiParameter(
-                "manual_identifier",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by manual identifier.",
-            ),
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "commission_id",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Commission ID linked to a project.",
-            ),
-            OpenApiParameter(
-                "project_statuses",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Project Statuses codes.",
-            ),
-            OpenApiParameter(
-                "with_comments",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get projects where comments are posted.",
-            ),
-            OpenApiParameter(
-                "active_projects",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get projects where reviews are still pending.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: ProjectPartialDataSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List all projects linked to a user, or all projects with all their details (manager)."""
-        queryset = self.get_queryset()
-
-        name = request.query_params.get("name")
-        year = request.query_params.get("year")
-        manual_identifier = request.query_params.get("manual_identifier")
-        user = request.query_params.get("user_id")
-        association = request.query_params.get("association_id")
-        commission = request.query_params.get("commission_id")
-        project_statuses = request.query_params.get("project_statuses")
-        with_comments = request.query_params.get("with_comments")
-        active_projects = request.query_params.get("active_projects")
-
-        if name is not None and name != "":
-            name = str(name).strip()
-            queryset = queryset.filter(name__nospaces__unaccent__icontains=name.replace(" ", ""))
-
-        if year is not None and year != "":
-            queryset = queryset.filter(creation_date__year=year)
-
-        if manual_identifier is not None and manual_identifier != "":
-            manual_identifier = str(manual_identifier).strip()
-            queryset = queryset.filter(
-                manual_identifier__nospaces__unaccent__icontains=manual_identifier.replace(" ", "")
-            )
+        request = self.request
+        queryset = super().get_queryset()
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
@@ -206,47 +115,22 @@ class ProjectListCreate(generics.ListCreateAPIView):
                         ).values_list("id")
                     )
                 )
+        return queryset
 
-        if user:
-            queryset = queryset.filter(user_id=user)
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = ProjectUpdateSerializer
+        else:
+            self.serializer_class = ProjectPartialDataSerializer
+        return super().get_serializer_class()
 
-        if association:
-            queryset = queryset.filter(association_id=association)
-
-        if project_statuses:
-            all_project_statuses = [c[0] for c in Project.project_status.field.choices]
-            project_statuses_codes = project_statuses.split(",")
-            project_statuses_codes = [
-                project_status_code
-                for project_status_code in project_statuses_codes
-                if project_status_code != "" and project_status_code in all_project_statuses
-            ]
-            queryset = queryset.filter(project_status__in=project_statuses_codes)
-
-        if commission is not None and commission != "":
-            queryset = queryset.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission).values_list("id")
-                ).values_list("project_id")
-            )
-
-        if with_comments is not None and with_comments != "":
-            projects_ids_with_comments = ProjectComment.objects.all().values_list("project_id")
-            if not to_bool(with_comments):
-                queryset = queryset.exclude(id__in=projects_ids_with_comments)
-            else:
-                queryset = queryset.filter(id__in=projects_ids_with_comments)
-
-        if active_projects is not None and active_projects != "":
-            inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
-            if not to_bool(active_projects):
-                queryset = queryset.filter(project_status__in=inactive_statuses)
-            else:
-                queryset = queryset.exclude(project_status__in=inactive_statuses)
+    @capture_queries()
+    def get(self, request, *args, **kwargs):
+        """List all projects linked to a user, or all projects with all their details (manager)."""
+        queryset = self.filter_queryset(self.get_queryset())
 
         for project in queryset:
-            pcf = project.projectcommissionfund_set.first()
-            if pcf is not None:
+            if (pcf := project.projectcommissionfund_set.first()):
                 project.commission = Commission.objects.get(
                     id=CommissionFund.objects.get(id=pcf.commission_fund_id).commission_id
                 )

@@ -7,10 +7,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Sum
+from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -29,41 +29,26 @@ from plana.apps.projects.serializers.project_commission_fund import (
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
+from ..filters import ProjectCommissionFundFilter
+
+from plana.decorators import capture_queries
 
 
+@extend_schema(
+    tags=["projects/commission_funds"],
+)
+@method_decorator(capture_queries(), name='dispatch')
 class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
     """/projects/commission_funds route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionFundSerializer
+    filterset_class = ProjectCommissionFundFilter
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Project id.",
-            ),
-            OpenApiParameter(
-                "commission_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Commission id.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: ProjectCommissionFundSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-        tags=["projects/commission_funds"],
-    )
-    def get(self, request, *args, **kwargs):
-        """List all commission funds that can be linked to a project."""
-        project_id = request.query_params.get("project_id")
-        commission_id = request.query_params.get("commission_id")
+    def get_queryset(self):
+        request = self.request
+        queryset = super().get_queryset()
 
         if not request.user.has_perm("projects.view_projectcommissionfund_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
@@ -86,7 +71,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
 
-            self.queryset = self.queryset.filter(
+            queryset = queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
                 | models.Q(
                     commission_fund_id__in=CommissionFund.objects.filter(fund_id__in=user_funds_ids).values_list("id")
@@ -101,15 +86,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                     )
                 )
             )
-
-        if project_id:
-            self.queryset = self.queryset.filter(project_id=project_id)
-
-        if commission_id:
-            commission_funds_ids = CommissionFund.objects.filter(commission_id=commission_id).values_list("id")
-            self.queryset = self.queryset.filter(commission_fund_id__in=commission_funds_ids)
-
-        return self.list(request, *args, **kwargs)
+        return queryset
 
     @extend_schema(
         responses={
