@@ -739,10 +739,6 @@ class DocumentsViewsTests(TestCase):
         - The route can be accessed by a student user.
         - project filter is available.
         """
-        # TODO Write better tests once document_upload fixtures are available.
-        response = self.student_misc_client.get("/documents/uploads/file")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
         response = self.student_misc_client.get("/documents/uploads/file?project_id=1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

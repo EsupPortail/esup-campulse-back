@@ -29,16 +29,20 @@ from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, User
-from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
+from ..filters import DocumentUploadFileFilter, DocumentUploadFilter
 
 
+@extend_schema(
+    tags=["documents/uploads"]
+)
 class DocumentUploadListCreate(generics.ListCreateAPIView):
     """/documents/uploads route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all().select_related('document')
+    filterset_class = DocumentUploadFilter
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -54,54 +58,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             self.serializer_class = DocumentUploadListSerializer
         return super().get_serializer_class()
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Project ID.",
-            ),
-            OpenApiParameter(
-                "process_types",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document process type.",
-            ),
-            OpenApiParameter(
-                "is_validated_by_admin",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for documents not validated by an admin",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: DocumentUploadListSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-        },
-        tags=["documents/uploads"],
-    )
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List all documents uploads."""
-        user = request.query_params.get("user_id")
-        association = request.query_params.get("association_id")
-        project = request.query_params.get("project_id")
-        process_types = request.query_params.get("process_types")
-        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
-
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        request = self.request
         if not request.user.has_perm("documents.view_documentupload_all"):
             user_associations_ids = AssociationUser.objects.filter(user_id=request.user.pk).values_list(
                 "association_id"
@@ -109,36 +68,13 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
             user_documents_ids = DocumentUpload.objects.filter(
                 models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
-            self.queryset = self.queryset.filter(id__in=user_documents_ids)
+            queryset = queryset.filter(id__in=user_documents_ids)
+        return queryset
 
-        if user is not None and user != "":
-            self.queryset = self.queryset.filter(user_id=user)
-
-        if association is not None and association != "":
-            self.queryset = self.queryset.filter(association_id=association)
-
-        if project is not None and project != "":
-            self.queryset = self.queryset.filter(project_id=project)
-
-        if process_types is not None and process_types != "":
-            all_process_types = [c[0] for c in Document.process_type.field.choices]
-            process_types_codes = process_types.split(",")
-            process_types_codes = [
-                project_type_code
-                for project_type_code in process_types_codes
-                if project_type_code != "" and project_type_code in all_process_types
-            ]
-            self.queryset = self.queryset.filter(
-                document_id__in=Document.objects.filter(process_type__in=process_types_codes).values_list("id")
-            )
-
-        if is_validated_by_admin is not None and is_validated_by_admin != "":
-            is_validated_by_admin = to_bool(is_validated_by_admin)
-            self.queryset = self.queryset.exclude(
-                validated_date__isnull=is_validated_by_admin,
-            )
-
-        return self.list(request, *args, **kwargs)
+    def filter_queryset(self, queryset):
+        qs = super().filter_queryset(queryset)
+        print('FQS :', qs.query)
+        return qs
 
     @extend_schema(
         responses={
@@ -474,54 +410,39 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         return self.destroy(request, *args, **kwargs)
 
 
+@extend_schema(
+    tags=["documents/uploads"]
+)
 class DocumentUploadFileList(generics.ListAPIView):
     """/documents/uploads/file route."""
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all()
     serializer_class = DocumentUploadFileSerializer
+    filterset_class = DocumentUploadFileFilter
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Project ID.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: DocumentUploadFileSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-        },
-        tags=["documents/uploads"],
-    )
     def get(self, request, *args, **kwargs):
         """Retrieve all uploaded documents."""
-        project = request.query_params.get("project_id")
-
-        if project is not None and project != "":
-            self.queryset = self.queryset.filter(project_id=project)
-
         filtered_uploads_ids = []
-        for document_upload in self.get_queryset():
+        queryset = self.filter_queryset(self.get_queryset())
+        for document_upload in queryset:
             if not request.user.has_perm("documents.view_documentupload_all") and (
                 (
-                    document_upload.project_id is not None
+                    document_upload.project_id
                     and not request.user.can_access_project(Project.visible_objects.get(id=document_upload.project_id))
                 )
-                or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
+                or (document_upload.user_id and request.user.pk != document_upload.user_id)
                 or (
-                    document_upload.association_id is not None
+                    document_upload.association_id
                     and not request.user.is_in_association(document_upload.association_id)
                 )
             ):
                 filtered_uploads_ids.append(document_upload.id)
-        self.queryset = self.queryset.exclude(id__in=filtered_uploads_ids)
+        queryset = queryset.exclude(id__in=filtered_uploads_ids)
 
         buffer = io.BytesIO()
         archive = zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED)
-        for document_upload in self.get_queryset():
+        for document_upload in queryset:
             file = document_upload.path_file
             archive.writestr(
                 os.path.basename(document_upload.path_file.name),
@@ -537,6 +458,9 @@ class DocumentUploadFileList(generics.ListAPIView):
         return res
 
 
+@extend_schema(
+    tags=["documents/uploads"]
+)
 class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     """/documents/uploads/{id}/file route."""
 
@@ -544,15 +468,6 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
     queryset = DocumentUpload.objects.all()
     serializer_class = DocumentUploadFileSerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: DocumentUploadFileSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["documents/uploads"],
-    )
     def get(self, request, *args, **kwargs):
         """Retrieve a document uploaded by a user."""
         document_upload = self.get_object()
