@@ -34,6 +34,8 @@ from plana.utils import send_mail, to_bool
 
 from .. import permissions
 from ..filters import AssociationFilter, AssociationNameFilter
+from ..permissions import ViewAssociationMembersPermission
+from ...users.serializers.association_user import AssociationUserSerializer
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
@@ -518,3 +520,19 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             )
 
         return self.update(request, *args, **kwargs)
+
+
+class AssociationMembersView(generics.ListAPIView):
+    """
+    /associations/{association_id}/users/ route.
+    Used to retrieve all validated members of given association id
+    Only if president of given association or association managed by auth user
+    """
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ViewAssociationMembersPermission]
+    queryset = AssociationUser.objects.filter(is_validated_by_admin=True).select_related('association', 'user')
+    serializer_class = AssociationUserSerializer
+
+    def get_queryset(self):
+        association_id = self.kwargs.get("association_id")
+        return self.queryset.filter(association_id=association_id)

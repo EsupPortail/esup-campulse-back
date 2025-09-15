@@ -286,7 +286,7 @@ class User(AbstractUser):
         """Return True if the user account was generated through CAS on signup."""
         return self.socialaccount_set.filter(provider=CASProvider.id).exists()
 
-    def is_in_association(self, association_id) -> bool:
+    def is_in_association(self, association_id: int) -> bool:
         """Check if a user can read an association."""
         return AssociationUser.objects.filter(
             user_id=self.pk,
@@ -303,7 +303,7 @@ class User(AbstractUser):
             ).exists()
         )
 
-    def is_president_in_association(self, association_id) -> bool:
+    def is_president_in_association(self, association_id: int) -> bool:
         """Check if a user can write in an association."""
         try:
             now = datetime.date.today()

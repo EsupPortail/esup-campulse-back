@@ -16,6 +16,7 @@ from plana.apps.associations.models.association import Association
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, User
+from plana.apps.users.permissions import ViewAssociationUserPermission
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
     AssociationUserSerializer,
@@ -27,11 +28,14 @@ from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
-    list=extend_schema(tags=["users/associations"])
+    get=extend_schema(tags=["users/associations"])
 )
 class AssociationUserListCreate(generics.ListCreateAPIView):
     # TODO : deprecated - association user post view must be auth only - no longer allowany
-    """/users/associations/ route."""
+    """
+    /users/associations/ route.
+    GET : Retrieves all links between validated users and associations for managers, only the ones authorized
+    """
 
     queryset = AssociationUser.objects.filter(user__is_validated_by_admin=True).select_related('association', 'user')
     filterset_fields = ["is_validated_by_admin"]
@@ -177,34 +181,26 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class AssociationUserRetrieve(generics.RetrieveAPIView):
-    """/users/{user_id}/associations/ route."""
+@extend_schema_view(
+    get=extend_schema(tags=["users/associations"])
+)
+class AssociationUserRetrieve(generics.ListAPIView):
+    """
+    /users/{user_id}/associations/ route.
+    Used to retrieve associations of given user id
+    (All if auth user, only authorized ones if manager)
+    """
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ViewAssociationUserPermission]
     queryset = AssociationUser.objects.all().select_related('association', 'user')
     serializer_class = AssociationUserSerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationUserSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["users/associations"],
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve all associations linked to a user (manager)."""
-        get_object_or_404(User, id=kwargs["user_id"])
-
-        if request.user.has_perm("users.view_associationuser_anyone") or kwargs["user_id"] == request.user.pk:
-            serializer = self.serializer_class(self.queryset.filter(user_id=kwargs["user_id"]), many=True)
-        else:
-            return response.Response(
-                {"error": _("Not allowed to get this link between association and user.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        return response.Response(serializer.data)
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return self.queryset.filter(
+            user_id=user_id,
+            association__in=Association.objects.managed_by_user(self.request.user)
+        )
 
 
 class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
