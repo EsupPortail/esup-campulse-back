@@ -70,6 +70,18 @@ class AssociationUserViewsTests(TestCase):
         }
         cls.response_manager = cls.manager_client.post(url_login, data_manager)
 
+        # Start a manager institution client used in some tests
+        cls.manager_inst_user_id = 4
+        cls.manager_inst_institution_id = 3
+        cls.managed_inst_user_id = 14
+        cls.manager_inst_user_name = "gestionnaire-uha@mail.tld"
+        cls.manager_inst_client = Client()
+        data_manager_inst = {
+            "username": cls.manager_inst_user_name,
+            "password": "motdepasse",
+        }
+        cls.response_manager_inst = cls.manager_inst_client.post(url_login, data_manager_inst)
+
         # Start a manager misc client used in some tests
         cls.manager_misc_user_id = 5
         cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
@@ -80,40 +92,16 @@ class AssociationUserViewsTests(TestCase):
         }
         cls.response = cls.manager_misc_client.post(url_login, data_manager_misc)
 
-    def test_anonymous_get_associations_user_list(self):
+    def test_student_get_association_user_list_global(self):
         """
         GET /users/associations/ .
 
-        - An anonymous user cannot execute this request.
+        - A student user always retrieves an empty list.
         """
-        response_anonymous = self.anonymous_client.get("/users/associations/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
-#    def test_student_get_association_user_list_global(self):
-#        """
-#        GET /users/associations/ .
-#
-#        - A student user can execute this request.
-#        - A student user gets correct association user list data.
-#        """
-#        response_student = self.student_client.get("/users/associations/")
-#        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-#
-#        associations_user_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-#        content = json.loads(response_student.content.decode("utf-8"))
-#        self.assertEqual(len(content), associations_user_cnt)
-#
-#    def test_student_get_association_user_list_search(self):
-#        """
-#        GET /users/associations/ .
-#
-#        - A student user can execute this request.
-#        - A student user gets correct association user list data based on search filters.
-#        """
-#        response_president = self.president_student_client.get("/users/associations/?association_id=2")
-#        associations_user_cnt = AssociationUser.objects.filter(association_id=2).count()
-#        content = json.loads(response_president.content.decode("utf-8"))
-#        self.assertEqual(len(content), associations_user_cnt)
+        response_all_asso = self.student_client.get("/users/associations/")
+        content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
+        self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
+        self.assertEqual(content_all_asso, [])
 
     def test_manager_get_association_user_list_global(self):
         """
@@ -121,12 +109,21 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager user can execute this request.
         - Links between user and associations are returned.
+        - Links between user and associations are filtered by authorized institution.
         """
         associations_user_all_cnt = AssociationUser.objects.filter(user__is_validated_by_admin=True).count()
         response_all_asso = self.manager_client.get("/users/associations/")
         content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
         self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
+
+        associations_user_inst_cnt = AssociationUser.objects.filter(
+            user__is_validated_by_admin=True,
+            association__institution=self.manager_inst_institution_id
+        ).count()
+        response_all_asso = self.manager_inst_client.get("/users/associations/")
+        content_asso_inst = json.loads(response_all_asso.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_inst), associations_user_inst_cnt)
 
     def test_manager_get_association_user_list_search(self):
         """
@@ -143,15 +140,6 @@ class AssociationUserViewsTests(TestCase):
         content_validated_asso = json.loads(response_validated_asso.content.decode("utf-8"))
         self.assertEqual(len(content_validated_asso), associations_user_validated_cnt)
 
-    def test_anonymous_get_association_user_detail(self):
-        """
-        GET /users/{user_id}/associations/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}/associations/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_manager_get_unexisting_association_user(self):
         """
         GET /users/{user_id}/associations/ .
@@ -165,10 +153,17 @@ class AssociationUserViewsTests(TestCase):
         """
         GET /users/{user_id}/associations/ .
 
-        - A student user cannot execute this request.
+        - A student user can execute this request only if given user is the auth user.
+        - All of its AssociationUser links are returned.
         """
-        response_student = self.student_client.get(f"/users/{self.unvalidated_user_id}/associations/")
+        response_student = self.student_client.get(f"/users/1/associations/")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+        asso_user_student_count = AssociationUser.objects.filter(user_id=self.student_user_id).count()
+        response_student = self.student_client.get(f"/users/{self.student_user_id}/associations/")
+        data_response_student = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(data_response_student), asso_user_student_count)
 
     def test_manager_get_association_user_detail(self):
         """

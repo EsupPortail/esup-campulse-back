@@ -62,6 +62,7 @@ class AssociationsViewsTests(TestCase):
 
         # Start a student president of an association client used in some tests
         cls.president_user_id = 13
+        cls.president_asso_id = 2
         cls.president_user_name = "president-asso-site@mail.tld"
         cls.president_client = Client()
         data_president = {
@@ -82,6 +83,7 @@ class AssociationsViewsTests(TestCase):
 
         # Start a manager institution client used in some tests
         cls.manager_institution_user_id = 4
+        cls.manager_institution_asso_id = 4
         cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
         cls.institution_client = Client()
         data_institution = {
@@ -1151,3 +1153,48 @@ class AssociationsViewsTests(TestCase):
             len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
             len(content_all_assos),
         )
+
+    def test_get_association_members_forbidden(self):
+        """
+        - A student not member of the association or simple member cannot execute this request.
+        - An association's president cannot execute this request if not its own.
+        - A manager cannot execute this request if the association is not managed by him.
+        """
+        response_member = self.member_client.get(f"/associations/{self.president_asso_id}/users")
+        self.assertEqual(response_member.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_president = self.president_client.get(f"/associations/1/users")
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_manager = self.institution_client.get(f"/associations/1/users")
+        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_association_members_president(self):
+        """
+        - An association's president can execute this request for its own association.
+        - Correct data is retrieved.
+        """
+        response_president = self.president_client.get(f"/associations/{self.president_asso_id}/users")
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+
+        associations_user_asso_cnt = AssociationUser.objects.filter(
+            association=self.president_asso_id,
+            is_validated_by_admin=True
+        ).count()
+        content_asso_members = json.loads(response_president.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_members), associations_user_asso_cnt)
+
+    def test_get_association_members_manager(self):
+        """
+        - A manager of an association can execute this request.
+        - Correct data is retrieved.
+        """
+        response_manager = self.institution_client.get(f"/associations/{self.manager_institution_asso_id}/users")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        associations_user_asso_cnt = AssociationUser.objects.filter(
+            association=self.manager_institution_asso_id,
+            is_validated_by_admin=True
+        ).count()
+        content_asso_members = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_members), associations_user_asso_cnt)
