@@ -6,4 +6,4 @@ class ViewAssociationUserPermission(BasePermission):
 
     def has_permission(self, request, view):
         user_id = view.kwargs.get("user_id")
-        return request.user.id == user_id or request.user.has_perm("users.view_associationuser")
+        return request.user.id == user_id or request.user.has_perm("users.view_associationuser_anyone")

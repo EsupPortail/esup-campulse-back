@@ -197,6 +197,9 @@ class AssociationUserRetrieve(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs.get("user_id")
+        get_object_or_404(User.objects.all(), pk=user_id)
+        if user_id == self.request.user.pk:
+            return self.queryset.filter(user_id=user_id)
         return self.queryset.filter(
             user_id=user_id,
             association__in=Association.objects.managed_by_user(self.request.user)
