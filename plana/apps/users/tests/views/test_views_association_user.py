@@ -233,7 +233,7 @@ class AssociationUserViewsTests(TestCase):
             AssociationUser(user_id=3, association_id=asso_id),
             AssociationUser(user_id=4, association_id=asso_id),
         ]
-        AssociationUser.objects.bulk_create(users)
+        AssociationUser.objects.bulk_create(asso_users)
 
         response = self.manager_client.post(
             "/users/associations/",
