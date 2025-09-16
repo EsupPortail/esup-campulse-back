@@ -5,18 +5,16 @@ import datetime
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics, response, status
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
 from plana.apps.history.models.history import History
-from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, User
-from plana.apps.users.permissions import ViewAssociationUserPermission
+from plana.apps.users.permissions import ViewAssociationUserPermission, AddAssociationUserPermission
 from plana.apps.users.serializers.association_user import (
     AssociationUserCreateSerializer,
     AssociationUserSerializer,
@@ -28,10 +26,16 @@ from plana.utils import send_mail, to_bool
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["users/associations"])
+    get=extend_schema(
+        operation_id="association_user_full_list",
+        tags=["users/associations"]
+    ),
+    post=extend_schema(
+        operation_id="association_user_create",
+        tags=["users/associations"]
+    )
 )
 class AssociationUserListCreate(generics.ListCreateAPIView):
-    # TODO : deprecated - association user post view must be auth only - no longer allowany
     """
     /users/associations/ route.
     GET : Retrieves all links between validated users and associations for managers, only the ones authorized
@@ -45,7 +49,7 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            self.permission_classes = [AllowAny]
+            self.permission_classes = [IsAuthenticated, AddAssociationUserPermission]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
@@ -57,132 +61,12 @@ class AssociationUserListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationUserSerializer
         return super().get_serializer_class()
 
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: AssociationUserCreateSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["users/associations"],
-    )
-    def post(self, request, *args, **kwargs):
-        """Create a new link between a user and an association."""
-        try:
-            username = request.data["user"]
-            association_id = request.data["association"]
-            user = User.objects.get(username=username)
-            association = Association.objects.get(id=association_id)
-        except (ObjectDoesNotExist, MultiValueDictKeyError):
-            return response.Response(
-                {"error": _("User or association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if request.user.is_anonymous and user.is_validated_by_admin:
-            return response.Response(
-                {"error": _("Only managers can edit associations for this account.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        # TODO Remove is_staff check to use another helper.
-        if (
-            request.user.is_staff
-            and not request.user.has_perm("users.change_associationuser_any_institution")
-            and not request.user.is_staff_for_association(association_id)
-        ):
-            return response.Response(
-                {"error": _("Cannot add an association from this institution.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if "is_validated_by_admin" in request.data and (
-            to_bool(request.data["is_validated_by_admin"])
-            and request.user.is_anonymous
-            or (
-                not request.user.has_perm("users.change_associationuser_any_institution")
-                and not request.user.is_staff_for_association(association_id)
-            )
-        ):
-            return response.Response(
-                {"error": _("Only managers can validate associations for this account.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        has_associations_possible_group = False
-        for group in user.get_user_groups():
-            if settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"]:
-                has_associations_possible_group = True
-        if not has_associations_possible_group:
-            return response.Response(
-                {"error": _("The user hasn't any group that can have associations.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        association_users = AssociationUser.objects.filter(association_id=association_id)
-        if (
-            not association.amount_members_allowed is None
-            and association_users.count() >= association.amount_members_allowed
-        ):
-            return response.Response(
-                {"error": _("Too many users in association.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        association_user = AssociationUser.objects.filter(user_id=user.id, association_id=association_id)
-        if association_user.exists():
-            return response.Response(
-                {"error": _("User already in association.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if "is_president" in request.data and to_bool(request.data["is_president"]):
-            association_user_president = AssociationUser.objects.filter(
-                association_id=association_id, is_president=True
-            )
-            if association_user_president.exists():
-                return response.Response(
-                    {"error": _("President already in association.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        if not request.user.is_anonymous and user.is_validated_by_admin:
-            if request.user.is_staff_for_association(association_id):
-                request.data["is_validated_by_admin"] = True
-            else:
-                request.data["is_validated_by_admin"] = False
-
-        if "is_validated_by_admin" not in request.data or (
-            "is_validated_by_admin" in request.data
-            and (not to_bool(request.data["is_validated_by_admin"]))
-            and user.is_validated_by_admin
-        ):
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": f"https://{current_site.domain}",
-                "site_name": current_site.name,
-                "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
-            }
-            template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=list(
-                    Institution.objects.get(id=association.institution_id)
-                    .default_institution_managers()
-                    .values_list("email", flat=True)
-                ),
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-        return super().create(request, *args, **kwargs)
-
 
 @extend_schema_view(
-    get=extend_schema(tags=["users/associations"])
+    get=extend_schema(
+        operation_id="association_user_list_by_user",
+        tags=["users/associations"]
+    )
 )
 class AssociationUserRetrieve(generics.ListAPIView):
     """
