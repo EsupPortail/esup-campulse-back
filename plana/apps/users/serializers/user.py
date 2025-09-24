@@ -1,21 +1,30 @@
 """Serializers describing fields used on users and related forms."""
-
+import datetime
 import re
+import secrets
+import string
 
 from allauth.account.adapter import get_adapter
+from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import IntegrityError
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import exceptions, serializers
 
+from plana.apps.associations.models import Association
 from plana.apps.associations.serializers.association import (
     AssociationMandatoryDataSerializer,
 )
 from plana.apps.contents.models.setting import Setting
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.provider import CASProvider
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -256,12 +265,12 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["email", "first_name", "last_name", "phone", "gifus", "associations"]
 
-    def validate_email(self, value):
-        if value.split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
+    def validate(self, data):
+        if data.get("email", "").split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
             raise exceptions.ValidationError(
-                {"detail": [_("This email address cannot be used to create a local account.")]}
+                {"email": [_("This email address cannot be used to create a local account.")]}
             )
-        return value
+        return data
 
     def create_links(self, validated_data, user):
         """Create linked GIFU and AssociationUser objects"""
@@ -315,9 +324,8 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError(_("President already in association."))
 
-    def save(self, request):
+    def save(self, request=None):
         """Save the user."""
-        # self.cleaned_data = request.data
         self.cleaned_data = self.validated_data
         adapter = get_adapter()
         user = adapter.new_user(request)
@@ -346,10 +354,8 @@ class CustomCASDataRegisterSerializer(CustomRegisterSerializer):
             fields.pop(field, None)
         return fields
 
-    def save(self):
+    def save(self, request=None):
         """Save the new data linked to CAS user."""
-        # self.cleaned_data = request.data
-        request = self.context.get("request")
         self.cleaned_data = self.validated_data
         user = request.user
 
@@ -358,4 +364,97 @@ class CustomCASDataRegisterSerializer(CustomRegisterSerializer):
 
         user.save()
         self.create_links(self.cleaned_data, user)
+        return user
+
+
+class UserCreateSerializer(CustomRegisterSerializer):
+    """
+    Used for user creation from a manager user.
+    """
+    is_cas = serializers.BooleanField(write_only=True)
+
+    class Meta(CustomRegisterSerializer.Meta):
+        fields = CustomRegisterSerializer.Meta.fields + ["is_cas", "username"]
+
+    def validate(self, data):
+        if data.get("email", "").split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS") and not data.get("is_cas", False):
+            raise exceptions.ValidationError(
+                {"email": _("This email address cannot be used to create a local account.")}
+            )
+        return data
+
+    def validate_association_user(self, association_data: dict, user):
+        association = association_data["association"]
+        au_count = AssociationUser.objects.filter(association=association).count()
+        if au_count >= association.amount_members_allowed:
+            raise serializers.ValidationError({"too_many_members": _("Too many users in association.")})
+
+        if (
+            association_data.get('is_president')
+            and AssociationUser.objects.filter(
+                association=association, is_president=True
+            ).exists()
+        ):
+            raise serializers.ValidationError({"president": _("President already in association.")})
+
+        if Association.objects.managed_by_user(self.context.get("request").user).filter(pk=association_data["association"].id).exists():
+            association_data["is_validated_by_admin"] = True
+
+    def save(self, request=None):
+        """Save the user."""
+        self.cleaned_data = self.validated_data
+
+        # Creating User and linked validated EmailAddress
+        user_data = {k: v for k, v in self.cleaned_data.items() if k in [f.name for f in User._meta.fields]}
+        user_data["username"] = self.cleaned_data["email"] if not self.cleaned_data["is_cas"] else self.cleaned_data["username"]
+        user_data["is_validated_by_admin"] = True
+
+        user = User.objects.create(**user_data)
+        EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
+
+        # Creating associated objects (GIFU, AssociationUser)
+        self.create_links(self.cleaned_data, user)
+
+        # Sending mail to created user
+        # TODO : Simplify email sending process
+        request = self.context.get("request")
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": f"https://{current_site.domain}",
+            "site_name": current_site.name,
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "manager_email_address": request.user.email,
+            "documentation_url": Setting.get_setting("APP_DOCUMENTATION_URL"),
+        }
+
+        if not self.cleaned_data.get("is_cas"):
+            password = "".join(
+                secrets.choice(string.ascii_letters + string.digits) for i in range(settings.DEFAULT_PASSWORD_LENGTH)
+            )
+            user.set_password(password)
+            user.password_last_change_date = datetime.datetime.today()
+            user.save(update_fields=["password", "password_last_change_date"])
+            context.update({
+                "password": password,
+                "password_change_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
+            })
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION")
+        else:
+            SocialAccount.objects.create(
+                user=user,
+                provider=CASProvider.id,
+                uid=user.username,
+                extra_data={},
+            )
+            template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_BY_MANAGER_CONFIRMATION")
+
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=self.cleaned_data["email"],
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+
         return user

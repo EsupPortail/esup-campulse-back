@@ -1,15 +1,12 @@
 """Views directly linked to users and their links with other models."""
 
-import datetime
-import secrets
-import string
-
 from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress
 from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
 from django.db.models import Exists, OuterRef, Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
@@ -27,7 +24,7 @@ from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.user import (
     UserPartialDataSerializer,
     UserSerializer,
-    UserUpdateSerializer,
+    UserUpdateSerializer, UserCreateSerializer,
 )
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
@@ -64,6 +61,8 @@ class UserListCreate(generics.ListCreateAPIView):
             self.serializer_class = UserPartialDataSerializer
         else:
             self.serializer_class = UserSerializer
+        if self.request.method == "POST":
+            self.serializer_class = UserCreateSerializer
         return super().get_serializer_class()
 
     @extend_schema(
@@ -222,76 +221,9 @@ class UserListCreate(generics.ListCreateAPIView):
 
         return self.list(request, *args, **kwargs)
 
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: UserSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        }
-    )
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
-        """Create an account for another person (manager only)."""
-        request.data.update({"email": request.data["email"].lower()})
-        is_cas = True
-        if "is_cas" not in request.data or ("is_cas" in request.data and not request.data["is_cas"]):
-            is_cas = False
-            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
-                return response.Response(
-                    {"error": _("This email address cannot be used for a local account.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            request.data.update({"username": request.data["email"]})
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        request.data.update({"is_validated_by_admin": True})
-        user_response = self.create(request, *args, **kwargs)
-        user = User.objects.get(id=user_response.data["id"])
-        EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
-
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": f"https://{current_site.domain}",
-            "site_name": current_site.name,
-            "username": user.username,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "manager_email_address": request.user.email,
-            "documentation_url": Setting.get_setting("APP_DOCUMENTATION_URL"),
-        }
-
-        template = None
-        if not is_cas:
-            password = "".join(
-                secrets.choice(string.ascii_letters + string.digits) for i in range(settings.DEFAULT_PASSWORD_LENGTH)
-            )
-            user.set_password(password)
-            user.password_last_change_date = datetime.datetime.today()
-            user.save(update_fields=["password", "password_last_change_date"])
-            context["password"] = password
-            context["password_change_url"] = (
-                f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
-            )
-            template = MailTemplate.objects.get(code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION")
-        else:
-            SocialAccount.objects.create(
-                user=user,
-                provider=CASProvider.id,
-                uid=user.username,
-                extra_data={},
-            )
-            template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_BY_MANAGER_CONFIRMATION")
-
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=request.data["email"],
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
-
-        return user_response
+        return super().post(request, *args, **kwargs)
 
 
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):

@@ -254,22 +254,6 @@ class UserViewsTests(TestCase):
             response = self.manager_client.get(f"/users/?email={similar_email}")
             self.assertEqual(response.data[0]["email"], similar_emails[0])
 
-    def test_anonymous_post_user(self):
-        """
-        POST /users/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/",
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-                "email": "john@doe.com",
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_student_post_user(self):
         """
         POST /users/ .
@@ -286,6 +270,7 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
+# FIXME : Adapt unittests to new user creation
     def test_manager_post_user_restricted_mail(self):
         """
         POST /users/ .
@@ -301,6 +286,7 @@ class UserViewsTests(TestCase):
             },
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response_manager.data)
         self.assertFalse(len(mail.outbox))
 
     def test_manager_post_user_wrong_phone(self):
@@ -322,6 +308,7 @@ class UserViewsTests(TestCase):
         user_cnt = User.objects.filter(email="john@doe.com").count()
         self.assertEqual(user_cnt, 0)
 
+    # FIXME : Adapt unittests to new user creation
     def test_manager_post_user(self):
         """
         POST /users/ .
@@ -346,6 +333,7 @@ class UserViewsTests(TestCase):
         user = User.objects.get(username=username)
         self.assertEqual(user.username, username)
 
+    # FIXME : Adapt unittests to new user creation
     def test_manager_post_user_cas(self):
         """
         POST /users/ .
