@@ -231,12 +231,12 @@ class GroupInstitutionFundUserRegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('institution') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('INSTITUTION_ID_POSSIBLE'):
             raise exceptions.ValidationError(
-                {"detail": [_("Linking this institution to this group is not allowed.")]}
+                {"gifu_institution": [_("Linking this institution to this group is not allowed.")]}
             )
 
         if data.get('fund') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('FUND_ID_POSSIBLE'):
             raise exceptions.ValidationError(
-                {"detail": [_("Linking this fund to this group is not allowed.")]}
+                {"gifu_fund": [_("Linking this fund to this group is not allowed.")]}
             )
         return data
 
@@ -268,7 +268,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get("email", "").split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
             raise exceptions.ValidationError(
-                {"email": [_("This email address cannot be used to create a local account.")]}
+                {"email_domain": [_("This email address cannot be used to create a local account.")]}
             )
         return data
 
@@ -285,7 +285,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
             # Check the uniqueness of the GIFU
             except IntegrityError:
                 raise serializers.ValidationError(
-                    {"detail": [_("Cannot create a GroupInstitutionFundUser object that already exists.")]}
+                    {"duplicate_gifu": [_("Cannot create a GroupInstitutionFundUser object that already exists.")]}
                 )
         user.groupinstitutionfunduser_set.add(*gifus_list)
 
@@ -308,13 +308,15 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         # At least one group can be linked to an association
         if not any(settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"]
                    for group in user.get_user_groups()):
-            raise serializers.ValidationError(_("The user hasn't any group that can have associations."))
+            raise serializers.ValidationError(
+                {"associations_forbidden": _("The user hasn't any group that can have associations.")}
+            )
 
     def validate_association_user(self, association_data: dict, user):
         association = association_data['association']
         au_count = AssociationUser.objects.filter(association=association).count()
         if au_count >= association.amount_members_allowed:
-            raise serializers.ValidationError(_("Too many users in association."))
+            raise serializers.ValidationError({"too_many_members": _("Too many users in association.")})
 
         if (
             association_data.get('is_president')
@@ -322,7 +324,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
                 association=association, is_president=True
             ).exists()
         ):
-            raise serializers.ValidationError(_("President already in association."))
+            raise serializers.ValidationError({"president": _("President already in association.")})
 
     def save(self, request=None):
         """Save the user."""
@@ -379,7 +381,7 @@ class UserCreateSerializer(CustomRegisterSerializer):
     def validate(self, data):
         if data.get("email", "").split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS") and not data.get("is_cas", False):
             raise exceptions.ValidationError(
-                {"email": _("This email address cannot be used to create a local account.")}
+                {"email_domain": _("This email address cannot be used to create a local account.")}
             )
         return data
 
@@ -457,4 +459,5 @@ class UserCreateSerializer(CustomRegisterSerializer):
             message=template.parse_vars(request.user, request, context),
         )
 
+        self.instance = user
         return user
