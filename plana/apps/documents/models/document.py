@@ -71,6 +71,11 @@ class Document(models.Model):
             """Documents with those processes can be linked to a project ID."""
             return ["DOCUMENT_PROJECT", "DOCUMENT_PROJECT_REVIEW"]
 
+        @staticmethod
+        def get_registration_documents():
+            """Documents with those processes are used in User registration."""
+            return ["DOCUMENT_USER"]
+
     name = models.CharField(_("Name"), max_length=250, default="")
     acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")

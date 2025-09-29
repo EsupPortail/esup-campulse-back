@@ -7,7 +7,7 @@ from .views.document_upload import (
     DocumentUploadFileList,
     DocumentUploadFileRetrieve,
     DocumentUploadListCreate,
-    DocumentUploadRetrieveUpdateDestroy,
+    DocumentUploadRetrieveUpdateDestroy, DocumentUploadRegistrationCreate,
 )
 
 urlpatterns = [
@@ -36,5 +36,10 @@ urlpatterns = [
         "uploads/<int:pk>/file",
         DocumentUploadFileRetrieve.as_view(),
         name="document_upload_file_retrieve",
+    ),
+    path(
+        "uploads/registration",
+        DocumentUploadRegistrationCreate.as_view(),
+        name="document_upload_registration_create",
     ),
 ]

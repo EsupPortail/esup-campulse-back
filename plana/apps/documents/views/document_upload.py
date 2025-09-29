@@ -9,8 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.http import FileResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
@@ -23,15 +22,25 @@ from plana.apps.documents.serializers.document_upload import (
     DocumentUploadFileSerializer,
     DocumentUploadListSerializer,
     DocumentUploadRetrieveSerializer,
-    DocumentUploadUpdateSerializer,
+    DocumentUploadUpdateSerializer, DocumentUploadRegistrationCreateSerializer,
 )
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import send_mail
 from ..filters import DocumentUploadFileFilter, DocumentUploadFilter
+
+
+@extend_schema(
+    tags=["documents/uploads"]
+)
+class DocumentUploadRegistrationCreate(generics.CreateAPIView):
+    """/documents/uploads/registration route."""
+    permission_classes = [AllowAny]
+    queryset = DocumentUpload.objects.all()
+    serializer_class = DocumentUploadRegistrationCreateSerializer
 
 
 @extend_schema(
@@ -43,13 +52,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = DocumentUpload.objects.all().select_related('document')
     filterset_class = DocumentUploadFilter
-
-    def get_permissions(self):
-        if self.request.method == "POST":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -92,14 +94,6 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         document = get_object_or_404(Document, id=request.data.get("document"))
         existing_document = DocumentUpload.objects.filter(document_id=document.id)
 
-        if request.user.is_anonymous and (
-            ("association" in request.data or "project" in request.data) or document.process_type != "DOCUMENT_USER"
-        ):
-            return response.Response(
-                {"error": _("Cannot upload documents not related to user as anonymous.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
         project = None
         if "project" in request.data and request.data["project"] != "":
             if document.process_type not in Document.ProcessType.get_project_documents():
@@ -135,21 +129,15 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
 
         user = None
         if "user" in request.data and request.data["user"] is not None and request.data["user"] != "":
-            user = get_object_or_404(User, username=request.data["user"])
+            user = get_object_or_404(User, pk=request.data["user"])
             existing_document = existing_document.filter(user_id=request.user.pk)
-            if (request.user.is_anonymous and user.is_validated_by_admin) or (
-                not request.user.is_anonymous
-                and not request.user.has_perm("documents.add_documentupload_all")
-                and user.id != request.user.pk
-            ):
+            if not request.user.has_perm("documents.add_documentupload_all") and user.id != request.user.pk:
                 return response.Response(
                     {"error": _("Not allowed to upload documents with this user.")},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-        if "validated_date" in request.data and (
-            request.user.is_anonymous or not request.user.has_perm("documents.add_documentupload_all")
-        ):
+        if "validated_date" in request.data and not request.user.has_perm("documents.add_documentupload_all"):
             return response.Response(
                 {"error": _("Not allowed to validate documents.")},
                 status=status.HTTP_403_FORBIDDEN,

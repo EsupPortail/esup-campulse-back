@@ -211,6 +211,11 @@
         "document"
       ],
       [
+        "add_documentupload",
+        "documents",
+        "documentupload"
+      ],
+      [
         "add_documentupload_all",
         "documents",
         "documentupload"
@@ -590,6 +595,11 @@
         "document"
       ],
       [
+        "add_documentupload",
+        "documents",
+        "documentupload"
+      ],
+      [
         "add_documentupload_all",
         "documents",
         "documentupload"
@@ -822,6 +832,11 @@
         "delete_document",
         "documents",
         "document"
+      ],
+      [
+        "add_documentupload",
+        "documents",
+        "documentupload"
       ],
       [
         "add_documentupload_all",
@@ -1127,6 +1142,11 @@
         "association"
       ],
       [
+        "add_documentupload",
+        "documents",
+        "documentupload"
+      ],
+      [
         "delete_documentupload",
         "documents",
         "documentupload"
@@ -1245,6 +1265,11 @@
   "fields": {
     "name": "STUDENT_MISC",
     "permissions": [
+      [
+        "add_documentupload",
+        "documents",
+        "documentupload"
+      ],
       [
         "delete_documentupload",
         "documents",

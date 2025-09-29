@@ -3,10 +3,12 @@
 import datetime
 
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from plana.apps.documents.models import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.users.models.user import User
 
@@ -69,8 +71,6 @@ class DocumentUploadRetrieveSerializer(serializers.ModelSerializer):
 class DocumentUploadCreateSerializer(serializers.ModelSerializer):
     """Main serializer not overriding path_file."""
 
-    user = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all(), required=False)
-
     class Meta:
         model = DocumentUpload
         fields = [
@@ -81,6 +81,35 @@ class DocumentUploadCreateSerializer(serializers.ModelSerializer):
             "association",
             "project",
             "validated_date",
+            "path_file",
+        ]
+
+
+class DocumentUploadRegistrationCreateSerializer(serializers.ModelSerializer):
+    """Serializer for DocumentUpload registration route."""
+
+    user = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all(), required=True)
+
+    def validate(self, attrs):
+        document = attrs.get("document")
+        user = attrs.get("user")
+        if document.process_type not in Document.ProcessType.get_registration_documents():
+            raise serializers.ValidationError(
+                {"document_process": _("Provided document type must be linked to a registration process.")}
+            )
+        if DocumentUpload.objects.filter(document=document, user=user).count() >= document.max_uploads:
+            raise serializers.ValidationError(
+                {"max_uploads": _("Maximum number of uploads reached for this type of document.")}
+            )
+        return super().validate(attrs)
+
+    class Meta:
+        model = DocumentUpload
+        fields = [
+            "id",
+            "name",
+            "document",
+            "user",
             "path_file",
         ]
 

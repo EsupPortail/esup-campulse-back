@@ -799,6 +799,7 @@ PERMISSIONS_GROUPS = {
         "delete_document",
         "delete_document_any_fund",
         "delete_document_any_institution",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -873,6 +874,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -925,6 +927,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -994,6 +997,7 @@ PERMISSIONS_GROUPS = {
         # associations
         "change_association",
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects
@@ -1021,6 +1025,7 @@ PERMISSIONS_GROUPS = {
     ],
     "STUDENT_MISC": [
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects
