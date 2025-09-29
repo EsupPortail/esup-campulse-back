@@ -5,6 +5,7 @@ import os
 
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -74,7 +75,7 @@ class Document(models.Model):
     acronym = models.TextField(_("Acronym"), default="")
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), default="")
-    is_multiple = models.BooleanField(_("Is multiple"), default=False)
+    max_uploads = models.PositiveIntegerField(_("Copies number"), default=1, validators=[MinValueValidator(1)])
     is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
     days_before_expiration = models.DurationField(_("Days before document expiration"), null=True)
     expiration_day = models.CharField(

@@ -12,13 +12,13 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = [
         "acronym",
         "description",
-        "is_multiple",
+        "max_uploads",
         "is_required_in_process",
         "institution",
         "fund",
         "process_type",
     ]
-    list_filter = ["is_multiple", "is_required_in_process"]
+    list_filter = ["max_uploads", "is_required_in_process"]
     search_fields = [
         "acronym",
         "name",

@@ -394,7 +394,7 @@ class DocumentsViewsTests(TestCase):
 
         - The route can be accessed by any authenticated user.
         - The authenticated user must be authorized to update the project.
-        - Object is not created if field is not is_multiple.
+        - Object is not created if field has not max_uploads > 1.
         """
         document = Document.objects.get(id=19)
         post_data = {
