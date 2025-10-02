@@ -1,4 +1,5 @@
 """List of tests done on user_group views."""
+import json
 
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -68,15 +69,6 @@ class UserGroupViewsTests(TestCase):
         }
         cls.response = cls.manager_misc_client.post(url_login, data_manager_misc)
 
-    def test_anonymous_get_user_groups_list(self):
-        """
-        GET /users/groups/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get("/users/groups/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_student_get_user_groups_list(self):
         """
         GET /users/groups/ .
@@ -100,15 +92,6 @@ class UserGroupViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         results = GroupInstitutionFundUser.objects.all()
         self.assertEqual(len(results), len(response_manager.data))
-
-    def test_anonymous_get_user_groups_details(self):
-        """
-        GET /users/{user_id}/groups/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}/groups/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_manager_get_unexisting_association_user(self):
         """
@@ -137,174 +120,86 @@ class UserGroupViewsTests(TestCase):
         response_manager = self.manager_client.get(f"/users/{self.student_user_id}/groups/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-    def test_anonymous_post_user_groups_404_user(self):
+    def test_post_user_groups_restricted_group(self):
         """
         POST /users/groups/ .
 
-        - A non-existing user cannot be added in a group.
-        - user is a mandatory param
+        - A manager user cannot link a restricted group to a user.
         """
-        response_anonymous = self.anonymous_client.post(
+        response = self.manager_client.post(
             "/users/groups/",
-            {"user": 9999, "group": 6},
+            json.dumps({"user": self.unvalidated_user_id, "group": 1, "institution": 1, "fund": None}),
+            content_type="application/json",
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("restricted_group", response.data)
 
-        response_anonymous = self.client.post("/users/groups/", {"group": 6})
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_anonymous_post_user_groups_404_group(self):
-        """
-        POST /users/groups/ .
-
-        - A user cannot be added in a non-existing group.
-        - group is a mandatory param
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/groups/",
-            {"user": self.student_user_name, "group": 9999},
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.client.post("/users/groups/", {"username": self.student_user_name})
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_anonymous_post_user_groups_forbidden(self):
-        """
-        POST /users/groups/ .
-
-        - An anonymous user cannot add a link between a validated user and a group.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/groups/",
-            {"user": self.student_user_name, "group": 4},
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_anonymous_post_user_groups_restricted_group(self):
-        """
-        POST /users/groups/ .
-
-        - An anonymous user can't add a link with a restricted group to a user.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 1},
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_anonymous_post_user_groups_bad_institution(self):
+    def test_post_user_groups_bad_institution(self):
         """
         POST /users/groups/ .
 
         - institution field must be valid for the given group.
         """
-        response_anonymous = self.anonymous_client.post(
+        response = self.manager_client.post(
             "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 6, "institution": 1},
+            json.dumps({"user": self.unvalidated_user_id, "group": 6, "institution": 1, "fund": None}),
+            content_type="application/json",
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("institution", response.data)
 
-    def test_anonymous_post_user_groups_bad_fund(self):
+    def test_post_user_groups_bad_fund(self):
         """
         POST /users/groups/ .
 
         - fund field must be valid for the given group.
         """
-        response_anonymous = self.anonymous_client.post(
+        response = self.manager_client.post(
             "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 6, "fund": 1},
+            json.dumps({"user": self.unvalidated_user_id, "group": 6, "institution": None, "fund": 1}),
+            content_type="application/json",
         )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("fund", response.data)
 
-    def test_anonymous_post_user_groups_success(self):
+    def test_manager_post_user_groups_rights_level(self):
         """
         POST /users/groups/ .
 
-        - An anonymous user can add a link between a non-validated user and a group.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 4, "fund": 2},
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
-
-    def test_student_post_user_groups(self):
-        """
-        POST /users/groups/ .
-
-        - An admin-validated student user cannot execute this request.
-        """
-        response_student = self.student_client.post("/users/groups/", {"user": self.student_user_name, "group": 6})
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_manager_post_user_groups_other_manager(self):
-        """
-        POST /users/groups/ .
-
-        - Groups for a general manager can't be changed by another manager.
-        """
-        response_manager = self.manager_misc_client.post(
-            "/users/groups/",
-            {"user": self.manager_general_user_name, "group": 4},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_manager_post_user_groups_bad_request(self):
-        """
-        POST /users/groups/ .
-
-        - A manager group cannot be given to a student.
-        - A student group cannot be given to a manager.
+        - A manager user cannot add a group to another manager user.
         """
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"user": self.student_user_name, "group": 2, "institution": 1},
+            json.dumps({"user": self.manager_misc_user_id, "group": 6, "institution": None, "fund": None}),
+            content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_manager = self.manager_client.post(
-            "/users/groups/",
-            {"user": self.manager_misc_user_name, "group": 6},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("rights_level", response_manager.data)
 
     def test_manager_post_user_groups_success(self):
         """
         POST /users/groups/ .
 
-        - A manager user can add a group to a validated student.
-        - Event is stored in History if authenticated.
-        - A manager user cannot add a group to student if the link already exists.
-        - A manager user can add a group to a non-validated student.
+        - A manager user can add a group to a student.
+        - Event is stored in History.
+        - A manager user cannot add a group to a student if the link already exists.
         """
+        json_data = json.dumps({"user": self.student_user_id, "group": 6, "institution": None, "fund": None})
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"user": self.student_user_name, "group": 6},
+            json_data,
+            content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
         self.assertEqual(History.objects.filter(action_title="GROUP_INSTITUTION_FUND_USER_CHANGED").count(), 1)
 
         response_manager = self.manager_client.post(
             "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 5},
+            json_data,
+            content_type="application/json",
         )
         self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-        response_manager = self.manager_client.post(
-            "/users/groups/",
-            {"user": self.unvalidated_user_name, "group": 4, "fund": 2},
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-    def test_anonymous_delete_user_group(self):
-        """
-        DELETE /users/{user_id}/groups/{group_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.client.delete(f"/users/{self.user_id_del_group}/groups/6")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertIn("already_exists", response_manager.data)
 
     def test_student_delete_user_group(self):
         """

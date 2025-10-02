@@ -451,6 +451,11 @@
         "associationuser"
       ],
       [
+        "add_groupinstitutionfunduser",
+        "users",
+        "groupinstitutionfunduser"
+      ],
+      [
         "add_groupinstitutionfunduser_any_group",
         "users",
         "groupinstitutionfunduser"
@@ -725,6 +730,11 @@
         "associationuser"
       ],
       [
+        "add_groupinstitutionfunduser",
+        "users",
+        "groupinstitutionfunduser"
+      ],
+      [
         "delete_groupinstitutionfunduser",
         "users",
         "groupinstitutionfunduser"
@@ -962,6 +972,11 @@
         "view_associationuser_anyone",
         "users",
         "associationuser"
+      ],
+      [
+        "add_groupinstitutionfunduser",
+        "users",
+        "groupinstitutionfunduser"
       ],
       [
         "delete_groupinstitutionfunduser",
