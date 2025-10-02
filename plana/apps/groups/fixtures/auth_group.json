@@ -529,6 +529,11 @@
         "view_user_misc",
         "users",
         "user"
+      ],
+      [
+        "delete_emailaddress",
+        "account",
+        "emailaddress"
       ]
     ]
   }

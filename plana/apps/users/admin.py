@@ -10,13 +10,12 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
-from ...admin import SecuredInlineAdmin, SecuredModelAdmin
 from .models import AssociationUser, GroupInstitutionFundUser, User
 
 
@@ -111,7 +110,7 @@ class GroupInstitutionFundUserForm(forms.ModelForm):
         self.fields["institution"].required = False
 
 
-class GroupInstitutionFundUserInline(SecuredInlineAdmin):
+class GroupInstitutionFundUserInline(admin.StackedInline):
     """Add GroupInstitutionFundUser sub-form."""
 
     model = GroupInstitutionFundUser
@@ -216,7 +215,7 @@ class AssociationUserAdmin(admin.ModelAdmin):
 
 
 @admin.register(GroupInstitutionFundUser)
-class GroupInstitutionFundUserAdmin(SecuredModelAdmin):
+class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
     """List view for group users."""
 
     list_display = ["user", "group", "institution", "fund"]

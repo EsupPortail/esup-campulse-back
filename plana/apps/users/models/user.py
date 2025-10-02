@@ -65,8 +65,8 @@ class GroupInstitutionFundUser(models.Model):
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.RESTRICT)
-    institution = models.ForeignKey(Institution, on_delete=models.RESTRICT, null=True)
-    fund = models.ForeignKey(Fund, on_delete=models.RESTRICT, null=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.user} - {self.group} - {self.institution} - {self.fund}"

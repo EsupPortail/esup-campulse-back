@@ -855,6 +855,7 @@ PERMISSIONS_GROUPS = {
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        "delete_emailaddress",
         # mail templates
         "change_mailtemplate",
         "view_mailtemplate",

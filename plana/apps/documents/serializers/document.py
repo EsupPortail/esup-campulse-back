@@ -31,6 +31,7 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "acronym",
             "description",
             "path_template",
             "institution",
