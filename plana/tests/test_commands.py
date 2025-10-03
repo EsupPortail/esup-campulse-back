@@ -105,8 +105,9 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
-            )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
+            ),
+            charter_status="CHARTER_VALIDATED"
         )
         call_command("cron_association_expiration")
         self.assertTrue(len(mail.outbox))
@@ -116,22 +117,21 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING") - 1)
-            )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING") + 1)
+            ),
+            charter_status="CHARTER_VALIDATED"
         )
         call_command("cron_association_expiration")
         self.assertFalse(len(mail.outbox))
 
     def test_association_expiration(self):
-        """Association charter status expires today."""
+        """Association charter status expires today. An email is sent."""
         self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
-        self.associations.update(
-            charter_date=(
-                self.today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
-            )
-        )
+        self.associations.update(charter_date=self.today, charter_status="CHARTER_VALIDATED")
         call_command("cron_association_expiration")
         self.assertEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
+        self.assertFalse(self.associations[0].is_site)
+        self.assertTrue(len(mail.outbox))
 
 
 class CommissionExpirationCommandTest(TestCase):
@@ -214,7 +214,7 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
         for document_upload in self.document_uploads:
             document = Document.objects.get(id=document_upload.document_id)
             document.expiration_day = None
-            document.days_before_expiration = f"{self.days_before_expiration} days"
+            document.days_before_expiration = self.days_before_expiration
             document.save()
         self.today = datetime.date.today()
 

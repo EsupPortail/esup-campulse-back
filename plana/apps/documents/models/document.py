@@ -82,7 +82,7 @@ class Document(models.Model):
     contact = models.TextField(_("Contact address"), default="")
     max_uploads = models.PositiveIntegerField(_("Copies number"), default=1, validators=[MinValueValidator(1)])
     is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
-    days_before_expiration = models.DurationField(_("Days before document expiration"), null=True, blank=True)
+    days_before_expiration = models.IntegerField(_("Days before document expiration"), null=True, blank=True)
     expiration_day = models.CharField(
         _("Document expiration day of the year in %m-%d format"),
         max_length=5,

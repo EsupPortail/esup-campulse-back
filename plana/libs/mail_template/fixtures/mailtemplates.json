@@ -418,9 +418,9 @@
     "fields": {
       "code": "ASSOCIATION_CHARTER_EXPIRATION_WARNING_SCHEDULED",
       "label": "Association Charter Expiration Warning Scheduled",
-      "description": "Tâche automatisée prévenant de l'expiration de la charte Site envoyée à une association",
+      "description": "Tâche automatisée prévenant de l'expiration prochaine de la charte Site envoyée à une association",
       "subject": "{{ site_name }} – La charte de votre association va bientôt expirer",
-      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, veuillez la mettre à jour dans votre espace. En cas de problème sur le renouvellement de la charte, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations va bientôt expirer, il vous faudra la mettre à jour dans votre espace à son expiration effective. En cas de problème sur le renouvellement de la charte, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
@@ -856,6 +856,22 @@
       "available_vars": [
         2,
         15
+      ]
+    }
+  },
+  {
+    "model": "mail_template.MailTemplate",
+    "pk": 52,
+    "fields": {
+      "code": "ASSOCIATION_CHARTER_EXPIRATION",
+      "label": "Association Charter Expiration",
+      "description": "Tâche automatisée prévenant de l'expiration effective de la charte Site envoyée à une association",
+      "subject": "{{ site_name }} – La charte de votre association a expiré",
+      "body": "Bonjour,<br/><br/>L'une des chartes de vos associations a expiré, veuillez la mettre à jour dans votre espace. En cas de problème sur le renouvellement de la charte, merci de nous contacter à : <a href='mailto:{{ manager_email_address }}'>{{ manager_email_address }}</a><br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "active": true,
+      "available_vars": [
+        2,
+        6
       ]
     }
   }

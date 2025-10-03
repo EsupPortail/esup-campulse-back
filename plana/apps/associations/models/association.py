@@ -79,7 +79,7 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
-    charter_date = models.DateField(_("Charter date"), blank=True, null=True)  # date de dernier dépôt de charte
+    charter_date = models.DateField(_("Charter date"), blank=True, null=True)  # date d'expiration de la charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateField(_("Approval date"), blank=True, null=True)  # date d'agrément
     last_goa_date = models.DateField(_("Last GOA date"), blank=True, null=True)  # date de dernière AGO
@@ -160,7 +160,7 @@ class Association(models.Model):
                         year += 1
                     return datetime.datetime.strptime(f"{year}-{document.expiration_day}", "%Y-%m-%d")
                 if document.days_before_expiration:
-                    return document_upload.validated_date + document.days_before_expiration
+                    return document_upload.validated_date + datetime.timedelta(days=document.days_before_expiration)
         return ''
 
 

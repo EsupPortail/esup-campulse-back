@@ -96,7 +96,7 @@ class DocumentUpload(models.Model):
                 year = self.validated_date.year
                 if document.expiration_day <= self.validated_date.strftime("%m-%d"):
                     year += 1
-                return datetime.datetime.strptime(f"{year}-{document.expiration_day}", "%Y-%m-%d")
+                return f"{year}-{document.expiration_day}"
             if document.days_before_expiration:
-                return self.validated_date + document.days_before_expiration
-        return ''
+                return datetime.datetime.strftime(self.validated_date + datetime.timedelta(days=document.days_before_expiration), "%Y-%m-%d")
+        return ""

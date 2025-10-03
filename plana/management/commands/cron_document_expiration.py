@@ -21,32 +21,30 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             document_uploads_with_expiration = DocumentUpload.objects.filter(
-                document_id__in=Document.objects.filter(
-                    Q(days_before_expiration__isnull=False) ^ Q(expiration_day__isnull=False)
-                ).values_list("id")
-            )
-            cron_days_before_document_expiration_warning = Setting.get_setting(
-                "CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING"
-            )
+                Q(document__days_before_expiration__isnull=False) |
+                Q(document__expiration_day__isnull=False)
+            ).exclude(document__process_type__in=Document.ProcessType.get_project_documents())
+            days_before_doc_exp_warning = Setting.get_setting("CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING")
+
             for document_upload in document_uploads_with_expiration:
                 document = Document.objects.get(id=document_upload.document_id)
                 expiration_date = None
-                if document_upload.validated_date is not None:
-                    if document.expiration_day is not None:
+                if document_upload.validated_date:
+                    if document.expiration_day:
                         if document.expiration_day <= document_upload.validated_date.strftime("%m-%d"):
                             expiration_date = datetime.datetime.strptime(
                                 f"{document_upload.validated_date.year + 1}-{document.expiration_day}",
                                 "%Y-%m-%d",
                             ).date()
-                        expiration_date = datetime.datetime.strptime(
-                            f"{document_upload.validated_date.year}-{document.expiration_day}",
-                            "%Y-%m-%d",
-                        ).date()
-                    if document.days_before_expiration is not None:
-                        expiration_date = document_upload.validated_date + document.days_before_expiration
-                if expiration_date is not None and datetime.date.today() == expiration_date - datetime.timedelta(
-                    days=cron_days_before_document_expiration_warning
-                ):
+                        else:
+                            expiration_date = datetime.datetime.strptime(
+                                f"{document_upload.validated_date.year}-{document.expiration_day}",
+                                "%Y-%m-%d",
+                            ).date()
+                    elif document.days_before_expiration:
+                        expiration_date = document_upload.validated_date + datetime.timedelta(days=document.days_before_expiration)
+
+                if expiration_date and datetime.date.today() == expiration_date - datetime.timedelta(days=days_before_doc_exp_warning):
                     template = MailTemplate.objects.get(
                         code="USER_OR_ASSOCIATION_DOCUMENT_EXPIRATION_WARNING_SCHEDULED"
                     )
@@ -63,7 +61,7 @@ class Command(BaseCommand):
                         subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
-                elif expiration_date is not None and datetime.date.today() == expiration_date:
+                elif expiration_date and datetime.date.today() >= expiration_date:
                     document_upload.delete()
 
         except Exception as error:
