@@ -231,12 +231,12 @@ class GroupInstitutionFundUserRegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('institution') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('INSTITUTION_ID_POSSIBLE'):
             raise exceptions.ValidationError(
-                {"gifu_institution": [_("Linking this institution to this group is not allowed.")]}
+                {"gifu_institution": [_("Adding institution in this group is not possible.")]}
             )
 
         if data.get('fund') and not settings.GROUPS_STRUCTURE.get(data['group'].name, {}).get('FUND_ID_POSSIBLE'):
             raise exceptions.ValidationError(
-                {"gifu_fund": [_("Linking this fund to this group is not allowed.")]}
+                {"gifu_fund": [_("Adding fund in this group is not possible.")]}
             )
         return data
 

@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             model_name='document',
             name='max_uploads',
             field=models.PositiveIntegerField(
-                default=1, validators=[django.core.validators.MinValueValidator(1)], verbose_name='Copies number'
+                default=1, validators=[django.core.validators.MinValueValidator(1)], verbose_name='Maximum copies number allowed'
             ),
         ),
         migrations.RunPython(migrate_is_multiple_to_max_uploads),

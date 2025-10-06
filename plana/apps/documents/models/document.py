@@ -80,7 +80,7 @@ class Document(models.Model):
     acronym = models.TextField(_("Acronym"))
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), default="")
-    max_uploads = models.PositiveIntegerField(_("Copies number"), default=1, validators=[MinValueValidator(1)])
+    max_uploads = models.PositiveIntegerField(_("Maximum copies number allowed"), default=1, validators=[MinValueValidator(1)])
     is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
     days_before_expiration = models.IntegerField(_("Days before document expiration"), null=True, blank=True)
     expiration_day = models.CharField(

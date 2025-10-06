@@ -155,9 +155,9 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if document.max_uploads == 1 and existing_document.exists():
+        if document.max_uploads <= existing_document.count():
             return response.Response(
-                {"error": _("Document cannot be submitted multiple times.")},
+                {"error": _("Unable to upload an additional copy for this document type : limit already reached.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
