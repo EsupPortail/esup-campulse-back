@@ -47,7 +47,7 @@ for logger in LOGGING["loggers"]:
 # Secret keys #
 ###############
 
-SECRET_KEY = ""
+SECRET_KEY = "{{ secret_key }}"
 
 
 ############
