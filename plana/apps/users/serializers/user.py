@@ -356,6 +356,9 @@ class CustomCASDataRegisterSerializer(CustomRegisterSerializer):
             fields.pop(field, None)
         return fields
 
+    def validate(self, data):
+        return data
+
     def save(self, request=None):
         """Save the new data linked to CAS user."""
         self.cleaned_data = self.validated_data
