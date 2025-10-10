@@ -362,7 +362,7 @@ class CustomCASDataRegisterSerializer(CustomRegisterSerializer):
     def save(self, request=None):
         """Save the new data linked to CAS user."""
         self.cleaned_data = self.validated_data
-        user = self.context.get("request").request if not request else request.user
+        user = self.context.get("request").user if not request else request.user
 
         if "phone" in self.cleaned_data:
             user.phone = self.cleaned_data["phone"]
