@@ -1,6 +1,6 @@
 stages:
-  - sonarqube-check
   - test
+  - sonarqube-check
   - deploy
   - build
   - scan
@@ -37,7 +37,9 @@ sonarqube-check:
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   
   script: 
-    - sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL}"
+    - sonar-scanner 
+      -Dsonar.host.url="${SONAR_HOST_URL}"
+      -Dsonar.python.coverage.reportPaths=coverage.xml
   allow_failure: true
   needs:
     - job: unittest
