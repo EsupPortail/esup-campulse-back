@@ -163,9 +163,8 @@ class User(AbstractUser):
             except AssociationUser.DoesNotExist:
                 pass
 
-        if project_obj.user is not None:
-            if project_obj.user == self:
-                return True
+        if project_obj.user is not None and project_obj.user == self:
+            return True
 
         if self.get_user_funds().count() != 0 or self.get_user_managed_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")

@@ -23,18 +23,14 @@ class AssociationFilter(filters.FilterSet):
     def filter_is_enabled(self, queryset, name, value):
         is_enabled = value
         request = self.request
-        if request.user.is_anonymous:
-            is_enabled = True
-        elif not request.user.has_perm("associations.view_association_not_enabled"):
+        if request.user.is_anonymous or not request.user.has_perm("associations.view_association_not_enabled"):
             is_enabled = True
         return queryset.filter(is_enabled=is_enabled)
 
     def filter_is_public(self, queryset, name, value):
         is_public = value
         request = self.request
-        if request.user.is_anonymous:
-            is_public = True
-        elif not request.user.has_perm("associations.view_association_not_public"):
+        if request.user.is_anonymous or not request.user.has_perm("associations.view_association_not_public"):
             is_public = True
         return queryset.filter(is_public=is_public)
 
