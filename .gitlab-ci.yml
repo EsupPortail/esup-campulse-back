@@ -39,9 +39,9 @@ sonarqube-check:
   script: 
     - sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL}"
   allow_failure: true
-  # needs:
-  #   - job: unittest
-  #     artifacts: true
+  needs:
+    - job: unittest
+      artifacts: true
   rules:
     # - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     # - if: $CI_COMMIT_BRANCH == 'master'
@@ -64,8 +64,9 @@ unittest:
     - touch keys/age-private-key.key
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
-#  rules:
-#    - when: never # TODO remove this line when tests with Docker are finished
+  artifacts:
+    paths:
+      - coverage.xml
 
 include:
   - project: docker/template
