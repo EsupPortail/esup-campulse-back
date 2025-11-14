@@ -97,9 +97,9 @@ class AssociationListCreate(generics.ListCreateAPIView):
         if "institution" in request.data and request.data["institution"] != "":
             get_object_or_404(Institution, id=request.data["institution"])
 
-        if not "institution" in request.data and request.user.get_user_managed_institutions().count() == 1:
+        if "institution" not in request.data and request.user.get_user_managed_institutions().count() == 1:
             request.data["institution"] = request.user.get_user_managed_institutions().first().id
-        elif not "institution" in request.data:
+        elif "institution" not in request.data:
             return response.Response(
                 {"error": _("No institution given.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -161,7 +161,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        if not "is_site" in request.data:
+        if "is_site" not in request.data:
             request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
         request.data["is_enabled"] = True
 

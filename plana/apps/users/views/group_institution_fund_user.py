@@ -169,7 +169,7 @@ class GroupInstitutionFundUserDestroyWithFund(generics.DestroyAPIView):
             )
 
         if not request.user.has_perm("users.delete_groupinstitutionfunduser_any_group") and (
-            not Fund.objects.get(id=kwargs["fund_id"]).institution_id in request.user.get_user_managed_institutions()
+            Fund.objects.get(id=kwargs["fund_id"]).institution_id not in request.user.get_user_managed_institutions()
         ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},
@@ -222,7 +222,7 @@ class GroupInstitutionFundUserDestroyWithInstitution(generics.DestroyAPIView):
             )
 
         if not request.user.has_perm("users.delete_groupinstitutionfunduser_any_group") and (
-            not kwargs["institution_id"] in request.user.get_user_managed_institutions()
+            kwargs["institution_id"] not in request.user.get_user_managed_institutions()
         ):
             return response.Response(
                 {"error": _("Not allowed to delete this link between user and group.")},

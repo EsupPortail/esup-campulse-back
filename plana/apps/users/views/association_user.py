@@ -192,10 +192,10 @@ class AssociationUserUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if "can_be_president_from" in request.data and not "can_be_president_to" in request.data:
+        if "can_be_president_from" in request.data and "can_be_president_to" not in request.data:
             request.data["can_be_president_to"] = None
 
-        if "can_be_president_to" in request.data and not "can_be_president_from" in request.data:
+        if "can_be_president_to" in request.data and "can_be_president_from" not in request.data:
             request.data["can_be_president_from"] = datetime.date.today()
 
         if "is_vice_president" in request.data and to_bool(request.data["is_vice_president"]):

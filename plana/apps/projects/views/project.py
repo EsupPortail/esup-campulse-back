@@ -213,10 +213,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if (
-            not "association" in request.data
+            "association" not in request.data
             or request.data["association"] is None
             or request.data["association"] == ""
-        ) and (not "user" in request.data or request.data["user"] is None or request.data["user"] == ""):
+        ) and ("user" not in request.data or request.data["user"] is None or request.data["user"] == ""):
             return response.Response(
                 {"error": _("Missing affectation of the new project.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -224,8 +224,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if (
             ("user" in request.data and "association_user" in request.data)
-            or (not "association" in request.data and "association_user" in request.data)
-            or (not "association_user" in request.data and "association" in request.data)
+            or ("association" not in request.data and "association_user" in request.data)
+            or ("association_user" not in request.data and "association" in request.data)
         ):
             return response.Response(
                 {"error": _("Cannot add a user from an association.")},
