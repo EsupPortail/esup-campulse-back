@@ -17,6 +17,8 @@ from plana.apps.projects.serializers.project_review import (
     ProjectReviewUpdateSerializer,
 )
 
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
 
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route."""
@@ -95,8 +97,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             "real_start_date" in request.data
             and "real_end_date" in request.data
-            and datetime.datetime.strptime(request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["real_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["real_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},

@@ -24,7 +24,7 @@ from plana.apps.contents.models.setting import Setting
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, PHONE_REGEX_PATTERN
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,8 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
         """Check phone field with a regex."""
         if value == '':
             return value
-        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
-        if not re.match(pattern, value):
+        if not re.match(PHONE_REGEX_PATTERN, value):
             raise serializers.ValidationError("Wrong phone number format.")
         return value
 
@@ -150,8 +149,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         """Check phone field with a regex."""
         if value == '':
             return value
-        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
-        if not re.match(pattern, value):
+        if not re.match(PHONE_REGEX_PATTERN, value):
             raise serializers.ValidationError("Wrong phone number format.")
         return value
 

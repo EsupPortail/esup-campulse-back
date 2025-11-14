@@ -36,6 +36,8 @@ from ..filters import ProjectFilter
 
 from plana.decorators import capture_queries
 
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
 
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route."""
@@ -256,8 +258,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if (
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
-            and datetime.datetime.strptime(request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["planned_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["planned_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},
@@ -407,8 +409,8 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
-            and datetime.datetime.strptime(request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["planned_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["planned_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},

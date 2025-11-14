@@ -16,6 +16,8 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
 
+PHONE_REGEX_PATTERN = r"^\+?\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4,6}$"
+
 
 def check_valid_password(password):
     """Check password standard rules and zxcvbn rules."""

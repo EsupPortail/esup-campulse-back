@@ -33,6 +33,8 @@ from ..filters import ProjectCommissionFundFilter
 
 from plana.decorators import capture_queries
 
+DATE_FORMAT = "%d %B %Y"
+
 
 @extend_schema(
     tags=["projects/commission_funds"],
@@ -397,8 +399,8 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                             "context_attach": {
                                 "project_name": project.name,
                                 "project_manual_identifier": project.manual_identifier,
-                                "date": datetime.date.today().strftime('%d %B %Y'),
-                                "date_commission": commission.commission_date.strftime('%d %B %Y'),
+                                "date": datetime.date.today().strftime(DATE_FORMAT),
+                                "date_commission": commission.commission_date.strftime(DATE_FORMAT),
                                 "owner": owner,
                                 "content": content,
                                 "comment": "" if not comment else comment.text,
@@ -425,9 +427,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                     "amount_earned": request.data["amount_earned"],
                                     "project_name": project.name,
                                     "project_manual_identifier": project.manual_identifier,
-                                    "date": datetime.date.today().strftime('%d %B %Y'),
+                                    "date": datetime.date.today().strftime(DATE_FORMAT),
                                     "year": datetime.date.today().strftime('%Y'),
-                                    "date_commission": commission.commission_date.strftime('%d %B %Y'),
+                                    "date_commission": commission.commission_date.strftime(DATE_FORMAT),
                                     "owner": owner,
                                     "content": content,
                                 },

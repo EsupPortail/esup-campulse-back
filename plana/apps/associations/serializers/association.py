@@ -16,6 +16,7 @@ from plana.apps.institutions.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
 from plana.apps.users.models.user import AssociationUser
+from plana.utils import PHONE_REGEX_PATTERN
 
 
 class AssociationAllDataReadSerializer(serializers.ModelSerializer):
@@ -78,8 +79,7 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
         """Check phone field with a regex."""
         if value == '':
             return value
-        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
-        if not re.match(pattern, value):
+        if not re.match(PHONE_REGEX_PATTERN, value):
             raise serializers.ValidationError("Wrong phone number format.")
         return value
 
