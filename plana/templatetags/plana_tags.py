@@ -8,7 +8,6 @@ from plana.utils import get_s3_client
 register = template.Library()
 
 
-# FIXME : PDF templates in public or private bucket ?
 @register.simple_tag
 def s3static(object_key):
     """Call with {% s3static 'file/path' %}."""
