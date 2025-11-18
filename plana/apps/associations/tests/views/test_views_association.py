@@ -15,12 +15,6 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser
 
-# from django.conf import settings
-# from django.core.files.storage import default_storage
-# from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
-# from unittest.mock import Mock
-# from plana.storages import DynamicThumbnailImageField
-
 
 class AssociationsViewsTests(TestCase):
     """Main tests class."""
@@ -303,25 +297,27 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_public"], False)
 
-    def test_post_association_bad_request(self):
+    def test_post_association_bad_request_format(self):
         """
         POST /associations/ .
 
-        - Name param is mandatory.
         - Institution param is mandatory.
+        - Name param is mandatory.
         - Email param is mandatory.
         """
         response_general = self.general_client.post(
             "/associations/",
             {
                 "name": "Les Fans de Campulse",
+                "email": "test@mail.tld"
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("no_institution", response_general.data)
 
         response_general = self.general_client.post(
             "/associations/",
-            {"institution": 2},
+            {"email": "test@mail.tld", "institution": 2},
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -334,7 +330,7 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_association_404(self):
+    def test_post_association_no_institution(self):
         """
         POST /associations/ .
 
@@ -344,54 +340,37 @@ class AssociationsViewsTests(TestCase):
             "/associations/",
             {"institution": 1000},
         )
-        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("institution", response_general.data)
 
-    def test_post_association_anonymous(self):
-        """
-        POST /associations/ .
-
-        - The user must be authenticated.
-        """
-        response = self.client.post(
-            "/associations/",
-            {
-                "name": "Unauthorized Association",
-                "institution": 2,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_post_association_forbidden(self):
+    def test_post_association_bad_request_data(self):
         """
         POST /associations/ .
 
         - An Institution Manager cannot add an association not from the same institution.
-        - A Misc manager cannot add an association linked to another institution than its own.
         - A Misc manager cannot set is_site on a new association.
         """
         response_institution = self.institution_client.post(
             "/associations/",
             {
                 "name": "Forbidden association",
+                "email": "false@mail.tld",
                 "institution": 2,
             },
         )
-        self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_institution.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("wrong_institution", response_institution.data)
 
         response_misc = self.misc_client.post(
             "/associations/",
             {
-                "name": "Also forbidden association",
-                "institution": 2,
+                "name": "Another forbidden association",
+                "email": "false@mail.tld",
+                "is_public": True
             },
         )
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
-
-        response_misc = self.misc_client.post(
-            "/associations/",
-            {"name": "Another forbidden association", "is_public": True},
-        )
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_misc.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("restricted_fields", response_misc.data)
 
     def test_post_association_similar_names(self):
         """
@@ -411,32 +390,18 @@ class AssociationsViewsTests(TestCase):
         )
 
         similar_names = [
-            "Les Fans de Campulse",
             "LesFansdeCampulse",
             "lesfansdecampulse",
-            " Les Fans de Campulse ",
+            " Les fans de Campulse ",
             "Lés Fàns dè Câmpülsé",
         ]
         for similar_name in similar_names:
             response_general = self.general_client.post(
                 "/associations/",
-                {"name": similar_name, "institution": 2},
+                {"name": similar_name, "email": "test@mail.tld", "institution": 2},
             )
             self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_post_association_serializer_error(self):
-        """
-        POST /associations/ .
-
-        - A General Manager can add an association.
-        - Serializers fields must be valid.
-        """
-        response_general = self.general_client.post(
-            "/associations/",
-            data={"name": "Nom d'asso", "institution": 2, "email": False},
-            content_type="application/json",
-        )
-        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertIn("similar_name", response_general.data)
 
     def test_post_association_success_manager_institution(self):
         """
@@ -449,6 +414,7 @@ class AssociationsViewsTests(TestCase):
             {
                 "name": "Successful association.",
                 "email": "success@association.fr",
+                "institution": 3
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)

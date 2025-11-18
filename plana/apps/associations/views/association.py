@@ -2,7 +2,6 @@
 
 import datetime
 import json
-import unicodedata
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -11,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -81,91 +79,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
             return self.queryset.filter(is_public=True)
 
         return self.queryset
-
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: AssociationMandatoryDataSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        }
-    )
-    @capture_queries()
-    def post(self, request, *args, **kwargs):
-        """Create a new association with mandatory informations (manager only)."""
-        if "institution" in request.data and request.data["institution"] != "":
-            get_object_or_404(Institution, id=request.data["institution"])
-
-        if "institution" not in request.data and request.user.get_user_managed_institutions().count() == 1:
-            request.data["institution"] = request.user.get_user_managed_institutions().first().id
-        elif "institution" not in request.data:
-            return response.Response(
-                {"error": _("No institution given.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not request.user.has_perm(
-            "associations.add_association_any_institution"
-        ) and not request.user.is_staff_in_institution(request.data["institution"]):
-            return response.Response(
-                {"error": _("Not allowed to create an association for this institution.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "is_public" in request.data
-            and to_bool(request.data["is_public"])
-            and not request.user.has_perm("associations.add_association_all_fields")
-        ):
-            return response.Response(
-                {"error": _("No rights to set is_public on this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "is_site" in request.data
-            and to_bool(request.data["is_site"])
-            and not request.user.has_perm("associations.add_association_all_fields")
-        ):
-            return response.Response(
-                {"error": _("No rights to set is_site on this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if "name" not in request.data:
-            return response.Response(
-                {"error": _("Association name not set.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Removes spaces, uppercase and accented characters to avoid similar association names.
-        new_association_name = (
-            unicodedata.normalize("NFD", request.data["name"].strip().replace(" ", "").lower())
-            .encode("ascii", "ignore")
-            .decode("utf-8")
-        )
-        associations = Association.objects.all()
-        for association in associations:
-            existing_association_name = (
-                unicodedata.normalize("NFD", association.name.strip().replace(" ", "").lower())
-                .encode("ascii", "ignore")
-                .decode("utf-8")
-            )
-            if new_association_name == existing_association_name:
-                return response.Response(
-                    {"error": _("Association name already taken.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if "is_site" not in request.data:
-            request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
-        request.data["is_enabled"] = True
-
-        return super().create(request, *args, **kwargs)
 
 
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):

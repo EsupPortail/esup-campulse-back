@@ -3,19 +3,20 @@
 import re
 
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
+from plana.apps.associations.utils import normalize_association_name
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.institutions.serializers.institution import InstitutionSerializer
 from plana.apps.institutions.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
-from plana.apps.users.models.user import AssociationUser
 from plana.utils import PHONE_REGEX_PATTERN
 
 
@@ -140,6 +141,35 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
             "institution",
             "can_submit_projects"
         ]
+
+    def validate(self, data):
+        user = self.context['request'].user
+
+        if "institution" not in data:
+            institutions = user.get_user_managed_institutions()
+            if institutions.count() == 1:
+                data["institution"] = institutions.first()
+            else:
+                raise serializers.ValidationError({"no_institution": _("No institution given.")})
+
+        if not user.has_perm("associations.add_association_any_institution") and not user.is_staff_in_institution(data["institution"]):
+            raise serializers.ValidationError({"wrong_institution": _("Not allowed to create an association for this institution.")})
+
+        restricted_fields = ["is_site", "is_public"]
+        if any(bool(data.get(field)) for field in restricted_fields) and not user.has_perm("associations.add_association_all_fields"):
+            raise serializers.ValidationError({"restricted_fields": _("Not allowed to create an association with restricted fields.")})
+
+        # Removes spaces, uppercase and accented characters to avoid similar association names.
+        associations = Association.objects.all()
+        for association in associations:
+            if normalize_association_name(data["name"]) == normalize_association_name(association.name):
+                raise serializers.ValidationError({"similar_name": _("Association name already taken.")})
+
+        if "is_site" not in data:
+            data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
+        data["is_enabled"] = True  # Always enabled at creation
+
+        return data
 
 
 class AssociationNameSerializer(serializers.ModelSerializer):
