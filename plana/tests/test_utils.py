@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from plana.utils import to_bool, valid_date_format
+from plana.utils import to_bool, valid_date_format, normalize_object_name
 
 
 class PlanAUtilsTests(TestCase):
@@ -26,3 +26,7 @@ class PlanAUtilsTests(TestCase):
 
         date_wrong = valid_date_format("29-06-2023")
         self.assertFalse(date_wrong)
+
+    def test_normalize_object_name(self):
+        result = normalize_object_name(" Ceci est Un têst avèc  ACCENts ")
+        self.assertEqual(result, "ceciestuntestavecaccents")

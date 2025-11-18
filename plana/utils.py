@@ -3,6 +3,7 @@
 import ast
 import datetime
 import logging
+import unicodedata
 
 import boto3
 import weasyprint
@@ -158,3 +159,11 @@ def generate_pdf_binary(context, request, template_name):
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
     return pdf_binary
+
+
+def normalize_object_name(object_name: str) -> str:
+    return (
+        unicodedata.normalize("NFD", object_name.strip().replace(" ", "").lower())
+        .encode("ascii", "ignore")
+        .decode("utf-8")
+    )

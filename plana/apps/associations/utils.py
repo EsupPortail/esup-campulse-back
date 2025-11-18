@@ -1,5 +1,4 @@
 import csv
-import unicodedata
 
 from tempfile import NamedTemporaryFile
 
@@ -8,14 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from openpyxl import Workbook
 
 from plana.apps.institutions.models import Institution, InstitutionComponent
-
-
-def normalize_association_name(association_name: str) -> str:
-    return (
-        unicodedata.normalize("NFD", association_name.strip().replace(" ", "").lower())
-        .encode("ascii", "ignore")
-        .decode("utf-8")
-    )
 
 
 def generate_associations_export(queryset, mode: str) -> HttpResponse:

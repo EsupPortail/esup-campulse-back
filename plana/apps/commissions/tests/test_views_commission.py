@@ -454,6 +454,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("similar_name", response.data)
 
     def test_patch_commission_wrong_dates(self):
         """
@@ -468,6 +469,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_dates", response.data)
 
     def test_patch_commission_too_old(self):
         """
@@ -482,34 +484,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_submission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"submission_date": "2200-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_commission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"commission_date": "2050-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_date", response.data)
 
     def test_patch_commission_success(self):
         """

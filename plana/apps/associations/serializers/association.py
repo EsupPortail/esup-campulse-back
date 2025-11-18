@@ -10,14 +10,13 @@ from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
 from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
-from plana.apps.associations.utils import normalize_association_name
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.apps.institutions.serializers.institution import InstitutionSerializer
 from plana.apps.institutions.serializers.institution_component import (
     InstitutionComponentSerializer,
 )
-from plana.utils import PHONE_REGEX_PATTERN
+from plana.utils import PHONE_REGEX_PATTERN, normalize_object_name
 
 
 class AssociationAllDataReadSerializer(serializers.ModelSerializer):
@@ -162,7 +161,7 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
         # Removes spaces, uppercase and accented characters to avoid similar association names.
         associations = Association.objects.all()
         for association in associations:
-            if normalize_association_name(data["name"]) == normalize_association_name(association.name):
+            if normalize_object_name(data["name"]) == normalize_object_name(association.name):
                 raise serializers.ValidationError({"similar_name": _("Association name already taken.")})
 
         if "is_site" not in data:
