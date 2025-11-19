@@ -20,6 +20,7 @@ from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.permissions import UserUpdatePermission
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.user import (
     UserPartialDataSerializer,
@@ -227,11 +228,13 @@ class UserListCreate(generics.ListCreateAPIView):
 
 
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    """/users/{id} route."""
+    """
+    /users/{id} route.
+    For managers only
+    """
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
 
     def get_serializer_class(self):
@@ -241,14 +244,12 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.serializer_class = UserUpdateSerializer
         return super().get_serializer_class()
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: UserSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
+    def get_permissions(self):
+        self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+        if self.request.method != "GET":
+            self.permission_classes.append(UserUpdatePermission)
+        return super().get_permissions()
+
     def get(self, request, *args, **kwargs):
         """Retrieve a user with all details."""
 
@@ -262,126 +263,21 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return self.retrieve(request, *args, **kwargs)
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: UserUpdateSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def patch(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         """Update a user field (with a restriction on CAS auto-generated fields)."""
-        user = self.get_object()
 
-        serializer = self.get_serializer(data=request.data)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
+        user = serializer.save()
 
-        request.data.pop("username", False)
+        self._handle_user_update_emails(user, serializer.validated_data, request)
 
-        if user.is_superuser or user.is_staff:
-            return response.Response(
-                {"error": _("Cannot edit superuser.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        return response.Response(serializer.data)
 
-        if user.is_cas_user:
-            for restricted_field in [
-                "email",
-                "first_name",
-                "last_name",
-                "is_student",
-            ]:
-                request.data.pop(restricted_field, False)
-        elif "email" in request.data:
-            request.data.update({"email": request.data["email"].lower()})
-            if request.data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
-                return response.Response(
-                    {"error": _("This email address cannot be used for a local account.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            request.data.update({"username": request.data["email"]})
-
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-            "manager_email_address": request.user.email,
-        }
-
-        if "can_submit_projects" in request.data:
-            template = None
-            if not to_bool(request.data["can_submit_projects"]):
-                template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
-            elif to_bool(request.data["can_submit_projects"]):
-                template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=user.email,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-        if "is_validated_by_admin" in request.data and to_bool(request.data["is_validated_by_admin"]):
-            context["username"] = user.username
-            context["first_name"] = user.first_name
-            context["last_name"] = user.last_name
-            context["documentation_url"] = Setting.get_setting("APP_DOCUMENTATION_URL")
-            if user.is_cas_user:
-                template = MailTemplate.objects.get(code="USER_ACCOUNT_LDAP_CONFIRMATION")
-            else:
-                template = MailTemplate.objects.get(code="USER_ACCOUNT_CONFIRMATION")
-                uid = user_pk_to_url_str(user)
-                token = default_token_generator.make_token(user)
-                context["password_reset_url"] = (
-                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}?uid={uid}&token={token}"
-                )
-            History.objects.create(action_title="USER_VALIDATED", action_user_id=request.user.pk, user_id=user.id)
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=user.email,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(user, request, context),
-            )
-
-            unvalidated_assos_user = AssociationUser.objects.filter(user_id=user.id, is_validated_by_admin=False)
-            if unvalidated_assos_user.exists():
-                for unvalidated_asso_user in unvalidated_assos_user:
-                    context["user_association_url"] = (
-                        f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
-                    )
-                    template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION")
-                    send_mail(
-                        from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=list(
-                            Institution.objects.get(id=unvalidated_asso_user.association.institution_id)
-                            .default_institution_managers()
-                            .values_list("email", flat=True)
-                        ),
-                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                        message=template.parse_vars(request.user, request, context),
-                    )
-
-        return self.partial_update(request, *args, **kwargs)
-
-    @extend_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: UserUpdateSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
     def delete(self, request, *args, **kwargs):
         """Destroys a user from the database (with a restriction on manager users)."""
         user = self.get_object()
-
-        if user.is_superuser or user.is_staff:
-            return response.Response(
-                {"error": _("Cannot delete superuser.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
 
         current_site = get_current_site(request)
         context = {
@@ -390,15 +286,73 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         }
         if not user.is_validated_by_admin:
             context["manager_email_address"] = request.user.email
-            template = MailTemplate.objects.get(code="USER_ACCOUNT_REJECTION")
+            template_code = "USER_ACCOUNT_REJECTION"
         else:
-            template = MailTemplate.objects.get(code="USER_ACCOUNT_DELETION")
+            template_code = "USER_ACCOUNT_DELETION"
 
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=user.email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
+        self._send_template_mail(template_code, user.email, request.user, request, context)
 
         return self.destroy(request, *args, **kwargs)
+
+    def _send_template_mail(self, template_code, to, user, request, context):
+        template = MailTemplate.objects.get(code=template_code)
+        subject = template.subject.replace("{{ site_name }}", context["site_name"])
+        message = template.parse_vars(user, request, context)
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=to,
+            subject=subject,
+            message=message
+        )
+
+    def _handle_user_update_emails(self, user, validated_data, request):
+        current_site = get_current_site(request)
+        base_context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "manager_email_address": request.user.email,
+        }
+
+        if "can_submit_projects" in validated_data:
+            template_code = (
+                "USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED"
+                if validated_data["can_submit_projects"]
+                else "USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED"
+            )
+            self._send_template_mail(template_code, user.email, request.user, request, base_context)
+
+        if validated_data.get("is_validated_by_admin"):
+            context = {**base_context,
+                       "username": user.username,
+                       "first_name": user.first_name,
+                       "last_name": user.last_name,
+                       "documentation_url": Setting.get_setting("APP_DOCUMENTATION_URL")}
+            if user.is_cas_user:
+                template_code = "USER_ACCOUNT_LDAP_CONFIRMATION"
+            else:
+                template_code = "USER_ACCOUNT_CONFIRMATION"
+                uid = user_pk_to_url_str(user)
+                token = default_token_generator.make_token(user)
+                context["password_reset_url"] = (
+                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}"
+                    f"?uid={uid}&token={token}"
+                )
+            History.objects.create(
+                action_title="USER_VALIDATED",
+                action_user=request.user,
+                user=user
+            )
+            self._send_template_mail(template_code, user.email, user, request, context)
+
+            context["user_association_url"] = (
+                f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}"
+            )
+            unvalidated_assos_user = (
+                AssociationUser.objects
+                .filter(user=user, is_validated_by_admin=False)
+                .select_related("association__institution")
+            )
+            for assoc_user in unvalidated_assos_user:
+                managers = assoc_user.association.institution.default_institution_managers()
+                manager_emails = list(managers.values_list("email", flat=True))
+                self._send_template_mail("MANAGER_ACCOUNT_ASSOCIATION_USER_CREATION", manager_emails, request.user, request, context)

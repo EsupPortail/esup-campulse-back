@@ -176,6 +176,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "permissions",
         ]
 
+    def validate(self, data):
+        if self.instance.is_cas_user:
+            for restricted_field in ["email", "first_name", "last_name", "is_student", "username"]:
+                data.pop(restricted_field, False)
+        elif "email" in data:
+            if data["email"].split('@')[1] in Setting.get_setting("RESTRICTED_DOMAINS"):
+                raise serializers.ValidationError({"email_domain": _("This email address cannot be used for a local account.")})
+            data["username"] = data["email"]
+        return data
+
 
 class UserPartialDataSerializer(serializers.ModelSerializer):
     """Used to get data from another student in the same associations."""

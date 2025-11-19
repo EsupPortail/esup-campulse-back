@@ -18,3 +18,9 @@ class AddAssociationUserPermission(BasePermission):
         if request.user.pk == int(request.data.get("user")):
             return True
         return False
+
+
+class UserUpdatePermission(BasePermission):
+    """Used to define which users can be updated through the API for managers"""
+    def has_object_permission(self, request, view, obj):
+        return not obj.is_superuser and not obj.is_staff
