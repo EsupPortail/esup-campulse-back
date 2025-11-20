@@ -76,11 +76,12 @@ class Document(models.Model):
     contact = models.TextField(_("Contact address"), default="")
     is_multiple = models.BooleanField(_("Is multiple"), default=False)
     is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
-    days_before_expiration = models.DurationField(_("Days before document expiration"), null=True)
+    days_before_expiration = models.DurationField(_("Days before document expiration"), null=True, blank=True)
     expiration_day = models.CharField(
         _("Document expiration day of the year in %m-%d format"),
         max_length=5,
         null=True,
+        blank=True
     )
     path_template = DynamicStorageFileField(
         _("Example template file"),
@@ -94,12 +95,14 @@ class Document(models.Model):
         verbose_name=_("Institution"),
         on_delete=models.RESTRICT,
         null=True,
+        blank=True
     )
     fund = models.ForeignKey(
         Fund,
         verbose_name=_("Fund"),
         on_delete=models.RESTRICT,
         null=True,
+        blank=True
     )
     process_type = models.CharField(
         _("Document Status"),
