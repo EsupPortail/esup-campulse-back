@@ -28,7 +28,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned.")))
             else:
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))
-                pass
 
         except Exception as error:
             self.stdout.write(self.style.ERROR(f"Error : {error}"))

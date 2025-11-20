@@ -31,7 +31,7 @@ def generate_associations_export(queryset, mode: str) -> HttpResponse:
         http_response = HttpResponse(content_type="application/csv")
         http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
         writer = csv.writer(http_response, delimiter=";")
-        writer.writerow([field for field in fields])
+        writer.writerow(fields)
     elif mode == "xlsx":
         workbook = Workbook()
         worksheet = workbook.active
@@ -59,7 +59,7 @@ def generate_associations_export(queryset, mode: str) -> HttpResponse:
 
         if mode is None or mode == "csv":
             # Write CSV file content
-            writer.writerow([field for field in fields])
+            writer.writerow(fields)
         elif mode == "xlsx":
             for index_field, field in enumerate(fields):
                 worksheet.cell(row=index_association + 2, column=index_field + 1).value = field

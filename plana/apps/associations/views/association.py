@@ -150,17 +150,17 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 else json.loads(json.dumps(social_networks_data))
             )
             for social_network in social_networks:
-                if sorted(list(social_network.keys())) != sorted(["type", "location"]):
+                if set(social_network.keys()) != {"type", "location"}:
                     return response.Response(
                         {"error": _("Wrong social_networks parameters")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-                if not all(isinstance(s, str) for s in list(social_network.values())):
+                if not all(isinstance(s, str) for s in social_network.values()):
                     return response.Response(
                         {"error": _("Wrong social_networks values")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-        except Exception as ex:
+        except Exception:
             return response.Response(
                 {"error": _("Error on social networks format.")},
                 status=status.HTTP_400_BAD_REQUEST,

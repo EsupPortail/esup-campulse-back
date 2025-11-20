@@ -21,7 +21,7 @@ class InstitutionAdmin(admin.ModelAdmin):
         if not change:
             group = Group.objects.get(name="MANAGER_GENERAL")
             user_ids = GroupInstitutionFundUser.objects.filter(group_id=group.id).values_list("user_id", flat=True)
-            for user_id in list(set(user_ids)):
+            for user_id in set(user_ids):
                 GroupInstitutionFundUser.objects.create(user_id=user_id, group_id=group.id, institution_id=obj.id)
 
 
