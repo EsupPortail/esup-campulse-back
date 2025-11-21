@@ -14,7 +14,7 @@ def load_key(keyfile):
     try:
         keyfile = SITE_ROOT / "keys" / keyfile
         with open(keyfile, "r") as file:
-            return file.read()
+            return file.read().strip()
     except FileNotFoundError:
         return ""
 
