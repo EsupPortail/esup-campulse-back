@@ -8,6 +8,7 @@ from plana.utils import get_s3_client
 register = template.Library()
 
 
+@register.simple_tag
 def s3static(object_key):
     """Call with {% s3static 'file/path' %}."""
     object_key = f"pdf/{object_key}"
