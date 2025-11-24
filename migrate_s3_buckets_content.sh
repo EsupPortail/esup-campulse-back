@@ -83,7 +83,7 @@ echo "🔊 Migrate public data"
 echo "➡️  Migrate app logos"
 s3cmd sync "$SRC_BUCKET/logos/" "$PUBLIC_DEST/logos/" --acl-public
 echo "➡️  Migrate PDF templates"
-s3cmd sync "$SRC_BUCKET/pdf/" "$PUBLIC_DEST/pdf/" --acl-public
+s3cmd sync "$SRC_BUCKET/pdf/" "$PUBLIC_DEST/pdf/" --acl-public --no-mime-magic --guess-mime-type
 echo "➡️  Migrate associations documents templates"
 s3cmd sync "$SRC_BUCKET/associations_documents_templates/" "$PUBLIC_DEST/associations_documents_templates/" --acl-public
 echo "➡️  Migrate associations logos"
