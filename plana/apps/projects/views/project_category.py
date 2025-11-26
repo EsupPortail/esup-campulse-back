@@ -8,16 +8,12 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import CommissionFund
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
@@ -69,24 +65,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
-                | models.Q(
-                    project_id__in=(
-                        ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=CommissionFund.objects.filter(
-                                fund_id__in=user_funds_ids
-                            ).values_list("id")
-                        ).values_list("project_id")
-                    )
-                )
-                | models.Q(
-                    project_id__in=(
-                        Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=user_institutions_ids
-                            ).values_list("id")
-                        ).values_list("id")
-                    )
-                )
+                | models.Q(project__projectcommissionfund__commission_fund__fund_id__in=user_funds_ids.values_list("id"))
+                | models.Q(project__in=(Project.visible_objects.filter(association__institution__in=user_institutions_ids.values_list("id"))))
             )
 
         if project_id:

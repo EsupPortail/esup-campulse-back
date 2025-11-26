@@ -75,16 +75,11 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
 
             queryset = queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
+                | models.Q(commission_fund__fund__id__in=user_funds_ids.values_list("id"))
                 | models.Q(
-                    commission_fund_id__in=CommissionFund.objects.filter(fund_id__in=user_funds_ids).values_list("id")
-                )
-                | models.Q(
-                    project_id__in=(
+                    project__in=(
                         Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=user_institutions_ids
-                            ).values_list("id")
-                        ).values_list("id")
+                            association__institution_id__in=user_institutions_ids.values_list("id"))
                     )
                 )
             )
@@ -169,9 +164,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        commission_funds = CommissionFund.objects.filter(
-            id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list("commission_fund_id")
-        )
+        commission_funds = CommissionFund.objects.filter(projectcommissionfund__project=project)
         for commission_fund in commission_funds:
             if commission_fund.commission_id != commission.id:
                 return response.Response(

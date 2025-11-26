@@ -119,7 +119,7 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get("/commissions/?is_site=true")
         commissions_cnt = Commission.objects.filter(
             id__in=CommissionFund.objects.filter(
-                fund_id__in=Fund.objects.filter(is_site=True).values_list("id")
+                fund__in=Fund.objects.filter(is_site=True)
             ).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))

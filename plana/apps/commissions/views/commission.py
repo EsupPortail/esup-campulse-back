@@ -12,7 +12,6 @@ from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthe
 
 from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.models.commission import Commission
-from plana.apps.commissions.models.fund import Fund
 from plana.apps.commissions.serializers.commission import (
     CommissionSerializer,
     CommissionUpdateSerializer,
@@ -108,39 +107,21 @@ class CommissionListCreate(generics.ListCreateAPIView):
             self.queryset = self.queryset.filter(commission_date__in=commission_dates)
 
         if is_site is not None and is_site != "":
-            self.queryset = self.queryset.filter(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=Fund.objects.filter(is_site=to_bool(is_site)).values_list("id")
-                ).values_list("commission_id")
-            )
+            self.queryset = self.queryset.filter(commissionfund__fund__is_site=to_bool(is_site)).distinct()
 
         if is_open_to_projects is not None and is_open_to_projects != "":
             self.queryset = self.queryset.filter(is_open_to_projects=to_bool(is_open_to_projects))
 
         if funds is not None and funds != "":
-            self.queryset = self.queryset.filter(
-                id__in=CommissionFund.objects.filter(fund_id__in=funds.split(",")).values_list("commission_id")
-            )
+            self.queryset = self.queryset.filter(commissionfund__fund_id__in=funds.split(",")).distinct()
 
-        commissions_ids_without_projects = CommissionFund.objects.exclude(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.objects.all().values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
-        commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.visible_objects.filter(
-                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                ).values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
-        commissions_ids_with_active_projects = CommissionFund.objects.filter(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.visible_objects.exclude(
-                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                ).values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
+        commissions_ids_without_projects = CommissionFund.objects.filter(projectcommissionfund__isnull=True).values_list("commission_id")
+
+        archived_projects = Project.visible_objects.filter(project_status__in=Project.ProjectStatus.get_archived_project_statuses())
+        commissions_ids_with_inactive_projects = CommissionFund.objects.filter(projectcommissionfund__project__in=archived_projects).values_list("commission_id")
+
+        active_projects = Project.visible_objects.exclude(project_status__in=Project.ProjectStatus.get_archived_project_statuses())
+        commissions_ids_with_active_projects = CommissionFund.objects.filter(projectcommissionfund__project__in=active_projects).values_list("commission_id")
 
         if with_active_projects is not None and with_active_projects != "":
             if not to_bool(with_active_projects):
@@ -168,36 +149,20 @@ class CommissionListCreate(generics.ListCreateAPIView):
             if to_bool(managed_projects):
                 self.queryset = self.queryset.filter(
                     models.Q(
-                        id__in=CommissionFund.objects.filter(
-                            fund_id__in=ProjectCommissionFund.objects.filter(
-                                project_id__in=Project.visible_objects.filter(
-                                    association_id__in=request.user.get_user_managed_associations()
-                                ).values_list("id")
-                            ).values_list("commission_fund_id")
-                        ).values_list('commission_id')
+                        commissionfund__projectcommissionfund__project__in=Project.visible_objects.filter(
+                            association__in=request.user.get_user_managed_associations()
+                        )
                     )
-                    | models.Q(
-                        id__in=CommissionFund.objects.filter(
-                            fund_id__in=request.user.get_user_managed_funds()
-                        ).values_list('commission_id')
-                    )
+                    | models.Q(commissionfund__fund__in=request.user.get_user_managed_funds())
                 )
             else:
                 self.queryset = self.queryset.exclude(
                     models.Q(
-                        id__in=CommissionFund.objects.filter(
-                            fund_id__in=ProjectCommissionFund.objects.filter(
-                                project_id__in=Project.visible_objects.filter(
-                                    association_id__in=request.user.get_user_managed_associations()
-                                ).values_list("id")
-                            ).values_list("commission_fund_id")
-                        ).values_list('commission_id')
+                        commissionfund__projectcommissionfund__project__in=Project.visible_objects.filter(
+                            association__in=request.user.get_user_managed_associations()
+                        )
                     )
-                    | models.Q(
-                        id__in=CommissionFund.objects.filter(
-                            fund_id__in=request.user.get_user_managed_funds()
-                        ).values_list('commission_id')
-                    )
+                    | models.Q(commissionfund__fund__in=request.user.get_user_managed_funds())
                 )
 
         return self.list(request, *args, **kwargs)
@@ -303,7 +268,7 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             )
 
         projects_commission_funds = ProjectCommissionFund.objects.filter(
-            commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission.id),
+            commission_fund__commission=commission,
             project_id__in=Project.visible_objects.exclude(
                 project_status__in=Project.ProjectStatus.get_unfinished_project_statuses()
             ),

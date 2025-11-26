@@ -15,11 +15,9 @@ from rest_framework import filters, generics, response, status
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.fund import Fund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
-from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.permissions import UserUpdatePermission
 from plana.apps.users.provider import CASProvider
 from plana.apps.users.serializers.user import (
@@ -121,11 +119,7 @@ class UserListCreate(generics.ListCreateAPIView):
         institutions = request.query_params.get("institutions")
 
         if not request.user.has_perm("users.view_user_anyone") and not request.user.has_perm("users.view_user_misc"):
-            self.queryset = self.queryset.filter(
-                id__in=AssociationUser.objects.filter(
-                    association_id__in=request.user.get_user_associations().values_list("id")
-                ).values_list("user_id")
-            )
+            self.queryset = self.queryset.filter(associations__in=request.user.get_user_associations())
         else:
             if name is not None and name != "":
                 name = str(name).strip()
@@ -161,16 +155,11 @@ class UserListCreate(generics.ListCreateAPIView):
 
             if institutions is not None:
                 misc_users_query = User.objects.filter(
-                    Q(
-                        id__in=GroupInstitutionFundUser.objects.filter(
-                            institution_id__isnull=True, fund_id__isnull=True
-                        ).values_list("user_id")
-                    )
-                    & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
+                    groupinstitutionfunduser__institution__isnull=True,
+                    groupinstitutionfunduser__fund__isnull=True,
+                    associations__isnull=True,
                 )
-                commission_users_query = User.objects.filter(
-                    id__in=GroupInstitutionFundUser.objects.filter(fund_id__isnull=False).values_list("user_id")
-                )
+                commission_users_query = User.objects.filter(groupinstitutionfunduser__fund__isnull=False)
                 if institutions == "":
                     self.queryset = self.queryset.filter(
                         Q(id__in=misc_users_query.values_list("id"))
@@ -191,20 +180,8 @@ class UserListCreate(generics.ListCreateAPIView):
                         "id"
                     )
                     assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids)
-                    commission_users_query = User.objects.filter(
-                        id__in=GroupInstitutionFundUser.objects.filter(
-                            fund_id__in=Fund.objects.filter(
-                                institution_id__in=Institution.objects.filter(id__in=institutions_ids).values_list(
-                                    "id"
-                                )
-                            ).values_list("id")
-                        ).values_list("user_id")
-                    )
-                    institution_users_query = User.objects.filter(
-                        id__in=GroupInstitutionFundUser.objects.filter(
-                            institution_id__in=Institution.objects.filter(id__in=institutions_ids).values_list("id")
-                        ).values_list("user_id")
-                    )
+                    commission_users_query = User.objects.filter(groupinstitutionfunduser__fund__institution_id__in=institutions_ids)
+                    institution_users_query = User.objects.filter(groupinstitutionfunduser__institution_id__in=institutions_ids)
 
                     if check_other_users:
                         self.queryset = self.queryset.filter(
