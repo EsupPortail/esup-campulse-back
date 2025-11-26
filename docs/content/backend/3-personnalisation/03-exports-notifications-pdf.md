@@ -26,7 +26,7 @@ Nous avons ainsi 4 types de notifications, aux codes formatés comme suit :
 - `NOTIFICATION_{FUND_ACRONYM}_DECISION_ATTRIBUTION` : Document présentant l'aspect légal de l'attribution de la subvention par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_ATTRIBUTION` : Document visant à prévenir les concernés que leur demande de subventionnement a été acceptée par le fonds désigné.
 - `NOTIFICATION_{FUND_ACRONYM}_REJECTION` : Document informant les concernés que leur demande de subventionnement a été refusée par le fonds désigné.
-- `NOTIFICATION_{FUND_ACRONYM}_PROJECT_POSTPONED` : Document informant les concernés que leur demande de subventionnement a été reportée à une commission future pour leur projet par le fonds désigné.
+- `NOTIFICATION_{FUND_ACRONYM}_POSTPONE` : Document informant les concernés que leur demande de subventionnement a été reportée à une commission future pour leur projet par le fonds désigné.
 
 L'attribut `{FUND_ACRONYM}` ci-dessus doit obligatoirement être remplacé par l'acronyme en base de données du fonds concerné en majuscules.
 
