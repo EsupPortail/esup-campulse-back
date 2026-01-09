@@ -105,7 +105,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
     @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all projects linked to a user, or all projects with all their details (manager)."""
-        queryset = self.filter_queryset(self.get_queryset())
+        # TODO : check why distinct needed here, fixable elsewhere ?
+        queryset = self.filter_queryset(self.get_queryset()).distinct()
 
         for project in queryset:
             if (pcf := project.projectcommissionfund_set.first()):
