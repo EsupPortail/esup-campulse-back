@@ -45,6 +45,7 @@ class DocumentUpload(models.Model):
         verbose_name=_("User"),
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     association = models.ForeignKey(
         Association,
@@ -57,6 +58,7 @@ class DocumentUpload(models.Model):
         verbose_name=_("Project"),
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     upload_date = models.DateTimeField(_("Upload date"), auto_now_add=True)
     path_file = DynamicStorageFileField(
