@@ -333,9 +333,9 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            if commission_fund.commission.commission_date >= new_commission_fund.commission.commission_date:
+            if new_commission_fund.commission.commission_date < datetime.date.today():
                 return response.Response(
-                    {"error": _("New Commission Fund is linked to an older commission that the old one.")},
+                    {"error": _("Cannot link the project to a past commission.")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
