@@ -120,7 +120,7 @@ class ProjectCommissionFundListCreate(generics.ListCreateAPIView):
             "amount_earned",
             "is_validated_by_admin",
         ]
-        if not request.user.has_perm("project.change_projectcommissionfund_as_validator"):
+        if not request.user.has_perm("projects.change_projectcommissionfund_as_validator"):
             for validator_field in validator_fields:
                 if validator_field in request.data and request.data[validator_field] is not None:
                     return response.Response(
@@ -271,7 +271,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "amount_earned_previous_edition",
             "amount_asked",
         ]
-        if not request.user.has_perm("project.change_projectcommissionfund_as_bearer"):
+        if not request.user.has_perm("projects.change_projectcommissionfund_as_bearer"):
             for bearer_field in bearer_fields:
                 if bearer_field in request.data and request.data[bearer_field] is not None:
                     return response.Response(
@@ -285,7 +285,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "new_commission_fund_id",
             "project_id",
         ]
-        if not request.user.has_perm("project.change_projectcommissionfund_as_validator"):
+        if not request.user.has_perm("projects.change_projectcommissionfund_as_validator"):
             for validator_field in validator_fields:
                 if validator_field in request.data and request.data[validator_field] is not None:
                     return response.Response(
@@ -294,7 +294,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     )
 
         if commission.submission_date < datetime.date.today() and not request.user.has_perm(
-            "project.change_projectcommissionfund_as_validator"
+            "projects.change_projectcommissionfund_as_validator"
         ):
             return response.Response(
                 {"error": _("Submission date for this commission is gone.")},
