@@ -12,7 +12,7 @@ from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import User
 from plana.storages import DynamicStorageFileField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicStorageFileField = models.FileField
 
 
@@ -45,6 +45,7 @@ class DocumentUpload(models.Model):
         verbose_name=_("User"),
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     association = models.ForeignKey(
         Association,
@@ -57,6 +58,7 @@ class DocumentUpload(models.Model):
         verbose_name=_("Project"),
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
     upload_date = models.DateTimeField(_("Upload date"), auto_now_add=True)
     path_file = DynamicStorageFileField(
@@ -64,7 +66,7 @@ class DocumentUpload(models.Model):
         upload_to=get_file_path,
     )
     validated_date = models.DateField(_("Validated date"), null=True)
-    comment = models.TextField(_("Comment"), null=True)
+    comment = models.TextField(_("Comment"), blank=True)
 
     def __str__(self):
         return self.name
@@ -86,3 +88,17 @@ class DocumentUpload(models.Model):
                 "Can view all documents linked to any project or any association.",
             ),
         ]
+
+    @property
+    def calculated_expiration_date(self) -> str:
+        """Return real expiration date based on expiration_day or days_before_expiration."""
+        document = self.document
+        if self.validated_date:
+            if document.expiration_day:
+                year = self.validated_date.year
+                if document.expiration_day <= self.validated_date.strftime("%m-%d"):
+                    year += 1
+                return f"{year}-{document.expiration_day}"
+            if document.days_before_expiration:
+                return datetime.datetime.strftime(self.validated_date + datetime.timedelta(days=document.days_before_expiration), "%Y-%m-%d")
+        return ""

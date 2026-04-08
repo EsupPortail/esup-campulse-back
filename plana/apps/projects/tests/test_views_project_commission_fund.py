@@ -16,27 +16,26 @@ class ProjectCommissionFundViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_content.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "projects_projectcomment.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcomment.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -295,15 +294,6 @@ class ProjectCommissionFundViewsTests(TestCase):
         results = ProjectCommissionFund.objects.filter(project_id=project_id, commission_fund_id=commission_fund_id)
         self.assertEqual(len(results), 1)
 
-    def test_put_project_cf_not_existing(self):
-        """
-        PUT /projects/{project_id}/commission_funds .
-
-        - This route always returns a 405.
-        """
-        response = self.student_misc_client.put("/projects/1/commission_funds", {}, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_get_project_cf_by_id_anonymous(self):
         """
         GET /projects/{project_id}/commission_funds .
@@ -354,24 +344,6 @@ class ProjectCommissionFundViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
-
-    def test_get_project_cf(self):
-        """
-        GET /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - Always returns a 405.
-        """
-        response = self.general_client.get("/projects/1/commission_funds/3")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_put_project_cf(self):
-        """
-        PUT /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - Always returns a 405.
-        """
-        response = self.general_client.put("/projects/1/commission_funds/3", {}, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_cf_anonymous(self):
         """

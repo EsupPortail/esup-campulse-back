@@ -14,11 +14,15 @@ class CommissionAdmin(admin.ModelAdmin):
     list_filter = ["is_open_to_projects"]
     search_fields = ["name", "submission_date", "commission_date"]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('commissionfund_set__fund')
+
+
     @admin.display(description=_("Funds"))
     @admin.display(ordering="commissionfund")
     def get_funds(self, obj):
         """Get funds linked to a commission."""
-        return list(CommissionFund.objects.filter(commission_id=obj.id).values_list("fund__acronym", flat=True))
+        return [cf.fund.acronym for cf in obj.commissionfund_set.all()]
 
 
 @admin.register(CommissionFund)

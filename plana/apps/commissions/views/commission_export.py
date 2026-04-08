@@ -3,7 +3,6 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -61,19 +60,12 @@ class CommissionExport(generics.RetrieveAPIView):
         project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
+        commission = self.get_object()
         commission_id = kwargs["pk"]
-
-        try:
-            commission = Commission.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -147,7 +139,7 @@ class CommissionExport(generics.RetrieveAPIView):
             http_response = HttpResponse(content_type="application/csv")
             http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
             writer = csv.writer(http_response, delimiter=";")
-            writer.writerow([field for field in fields])
+            writer.writerow(fields)
         elif mode == "xlsx":
             workbook = Workbook()
             worksheet = workbook.active
@@ -201,13 +193,13 @@ class CommissionExport(generics.RetrieveAPIView):
                     )
                     fields.append(pcf.amount_asked)
                     fields.append(pcf.amount_earned)
-                except ObjectDoesNotExist:
+                except ProjectCommissionFund.DoesNotExist:
                     fields.append(0)
                     fields.append(0)
 
             if mode is None or mode == "csv":
                 # Write CSV file content
-                writer.writerow([field for field in fields])
+                writer.writerow(fields)
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
                     worksheet.cell(row=index_project + 2, column=index_field + 1).value = field

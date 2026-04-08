@@ -11,15 +11,15 @@ class DocumentsModelsTests(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "tests/commissions_fund.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):

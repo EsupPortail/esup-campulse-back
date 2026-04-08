@@ -2,17 +2,14 @@
 
 import datetime
 import json
-import unicodedata
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Exists, F, OuterRef
+from django.db.models import Exists, OuterRef
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from django_filters import rest_framework as drf_filters
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -29,15 +26,26 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
+from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, to_bool
+
+from .. import permissions
+from ..filters import AssociationFilter, AssociationNameFilter
+from ..permissions import ViewAssociationMembersPermission
+from ...users.serializers.association_user import AssociationUserSerializer
 
 
 class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route."""
 
-    filter_backends = [filters.SearchFilter]
-    queryset = Association.objects.all().order_by("name")
+    filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    filterset_class = AssociationFilter
+    queryset = (
+        Association.objects.all()
+        .select_related('institution', 'institution_component', 'activity_field')
+        .order_by("name")
+    )
     search_fields = [
         "name__nospaces__unaccent",
         "acronym__nospaces__unaccent",
@@ -60,230 +68,34 @@ class AssociationListCreate(generics.ListCreateAPIView):
             self.serializer_class = AssociationMandatoryDataSerializer
         return super().get_serializer_class()
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association name.",
-            ),
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Association acronym.",
-            ),
-            OpenApiParameter(
-                "is_enabled",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for non-validated associations.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "is_site",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations from site.",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution ID.",
-            ),
-            OpenApiParameter(
-                "institution_component",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Institution Component ID.",
-            ),
-            OpenApiParameter(
-                "activity_field",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Activity Field ID.",
-            ),
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: AssociationPartialDataSerializer,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List all associations with many filters."""
-        name = request.query_params.get("name")
-        acronym = request.query_params.get("acronym")
-        is_enabled = request.query_params.get("is_enabled")
-        is_public = request.query_params.get("is_public")
-        is_site = request.query_params.get("is_site")
-        institutions = request.query_params.get("institutions")
-        institution_component = request.query_params.get("institution_component")
-        activity_field = request.query_params.get("activity_field")
-        user_id = request.query_params.get("user_id")
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return self.queryset.filter(is_enabled=True, is_public=True)
 
-        if request.user.is_anonymous:
-            is_enabled = True
-            is_public = True
+        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_enabled"):
+            return self.queryset.filter(is_enabled=True)
 
-        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_enabled"):
-            is_enabled = True
+        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_public"):
+            return self.queryset.filter(is_public=True)
 
-        if not request.user.is_anonymous and not request.user.has_perm("associations.view_association_not_public"):
-            is_public = True
-
-        if name is not None and name != "":
-            name = str(name).strip()
-            self.queryset = self.queryset.filter(name__nospaces__unaccent__icontains=name.replace(" ", ""))
-
-        if acronym is not None and acronym != "":
-            acronym = str(acronym).strip()
-            self.queryset = self.queryset.filter(acronym__icontains=acronym)
-
-        if is_enabled is not None and is_enabled != "":
-            self.queryset = self.queryset.filter(is_enabled=to_bool(is_enabled))
-
-        if is_public is not None and is_public != "":
-            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
-
-        if is_site is not None and is_site != "":
-            self.queryset = self.queryset.filter(is_site=to_bool(is_site))
-
-        if institutions is not None and institutions != "":
-            self.queryset = self.queryset.filter(institution_id__in=institutions.split(","))
-
-        if institution_component is not None:
-            if institution_component == "":
-                self.queryset = self.queryset.filter(institution_component_id__isnull=True)
-            else:
-                self.queryset = self.queryset.filter(institution_component_id=institution_component)
-
-        if activity_field is not None and activity_field != "":
-            self.queryset = self.queryset.filter(activity_field_id=activity_field)
-
-        if user_id is not None and user_id != "" and self.request.user.has_perm("users.view_user_anyone"):
-            self.queryset = self.queryset.filter(
-                id__in=AssociationUser.objects.filter(user_id=user_id).values_list("association_id")
-            )
-
-        return self.list(request, *args, **kwargs)
-
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: AssociationMandatoryDataSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        }
-    )
-    def post(self, request, *args, **kwargs):
-        """Create a new association with mandatory informations (manager only)."""
-        if "institution" in request.data and request.data["institution"] != "":
-            try:
-                Institution.objects.get(id=request.data["institution"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Institution does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-        if not "institution" in request.data and request.user.get_user_managed_institutions().count() == 1:
-            request.data["institution"] = request.user.get_user_managed_institutions().first().id
-        elif not "institution" in request.data:
-            return response.Response(
-                {"error": _("No institution given.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not request.user.has_perm(
-            "associations.add_association_any_institution"
-        ) and not request.user.is_staff_in_institution(request.data["institution"]):
-            return response.Response(
-                {"error": _("Not allowed to create an association for this institution.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "is_public" in request.data
-            and to_bool(request.data["is_public"]) is True
-            and not request.user.has_perm("associations.add_association_all_fields")
-        ):
-            return response.Response(
-                {"error": _("No rights to set is_public on this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            "is_site" in request.data
-            and to_bool(request.data["is_site"]) is True
-            and not request.user.has_perm("associations.add_association_all_fields")
-        ):
-            return response.Response(
-                {"error": _("No rights to set is_site on this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if "name" not in request.data:
-            return response.Response(
-                {"error": _("Association name not set.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Removes spaces, uppercase and accented characters to avoid similar association names.
-        new_association_name = (
-            unicodedata.normalize("NFD", request.data["name"].strip().replace(" ", "").lower())
-            .encode("ascii", "ignore")
-            .decode("utf-8")
-        )
-        associations = Association.objects.all()
-        for association in associations:
-            existing_association_name = (
-                unicodedata.normalize("NFD", association.name.strip().replace(" ", "").lower())
-                .encode("ascii", "ignore")
-                .decode("utf-8")
-            )
-            if new_association_name == existing_association_name:
-                return response.Response(
-                    {"error": _("Association name already taken.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not "is_site" in request.data:
-            request.data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
-        request.data["is_enabled"] = True
-
-        return super().create(request, *args, **kwargs)
+        return self.queryset
 
 
 class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/associations/{id} route."""
 
-    queryset = Association.objects.all()
+    queryset = (
+        Association.objects.all()
+        .select_related('institution', 'institution_component', 'activity_field')
+    )
+    http_method_names = ["get", "patch", "delete"]
 
     def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
-            self.permission_classes = [AllowAny]
+        if self.request.method == "GET":
+            self.permission_classes = [
+                AllowAny,
+                permissions.AssociationRetrieveUpdateDestroyPermission
+            ]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
@@ -294,63 +106,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationAllDataReadSerializer,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve an association with all its details."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if request.user.is_anonymous and (not association.is_enabled or not association.is_public):
-            return response.Response(
-                {"error": _("Association not visible.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            not request.user.is_anonymous
-            and not association.is_enabled
-            and not request.user.is_in_association(association_id)
-            and not request.user.has_perm("associations.view_association_not_enabled")
-        ):
-            return response.Response(
-                {"error": _("Association not enabled.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if (
-            not request.user.is_anonymous
-            and not association.is_public
-            and not request.user.is_in_association(association_id)
-            and not request.user.has_perm("associations.view_association_not_public")
-        ):
-            return response.Response(
-                {"error": _("Association not public.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # WARNING : to upload images the form sent must be "multipart/form-data" encoded
     @extend_schema(
@@ -363,28 +118,16 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
         }
     )
+    @capture_queries()
     def patch(self, request, *args, **kwargs):
         """Update association details (president and manager only, restricted fields for president)."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
-            not request.user.is_president_in_association(association_id)
+            not request.user.is_president_in_association(association.id)
             and not request.user.has_perm("associations.change_association_any_institution")
             and not request.user.is_staff_in_institution(association.institution_id)
         ):
@@ -393,7 +136,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).count() > 0:
+        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).exists():
             return response.Response(
                 {"error": _("Email address is already used for another association.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -407,18 +150,17 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 else json.loads(json.dumps(social_networks_data))
             )
             for social_network in social_networks:
-                if sorted(list(social_network.keys())) != sorted(["type", "location"]):
+                if set(social_network.keys()) != {"type", "location"}:
                     return response.Response(
                         {"error": _("Wrong social_networks parameters")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-                if not all(isinstance(s, str) for s in list(social_network.values())):
+                if not all(isinstance(s, str) for s in social_network.values()):
                     return response.Response(
                         {"error": _("Wrong social_networks values")},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-        except Exception as ex:
-            print(ex)
+        except Exception:
             return response.Response(
                 {"error": _("Error on social networks format.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -451,20 +193,20 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
             if "is_public" in request.data:
                 is_public = to_bool(request.data["is_public"])
-                if is_public is True and association.is_enabled is False:
+                if is_public and not association.is_enabled:
                     request.data["is_public"] = False
 
             if "is_enabled" in request.data:
                 is_enabled = to_bool(request.data["is_enabled"])
-                if is_enabled is False:
+                if not is_enabled:
                     request.data["is_public"] = False
 
             if "can_submit_projects" in request.data:
                 template = None
-                if to_bool(request.data["can_submit_projects"]) is False:
+                if not to_bool(request.data["can_submit_projects"]):
                     context["manager_email_address"] = request.user.email
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
-                elif to_bool(request.data["can_submit_projects"]) is True:
+                elif to_bool(request.data["can_submit_projects"]):
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
@@ -510,18 +252,12 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             status.HTTP_404_NOT_FOUND: None,
         },
     )
+    @capture_queries()
     def delete(self, request, *args, **kwargs):
         """Destroys an entire association (manager only)."""
-        try:
-            association_id = kwargs["pk"]
-            association = Association.objects.get(id=association_id)
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        association = self.get_object()
 
-        if association.is_enabled is True:
+        if association.is_enabled:
             return response.Response(
                 {"error": _("Can't delete an enabled association.")},
                 status=status.HTTP_403_FORBIDDEN,
@@ -562,60 +298,14 @@ class AssociationNameList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Association.objects.all().order_by("name")
     serializer_class = AssociationNameSerializer
+    filterset_class = AssociationNameFilter
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-            OpenApiParameter(
-                "is_public",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations shown in the public list.",
-            ),
-            OpenApiParameter(
-                "allow_new_users",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for associations where registration is possible.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: AssociationNameSerializer,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List minimal details for all associations with many filters."""
-        institutions = request.query_params.get("institutions")
-        is_public = request.query_params.get("is_public")
-        allow_new_users = request.query_params.get("allow_new_users")
-        if institutions is not None and institutions != "":
-            institutions_ids = institutions.split(",")
-            institutions_ids = [
-                institution_id
-                for institution_id in institutions_ids
-                if institution_id != "" and institution_id.isdigit()
-            ]
-            self.queryset = self.queryset.filter(institution_id__in=institutions_ids)
-        if is_public is not None and is_public != "":
-            self.queryset = self.queryset.filter(is_public=to_bool(is_public))
-        if allow_new_users is not None and allow_new_users != "":
-            assos_ids_with_all_members = []
-            self.queryset = self.queryset.alias(amount_members=Count('associationuser'))
-            if to_bool(allow_new_users) is True:
-                self.queryset = self.queryset.filter(amount_members_allowed__gt=F('amount_members'))
-            else:
-                self.queryset = self.queryset.filter(amount_members_allowed__lte=F('amount_members'))
-
-        au_qs = AssociationUser.objects.filter(association_id=OuterRef('pk'), is_president=True)
-        self.queryset = self.queryset.annotate(
-            has_president=Exists(au_qs))
-
-        return self.list(request, *args, **kwargs)
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            has_president=Exists(
+                AssociationUser.objects.filter(association_id=OuterRef('pk'), is_president=True)
+            )
+        )
 
 
 class AssociationStatusUpdate(generics.UpdateAPIView):
@@ -623,22 +313,8 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
 
     queryset = Association.objects.all()
     serializer_class = AssociationStatusSerializer
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["patch"]
 
     @extend_schema(
         responses={
@@ -649,24 +325,13 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             status.HTTP_404_NOT_FOUND: None,
         }
     )
+    @capture_queries()
     def patch(self, request, *args, **kwargs):
         """Update association charter status."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        association = self.get_object()
 
-        try:
-            association = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Association does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
             not request.user.is_president_in_association(association.id)
@@ -697,7 +362,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             )
             .values_list("name")
         )
-        if missing_documents_names.count() > 0:
+        if missing_documents_names.exists():
             missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
             return response.Response(
                 {"error": _(f"Missing documents : {missing_documents_names_string}.")},
@@ -725,18 +390,22 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                 message=template.parse_vars(request.user, request, context),
             )
             # TODO Very imperfect solution to get charter expiration date, please refactor when charter module will be refactored.
-            charter_expiration_day = (
+            charter = (
                 Document.objects.filter(process_type__in=Document.ProcessType.get_charter_documents())
                 .first()
-                .expiration_day
             )
-            if charter_expiration_day <= datetime.date.today().strftime("%m-%d"):
+            if charter.expiration_day:
+                if charter.expiration_day <= datetime.date.today().strftime("%m-%d"):
+                    association.charter_date = datetime.datetime.strptime(
+                        f"{datetime.date.today().year + 1}-{charter.expiration_day}", "%Y-%m-%d"
+                    )
+                else:
+                    association.charter_date = datetime.datetime.strptime(
+                        f"{datetime.date.today().year}-{charter.expiration_day}", "%Y-%m-%d"
+                    )
+            elif charter.days_before_expiration:
                 association.charter_date = datetime.datetime.strptime(
-                    f"{datetime.date.today().year + 1}-{charter_expiration_day}", "%Y-%m-%d"
-                )
-            else:
-                association.charter_date = datetime.datetime.strptime(
-                    f"{datetime.date.today().year}-{charter_expiration_day}", "%Y-%m-%d"
+                    f"{datetime.datetime.today() + datetime.timedelta(days=charter.days_before_expiration)}", "%Y-%m-%d"
                 )
             association.save()
 
@@ -768,3 +437,19 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             )
 
         return self.update(request, *args, **kwargs)
+
+
+class AssociationMembersView(generics.ListAPIView):
+    """
+    /associations/{association_id}/users/ route.
+    Used to retrieve all validated members of given association id
+    Only if president of given association or association managed by auth user
+    """
+
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ViewAssociationMembersPermission]
+    queryset = AssociationUser.objects.filter(is_validated_by_admin=True).select_related('association', 'user')
+    serializer_class = AssociationUserSerializer
+
+    def get_queryset(self):
+        association_id = self.kwargs.get("association_id")
+        return self.queryset.filter(association_id=association_id)

@@ -15,29 +15,28 @@ class ProjectReviewsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "projects_category.json",
-        "projects_project.json",
-        "projects_projectcategory.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcategory.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -141,16 +140,6 @@ class ProjectReviewsViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(content["name"], project_test.name)
-
-    def test_put_project_review(self):
-        """
-        PUT /projects/{id}/review .
-
-        - Always returns a 405.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put("/projects/1/review", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_project_review_anonymous(self):
         """

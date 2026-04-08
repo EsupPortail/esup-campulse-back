@@ -82,7 +82,7 @@ class AssociationExpirationCommandTest(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
@@ -105,8 +105,9 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
-            )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING"))
+            ),
+            charter_status="CHARTER_VALIDATED"
         )
         call_command("cron_association_expiration")
         self.assertTrue(len(mail.outbox))
@@ -116,41 +117,40 @@ class AssociationExpirationCommandTest(TestCase):
         self.associations.update(
             charter_date=(
                 self.today
-                - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING") - 1)
-            )
+                + datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING") + 1)
+            ),
+            charter_status="CHARTER_VALIDATED"
         )
         call_command("cron_association_expiration")
         self.assertFalse(len(mail.outbox))
 
     def test_association_expiration(self):
-        """Association charter status expires today."""
+        """Association charter status expires today. An email is sent."""
         self.assertNotEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
-        self.associations.update(
-            charter_date=(
-                self.today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION"))
-            )
-        )
+        self.associations.update(charter_date=self.today, charter_status="CHARTER_VALIDATED")
         call_command("cron_association_expiration")
         self.assertEqual(self.associations[0].charter_status, "CHARTER_EXPIRED")
+        self.assertFalse(self.associations[0].is_site)
+        self.assertTrue(len(mail.outbox))
 
 
 class CommissionExpirationCommandTest(TestCase):
     """Test commission_expiration command."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_project.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
     ]
 
     def test_no_expire_commission(self):
@@ -193,18 +193,18 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "tests/commissions_fund.json",
         "tests/contents_setting.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -214,7 +214,7 @@ class DocumentDaysBeforeExpirationCommandTest(TestCase):
         for document_upload in self.document_uploads:
             document = Document.objects.get(id=document_upload.document_id)
             document.expiration_day = None
-            document.days_before_expiration = f"{self.days_before_expiration} days"
+            document.days_before_expiration = self.days_before_expiration
             document.save()
         self.today = datetime.date.today()
 
@@ -271,18 +271,18 @@ class DocumentExpirationDayCommandTest(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "tests/commissions_fund.json",
         "tests/contents_setting.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -348,15 +348,15 @@ class GOAExpirationCommandTest(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
         "tests/commissions_fund.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -379,7 +379,7 @@ class GOAExpirationCommandTest(TestCase):
 class HistoryExpirationCommandTest(TestCase):
     """Test history_expiration command."""
 
-    fixtures = ["tests/contents_setting.json", "users_user.json"]
+    fixtures = ["tests/contents_setting.json", "tests/users_user.json"]
 
     def setUp(self):
         """Cache all history."""
@@ -418,7 +418,7 @@ class PasswordExpirationCommandTest(TestCase):
         "tests/contents_setting.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_user.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -469,24 +469,23 @@ class ProjectExpirationCommandTest(TestCase):
     """Test project_expiration command."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def test_no_project_expiration(self):
@@ -511,25 +510,24 @@ class ReviewExpirationCommandTest(TestCase):
     """Test review_expiration command."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def test_no_review_expiration(self):

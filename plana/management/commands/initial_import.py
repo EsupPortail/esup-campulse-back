@@ -23,14 +23,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            if Group.objects.all().count() > 0:
+            if Group.objects.all().exists():
                 self.stdout.write(self.style.WARNING(_("Initial data already present.")))
             # FIXME : May be boken due to fixtures changes
-            #elif options["test"] is True:
+            #elif options["test"]:
             #    apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
             #    # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
             #    for app_fixture in apps_fixtures:
-            #        if app_fixture.name.endswith("documents_documentupload.json"):
+            #        if app_fixture.name.endswith("tests/documents_documentupload.json"):
             #            apps_fixtures.remove(app_fixture)
             #    call_command("loaddata", *apps_fixtures)
             #    libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
@@ -47,8 +47,6 @@ class Command(BaseCommand):
                         "django_site",
                         "documents_document",
                         "auth_group",
-                        "auth_group_permissions",
-                        "auth_permission",
                         "institutions_institution",
                         "institutions_institutioncomponent",
                         "projects_category",
@@ -57,7 +55,7 @@ class Command(BaseCommand):
                     ],
                 )
 
-            if options["storages"] is True:
+            if options["storages"]:
                 call_command("loaddata_storages")
 
             call_command("createsuperuser", "--no-input")

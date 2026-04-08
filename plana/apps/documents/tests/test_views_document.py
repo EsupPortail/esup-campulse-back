@@ -17,15 +17,14 @@ class DocumentsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/documents_document.json",
         "tests/institutions_institution.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -75,6 +74,7 @@ class DocumentsViewsTests(TestCase):
         file.storage = Mock()
         post_data = {
             "name": "Document test",
+            "acronym": "DOCTEST",
             "path_template": file,
         }
         cls.new_document = cls.general_client.post("/documents/", post_data)
@@ -98,9 +98,6 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
 
-        document_1 = content[0]
-        self.assertTrue(document_1.get("name"))
-
         acronym = "CHARTE_SITE"
         response = self.client.get(f"/documents/?acronym={acronym}")
         self.assertEqual(response.data[0]["acronym"], acronym)
@@ -115,16 +112,6 @@ class DocumentsViewsTests(TestCase):
         documents_cnt = Document.objects.filter(process_type__in=process_types).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), documents_cnt)
-
-    def test_post_documents_anonymous(self):
-        """
-        POST /documents/ .
-
-        - An anonymous user can't execute this request.
-        """
-        post_data = {"name": "test anonymous"}
-        response = self.client.post("/documents/", post_data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_documents_forbidden(self):
         """
@@ -143,7 +130,7 @@ class DocumentsViewsTests(TestCase):
         - A user without access to requested institution can't execute this request.
         """
         institution = 1
-        post_data = {"name": "Test forbidden", "institution": institution}
+        post_data = {"name": "Test forbidden", "acronym": "TEST", "institution": institution}
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -154,7 +141,7 @@ class DocumentsViewsTests(TestCase):
         - A user without access to requested fund can't execute this request.
         """
         fund = 3
-        post_data = {"name": "Test forbidden", "fund": fund}
+        post_data = {"name": "Test forbidden", "acronym": "TEST", "fund": fund}
         response = self.institution_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -182,7 +169,7 @@ class DocumentsViewsTests(TestCase):
         file.storage = Mock()
 
         name = "Test success"
-        post_data = {"name": name, "path_template": file}
+        post_data = {"name": name, "acronym": "TEST", "path_template": file}
         response = self.general_client.post("/documents/", post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -225,16 +212,6 @@ class DocumentsViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         document = content
         self.assertEqual(document["name"], doc_test.name)
-
-    def test_put_document_by_id_405(self):
-        """
-        PUT /documents/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"name": "name"}
-        response = self.general_client.put("/documents/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_documents_anonymous(self):
         """

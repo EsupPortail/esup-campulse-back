@@ -50,3 +50,20 @@ class HistoryAdmin(admin.ModelAdmin):
         "document_upload__project__name",
         "project__name",
     ]
+
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .select_related(
+                'action_user',
+                'user',
+                'association',
+                'association_user__user',
+                'association_user__association',
+                'group_institution_fund_user__fund',
+                'group_institution_fund_user__group',
+                'group_institution_fund_user__user',
+                'document_upload',
+                'project'
+            )
+        )

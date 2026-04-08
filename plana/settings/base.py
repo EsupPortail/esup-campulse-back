@@ -270,6 +270,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth_cas",
     "rest_framework_simplejwt",
+    'django_filters',
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "drf_spectacular",
@@ -433,6 +434,9 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
     ],
+    "DEFAULT_FILTER_BACKENDS": (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
@@ -795,6 +799,7 @@ PERMISSIONS_GROUPS = {
         "delete_document",
         "delete_document_any_fund",
         "delete_document_any_institution",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -844,11 +849,13 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser_any_institution",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "add_groupinstitutionfunduser_any_group",
         "delete_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        "delete_emailaddress",
         # mail templates
         "change_mailtemplate",
         "view_mailtemplate",
@@ -869,6 +876,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -902,6 +910,7 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
@@ -921,6 +930,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -958,6 +968,7 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
@@ -990,6 +1001,7 @@ PERMISSIONS_GROUPS = {
         # associations
         "change_association",
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects
@@ -1017,6 +1029,7 @@ PERMISSIONS_GROUPS = {
     ],
     "STUDENT_MISC": [
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects

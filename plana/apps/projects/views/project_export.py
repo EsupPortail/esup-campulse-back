@@ -1,6 +1,5 @@
 """Views for project PDF generation."""
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -39,14 +38,8 @@ class ProjectDataExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
-        try:
-            project = self.queryset.get(id=kwargs["pk"])
-            data = project.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
+        data = project.__dict__
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -126,14 +119,8 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
-        try:
-            project = self.queryset.get(id=kwargs["pk"])
-            data = project.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
+        data = project.__dict__
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")

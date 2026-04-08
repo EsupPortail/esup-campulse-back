@@ -1,4 +1,5 @@
 """Serializer describing fields used on project's comments"""
+import datetime
 
 from rest_framework import serializers
 
@@ -31,6 +32,10 @@ class ProjectCommentDataSerializer(serializers.ModelSerializer):
 
 class ProjectCommentUpdateSerializer(serializers.ModelSerializer):
     """Fields that can be updated."""
+
+    def update(self, instance, validated_data):
+        instance.edition_date = datetime.date.today()
+        return super().update(instance, validated_data)
 
     class Meta:
         model = ProjectComment

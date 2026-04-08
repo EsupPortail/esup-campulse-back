@@ -8,7 +8,7 @@ from .views.association_user import (
     AssociationUserRetrieve,
     AssociationUserUpdateDestroy,
 )
-from .views.cas import CASLogin, CASLogout, cas_test, cas_verify
+from .views.cas import CASDataRegisterView, CASLogin, CASLogout, cas_test, cas_verify
 from .views.external import ExternalUserList
 from .views.group_institution_fund_user import (
     GroupInstitutionFundUserDestroy,
@@ -18,7 +18,12 @@ from .views.group_institution_fund_user import (
     GroupInstitutionFundUserRetrieve,
 )
 from .views.user import UserListCreate, UserRetrieveUpdateDestroy
-from .views.user_auth import PasswordResetConfirm, UserAuthVerifyEmailView, UserAuthView
+from .views.user_auth import (
+    PasswordResetConfirm,
+    RegisterView,
+    UserAuthVerifyEmailView,
+    UserAuthView,
+)
 
 urlpatterns = [
     path("", UserListCreate.as_view(), name="user_list_create"),
@@ -26,6 +31,8 @@ urlpatterns = [
     path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
     path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
+    path("auth/registration/", RegisterView.as_view(), name="rest_user_registration"),
+    path("auth/registration/cas/", CASDataRegisterView.as_view(), name="rest_user_registration_cas_data"),
     path("auth/", include("dj_rest_auth.urls")),
     re_path(
         r"auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$",
@@ -80,7 +87,7 @@ urlpatterns = [
     ),
 ]
 
-if settings.LDAP_ENABLED is True:
+if settings.LDAP_ENABLED:
     urlpatterns += [
         path("external/", ExternalUserList.as_view(), name="external_user_list"),
     ]

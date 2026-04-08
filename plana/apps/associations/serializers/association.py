@@ -3,23 +3,30 @@
 import re
 
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from plana.apps.associations.models.activity_field import ActivityField
 from plana.apps.associations.models.association import Association
+from plana.apps.associations.serializers.activity_field import ActivityFieldSerializer
 from plana.apps.associations.serializers.fields import ThumbnailField
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
-from plana.apps.users.models.user import AssociationUser
+from plana.apps.institutions.serializers.institution import InstitutionSerializer
+from plana.apps.institutions.serializers.institution_component import (
+    InstitutionComponentSerializer,
+)
+from plana.utils import PHONE_REGEX_PATTERN, normalize_object_name
 
 
 class AssociationAllDataReadSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
-    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
-    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
+    institution = InstitutionSerializer(read_only=True)
+    institution_component = InstitutionComponentSerializer(read_only=True)
+    activity_field = ActivityFieldSerializer(read_only=True)
     path_logo = ThumbnailField(sizes=["detail"])
+    calculated_expiration_date = serializers.ReadOnlyField()
 
     def to_representation(self, obj):
         """Don't send confidential values depending on the user doing the request."""
@@ -72,8 +79,7 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
         """Check phone field with a regex."""
         if value == '':
             return value
-        pattern = r"^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$"
-        if not re.match(pattern, value):
+        if not re.match(PHONE_REGEX_PATTERN, value):
             raise serializers.ValidationError("Wrong phone number format.")
         return value
 
@@ -85,10 +91,9 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
 class AssociationPartialDataSerializer(serializers.ModelSerializer):
     """Smaller serializer to return only some of the informations of an association."""
 
-    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
-    institution_component = serializers.PrimaryKeyRelatedField(queryset=InstitutionComponent.objects.all())
-    activity_field = serializers.PrimaryKeyRelatedField(queryset=ActivityField.objects.all())
-    # path_logo = ThumbnailField(sizes=["list"])
+    institution = InstitutionSerializer(read_only=True)
+    institution_component = InstitutionComponentSerializer(read_only=True)
+    activity_field = ActivityFieldSerializer(read_only=True)
     path_logo = serializers.SerializerMethodField("cached_logo_url")
 
     def cached_logo_url(self, association) -> dict[str, str]:
@@ -133,7 +138,37 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
             "is_public",
             "is_site",
             "institution",
+            "can_submit_projects"
         ]
+
+    def validate(self, data):
+        user = self.context['request'].user
+
+        if "institution" not in data:
+            institutions = user.get_user_managed_institutions()
+            if institutions.count() == 1:
+                data["institution"] = institutions.first()
+            else:
+                raise serializers.ValidationError({"no_institution": _("No institution given.")})
+
+        if not user.has_perm("associations.add_association_any_institution") and not user.is_staff_in_institution(data["institution"]):
+            raise serializers.ValidationError({"wrong_institution": _("Not allowed to create an association for this institution.")})
+
+        restricted_fields = ["is_site", "is_public"]
+        if any(bool(data.get(field)) for field in restricted_fields) and not user.has_perm("associations.add_association_all_fields"):
+            raise serializers.ValidationError({"restricted_fields": _("Not allowed to create an association with restricted fields.")})
+
+        # Removes spaces, uppercase and accented characters to avoid similar association names.
+        associations = Association.objects.all()
+        for association in associations:
+            if normalize_object_name(data["name"]) == normalize_object_name(association.name):
+                raise serializers.ValidationError({"similar_name": _("Association name already taken.")})
+
+        if "is_site" not in data:
+            data["is_site"] = settings.ASSOCIATION_IS_SITE_DEFAULT
+        data["is_enabled"] = True  # Always enabled at creation
+
+        return data
 
 
 class AssociationNameSerializer(serializers.ModelSerializer):

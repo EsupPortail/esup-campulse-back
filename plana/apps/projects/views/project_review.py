@@ -3,7 +3,6 @@
 import datetime
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -18,19 +17,14 @@ from plana.apps.projects.serializers.project_review import (
     ProjectReviewUpdateSerializer,
 )
 
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
 
 class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """/projects/{id}/review route."""
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["get", "patch"]
+    queryset = Project.visible_objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -49,13 +43,7 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a project review with all its details."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -70,15 +58,6 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         return self.retrieve(request, *args, **kwargs)
 
     @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    @extend_schema(
         responses={
             status.HTTP_200_OK: ProjectReviewUpdateSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -89,22 +68,10 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project review details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.has_perm("projects.change_project_as_bearer"):
             return response.Response(
@@ -130,8 +97,8 @@ class ProjectReviewRetrieveUpdate(generics.RetrieveUpdateAPIView):
         if (
             "real_start_date" in request.data
             and "real_end_date" in request.data
-            and datetime.datetime.strptime(request.data["real_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["real_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["real_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["real_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set start date after end date.")},

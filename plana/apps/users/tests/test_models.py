@@ -10,14 +10,14 @@ class UsersModelsTests(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
         "tests/commissions_fund.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):

@@ -12,13 +12,13 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = [
         "acronym",
         "description",
-        "is_multiple",
+        "max_uploads",
         "is_required_in_process",
         "institution",
         "fund",
         "process_type",
     ]
-    list_filter = ["is_multiple", "is_required_in_process"]
+    list_filter = ["max_uploads", "is_required_in_process"]
     search_fields = [
         "acronym",
         "name",
@@ -29,6 +29,9 @@ class DocumentAdmin(admin.ModelAdmin):
         "fund__name",
         "process_type",
     ]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('fund', 'institution')
 
 
 @admin.register(DocumentUpload)
@@ -46,3 +49,9 @@ class DocumentUploadAdmin(admin.ModelAdmin):
         "association__name",
         "project__name",
     ]
+
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .select_related('document', 'user', 'association', 'project')
+        )

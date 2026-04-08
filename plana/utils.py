@@ -3,6 +3,7 @@
 import ast
 import datetime
 import logging
+import unicodedata
 
 import boto3
 import weasyprint
@@ -15,6 +16,8 @@ from django.template.loader import get_template, render_to_string
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
+
+PHONE_REGEX_PATTERN = r"^\+?\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4,6}$"
 
 
 def check_valid_password(password):
@@ -156,3 +159,11 @@ def generate_pdf_binary(context, request, template_name):
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
     return pdf_binary
+
+
+def normalize_object_name(object_name: str) -> str:
+    return (
+        unicodedata.normalize("NFD", object_name.strip().replace(" ", "").lower())
+        .encode("ascii", "ignore")
+        .decode("utf-8")
+    )

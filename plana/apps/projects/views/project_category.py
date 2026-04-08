@@ -8,15 +8,12 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import CommissionFund
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
@@ -51,7 +48,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -68,24 +65,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
-                | models.Q(
-                    project_id__in=(
-                        ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=CommissionFund.objects.filter(
-                                fund_id__in=user_funds_ids
-                            ).values_list("id")
-                        ).values_list("project_id")
-                    )
-                )
-                | models.Q(
-                    project_id__in=(
-                        Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=user_institutions_ids
-                            ).values_list("id")
-                        ).values_list("id")
-                    )
-                )
+                | models.Q(project__projectcommissionfund__commission_fund__fund_id__in=user_funds_ids.values_list("id"))
+                | models.Q(project__in=(Project.visible_objects.filter(association__institution__in=user_institutions_ids.values_list("id"))))
             )
 
         if project_id:
@@ -114,14 +95,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -129,11 +104,11 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        project_categories_count = ProjectCategory.objects.filter(
+        project_categories = ProjectCategory.objects.filter(
             project_id=request.data["project"],
             category_id=request.data["category"],
-        ).count()
-        if project_categories_count > 0:
+        )
+        if project_categories.exists():
             return response.Response(
                 {"error": _("This project is already linked to this category.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -163,13 +138,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all categories linked to a project."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_fund")
@@ -192,6 +161,13 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
+    def get_object(self):
+        return get_object_or_404(
+            self.get_queryset(),
+            project_id=self.kwargs["project_id"],
+            category_id=self.kwargs["category_id"]
+        )
+
     @extend_schema(
         responses={
             status.HTTP_204_NO_CONTENT: ProjectCategorySerializer,
@@ -203,16 +179,8 @@ class ProjectCategoryDestroy(generics.DestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys a link between project and category."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_category = ProjectCategory.objects.get(
-                project_id=kwargs["project_id"], category_id=kwargs["category_id"]
-            )
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project_category = self.get_object()
+        project = get_object_or_404(Project.visible_objects, id=project_category.pk)
 
         if not request.user.can_edit_project(project):
             return response.Response(

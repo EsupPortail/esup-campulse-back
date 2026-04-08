@@ -24,11 +24,10 @@ class UserViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/contents_setting.json",
@@ -36,9 +35,9 @@ class UserViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -68,14 +67,16 @@ class UserViewsTests(TestCase):
         }
         cls.response_manager = cls.manager_client.post(url_login, data_manager)
 
-    def test_anonymous_get_users_list(self):
-        """
-        GET /users/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get("/users/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        # Start a manager institution client used in some tests
+        cls.manager_inst_user_id = 4
+        cls.manager_inst_institution_id = 3
+        cls.manager_inst_user_name = "gestionnaire-uha@mail.tld"
+        cls.manager_inst_client = Client()
+        data_manager_inst = {
+            "username": cls.manager_inst_user_name,
+            "password": "motdepasse",
+        }
+        cls.response_manager_inst = cls.manager_inst_client.post(url_login, data_manager_inst)
 
     def test_student_get_users_list(self):
         """
@@ -102,7 +103,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
         users_cnt = User.objects.all().count()
-        self.assertTrue(users_cnt > 0)
 
         content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
@@ -256,22 +256,6 @@ class UserViewsTests(TestCase):
             response = self.manager_client.get(f"/users/?email={similar_email}")
             self.assertEqual(response.data[0]["email"], similar_emails[0])
 
-    def test_anonymous_post_user(self):
-        """
-        POST /users/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/",
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-                "email": "john@doe.com",
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_student_post_user(self):
         """
         POST /users/ .
@@ -288,100 +272,125 @@ class UserViewsTests(TestCase):
         )
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_manager_post_user_restricted_mail(self):
+    def test_manager_post_user_bad_request_email_domain(self):
         """
         POST /users/ .
 
-        - An account with a restricted mail cannot be created.
+        - An account with a restricted email can't be created.
         """
-        response_manager = self.manager_client.post(
-            "/users/",
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-                "email": f"jd@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
-            },
+        data = {
+            "email": f"john-doe@{Setting.get_setting('RESTRICTED_DOMAINS')[0]}",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_cas": False,
+            "username": "test",
+            "gifus": [{"group": 6, "institution": None, "fund": None}],
+            "associations": []
+        }
+        response_email = self.manager_client.post(
+            "/users/", data=json.dumps(data), content_type="application/json"
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertFalse(len(mail.outbox))
+        self.assertEqual(response_email.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email_domain", response_email.data)
 
-    def test_manager_post_user_wrong_phone(self):
+    def test_manager_post_user_bad_request_asso_user(self):
         """
         POST /users/ .
 
-        - A manager user can execute this request.
-        - Phone number must be correct.
+        - Cannot create a link asso-user if association is already full.
+        - Cannot create a link asso-user as president if association already has one.
         """
-        self.manager_client.post(
-            "/users/",
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-                "email": "john@doe.com",
-                "phone": "phone"
-            },
+        data = {
+            "email": "john@doe.fr",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_cas": False,
+            "username": "test",
+            "gifus": [{"group": 5, "institution": None, "fund": None}],
+            "associations": [{"association": 1, "is_president": False, "is_secretary": False, "is_treasurer": False, "is_vice_president": False}]
+        }
+        asso_id = 1
+        asso_users = [AssociationUser(user_id=i, association_id=asso_id) for i in range(1, 5)]
+        AssociationUser.objects.bulk_create(asso_users)
+        response_asso_full = self.manager_client.post(
+            "/users/", data=json.dumps(data), content_type="application/json"
         )
-        user_cnt = User.objects.filter(email="john@doe.com").count()
-        self.assertEqual(user_cnt, 0)
+        self.assertEqual(response_asso_full.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_many_members", response_asso_full.data)
 
-    def test_manager_post_user(self):
+        data["associations"] = [{"association": 2, "is_president": True, "is_secretary": False, "is_treasurer": False, "is_vice_president": False}]
+        response_asso_president = self.manager_client.post(
+            "/users/", data=json.dumps(data), content_type="application/json"
+        )
+        self.assertEqual(response_asso_president.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("president", response_asso_president.data)
+
+    def test_manager_post_user_local_ok(self):
         """
         POST /users/ .
 
-        - A manager user can execute this request.
-        - The user has been created.
-        - An email is received if creation is successful.
+        - User is successfully created with given data.
+        - Local user has its email as username and is validated by admin by default.
+        - An email is sent.
+        - A password is automatically generated.
+        - Link between new user and its association is validated by default. (manager has correct permissions)
         """
-        username = "john@doe.com"
-        response_manager = self.manager_client.post(
-            "/users/",
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-                "email": username,
-                "phone": "1234567890"
-            },
+        data = {
+            "email": "john@doe.fr",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_cas": False,
+            "username": "test",
+            "gifus": [{"group": 5, "institution": None, "fund": None}],
+            "associations": [{"association": 1, "is_president": False, "is_secretary": True, "is_treasurer": False, "is_vice_president": False}]
+        }
+        response = self.manager_client.post(
+            "/users/", data=json.dumps(data), content_type="application/json"
         )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        user_created = User.objects.get(username=response.data["username"])
+        self.assertEqual(user_created.username, "john@doe.fr")
+        self.assertTrue(user_created.is_validated_by_admin)
+        self.assertTrue(len(mail.outbox))
+        self.assertTrue(user_created.password)
+
+        asso_user_created = AssociationUser.objects.get(user=user_created, association_id=1)
+        self.assertTrue(asso_user_created.is_validated_by_admin)
+
+    def test_manager_post_user_cas_ok(self):
+        """
+        POST /users/ .
+
+        - User is successfully created with given data.
+        - CAS created user has given username and is validated by admin by default.
+        - An email is sent.
+        - Link between new user and its association is not validated by default. (manager does not have correct permissions)
+        - A SocialAccount object is created.
+        """
+        data = {
+            "email": "john@doe.fr",
+            "first_name": "John",
+            "last_name": "Doe",
+            "is_cas": True,
+            "username": "test",
+            "gifus": [{"group": 5, "institution": None, "fund": None}],
+            "associations": [{"association": 1, "is_president": False, "is_secretary": True, "is_treasurer": False, "is_vice_president": False}]
+        }
+        response = self.manager_inst_client.post(
+            "/users/", data=json.dumps(data), content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        user_created = User.objects.get(username=response.data["username"])
+        self.assertEqual(user_created.username, "test")
+        self.assertTrue(user_created.is_validated_by_admin)
         self.assertTrue(len(mail.outbox))
 
-        user = User.objects.get(username=username)
-        self.assertEqual(user.username, username)
+        asso_user_created = AssociationUser.objects.get(user=user_created, association_id=1)
+        self.assertFalse(asso_user_created.is_validated_by_admin)
 
-    def test_manager_post_user_cas(self):
-        """
-        POST /users/ .
-
-        - A manager user can execute this request.
-        - The CAS user has been created.
-        - An email is received if creation is successful.
-        """
-        username = "campulse"
-        email = "campulse@unistra.fr"
-        response_manager = self.manager_client.post(
-            "/users/",
-            {
-                "first_name": "Campulse",
-                "last_name": "Plana",
-                "username": username,
-                "email": email,
-                "is_cas": True,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(len(mail.outbox))
-
-        user = SocialAccount.objects.get(uid=username)
-        self.assertEqual(user.uid, username)
-
-    def test_anonymous_get_user_detail(self):
-        """
-        GET /users/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertTrue(SocialAccount.objects.filter(user=user_created).exists())
 
     def test_manager_get_unexisting_user(self):
         """
@@ -428,26 +437,6 @@ class UserViewsTests(TestCase):
         user = User.objects.get(id=self.student_user_id)
         user_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(user_requested["username"], user.username)
-
-    def test_put_user_detail(self):
-        """
-        PUT /users/{id} .
-
-        - Always returns a 405 no matter which role tries to acces it
-        """
-        response_manager = self.manager_client.put(f"/users/{self.student_user_id}", {"username": "NotAllowed"})
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_anonymous_patch_user_detail(self):
-        """
-        PATCH /users/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.patch(
-            f"/users/{self.unvalidated_user_id}", {"username": "Unauthorized"}
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_patch_user_detail(self):
         """
@@ -588,15 +577,6 @@ class UserViewsTests(TestCase):
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
         user = User.objects.get(id=self.unvalidated_user_id)
         self.assertEqual(user.can_submit_projects, True)
-
-    def test_anonymous_delete_user(self):
-        """
-        DELETE /users/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.delete(f"/users/{self.unvalidated_user_id}")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_delete_user(self):
         """

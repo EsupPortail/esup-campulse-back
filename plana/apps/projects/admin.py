@@ -1,5 +1,6 @@
 """Admin view for Project models."""
 import datetime
+
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
@@ -8,6 +9,10 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.models.user import AssociationUser, User
 
+from ...admin import SecuredModelAdmin
+from ...libs.mail_template.models import MailTemplate
+from ...utils import send_mail
+from ..contents.models import Content
 from .models import (
     Category,
     Project,
@@ -15,10 +20,6 @@ from .models import (
     ProjectComment,
     ProjectCommissionFund,
 )
-from ..contents.models import Content
-from ...admin import SecuredModelAdmin
-from ...libs.mail_template.models import MailTemplate
-from ...utils import send_mail
 
 
 @admin.register(Category)
@@ -54,12 +55,22 @@ class ProjectAdmin(SecuredModelAdmin):
         "project_status",
     ]
 
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .select_related('user', 'association_user__user', 'association')
+            .prefetch_related(
+                'projectcommissionfund_set__commission_fund__commission',
+                'projectcommissionfund_set__commission_fund__fund'
+            )
+        )
+
     @admin.display(description=_("Association User"))
     @admin.display(ordering="association_user")
     def get_association_user(self, obj):
         """Get user that manages a project in an association."""
-        if obj.association_user is not None:
-            user = User.objects.get(id=AssociationUser.objects.get(id=obj.association_user.id).user_id)
+        if (association_user := obj.association_user):
+            user = association_user.user
             return f"{user.first_name} {user.last_name}"
         return "-"
 
@@ -67,12 +78,15 @@ class ProjectAdmin(SecuredModelAdmin):
     @admin.display(ordering="projectcommissionfund")
     def get_commission_funds(self, obj):
         """Get commissions and funds linked to a project."""
-        project_commission_funds = ProjectCommissionFund.objects.filter(project_id=obj.id)
-        if project_commission_funds.count() > 0:
-            commission_name = project_commission_funds.first().commission_fund.commission.name
-            fund_names = list(project_commission_funds.values_list("commission_fund__fund__acronym", flat=True))
+        commission_name = ''
+        fund_names = []
+        for pcf in obj.projectcommissionfund_set.all():
+            commision_fund = pcf.commission_fund
+            commission_name = commision_fund.commission.name
+            fund_names.append(commision_fund.fund.acronym)
+        if commission_name:
             return f"{commission_name} - {', '.join(fund_names)}"
-        return "-"
+        return '-'
 
 
 @admin.register(ProjectCategory)
@@ -90,6 +104,9 @@ class ProjectCommentAdmin(SecuredModelAdmin):
     list_display = ["text", "is_visible", "project", "user"]
     list_filter = ["is_visible"]
     search_fields = ["text", "project__name", "user__first_name", "user__last_name"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project', 'user')
 
 
 class GeneratePDFAction:

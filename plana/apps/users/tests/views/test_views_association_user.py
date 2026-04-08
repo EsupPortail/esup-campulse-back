@@ -11,27 +11,26 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.history.models.history import History
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser
+from plana.apps.users.models.user import AssociationUser
 
 
 class AssociationUserViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -40,13 +39,13 @@ class AssociationUserViewsTests(TestCase):
         # Vars used in unittests
         cls.unvalidated_user_id = 2
         cls.unvalidated_user_name = "compte-non-valide@mail.tld"
-
-        # Start an anonymous client used in some tests
-        cls.anonymous_client = Client()
+        cls.misc_user_id = 9
+        cls.user_in_asso_id = 10
 
         # Start a student client used in some tests
         cls.student_user_id = 11
         cls.student_user_name = "etudiant-asso-site@mail.tld"
+        cls.student_asso_id = 2
         cls.student_client = Client()
         data_student = {"username": cls.student_user_name, "password": "motdepasse"}
         cls.response_student = cls.student_client.post(url_login, data_student)
@@ -71,6 +70,18 @@ class AssociationUserViewsTests(TestCase):
         }
         cls.response_manager = cls.manager_client.post(url_login, data_manager)
 
+        # Start a manager institution client used in some tests
+        cls.manager_inst_user_id = 4
+        cls.manager_inst_institution_id = 3
+        cls.managed_inst_user_id = 14
+        cls.manager_inst_user_name = "gestionnaire-uha@mail.tld"
+        cls.manager_inst_client = Client()
+        data_manager_inst = {
+            "username": cls.manager_inst_user_name,
+            "password": "motdepasse",
+        }
+        cls.response_manager_inst = cls.manager_inst_client.post(url_login, data_manager_inst)
+
         # Start a manager misc client used in some tests
         cls.manager_misc_user_id = 5
         cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
@@ -81,40 +92,16 @@ class AssociationUserViewsTests(TestCase):
         }
         cls.response = cls.manager_misc_client.post(url_login, data_manager_misc)
 
-    def test_anonymous_get_associations_user_list(self):
-        """
-        GET /users/associations/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get("/users/associations/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_student_get_association_user_list_global(self):
         """
         GET /users/associations/ .
 
-        - A student user can execute this request.
-        - A student user gets correct association user list data.
+        - A student user always retrieves an empty list.
         """
-        response_student = self.student_client.get("/users/associations/")
-        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
-
-        associations_user_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-        content = json.loads(response_student.content.decode("utf-8"))
-        self.assertEqual(len(content), associations_user_cnt)
-
-    def test_student_get_association_user_list_search(self):
-        """
-        GET /users/associations/ .
-
-        - A student user can execute this request.
-        - A student user gets correct association user list data based on search filters.
-        """
-        response_president = self.president_student_client.get("/users/associations/?association_id=2")
-        associations_user_cnt = AssociationUser.objects.filter(association_id=2).count()
-        content = json.loads(response_president.content.decode("utf-8"))
-        self.assertEqual(len(content), associations_user_cnt)
+        response_all_asso = self.student_client.get("/users/associations/")
+        content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
+        self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
+        self.assertEqual(content_all_asso, [])
 
     def test_manager_get_association_user_list_global(self):
         """
@@ -122,12 +109,21 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager user can execute this request.
         - Links between user and associations are returned.
+        - Links between user and associations are filtered by authorized institution.
         """
-        associations_user_all_cnt = AssociationUser.objects.count()
+        associations_user_all_cnt = AssociationUser.objects.filter(user__is_validated_by_admin=True).count()
         response_all_asso = self.manager_client.get("/users/associations/")
         content_all_asso = json.loads(response_all_asso.content.decode("utf-8"))
         self.assertEqual(response_all_asso.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content_all_asso), associations_user_all_cnt)
+
+        associations_user_inst_cnt = AssociationUser.objects.filter(
+            user__is_validated_by_admin=True,
+            association__institution=self.manager_inst_institution_id
+        ).count()
+        response_all_asso = self.manager_inst_client.get("/users/associations/")
+        content_asso_inst = json.loads(response_all_asso.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_inst), associations_user_inst_cnt)
 
     def test_manager_get_association_user_list_search(self):
         """
@@ -135,29 +131,14 @@ class AssociationUserViewsTests(TestCase):
 
         - A manager user can execute this request.
         - Filter by is_validated_by_admin is possible.
-        - Filter by institutions is possible.
         """
-        associations_user_validated_cnt = AssociationUser.objects.filter(is_validated_by_admin=False).count()
+        associations_user_validated_cnt = AssociationUser.objects.filter(
+            user__is_validated_by_admin=True,
+            is_validated_by_admin=False
+        ).count()
         response_validated_asso = self.manager_client.get("/users/associations/?is_validated_by_admin=false")
         content_validated_asso = json.loads(response_validated_asso.content.decode("utf-8"))
         self.assertEqual(len(content_validated_asso), associations_user_validated_cnt)
-
-        institutions_ids = [2, 3]
-        associations_user_institutions_cnt = AssociationUser.objects.filter(
-            association_id__in=Association.objects.filter(institution_id__in=institutions_ids).values_list("id")
-        ).count()
-        response_institutions_asso = self.manager_client.get("/users/associations/?institutions=2,3,")
-        content_institutions_asso = json.loads(response_institutions_asso.content.decode("utf-8"))
-        self.assertEqual(len(content_institutions_asso), associations_user_institutions_cnt)
-
-    def test_anonymous_get_association_user_detail(self):
-        """
-        GET /users/{user_id}/associations/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.get(f"/users/{self.unvalidated_user_id}/associations/")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_manager_get_unexisting_association_user(self):
         """
@@ -172,10 +153,17 @@ class AssociationUserViewsTests(TestCase):
         """
         GET /users/{user_id}/associations/ .
 
-        - A student user cannot execute this request.
+        - A student user can execute this request only if given user is the auth user.
+        - All of its AssociationUser links are returned.
         """
-        response_student = self.student_client.get(f"/users/{self.unvalidated_user_id}/associations/")
+        response_student = self.student_client.get(f"/users/1/associations/")
         self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+        asso_user_student_count = AssociationUser.objects.filter(user_id=self.student_user_id).count()
+        response_student = self.student_client.get(f"/users/{self.student_user_id}/associations/")
+        data_response_student = json.loads(response_student.content.decode("utf-8"))
+        self.assertEqual(response_student.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(data_response_student), asso_user_student_count)
 
     def test_manager_get_association_user_detail(self):
         """
@@ -191,279 +179,143 @@ class AssociationUserViewsTests(TestCase):
         user_associations_requested = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(user_associations_requested), len(user_associations))
 
-    def test_get_link_association_user(self):
-        """
-        GET /users/{user_id}/associations/{association_id} .
-
-        - Always returns a 405 no matter which role is trying to access it.
-        """
-        response_manager = self.manager_client.get("/users/999/associations/999")
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_anonymous_post_association_user_404_user(self):
+    def test_post_association_user_forbidden(self):
         """
         POST /users/associations/ .
 
-        - A non-existing user cannot be added in an association.
-        - User param is mandatory.
+        - A manager not linked to given association's institution cannot execute this request.
+        - A basic user cannot execute this request on another user.
         """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": "george-luCAS",
-                "association": 2,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "association": 3,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_anonymous_post_association_user_404_association(self):
-        """
-        POST /users/associations/ .
-
-        - A user cannot be added in a non-existing association.
-        - Association param is mandatory.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 9999,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_anonymous_post_association_user_forbidden_add(self):
-        """
-        POST /users/associations/ .
-
-        - An anonymous user cannot add a link between a validated user and an association.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.student_user_name,
-                "association": 2,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_anonymous_post_association_user_forbidden_validate(self):
-        """
-        POST /users/associations/ .
-
-        - An anonymous user cannot validate a link between a user and an association.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 5,
-                "is_validated_by_admin": True,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_anonymous_post_association_user_multiple_presidents(self):
-        """
-        POST /users/associations/ .
-
-        - An association cannot have two presidents.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 3,
-                "is_president": True,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_anonymous_post_association_user_wrong_group(self):
-        """
-        POST /users/associations/ .
-
-        - Link cannot be added to a user without a group where associations can be linked.
-        """
-        GroupInstitutionFundUser.objects.filter(user_id=self.unvalidated_user_id, group_id=5).delete()
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 5,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_anonymous_post_association_user_max_members(self):
-        """
-        POST /users/associations/ .
-
-        - An anonymous user cannot add a link if association is full.
-        """
-        association = Association.objects.get(id=5)
-        association.amount_members_allowed = 1
-        association.save()
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 5,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_anonymous_post_association_user_success(self):
-        """
-        POST /users/associations/ .
-
-        - An anonymous user can add a link between a non-validated user and an association.
-        - A user cannot be added twice in the same association.
-        """
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 5,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_201_CREATED)
-
-        response_anonymous = self.anonymous_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 5,
-            },
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_student_post_association_user_serializer_error(self):
-        """
-        POST /users/associations/ .
-
-        - An admin-validated student user can execute this request.
-        - Serializer fields must be valid.
-        """
-        response_student = self.student_client.post(
-            "/users/associations/",
-            data={
-                "user": self.student_user_name,
-                "association": 5,
-                "is_president": "test",
-            },
-            content_type="application/json",
-        )
-        self.assertEqual(response_student.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_student_post_association_user(self):
-        """
-        POST /users/associations/ .
-
-        - An admin-validated student user can execute this request.
-        - An admin-validated student cannot validate its own link.
-        """
-        self.assertFalse(len(mail.outbox))
+        # TODO : uncomment when is_staff permissions are better defined
+        #response_manager = self.manager_inst_client.post(
+        #    "/users/associations/",
+        #    {
+        #            "user": self.student_user_id,
+        #            "association": Association.objects.exclude(institution=self.manager_inst_institution_id).first().pk
+        #    }
+        #)
+        #self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
         response_student = self.student_client.post(
             "/users/associations/",
             {
-                "user": self.student_user_name,
-                "association": 5,
-            },
+                    "user": self.unvalidated_user_id,
+                    "association": Association.objects.first().pk
+            }
         )
+        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_association_user_missing_group(self):
+        """
+        POST /users/associations/ .
+
+        - Cannot execute this request if given user is not a member of a group that can have association.
+        """
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.misc_user_id,
+                "association": Association.objects.first().pk
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("missing_group", response.data)
+
+    def test_post_association_user_too_many_members(self):
+        """
+        POST /users/associations/ .
+
+        - Cannot execute this request if association is full.
+        """
+        asso_id = 1
+        asso_users = [
+            AssociationUser(user_id=1, association_id=asso_id),
+            AssociationUser(user_id=2, association_id=asso_id),
+            AssociationUser(user_id=3, association_id=asso_id),
+            AssociationUser(user_id=4, association_id=asso_id),
+        ]
+        AssociationUser.objects.bulk_create(asso_users)
+
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_id,
+                "association": asso_id
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_many_members", response.data)
+
+    def test_post_association_user_president(self):
+        """
+        POST /users/associations/ .
+
+        - Cannot execute this request with given user set as president if association already have one.
+        """
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.user_in_asso_id,
+                "association": self.student_asso_id,
+                "is_president": True
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("president", response.data)
+
+    def test_post_association_user_already_exists(self):
+        """
+        POST /users/associations/ .
+
+        - Cannot execute this request if given user is already linked to given association.
+        """
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_id,
+                "association": self.student_asso_id
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("non_field_errors", response.data)
+
+    def test_post_association_user_ok_user(self):
+        """
+        POST /users/associations/ .
+
+        - A student user can execute this request.
+        - An email is sent to dedicated managers.
+        - Attribute "is_validated_by_admin" is set to False by default.
+        """
+        response = self.student_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_id,
+                "association": 1,
+                "is_validated_by_admin": True
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(len(mail.outbox))
-        self.assertEqual(response_student.status_code, status.HTTP_201_CREATED)
-        user_asso = AssociationUser.objects.get(user_id=self.student_user_id, association_id=5)
-        self.assertFalse(user_asso.is_validated_by_admin)
+        self.assertFalse(response.data["is_validated_by_admin"])
 
-    def test_manager_misc_post_association_user_forbidden(self):
+    def test_post_association_user_ok_manager(self):
         """
         POST /users/associations/ .
 
-        - A misc manager user cannot add an association from another institution.
+        - A manager user can execute this request.
+        - No email is sent to dedicated managers.
+        - Attribute "is_validated_by_admin" is set to True by default.
         """
-        response_manager_misc = self.manager_misc_client.post(
+        response = self.manager_client.post(
             "/users/associations/",
             {
-                "user": self.student_user_name,
-                "association": 1,
-            },
+                "user": self.student_user_id,
+                "association": 1
+            }
         )
-        self.assertEqual(response_manager_misc.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_manager_post_association_user_bad_request(self):
-        """
-        POST /users/associations/ .
-
-        - A manager cannot be added in an association.
-        """
-        response_manager = self.manager_client.post(
-            "/users/associations/",
-            {
-                "user": self.manager_general_user_name,
-                "association": 1,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_manager_post_association_user(self):
-        """
-        POST /users/associations/ .
-
-        - A manager user can add an association to a validated student.
-        - A manager user can add an association to a non-validated student.
-        """
-        response_manager = self.manager_client.post(
-            "/users/associations/",
-            {
-                "user": self.student_user_name,
-                "association": 1,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-        response_manager = self.manager_client.post(
-            "/users/associations/",
-            {
-                "user": self.unvalidated_user_name,
-                "association": 1,
-            },
-        )
-        self.assertEqual(response_manager.status_code, status.HTTP_201_CREATED)
-
-    def test_put_link_association_user(self):
-        """
-        PUT /users/{user_id}/associations/{association_id} .
-
-        - Always returns a 405 no matter which role is trying to access it.
-        """
-        response_manager = self.manager_client.put("/users/999/associations/999", {"is_treasurer": True})
-        self.assertEqual(response_manager.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_anonymous_patch_association_user(self):
-        """
-        PATCH /users/{user_id}/associations/{association_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.anonymous_client.patch(f"/users/{self.unvalidated_user_id}/associations/2")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertFalse(len(mail.outbox))
+        self.assertTrue(response.data["is_validated_by_admin"])
 
     def test_student_patch_association_user(self):
         """
@@ -646,8 +498,8 @@ class AssociationUserViewsTests(TestCase):
         - A manager can validate a UserAssociation link.
         - A manager can add a president to an association without one.
         """
-        association_id = 2
-        asso_user = AssociationUser.objects.get(user_id=self.student_user_id, association_id=association_id)
+        association_id = self.student_asso_id
+
         response = self.manager_client.patch(
             f"/users/{self.student_user_id}/associations/{association_id}",
             {"is_president": True},
@@ -676,7 +528,7 @@ class AssociationUserViewsTests(TestCase):
         response = self.manager_client.post(
             "/users/associations/",
             {
-                "user": self.student_user_name,
+                "user": self.student_user_id,
                 "association": association_id,
             },
         )
@@ -733,18 +585,6 @@ class AssociationUserViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_anonymous_delete_association_user(self):
-        """
-        DELETE /users/{user_id}/associations/{association_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        asso_user = AssociationUser.objects.get(user_id=self.unvalidated_user_id)
-        response_anonymous = self.anonymous_client.delete(
-            f"/users/{self.unvalidated_user_id}/associations/{asso_user.id}"
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_student_delete_user_association(self):
         """

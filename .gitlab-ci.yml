@@ -1,9 +1,15 @@
 stages:
   - test
+  - sonarqube-check
   - deploy
   - build
   - scan
   - release
+
+services:
+  # - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
+  #   alias: postgres
+  - postgres:latest
 
 variables:
   POSTGRES_DB: plana_test
@@ -15,11 +21,35 @@ variables:
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
   EXTRA_ARGS: ""
 
-services:
-  - postgres:latest
-
 before_script:
   - apt-get update && apt-get install -y age
+
+sonarqube-check:
+  stage: sonarqube-check
+  image: 
+    name: sonarsource/sonar-scanner-cli:11
+    entrypoint: [""]
+  tags:
+    - cluster
+
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  
+  script: 
+    - sonar-scanner 
+      -Dsonar.host.url="${SONAR_HOST_URL}"
+      -Dsonar.python.coverage.reportPaths=coverage.xml
+  allow_failure: true
+  needs:
+    - job: unittest
+      artifacts: true
+  rules:
+    # - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    # - if: $CI_COMMIT_BRANCH == 'master'
+    # - if: $CI_COMMIT_BRANCH == 'main'
+    # - if: $CI_COMMIT_BRANCH == 'develop'
+    - if: $CI_COMMIT_BRANCH == 'cleanup'
 
 unittest:
   stage: test
@@ -36,6 +66,9 @@ unittest:
     - touch keys/age-private-key.key
     - tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    paths:
+      - coverage.xml
 
 include:
   - project: docker/template

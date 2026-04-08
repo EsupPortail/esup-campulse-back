@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            if options["flush"] is True:
+            if options["flush"]:
                 call_command("flush", "--no-input")
                 permission_fixtures_files = [
                     "plana/apps/groups/fixtures/auth_permission.json",

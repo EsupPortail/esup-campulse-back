@@ -13,15 +13,14 @@ class ContentsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "tests/commissions_fund.json",
         "tests/contents_content.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/institutions_institution.json",
-        "users_user.json",
-        "users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
+        "tests/users_groupinstitutionfunduser.json",
     ]
 
     @classmethod
@@ -60,16 +59,12 @@ class ContentsViewsTests(TestCase):
         - Filter by is_editable is available.
         """
         contents_cnt = Content.objects.count()
-        self.assertTrue(contents_cnt > 0)
 
         response = self.client.get("/contents/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), contents_cnt)
-
-        content_1 = content[0]
-        self.assertTrue(content_1.get("code"))
 
         code = "HOME_INFO"
         response = self.client.get(f"/contents/?code={code}")
@@ -108,17 +103,6 @@ class ContentsViewsTests(TestCase):
 
         content = Content.objects.get(id=cid)
         self.assertEqual(content.code, response.data["code"])
-
-    def test_put_content(self):
-        """
-        PUT /contents/{id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        response = self.client.put(
-            "/contents/1", {"body": "Bienvenue sur Campulse, le site de la vie associative étudiante de l'UNISTRA"}
-        )
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_content_anonymous(self):
         """

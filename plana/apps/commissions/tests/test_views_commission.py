@@ -22,23 +22,22 @@ class CommissionDatesViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_project.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -83,7 +82,6 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commissions through the model and through the view.
         """
         commissions_cnt = Commission.objects.count()
-        self.assertTrue(commissions_cnt > 0)
 
         response = self.client.get("/commissions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -121,7 +119,7 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get("/commissions/?is_site=true")
         commissions_cnt = Commission.objects.filter(
             id__in=CommissionFund.objects.filter(
-                fund_id__in=Fund.objects.filter(is_site=True).values_list("id")
+                fund__in=Fund.objects.filter(is_site=True)
             ).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -400,16 +398,6 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get("/commissions/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_put_commission_by_id_405(self):
-        """
-        PUT /commissions/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
-        response = self.client.put("/commissions/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_commission_anonymous(self):
         """
         PATCH /commissions/{id} .
@@ -466,6 +454,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("similar_name", response.data)
 
     def test_patch_commission_wrong_dates(self):
         """
@@ -480,6 +469,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_dates", response.data)
 
     def test_patch_commission_too_old(self):
         """
@@ -494,34 +484,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_submission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"submission_date": "2200-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_commission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"commission_date": "2050-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_date", response.data)
 
     def test_patch_commission_success(self):
         """

@@ -2,14 +2,15 @@
 
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from dj_rest_auth.registration.views import RegisterView as DJRestAutRegisterView
 from dj_rest_auth.registration.views import VerifyEmailView as DJRestAuthVerifyEmailView
 from dj_rest_auth.views import UserDetailsView as DJRestAuthUserDetailsView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.contents.models.setting import Setting
@@ -25,6 +26,13 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
     https://dj-rest-auth.readthedocs.io/en/latest/faq.html
     """
+
+
+class RegisterView(DJRestAutRegisterView):
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        return super().perform_create(serializer)
 
 
 @extend_schema(methods=["PUT"], exclude=True)
@@ -64,7 +72,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
                 if restricted_field in request.data:
                     request.data.pop(restricted_field, False)
 
-            if request.user.is_validated_by_admin is False:
+            if not request.user.is_validated_by_admin:
                 user_id = request.user.pk
                 context["account_url"] = (
                     f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{user_id}"
@@ -117,14 +125,8 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
 
     def post(self, request, *args, **kwargs):
         """Send an email to a manager on email validation."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         self.kwargs['key'] = serializer.validated_data['key']
         confirmation = self.get_object()
@@ -146,7 +148,7 @@ class UserAuthVerifyEmailView(DJRestAuthVerifyEmailView):
             }
             managers_emails = user.get_user_default_manager_emails()
             History.objects.create(action_title="USER_REGISTERED", action_user_id=user.id)
-            if assos_user.count() > 0 or funds_user.count() > 0:
+            if assos_user.exists() or funds_user.exists():
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_CREATION")
             else:
                 template = MailTemplate.objects.get(code="MANAGER_ACCOUNT_LOCAL_MISC_CREATION")

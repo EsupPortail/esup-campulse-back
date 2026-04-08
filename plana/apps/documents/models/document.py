@@ -5,6 +5,7 @@ import os
 
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -12,7 +13,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
 from plana.storages import DynamicStorageFileField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicStorageFileField = models.FileField
 
 
@@ -70,13 +71,18 @@ class Document(models.Model):
             """Documents with those processes can be linked to a project ID."""
             return ["DOCUMENT_PROJECT", "DOCUMENT_PROJECT_REVIEW"]
 
+        @staticmethod
+        def get_registration_documents():
+            """Documents with those processes are used in User registration."""
+            return ["DOCUMENT_USER"]
+
     name = models.CharField(_("Name"), max_length=250, default="")
-    acronym = models.TextField(_("Acronym"), default="")
+    acronym = models.TextField(_("Acronym"))
     description = models.TextField(_("Description"), default="")
     contact = models.TextField(_("Contact address"), default="")
-    is_multiple = models.BooleanField(_("Is multiple"), default=False)
+    max_uploads = models.PositiveIntegerField(_("Maximum copies number allowed"), default=1, validators=[MinValueValidator(1)])
     is_required_in_process = models.BooleanField(_("Is required in process"), default=False)
-    days_before_expiration = models.DurationField(_("Days before document expiration"), null=True, blank=True)
+    days_before_expiration = models.IntegerField(_("Days before document expiration"), null=True, blank=True)
     expiration_day = models.CharField(
         _("Document expiration day of the year in %m-%d format"),
         max_length=5,

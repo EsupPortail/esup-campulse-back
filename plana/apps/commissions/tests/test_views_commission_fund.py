@@ -13,22 +13,21 @@ class CommissionDatesViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_project.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -64,7 +63,6 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commission_funds through the model and through the view.
         """
         cf_count = CommissionFund.objects.count()
-        self.assertTrue(cf_count > 0)
 
         response = self.client.get("/commissions/funds")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -136,7 +134,8 @@ class CommissionDatesViewsTests(TestCase):
         - The route returns a 404 if a wrong commission id is given.
         """
         response = self.client.get("/commissions/99999/funds")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data)
 
     def test_get_commission_funds_by_id(self):
         """

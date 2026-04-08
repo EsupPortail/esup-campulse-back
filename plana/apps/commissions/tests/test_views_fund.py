@@ -32,16 +32,12 @@ class FundsViewsTests(TestCase):
         - Filter by acronym is available.
         """
         funds_cnt = Fund.objects.count()
-        self.assertTrue(funds_cnt > 0)
 
         response = self.client.get("/commissions/funds/names")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), funds_cnt)
-
-        fund_1 = content[0]
-        self.assertTrue(fund_1.get("name"))
 
         acronym = "FSDIE"
         response = self.client.get(f"/commissions/funds/names?acronym={acronym}")

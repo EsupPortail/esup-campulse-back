@@ -18,9 +18,8 @@ class UserViewsTests(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/contents_setting.json",
@@ -28,9 +27,9 @@ class UserViewsTests(TestCase):
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @patch('plana.apps.users.serializers.cas.CASSerializer.validate')

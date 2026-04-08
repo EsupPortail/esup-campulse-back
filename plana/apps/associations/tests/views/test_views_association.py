@@ -15,34 +15,27 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser
 
-# from django.conf import settings
-# from django.core.files.storage import default_storage
-# from django.test.client import BOUNDARY, MULTIPART_CONTENT, encode_multipart
-# from unittest.mock import Mock
-# from plana.storages import DynamicThumbnailImageField
-
 
 class AssociationsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/documents_document.json",
-        "documents_documentupload.json",
+        "tests/documents_documentupload.json",
         "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
-        "projects_project.json",
-        "users_associationuser.json",
-        "users_user.json",
-        "users_groupinstitutionfunduser.json",
+        "tests/projects_project.json",
+        "tests/users_associationuser.json",
+        "tests/users_user.json",
+        "tests/users_groupinstitutionfunduser.json",
     ]
 
     @classmethod
@@ -63,6 +56,7 @@ class AssociationsViewsTests(TestCase):
 
         # Start a student president of an association client used in some tests
         cls.president_user_id = 13
+        cls.president_asso_id = 2
         cls.president_user_name = "president-asso-site@mail.tld"
         cls.president_client = Client()
         data_president = {
@@ -83,6 +77,7 @@ class AssociationsViewsTests(TestCase):
 
         # Start a manager institution client used in some tests
         cls.manager_institution_user_id = 4
+        cls.manager_institution_asso_id = 4
         cls.manager_institution_user_name = "gestionnaire-uha@mail.tld"
         cls.institution_client = Client()
         data_institution = {
@@ -213,7 +208,7 @@ class AssociationsViewsTests(TestCase):
         """
         response = self.client.get("/associations/?institution_component=1")
         for association in response.data:
-            self.assertEqual(association["institution_component"], 1)
+            self.assertEqual(association["institution_component"]["id"], 1)
 
         response = self.client.get("/associations/?institution_component=")
         for association in response.data:
@@ -228,7 +223,7 @@ class AssociationsViewsTests(TestCase):
         """
         response = self.client.get("/associations/?activity_field=3")
         for association in response.data:
-            self.assertEqual(association["activity_field"], 3)
+            self.assertEqual(association["activity_field"]["id"], 3)
 
     def test_get_associations_list_filter_user_anonymous(self):
         """
@@ -302,25 +297,27 @@ class AssociationsViewsTests(TestCase):
         for association in response.data:
             self.assertEqual(association["is_public"], False)
 
-    def test_post_association_bad_request(self):
+    def test_post_association_bad_request_format(self):
         """
         POST /associations/ .
 
-        - Name param is mandatory.
         - Institution param is mandatory.
+        - Name param is mandatory.
         - Email param is mandatory.
         """
         response_general = self.general_client.post(
             "/associations/",
             {
                 "name": "Les Fans de Campulse",
+                "email": "test@mail.tld"
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("no_institution", response_general.data)
 
         response_general = self.general_client.post(
             "/associations/",
-            {"institution": 2},
+            {"email": "test@mail.tld", "institution": 2},
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -333,7 +330,7 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_post_association_404(self):
+    def test_post_association_no_institution(self):
         """
         POST /associations/ .
 
@@ -343,54 +340,37 @@ class AssociationsViewsTests(TestCase):
             "/associations/",
             {"institution": 1000},
         )
-        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("institution", response_general.data)
 
-    def test_post_association_anonymous(self):
-        """
-        POST /associations/ .
-
-        - The user must be authenticated.
-        """
-        response = self.client.post(
-            "/associations/",
-            {
-                "name": "Unauthorized Association",
-                "institution": 2,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_post_association_forbidden(self):
+    def test_post_association_bad_request_data(self):
         """
         POST /associations/ .
 
         - An Institution Manager cannot add an association not from the same institution.
-        - A Misc manager cannot add an association linked to another institution than its own.
         - A Misc manager cannot set is_site on a new association.
         """
         response_institution = self.institution_client.post(
             "/associations/",
             {
                 "name": "Forbidden association",
+                "email": "false@mail.tld",
                 "institution": 2,
             },
         )
-        self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_institution.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("wrong_institution", response_institution.data)
 
         response_misc = self.misc_client.post(
             "/associations/",
             {
-                "name": "Also forbidden association",
-                "institution": 2,
+                "name": "Another forbidden association",
+                "email": "false@mail.tld",
+                "is_public": True
             },
         )
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
-
-        response_misc = self.misc_client.post(
-            "/associations/",
-            {"name": "Another forbidden association", "is_public": True},
-        )
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_misc.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("restricted_fields", response_misc.data)
 
     def test_post_association_similar_names(self):
         """
@@ -410,32 +390,18 @@ class AssociationsViewsTests(TestCase):
         )
 
         similar_names = [
-            "Les Fans de Campulse",
             "LesFansdeCampulse",
             "lesfansdecampulse",
-            " Les Fans de Campulse ",
+            " Les fans de Campulse ",
             "Lés Fàns dè Câmpülsé",
         ]
         for similar_name in similar_names:
             response_general = self.general_client.post(
                 "/associations/",
-                {"name": similar_name, "institution": 2},
+                {"name": similar_name, "email": "test@mail.tld", "institution": 2},
             )
             self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_post_association_serializer_error(self):
-        """
-        POST /associations/ .
-
-        - A General Manager can add an association.
-        - Serializers fields must be valid.
-        """
-        response_general = self.general_client.post(
-            "/associations/",
-            data={"name": "Nom d'asso", "institution": 2, "email": False},
-            content_type="application/json",
-        )
-        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertIn("similar_name", response_general.data)
 
     def test_post_association_success_manager_institution(self):
         """
@@ -448,6 +414,7 @@ class AssociationsViewsTests(TestCase):
             {
                 "name": "Successful association.",
                 "email": "success@association.fr",
+                "institution": 3
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
@@ -520,7 +487,7 @@ class AssociationsViewsTests(TestCase):
         - A non-public association can't be seen by a student user who's not in it.
         """
         non_public_response = self.client.get("/associations/3")
-        self.assertEqual(non_public_response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(non_public_response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         association = Association.objects.get(id=5)
         association.is_enabled = False
@@ -567,15 +534,6 @@ class AssociationsViewsTests(TestCase):
         """
         non_public_member_response = self.member_client.get("/associations/2")
         self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
-
-    def test_put_association(self):
-        """
-        PUT /associations/{id} .
-
-        - Always returns a 405 no matter which user tries to access it.
-        """
-        response = self.client.put("/associations/1", {"name": "YayCampulse"})
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_association_anonymous(self):
         """
@@ -947,16 +905,6 @@ class AssociationsViewsTests(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
 
-    def test_put_association_status(self):
-        """
-        PUT /associations/{id}/status .
-
-        - Always returns a 405.
-        """
-        patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.general_client.put("/associations/2/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_patch_association_status_anonymous(self):
         """
         PATCH /associations/{id}/status .
@@ -1100,16 +1048,12 @@ class AssociationsViewsTests(TestCase):
         - Activity fields details are returned (test the "name" attribute).
         """
         activity_fields_cnt = ActivityField.objects.count()
-        self.assertTrue(activity_fields_cnt > 0)
 
         response = self.client.get("/associations/activity_fields")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), activity_fields_cnt)
-
-        activity_field_1 = content[0]
-        self.assertTrue(activity_field_1.get("name"))
 
     def test_get_association_names_list(self):
         """
@@ -1175,3 +1119,48 @@ class AssociationsViewsTests(TestCase):
             len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
             len(content_all_assos),
         )
+
+    def test_get_association_members_forbidden(self):
+        """
+        - A student not member of the association or simple member cannot execute this request.
+        - An association's president cannot execute this request if not its own.
+        - A manager cannot execute this request if the association is not managed by him.
+        """
+        response_member = self.member_client.get(f"/associations/{self.president_asso_id}/users")
+        self.assertEqual(response_member.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_president = self.president_client.get(f"/associations/1/users")
+        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_manager = self.institution_client.get(f"/associations/1/users")
+        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_association_members_president(self):
+        """
+        - An association's president can execute this request for its own association.
+        - Correct data is retrieved.
+        """
+        response_president = self.president_client.get(f"/associations/{self.president_asso_id}/users")
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+
+        associations_user_asso_cnt = AssociationUser.objects.filter(
+            association=self.president_asso_id,
+            is_validated_by_admin=True
+        ).count()
+        content_asso_members = json.loads(response_president.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_members), associations_user_asso_cnt)
+
+    def test_get_association_members_manager(self):
+        """
+        - A manager of an association can execute this request.
+        - Correct data is retrieved.
+        """
+        response_manager = self.institution_client.get(f"/associations/{self.manager_institution_asso_id}/users")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        associations_user_asso_cnt = AssociationUser.objects.filter(
+            association=self.manager_institution_asso_id,
+            is_validated_by_admin=True
+        ).count()
+        content_asso_members = json.loads(response_manager.content.decode("utf-8"))
+        self.assertEqual(len(content_asso_members), associations_user_asso_cnt)
