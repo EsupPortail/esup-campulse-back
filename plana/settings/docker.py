@@ -62,11 +62,11 @@ CAS_SERVER = environ.get("CAS_SERVER", "https://cas.domain.tld/")
 CAS_VERSION = environ.get("CAS_VERSION", "3")
 CAS_AUTHORIZED_SERVICES = environ.get("CAS_AUTHORIZED_SERVICES", "https://front-url.tld/cas-login https://front-url.tld/cas-register").split()
 
-CAS_ATTRIBUTE_EMAIL = environ.get("CAS_ATTRIBUTE_EMAIL", "mail")
-CAS_ATTRIBUTE_FIRST_NAME = environ.get("CAS_ATTRIBUTE_FIRST_NAME", "first_name")
-CAS_ATTRIBUTE_LAST_NAME = environ.get("CAS_ATTRIBUTE_LAST_NAME", "last_name")
-CAS_ATTRIBUTE_IS_STUDENT = environ.get("CAS_ATTRIBUTE_IS_STUDENT", "affliliation")
-CAS_VALUE_IS_STUDENT = environ.get("CAS_VALUE_IS_STUDENT", "student")
+CAS_ATTRIBUTES_NAMES["email"] = environ.get("CAS_ATTRIBUTE_EMAIL", "mail")
+CAS_ATTRIBUTES_NAMES["first_name"] = environ.get("CAS_ATTRIBUTE_FIRST_NAME", "first_name")
+CAS_ATTRIBUTES_NAMES["last_name"] = environ.get("CAS_ATTRIBUTE_LAST_NAME", "last_name")
+CAS_ATTRIBUTES_NAMES["is_student"] = environ.get("CAS_ATTRIBUTE_IS_STUDENT", "affliliation")
+CAS_ATTRIBUTES_VALUES["is_student"] = environ.get("CAS_VALUE_IS_STUDENT", "student")
 
 
 ##########
