@@ -7,9 +7,8 @@ stages:
   - release
 
 services:
-  # - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
+  - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
   #   alias: postgres
-  - postgres:latest
 
 variables:
   POSTGRES_DB: plana_test
@@ -116,6 +115,8 @@ b:docker:
   stage: build
   variables:
     DESTINATION: $CONTAINER_TEST_IMAGE
+  rules:
+    - when: always
 
 r:docker:
   extends: .build-image
