@@ -34,4 +34,4 @@ class AssociationRetrieveUpdateDestroyPermission(permissions.BasePermission):
 class ViewAssociationMembersPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         asso_id = view.kwargs.get("association_id")
-        return Association.objects.managed_by_user(request.user).filter(id=asso_id).exists() or request.user.is_president_in_association(asso_id)
+        return Association.objects.managed_by_user(request.user).filter(id=asso_id).exists() or request.user.is_in_association(asso_id)
