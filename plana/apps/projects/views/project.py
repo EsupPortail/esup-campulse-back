@@ -13,7 +13,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.commissions.models import Commission, Fund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document import Document
 from plana.apps.history.models.history import History
@@ -40,7 +40,7 @@ DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route."""
 
-    queryset = Project.visible_objects.all().order_by("edition_date")
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").order_by("edition_date")
     filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
     filterset_class = ProjectFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -93,6 +93,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
                     | models.Q(projectcommissionfund__commission_fund__fund_id__in=user_funds_ids)
                     | models.Q(association__institution_id__in=user_institutions_ids)
                 )
+
+        queryset = queryset.prefetch_related(
+            models.Prefetch(
+                'projectcommissionfund_set',
+                queryset=ProjectCommissionFund.objects.select_related(
+                    'commission_fund__commission'
+                )
+            )
+        ).distinct()
+
         return queryset
 
     def get_serializer_class(self):
@@ -105,18 +115,16 @@ class ProjectListCreate(generics.ListCreateAPIView):
     @capture_queries()
     def get(self, request, *args, **kwargs):
         """List all projects linked to a user, or all projects with all their details (manager)."""
-        # TODO : check why distinct needed here, fixable elsewhere ?
-        queryset = self.filter_queryset(self.get_queryset()).distinct()
+        queryset = self.filter_queryset(self.get_queryset())
 
         for project in queryset:
-            if (pcf := project.projectcommissionfund_set.first()):
-                project.commission = Commission.objects.get(
-                    id=CommissionFund.objects.get(id=pcf.commission_fund_id).commission_id
-                )
+            pcf = project.projectcommissionfund_set.all()
+            if pcf:
+                project.commission = pcf[0].commission_fund.commission
             else:
                 project.commission = None
 
-        serializer = self.get_serializer_class()(queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True)
         return response.Response(serializer.data)
 
     @extend_schema(
@@ -254,7 +262,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-    queryset = Project.visible_objects.all()
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

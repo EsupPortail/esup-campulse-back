@@ -6,11 +6,14 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
 from plana.apps.commissions.serializers.commission import CommissionSerializer
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
+from plana.apps.users.serializers.association_user import AssociationUserSerializer
+from plana.apps.users.serializers.user import UserNameSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -18,6 +21,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     categories = CategorySerializer(many=True, read_only=True)
     commissions = CommissionSerializer(many=True, read_only=True)
+    association = AssociationMandatoryDataSerializer(read_only=True)
+    user = UserNameSerializer(read_only=True)
+    association_user = AssociationUserSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -107,6 +113,9 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
 
     commission = CommissionSerializer(many=False, read_only=True)
     budget_file = serializers.SerializerMethodField("get_budget_file")
+    association = AssociationMandatoryDataSerializer(read_only=True)
+    user = UserNameSerializer(read_only=True)
+    association_user = AssociationUserSerializer(read_only=True)
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_budget_file(self, project):
