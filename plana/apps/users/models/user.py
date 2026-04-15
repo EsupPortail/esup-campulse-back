@@ -158,7 +158,11 @@ class User(AbstractUser):
         """Check if a user can access a project as association president, misc user, fund member, or manager."""
         if project_obj.association is not None:
             try:
-                AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
+                AssociationUser.objects.get(
+                    user_id=self.pk,
+                    association_id=project_obj.association,
+                    is_validated_by_admin=True
+                )
                 return True
             except AssociationUser.DoesNotExist:
                 pass
@@ -201,20 +205,27 @@ class User(AbstractUser):
             return False
 
         if project_obj.association_user is not None and self.get_user_funds().count() == 0 and not self.is_staff:
-            member = AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
-            if (
-                not member.is_president
-                and not self.is_president_in_association(project_obj.association)
-                and member.id != project_obj.association_user.id
-            ):
+            try:
+                member = AssociationUser.objects.get(
+                    user_id=self.pk,
+                    association_id=project_obj.association,
+                    is_validated_by_admin=True
+                )
+                if (
+                    not member.is_president
+                    and not self.is_president_in_association(project_obj.association)
+                    and member.id != project_obj.association_user.id
+                ):
+                    return False
+                return True
+            except AssociationUser.DoesNotExist:
                 return False
-            return True
 
         return True
 
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""
-        return Association.objects.filter(associationuser__user=self)
+        return Association.objects.filter(associationuser__user=self, is_validated_by_admin=True)
 
     def get_user_managed_associations(self):
         """Return a list of Association IDs linked to a manager user."""

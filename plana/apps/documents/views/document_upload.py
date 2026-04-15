@@ -64,9 +64,10 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
         queryset = super().get_queryset()
         request = self.request
         if not request.user.has_perm("documents.view_documentupload_all"):
-            user_associations_ids = AssociationUser.objects.filter(user_id=request.user.pk).values_list(
-                "association_id"
-            )
+            user_associations_ids = AssociationUser.objects.filter(
+                user_id=request.user.pk,
+                is_validated_by_admin=True
+            ).values_list("association_id")
             user_documents_ids = DocumentUpload.objects.filter(
                 models.Q(user_id=request.user.pk) | models.Q(association_id__in=user_associations_ids)
             ).values_list("id")
