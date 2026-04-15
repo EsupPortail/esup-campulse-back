@@ -225,7 +225,7 @@ class User(AbstractUser):
 
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""
-        return Association.objects.filter(associationuser__user=self, is_validated_by_admin=True)
+        return Association.objects.filter(associationuser__user=self, associationuser__is_validated_by_admin=True)
 
     def get_user_managed_associations(self):
         """Return a list of Association IDs linked to a manager user."""
