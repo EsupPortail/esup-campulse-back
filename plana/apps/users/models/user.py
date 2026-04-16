@@ -14,6 +14,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.apps.users.managers import CustomUserManager
 from plana.apps.users.provider import CASProvider
 
 
@@ -140,6 +141,8 @@ class User(AbstractUser):
         through="GroupInstitutionFundUser",
         related_name="group_institution_fund_set",
     )
+
+    objects = CustomUserManager()
 
     def has_perm(self, perm, obj=None) -> bool:
         """Overriden has_perm to check for institutions."""

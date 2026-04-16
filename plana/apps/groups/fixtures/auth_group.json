@@ -778,11 +778,6 @@
         "view_user",
         "users",
         "user"
-      ],
-      [
-        "view_user_anyone",
-        "users",
-        "user"
       ]
     ]
   }
@@ -1039,11 +1034,6 @@
         "user"
       ],
       [
-        "view_user_anyone",
-        "users",
-        "user"
-      ],
-      [
         "view_user_misc",
         "users",
         "user"
@@ -1134,11 +1124,6 @@
       ],
       [
         "view_user",
-        "users",
-        "user"
-      ],
-      [
-        "view_user_anyone",
         "users",
         "user"
       ],

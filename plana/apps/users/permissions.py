@@ -20,7 +20,7 @@ class AddAssociationUserPermission(BasePermission):
         return False
 
 
-class UserUpdatePermission(BasePermission):
+class UserManagerUpdatePermission(BasePermission):
     """Used to define which users can be updated through the API for managers"""
     def has_object_permission(self, request, view, obj):
-        return not obj.is_superuser and not obj.is_staff
+        return not obj.is_superuser and not obj.is_staff and request.user.is_staff

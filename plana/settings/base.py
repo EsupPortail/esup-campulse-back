@@ -905,7 +905,6 @@ PERMISSIONS_GROUPS = {
         "change_user_all_fields",
         "delete_user",
         "view_user",
-        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
@@ -963,7 +962,6 @@ PERMISSIONS_GROUPS = {
         "delete_user_misc",
         "view_user",
         "view_user_misc",
-        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
@@ -993,7 +991,6 @@ PERMISSIONS_GROUPS = {
         # users
         "view_user",
         "view_user_misc",
-        "view_user_anyone",
         "view_associationuser",
         "view_groupinstitutionfunduser",
     ],
