@@ -114,7 +114,7 @@ class CommissionExport(generics.RetrieveAPIView):
             str(_("Categories")),
         ]
 
-        funds = Fund.objects.all().order_by("acronym")
+        funds = Fund.objects.filter(commissionfund__commission_id=commission_id).order_by("acronym")
         for fund in funds:
             acronym = fund.acronym
             fields.append(str(_("Amount asked ") + acronym))
