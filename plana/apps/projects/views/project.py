@@ -186,8 +186,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        write_serializer = self.get_serializer(data=request.data)
+        write_serializer.is_valid(raise_exception=True)
 
         if (
             "association" in request.data
@@ -255,7 +255,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
         request.data["creation_date"] = today
         request.data["edition_date"] = today
 
-        return super().create(request, *args, **kwargs)
+        # Returns Project with details about linked objects
+        project_instance = write_serializer.save()
+        read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
+        return response.Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
