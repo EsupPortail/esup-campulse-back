@@ -252,11 +252,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         today = datetime.date.today()
-        request.data["creation_date"] = today
-        request.data["edition_date"] = today
-
         # Returns Project with details about linked objects
-        project_instance = write_serializer.save()
+        project_instance = write_serializer.save(
+            creation_date=today,
+            edition_date=today
+        )
         read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
         return response.Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
@@ -330,8 +330,8 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         """Update project details."""
         project = self.get_object()
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        write_serializer = self.get_serializer(instance=project, data=request.data, partial=True)
+        write_serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -401,8 +401,12 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data["edition_date"] = datetime.date.today()
-        return self.partial_update(request, *args, **kwargs)
+        # Returns Project with details about linked objects
+        project_instance = write_serializer.save(
+            edition_date=datetime.date.today()
+        )
+        read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
+        return response.Response(read_serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         responses={
