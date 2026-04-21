@@ -1,5 +1,60 @@
 # Changelog
 
+## k8s-0.3.0 (21/04/2026)
+
+### Features et évolutions
+- Plus de détails sur les objets liés récupérés lors d'opérations sur des Project
+- Mise à jour de la gestion des droits vis à vis des liens AssociationUser
+- Mise à jour de la gestion des droits vis à vis des objets User
+
+### Corrections de bugs
+- Correction sur les fonds présents dans les documents d'exports de Commission
+
+## k8s-0.2.7 (10/04/2026)
+
+### Features et évolutions
+- Un membre d'une association peut en voir les autres membres qui la constitue
+
+## k8s-0.2.6 (09/04/2026)
+
+### Features et évolutions
+- L'inscription se fait désormais par une seule route qui combine tout en une (infos user, assos, groupes), pour utilisateur CAS ou local
+- Route dédiée pour les DocumentUpload nécessaires à l'inscription
+- Plus de détails sur les objets liés dans les routes de listes (associations, commissions, users...)
+- Refactorisation des routes AssociationUser pour permettre une meilleure gestion des droits et des pré-filtrages dynamiques des données
+- Le champ booléen Document "is multiple" est désormais un entier "max_uploads"
+- Evolutions de l'admin django (permissions, champs obligatoires, correctifs variés)
+ 
+### Configurations
+- Correction des noms de variables CAS dans les settings docker
+- Ajout de sonarqube dans la CI
+
+### Autres changements
+- Amélioration de la maintenabilité et de la lisibilité du code dans son ensemble
+- Amélioration des performances globales de l'application
+- Travail sur les permissions requises pour accéder aux routes d'API
+
+## k8s-0.2.5 (21/11/2025)
+
+### Correction de bugs
+- Correction du templatetag "s3static" utilisé pour la personnalisation des templates pdfs
+
+## k8s-0.2.4 (21/11/2025)
+
+### Correction de bugs
+- Correction de bug qui empêchait la bonne lecture des clés AGE lorsque lues depuis des fichiers
+
+## k8s-0.2.3 (20/11/2025)
+
+### Ajustements
+- Nouveaux champs blankable pour les Documents dans l'admin
+- Les clés AGE peuvent être utilisées depuis des variables d'environnement ou des fichiers comme avant
+
+## k8s-0.2.2 (03/09/2025)
+
+### Configurations
+- Les clés AGE sont désormais des variables d'environnement non générées dans le docker-prestart
+
 ## 1.3.2 - k8s-0.2.1 (02/09/2025)
 
 ### Corrections de bugs
