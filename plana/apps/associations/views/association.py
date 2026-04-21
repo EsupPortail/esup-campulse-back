@@ -443,7 +443,7 @@ class AssociationMembersView(generics.ListAPIView):
     """
     /associations/{association_id}/users/ route.
     Used to retrieve all validated members of given association id
-    Only if president of given association or association managed by auth user
+    Only if president of given association or association managed by auth user, or member of the association
     """
 
     permission_classes = [IsAuthenticated, DjangoModelPermissions, ViewAssociationMembersPermission]

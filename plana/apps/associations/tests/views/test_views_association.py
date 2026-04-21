@@ -1122,18 +1122,24 @@ class AssociationsViewsTests(TestCase):
 
     def test_get_association_members_forbidden(self):
         """
-        - A student not member of the association or simple member cannot execute this request.
+        - A student not member of the association cannot execute this request.
         - An association's president cannot execute this request if not its own.
         - A manager cannot execute this request if the association is not managed by him.
         """
         response_member = self.member_client.get(f"/associations/{self.president_asso_id}/users")
-        self.assertEqual(response_member.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_member.status_code, status.HTTP_200_OK)
 
-        response_president = self.president_client.get(f"/associations/1/users")
-        self.assertEqual(response_president.status_code, status.HTTP_403_FORBIDDEN)
+        response_president_forbidden = self.president_client.get(f"/associations/1/users")
+        self.assertEqual(response_president_forbidden.status_code, status.HTTP_403_FORBIDDEN)
 
-        response_manager = self.institution_client.get(f"/associations/1/users")
-        self.assertEqual(response_manager.status_code, status.HTTP_403_FORBIDDEN)
+        response_president = self.president_client.get(f"/associations/{self.president_asso_id}/users")
+        self.assertEqual(response_president.status_code, status.HTTP_200_OK)
+
+        response_manager_forbidden = self.institution_client.get(f"/associations/1/users")
+        self.assertEqual(response_manager_forbidden.status_code, status.HTTP_403_FORBIDDEN)
+
+        response_manager = self.institution_client.get(f"/associations/{self.manager_institution_asso_id}/users")
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
     def test_get_association_members_president(self):
         """
