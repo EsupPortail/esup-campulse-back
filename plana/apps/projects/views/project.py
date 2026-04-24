@@ -513,7 +513,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             association_email_template_code = ""
             user_email_template_code = ""
             if new_project_status in Project.ProjectStatus.get_email_project_processing_project_statuses():
-                document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
+                document_process_types = ["DOCUMENT_PROJECT"]
                 association_email_template_code = "MANAGER_PROJECT_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_USER_CREATION"
                 request.data["processing_date"] = datetime.datetime.today()
@@ -535,10 +535,6 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     )
                 )
             ).exclude(documentupload__project=project)
-            if project.association_id is not None:
-                missing_documents_names = missing_documents_names.exclude(documentupload__association=project.association).values_list("name")
-            elif project.user_id is not None:
-                missing_documents_names = missing_documents_names.exclude(documentupload__user=project.user).values_list("name")
             if missing_documents_names.exists():
                 missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
                 return response.Response(
