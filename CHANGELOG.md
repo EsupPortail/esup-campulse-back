@@ -1,5 +1,10 @@
 # Changelog
 
+## k8s-0.3.1 (27/04/2026)
+
+### Corrections de bugs
+- Correction des vérifications effectuées sur les documents nécessaires lors de la soumission de projet
+
 ## k8s-0.3.0 (21/04/2026)
 
 ### Features et évolutions
