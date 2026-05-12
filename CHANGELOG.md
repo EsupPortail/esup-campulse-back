@@ -1,5 +1,10 @@
 # Changelog
 
+## k8s-0.3.2 (12/05/2026)
+
+### Corrections de bugs
+- Correction des noms et ids de Commissions présents lors de leur exports de liste de projets
+
 ## k8s-0.3.1 (27/04/2026)
 
 ### Corrections de bugs
