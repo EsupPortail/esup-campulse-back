@@ -10,6 +10,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from openpyxl import Workbook
 from rest_framework import generics, response, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
@@ -30,6 +31,7 @@ class CommissionExport(generics.RetrieveAPIView):
     """/commissions/{id}/export route."""
 
     permission_classes = [IsAuthenticated]
+    # FIXME : Should be a Commission queryset, temporarily keeping it to not break anything else
     queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
@@ -60,7 +62,8 @@ class CommissionExport(generics.RetrieveAPIView):
         project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
-        commission = self.get_object()
+        # commission = self.get_object() # Use it again when Commission queryset for the View
+        commission = get_object_or_404(Commission.objects.all(), pk=kwargs["pk"])
         commission_id = kwargs["pk"]
 
         if not request.user.has_perm("projects.view_project_any_fund"):
