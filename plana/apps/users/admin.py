@@ -118,11 +118,11 @@ class GroupInstitutionFundUserInline(admin.StackedInline):
     form = GroupInstitutionFundUserForm
 
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
-        exclude = ('password',)
+        fields = "__all__"
+        exclude = ("password",)
 
 
 @admin.register(User)
@@ -158,13 +158,20 @@ class UserAdmin(admin.ModelAdmin):
         )
 
     def get_form(self, request, obj=None, **kwargs):
-        """Route correct form if user is created or changed."""
-        if not obj:
-            self.form = self.add_form
-        else:
-            self.form = self.change_form
+        """Use correct form if user is created or changed with restricted fields if not superuser."""
+        superuser_only_fields = ["is_superuser", "groups", "user_permissions", "is_staff"]
 
-        return super().get_form(request, obj, **kwargs)
+        if not obj:
+            kwargs["form"] = self.add_form
+        else:
+            kwargs["form"] = self.change_form
+        form_class = super().get_form(request, obj, **kwargs)
+
+        if not request.user.is_superuser:
+            for field in superuser_only_fields:
+                if field in form_class.base_fields:
+                    del form_class.base_fields[field]
+        return form_class
 
     @admin.display(description=_("Groups"))
     @admin.display(ordering="groups_institutions_funds")
