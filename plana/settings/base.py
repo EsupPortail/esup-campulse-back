@@ -411,13 +411,19 @@ SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
 
 def sentry_init(environment):
     """Init Sentry service."""
+    try:
+        with open(join(SITE_ROOT, "build.txt"), encoding="utf-8") as f:
+            release = f.read().strip()
+    except FileNotFoundError:
+        release = None
+
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
         ],
         environment=environment,
-        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
+        release=release,
         send_default_pii=True,
         traces_sample_rate=1.0,
     )
