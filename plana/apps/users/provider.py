@@ -24,7 +24,7 @@ class CASProvider(AllAuthCASProvider):
     def extract_common_fields(self, data) -> dict[str, str]:
         uid, extra = data
         fields = {
-            "username": uid,
+            "username": extra.get(settings.CAS_ATTRIBUTES_NAMES["uid"], uid),
             "email": extra.get(settings.CAS_ATTRIBUTES_NAMES["email"], ""),
             "first_name": extra.get(settings.CAS_ATTRIBUTES_NAMES["first_name"], ""),
             "last_name": extra.get(settings.CAS_ATTRIBUTES_NAMES["last_name"], ""),

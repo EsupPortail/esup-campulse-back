@@ -76,6 +76,7 @@ CAS_VERSION = "{{ cas_version }}"  # 3
 CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # ["https://plana-test.app.unistra.fr/cas-login", "https://plana-test.app.unistra.fr/cas-register"]
 
+CAS_ATTRIBUTES_NAMES["uid"] = "{{ cas_attribute_uid }}"
 CAS_ATTRIBUTES_NAMES["email"] = "{{ cas_attribute_email }}"  # mail
 CAS_ATTRIBUTES_NAMES["first_name"] = "{{ cas_attribute_first_name }}"  # first_name
 CAS_ATTRIBUTES_NAMES["last_name"] = "{{ cas_attribute_last_name }}"  # last_name

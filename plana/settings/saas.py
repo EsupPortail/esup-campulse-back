@@ -63,6 +63,7 @@ CAS_VERSION = "{{ cas_version }}"
 CAS_AUTHORIZED_SERVICES = "{{ cas_authorized_services }}".split()
 # ["https://campulse-demo.unistra.fr/cas-login", "https://campulse-demo.unistra.fr/cas-register"]
 
+CAS_ATTRIBUTES_NAMES["uid"] = "{{ cas_attribute_uid }}"
 CAS_ATTRIBUTES_NAMES["email"] = "{{ cas_attribute_email }}"
 CAS_ATTRIBUTES_NAMES["first_name"] = "{{ cas_attribute_first_name }}"
 CAS_ATTRIBUTES_NAMES["last_name"] = "{{ cas_attribute_last_name }}"
