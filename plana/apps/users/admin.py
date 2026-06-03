@@ -155,6 +155,7 @@ class UserAdmin(admin.ModelAdmin):
                 'associations',
                 'emailaddress_set'
             )
+            .distinct()
         )
 
     def get_form(self, request, obj=None, **kwargs):
