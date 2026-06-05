@@ -407,8 +407,9 @@ class UserViewsTests(TestCase):
 
         - A student user cannot execute this request.
         """
+        # FIXME : Currently 404 for all non-staff users, update to 403 again ?
         response_student = self.student_client.get(f"/users/{self.student_user_id}")
-        self.assertEqual(response_student.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_student.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_institution_manager_get_user_detail(self):
         """

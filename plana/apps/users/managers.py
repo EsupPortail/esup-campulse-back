@@ -1,3 +1,5 @@
+"""Managers for User models"""
+
 from django.contrib.auth.models import UserManager
 from django.db import models
 from django.db.models import Q
@@ -14,6 +16,9 @@ class UserQuerySet(models.QuerySet):
         # No restrictions
         if user.is_superuser or user.has_perm("users.view_user_anyone"):
             return self.all()
+
+        if not user.is_staff:
+            return self.none()
 
         filters = Q()
         managed_institution_acronyms = user.get_user_managed_institutions().values_list("acronym", flat=True)
@@ -36,7 +41,8 @@ class UserQuerySet(models.QuerySet):
             filters |= Q(groupinstitutionfunduser__group__name="STUDENT_MISC")
 
         # A staff User cannot access to another staff User data
-        restricted_scope = filters & Q(is_staff=False)
+        # Only Users with verified email address are considered active for classic managers users
+        restricted_scope = filters & Q(is_staff=False) & Q(emailaddress__verified=True)
 
         # Can always get yourself even with the restricted scope
         return self.filter(restricted_scope | Q(pk=user.pk)).distinct()
