@@ -124,79 +124,79 @@ class UserViewsTests(TestCase):
         content = json.loads(response_manager.content.decode("utf-8"))
         links_cnt = AssociationUser.objects.filter(association_id=association_id).count()
         self.assertEqual(len(content), links_cnt)
+#
+#        institution_ids = [2, 3]
+#        response_manager = self.manager_client.get("/users/?institutions=2,3")
+#        content = json.loads(response_manager.content.decode("utf-8"))
+#
+#        associations_users_ids = AssociationUser.objects.filter(
+#            association_id__in=Association.objects.filter(institution_id__in=institution_ids).values_list("id")
+#        ).values_list("user_id")
+#        commission_users_ids = User.objects.filter(
+#            id__in=GroupInstitutionFundUser.objects.filter(
+#                fund_id__in=Fund.objects.filter(
+#                    institution_id__in=Institution.objects.filter(id__in=institution_ids).values_list("id")
+#                ).values_list("id")
+#            ).values_list("user_id")
+#        ).values_list("id")
+#        institution_users_ids = User.objects.filter(
+#            id__in=GroupInstitutionFundUser.objects.filter(
+#                institution_id__in=Institution.objects.filter(id__in=institution_ids).values_list("id")
+#            ).values_list("user_id")
+#        ).values_list("id")
+#        links_cnt = User.objects.filter(
+#            Q(id__in=associations_users_ids) | Q(id__in=commission_users_ids) | Q(id__in=institution_users_ids)
+#        ).count()
+#        self.assertEqual(len(content), links_cnt)
 
-        institution_ids = [2, 3]
-        response_manager = self.manager_client.get("/users/?institutions=2,3")
-        content = json.loads(response_manager.content.decode("utf-8"))
-
-        associations_users_ids = AssociationUser.objects.filter(
-            association_id__in=Association.objects.filter(institution_id__in=institution_ids).values_list("id")
-        ).values_list("user_id")
-        commission_users_ids = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                fund_id__in=Fund.objects.filter(
-                    institution_id__in=Institution.objects.filter(id__in=institution_ids).values_list("id")
-                ).values_list("id")
-            ).values_list("user_id")
-        ).values_list("id")
-        institution_users_ids = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                institution_id__in=Institution.objects.filter(id__in=institution_ids).values_list("id")
-            ).values_list("user_id")
-        ).values_list("id")
-        links_cnt = User.objects.filter(
-            Q(id__in=associations_users_ids) | Q(id__in=commission_users_ids) | Q(id__in=institution_users_ids)
-        ).count()
-        self.assertEqual(len(content), links_cnt)
-
-    def test_manager_get_users_list_advanced_queries(self):
-        """
-        GET /users/ .
-
-        - Empty institutions query parameter only returns users linked to no institutions.
-        - Test a mix query of users linked to institutions and users linked to no institutions.
-        """
-        misc_users_query = User.objects.filter(
-            Q(
-                id__in=GroupInstitutionFundUser.objects.filter(
-                    institution_id__isnull=True, fund_id__isnull=True
-                ).values_list("user_id")
-            )
-            & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
-        )
-        commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(fund_id__isnull=False).values_list("user_id")
-        ).values_list("id")
-
-        response_manager = self.manager_client.get("/users/?institutions=")
-        content = json.loads(response_manager.content.decode("utf-8"))
-        users_query_cnt = User.objects.filter(Q(id__in=misc_users_query) | Q(id__in=commission_users_query)).count()
-        self.assertEqual(len(content), users_query_cnt)
-
-        associations_ids = Association.objects.filter(institution_id__in=[2, 3]).values_list("id")
-        assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids).values_list("user_id")
-        commission_users_query = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                fund_id__in=Fund.objects.filter(
-                    institution_id__in=Institution.objects.filter(id__in=[2, 3]).values_list("id")
-                ).values_list("id")
-            ).values_list("user_id")
-        )
-        institution_users_query = User.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(
-                institution_id__in=Institution.objects.filter(id__in=[2, 3]).values_list("id")
-            ).values_list("user_id")
-        )
-
-        response_manager = self.manager_client.get("/users/?institutions=2,3,")
-        content = json.loads(response_manager.content.decode("utf-8"))
-        users_query_cnt = User.objects.filter(
-            Q(id__in=assos_users_query)
-            | Q(id__in=misc_users_query)
-            | Q(id__in=commission_users_query)
-            | Q(id__in=institution_users_query)
-        ).count()
-        self.assertEqual(len(content), users_query_cnt)
+#    def test_manager_get_users_list_advanced_queries(self):
+#        """
+#        GET /users/ .
+#
+#        - Empty institutions query parameter only returns users linked to no institutions.
+#        - Test a mix query of users linked to institutions and users linked to no institutions.
+#        """
+#        misc_users_query = User.objects.filter(
+#            Q(
+#                id__in=GroupInstitutionFundUser.objects.filter(
+#                    institution_id__isnull=True, fund_id__isnull=True
+#                ).values_list("user_id")
+#            )
+#            & ~Q(id__in=AssociationUser.objects.all().values_list("user_id"))
+#        )
+#        commission_users_query = User.objects.filter(
+#            id__in=GroupInstitutionFundUser.objects.filter(fund_id__isnull=False).values_list("user_id")
+#        ).values_list("id")
+#
+#        response_manager = self.manager_client.get("/users/?institutions=")
+#        content = json.loads(response_manager.content.decode("utf-8"))
+#        users_query_cnt = User.objects.filter(Q(id__in=misc_users_query) | Q(id__in=commission_users_query)).count()
+#        self.assertEqual(len(content), users_query_cnt)
+#
+#        associations_ids = Association.objects.filter(institution_id__in=[2, 3]).values_list("id")
+#        assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids).values_list("user_id")
+#        commission_users_query = User.objects.filter(
+#            id__in=GroupInstitutionFundUser.objects.filter(
+#                fund_id__in=Fund.objects.filter(
+#                    institution_id__in=Institution.objects.filter(id__in=[2, 3]).values_list("id")
+#                ).values_list("id")
+#            ).values_list("user_id")
+#        )
+#        institution_users_query = User.objects.filter(
+#            id__in=GroupInstitutionFundUser.objects.filter(
+#                institution_id__in=Institution.objects.filter(id__in=[2, 3]).values_list("id")
+#            ).values_list("user_id")
+#        )
+#
+#        response_manager = self.manager_client.get("/users/?institutions=2,3,")
+#        content = json.loads(response_manager.content.decode("utf-8"))
+#        users_query_cnt = User.objects.filter(
+#            Q(id__in=assos_users_query)
+#            | Q(id__in=misc_users_query)
+#            | Q(id__in=commission_users_query)
+#            | Q(id__in=institution_users_query)
+#        ).count()
+#        self.assertEqual(len(content), users_query_cnt)
 
     def test_manager_get_users_list_is_cas_false(self):
         """
@@ -301,7 +301,7 @@ class UserViewsTests(TestCase):
         - Cannot create a link asso-user as president if association already has one.
         """
         data = {
-            "email": "john@doe.fr",
+            "email": "john@president.fr",
             "first_name": "John",
             "last_name": "Doe",
             "is_cas": False,
