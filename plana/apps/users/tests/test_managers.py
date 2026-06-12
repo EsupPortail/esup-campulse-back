@@ -1,5 +1,4 @@
 """List of tests done on user managers."""
-from pprint import pprint
 
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
