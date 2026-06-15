@@ -16,6 +16,22 @@ class CommissionSerializer(serializers.ModelSerializer):
         model = Commission
         fields = "__all__"
 
+    def validate_name(self, value):
+        normalized_value = value.strip().replace(" ", "")
+        name_exists = Commission.objects.filter(name__nospaces__unaccent=normalized_value).exists()
+        if name_exists:
+            raise serializers.ValidationError({"name": _("Commission name already taken.")})
+        return value
+
+    def validate(self, data):
+        submission_date = data.get("submission_date")
+        commission_date = data.get("commission_date")
+        if submission_date and submission_date < datetime.date.today():
+            raise serializers.ValidationError({"submission_date": _("Cannot create commission date taking place before today.")})
+        if submission_date and commission_date and submission_date > commission_date:
+            raise serializers.ValidationError({"inconsistent_dates": _("Can't set submission date after commission date.")})
+        return data
+
 
 class CommissionUpdateSerializer(serializers.ModelSerializer):
     """Update serializer."""
