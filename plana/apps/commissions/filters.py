@@ -15,6 +15,7 @@ class CommissionFilter(filters.FilterSet):
     with_active_projects = filters.BooleanFilter(method="filter_with_active_projects")
     only_with_active_projects = filters.BooleanFilter(method="filter_only_with_active_projects")
     managed_projects = filters.BooleanFilter(method="filter_managed_projects")
+    to_postpone_project = filters.NumberFilter(method="filter_to_postpone_project")
 
     class Meta:
         model = Commission
@@ -81,3 +82,12 @@ class CommissionFilter(filters.FilterSet):
             return queryset.filter(is_managed_condition).distinct()
         else:
             return queryset.exclude(is_managed_condition).distinct()
+
+    def filter_to_postpone_project(self, queryset, name, value):
+        """
+        Filtering commissions that can welcome the designated project id
+        If no project given, do nothing
+        """
+        if value:
+            return queryset.allowing_project_postpone(value)
+        return queryset
