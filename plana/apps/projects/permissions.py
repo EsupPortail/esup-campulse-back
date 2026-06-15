@@ -15,3 +15,12 @@ class ProjectCommentUpdateDestroyPermission(permissions.BasePermission):
             return False
 
         return True
+
+
+class ProjectUpdatePermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user.is_superuser or request.user.is_staff
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_superuser or request.user.can_edit_project(project_obj=obj)

@@ -4,16 +4,18 @@ import datetime
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db import models
+from django.db import models, transaction
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.response import Response
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, Fund
+from plana.apps.commissions.models import Commission, Fund, CommissionFund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document import Document
 from plana.apps.history.models.history import History
@@ -25,7 +27,7 @@ from plana.apps.projects.serializers.project import (
     ProjectSerializer,
     ProjectStatusSerializer,
     ProjectUpdateManagerSerializer,
-    ProjectUpdateSerializer,
+    ProjectUpdateSerializer, ProjectPostponeSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
@@ -33,6 +35,9 @@ from plana.utils import send_mail
 from ..filters import ProjectFilter
 
 from plana.decorators import capture_queries
+from ..models import ProjectComment
+from ..permissions import ProjectUpdatePermission
+from ...contents.models import Content
 
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -625,3 +630,77 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
 
         request.data["edition_date"] = datetime.date.today()
         return self.update(request, *args, **kwargs)
+
+
+class ProjectCommissionPostponeView(generics.GenericAPIView):
+    """Custom view to postpone a Project to another Commission while keeping its funds data"""
+    queryset = Project.visible_objects.all()
+    serializer_class = ProjectPostponeSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ProjectUpdatePermission]
+    lookup_url_kwarg = "project_id"
+
+    def patch(self, request, *args, **kwargs):
+        project = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        new_commission = serializer.validated_data["new_commission_id"]
+
+        # Updating ProjectCommissionFund links
+        with transaction.atomic():
+            # Mapping funds with CommissionFund ids of the new commission
+            new_commission_funds_map = {
+                cf.fund_id: cf.id
+                for cf in CommissionFund.objects.filter(commission=new_commission)
+            }
+
+            # For each existing PCF object, update CommissionFund id based on previous mapped funds and project funds
+            project_commission_funds = ProjectCommissionFund.objects.filter(project=project)
+            for pcf in project_commission_funds:
+                fund = pcf.commission_fund.fund
+                new_cf_id = new_commission_funds_map.get(fund.id)
+                if new_cf_id != pcf.commission_fund_id:
+                    pcf.commission_fund_id = new_cf_id
+                    pcf.save()
+                    pcf.refresh_from_db()
+
+                    owner_data = project.get_project_owner_data()
+                    current_site = get_current_site(request)
+                    context = {
+                        "site_domain": f"https://{current_site.domain}",
+                        "site_name": current_site.name,
+                    }
+                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_POSTPONED")
+                    attachment = None
+                    # Creating context for notifications attachments
+                    if fund.postpone_template_path != "":
+                        content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
+                        # Retrieving last comment of the project or None
+                        comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
+                        attachment = {
+                            "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
+                            "filename": f"{slugify(content.title)}.pdf",
+                            "context_attach": {
+                                "project_name": project.name,
+                                "date": datetime.date.today(),
+                                "date_commission": pcf.commission_fund.commission.commission_date,
+                                "owner": owner_data,
+                                "content": content,
+                                "comment": "" if not comment else comment.text,
+                            },
+                            "mimetype": "application/pdf",
+                            "request": request,
+                            "pcf_obj": pcf
+                        }
+                    send_mail(
+                        from_=settings.DEFAULT_FROM_EMAIL,
+                        to_=owner_data.get("email"),
+                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+                        message=template.parse_vars(request.user, request, context),
+                        temp_attachments=[attachment],
+                    )
+
+        return Response(
+            {"success": _("Project successfully postponed to the new commission.")},
+            status=status.HTTP_200_OK
+        )
