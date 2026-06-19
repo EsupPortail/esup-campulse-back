@@ -10,6 +10,14 @@ services:
   - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
     alias: postgres
 
+.python-image:
+  tags:
+    - cluster
+  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
+  before_script:
+    - apt-get update && apt-get install -y age
+    - curl -sSL https://install.python-poetry.org | python3 - --version 1.8.4
+
 variables:
   POSTGRES_DB: plana_test
   POSTGRES_USER: plana
@@ -54,6 +62,7 @@ unittest:
   stage: test
   tags:
     - cluster
+  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
