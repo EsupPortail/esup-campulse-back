@@ -404,9 +404,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
                         f"{datetime.date.today().year}-{charter.expiration_day}", "%Y-%m-%d"
                     )
             elif charter.days_before_expiration:
-                association.charter_date = datetime.datetime.strptime(
-                    f"{datetime.datetime.today() + datetime.timedelta(days=charter.days_before_expiration)}", "%Y-%m-%d"
-                )
+                association.charter_date = datetime.datetime.today() + datetime.timedelta(days=charter.days_before_expiration)
             association.save()
 
         mail_templates_codes_by_status = {
