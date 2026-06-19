@@ -53,7 +53,7 @@ sonarqube-check:
 unittest:
   stage: test
   tags:
-    - python3.9
+    - cluster
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
