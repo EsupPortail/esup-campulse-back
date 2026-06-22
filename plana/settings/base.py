@@ -545,6 +545,7 @@ CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
 # Keys are User model fields, values are CAS fields.
 CAS_ATTRIBUTES_NAMES = {
+    "uid": "",  # Should be automatically detected by CAS
     "email": "mail",
     "first_name": "first_name",
     "last_name": "last_name",
