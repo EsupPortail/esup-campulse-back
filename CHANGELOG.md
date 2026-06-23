@@ -1,5 +1,24 @@
 # Changelog
 
+## k8s-0.3.4 (22/06/2026)
+
+### Features et évolutions
+- Possibilité de personnaliser l'attribut CAS "uid" comme les autres attributs
+
+### Corrections de bugs
+- Lignes dupliquées dans l'admin django lors du tri par groupe sur la liste des utilisateurs
+- Correction d'un bug empêchant le dépôt de charte lorsqu'elle est configurée en expiration par nombre de jours
+
+### Configurations
+- CI gitlab corrigée
+- Configuration Sentry pour le PaaS
+
+## k8s-0.3.3 (19/05/2026)
+
+### Ajustements
+- Restrictions plus strictes à la création de Users dans l'admin django pour les non super-utilisateurs
+- Champ de contact blankable pour les Documents dans l'admin django
+
 ## k8s-0.3.2 (12/05/2026)
 
 ### Corrections de bugs
