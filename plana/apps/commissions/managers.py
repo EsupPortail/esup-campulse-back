@@ -26,9 +26,13 @@ class CommissionQuerySet(models.QuerySet):
         if not project_funds_list:
             return self.none()
 
-        return self.annotate(
-            commission_funds_array=ArrayAgg("commissionfund__fund_id")
-        ).filter(
-            commission_funds_array__contains=project_funds_list,
-            commission_date__gt=today
+        return (
+            self.annotate(commission_funds_array=ArrayAgg("commissionfund__fund_id"))
+            .filter(
+                commission_funds_array__contains=project_funds_list,
+                commission_date__gt=today
+            )
+            # Only one commission per project for now, should not appear as a choice to postpone into (already linked)
+            .exclude(commissionfund__projectcommissionfund__project_id=project_id)
+            .distinct()
         )
