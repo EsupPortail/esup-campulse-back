@@ -7,15 +7,14 @@ from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
-from django.db.models import Exists, OuterRef, Q
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import filters, generics, response, status
+from django.db.models import Exists, OuterRef
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics, response
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
 from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
+from plana.apps.users.filters import UserFilter
 from plana.apps.users.models.user import AssociationUser, User
 from plana.apps.users.permissions import UserManagerUpdatePermission
 from plana.apps.users.provider import CASProvider
@@ -25,14 +24,16 @@ from plana.apps.users.serializers.user import (
     UserUpdateSerializer, UserCreateSerializer,
 )
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import send_mail
 
 
 class UserListCreate(generics.ListCreateAPIView):
     """/users/ route."""
 
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_class = UserFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["get", "post"]
     queryset = User.objects.all().order_by("id")
     search_fields = [
         "username__nospaces__unaccent",
@@ -68,136 +69,6 @@ class UserListCreate(generics.ListCreateAPIView):
         if self.request.method == "POST":
             self.serializer_class = UserCreateSerializer
         return super().get_serializer_class()
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by first name and last name.",
-            ),
-            OpenApiParameter(
-                "email",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by email.",
-            ),
-            OpenApiParameter(
-                "is_validated_by_admin",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members not validated by an admin",
-            ),
-            OpenApiParameter(
-                "is_cas",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter for members logged through CAS",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "institutions",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Institutions IDs.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: UserSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List users sharing the same association, or all users (manager)."""
-        name = request.query_params.get("name")
-        email = request.query_params.get("email")
-        is_validated_by_admin = request.query_params.get("is_validated_by_admin")
-        is_cas = request.query_params.get("is_cas")
-        association_id = request.query_params.get("association_id")
-        institutions = request.query_params.get("institutions")
-
-        if name is not None and name != "":
-            name = str(name).strip()
-            self.queryset = self.queryset.filter(
-                Q(first_name__nospaces__unaccent__icontains=name.replace(" ", ""))
-                | Q(last_name__nospaces__unaccent__icontains=name.replace(" ", ""))
-            )
-
-        if email is not None and email != "":
-            email = str(email).strip()
-            self.queryset = self.queryset.filter(email__nospaces__unaccent__icontains=email.replace(" ", ""))
-
-        if is_validated_by_admin is not None and is_validated_by_admin != "":
-            is_validated_by_admin = to_bool(is_validated_by_admin)
-            self.queryset = self.queryset.filter(
-                is_validated_by_admin=is_validated_by_admin,
-            )
-
-        if is_cas is not None and is_cas != "":
-            is_cas = to_bool(is_cas)
-            cas_ids_list = SocialAccount.objects.filter(provider='cas').values_list("user_id")
-            self.queryset = (
-                self.queryset.filter(id__in=cas_ids_list) if is_cas else self.queryset.exclude(id__in=cas_ids_list)
-            )
-
-        if association_id is not None and association_id != "":
-            assos_users_query = AssociationUser.objects.filter(association_id=association_id).values_list(
-                "user_id"
-            )
-            self.queryset = self.queryset.filter(id__in=assos_users_query)
-
-        if institutions is not None:
-            misc_users_query = User.objects.filter(
-                groupinstitutionfunduser__institution__isnull=True,
-                groupinstitutionfunduser__fund__isnull=True,
-                associations__isnull=True,
-            )
-            commission_users_query = User.objects.filter(groupinstitutionfunduser__fund__isnull=False)
-            if institutions == "":
-                self.queryset = self.queryset.filter(
-                    Q(id__in=misc_users_query.values_list("id"))
-                    | Q(id__in=commission_users_query.values_list("id"))
-                )
-            else:
-                institutions_ids = institutions.split(",")
-                check_other_users = False
-                if "" in institutions_ids:
-                    check_other_users = True
-                institutions_ids = [
-                    institution_id
-                    for institution_id in institutions_ids
-                    if institution_id != "" and institution_id.isdigit()
-                ]
-
-                associations_ids = Association.objects.filter(institution_id__in=institutions_ids).values_list(
-                    "id"
-                )
-                assos_users_query = AssociationUser.objects.filter(association_id__in=associations_ids)
-                commission_users_query = User.objects.filter(groupinstitutionfunduser__fund__institution_id__in=institutions_ids)
-                institution_users_query = User.objects.filter(groupinstitutionfunduser__institution_id__in=institutions_ids)
-
-                if check_other_users:
-                    self.queryset = self.queryset.filter(
-                        Q(id__in=assos_users_query.values_list("user_id"))
-                        | Q(id__in=misc_users_query.values_list("id"))
-                        | Q(id__in=commission_users_query.values_list("id"))
-                        | Q(id__in=institution_users_query.values_list("id"))
-                    )
-                else:
-                    self.queryset = self.queryset.filter(
-                        Q(id__in=assos_users_query.values_list("user_id"))
-                        | Q(id__in=commission_users_query.values_list("id"))
-                        | Q(id__in=institution_users_query.values_list("id"))
-                    )
-
-        return self.list(request, *args, **kwargs)
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):

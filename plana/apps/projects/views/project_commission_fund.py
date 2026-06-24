@@ -238,7 +238,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update details of a project linked to a commission fund object."""
-        new_commission_fund = None
         try:
             project = Project.visible_objects.get(id=kwargs["project_id"])
             project_commission_fund = ProjectCommissionFund.objects.get(
@@ -248,8 +247,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             commission_fund = CommissionFund.objects.get(id=kwargs["commission_fund_id"])
             commission = Commission.objects.get(id=commission_fund.commission_id)
             fund = Fund.objects.get(id=commission_fund.fund_id)
-            if "new_commission_fund_id" in request.data:
-                new_commission_fund = CommissionFund.objects.get(id=request.data["new_commission_fund_id"])
         except ObjectDoesNotExist:
             return response.Response(
                 {"error": _("Link between this project and commission does not exist.")},
@@ -282,7 +279,6 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         validator_fields = [
             "amount_earned",
             "is_validated_by_admin",
-            "new_commission_fund_id",
             "project_id",
         ]
         if not request.user.has_perm("projects.change_projectcommissionfund_as_validator"):
@@ -306,73 +302,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             "site_domain": f"https://{current_site.domain}",
             "site_name": current_site.name,
         }
-        email = ""
-        owner = None
-        if project.association_id is not None:
-            owner = Association.objects.get(id=project.association_id)
-            if project.association_user_id is not None:
-                email = User.objects.get(id=AssociationUser.objects.get(id=project.association_user_id).user_id).email
-            else:
-                email = owner.email
-            owner = {
-                "name": owner.name,
-                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-            }
-        elif project.user_id is not None:
-            email = User.objects.get(id=project.user_id).email
-            owner = User.objects.get(id=project.user_id)
-            owner = {
-                "name": f"{owner.first_name} {owner.last_name}",
-                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-            }
-
-        if new_commission_fund is not None:
-            if commission_fund.fund_id != new_commission_fund.fund_id:
-                return response.Response(
-                    {"error": _("New Commission Fund is not linked to the same fund that the old one.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            if new_commission_fund.commission.commission_date < datetime.date.today():
-                return response.Response(
-                    {"error": _("Cannot link the project to a past commission.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            setattr(
-                project_commission_fund,
-                "commission_fund_id",
-                request.data["new_commission_fund_id"],
-            )
-            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_POSTPONED")
-            attachment = None
-            # Creating context for notifications attachments
-            if fund.postpone_template_path != "":
-                content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
-                # Retrieving last comment of the project or None
-                comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
-                attachment = {
-                    "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
-                    "filename": f"{slugify(content.title)}.pdf",
-                    "context_attach": {
-                        "project_name": project.name,
-                        "date": datetime.date.today(),
-                        "date_commission": commission.commission_date,
-                        "owner": owner,
-                        "content": content,
-                        "comment": "" if not comment else comment.text,
-                    },
-                    "mimetype": "application/pdf",
-                    "request": request,
-                    "pcf_obj": project_commission_fund
-                }
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-                temp_attachments=[attachment],
-            )
+        owner_data = project.get_project_owner_data()
 
         if "amount_earned" in request.data:
             # locale.setlocale(locale.LC_ALL, "")
@@ -394,7 +324,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                 "project_manual_identifier": project.manual_identifier,
                                 "date": datetime.date.today().strftime(DATE_FORMAT),
                                 "date_commission": commission.commission_date.strftime(DATE_FORMAT),
-                                "owner": owner,
+                                "owner": owner_data,
                                 "content": content,
                                 "comment": "" if not comment else comment.text,
                             },
@@ -423,7 +353,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                                     "date": datetime.date.today().strftime(DATE_FORMAT),
                                     "year": datetime.date.today().strftime('%Y'),
                                     "date_commission": commission.commission_date.strftime(DATE_FORMAT),
-                                    "owner": owner,
+                                    "owner": owner_data,
                                     "content": content,
                                 },
                                 "mimetype": "application/pdf",
@@ -435,7 +365,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             context["project_name"] = project.name
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
+                to_=owner_data.get("email"),
                 cc_=managers_emails,
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
@@ -481,7 +411,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 context["commission_name"] = commission.name
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=email,
+                    to_=owner_data.get("email"),
                     subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(request.user, request, context),
                 )
@@ -492,7 +422,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 context["manager_email_address"] = ','.join(project.get_project_default_manager_emails())
                 send_mail(
                     from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=email,
+                    to_=owner_data.get("email"),
                     subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                     message=template.parse_vars(request.user, request, context),
                 )

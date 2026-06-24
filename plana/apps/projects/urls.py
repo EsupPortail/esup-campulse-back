@@ -6,7 +6,7 @@ from .views.category import CategoryList
 from .views.project import (
     ProjectListCreate,
     ProjectRetrieveUpdateDestroy,
-    ProjectStatusUpdate,
+    ProjectStatusUpdate, ProjectCommissionPostponeView,
 )
 from .views.project_category import (
     ProjectCategoryDestroy,
@@ -86,5 +86,10 @@ urlpatterns = [
         "<int:project_id>/commission_funds/<int:commission_fund_id>",
         ProjectCommissionFundUpdateDestroy.as_view(),
         name="project_commission_fund_update_destroy",
+    ),
+    path(
+        "<int:project_id>/postpone",
+        ProjectCommissionPostponeView.as_view(),
+        name="project_commission_postpone_view",
     ),
 ]

@@ -2,11 +2,13 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
+from plana.apps.commissions.models import Commission
 from plana.apps.commissions.serializers.commission import CommissionSerializer
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
@@ -152,3 +154,17 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["project_status", "processing_date"]
+
+
+class ProjectPostponeSerializer(serializers.Serializer):
+    """Serializer for project commission postpone"""
+    new_commission_id = serializers.PrimaryKeyRelatedField(queryset=Commission.objects.all(), allow_null=False, required=True)
+
+    def validate(self, data):
+        project_id = self.context["view"].kwargs.get("project_id")
+        eligible_commissions_ids = Commission.objects.allowing_project_postpone(project_id=project_id).values_list("id", flat=True)
+        if data["new_commission_id"].pk not in eligible_commissions_ids:
+            raise serializers.ValidationError({
+                "commission_not_eligible": _("The selected commission is not eligible for this project postpone.")}
+            )
+        return data
