@@ -5,7 +5,6 @@ import datetime
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import models, transaction
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
 from drf_spectacular.utils import extend_schema
@@ -679,7 +678,7 @@ class ProjectCommissionPostponeView(generics.GenericAPIView):
                         comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
                         attachment = {
                             "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
-                            "filename": f"{slugify(content.title)}.pdf",
+                            "filename": f"{content.title}.pdf",
                             "context_attach": {
                                 "project_name": project.name,
                                 "date": datetime.date.today(),

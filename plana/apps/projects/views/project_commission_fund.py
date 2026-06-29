@@ -8,7 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Sum
 from django.utils.decorators import method_decorator
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -318,7 +317,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     attachments.append(
                         {
                             "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.rejection_template_path}",
-                            "filename": f"{slugify(content.title)}.pdf",
+                            "filename": f"{content.title}.pdf",
                             "context_attach": {
                                 "project_name": project.name,
                                 "project_manual_identifier": project.manual_identifier,
@@ -345,7 +344,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                         attachments.append(
                             {
                                 "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{template_path}",
-                                "filename": f"{slugify(content.title)}.pdf",
+                                "filename": f"{content.title}.pdf",
                                 "context_attach": {
                                     "amount_earned": request.data["amount_earned"],
                                     "project_name": project.name,

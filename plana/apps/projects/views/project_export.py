@@ -98,8 +98,9 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT"),
             ).values("name", "document__name")
         )
+        filename = f"Récapitulatif-Demande-Subvention-{data['name']}"
 
-        return generate_pdf_response(data["name"], data, "project_summary", request.build_absolute_uri("/"))
+        return generate_pdf_response(filename, data, "project_summary", request.build_absolute_uri("/"))
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -173,9 +174,10 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT_REVIEW"),
             ).values("name", "document__name")
         )
+        filename = f"Récapitulatif-Demande-Subvention-{data['name']}"
 
         return generate_pdf_response(
-            data["name"],
+            filename,
             data,
             "project_review_summary",
             request.build_absolute_uri('/'),

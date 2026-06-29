@@ -3,6 +3,7 @@
 import ast
 import datetime
 import logging
+import re
 import unicodedata
 
 import boto3
@@ -13,11 +14,16 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.template import Context, Template
 from django.template.loader import get_template, render_to_string
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
 
 PHONE_REGEX_PATTERN = r"^\+?\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4,6}$"
+
+
+def clean_filename(filename: str) -> str:
+    """Used to clean filenames of generated PDFs, replacing every character other than letter or number with dashes"""
+    cleaned_filename = re.sub(r'[^a-zA-Z0-9À-ÿ]+', '-', filename)
+    return cleaned_filename.strip('-')
 
 
 def check_valid_password(password):
@@ -78,7 +84,7 @@ def send_mail(
                         temp_attachment["template_name"],
                 )
                 if "pcf_obj" in temp_attachment:
-                    filename = f"notification_{temp_attachment['context_attach']['project_name']}.pdf"
+                    filename = f"notification_{clean_filename(temp_attachment['context_attach']['project_name'])}.pdf"
                     temp_attachment["pcf_obj"].last_notification_file.save(
                         filename,
                         SimpleUploadedFile(filename, binary, content_type="application/pdf"),
@@ -140,8 +146,10 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
     else:
         # May not work anymore since S3 PDF refactoring.
         html = render_to_string(settings.TEMPLATES_PDF_FILEPATHS[type_doc], dict_data)
+    filename = clean_filename(filename)
     pdf_response = HttpResponse(content_type="application/pdf")
-    pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
+    pdf_response["Access-Control-Expose-Headers"] = "Content-Disposition"
+    pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{filename}.pdf"'.encode("utf-8")
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
     return pdf_response
 

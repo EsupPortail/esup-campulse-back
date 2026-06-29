@@ -118,9 +118,10 @@ class AssociationRetrieveExport(generics.RetrieveAPIView):
                 ),
             ).values("name", "document__name")
         )
+        filename = f"Récapitulatif-Signature-Charte-{data['name']}"
 
         return generate_pdf_response(
-            data["name"],
+            filename,
             data,
             "association_charter_summary",
             request.build_absolute_uri("/"),

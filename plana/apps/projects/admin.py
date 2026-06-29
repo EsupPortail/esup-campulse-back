@@ -4,7 +4,6 @@ import datetime
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.users.models.user import AssociationUser, User
@@ -135,7 +134,7 @@ class GeneratePDFAction:
             attachments.append(
                 {
                     "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{getattr(fund, f'{self.template_name.lower()}_template_path')}",
-                    "filename": f"{slugify(content.title)}.pdf",
+                    "filename": f"{content.title}.pdf",
                     "context_attach": {
                         "amount_earned": obj.amount_earned,
                         "project_name": project.name,
