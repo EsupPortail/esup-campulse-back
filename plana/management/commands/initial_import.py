@@ -44,7 +44,6 @@ class Command(BaseCommand):
                         "contents_content",
                         "contents_logo",
                         "contents_setting",
-                        "django_site",
                         "documents_document",
                         "auth_group",
                         "institutions_institution",

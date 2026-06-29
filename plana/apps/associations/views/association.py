@@ -178,7 +178,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
         }
 

@@ -509,7 +509,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         template = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
         }
 
@@ -667,7 +667,7 @@ class ProjectCommissionPostponeView(generics.GenericAPIView):
                     owner_data = project.get_project_owner_data()
                     current_site = get_current_site(request)
                     context = {
-                        "site_domain": f"https://{current_site.domain}",
+                        "site_domain": current_site.domain,
                         "site_name": current_site.name,
                     }
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_POSTPONED")

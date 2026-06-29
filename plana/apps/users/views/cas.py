@@ -100,7 +100,7 @@ class CASDataRegisterView(generics.UpdateAPIView):
 
         # Send manager notification email when data submitted
         current_site = get_current_site(self.request)
-        context = {"site_domain": f"https://{current_site.domain}", "site_name": current_site.name, "account_url": (
+        context = {"site_domain": current_site.domain, "site_name": current_site.name, "account_url": (
             f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH}{self.request.user.pk}"
         )}
         History.objects.create(action_title="USER_REGISTERED", action_user_id=self.request.user.pk)

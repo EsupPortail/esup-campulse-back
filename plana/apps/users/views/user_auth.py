@@ -62,7 +62,7 @@ class UserAuthView(DJRestAuthUserDetailsView):
 
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
         }
         if "is_validated_by_admin" in request.data and not request.user.is_cas_user:

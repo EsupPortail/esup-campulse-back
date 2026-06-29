@@ -433,7 +433,7 @@ class UserCreateSerializer(CustomRegisterSerializer):
         request = self.context.get("request")
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
             "username": user.username,
             "first_name": user.first_name,

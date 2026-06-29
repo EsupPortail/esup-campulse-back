@@ -73,7 +73,7 @@ class AssociationUserCreateSerializer(serializers.ModelSerializer):
         if validated_data.get("user").is_validated_by_admin and not auth_user.is_staff_for_association(validated_data.get("association").id):
             current_site = get_current_site(self.context["request"])
             context = {
-                "site_domain": f"https://{current_site.domain}",
+                "site_domain": current_site.domain,
                 "site_name": current_site.name,
                 "user_association_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH}",
             }
