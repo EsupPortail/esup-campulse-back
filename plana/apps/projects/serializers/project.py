@@ -65,7 +65,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
-    name = serializers.CharField(required=False, allow_blank=True, max_length=250)
     categories = CategorySerializer(many=True, read_only=True)
     commissions = CommissionSerializer(many=True, read_only=True)
 

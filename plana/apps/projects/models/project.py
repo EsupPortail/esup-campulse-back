@@ -130,7 +130,7 @@ class Project(models.Model):
                 "PROJECT_CANCELED",
             ]
 
-    name = models.CharField(_("Name"), max_length=250, blank=False)
+    name = models.CharField(_("Name"), max_length=100, blank=False)
     manual_identifier = models.CharField(_("Manual identifier"), max_length=8, unique=True, null=True)
     planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
     planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
