@@ -149,7 +149,7 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
     filename = clean_filename(filename)
     pdf_response = HttpResponse(content_type="application/pdf")
     pdf_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-    pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{filename}.pdf"'.encode("utf-8")
+    pdf_response["Content-Disposition"] = f'attachment; filename={filename}.pdf; filename*=UTF-8'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
     return pdf_response
 

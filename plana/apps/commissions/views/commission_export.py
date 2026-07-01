@@ -141,7 +141,7 @@ class CommissionExport(generics.RetrieveAPIView):
         if mode is None or mode == "csv":
             http_response = HttpResponse(content_type="application/csv")
             http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
+            http_response["Content-Disposition"] = f'attachment; filename={filename}.csv; filename*=UTF-8'
             writer = csv.writer(http_response, delimiter=";")
             writer.writerow(fields)
         elif mode == "xlsx":
@@ -222,7 +222,7 @@ class CommissionExport(generics.RetrieveAPIView):
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
             http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
+            http_response["Content-Disposition"] = f'attachment; filename={filename}.xlsx; filename*=UTF-8'
             return http_response
         if mode == "pdf":
             return generate_pdf_response(

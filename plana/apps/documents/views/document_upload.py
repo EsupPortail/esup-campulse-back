@@ -442,7 +442,8 @@ class DocumentUploadFileList(generics.ListAPIView):
 
         res = HttpResponse(buffer.getvalue())
         res['Content-Type'] = "application/x-zip-compressed"
-        res['Content-Disposition'] = "attachment; filename=documents.zip"
+        res["Access-Control-Expose-Headers"] = "Content-Disposition"
+        res["Content-Disposition"] = f'attachment; filename=documents.zip; filename*=UTF-8'
 
         return res
 
