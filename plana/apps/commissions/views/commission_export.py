@@ -139,7 +139,7 @@ class CommissionExport(generics.RetrieveAPIView):
         worksheet = None
         filename = f"Export-Projets-{commission.name}"
         if mode is None or mode == "csv":
-            http_response = HttpResponse(content_type="application/csv")
+            http_response = HttpResponse(content_type="text/csv")
             http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
             http_response["Content-Disposition"] = f'attachment; filename={filename}.csv; filename*=UTF-8'
             writer = csv.writer(http_response, delimiter=";")
