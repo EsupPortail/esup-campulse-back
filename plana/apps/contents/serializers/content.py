@@ -29,6 +29,7 @@ class ContentUpdateSerializer(serializers.ModelSerializer):
             "body",
             "footer",
             "aside",
+            "id",
         ]
 
     def validate(self, data):
