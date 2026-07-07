@@ -1,6 +1,7 @@
 """Views directly linked to commission exports."""
 
 import csv
+import urllib.parse
 from tempfile import NamedTemporaryFile
 
 from django.db import models
@@ -24,7 +25,7 @@ from plana.apps.projects.models import (
 )
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
-from plana.utils import generate_pdf_response
+from plana.utils import generate_pdf_response, clean_filename
 
 
 class CommissionExport(generics.RetrieveAPIView):
@@ -137,11 +138,12 @@ class CommissionExport(generics.RetrieveAPIView):
         writer = None
         workbook = None
         worksheet = None
-        filename = f"Export-Projets-{commission.name}"
+        filename = clean_filename(f"Export-Projets-{commission.name}")
         if mode is None or mode == "csv":
+            encoded_filename = urllib.parse.quote(f"{filename}.csv")
             http_response = HttpResponse(content_type="text/csv")
+            http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
             http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-            http_response["Content-Disposition"] = f'attachment; filename={filename}.csv; filename*=UTF-8'
             writer = csv.writer(http_response, delimiter=";")
             writer.writerow(fields)
         elif mode == "xlsx":
@@ -217,12 +219,13 @@ class CommissionExport(generics.RetrieveAPIView):
                 workbook.save(tmp.name)
                 tmp.seek(0)
                 stream = tmp.read()
+            encoded_filename = urllib.parse.quote(f"{filename}.xlsx")
             http_response = HttpResponse(
                 content=stream,
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
+            http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
             http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-            http_response["Content-Disposition"] = f'attachment; filename={filename}.xlsx; filename*=UTF-8'
             return http_response
         if mode == "pdf":
             return generate_pdf_response(

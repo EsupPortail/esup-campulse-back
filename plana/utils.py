@@ -5,6 +5,7 @@ import datetime
 import logging
 import re
 import unicodedata
+import urllib.parse
 
 import boto3
 import weasyprint
@@ -147,9 +148,10 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
         # May not work anymore since S3 PDF refactoring.
         html = render_to_string(settings.TEMPLATES_PDF_FILEPATHS[type_doc], dict_data)
     filename = clean_filename(filename)
+    encoded_filename = urllib.parse.quote(f"{filename}.pdf")
     pdf_response = HttpResponse(content_type="application/pdf")
+    pdf_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
     pdf_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-    pdf_response["Content-Disposition"] = f'attachment; filename={filename}.pdf; filename*=UTF-8'
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
     return pdf_response
 

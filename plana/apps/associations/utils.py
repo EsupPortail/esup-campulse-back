@@ -1,4 +1,5 @@
 import csv
+import urllib.parse
 
 from tempfile import NamedTemporaryFile
 
@@ -29,8 +30,9 @@ def generate_associations_export(queryset, mode: str) -> HttpResponse:
 
     if mode is None or mode == "csv":
         http_response = HttpResponse(content_type="text/csv")
+        encoded_filename = urllib.parse.quote(f"{filename}.csv")
+        http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
         http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-        http_response["Content-Disposition"] = f'attachment; filename={filename}.csv; filename*=UTF-8'
         writer = csv.writer(http_response, delimiter=";")
         writer.writerow(fields)
     elif mode == "xlsx":
@@ -72,10 +74,11 @@ def generate_associations_export(queryset, mode: str) -> HttpResponse:
             workbook.save(tmp.name)
             tmp.seek(0)
             stream = tmp.read()
+        encoded_filename = urllib.parse.quote(f"{filename}.xlsx")
         http_response = HttpResponse(
             content=stream,
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
+        http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
         http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
-        http_response["Content-Disposition"] = f'attachment; filename={filename}.xlsx; filename*=UTF-8'
         return http_response

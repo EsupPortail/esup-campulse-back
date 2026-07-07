@@ -208,9 +208,6 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "range",
 )
-CORS_EXPOSE_HEADERS = [
-    "Content-Disposition",
-]
 
 
 ############################
