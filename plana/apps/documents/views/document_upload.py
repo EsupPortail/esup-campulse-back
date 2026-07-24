@@ -430,7 +430,8 @@ class DocumentUploadFileList(generics.ListAPIView):
             ):
                 filtered_uploads_ids.append(document_upload.id)
         queryset = queryset.exclude(id__in=filtered_uploads_ids)
-        project_name = Project.objects.filter(id=queryset.first().project_id).first() or ""
+        if du := queryset.first():
+            project_name = Project.objects.filter(id=du.project_id).first() or ""
 
         buffer = io.BytesIO()
         archive = zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED)
