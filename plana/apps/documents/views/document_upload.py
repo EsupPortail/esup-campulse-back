@@ -2,6 +2,7 @@
 
 import io
 import os
+import urllib
 import zipfile
 
 from django.conf import settings
@@ -29,7 +30,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail
+from plana.utils import send_mail, clean_filename
 from ..filters import DocumentUploadFileFilter, DocumentUploadFilter
 
 
@@ -410,6 +411,7 @@ class DocumentUploadFileList(generics.ListAPIView):
     serializer_class = DocumentUploadFileSerializer
     filterset_class = DocumentUploadFileFilter
 
+    # FIXME : project should be directly provided in url if mandatory and no other usage (not required filter)
     def get(self, request, *args, **kwargs):
         """Retrieve all uploaded documents."""
         filtered_uploads_ids = []
@@ -428,6 +430,7 @@ class DocumentUploadFileList(generics.ListAPIView):
             ):
                 filtered_uploads_ids.append(document_upload.id)
         queryset = queryset.exclude(id__in=filtered_uploads_ids)
+        project_name = Project.objects.filter(id=queryset.first().project_id).first() or ""
 
         buffer = io.BytesIO()
         archive = zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED)
@@ -440,10 +443,12 @@ class DocumentUploadFileList(generics.ListAPIView):
         archive.close()
         buffer.seek(0)
 
+        filename = clean_filename(f"documents_{project_name}")
+        encoded_filename = urllib.parse.quote(f"{filename}.zip")
         res = HttpResponse(buffer.getvalue())
         res['Content-Type'] = "application/x-zip-compressed"
         res["Access-Control-Expose-Headers"] = "Content-Disposition"
-        res["Content-Disposition"] = f'attachment; filename=documents.zip; filename*=UTF-8'
+        res["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
 
         return res
 
