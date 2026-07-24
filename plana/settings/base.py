@@ -789,7 +789,9 @@ PERMISSIONS_GROUPS = {
         "delete_institutioncomponent",
         "view_institutioncomponent",
         # contents
+        "add_content",
         "change_content",
+        "view_content",
         "add_logo",
         "change_logo",
         "delete_logo",

@@ -131,7 +131,17 @@
         "fund"
       ],
       [
+        "add_content",
+        "contents",
+        "content"
+      ],
+      [
         "change_content",
+        "contents",
+        "content"
+      ],
+      [
+        "delete_content",
         "contents",
         "content"
       ],
