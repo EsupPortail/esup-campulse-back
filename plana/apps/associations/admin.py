@@ -3,10 +3,11 @@
 from django.contrib import admin
 
 from .models import ActivityField, Association
+from ...admin import JSONImportAdminMixin
 
 
 @admin.register(ActivityField)
-class ActivityFieldAdmin(admin.ModelAdmin):
+class ActivityFieldAdmin(JSONImportAdminMixin):
     """List view for activity fields."""
 
     list_display = ["name"]
@@ -14,7 +15,7 @@ class ActivityFieldAdmin(admin.ModelAdmin):
 
 
 @admin.register(Association)
-class AssociationAdmin(admin.ModelAdmin):
+class AssociationAdmin(JSONImportAdminMixin):
     """List view for associations."""
 
     list_display = [

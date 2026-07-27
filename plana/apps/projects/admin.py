@@ -6,9 +6,7 @@ from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.users.models.user import AssociationUser, User
-
-from ...admin import SecuredModelAdmin
+from ...admin import SecuredModelAdmin, JSONImportAdminMixin
 from ...libs.mail_template.models import MailTemplate
 from ...utils import send_mail
 from ..contents.models import Content
@@ -22,7 +20,7 @@ from .models import (
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(JSONImportAdminMixin):
     """List view for categories."""
 
     list_display = ["name"]
