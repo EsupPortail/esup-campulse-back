@@ -1,5 +1,41 @@
 # Changelog
 
+## k8s-0.4.3 (27/07/2026)
+
+### Features et évolutions
+- Possibilité pour les superusers d'importer des données via des fichiers JSON pour les objets Association, ActivityField et Category (project) depuis l'interface Django Admin
+
+### Corrections de bugs
+- Correction de la génération des fichiers .zip de Projets dans une Commission lorsqu'il n'y a pas de fichier déposé pour les projets sélectionnés
+- Les gestionnaires généraux peuvent à nouveau créer des contenus dans l'interface Django Admin
+
+## k8s-0.4.2 (07/07/2026)
+
+### Corrections de bugs
+- Correction de l'encodage des noms de fichiers générés et retournés par l'API
+
+## k8s-0.4.1 (03/07/2026)
+
+### Features et évolutions
+- Réduction de la longueur du champ Project "name" à 100 caractères maximum
+- Les noms des fichiers générés par l'API sont désormais formattés et renvoyés de manière à être utilisés par un front
+
+### Corrections de bugs
+- Ajout du champ "id" dans le serializer de retour lors de la mise à jour des objets Content
+
+### Autres changements
+- Harmonisation du code pour l'envoi de mails (usage de la variable "current_site")
+
+## k8s-0.4.0 (24/06/2026)
+
+### Features et évolutions
+- Nouveau filtre disponible sur les Commissions "to_postpone_project"
+- Nouvelle route pour reporter un Projet dans une autre Commission
+
+### Autres changements
+- Optimisation du code pour des routes concernant les Commissions
+- Optimisation du code pour des routes concernant les Users
+
 ## k8s-0.3.4 (22/06/2026)
 
 ### Features et évolutions
