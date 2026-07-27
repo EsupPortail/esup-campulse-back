@@ -25,18 +25,6 @@ class Command(BaseCommand):
         try:
             if Group.objects.all().exists():
                 self.stdout.write(self.style.WARNING(_("Initial data already present.")))
-            # Loading dev data from tests fixtures too
-            if options["test"]:
-                apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
-                # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
-                for app_fixture in apps_fixtures:
-                    if app_fixture.name.endswith("tests/documents_documentupload.json"):
-                        apps_fixtures.remove(app_fixture)
-                call_command("loaddata", *apps_fixtures)
-                test_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/tests/*.json"))
-                call_command("loaddata", *test_fixtures)
-                libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
-                call_command("loaddata", *libs_fixtures)
             else:
                 call_command(
                     "loaddata",
@@ -55,6 +43,19 @@ class Command(BaseCommand):
                         "mailtemplatevars",
                     ],
                 )
+
+            # Loading dev data from tests fixtures if needed
+            if options["test"]:
+                apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
+                # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
+                for app_fixture in apps_fixtures:
+                    if app_fixture.name.endswith("tests/documents_documentupload.json"):
+                        apps_fixtures.remove(app_fixture)
+                call_command("loaddata", *apps_fixtures)
+                test_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/tests/*.json"))
+                call_command("loaddata", *test_fixtures)
+                libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
+                call_command("loaddata", *libs_fixtures)
 
             if options["storages"]:
                 call_command("loaddata_storages")
