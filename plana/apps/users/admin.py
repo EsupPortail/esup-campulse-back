@@ -158,6 +158,11 @@ class UserAdmin(admin.ModelAdmin):
             .distinct()
         )
 
+    def delete_queryset(self, request, queryset):
+        """Uses ids list to group delete objects even with distinct on main queryset"""
+        user_ids = list(queryset.values_list('pk', flat=True))
+        self.model.objects.filter(pk__in=user_ids).delete()
+
     def get_form(self, request, obj=None, **kwargs):
         """Use correct form if user is created or changed with restricted fields if not superuser."""
         superuser_only_fields = ["is_superuser", "groups", "user_permissions", "is_staff"]
