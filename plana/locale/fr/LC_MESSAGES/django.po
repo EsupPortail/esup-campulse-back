@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-27 11:39+0200\n"
+"POT-Creation-Date: 2026-08-03 15:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,9 @@ msgstr "Passer en mode Import d'objets via un fichier JSON"
 msgid ""
 "Check this box to import data through a JSON file instead of the classic "
 "form. (multiple objects creation)"
-msgstr "Cochez cette case pour importer des données depuis un fichier JSON au lieu du formulaire classique. (Création d'objets en masse)"
+msgstr ""
+"Cochez cette case pour importer des données depuis un fichier JSON au lieu "
+"du formulaire classique. (Création d'objets en masse)"
 
 #: plana/admin.py:59
 msgid "JSON file to import data from"
@@ -36,11 +38,14 @@ msgstr "Fichier JSON à partir duquel les données seront importées"
 msgid ""
 "JSON file upload is mandatory in this mode, provide one, or else uncheck the "
 "toggle mode box."
-msgstr "Un fichier JSON est obligatoire dans ce mode, fournissez en un, ou décochez la case pour revenir au formulaire classique."
+msgstr ""
+"Un fichier JSON est obligatoire dans ce mode, fournissez en un, ou décochez "
+"la case pour revenir au formulaire classique."
 
 #: plana/admin.py:89
 msgid "The provided json file must contain a list of objects : [{...}, {...}]."
-msgstr "Le fichier JSON fourni doit contenir une liste d'objets : [{...}, {...}]."
+msgstr ""
+"Le fichier JSON fourni doit contenir une liste d'objets : [{...}, {...}]."
 
 #: plana/admin.py:93
 msgid "The provided JSON file must be encoded in UTF-8."
@@ -155,6 +160,7 @@ msgid "President email"
 msgstr "Adresse email du président"
 
 #: plana/apps/associations/models/association.py:62
+#: plana/apps/projects/models/category.py:11
 msgid "Is enabled"
 msgstr "Est active"
 
@@ -450,7 +456,7 @@ msgid "First edition"
 msgstr "Est la première édition du projet"
 
 #: plana/apps/commissions/views/commission_export.py:118
-#: plana/apps/projects/models/category.py:17
+#: plana/apps/projects/models/category.py:18
 msgid "Categories"
 msgstr "Catégories"
 
@@ -890,16 +896,24 @@ msgstr "Établissements"
 msgid "Institution components"
 msgstr "Composantes"
 
-#: plana/apps/projects/admin.py:65 plana/apps/projects/models/project.py:142
+#: plana/apps/projects/admin.py:30
+msgid "Enable all selected Categories"
+msgstr "Activer toutes les catégories sélectionnées"
+
+#: plana/apps/projects/admin.py:34
+msgid "Disable all selected Categories"
+msgstr "Désactiver toutes les catégories sélectionnées"
+
+#: plana/apps/projects/admin.py:74 plana/apps/projects/models/project.py:142
 msgid "Association User"
 msgstr "Membre d'association"
 
-#: plana/apps/projects/admin.py:74
+#: plana/apps/projects/admin.py:83
 #: plana/apps/projects/models/project_commission_fund.py:57
 msgid "Project commission fund"
 msgstr "Fonds de Commission lié à un projet"
 
-#: plana/apps/projects/models/category.py:16
+#: plana/apps/projects/models/category.py:17
 msgid "Category"
 msgstr "Catégorie"
 
@@ -1132,6 +1146,16 @@ msgstr "Fonds de Commissions liés à des projets"
 msgid "The selected commission is not eligible for this project postpone."
 msgstr "La commission sélectionnée n'est pas éligible au report de ce projet."
 
+#: plana/apps/projects/serializers/project_category.py:23
+msgid ""
+"This project is already linked to a category. Only one is allowed per "
+"project."
+msgstr "Ce projet est déjà lié à une catégorie. Une seule catégorie est autorisée par projet."
+
+#: plana/apps/projects/serializers/project_category.py:28
+msgid "A project cannot be linked to a disabled category."
+msgstr "Un projet ne peut pas être lié à une catégorie inactive."
+
 #: plana/apps/projects/views/project.py:163
 msgid "User not allowed to create a new project for this association."
 msgstr "Utilisateur non autorisé à créer un projet pour cette association."
@@ -1229,20 +1253,7 @@ msgstr "Mauvais statut de projet."
 msgid "Project successfully postponed to the new commission."
 msgstr "Projet reporté à la nouvelle commission avec succès."
 
-#: plana/apps/projects/views/project_category.py:94
-msgid "Project or category does not exist."
-msgstr "Le projet ou la catégorie n'existe pas."
-
-#: plana/apps/projects/views/project_category.py:103
-#: plana/apps/projects/views/project_category.py:187
-msgid "Not allowed to update categories for this project."
-msgstr "Non autorisé à mettre à jour les catégories de ce projet."
-
-#: plana/apps/projects/views/project_category.py:113
-msgid "This project is already linked to this category."
-msgstr "Ce projet est déjà lié à cette catégorie."
-
-#: plana/apps/projects/views/project_category.py:149
+#: plana/apps/projects/views/project_category.py:92
 msgid "Not allowed to retrieve this project categories."
 msgstr "Non autorisé à récupérer les catégories de ce projet."
 
@@ -2100,6 +2111,12 @@ msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
 "des caractères."
+
+#~ msgid "Project or category does not exist."
+#~ msgstr "Le projet ou la catégorie n'existe pas."
+
+#~ msgid "Not allowed to update categories for this project."
+#~ msgstr "Non autorisé à mettre à jour les catégories de ce projet."
 
 #~ msgid "New Commission Fund is not linked to the same fund that the old one."
 #~ msgstr ""
