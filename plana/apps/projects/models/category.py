@@ -8,6 +8,7 @@ class Category(models.Model):
     """Main model."""
 
     name = models.CharField(_("Name"), max_length=250, blank=False)
+    is_enabled = models.BooleanField(_("Is enabled"), default=True)
 
     def __str__(self):
         return self.name

@@ -23,8 +23,17 @@ from .models import (
 class CategoryAdmin(JSONImportAdminMixin):
     """List view for categories."""
 
-    list_display = ["name"]
+    list_display = ["name", "is_enabled"]
     search_fields = ["name"]
+    actions = ["enable_selection", "disable_selection"]
+
+    @admin.action(description=_("Enable all selected Categories"))
+    def enable_selection(self, request, queryset):
+        queryset.update(is_enabled=True)
+
+    @admin.action(description=_("Disable all selected Categories"))
+    def disable_selection(self, request, queryset):
+        queryset.update(is_enabled=False)
 
 
 @admin.register(Project)

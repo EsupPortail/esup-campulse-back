@@ -17,3 +17,4 @@ class CategoryList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Category.objects.all().order_by("name")
     serializer_class = CategorySerializer
+    filterset_fields = ["is_enabled"]
