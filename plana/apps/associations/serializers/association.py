@@ -117,6 +117,14 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
         """Custom validation for some fields depending on others"""
         if (data.get("is_public") and not self.instance.is_enabled) or data.get("is_enabled") is False:
             data["is_public"] = False
+
+        if data.get("institution_component") or data.get("institution"):
+            institution_component = data.get("institution_component", self.instance.institution_component if self.instance else None)
+            institution = data.get("institution", self.instance.institution if self.instance else None)
+            if institution_component and institution and institution_component.institution_id != institution.id:
+                raise serializers.ValidationError({
+                    "inconsistent_institution": _("Institution component must be related to the same institution as the association.")
+                })
         return data
 
     def update(self, instance, validated_data):

@@ -15,3 +15,4 @@ class InstitutionComponentList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = InstitutionComponent.objects.all().order_by("name")
     serializer_class = InstitutionComponentSerializer
+    filterset_fields = ["institution_id"]
