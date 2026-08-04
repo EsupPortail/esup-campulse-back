@@ -1,10 +1,12 @@
+"""Base permissions classes for associations"""
+
 from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions
 
 from plana.apps.associations.models import Association
 
 
-class AssociationRetrieveUpdateDestroyPermission(permissions.BasePermission):
+class AssociationRetrievePermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method == 'GET':
@@ -29,6 +31,18 @@ class AssociationRetrieveUpdateDestroyPermission(permissions.BasePermission):
                     return False
 
         return True
+
+
+class AssociationUpdatePermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if (
+                request.user.is_president_in_association(obj.id)
+                or request.user.has_perm("associations.change_association_any_institution")
+                or request.user.is_staff_in_institution(obj.institution_id)
+        ):
+            return True
+        return False
 
 
 class ViewAssociationMembersPermission(permissions.BasePermission):

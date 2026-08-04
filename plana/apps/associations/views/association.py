@@ -1,7 +1,6 @@
 """Views directly linked to associations."""
 
 import datetime
-import json
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -28,7 +27,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import send_mail
 
 from .. import permissions
 from ..filters import AssociationFilter, AssociationNameFilter
@@ -92,10 +91,9 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self):
         if self.request.method == "GET":
-            self.permission_classes = [
-                AllowAny,
-                permissions.AssociationRetrieveUpdateDestroyPermission
-            ]
+            self.permission_classes = [AllowAny, permissions.AssociationRetrievePermission]
+        elif self.request.method == "PATCH":
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationUpdatePermission]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
@@ -106,143 +104,6 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
-
-    # WARNING : to upload images the form sent must be "multipart/form-data" encoded
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: AssociationAllDataUpdateSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: None,
-        }
-    )
-    @capture_queries()
-    def patch(self, request, *args, **kwargs):
-        """Update association details (president and manager only, restricted fields for president)."""
-        association = self.get_object()
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if (
-            not request.user.is_president_in_association(association.id)
-            and not request.user.has_perm("associations.change_association_any_institution")
-            and not request.user.is_staff_in_institution(association.institution_id)
-        ):
-            return response.Response(
-                {"error": _("Not allowed to edit this association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if "email" in request.data and Association.objects.filter(email__iexact=request.data["email"]).exists():
-            return response.Response(
-                {"error": _("Email address is already used for another association.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        try:
-            social_networks_data = request.data["social_networks"] if "social_networks" in request.data else []
-            social_networks = (
-                json.loads(social_networks_data)
-                if isinstance(social_networks_data, str)
-                else json.loads(json.dumps(social_networks_data))
-            )
-            for social_network in social_networks:
-                if set(social_network.keys()) != {"type", "location"}:
-                    return response.Response(
-                        {"error": _("Wrong social_networks parameters")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-                if not all(isinstance(s, str) for s in social_network.values()):
-                    return response.Response(
-                        {"error": _("Wrong social_networks values")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-        except Exception:
-            return response.Response(
-                {"error": _("Error on social networks format.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            "path_logo" in request.data
-            and request.data["path_logo"] is not None
-            and request.data["path_logo"].content_type not in settings.ALLOWED_IMAGE_MIME_TYPES
-        ):
-            return response.Response(
-                {"error": _("Wrong media type for images.")},
-                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            )
-
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-        }
-
-        if request.user.has_perm("associations.change_association_all_fields"):
-            if "amount_members_allowed" in request.data:
-                amount_members_allowed = int(request.data["amount_members_allowed"])
-                if amount_members_allowed < AssociationUser.objects.filter(association_id=association.id).count():
-                    return response.Response(
-                        {"error": _("Cannot set lower amount of members in this association.")},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-
-            if "is_public" in request.data:
-                is_public = to_bool(request.data["is_public"])
-                if is_public and not association.is_enabled:
-                    request.data["is_public"] = False
-
-            if "is_enabled" in request.data:
-                is_enabled = to_bool(request.data["is_enabled"])
-                if not is_enabled:
-                    request.data["is_public"] = False
-
-            if "can_submit_projects" in request.data:
-                template = None
-                if not to_bool(request.data["can_submit_projects"]):
-                    context["manager_email_address"] = request.user.email
-                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_DISABLED")
-                elif to_bool(request.data["can_submit_projects"]):
-                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_SUBMISSION_ENABLED")
-                send_mail(
-                    from_=settings.DEFAULT_FROM_EMAIL,
-                    to_=association.email,
-                    subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                    message=template.parse_vars(request.user, request, context),
-                )
-
-        else:
-            for restricted_field in [
-                "amount_members_allowed",
-                "can_submit_projects",
-                "charter_status",
-                "creation_date",
-                "institution_id",
-                "is_enabled",
-                "is_public",
-                "is_site",
-            ]:
-                request.data.pop(restricted_field, False)
-
-        context["first_name"] = request.user.first_name
-        context["last_name"] = request.user.last_name
-        context["association_name"] = association.name
-        History.objects.create(
-            action_title="ASSOCIATION_CHANGED", action_user_id=request.user.pk, association_id=association.id
-        )
-        template = MailTemplate.objects.get(code="USER_ACCOUNT_ASSOCIATION_CHANGE_CONFIRMATION")
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=request.user.email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
-
-        return self.partial_update(request, *args, **kwargs)
 
     @extend_schema(
         responses={
