@@ -45,6 +45,17 @@ class AssociationUpdatePermission(permissions.BasePermission):
         return False
 
 
+class AssociationDestroyPermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if obj.is_enabled:
+            self.message = _("Can't delete an enabled association.")
+            return False
+        if request.user.has_perm("associations.change_association_any_institution") or request.user.is_staff_in_institution(obj.institution_id):
+            return True
+        return False
+
+
 class ViewAssociationMembersPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         asso_id = view.kwargs.get("association_id")

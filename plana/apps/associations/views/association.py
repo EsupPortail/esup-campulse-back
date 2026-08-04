@@ -95,7 +95,7 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         elif self.request.method == "PATCH":
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationUpdatePermission]
         else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
+            self.permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationDestroyPermission]
         return super().get_permissions()
 
     def get_serializer_class(self):
@@ -105,52 +105,24 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
 
-    @extend_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: AssociationAllDataUpdateSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    @capture_queries()
-    def delete(self, request, *args, **kwargs):
-        """Destroys an entire association (manager only)."""
-        association = self.get_object()
-
-        if association.is_enabled:
-            return response.Response(
-                {"error": _("Can't delete an enabled association.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if not request.user.has_perm(
-            "associations.delete_association_any_institution"
-        ) and not request.user.is_staff_in_institution(association.institution):
-            return response.Response(
-                {"error": _("Not allowed to delete an association for this institution.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if association.email:
-            current_site = get_current_site(request)
+    def perform_destroy(self, instance):
+        """Custom destroy to send a mail to the deleted association"""
+        if instance.email:
+            current_site = get_current_site(self.request)
+            managers_emails = instance.institution.default_institution_managers().values_list("email", flat=True)
             context = {
                 "site_domain": current_site.domain,
                 "site_name": current_site.name,
-                "manager_email_address": ','.join(
-                    Institution.objects.get(id=association.institution_id)
-                    .default_institution_managers()
-                    .values_list("email", flat=True)
-                ),
+                "manager_email_address": ",".join(managers_emails),
             }
             template = MailTemplate.objects.get(code="ASSOCIATION_ACCOUNT_DELETION")
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                to_=association.email,
+                to_=instance.email,
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
+                message=template.parse_vars(self.request.user, self.request, context),
             )
-        return self.destroy(request, *args, **kwargs)
+        super().perform_destroy(instance)
 
 
 class AssociationNameList(generics.ListAPIView):
