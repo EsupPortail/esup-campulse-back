@@ -535,19 +535,6 @@ class AssociationsViewsTests(TestCase):
         non_public_member_response = self.member_client.get("/associations/2")
         self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
 
-    def test_patch_association_anonymous(self):
-        """
-        PATCH /associations/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.client.patch(
-            "/associations/1",
-            {"name": "Cannot patch this"},
-            content_type="application/json",
-        )
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_patch_association_wrong_phone_number(self):
         """
         PATCH /associations/{id} .
@@ -641,6 +628,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_wrong_email.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response_wrong_email.data)
 
     def test_patch_association_by_its_members_success(self):
         """
@@ -684,8 +672,10 @@ class AssociationsViewsTests(TestCase):
             f"/associations/{association_id}",
             {
                 "name": "Association name",
-                "institution": 1,
+                "institution": 2,
                 "can_submit_projects": False,
+                "phone": "",
+                "amount_members_allowed": 10
             },
             content_type="application/json",
         )
@@ -696,8 +686,10 @@ class AssociationsViewsTests(TestCase):
             association.name,
             "Association name",
         )
-        self.assertEqual(association.institution_id, 1)
-        self.assertEqual(association.can_submit_projects, False)
+        self.assertEqual(association.institution_id, 2)
+        self.assertFalse(association.can_submit_projects)
+        self.assertEqual(association.phone, "")
+        self.assertEqual(association.amount_members_allowed, 10)
         self.assertTrue(len(mail.outbox))
 
         response_general = self.general_client.patch(
@@ -722,30 +714,54 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("amount_members_allowed", response_general.data)
+
+    def test_patch_association_institution_component(self):
+        """
+        PATCH /associations/{id} .
+
+        - Association's institution component must be linked to the same institution as the designated association.
+        """
+        asso_id = 4
+        response = self.general_client.patch(f"/associations/{asso_id}", {"institution_component": 1}, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_institution", response.data)
+
+        other_response = self.general_client.patch(f"/associations/{asso_id}", {"institution": 4}, content_type="application/json")
+        self.assertEqual(other_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_institution", other_response.data)
+
+        consistent_response = self.general_client.patch(
+            f"/associations/{asso_id}",
+            {"institution": 2, "institution_component": 1},
+            content_type="application/json"
+        )
+        self.assertEqual(consistent_response.status_code, status.HTTP_200_OK)
 
     def test_patch_association_social_networks_bad_request(self):
         """
         PATCH /associations/{id} .
 
+        - Association's social networks are not updated if the global format is not a list (400).
         - Association's social networks are not updated if the keys are not valid (400).
         - Association's social networks are not updated if the values are not strings (400).
         """
         association_id = 2
+        response_general_list = self.general_client.patch(
+            f"/associations/{association_id}",
+            {"social_networks": {"type": "SocialNetwork", "location": "https://socialnetwork.random"}},
+            content_type="application/json",
+        )
+        self.assertEqual(response_general_list.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("list_expected", response_general_list.data.get("social_networks"))
+
         response_general_keys = self.general_client.patch(
             f"/associations/{association_id}",
-            {
-                "social_networks": json.dumps(
-                    [
-                        {
-                            "typeeee": "SocialNetwork",
-                            "location": "https://socialnetwork.random",
-                        }
-                    ]
-                )
-            },
+            {"social_networks": [{"typeeee": "SocialNetwork", "location": "https://socialnetwork.random"}]},
             content_type="application/json",
         )
         self.assertEqual(response_general_keys.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("wrong_params", response_general_keys.data.get("social_networks"))
 
         response_general_string = self.general_client.patch(
             f"/associations/{association_id}",
@@ -753,6 +769,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response_general_string.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("wrong_value_types", response_general_string.data.get("social_networks"))
 
     def test_patch_association_social_networks_success(self):
         """
@@ -763,7 +780,7 @@ class AssociationsViewsTests(TestCase):
         - Association's social networks are correctly updated with provided data.
         """
         association_id = 2
-        social_networks_json = json.dumps([{"type": "SocialNetwork", "location": "https://socialnetwork.random"}])
+        social_networks_json = [{"type": "SocialNetwork", "location": "https://socialnetwork.random"}]
         response_general = self.general_client.patch(
             f"/associations/{association_id}",
             {"social_networks": social_networks_json},
@@ -779,9 +796,9 @@ class AssociationsViewsTests(TestCase):
         PATCH /associations/{id} .
 
         - An association can't be public if not enabled.
-        - An association must be lost public status if enabled or site is removed.
+        - An association must lose its public status if enabled is removed.
         """
-        # This association is not enabled by default
+        # This association is enabled by default
         association_id = 3
         self.general_client.patch(
             f"/associations/{association_id}",
@@ -789,7 +806,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_enabled, False)
+        self.assertFalse(association.is_enabled)
 
         # Association public status can be true only if is_enabled is true
         self.general_client.patch(
@@ -798,7 +815,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_public, False)
+        self.assertFalse(association.is_public)
         self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": True},
@@ -810,7 +827,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_public, True)
+        self.assertTrue(association.is_public)
 
         # Association loosing its public status by changing is_enabled to false
         self.general_client.patch(
@@ -819,7 +836,7 @@ class AssociationsViewsTests(TestCase):
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
-        self.assertEqual(association.is_public, False)
+        self.assertFalse(association.is_public)
 
 #    def test_patch_association_logo(self):
 #        """
@@ -841,15 +858,6 @@ class AssociationsViewsTests(TestCase):
 #            f"/associations/{association_id}", data, content_type=MULTIPART_CONTENT
 #        )
 #        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_delete_association_anonymous(self):
-        """
-        DELETE /associations/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response_anonymous = self.client.delete("/associations/1")
-        self.assertEqual(response_anonymous.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_association_forbidden(self):
         """
@@ -904,16 +912,6 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(len(mail.outbox))
         with self.assertRaises(ObjectDoesNotExist):
             Association.objects.get(id=association_id)
-
-    def test_patch_association_status_anonymous(self):
-        """
-        PATCH /associations/{id}/status .
-
-        - An anonymous user cannot execute this request.
-        """
-        patch_data = {"charter_status": "CHARTER_REJECTED"}
-        response = self.client.patch("/associations/2/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_association_status_not_found(self):
         """

@@ -1,4 +1,5 @@
 """Serializers describing fields used on associations."""
+import json
 import re
 
 from django.conf import settings
@@ -20,7 +21,6 @@ from plana.utils import PHONE_REGEX_PATTERN, normalize_object_name, send_mail
 RESTRICTED_FIELDS = [
     "amount_members_allowed",
     "can_submit_projects",
-    "charter_status",
     "creation_date",
     "institution",
     "is_enabled",
@@ -67,6 +67,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
         """Custom init to force readonly on restricted fields if user doesn't have the correct permission"""
         super().__init__(*args, **kwargs)
         request = self.context.get("request")
+        # Part of a more complex process, only Association field never editable here
+        self.fields["charter_status"].read_only = True
 
         if request and hasattr(request, "user"):
             if not request.user.has_perm("associations.change_association_all_fields"):
@@ -93,6 +95,9 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
     def validate_social_networks(self, value):
         """Validate correct JSON format and keys for social_networks JSONField (allows empty list too)"""
         allowed_keys = {"type", "location"}
+
+        if isinstance(value, str):
+            value = json.loads(value)
 
         if not isinstance(value, list):
             raise serializers.ValidationError({"list_expected": _("Social networks field expected a list of items.")})
