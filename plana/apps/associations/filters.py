@@ -70,6 +70,7 @@ class AssociationNameFilter(filters.FilterSet):
         fields = [
             "institutions",
             "is_public",
+            "is_enabled",
             "allow_new_users"
         ]
 

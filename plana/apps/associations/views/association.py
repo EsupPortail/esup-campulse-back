@@ -163,7 +163,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
         """Update association charter status."""
         association = self.get_object()
 
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(instance=association, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
         if (

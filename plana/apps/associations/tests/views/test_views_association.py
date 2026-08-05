@@ -942,21 +942,23 @@ class AssociationsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_patch_association_status_serializer_error(self):
+    def test_patch_association_status_disabled_asso(self):
         """
         PATCH /associations/{id}/status .
 
-        - A manager user can execute this request.
-        - Serializer fields must be valid.
+        - An association cannot update its status if disabled
         """
-        association_id = 2
-        patch_data = {"charter_status": False}
-        response = self.general_client.patch(
-            f"/associations/{association_id}/status",
+        asso = Association.objects.get(pk=2)
+        asso.is_enabled = False
+        asso.save()
+        patch_data = {"charter_status": "CHARTER_PROCESSING"}
+        response = self.president_client.patch(
+            f"/associations/{asso.id}/status",
             patch_data,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("disabled_association", response.data)
 
     def test_patch_association_status_student(self):
         """

@@ -279,3 +279,10 @@ class AssociationStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Association
         fields = ["charter_status"]
+
+    def validate(self, data):
+        """Custom validate to avoid charter submission from a disabled association"""
+        if not self.instance.is_enabled and data.get("charter_status") == "CHARTER_PROCESSING":
+            raise serializers.ValidationError({"disabled_association": _("The selected association is not enabled to new requests for charter submissions.")})
+        return data
+
