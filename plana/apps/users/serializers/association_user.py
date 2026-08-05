@@ -51,6 +51,9 @@ class AssociationUserCreateSerializer(serializers.ModelSerializer):
         user = data.get("user")
         auth_user = self.context["request"].user
 
+        if not association.is_enabled:
+            raise serializers.ValidationError({"disabled_association": _("The selected association is not enabled for new applications.")})
+
         if not any(settings.GROUPS_STRUCTURE[group.name]["ASSOCIATIONS_POSSIBLE"] for group in user.get_user_groups()):
             raise serializers.ValidationError({"missing_group": _("The user hasn't any group that can have associations.")})
 

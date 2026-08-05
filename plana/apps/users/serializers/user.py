@@ -322,6 +322,10 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
 
     def validate_association_user(self, association_data: dict, user):
         association = association_data['association']
+
+        if not association.is_enabled:
+            raise serializers.ValidationError({"disabled_association": _("The selected association is not enabled for new applications.")})
+
         au_count = AssociationUser.objects.filter(association=association).count()
         if au_count >= association.amount_members_allowed:
             raise serializers.ValidationError({"too_many_members": _("Too many users in association.")})
@@ -398,6 +402,11 @@ class UserCreateSerializer(CustomRegisterSerializer):
 
     def validate_association_user(self, association_data: dict, user):
         association = association_data["association"]
+
+        # TODO : authorized for manager ?
+        if not association.is_enabled:
+            raise serializers.ValidationError({"disabled_association": _("The selected association is not enabled for new applications.")})
+
         au_count = AssociationUser.objects.filter(association=association).count()
         if au_count >= association.amount_members_allowed:
             raise serializers.ValidationError({"too_many_members": _("Too many users in association.")})

@@ -220,6 +220,26 @@ class AssociationUserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("missing_group", response.data)
 
+    def test_post_association_user_disabled_association(self):
+        """
+        POST /users/associations/ .
+
+        - Cannot execute this request if the chosen association is disabled
+        """
+        asso = Association.objects.get(pk=1)
+        asso.is_enabled = False
+        asso.save()
+
+        response = self.manager_client.post(
+            "/users/associations/",
+            {
+                "user": self.student_user_id,
+                "association": asso.id
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("disabled_association", response.data)
+
     def test_post_association_user_too_many_members(self):
         """
         POST /users/associations/ .

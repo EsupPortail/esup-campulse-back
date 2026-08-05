@@ -11,6 +11,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from plana.apps.associations.models import Association
 from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
 from plana.apps.users.models.user import AssociationUser, User
@@ -228,6 +229,7 @@ class AuthUserViewsTests(TestCase):
         - Cannot create a link asso-user if not in a group allowing it.
         - Cannot create a link asso-user if association is already full.
         - Cannot create a link asso-user as president if association already has one.
+        - Cannot create a link asso-user if association is disabled
         """
         data = {
             "email": "john@doe.fr",
@@ -260,6 +262,16 @@ class AuthUserViewsTests(TestCase):
         )
         self.assertEqual(response_asso_president.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("president", response_asso_president.data)
+
+        asso = Association.objects.get(pk=asso_id)
+        asso.is_enabled = False
+        asso.save()
+        data["associations"] = [{"association": 1, "is_president": False, "is_secretary": False, "is_treasurer": False, "is_vice_president": False}]
+        response_asso_disabled = self.anonymous_client.post(
+            "/users/auth/registration/", data=json.dumps(data), content_type="application/json"
+        )
+        self.assertEqual(response_asso_disabled.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("disabled_association", response_asso_disabled.data)
 
     def test_anonymous_post_registration_bad_request_email_domain(self):
         """
