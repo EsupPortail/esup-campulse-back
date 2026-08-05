@@ -122,6 +122,8 @@ class AssociationAllDataUpdateSerializer(serializers.ModelSerializer):
         """Custom validation for some fields depending on others"""
         if (data.get("is_public") and not self.instance.is_enabled) or data.get("is_enabled") is False:
             data["is_public"] = False
+        if (data.get("can_submit_projects") and not self.instance.is_enabled) or data.get("is_enabled") is False:
+            data["can_submit_projects"] = False
 
         if data.get("institution_component") or data.get("institution"):
             institution_component = data.get("institution_component", self.instance.institution_component if self.instance else None)

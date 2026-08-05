@@ -791,12 +791,12 @@ class AssociationsViewsTests(TestCase):
         association = Association.objects.get(id=association_id)
         self.assertEqual(association.social_networks, social_networks_json)
 
-    def test_patch_association_public_or_not(self):
+    def test_patch_association_public_and_projects_or_not(self):
         """
         PATCH /associations/{id} .
 
-        - An association can't be public if not enabled.
-        - An association must lose its public status if enabled is removed.
+        - An association can't be public nor submit projects if not enabled.
+        - An association must lose its public status and can_submit_project perm if enabled is removed.
         """
         # This association is enabled by default
         association_id = 3
@@ -811,11 +811,13 @@ class AssociationsViewsTests(TestCase):
         # Association public status can be true only if is_enabled is true
         self.general_client.patch(
             f"/associations/{association_id}",
-            {"is_public": True},
+            {"is_public": True, "can_submit_project": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
         self.assertFalse(association.is_public)
+        self.assertFalse(association.can_submit_projects)
+
         self.general_client.patch(
             f"/associations/{association_id}",
             {"is_enabled": True},
@@ -823,11 +825,12 @@ class AssociationsViewsTests(TestCase):
         )
         self.general_client.patch(
             f"/associations/{association_id}",
-            {"is_public": True},
+            {"is_public": True, "can_submit_projects": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
         self.assertTrue(association.is_public)
+        self.assertTrue(association.can_submit_projects)
 
         # Association loosing its public status by changing is_enabled to false
         self.general_client.patch(
@@ -837,6 +840,7 @@ class AssociationsViewsTests(TestCase):
         )
         association = Association.objects.get(id=association_id)
         self.assertFalse(association.is_public)
+        self.assertFalse(association.can_submit_projects)
 
 #    def test_patch_association_logo(self):
 #        """
