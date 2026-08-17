@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-03 15:09+0200\n"
+"POT-Creation-Date: 2026-08-17 15:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,85 +252,89 @@ msgid "Association"
 msgstr "Association"
 
 #: plana/apps/associations/models/association.py:116
-#: plana/apps/users/admin.py:183 plana/apps/users/models/user.py:137
+#: plana/apps/users/admin.py:188 plana/apps/users/models/user.py:137
 msgid "Associations"
 msgstr "Associations"
 
-#: plana/apps/associations/permissions.py:13
+#: plana/apps/associations/permissions.py:15
 msgid "Association not visible."
 msgstr "Association non visible"
 
-#: plana/apps/associations/permissions.py:22
+#: plana/apps/associations/permissions.py:24
 msgid "Association not enabled."
 msgstr "Association non activée."
 
-#: plana/apps/associations/permissions.py:28
+#: plana/apps/associations/permissions.py:30
 msgid "Association not public."
 msgstr "Association non publique."
 
-#: plana/apps/associations/serializers/association.py:152
+#: plana/apps/associations/permissions.py:52
+msgid "Can't delete an enabled association."
+msgstr "Une association activée ne peut être supprimée."
+
+#: plana/apps/associations/serializers/association.py:92
+msgid "Wrong media type for images."
+msgstr "Mauvais format d'image."
+
+#: plana/apps/associations/serializers/association.py:103
+msgid "Social networks field expected a list of items."
+msgstr "Le champ 'réseaux sociaux' attend une liste d'objets."
+
+#: plana/apps/associations/serializers/association.py:107
+msgid ""
+"Wrong social networks parameters : keys 'type' and 'location' are mandatory."
+msgstr "Mauvais paramétrage du champ 'réseaux sociaux': les clés 'type' et 'location' sont obligatoires."
+
+#: plana/apps/associations/serializers/association.py:109
+msgid "Wrong social_networks values : only strings are authorized."
+msgstr "Mauvais types de valeurs de réseaux sociaux : seules les chaînes de caractères sont autorisées."
+
+#: plana/apps/associations/serializers/association.py:118
+msgid "Cannot set lower amount of members in this association."
+msgstr "Impossible d'abaisser le nombre de membres de cette association."
+
+#: plana/apps/associations/serializers/association.py:133
+msgid ""
+"Institution component must be related to the same institution as the "
+"association."
+msgstr "La composante d'établissement choisie doit être reliée au même établissement que celui de l'association."
+
+#: plana/apps/associations/serializers/association.py:239
 msgid "No institution given."
 msgstr "Pas d'établissement donné."
 
-#: plana/apps/associations/serializers/association.py:155
+#: plana/apps/associations/serializers/association.py:242
 msgid "Not allowed to create an association for this institution."
 msgstr "Non autorisé à créer une association pour cet établissement."
 
-#: plana/apps/associations/serializers/association.py:159
+#: plana/apps/associations/serializers/association.py:246
 msgid "Not allowed to create an association with restricted fields."
 msgstr "Non autorisé à créer une association avec des champs restreints."
 
-#: plana/apps/associations/serializers/association.py:165
+#: plana/apps/associations/serializers/association.py:252
 msgid "Association name already taken."
 msgstr "Nom d'association déjà enregistré."
+
+#: plana/apps/associations/serializers/association.py:286
+msgid ""
+"The selected association is not enabled to new requests for charter "
+"submissions."
+msgstr "L'association sélectionnée n'est pas autorisée à déposer de nouvelles demandes de soumission de chartes."
 
 #: plana/apps/associations/serializers/fields.py:20
 msgid "URL for each thumbnail size"
 msgstr "Lien pour chaque taille de miniature"
 
-#: plana/apps/associations/views/association.py:135
-#: plana/apps/associations/views/association.py:342
+#: plana/apps/associations/views/association.py:175
 msgid "Not allowed to edit this association."
 msgstr "Aucun droit d'éditer cette association."
 
-#: plana/apps/associations/views/association.py:141
-msgid "Email address is already used for another association."
-msgstr "L'adresse email est déjà utilisée pour une autre association."
-
-#: plana/apps/associations/views/association.py:155
-msgid "Wrong social_networks parameters"
-msgstr "Erreur de paramètres de réseaux sociaux"
-
-#: plana/apps/associations/views/association.py:160
-msgid "Wrong social_networks values"
-msgstr "Erreur de valeurs de réseaux sociaux"
-
-#: plana/apps/associations/views/association.py:165
-msgid "Error on social networks format."
-msgstr "Erreur de format de réseaux sociaux."
-
-#: plana/apps/associations/views/association.py:175
-msgid "Wrong media type for images."
-msgstr "Mauvais format d'image."
-
-#: plana/apps/associations/views/association.py:190
-msgid "Cannot set lower amount of members in this association."
-msgstr "Impossible d'abaisser le nombre de membres de cette association."
-
-#: plana/apps/associations/views/association.py:262
-msgid "Can't delete an enabled association."
-msgstr "Une association activée ne peut être supprimée."
-
-#: plana/apps/associations/views/association.py:270
-msgid "Not allowed to delete an association for this institution."
-msgstr "Non autorisé à supprimer une association pour cet établissement."
-
-#: plana/apps/associations/views/association.py:351
+#: plana/apps/associations/views/association.py:184
 #: plana/apps/projects/views/project.py:482
 msgid "Choosing this status is not allowed."
 msgstr "Choisir ce statut n'est pas autorisé."
 
-#: plana/apps/associations/views/association.py:368
+#: plana/apps/associations/views/association.py:201
 #: plana/apps/projects/views/project.py:546
 #, python-brace-format
 msgid "Missing documents : {missing_documents_names_string}."
@@ -1150,7 +1154,9 @@ msgstr "La commission sélectionnée n'est pas éligible au report de ce projet.
 msgid ""
 "This project is already linked to a category. Only one is allowed per "
 "project."
-msgstr "Ce projet est déjà lié à une catégorie. Une seule catégorie est autorisée par projet."
+msgstr ""
+"Ce projet est déjà lié à une catégorie. Une seule catégorie est autorisée "
+"par projet."
 
 #: plana/apps/projects/serializers/project_category.py:28
 msgid "A project cannot be linked to a disabled category."
@@ -1366,15 +1372,15 @@ msgstr "Est superutilisateur"
 msgid "Is Manager General"
 msgstr "Est Gestionnaire Général"
 
-#: plana/apps/users/admin.py:177 plana/apps/users/models/user.py:140
+#: plana/apps/users/admin.py:182 plana/apps/users/models/user.py:140
 msgid "Groups"
 msgstr "Groupes"
 
-#: plana/apps/users/admin.py:190
+#: plana/apps/users/admin.py:195
 msgid "Has validated email address"
 msgstr "A une adresse email validée"
 
-#: plana/apps/users/admin.py:196
+#: plana/apps/users/admin.py:201
 msgid "Is CAS user"
 msgstr "Est utilisateur CAS"
 
@@ -1435,19 +1441,25 @@ msgid "Users"
 msgstr "Utilisateurs"
 
 #: plana/apps/users/serializers/association_user.py:55
+#: plana/apps/users/serializers/user.py:327
+#: plana/apps/users/serializers/user.py:408
+msgid "The selected association is not enabled for new applications."
+msgstr "L'association sélectionnée n'est pas autorisée à recevoir de nouvelles demandes d'adhésion sur la plateforme."
+
+#: plana/apps/users/serializers/association_user.py:58
 #: plana/apps/users/serializers/user.py:320
 msgid "The user hasn't any group that can have associations."
 msgstr "L'utilisateur n'a aucun groupe pouvant avoir des associations."
 
-#: plana/apps/users/serializers/association_user.py:58
-#: plana/apps/users/serializers/user.py:327
-#: plana/apps/users/serializers/user.py:403
+#: plana/apps/users/serializers/association_user.py:61
+#: plana/apps/users/serializers/user.py:331
+#: plana/apps/users/serializers/user.py:412
 msgid "Too many users in association."
 msgstr "Trop d'utilisateurs dans l'association."
 
-#: plana/apps/users/serializers/association_user.py:61
-#: plana/apps/users/serializers/user.py:335
-#: plana/apps/users/serializers/user.py:411
+#: plana/apps/users/serializers/association_user.py:64
+#: plana/apps/users/serializers/user.py:339
+#: plana/apps/users/serializers/user.py:420
 msgid "President already in association."
 msgstr "L'association a déjà un président."
 
@@ -1502,7 +1514,7 @@ msgid "Registering in a private group is not allowed."
 msgstr "S'inscrire dans un groupe privé n'est pas autorisé."
 
 #: plana/apps/users/serializers/user.py:279
-#: plana/apps/users/serializers/user.py:395
+#: plana/apps/users/serializers/user.py:399
 msgid "This email address cannot be used to create a local account."
 msgstr "Cette adresse mail ne peut être utilisée pour créer un compte local."
 
@@ -2111,6 +2123,18 @@ msgid "Password is still too weak, please add some characters."
 msgstr ""
 "Le mot de passe est toujours trop faible, veuillez s'il vous plaît ajouter "
 "des caractères."
+
+#~ msgid "Email address is already used for another association."
+#~ msgstr "L'adresse email est déjà utilisée pour une autre association."
+
+#~ msgid "Wrong social_networks parameters"
+#~ msgstr "Erreur de paramètres de réseaux sociaux"
+
+#~ msgid "Error on social networks format."
+#~ msgstr "Erreur de format de réseaux sociaux."
+
+#~ msgid "Not allowed to delete an association for this institution."
+#~ msgstr "Non autorisé à supprimer une association pour cet établissement."
 
 #~ msgid "Project or category does not exist."
 #~ msgstr "Le projet ou la catégorie n'existe pas."
