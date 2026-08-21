@@ -23,6 +23,7 @@ from plana.apps.associations.serializers.association import (
 from plana.apps.contents.models.setting import Setting
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 from plana.apps.users.provider import CASProvider
+from plana.apps.users.utils import build_password_reset_url
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail, PHONE_REGEX_PATTERN
 
@@ -460,7 +461,7 @@ class UserCreateSerializer(CustomRegisterSerializer):
             user.save(update_fields=["password", "password_last_change_date"])
             context.update({
                 "password": password,
-                "password_change_url": f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH}"
+                "password_change_url": build_password_reset_url(user)
             })
             template = MailTemplate.objects.get(code="USER_ACCOUNT_BY_MANAGER_CONFIRMATION")
         else:
