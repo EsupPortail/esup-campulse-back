@@ -644,7 +644,6 @@ SPECTACULAR_SETTINGS = {
 
 EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH = "register-verify-email/"
 EMAIL_TEMPLATE_PASSWORD_RESET_PATH = "password-reset-confirm/"
-EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH = "dashboard/password-change-url/"
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH = "dashboard/validate-users/"
 EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-users/"
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
