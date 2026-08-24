@@ -228,24 +228,19 @@ class Project(models.Model):
         return managers_emails
 
     def get_project_owner_data(self) -> dict:
-        if self.association_id is not None:
-            owner = Association.objects.get(id=self.association_id)
-            if self.association_user_id is not None:
-                email = User.objects.get(id=AssociationUser.objects.get(id=self.association_user_id).user_id).email
-            else:
-                email = owner.email
+        if self.association:
+            owner = self.association
             return {
                 "name": owner.name,
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-                "email": email,
+                "email": self.association_user.user.email if self.association_user else owner.email
             }
-        elif self.user_id is not None:
-            email = User.objects.get(id=self.user_id).email
-            owner = User.objects.get(id=self.user_id)
+        elif self.user:
+            owner = self.user
             return {
                 "name": f"{owner.first_name} {owner.last_name}",
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-                "email": email,
+                "email": self.user.email
             }
         return {}
 

@@ -156,3 +156,23 @@ class ProjectsModelsTests(TestCase):
 
         project = Project.visible_objects.get(id=2)
         self.assertFalse(user.can_access_project(project))
+
+    def test_get_project_owner_data_user(self):
+        project = Project.objects.get(id=1)
+        data = project.get_project_owner_data()
+        self.assertEqual(data["email"], "etudiant-porteur@mail.tld")
+        self.assertEqual(data["address"], "  - , ")
+        self.assertEqual(data["name"], "Porteur Étudiant")
+
+    def test_get_project_owner_data_association(self):
+        project = Project.objects.get(id=2)
+        data = project.get_project_owner_data()
+        self.assertEqual(data["email"], "president-asso-site@mail.tld")
+        self.assertEqual(data["address"], "Université de Strasbourg (Le Portique, 3ème étage), Rue René Descartes Strasbourg - 67000, France")
+        self.assertEqual(data["name"], "Association du Site Alsace")
+
+        project.association_user = None
+        project.save()
+        new_data = project.get_project_owner_data()
+        self.assertEqual(new_data["email"], "asso-site-alsace@unistra.fr")
+

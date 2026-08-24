@@ -69,19 +69,9 @@ class ProjectCommentCreate(generics.CreateAPIView):
                 "site_name": current_site.name,
             }
             template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_COMMENT")
-            email = None
-            if project.association_id is not None:
-                if project.association_user_id is not None:
-                    email = User.objects.get(
-                        id=AssociationUser.objects.get(id=project.association_user_id).user_id
-                    ).email
-                else:
-                    email = Association.objects.get(id=project.association_id).email
-            elif project.user_id is not None:
-                email = User.objects.get(id=project.user_id).email
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
+                to_=project.get_project_owner_data().get("email"),
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
