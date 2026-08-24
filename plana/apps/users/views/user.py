@@ -1,8 +1,6 @@
 """Views directly linked to users and their links with other models."""
 
-from allauth.account.forms import default_token_generator
 from allauth.account.models import EmailAddress
-from allauth.account.utils import user_pk_to_url_str
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -23,6 +21,7 @@ from plana.apps.users.serializers.user import (
     UserSerializer,
     UserUpdateSerializer, UserCreateSerializer,
 )
+from plana.apps.users.utils import build_password_reset_url
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
@@ -164,12 +163,7 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 template_code = "USER_ACCOUNT_LDAP_CONFIRMATION"
             else:
                 template_code = "USER_ACCOUNT_CONFIRMATION"
-                uid = user_pk_to_url_str(user)
-                token = default_token_generator.make_token(user)
-                context["password_reset_url"] = (
-                    f"{settings.EMAIL_TEMPLATE_FRONTEND_URL}{settings.EMAIL_TEMPLATE_PASSWORD_RESET_PATH}"
-                    f"?uid={uid}&token={token}"
-                )
+                context["password_reset_url"] = build_password_reset_url(user)
             History.objects.create(
                 action_title="USER_VALIDATED",
                 action_user=request.user,
