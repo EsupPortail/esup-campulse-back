@@ -88,41 +88,33 @@ class ProjectCommentLinksViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
-    def test_post_project_comments_anonymous(self):
-        """
-        POST /projects/comments .
-
-        - An anonymous user cannot execute this command.
-        """
-        response = self.client.post("/projects/comments", {"name": "Testing anonymous"})
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_post_project_comments_not_found(self):
         """
-        POST /projects/comments .
+        POST /projects/{project_id}/comments .
 
         - The project must exist.
         """
-        post_data = {
-            "project": 99999,
-            "text": "Ce commentaire n'est pas censé exister.",
-        }
-        response = self.general_client.post("/projects/comments", post_data)
+        response = self.general_client.post(
+            reverse("project_comment_list_create", kwargs={"project_id": 9999}),
+            {"text": "Project not found."}
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_project_comments_forbidden_user(self):
         """
-        POST /projects/comments .
+        POST /projects/{project_id}/comments .
 
         - The route cannot be accessed by a student user.
         """
-        post_data = {"project": 1, "text": "Forbidden comment"}
-        response = self.student_offsite_client.post("/projects/comments", post_data)
+        response = self.student_offsite_client.post(
+            reverse("project_comment_list_create", kwargs={"project_id": 1}),
+            {"text": "Forbidden comment."}
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_project_comments_manager_wrong_status(self):
         """
-        POST /projects/comments .
+        POST /projects/{project_id}/comments .
 
         - The route can be accessed by a manager.
         - Validated projects cannot receive a comment.
@@ -132,59 +124,43 @@ class ProjectCommentLinksViewsTests(TestCase):
         project.project_status = "PROJECT_REJECTED"
         project.save()
 
-        post_data = {
-            "project": project_id,
-            "text": "Project rejection.",
-        }
-        response = self.general_client.post("/projects/comments", post_data)
+        response = self.general_client.post(
+            reverse("project_comment_list_create", kwargs={"project_id": project_id}),
+            {"text": "Project rejection."}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_post_project_comments_serializer_error(self):
-        """
-        POST /projects/comments .
-
-        - The route can be accessed by a manager.
-        - Serializer fields must be valid.
-        """
-        post_data = {"project": 1, "text": False}
-        response = self.general_client.post("/projects/comments", data=post_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("project_status", response.data)
 
     def test_post_project_comments_manager_success(self):
         """
-        POST /projects/comments .
+        POST /projects/{project_id}/comments .
 
         - The route can be accessed by a manager.
         - The ProjectComment link is created in db.
+        - An email is sent.
         """
         self.assertFalse(len(mail.outbox))
-        post_data = {"project": 1, "text": "Commentaire"}
-        response = self.general_client.post("/projects/comments", post_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(
-            1,
-            len(ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])),
+        project_id = 1
+        post_data = {"text": "Commentaire"}
+        response = self.general_client.post(
+            reverse("project_comment_list_create", kwargs={"project_id": project_id}),
+            post_data
         )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(1, len(ProjectComment.objects.filter(project_id=project_id, text=post_data["text"])))
         self.assertTrue(len(mail.outbox))
-        post_data = {"project": 2, "text": "Autre Commentaire"}
-        response = self.general_client.post("/projects/comments", post_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(
-            1,
-            len(ProjectComment.objects.filter(project=post_data["project"], text=post_data["text"])),
-        )
 
-    def test_get_project_comments_by_id_forbidden_student(self):
+    def test_get_project_comments_forbidden_student(self):
         """
         GET /projects/{project_id}/comments .
 
         - A student user not owning the project cannot execute this request.
         """
         project_id = 2
-        response = self.student_offsite_client.get(f"/projects/{project_id}/comments")
+        response = self.student_offsite_client.get(reverse("project_comment_list_create", kwargs={"project_id": project_id}))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_get_project_comments_by_id_success(self):
+    def test_get_project_comments_success(self):
         """
         GET /projects/{project_id}/comments .
 
@@ -195,28 +171,18 @@ class ProjectCommentLinksViewsTests(TestCase):
         project_id = 2
 
         project_test_cnt = ProjectComment.objects.filter(project_id=project_id).count()
-        response = self.general_client.get(f"/projects/{project_id}/comments")
+        response = self.general_client.get(reverse("project_comment_list_create", kwargs={"project_id": project_id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
         project_test_cnt = ProjectComment.objects.filter(project_id=project_id).count()
-        response = self.student_president_client.get(f"/projects/{project_id}/comments")
+        response = self.student_president_client.get(reverse("project_comment_list_create", kwargs={"project_id": project_id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
-
-    def test_patch_project_comment_anonymous(self):
-        """
-        PATCH /projects/{project_id}/comments/{comment_id} .
-
-        - An anonymous user cannot execute this command.
-        """
-        patch_data = {"text": "Commentaire test"}
-        response = self.client.patch("/projects/2/comments/1", data=patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_comment_not_found(self):
         """

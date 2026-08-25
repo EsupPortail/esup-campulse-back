@@ -1,6 +1,8 @@
 """Custom permissions for projects app"""
 
 from rest_framework import permissions
+from rest_framework.generics import get_object_or_404
+
 from plana.apps.projects.models import Project
 
 
@@ -15,6 +17,20 @@ class ProjectCommentUpdateDestroyPermission(permissions.BasePermission):
             return False
 
         return True
+
+
+class ProjectCommentListPermission(permissions.BasePermission):
+    """Custom permission to retrieve a project's comments"""
+
+    def has_permission(self, request, view):
+        project = get_object_or_404(Project.visible_objects.all(), pk=view.kwargs.get("project_id"))
+        if (
+            request.user.has_perm("projects.view_projectcomment_any_fund")
+            or request.user.has_perm("projects.view_projectcomment_any_institution")
+            or request.user.can_access_project(project)
+        ):
+            return True
+        return False
 
 
 class ProjectUpdatePermission(permissions.BasePermission):
