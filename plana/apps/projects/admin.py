@@ -3,23 +3,14 @@ import datetime
 
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext_lazy as _
 
+from .utils import send_pcf_notification_mail_with_attachments
 from ...admin import SecuredModelAdmin, JSONImportAdminMixin
-from ...libs.mail_template.models import MailTemplate
-from ...utils import send_mail
-from ..contents.models import Content
-from .models import (
-    Category,
-    Project,
-    ProjectCategory,
-    ProjectComment,
-    ProjectCommissionFund,
-)
+from plana.apps.projects import models
 
 
-@admin.register(Category)
+@admin.register(models.Category)
 class CategoryAdmin(JSONImportAdminMixin):
     """List view for categories."""
 
@@ -36,7 +27,7 @@ class CategoryAdmin(JSONImportAdminMixin):
         queryset.update(is_enabled=False)
 
 
-@admin.register(Project)
+@admin.register(models.Project)
 class ProjectAdmin(SecuredModelAdmin):
     """List view for projects."""
 
@@ -95,7 +86,7 @@ class ProjectAdmin(SecuredModelAdmin):
         return '-'
 
 
-@admin.register(ProjectCategory)
+@admin.register(models.ProjectCategory)
 class ProjectCategoryAdmin(SecuredModelAdmin):
     """List view for project categories."""
 
@@ -103,7 +94,7 @@ class ProjectCategoryAdmin(SecuredModelAdmin):
     search_fields = ["category__name", "project__name"]
 
 
-@admin.register(ProjectComment)
+@admin.register(models.ProjectComment)
 class ProjectCommentAdmin(SecuredModelAdmin):
     """List view for project comments."""
 
@@ -116,80 +107,26 @@ class ProjectCommentAdmin(SecuredModelAdmin):
 
 
 class GeneratePDFAction:
-    def __init__(self, template_name, description):
-        self.template_name = template_name
+    def __init__(self, notification_type, description):
+        self.notification_type = notification_type
         self.short_description = description
 
     @property
     def __name__(self):
-        return f"generate_pdf_{self.template_name}"
+        return f"generate_pdf_{self.notification_type}"
 
-    # TODO : Add info and error messages
     def __call__(self, modeladmin, request, queryset):
-        attachments = []
         for obj in queryset:
-            # Retrieving data from ProjectCommissionFund object
-            fund = obj.commission_fund.fund
-            project = obj.project
-            commission = obj.commission_fund.commission
-            content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_{self.template_name}")
-            owner = {
-                "name": "PRENOM NOM",
-                "address": "1 Rue du Test STRASBOURG - 67000, FRANCE",
-            }
-            # Initializing data for PDF attachment
-            attachments.append(
-                {
-                    "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{getattr(fund, f'{self.template_name.lower()}_template_path')}",
-                    "filename": f"{content.title}.pdf",
-                    "context_attach": {
-                        "amount_earned": obj.amount_earned,
-                        "project_name": project.name,
-                        "project_manual_identifier": project.manual_identifier,
-                        "date": datetime.date.today().strftime('%d %B %Y'),
-                        "year": datetime.date.today().strftime('%Y'),
-                        "date_commission": commission.commission_date.strftime('%d %B %Y'),
-                        "owner": owner,
-                        "content": content,
-                    },
-                    "mimetype": "application/pdf",
-                    "request": request,
-                }
-
-            )
-
-        # Setting up data to send email
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-        }
-
-        code_templates = {
-            "ATTRIBUTION": "FUND_CONFIRMATION",
-            "REJECTION": "FUND_REJECTION",
-            "POSTPONE": "POSTPONED",
-            "DECISION_ATTRIBUTION": "FUND_CONFIRMATION",
-        }
-        template = MailTemplate.objects.get(code=f"USER_OR_ASSOCIATION_PROJECT_{code_templates[self.template_name]}")
-        # Send email with all generated PDF attachments
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=request.user.email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-            temp_attachments=attachments,
-        )
+            send_pcf_notification_mail_with_attachments(request=request, pcf=obj, notification_type=self.notification_type, from_admin=True)
 
 
 # Defining PDF actions for ProjectCommissionFund admin
-generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution")
+generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution et de décison d'attribution")
 generate_pdf_rejection = GeneratePDFAction("REJECTION", "Générer une notification de rejet")
 generate_pdf_postpone = GeneratePDFAction("POSTPONE", "Générer une notification de report")
-generate_pdf_decision_attribution = GeneratePDFAction("DECISION_ATTRIBUTION", "Générer une notification de décision d'attribution")
 
 
-@admin.register(ProjectCommissionFund)
+@admin.register(models.ProjectCommissionFund)
 class ProjectCommissionFundAdmin(admin.ModelAdmin):
     """List view for project commission funds."""
 
@@ -217,9 +154,6 @@ class ProjectCommissionFundAdmin(admin.ModelAdmin):
                     generate_pdf_rejection, 'generate_pdf_rejection', generate_pdf_rejection.short_description),
                 'generate_pdf_postpone': (
                     generate_pdf_postpone, 'generate_pdf_postpone', generate_pdf_postpone.short_description),
-                'generate_pdf_decision_attribution': (
-                    generate_pdf_decision_attribution, 'generate_pdf_decision_attribution',
-                    generate_pdf_decision_attribution.short_description),
             }
             actions.update(custom_actions)
         return actions
