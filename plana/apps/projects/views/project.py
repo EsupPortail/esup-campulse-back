@@ -34,9 +34,8 @@ from plana.utils import send_mail
 from ..filters import ProjectFilter
 
 from plana.decorators import capture_queries
-from ..models import ProjectComment
 from ..permissions import ProjectUpdatePermission
-from ...contents.models import Content
+from ..utils import send_pcf_notification_mail_with_attachments
 
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -652,42 +651,7 @@ class ProjectCommissionPostponeView(generics.GenericAPIView):
                     pcf.commission_fund_id = new_cf_id
                     pcf.save()
                     pcf.refresh_from_db()
-
-                    owner_data = project.get_project_owner_data()
-                    current_site = get_current_site(request)
-                    context = {
-                        "site_domain": current_site.domain,
-                        "site_name": current_site.name,
-                    }
-                    template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_POSTPONED")
-                    attachment = None
-                    # Creating context for notifications attachments
-                    if fund.postpone_template_path != "":
-                        content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_POSTPONE")
-                        # Retrieving last comment of the project or None
-                        comment = ProjectComment.objects.filter(project=project.id).order_by("-creation_date").first()
-                        attachment = {
-                            "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{fund.postpone_template_path}",
-                            "filename": f"{content.title}.pdf",
-                            "context_attach": {
-                                "project_name": project.name,
-                                "date": datetime.date.today(),
-                                "date_commission": pcf.commission_fund.commission.commission_date,
-                                "owner": owner_data,
-                                "content": content,
-                                "comment": "" if not comment else comment.text,
-                            },
-                            "mimetype": "application/pdf",
-                            "request": request,
-                            "pcf_obj": pcf
-                        }
-                    send_mail(
-                        from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=owner_data.get("email"),
-                        subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                        message=template.parse_vars(request.user, request, context),
-                        temp_attachments=[attachment],
-                    )
+                    send_pcf_notification_mail_with_attachments(request=request, pcf=pcf, notification_type="POSTPONE")
 
         return Response(
             {"success": _("Project successfully postponed to the new commission.")},

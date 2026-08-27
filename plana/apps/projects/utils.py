@@ -101,11 +101,10 @@ def send_pcf_notification_mail_with_attachments(request, pcf: ProjectCommissionF
             attachments.append(attachment)
 
     # If request is sent from admin, send mail to request user only (used for testing purposes)
-    if from_admin:
-        to = request.user.email
-        cc = []
-    else:
-        to = project.get_project_owner_data().get("email")
+    cc = []
+    to = request.user.email if from_admin else project.get_project_owner_data().get("email")
+    # postpone notifications does not need to be sent to managers
+    if not from_admin and notification_type != "POSTPONE":
         cc = project.get_project_default_manager_emails(fund.id)
 
     # Send the final email with correct generated attachments
