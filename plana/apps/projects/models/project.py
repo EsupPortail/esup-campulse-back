@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Exists, Sum
+from django.db.models import Sum, Count, Q
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
@@ -282,10 +282,10 @@ class Project(models.Model):
         A project is considered finished one way (waiting review) or another (canceled) when all pcf amount_earned have been set up
         """
         stats = self.projectcommissionfund_set.aggregate(
-            has_pending_amount=Exists(self.projectcommissionfund_set.filter(amount_earned__isnull=True, is_validated_by_admin=True)),
+            has_pending_amount_count=Count("id", Q(amount_earned__isnull=True, is_validated_by_admin=True)),
             total_earned=Sum("amount_earned", default=0),
         )
-        if not stats["has_pending_amount"]:
+        if stats["has_pending_amount_count"] == 0:
             new_status = self.ProjectStatus.PROJECT_REVIEW_DRAFT if stats["total_earned"] > 0 else self.ProjectStatus.PROJECT_CANCELED
             if self.project_status != new_status and self.can_transition_to_status(new_status):
                 self.project_status = new_status
@@ -297,12 +297,12 @@ class Project(models.Model):
         A project is considered ready for commission (validated) or not (rejected) when all pcf is_validated_by_admin have been set up
         """
         stats = self.projectcommissionfund_set.aggregate(
-            has_unchecked_admin=Exists(self.projectcommissionfund_set.filter(is_validated_by_admin__isnull=True)),
-            has_validated_admin=Exists(self.projectcommissionfund_set.filter(is_validated_by_admin=True)),
+            unchecked_admin_count=Count("id", filter=Q(is_validated_by_admin__isnull=True)),
+            validated_admin_count=Count("id", filter=Q(is_validated_by_admin=True)),
         )
 
         # There's still pcf waiting for first validation, do nothing here
-        if stats["has_unchecked_admin"]:
+        if stats["unchecked_admin_count"] > 0:
             return
 
         current_site = get_current_site(request)
@@ -313,7 +313,7 @@ class Project(models.Model):
         }
         owner_data = self.get_project_owner_data()
 
-        if stats["has_validated_admin"]:
+        if stats["validated_admin_count"] > 0:
             new_status = self.ProjectStatus.PROJECT_VALIDATED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION"
         else:

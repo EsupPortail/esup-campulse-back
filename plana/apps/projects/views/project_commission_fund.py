@@ -225,18 +225,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             commission_fund_id=self.kwargs["commission_fund_id"],
         )
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: ProjectCommissionFundDataSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/commission_funds"],
-    )
-    def patch(self, request, *args, **kwargs):
-        """Update details of a project linked to a commission fund object."""
+    def partial_update(self, request, *args, **kwargs):
         pcf = self.get_object()
 
         if not request.user.can_edit_project(pcf.project):
@@ -245,10 +234,7 @@ class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        return response.Response({}, status=status.HTTP_200_OK)
+        return super().partial_update(request, *args, **kwargs)
 
     @extend_schema(
         responses={
