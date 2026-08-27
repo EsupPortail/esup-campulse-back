@@ -23,8 +23,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 from ..filters import ProjectCommissionFundFilter
 
 from plana.decorators import capture_queries
-
-DATE_FORMAT = "%d %B %Y"
+from ..permissions import CanEditProjectPermission
 
 
 @extend_schema(
@@ -203,69 +202,27 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
+@extend_schema(tags=["projects/commission_funds"])
 class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_funds/{commission_fund_id} route."""
 
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, CanEditProjectPermission]
     queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionFundDataSerializer
     http_method_names = ["patch", "delete"]
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
     def get_object(self):
-        return get_object_or_404(
+        pcf = get_object_or_404(
             self.get_queryset(),
             project__in=Project.visible_objects.all(),
             project_id=self.kwargs["project_id"],
             commission_fund_id=self.kwargs["commission_fund_id"],
         )
+        self.check_object_permissions(self.request, pcf)
+        return pcf
 
-    def partial_update(self, request, *args, **kwargs):
-        pcf = self.get_object()
-
-        if not request.user.can_edit_project(pcf.project):
-            return response.Response(
-                {"error": _("Not allowed to update this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return super().partial_update(request, *args, **kwargs)
-
-    @extend_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: ProjectCommissionFundSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/commission_funds"],
-    )
-    def delete(self, request, *args, **kwargs):
-        """Destroys details of a project linked to a commission date."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_commission_fund = ProjectCommissionFund.objects.get(
-                project_id=kwargs["project_id"],
-                commission_fund_id=kwargs["commission_fund_id"],
-            )
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Link between this project and commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if not request.user.can_edit_project(project):
-            return response.Response(
-                {"error": _("Not allowed to update this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
+    def perform_destroy(self, instance):
+        project = instance.project
         project.edition_date = datetime.date.today()
         project.save()
-        project_commission_fund.delete()
-        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+        return super().perform_destroy(instance)

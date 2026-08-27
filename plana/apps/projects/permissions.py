@@ -6,6 +6,16 @@ from rest_framework.generics import get_object_or_404
 from plana.apps.projects.models import Project
 
 
+class CanEditProjectPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        """
+        Custom permission to check if the request user can edit the project
+        With the Project obj itself or other linked objects (ProjectCommissionFund, ...)
+        """
+        project = getattr(obj, "project", obj)
+        return request.user.can_edit_project(project)
+
+
 class ProjectCommentUpdateDestroyPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
