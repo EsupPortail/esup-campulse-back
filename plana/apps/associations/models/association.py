@@ -72,6 +72,7 @@ class Association(models.Model):
         max_length=32,
         choices=[
             ("CHARTER_DRAFT", _("Charter Draft")),
+            ("CHARTER_DRAFT_PROCESSED", _("Charter Draft Processed")),
             ("CHARTER_REJECTED", _("Charter Rejected")),
             ("CHARTER_PROCESSING", _("Charter Processing")),
             ("CHARTER_VALIDATED", _("Charter Validated")),
