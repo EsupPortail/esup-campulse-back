@@ -23,7 +23,7 @@ from plana.apps.projects.serializers.project_commission_fund import (
 from ..filters import ProjectCommissionFundFilter
 
 from plana.decorators import capture_queries
-from ..permissions import CanEditProjectPermission
+from ..permissions import CanAccessOrEditProjectPermission
 
 
 @extend_schema(
@@ -206,7 +206,7 @@ class ProjectCommissionFundRetrieve(generics.RetrieveAPIView):
 class ProjectCommissionFundUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{project_id}/commission_funds/{commission_fund_id} route."""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions, CanEditProjectPermission]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, CanAccessOrEditProjectPermission]
     queryset = ProjectCommissionFund.objects.all()
     serializer_class = ProjectCommissionFundDataSerializer
     http_method_names = ["patch", "delete"]
