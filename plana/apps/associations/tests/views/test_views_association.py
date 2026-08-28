@@ -1022,6 +1022,21 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(association.charter_status, "CHARTER_VALIDATED")
         self.assertEqual(association.is_site, True)
 
+    def test_patch_association_status_manager_forbidden_status(self):
+        """
+        PATCH /associations/{id}/status .
+
+        - A manager user cannot set up a forbidden charter status through the API
+        """
+        patch_data = {"charter_status": "CHARTER_DRAFT"}
+        response = self.general_client.patch(
+            reverse("association_status_update", kwargs={"pk": 2}),
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("forbidden_status", response.data)
+
     def test_patch_association_status_missing_documents(self):
         """
         PATCH /associations/{id}/status .
