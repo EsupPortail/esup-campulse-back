@@ -284,5 +284,7 @@ class AssociationStatusSerializer(serializers.ModelSerializer):
         """Custom validate to avoid charter submission from a disabled association"""
         if not self.instance.is_enabled and data.get("charter_status") == "CHARTER_PROCESSING":
             raise serializers.ValidationError({"disabled_association": _("The selected association is not enabled to new requests for charter submissions.")})
+        if data.get("charter_status") == "CHARTER_DRAFT":
+            raise serializers.ValidationError({"forbidden_status": _("Cannot set this charter status through the API.")})
         return data
 

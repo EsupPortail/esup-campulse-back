@@ -241,7 +241,7 @@ class AssociationStatusUpdate(generics.UpdateAPIView):
             association.save()
 
         mail_templates_codes_by_status = {
-            "CHARTER_DRAFT": "ASSOCIATION_CHARTER_REJECTION",
+            "CHARTER_DRAFT_PROCESSED": "ASSOCIATION_CHARTER_REJECTION",
             "CHARTER_PROCESSING": "ASSOCIATION_CHARTER_CREATION",
             "CHARTER_VALIDATED": "ASSOCIATION_CHARTER_CONFIRMATION",
             "CHARTER_REJECTED": "ASSOCIATION_CHARTER_REJECTION",
