@@ -27,12 +27,28 @@ class CategoryAdmin(JSONImportAdminMixin):
     search_fields = ["name"]
     actions = ["enable_selection", "disable_selection"]
 
+    def _purge_draft_project_categories(self, category_queryset):
+        """Deletes ProjectCategory objects from draft and processing projects."""
+        ProjectCategory.objects.filter(
+            category__in=category_queryset,
+            project__project_status__in=["PROJECT_DRAFT", "PROJECT_DRAFT_PROCESSED", "PROJECT_PROCESSING"]
+        ).delete()
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            old_obj = Category.objects.get(pk=obj.pk)
+            if old_obj.is_enabled and not obj.is_enabled:
+                self._purge_draft_project_categories(Category.objects.filter(pk=obj.pk))
+
+        super().save_model(request, obj, form, change)
+
     @admin.action(description=_("Enable all selected Categories"))
     def enable_selection(self, request, queryset):
         queryset.update(is_enabled=True)
 
     @admin.action(description=_("Disable all selected Categories"))
     def disable_selection(self, request, queryset):
+        self._purge_draft_project_categories(queryset)
         queryset.update(is_enabled=False)
 
 
