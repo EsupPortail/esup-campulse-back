@@ -940,3 +940,28 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REVIEW_PROCESSING")
         self.assertTrue(len(mail.outbox))
+
+    def test_postpone_project_view_bad_request(self):
+        response = self.general_client.patch(
+            reverse("project_commission_postpone_view", kwargs={"project_id": 1}),
+            data={"new_commission_id": 2},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("commission_not_eligible", response.data)
+
+    def test_postpone_project_view_ok(self):
+        project_id = 1
+        self.assertFalse(len(mail.outbox))
+        response = self.general_client.patch(
+            reverse("project_commission_postpone_view", kwargs={"project_id": project_id}),
+            data={"new_commission_id": 3},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Ensure all pcf have been updated and an email has been sent
+        commission_funds_ids = list(
+            ProjectCommissionFund.objects.filter(project_id=project_id).values_list("commission_fund_id", flat=True)
+        )
+        self.assertCountEqual(commission_funds_ids, [5])
+        self.assertTrue(len(mail.outbox))

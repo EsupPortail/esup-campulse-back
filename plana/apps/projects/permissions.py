@@ -54,6 +54,7 @@ class ProjectCommentListPermission(permissions.BasePermission):
         return False
 
 
+# TODO : Obsolete with new permission CanAccessOrEditProjectPermission
 class ProjectUpdatePermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -63,6 +64,7 @@ class ProjectUpdatePermission(permissions.BasePermission):
         return request.user.is_superuser or request.user.can_edit_project(project_obj=obj)
 
 
+# TODO : May be Obsolete with new permission CanAccessOrEditProjectPermission ?
 class ProjectCategoryUpdatePermission(permissions.BasePermission):
     """
     Checks if user can edit project categories based on request data and if the user can edit the linked project or not

@@ -625,6 +625,7 @@ class ProjectCommissionPostponeView(generics.GenericAPIView):
     queryset = Project.visible_objects.all()
     serializer_class = ProjectPostponeSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions, ProjectUpdatePermission]
+    http_method_names = ["patch"]
     lookup_url_kwarg = "project_id"
 
     def patch(self, request, *args, **kwargs):
