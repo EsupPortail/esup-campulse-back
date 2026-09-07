@@ -155,8 +155,19 @@ Les références sont appelées ainsi : `@:voici-une-référence`.
 
 Pour écraser un texte, ajoutez-le dans `locales/custom.txt`.
 
-Attention à bien respecter cette syntaxe (clé=texte, sans guillemets et saut de ligne) : 
+Veillez à bien respecter cette syntaxe (clé=texte, sans guillemets et saut de ligne) : 
 
 ```txt
 university-name=Université de la Réunion
 ```
+
+Attention : l'usage du caractère @ nécéssite une attention particulière.
+
+Par exemple : "Si vous n'avez pas eu de rendez-vous avec le vie étudiante, merci d'écrire à cette adresse avant de déposer votre projet : fsdie-projet@univ.fr."
+
+L'adresse mail citée va générer une erreur.
+En effet, conformément au plugin Vue I18n, que nous utilisons, il est nécessaire d'échapper l'arobase, qui est un caractère dédié à la liaison avec une autre clé.
+
+Vous pouvez le faire de la manière suivante, dans des accolades avec des guillemets simples :
+
+"Si vous n'avez pas eu de rendez-vous avec le vie étudiante, merci d'écrire à cette adresse avant de déposer votre projet : fsdie-projet{'@'}univ.fr."
