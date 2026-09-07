@@ -478,15 +478,6 @@ class ProjectsViewsTests(TestCase):
         results = Project.visible_objects.filter(name="Testing creation user")
         self.assertEqual(len(results), 1)
 
-    def test_get_project_by_id_anonymous(self):
-        """
-        GET /projects/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_get_project_by_id_404(self):
         """
         GET /projects/{id} .

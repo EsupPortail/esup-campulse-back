@@ -1,6 +1,8 @@
 """List of tests done on projects models."""
+from unittest.mock import patch
 
-from django.test import Client, TestCase
+from django.core import mail
+from django.test import Client, TestCase, RequestFactory
 
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
@@ -32,11 +34,16 @@ class ProjectsModelsTests(TestCase):
         "tests/users_associationuser.json",
         "tests/users_groupinstitutionfunduser.json",
         "tests/users_user.json",
+        "mailtemplates",
+        "mailtemplatevars",
     ]
 
     def setUp(self):
         """Start a default client used on all tests."""
         self.client = Client()
+        self.factory = RequestFactory()
+        self.request = self.factory.get("/")
+        self.request.user = User.objects.create_user(username="admin", email="admin@test.com")
 
     def test_category_model(self):
         """There's at least one category in the database."""
@@ -176,3 +183,106 @@ class ProjectsModelsTests(TestCase):
         new_data = project.get_project_owner_data()
         self.assertEqual(new_data["email"], "asso-site-alsace@unistra.fr")
 
+    def test_can_transition_to_status_ok(self):
+        project = Project.objects.get(id=1)
+        self.assertTrue(project.can_transition_to_status(new_status=Project.ProjectStatus.PROJECT_PROCESSING))
+        # Project should be able to roll back with a delta of 1
+        project.project_status = Project.ProjectStatus.PROJECT_PROCESSING
+        project.save()
+        self.assertTrue(project.can_transition_to_status(new_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED))
+
+    def test_can_transition_to_status_forbidden(self):
+        project = Project.objects.get(id=1)
+        # Project should not be able to transition to a status with a delta > 1
+        self.assertFalse(project.can_transition_to_status(new_status=Project.ProjectStatus.PROJECT_VALIDATED))
+
+        # Project should not be able to transition from an archived status to another one
+        project.project_status = Project.ProjectStatus.PROJECT_CANCELED
+        project.save()
+        self.assertFalse(project.can_transition_to_status(new_status=Project.ProjectStatus.PROJECT_REVIEW_PROCESSING))
+
+        # Project should not be able to roll back from a non-rollbackable status
+        project.project_status = Project.ProjectStatus.PROJECT_REVIEW_DRAFT
+        project.save()
+        self.assertFalse(project.can_transition_to_status(new_status=Project.ProjectStatus.PROJECT_VALIDATED))
+
+    @patch.object(Project, "can_transition_to_status", return_value=True)
+    def test_process_pcf_last_amount_earned_positive(self, mock_can_transition):
+        project = Project.objects.get(id=10)
+        pcf = ProjectCommissionFund.objects.get(pk=11)
+        pcf.amount_earned = 100
+        pcf.save()
+        # Last PCF updated with positive amount earned
+        project.process_project_pcf_amount_earned_status_update()
+        mock_can_transition.assert_called_once_with(Project.ProjectStatus.PROJECT_REVIEW_DRAFT)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_REVIEW_DRAFT)
+
+    @patch.object(Project, "can_transition_to_status", return_value=True)
+    def test_process_pcf_last_amount_earned_zero(self, mock_can_transition):
+        project = Project.objects.get(id=10)
+        pcf = ProjectCommissionFund.objects.get(pk=11)
+        # Last PCF updated with an amount earned of zero
+        pcf.amount_earned = 0
+        pcf.save()
+        project.process_project_pcf_amount_earned_status_update()
+        mock_can_transition.assert_called_once_with(Project.ProjectStatus.PROJECT_CANCELED)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_CANCELED)
+
+    @patch.object(Project, "can_transition_to_status", return_value=True)
+    def test_process_pcf_not_last_amount_earned(self, mock_can_transition):
+        project_id = 10
+        project = Project.objects.get(id=project_id)
+        pcf = ProjectCommissionFund.objects.create(amount_asked=200, is_validated_by_admin=True, project_id=project.id, commission_fund_id=2)
+        # Not the last pcf, do nothing
+        pcf.amount_earned = 100
+        pcf.save()
+        project.process_project_pcf_amount_earned_status_update()
+        mock_can_transition.assert_not_called()
+        refreshed_other_project = Project.objects.get(id=project_id)
+        self.assertEqual(refreshed_other_project.project_status, project.project_status)
+
+    def test_process_pcf_admin_validation_ok(self):
+        # If last pcf validated by admin, mail sent and project status updated accordingly
+        project = Project.objects.get(id=3)
+        pcf = ProjectCommissionFund.objects.get(pk=4)
+        pcf.is_validated_by_admin = True
+        pcf.save()
+
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_VALIDATED)
+        self.assertEqual(len(mail.outbox), 1)
+
+        # No double-mail sent if validated twice
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_process_pcf_admin_validation_fully_rejected(self):
+        # If last pcf rejected by admin, mail sent and project status updated accordingly
+        project = Project.objects.get(id=3)
+        pcf = ProjectCommissionFund.objects.get(pk=4)
+        pcf.is_validated_by_admin = False
+        pcf.save()
+
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_REJECTED)
+        self.assertEqual(len(mail.outbox), 1)
+
+        # No double-mail sent if rejected twice
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_process_pcf_admin_validation_not_last(self):
+        # If not last pcf validated by admin, no email sent and project status not updated yet
+        project = Project.objects.get(id=4)
+        pcf = ProjectCommissionFund.objects.get(pk=5)
+        pcf.is_validated_by_admin = True
+        pcf.save()
+
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_PROCESSING)
+        self.assertEqual(len(mail.outbox), 0)

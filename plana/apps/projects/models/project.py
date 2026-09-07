@@ -325,13 +325,13 @@ class Project(models.Model):
             self.project_status = new_status
             self.save(update_fields=["project_status"])
 
-        template = MailTemplate.objects.get(code=mail_code)
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=owner_data.get("email"),
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-        )
+            template = MailTemplate.objects.get(code=mail_code)
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=owner_data.get("email"),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+                message=template.parse_vars(request.user, request, context),
+            )
 
     def __str__(self):
         return self.name
