@@ -110,9 +110,22 @@ ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = environ.get("ASSOCIATION_DEFAULT_AM
 LDAP_ENABLED = environ.get("LDAP_ENABLED", "False").lower() == "true"
 
 # External APIs
-ACCOUNTS_API_CONF["DESCRIPTION_FILE"] = environ.get("ACCOUNTS_API_SPORE_DESCRIPTION_FILE", "https://domain.tld")
-ACCOUNTS_API_CONF["BASE_URL"] = environ.get("ACCOUNTS_API_SPORE_BASE_URL", "https://domain.tld/description.json")
-ACCOUNTS_API_CONF["TOKEN"] = environ.get("ACCOUNTS_API_SPORE_TOKEN", "70K3N")
+ACCOUNTS_API_CLIENT = environ.get("ACCOUNTS_API_CLIENT", "Spore")  # "Spore" or "Ldap"
+ACCOUNTS_API_CONF = {
+    # SPORE
+    "DESCRIPTION_FILE": environ.get("ACCOUNTS_API_SPORE_DESCRIPTION_FILE", "https://domain.tld"),
+    "BASE_URL": environ.get("ACCOUNTS_API_SPORE_BASE_URL", "https://domain.tld/description.json"),
+    "TOKEN": environ.get("ACCOUNTS_API_SPORE_TOKEN", "70K3N"),
+    # LDAP
+    "HOST": environ.get("ACCOUNTS_LDAP_HOST", "ldap.domain.tld"),
+    "PORT": int(environ.get("ACCOUNTS_LDAP_PORT", "000")),
+    "USE_TLS": environ.get("ACCOUNTS_LDAP_USE_TLS", "true").lower() == "true",
+    "BIND_DN": environ.get("ACCOUNTS_LDAP_BIND_DN", "cn=admin,dc=domain,dc=tld"),
+    "PASSWORD": environ.get("ACCOUNTS_LDAP_PASSWORD", "secret"),
+    "BASE_DN": environ.get("ACCOUNTS_LDAP_BASE_DN", "ou=users,dc=domain,dc=tld"),
+    "FILTER": environ.get("ACCOUNTS_LDAP_FILTER", "(&(objectClass=person)(uid={username}))"),
+    "ATTRIBUTES": environ.get("ACCOUNTS_LDAP_ATTRIBUTES_LIST", "givenName,sn,mail,uid").split(","),
+}
 
 # Initial superuser account
 DJANGO_SUPERUSER_EMAIL = environ.get("DJANGO_SUPERUSER_EMAIL", "")

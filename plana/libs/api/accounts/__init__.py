@@ -14,9 +14,10 @@ from django.conf import settings
 
 
 def _get_client():
-    conf = settings.ACCOUNTS_API_CONF
-    mod, package = settings.ACCOUNTS_API_CLIENT.rsplit('.', 1)
-    return getattr(import_module(mod), package)
+    client_path = f"plana.libs.api.accounts.{settings.ACCOUNTS_API_CLIENT}AccountsClient"
+    mod, package = client_path.rsplit('.', 1)
+    client_class = getattr(import_module(mod), package)
+    return client_class
 
 
 Client = _get_client()
