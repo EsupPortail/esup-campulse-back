@@ -3,7 +3,8 @@ stages:
   - deploy
 
 services:
-  - postgres:latest
+  - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/postgres
+    alias: postgres
 
 variables:
   POSTGRES_DB: plana_test
@@ -18,7 +19,8 @@ before_script:
 unittest:
   stage: test
   tags:
-    - python3.9
+    - cluster
+  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - pip3 install -r requirements/dev.txt
