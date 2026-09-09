@@ -8,8 +8,9 @@ EXPOSE 8080
 WORKDIR /app
 
 # Install the application
+# Temporarily ignoring bullseye warnings
 RUN set -ex \
-    && apt-get update \
+    && apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y gettext gcc locales tzdata \
     && localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8 \
     && ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime \

@@ -105,6 +105,7 @@ pages:
     # gcr.io/kaniko-project/executor:v1.7.0-debug
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  before_script: []
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
