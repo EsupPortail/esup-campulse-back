@@ -8,8 +8,11 @@ EXPOSE 8080
 WORKDIR /app
 
 # Install the application
-# Temporarily ignoring bullseye warnings
+# Temporarily ignoring bullseye warnings and using debian archives to make it work
 RUN set -ex \
+    && sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i '/debian-security/d' /etc/apt/sources.list \
     && apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y gettext gcc locales tzdata \
     && localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8 \
