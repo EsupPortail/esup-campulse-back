@@ -14,15 +14,21 @@ RUN set -ex \
     && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
     && sed -i '/debian-security/d' /etc/apt/sources.list \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y gettext gcc locales tzdata \
+   && apt-get install -y --no-install-recommends \
+        gettext \
+        gcc \
+        locales \
+        tzdata \
+    # Key gen
+        age \
+        openssh-client \
+    # Weasyprint dependencies
+        libpango-1.0-0 \
+        libpangoft2-1.0-0 \
     && localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8 \
     && ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && pip install -U pip uwsgi \
-    # Key gen
-    && apt-get install -y age openssh-client \
-    # Weasyprint dependencies
-    && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV LANG fr_FR.UTF-8
