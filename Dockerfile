@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.9-slim-bookworm
 
 LABEL maintainer="DNum DIP - Université de Strasbourg <dnum-dip@unistra.fr>" \
       app="plana"
@@ -8,13 +8,11 @@ EXPOSE 8080
 WORKDIR /app
 
 # Install the application
-# Temporarily ignoring bullseye warnings and using debian archives to make it work
 RUN set -ex \
-    && sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
-    && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
-    && sed -i '/debian-security/d' /etc/apt/sources.list \
-    && apt-get -o Acquire::Check-Valid-Until=false update \
+   && apt-get update \
    && apt-get install -y --no-install-recommends \
+        build-essential \
+        python3-dev \
         gettext \
         gcc \
         locales \
