@@ -487,6 +487,8 @@ jsonschema-specifications==2024.10.1 ; python_version >= "3.9" and python_versio
 jsonschema==4.23.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:d71497fef26351a33265337fa77ffeb82423f3ea21283cd9467bb03999266bc4 \
     --hash=sha256:fbadb6f8b144a8f8cf9f0b89ba94501d143e50411a1278633f56a7acf7fd5566
+ldap3==2.9.1 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:5869596fc4948797020d3f03b7939da938778a0f9e2009f7a072ccf92b8e8d70
 lxml==5.3.0 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:01220dca0d066d1349bd6a1726856a78f7929f3878f7e2ee83c296c69495309e \
     --hash=sha256:02ced472497b8362c8e902ade23e3300479f4f43e45f4105c85ef43b8db85229 \
@@ -770,6 +772,8 @@ psycopg-binary==3.2.4 ; implementation_name != "pypy" and python_version >= "3.9
 psycopg[binary]==3.2.4 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:43665368ccd48180744cab26b74332f46b63b7e06e8ce0775547a3533883d381 \
     --hash=sha256:f26f1346d6bf1ef5f5ef1714dd405c67fb365cfd1c6cea07de1792747b167b92
+pyasn1==0.6.1 ; python_version >= "3.9" and python_version < "3.13" \
+    --hash=sha256:0d632f46f2ba09143da3a8afe9e33fb6f92fa2320ab7e886e2d0f7672af84629
 pycparser==2.22 ; python_version >= "3.9" and python_version < "3.13" \
     --hash=sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6 \
     --hash=sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
