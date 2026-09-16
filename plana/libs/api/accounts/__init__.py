@@ -17,4 +17,4 @@ def get_client():
     client_path = f"plana.libs.api.accounts.{settings.ACCOUNTS_API_CLIENT.lower()}.{settings.ACCOUNTS_API_CLIENT}AccountsAPI"
     mod, package = client_path.rsplit('.', 1)
     client_class = getattr(import_module(mod), package)
-    return client_class
+    return client_class()
