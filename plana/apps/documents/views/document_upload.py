@@ -485,9 +485,12 @@ class DocumentUploadFileRetrieve(generics.RetrieveAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
+        # Encode filename and expose headers as for generated documents
         file = document_upload.path_file
-        return FileResponse(
-            file.open(),
-            as_attachment=False,
-            filename=document_upload.name,
-        )
+        raw_filename = document_upload.name
+        encoded_filename = urllib.parse.quote(raw_filename)
+        file_response = FileResponse(file.open())
+        file_response["Content-Disposition"] = f"attachment; filename*=UTF-8''{encoded_filename}"
+        file_response["Access-Control-Expose-Headers"] = "Content-Disposition"
+
+        return file_response

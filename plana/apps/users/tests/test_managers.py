@@ -3,7 +3,7 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.test import TestCase
-from plana.apps.users.models.user import User
+from plana.apps.users.models.user import User, GroupInstitutionFundUser
 from plana.apps.users.provider import CASProvider
 
 
@@ -44,12 +44,13 @@ class UserManagersTests(TestCase):
         """
         For not CAS manager, should return users from associations managed by its institution + himself
         For CAS manager, should return users from associations managed by its institution + CAS users from any institution or group + himself
+        CAS users are only returned when they have at least one GIFU
         CAS manager has funds linked to its institution, retrieve fund members from those too
         """
         qs_not_cas = User.objects.managed_users(user=User.objects.get(username="gestionnaire-uha@mail.tld")).values_list("username", flat=True)
         self.assertCountEqual(
             list(qs_not_cas),
-            ["gestionnaire-uha@mail.tld","president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld"]
+            ["gestionnaire-uha@mail.tld", "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld"]
         )
 
         # Creating a fake CAS User for this test only
@@ -67,11 +68,13 @@ class UserManagersTests(TestCase):
             # Fund members from same institution managed funds
             "membre-fsdie-idex@mail.tld",
             "membre-commissions@mail.tld",
-            # CAS account
-            "PatriciaCAS",
             # Special case
             "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld"
         ]
+
+        # CAS user should be there only if it has at least one GIFU
+        GroupInstitutionFundUser.objects.create(user=user, group_id=6)
+        expected_users.append("PatriciaCAS")
         self.assertCountEqual(list(qs_with_cas), expected_users)
 
     def test_user_manager_managed_users_manager_misc(self):

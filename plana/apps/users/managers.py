@@ -42,7 +42,8 @@ class UserQuerySet(models.QuerySet):
 
         # A staff User cannot access to another staff User data
         # Only Users with verified email address are considered active for classic managers users
-        restricted_scope = filters & Q(is_staff=False) & Q(emailaddress__verified=True)
+        # Incomplete Users are not returned (at least one gifu)
+        restricted_scope = filters & Q(is_staff=False) & Q(emailaddress__verified=True) & ~Q(groupinstitutionfunduser__isnull=True)
 
         # Can always get yourself even with the restricted scope
         return self.filter(restricted_scope | Q(pk=user.pk)).distinct()

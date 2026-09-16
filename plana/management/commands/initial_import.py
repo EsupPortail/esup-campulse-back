@@ -43,6 +43,7 @@ class Command(BaseCommand):
                         "mailtemplatevars",
                     ],
                 )
+                call_command("createsuperuser", "--no-input")
 
             # Loading dev data from tests fixtures if needed
             if options["test"]:
@@ -59,8 +60,6 @@ class Command(BaseCommand):
 
             if options["storages"]:
                 call_command("loaddata_storages")
-
-            call_command("createsuperuser", "--no-input")
 
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))
 

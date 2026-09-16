@@ -1,5 +1,28 @@
 # Changelog
 
+## k8s-0.5.0 (03/09/2026)
+
+### Features et évolutions
+- Ajout d'un champ is_enabled sur les Catégories de Projet, une Catégorie de Projet peut désormais être désactivée (non sélectionnable pour les Projets en cours)
+- Les Projets ne peuvent désormais avoir plus qu'une seule Catégorie réglementaire (ne s'applique qu'aux nouveau projets en brouillon ou en cours de validation, l'historique est conservé pour le reste)
+- Les associations doivent désormais sélectionner une composante d'établissement obligatoirement dépendante de leur établissement d'affectation
+- La désactivation d'une association applique des conséquences plus concrètes sur ses actions sur la plateforme : interdiction de soumission de demande d'agrément ou de projet, les utilisateurs ne peuvent plus y faire de demande d'inscription
+
+### Corrections de bugs
+- Il est à nouveau possible de supprimer des utilisateurs depuis la liste dans l'admin django
+- Correction d'un lien mort dans un mail de reset de mot de passe
+- Correction des headers renvoyés pour la récupération de documents via l'API
+- Les comptes CAS "fantômes" (inscription non complétée) n'apparaissent plus dans la liste remontée pour la gestion des comptes
+
+### Autres changements
+- Optimisation et amélioration de la maintenabilité du code pour la modification et la suppression d'associations
+- Harmonisation des informations disponibles dans les mails pour la soumission de projets
+
+## k8s-0.4.4 (27/07/2026)
+
+### Corrections de bugs
+- Correction d'un bug causant le rafraîchissement de certaines fixtures chaque matin sur les instances PaaS
+
 ## k8s-0.4.3 (27/07/2026)
 
 ### Features et évolutions
