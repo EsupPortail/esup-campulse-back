@@ -13,7 +13,6 @@ class Command(BaseCommand):
         call_command("cron_association_expiration")
         call_command("cron_commission_expiration")
         call_command("cron_document_expiration")
-        call_command("cron_goa_expiration")
         call_command("cron_history_expiration")
         call_command("cron_password_expiration")
         call_command("cron_project_expiration")
