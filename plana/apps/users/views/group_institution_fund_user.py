@@ -28,24 +28,10 @@ class GroupInstitutionFundUserListCreate(generics.ListCreateAPIView):
     serializer_class = GroupInstitutionFundUserCreateSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: GroupInstitutionFundUserCreateSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-        tags=["users/groups"],
-    )
-    def get(self, request, *args, **kwargs):
-        """List all groups linked to a user, or all groups of all users (manager)."""
-        if request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
-            serializer = self.serializer_class(self.queryset.all(), many=True)
-            return response.Response(serializer.data)
-        serializer = self.serializer_class(
-            self.queryset.filter(user_id=request.user.pk),
-            many=True,
-        )
-        return response.Response(serializer.data)
+    def get_queryset(self):
+        if self.request.user.has_perm("users.view_groupinstitutionfunduser_any_group"):
+            return self.queryset.all()
+        return self.queryset.filter(user_id=self.request.user.pk)
 
 
 class GroupInstitutionFundUserRetrieve(generics.RetrieveAPIView):
