@@ -693,7 +693,7 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 
 # External APIs.
-ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
+ACCOUNTS_API_CLIENT = "Spore"
 ACCOUNTS_API_CONF = {}
 
 # Enable adding a LDAP account though Spore.

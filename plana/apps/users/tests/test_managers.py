@@ -33,12 +33,12 @@ class UserManagersTests(TestCase):
         self.assertEqual(qs.count(), 0)
 
     def test_user_manager_managed_users_superuser(self):
-        """Should return all existing users"""
+        """Should return all existing finished users"""
         qs_superuser = User.objects.managed_users(user=User.objects.get(username="admin@admin.admin"))
-        self.assertEqual(qs_superuser.count(), User.objects.all().count())
+        self.assertEqual(qs_superuser.count(), User.objects.filter(emailaddress__verified=True).count())
 
         qs_manager_general = User.objects.managed_users(user=User.objects.get(username="gestionnaire-svu@mail.tld"))
-        self.assertEqual(qs_manager_general.count(), User.objects.all().count())
+        self.assertEqual(qs_manager_general.count(), User.objects.filter(emailaddress__verified=True).count())
 
     def test_user_manager_managed_users_manager_institution(self):
         """

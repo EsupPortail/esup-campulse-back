@@ -2,21 +2,17 @@
 
 import json
 
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from django.conf import settings
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models.fund import Fund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.history.models.history import History
-from plana.apps.institutions.models.institution import Institution
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.models.user import AssociationUser, User, GroupInstitutionFundUser
 from plana.apps.users.provider import CASProvider
 
 
@@ -45,7 +41,7 @@ class UserViewsTests(TestCase):
         """Fake accounts to test."""
         url_login = reverse("rest_login")
         # Vars used in unittests
-        cls.unvalidated_user_id = 2
+        cls.unvalidated_user_id = 15
         cls.manager_misc_user_name = "gestionnaire-crous@mail.tld"
         # Start an anonymous client used in some tests
         cls.anonymous_client = Client()
@@ -96,13 +92,12 @@ class UserViewsTests(TestCase):
         GET /users/ .
 
         - A manager user can execute this request.
-        - There's at least one user in the users list.
-        - We get the same amount of users through the model and through the view.
+        - We get all finished users only through the view
         """
         response_manager = self.manager_client.get("/users/")
         self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
 
-        users_cnt = User.objects.all().count()
+        users_cnt = User.objects.filter(emailaddress__verified=True).count()
 
         content = json.loads(response_manager.content.decode("utf-8"))
         self.assertEqual(len(content), users_cnt)
@@ -122,7 +117,7 @@ class UserViewsTests(TestCase):
         association_id = 2
         response_manager = self.manager_client.get(f"/users/?association_id={association_id}")
         content = json.loads(response_manager.content.decode("utf-8"))
-        links_cnt = AssociationUser.objects.filter(association_id=association_id).count()
+        links_cnt = AssociationUser.objects.filter(association_id=association_id, user__emailaddress__verified=True).count()
         self.assertEqual(len(content), links_cnt)
 
     def test_manager_get_users_list_is_cas_false(self):
@@ -453,9 +448,11 @@ class UserViewsTests(TestCase):
             uid=user.username,
             extra_data={},
         )
+        EmailAddress.objects.create(user=user, email=user.email, verified=True, primary=True)
+        GroupInstitutionFundUser.objects.create(group_id=5, user=user)
 
         user_cas = User.objects.get(username="PatriciaCAS")
-        self.manager_client.patch(
+        response = self.manager_client.patch(
             f"/users/{user_cas.pk}",
             data={
                 "username": "UserCAS",
@@ -464,6 +461,7 @@ class UserViewsTests(TestCase):
             },
             content_type="application/json",
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         user_cas = User.objects.get(username="PatriciaCAS")
         self.assertEqual(user_cas.is_validated_by_admin, True)
         self.assertEqual(user_cas.email, "test@unistra.fr")

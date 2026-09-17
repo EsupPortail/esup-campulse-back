@@ -89,6 +89,7 @@ urllib3 = "<2.0" # needed to avoid dependency problems when updating boto3 and b
 weasyprint = "^63.0"
 zxcvbn = "^4.4.28"
 django-filter = "^24.3"
+ldap3 = "^2.9.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
