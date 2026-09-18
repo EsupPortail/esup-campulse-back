@@ -65,7 +65,7 @@
     "fields": {
       "setting": "CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING",
       "parameters": {
-        "description": "Nombre de jours depuis le dernier changement de mot de passe d’un compte après lequel un mail est envoyé pour prévenir de l’expiration future de ce mot de passe.",
+        "description": "Nombre de jours depuis la dernière connexion d’un compte après lequel un mail est envoyé pour prévenir de la suppression future de ce compte.",
         "type": "integer",
         "value": 335
       }
