@@ -225,7 +225,8 @@ class AssociationMandatoryDataSerializer(serializers.ModelSerializer):
             "is_public",
             "is_site",
             "institution",
-            "can_submit_projects"
+            "can_submit_projects",
+            "charter_status"
         ]
 
     def validate(self, data):
