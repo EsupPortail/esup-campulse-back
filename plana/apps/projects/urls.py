@@ -4,20 +4,17 @@ from django.urls import path
 
 from .views.category import CategoryList
 from .views.project import (
+    ProjectCommissionPostponeView,
     ProjectListCreate,
     ProjectRetrieveUpdateDestroy,
-    ProjectStatusUpdate, ProjectCommissionPostponeView,
+    ProjectStatusUpdate,
 )
 from .views.project_category import (
     ProjectCategoryDestroy,
     ProjectCategoryListCreate,
     ProjectCategoryRetrieve,
 )
-from .views.project_comment import (
-    ProjectCommentCreate,
-    ProjectCommentRetrieve,
-    ProjectCommentUpdateDestroy,
-)
+from .views.project_comment import ProjectCommentListCreate, ProjectCommentUpdateDestroy
 from .views.project_commission_fund import (
     ProjectCommissionFundListCreate,
     ProjectCommissionFundRetrieve,
@@ -61,12 +58,7 @@ urlpatterns = [
         name="project_category_destroy",
     ),
     path("categories/names", CategoryList.as_view(), name="category_list"),
-    path("comments", ProjectCommentCreate.as_view(), name="project_comment_create"),
-    path(
-        "<int:project_id>/comments",
-        ProjectCommentRetrieve.as_view(),
-        name="project_comment_list_create",
-    ),
+    path("<int:project_id>/comments", ProjectCommentListCreate.as_view(), name="project_comment_list_create"),
     path(
         "<int:project_id>/comments/<int:pk>",
         ProjectCommentUpdateDestroy.as_view(),

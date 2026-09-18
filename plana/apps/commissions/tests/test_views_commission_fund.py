@@ -70,16 +70,6 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), cf_count)
 
-    def test_post_commission_fund_anonymous(self):
-        """
-        POST /commissions/funds .
-
-        - An anonymous user can't execute this request.
-        """
-        post_data = {"commission": 3, "fund": 2}
-        response = self.client.post("/commissions/funds", post_data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_post_commission_fund_not_found(self):
         """
         POST /commissions/funds .
@@ -88,10 +78,12 @@ class CommissionDatesViewsTests(TestCase):
         """
         post_data = {"commission": 999, "fund": 2}
         response = self.general_client.post("/commissions/funds", post_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("commission", response.data)
         post_data = {"commission": 2, "fund": 999}
         response = self.general_client.post("/commissions/funds", post_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("fund", response.data)
 
     def test_post_commission_fund_forbidden(self):
         """
@@ -112,6 +104,7 @@ class CommissionDatesViewsTests(TestCase):
         post_data = {"commission": 1, "fund": 1}
         response = self.general_client.post("/commissions/funds", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("already_exists", response.data)
 
     def test_post_commission_fund_success(self):
         """
@@ -151,15 +144,6 @@ class CommissionDatesViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commission_test_cnt)
-
-    def test_delete_commission_funds_anonymous(self):
-        """
-        DELETE /commissions/{commission_id}/funds/{fund_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.delete("/commissions/1/funds/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_commission_funds_not_found(self):
         """

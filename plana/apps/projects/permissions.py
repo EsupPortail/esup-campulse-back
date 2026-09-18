@@ -1,7 +1,30 @@
 """Custom permissions for projects app"""
 
 from rest_framework import permissions
+from rest_framework.generics import get_object_or_404
+
 from plana.apps.projects.models import Project
+
+
+class CanAccessOrEditProjectPermission(permissions.BasePermission):
+    """
+    Custom permission to check whether the request user can access or edit a project
+    Works directly with a Project instance or any linked model with a 'project' attribute
+    (ProjectCommissionFund, ProjectCategory, ...)
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated)
+
+    def has_object_permission(self, request, view, obj):
+        project = getattr(obj, "project", obj)
+
+        # For GET, HEAD and OPTIONS
+        if request.method in permissions.SAFE_METHODS:
+            return request.user.can_access_project(project)
+
+        # All other operations
+        return request.user.can_edit_project(project)
 
 
 class ProjectCommentUpdateDestroyPermission(permissions.BasePermission):
@@ -17,6 +40,21 @@ class ProjectCommentUpdateDestroyPermission(permissions.BasePermission):
         return True
 
 
+class ProjectCommentListPermission(permissions.BasePermission):
+    """Custom permission to retrieve a project's comments"""
+
+    def has_permission(self, request, view):
+        project = get_object_or_404(Project.visible_objects.all(), pk=view.kwargs.get("project_id"))
+        if (
+            request.user.has_perm("projects.view_projectcomment_any_fund")
+            or request.user.has_perm("projects.view_projectcomment_any_institution")
+            or request.user.can_access_project(project)
+        ):
+            return True
+        return False
+
+
+# TODO : Obsolete with new permission CanAccessOrEditProjectPermission
 class ProjectUpdatePermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -26,6 +64,7 @@ class ProjectUpdatePermission(permissions.BasePermission):
         return request.user.is_superuser or request.user.can_edit_project(project_obj=obj)
 
 
+# TODO : May be Obsolete with new permission CanAccessOrEditProjectPermission ?
 class ProjectCategoryUpdatePermission(permissions.BasePermission):
     """
     Checks if user can edit project categories based on request data and if the user can edit the linked project or not

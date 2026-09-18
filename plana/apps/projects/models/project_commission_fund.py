@@ -74,3 +74,20 @@ class ProjectCommissionFund(models.Model):
                 "Can view all commission funds linked to all projects for an institution.",
             ),
         ]
+
+    @classmethod
+    def get_bearer_fields(cls):
+        return {
+            "is_first_edition",
+            "amount_asked_previous_edition",
+            "amount_earned_previous_edition",
+            "amount_asked",
+        }
+
+    @classmethod
+    def get_validator_fields(cls):
+        return {
+            "amount_earned",
+            "is_validated_by_admin",
+            "project_id",
+        }

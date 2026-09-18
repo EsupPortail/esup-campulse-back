@@ -84,6 +84,7 @@ def send_mail(
                         temp_attachment["request"],
                         temp_attachment["template_name"],
                 )
+                # Override last notification file for the given pcf (if None is specifically provided do nothing)
                 if "pcf_obj" in temp_attachment:
                     filename = f"notification_{clean_filename(temp_attachment['context_attach']['project_name'])}.pdf"
                     temp_attachment["pcf_obj"].last_notification_file.save(

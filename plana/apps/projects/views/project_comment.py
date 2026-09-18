@@ -1,123 +1,38 @@
 """Views directly linked to projects comments."""
 
-import datetime
-
-from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import generics, response, status
-from rest_framework.generics import get_object_or_404
+from rest_framework import generics
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
-from plana.apps.projects.models.project import Project
+from plana.apps.projects import permissions
 from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.serializers.project_comment import (
     ProjectCommentDataSerializer,
     ProjectCommentSerializer,
     ProjectCommentUpdateSerializer,
 )
-from plana.apps.users.models.user import AssociationUser, User
-from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
-from plana.apps.projects import permissions
 
 
-class ProjectCommentCreate(generics.CreateAPIView):
-    """/projects/comments route."""
-
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentDataSerializer
-
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: ProjectCommentSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/comments"],
-    )
-    def post(self, request, *args, **kwargs):
-        """Create a link between a comment and a project."""
-
-        project = get_object_or_404(Project.visible_objects, id=request.data["project"])
-        request.data["user"] = request.user.id
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if project.project_status not in Project.ProjectStatus.get_commentable_project_statuses():
-            return response.Response(
-                {"error": _("Cannot manage comments on a validated project/review.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        today = datetime.date.today()
-        request.data["creation_date"] = today
-        request.data["edition_date"] = today
-        request.data["user"] = request.user.pk
-
-        if "is_visible" not in request.data or (
-            request.data["is_visible"] != "" and to_bool(request.data["is_visible"])
-        ):
-            current_site = get_current_site(request)
-            context = {
-                "site_domain": current_site.domain,
-                "site_name": current_site.name,
-            }
-            template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_COMMENT")
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=project.get_project_owner_data().get("email"),
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-        return super().create(request, *args, **kwargs)
-
-
-class ProjectCommentRetrieve(generics.RetrieveAPIView):
+@extend_schema_view(
+    get=extend_schema(tags=["projects/comments"]),
+    post=extend_schema(tags=["projects/comments"]),
+)
+class ProjectCommentListCreate(generics.ListCreateAPIView):
     """/projects/{project_id}/comments route."""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.ProjectCommentListPermission]
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentSerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: ProjectCommentSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/comments"],
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve all comments linked to a project."""
-        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return ProjectCommentDataSerializer
+        return ProjectCommentSerializer
 
-        if (
-            not request.user.has_perm("projects.view_projectcomment_any_fund")
-            and not request.user.has_perm("projects.view_projectcomment_any_institution")
-            and not request.user.can_access_project(project)
-        ):
-            return response.Response(
-                {"error": _("Not allowed to retrieve these project comments.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        if not request.user.has_perm("projects.view_projectcomment_not_visible"):
-            serializer = self.serializer_class(
-                self.queryset.filter(project_id=kwargs["project_id"], is_visible=True),
-                many=True,
-            )
-        else:
-            serializer = self.serializer_class(self.queryset.filter(project_id=kwargs["project_id"]), many=True)
-
-        return response.Response(serializer.data)
+    def get_queryset(self):
+        if not self.request.user.has_perm("projects.view_projectcomment_not_visible"):
+            return self.queryset.filter(project_id=self.kwargs.get("project_id"), is_visible=True)
+        return self.queryset.filter(project_id=self.kwargs.get("project_id"))
 
 
 @extend_schema_view(

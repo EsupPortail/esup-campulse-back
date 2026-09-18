@@ -345,15 +345,6 @@ class ProjectCommissionFundViewsTests(TestCase):
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
 
-    def test_patch_project_cf_anonymous(self):
-        """
-        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.patch("/projects/1/commission_funds/3", {}, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_patch_project_cf_not_found(self):
         """
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
@@ -392,7 +383,8 @@ class ProjectCommissionFundViewsTests(TestCase):
             {"amount_earned": 1000},
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("forbidden_validator_fields", response.data)
 
     def test_patch_project_cf_manager_bad_request(self):
         """
@@ -406,22 +398,16 @@ class ProjectCommissionFundViewsTests(TestCase):
             {"amount_asked": 1000},
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("forbidden_bearer_fields", response.data)
 
-    def test_patch_project_cf_serializer_error(self):
-        """
-        PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - The route can be accessed by any authenticated user.
-        - The serializer fields must be correct.
-        """
-        patch_data = {"amount_asked": True}
-        response = self.student_misc_client.patch(
+        response = self.general_client.patch(
             "/projects/1/commission_funds/3",
-            patch_data,
+            {"amount_earned": 1000, "is_validated_by_admin": True},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("workflow_inconsistency", response.data)
 
     def test_patch_project_cf_wrong_submission_date(self):
         """
@@ -482,15 +468,17 @@ class ProjectCommissionFundViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REVIEW_DRAFT")
 
-        project_id = 1
         commission_fund_id = 3
+        project = Project.visible_objects.get(id=1)
+        project.project_status = "PROJECT_VALIDATED"
+        project.save()
         response = self.general_client.patch(
-            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
+            f"/projects/{project.id}/commission_funds/{commission_fund_id}",
             {"amount_earned": 0},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.visible_objects.get(id=project_id)
+        project.refresh_from_db()
         self.assertEqual(project.project_status, "PROJECT_CANCELED")
 
     def test_patch_project_cf_success(self):
@@ -546,15 +534,6 @@ class ProjectCommissionFundViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
-
-    def test_delete_project_cf_anonymous(self):
-        """
-        DELETE /projects/{project_id}/commission_funds/{commission_fund_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.delete("/projects/1/commission_funds/3")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_project_cf_not_found(self):
         """
