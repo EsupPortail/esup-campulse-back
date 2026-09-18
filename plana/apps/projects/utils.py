@@ -23,7 +23,7 @@ def build_pcf_notification_attachment_data(request, pcf: ProjectCommissionFund, 
     # Retrieving content linked to the template path
     content = Content.objects.get(code=content_code)
     # Retrieving last comment of the project or None
-    comment = ProjectComment.objects.filter(project=project).order_by("-creation_date").values_list("text", flat=True).first() or ""
+    comment = ProjectComment.objects.filter(project=project, is_visible=True).order_by("-creation_date").values_list("text", flat=True).first() or ""
 
     attachment = {
         "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{template_path}",
@@ -62,6 +62,7 @@ def send_pcf_notification_mail_with_attachments(request, pcf: ProjectCommissionF
         "site_domain": current_site.domain,
         "site_name": current_site.name,
         "project_name": project.name,
+        "fund_name": fund.name,
     }
 
     # If wrong given notification type do nothing

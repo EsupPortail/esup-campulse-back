@@ -20,16 +20,16 @@ class CategoryAdmin(JSONImportAdminMixin):
 
     def _purge_draft_project_categories(self, category_queryset):
         """Deletes ProjectCategory objects from draft and processing projects."""
-        ProjectCategory.objects.filter(
+        models.ProjectCategory.objects.filter(
             category__in=category_queryset,
             project__project_status__in=["PROJECT_DRAFT", "PROJECT_DRAFT_PROCESSED", "PROJECT_PROCESSING"]
         ).delete()
 
     def save_model(self, request, obj, form, change):
         if change:
-            old_obj = Category.objects.get(pk=obj.pk)
+            old_obj = models.Category.objects.get(pk=obj.pk)
             if old_obj.is_enabled and not obj.is_enabled:
-                self._purge_draft_project_categories(Category.objects.filter(pk=obj.pk))
+                self._purge_draft_project_categories(models.Category.objects.filter(pk=obj.pk))
 
         super().save_model(request, obj, form, change)
 
