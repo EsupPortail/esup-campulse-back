@@ -310,6 +310,7 @@ class Project(models.Model):
             "site_domain": current_site.domain,
             "site_name": current_site.name,
             "project_name": self.name,
+            "fund_name": list(self.projectcommissionfund_set.filter(is_validated_by_admin=True).values_list("name", flat=True)),
         }
         owner_data = self.get_project_owner_data()
 
