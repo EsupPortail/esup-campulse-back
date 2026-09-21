@@ -153,16 +153,8 @@ class Association(models.Model):
             .order_by('-validated_date')
             .first()
         )
-        if (document := (document_upload.document if document_upload else None)):
-            if document_upload.validated_date:
-                if document.expiration_day:
-                    year = document_upload.validated_date.year
-                    if document.expiration_day <= document_upload.validated_date.strftime("%m-%d"):
-                        year += 1
-                    return datetime.datetime.strptime(f"{year}-{document.expiration_day}", "%Y-%m-%d")
-                if document.days_before_expiration:
-                    return document_upload.validated_date + datetime.timedelta(days=document.days_before_expiration)
-        return ''
+        if document_upload:
+            return document_upload.calculated_expiration_date
 
 
 class SpaceRemovedValue(models.Transform):

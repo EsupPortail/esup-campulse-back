@@ -90,15 +90,15 @@ class DocumentUpload(models.Model):
         ]
 
     @property
-    def calculated_expiration_date(self) -> str:
-        """Return real expiration date based on expiration_day or days_before_expiration."""
+    def calculated_expiration_date(self):  # -> None | datetime:
+        """Return real expiration date based on expiration_day or days_before_expiration from validated_date."""
         document = self.document
         if self.validated_date:
             if document.expiration_day:
                 year = self.validated_date.year
                 if document.expiration_day <= self.validated_date.strftime("%m-%d"):
                     year += 1
-                return f"{year}-{document.expiration_day}"
+                return datetime.datetime.strptime(f"{year}-{document.expiration_day}", "%Y-%m-%d")
             if document.days_before_expiration:
-                return datetime.datetime.strftime(self.validated_date + datetime.timedelta(days=document.days_before_expiration), "%Y-%m-%d")
-        return ""
+                return self.validated_date + datetime.timedelta(days=document.days_before_expiration)
+        return None
