@@ -1,8 +1,10 @@
 """Admin view for Document models."""
 import datetime
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db.models import Prefetch
+from django.http import HttpResponseRedirect
+from django.utils.translation import gettext_lazy as _
 
 from .models import Document, DocumentUpload
 from ..associations.models import Association
@@ -36,13 +38,48 @@ class DocumentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('fund', 'institution')
 
+    def has_delete_permission(self, request, obj=None):
+        """
+        Custom admin permission to avoid non-superusers from deleting documents
+        if some uploads were already wade using them.
+        """
+        if request.user.is_superuser:
+            return True
+        # Cannot mass-delete documents if not superuser anymore
+        if obj is None:
+            return False
+        # Conditionally mask the delete button in change form
+        if DocumentUpload.objects.filter(document=obj).exists():
+            return False
+
+        return super().has_delete_permission(request, obj)
+
+    def response_change(self, request, obj):
+        """Force error message to stay on change form instead of list redirect"""
+        storage = messages.get_messages(request)
+        has_error = any(message.level == messages.ERROR for message in storage)
+
+        if has_error:
+            storage.used = False
+            return HttpResponseRedirect(request.path)
+
     def save_model(self, request, obj, form, change):
         """
         Custom save method to update future charter expiration date of all associations in advanced workflow
         with the new expiration day.
+        Also blocks a Document process to be changed by a non-superuser if some documents were already uploaded.
         """
         if change:
             old_obj = Document.objects.get(pk=obj.pk)
+            uploaded_docs = DocumentUpload.objects.filter(document=old_obj).exists()
+            if uploaded_docs and old_obj.process_type != obj.process_type and not request.user.is_superuser:
+                self.message_user(
+                    request,
+                    str(_("Cannot update this document's process : some documents using it were already uploaded.")),
+                    level=messages.ERROR
+                )
+                return
+
             super().save_model(request, obj, form, change)
 
             if old_obj.expiration_day != obj.expiration_day and obj.acronym == "CHARTE_SITE":
