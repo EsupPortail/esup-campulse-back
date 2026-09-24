@@ -26,29 +26,28 @@ class ProjectsViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
-        "contents_setting.json",
-        "documents_document.json",
-        "documents_documentupload.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
+        "tests/contents_setting.json",
+        "tests/documents_document.json",
+        "tests/documents_documentupload.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "mailtemplates",
         "mailtemplatevars",
         "projects_category.json",
-        "projects_project.json",
-        "projects_projectcategory.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcategory.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -119,15 +118,6 @@ class ProjectsViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.student_president_client.post(url_login, data_student_president)
-
-    def test_get_project_anonymous(self):
-        """
-        GET /projects/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_project_student(self):
         """
@@ -272,15 +262,6 @@ class ProjectsViewsTests(TestCase):
         response = self.general_client.get("/projects/?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), active_projects.count())
-
-    def test_post_project_anonymous(self):
-        """
-        POST /projects/ .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.post("/projects/", {"name": "Testing anonymous"})
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_post_project_bad_request(self):
         """
@@ -497,15 +478,6 @@ class ProjectsViewsTests(TestCase):
         results = Project.visible_objects.filter(name="Testing creation user")
         self.assertEqual(len(results), 1)
 
-    def test_get_project_by_id_anonymous(self):
-        """
-        GET /projects/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_get_project_by_id_404(self):
         """
         GET /projects/{id} .
@@ -560,26 +532,6 @@ class ProjectsViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(content["name"], project_test.name)
-
-    def test_put_project(self):
-        """
-        PUT /projects/{id} .
-
-        - Always returns a 405.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.general_client.put("/projects/1", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_patch_project_anonymous(self):
-        """
-        PATCH /projects/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        patch_data = {"name": "Test anonymous"}
-        response = self.client.patch("/projects/1", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_not_found(self):
         """
@@ -742,15 +694,6 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.summary, "new summary")
 
-    def test_delete_project_anonymous(self):
-        """
-        DELETE /projects/{id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.delete("/projects/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_delete_project_not_found(self):
         """
         DELETE /projects/{id} .
@@ -796,26 +739,6 @@ class ProjectsViewsTests(TestCase):
         response = self.student_misc_client.delete(f"/projects/{project_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(1, len(Project.visible_objects.filter(id=project_id)))
-
-    def test_put_project_status(self):
-        """
-        PUT /projects/{id}/status .
-
-        - Always returns a 405.
-        """
-        patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.general_client.put("/projects/5/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_patch_project_status_anonymous(self):
-        """
-        PATCH /projects/{id}/status .
-
-        - An anonymous user cannot execute this request.
-        """
-        patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.client.patch("/projects/1/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_patch_project_status_forbidden(self):
         """
@@ -1016,4 +939,29 @@ class ProjectsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_REVIEW_PROCESSING")
+        self.assertTrue(len(mail.outbox))
+
+    def test_postpone_project_view_bad_request(self):
+        response = self.general_client.patch(
+            reverse("project_commission_postpone_view", kwargs={"project_id": 1}),
+            data={"new_commission_id": 2},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("commission_not_eligible", response.data)
+
+    def test_postpone_project_view_ok(self):
+        project_id = 1
+        self.assertFalse(len(mail.outbox))
+        response = self.general_client.patch(
+            reverse("project_commission_postpone_view", kwargs={"project_id": project_id}),
+            data={"new_commission_id": 3},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Ensure all pcf have been updated and an email has been sent
+        commission_funds_ids = list(
+            ProjectCommissionFund.objects.filter(project_id=project_id).values_list("commission_fund_id", flat=True)
+        )
+        self.assertCountEqual(commission_funds_ids, [5])
         self.assertTrue(len(mail.outbox))

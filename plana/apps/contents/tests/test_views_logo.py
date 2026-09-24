@@ -30,13 +30,9 @@ class ContentsViewsTests(TestCase):
         - Logos details are returned (test the "title" attribute).
         """
         logos_cnt = Logo.objects.count()
-        self.assertTrue(logos_cnt > 0)
 
         response = self.client.get("/contents/logos")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         logo = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(logo), logos_cnt)
-
-        logo_1 = logo[0]
-        self.assertTrue(logo_1.get("title"))

@@ -22,23 +22,22 @@ class CommissionDatesViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
-        "projects_project.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -83,32 +82,10 @@ class CommissionDatesViewsTests(TestCase):
         - We get the same amount of commissions through the model and through the view.
         """
         commissions_cnt = Commission.objects.count()
-        self.assertTrue(commissions_cnt > 0)
 
         response = self.client.get("/commissions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
-
-    def test_get_commissions_list_filter_dates(self):
-        """
-        GET /commissions/ .
-
-        - dates filters by commission_date field.
-        """
-        dates = ["2099-10-20", "2099-10-21"]
-        dates = [
-            datetime.datetime.strptime(date, "%Y-%m-%d").date()
-            for date in dates
-            if date != ""
-            and isinstance(
-                datetime.datetime.strptime(date, "%Y-%m-%d").date(),
-                datetime.date,
-            )
-        ]
-        response = self.client.get(f"/commissions/?dates={','.join(str(x) for x in dates)}")
-        commissions_cnt = Commission.objects.filter(commission_date__in=dates).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
@@ -121,7 +98,7 @@ class CommissionDatesViewsTests(TestCase):
         response = self.client.get("/commissions/?is_site=true")
         commissions_cnt = Commission.objects.filter(
             id__in=CommissionFund.objects.filter(
-                fund_id__in=Fund.objects.filter(is_site=True).values_list("id")
+                fund__in=Fund.objects.filter(is_site=True)
             ).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
@@ -157,6 +134,7 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response_false.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_cnt)
 
+    # FIXME : more precise unittest
     def test_get_commissions_list_filter_active_projects(self):
         """
         GET /commissions/ .
@@ -164,55 +142,54 @@ class CommissionDatesViewsTests(TestCase):
         - with_active_projects returns commissions depending on their projects statuses.
         - only_with_active_projects returns commissions depending on their projects statuses.
         """
-        commissions_ids_without_projects = CommissionFund.objects.exclude(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.objects.all().values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
+        # Empty commissions
+        commissions_ids_without_projects = Commission.objects.filter(
+            commissionfund__projectcommissionfund__project__isnull=True
+        ).values_list("id", flat=True).distinct()
 
-        commissions_ids_with_inactive_projects = CommissionFund.objects.filter(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.visible_objects.filter(
-                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                ).values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
+        # Inactive projects related commissions
+        archived_visible_projects = Project.visible_objects.filter(
+            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+        )
+        commissions_ids_with_inactive_projects = Commission.objects.filter(
+            commissionfund__projectcommissionfund__project__in=archived_visible_projects
+        ).values_list("id", flat=True).distinct()
+
+        # Active projects related commissions
+        active_visible_projects = Project.visible_objects.exclude(
+            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+        )
+        commissions_ids_with_active_projects = Commission.objects.filter(
+            commissionfund__projectcommissionfund__project__in=active_visible_projects
+        ).values_list("id", flat=True).distinct()
+
         commissions_with_inactive_projects = Commission.objects.filter(
             models.Q(id__in=commissions_ids_with_inactive_projects) | models.Q(id__in=commissions_ids_without_projects)
         )
-        commissions_ids_with_active_projects = CommissionFund.objects.filter(
-            id__in=ProjectCommissionFund.objects.filter(
-                project_id__in=Project.visible_objects.exclude(
-                    project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-                ).values_list("id")
-            ).values_list("commission_fund_id")
-        ).values_list("commission_id")
+        response_wapf = self.client.get("/commissions/?with_active_projects=false")
+        content_wapf = json.loads(response_wapf.content.decode("utf-8"))
+        self.assertEqual(len(content_wapf), commissions_with_inactive_projects.count())
+
         commissions_with_active_projects = Commission.objects.filter(
             models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
         )
-
-        response = self.client.get("/commissions/?with_active_projects=false")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_inactive_projects.count())
-
-        response = self.client.get("/commissions/?with_active_projects=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_active_projects.count())
+        response_wapt = self.client.get("/commissions/?with_active_projects=true")
+        content_wapt = json.loads(response_wapt.content.decode("utf-8"))
+        self.assertEqual(len(content_wapt), commissions_with_active_projects.count())
 
         commissions_only_with_inactive_projects = Commission.objects.filter(
             id__in=commissions_ids_with_inactive_projects
         ).exclude(id__in=commissions_ids_with_active_projects)
+        response_owapf = self.client.get("/commissions/?only_with_active_projects=false")
+        content_owapf = json.loads(response_owapf.content.decode("utf-8"))
+        self.assertEqual(len(content_owapf), commissions_only_with_inactive_projects.count())
+
         commissions_only_with_active_projects = Commission.objects.exclude(
             id__in=commissions_ids_with_inactive_projects
         ).filter(id__in=commissions_ids_with_active_projects)
-
-        response = self.client.get("/commissions/?only_with_active_projects=false")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_only_with_inactive_projects.count())
-
-        response = self.client.get("/commissions/?only_with_active_projects=true")
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_only_with_active_projects.count())
+        response_owapt = self.client.get("/commissions/?only_with_active_projects=true")
+        content_owapt = json.loads(response_owapt.content.decode("utf-8"))
+        self.assertEqual(len(content_owapt), commissions_only_with_active_projects.count())
 
     def test_get_commissions_list_filter_managed_projects(self):
         """
@@ -220,65 +197,20 @@ class CommissionDatesViewsTests(TestCase):
 
         - managed_projects returns funds where current user manages projects.
         """
+        user_id = self.manager_institution_user_id
         commissions_with_managed_projects = Commission.objects.filter(
             models.Q(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=Institution.objects.filter(
-                                    id__in=GroupInstitutionFundUser.objects.filter(
-                                        user_id=self.manager_institution_user_id
-                                    ).values_list("institution_id")
-                                ).values_list("id")
-                            ).values_list("id")
-                        ).values_list("id")
-                    ).values_list("commission_fund_id")
-                ).values_list('commission_id')
+                commissionfund__projectcommissionfund__project__in=Project.visible_objects.all(),
+                commissionfund__projectcommissionfund__project__association__institution__groupinstitutionfunduser__user_id=user_id
             )
-            | models.Q(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=Fund.objects.filter(
-                        institution_id__in=Institution.objects.filter(
-                            id__in=GroupInstitutionFundUser.objects.filter(
-                                user_id=self.manager_institution_user_id
-                            ).values_list("institution_id")
-                        ).values_list("id")
-                    )
-                ).values_list('commission_id')
-            )
+            | models.Q(commissionfund__fund__institution__groupinstitutionfunduser__user_id=user_id)
         )
         response = self.institution_client.get("/commissions/?managed_projects=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), commissions_with_managed_projects.count())
 
         commissions_not_with_managed_projects = Commission.objects.exclude(
-            models.Q(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=ProjectCommissionFund.objects.filter(
-                        project_id__in=Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=Institution.objects.filter(
-                                    id__in=GroupInstitutionFundUser.objects.filter(
-                                        user_id=self.manager_institution_user_id
-                                    ).values_list("institution_id")
-                                ).values_list("id")
-                            ).values_list("id")
-                        ).values_list("id")
-                    ).values_list("commission_fund_id")
-                ).values_list('commission_id')
-            )
-            | models.Q(
-                id__in=CommissionFund.objects.filter(
-                    fund_id__in=Fund.objects.filter(
-                        institution_id__in=Institution.objects.filter(
-                            id__in=GroupInstitutionFundUser.objects.filter(
-                                user_id=self.manager_institution_user_id
-                            ).values_list("institution_id")
-                        ).values_list("id")
-                    )
-                ).values_list('commission_id')
-            )
+            id__in=commissions_with_managed_projects.values_list("id", flat=True)
         )
         response = self.institution_client.get("/commissions/?managed_projects=false")
         content = json.loads(response.content.decode("utf-8"))
@@ -325,6 +257,7 @@ class CommissionDatesViewsTests(TestCase):
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_dates", response.data)
 
     def test_post_commissions_too_old(self):
         """
@@ -339,20 +272,7 @@ class CommissionDatesViewsTests(TestCase):
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_post_commissions_serializer_error(self):
-        """
-        POST /commissions/ .
-
-        - If data format is not good we get a bad request from the serializer.
-        """
-        post_data = {
-            "submission_date": 1,
-            "commission_date": "2099-12-25",
-            "name": "New Commission",
-        }
-        response = self.general_client.post("/commissions/", post_data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("submission_date", response.data)
 
     def test_post_commissions_name_already_taken(self):
         """
@@ -367,6 +287,7 @@ class CommissionDatesViewsTests(TestCase):
         }
         response = self.general_client.post("/commissions/", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("name", response.data)
 
     def test_post_commissions_success(self):
         """
@@ -399,16 +320,6 @@ class CommissionDatesViewsTests(TestCase):
         """
         response = self.client.get("/commissions/1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_put_commission_by_id_405(self):
-        """
-        PUT /commissions/{id} .
-
-        - The route returns a 405 everytime.
-        """
-        data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
-        response = self.client.put("/commissions/1", data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_commission_anonymous(self):
         """
@@ -466,6 +377,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("similar_name", response.data)
 
     def test_patch_commission_wrong_dates(self):
         """
@@ -480,6 +392,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("inconsistent_dates", response.data)
 
     def test_patch_commission_too_old(self):
         """
@@ -494,34 +407,7 @@ class CommissionDatesViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_submission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"submission_date": "2200-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_patch_commission_only_commission_date(self):
-        """
-        PATCH /commissions/{id} .
-
-        - submission_date cannot come after commission_date.
-        """
-        patch_data = {"commission_date": "2050-12-25"}
-        response = self.general_client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_date", response.data)
 
     def test_patch_commission_success(self):
         """

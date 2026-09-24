@@ -8,11 +8,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from thumbnails.fields import ImageField
 
+from plana.apps.associations.managers import AssociationQueryset
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.institutions.models.institution_component import InstitutionComponent
 from plana.storages import DynamicThumbnailImageField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicThumbnailImageField = ImageField
 
 
@@ -71,6 +72,7 @@ class Association(models.Model):
         max_length=32,
         choices=[
             ("CHARTER_DRAFT", _("Charter Draft")),
+            ("CHARTER_DRAFT_PROCESSED", _("Charter Draft Processed")),
             ("CHARTER_REJECTED", _("Charter Rejected")),
             ("CHARTER_PROCESSING", _("Charter Processing")),
             ("CHARTER_VALIDATED", _("Charter Validated")),
@@ -78,7 +80,7 @@ class Association(models.Model):
         ],
         default="CHARTER_DRAFT",
     )
-    charter_date = models.DateField(_("Charter date"), blank=True, null=True)  # date de dernier dépôt de charte
+    charter_date = models.DateField(_("Charter date"), blank=True, null=True)  # date d'expiration de la charte
     creation_date = models.DateTimeField(_("Creation date"), auto_now_add=True)
     approval_date = models.DateField(_("Approval date"), blank=True, null=True)  # date d'agrément
     last_goa_date = models.DateField(_("Last GOA date"), blank=True, null=True)  # date de dernière AGO
@@ -104,6 +106,8 @@ class Association(models.Model):
         on_delete=models.RESTRICT,
         null=True,
     )
+
+    objects = AssociationQueryset.as_manager()
 
     def __str__(self):
         return self.acronym
@@ -139,6 +143,18 @@ class Association(models.Model):
             ("view_association_not_enabled", "Can view a not enabled association."),
             ("view_association_not_public", "Can view a not public association."),
         ]
+
+    @property
+    def calculated_expiration_date(self) -> str:
+        """Return real expiration date based on expiration_day or days_before_expiration."""
+        document_upload = (
+            self.documentupload_set
+            .filter(document__process_type='CHARTER_ASSOCIATION', document__acronym='CHARTE_SITE')
+            .order_by('-validated_date')
+            .first()
+        )
+        if document_upload:
+            return document_upload.calculated_expiration_date
 
 
 class SpaceRemovedValue(models.Transform):

@@ -17,7 +17,8 @@ Le dossier `plana/apps` du backend est découpé en huit sous-applications compr
 
 - `contents`
   - `content` : contenus divers affichés sur le frontend (page d'accueil, contact, ...) et templates de PDF.
-  - Le module comprend également le set de données définissant le nom initial de l'application dans la table `django_site`.
+  - `logo` : gestion des logos présents dans le footer de l'interface front.
+  - `setting` : configuration de comportements et paramétrages de l'application (institution responsable des comptes CAS, domaines de mail bloqués à la création de comptes locaux...).
 
 - `documents`
   - `document` : types de documents pouvant être déposés sur l'application, un document peut être relié à un fonds, les process suivants sont disponibles :

@@ -12,8 +12,7 @@ class DocumentSerializer(serializers.ModelSerializer):
 
     size = serializers.SerializerMethodField()
 
-    @extend_schema_field(OpenApiTypes.INT)
-    def get_size(self, document):
+    def get_size(self, document) -> int:
         """Return file size."""
         if document.path_template:
             return document.path_template.size
@@ -32,6 +31,7 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "acronym",
             "description",
             "path_template",
             "institution",

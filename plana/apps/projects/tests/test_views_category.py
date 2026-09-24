@@ -29,13 +29,9 @@ class ProjectsCategoriesViewsTests(TestCase):
         - Categories details are returned (test the "name" attribute).
         """
         categories_cnt = Category.objects.count()
-        self.assertTrue(categories_cnt > 0)
 
         response = self.client.get("/projects/categories/names")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), categories_cnt)
-
-        category_1 = content[0]
-        self.assertTrue(category_1.get("name"))

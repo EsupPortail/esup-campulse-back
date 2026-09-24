@@ -4,41 +4,48 @@ import datetime
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from django_filters import rest_framework as drf_filters
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
-from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.response import Response
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, CommissionFund, Fund
+from plana.apps.commissions.models import Commission, Fund, CommissionFund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.documents.models.document import Document
-from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.history.models.history import History
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.projects.models.project_comment import ProjectComment
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.serializers.project import (
     ProjectPartialDataSerializer,
     ProjectSerializer,
     ProjectStatusSerializer,
     ProjectUpdateManagerSerializer,
-    ProjectUpdateSerializer,
+    ProjectUpdateSerializer, ProjectPostponeSerializer,
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
-from plana.utils import send_mail, to_bool
+from plana.utils import send_mail
+from ..filters import ProjectFilter
+
+from plana.decorators import capture_queries
+from ..permissions import ProjectUpdatePermission
+from ..utils import send_pcf_notification_mail_with_attachments
+
+DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route."""
 
-    filter_backends = [filters.SearchFilter]
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").order_by("edition_date")
+    filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    filterset_class = ProjectFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     search_fields = [
         "name__nospaces__unaccent",
@@ -50,108 +57,12 @@ class ProjectListCreate(generics.ListCreateAPIView):
     ]
 
     def get_queryset(self):
-        return Project.visible_objects.all().order_by("edition_date")
-
-    def get_serializer_class(self):
-        if self.request.method == "POST":
-            self.serializer_class = ProjectUpdateSerializer
-        else:
-            self.serializer_class = ProjectPartialDataSerializer
-        return super().get_serializer_class()
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "name",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by name.",
-            ),
-            OpenApiParameter(
-                "year",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by creation_date year.",
-            ),
-            OpenApiParameter(
-                "manual_identifier",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by manual identifier.",
-            ),
-            OpenApiParameter(
-                "user_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by User ID.",
-            ),
-            OpenApiParameter(
-                "association_id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Filter by Association ID.",
-            ),
-            OpenApiParameter(
-                "commission_id",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Commission ID linked to a project.",
-            ),
-            OpenApiParameter(
-                "project_statuses",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Filter by Project Statuses codes.",
-            ),
-            OpenApiParameter(
-                "with_comments",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get projects where comments are posted.",
-            ),
-            OpenApiParameter(
-                "active_projects",
-                OpenApiTypes.BOOL,
-                OpenApiParameter.QUERY,
-                description="Filter to get projects where reviews are still pending.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: ProjectPartialDataSerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List all projects linked to a user, or all projects with all their details (manager)."""
-        queryset = self.get_queryset()
-
-        name = request.query_params.get("name")
-        year = request.query_params.get("year")
-        manual_identifier = request.query_params.get("manual_identifier")
-        user = request.query_params.get("user_id")
-        association = request.query_params.get("association_id")
-        commission = request.query_params.get("commission_id")
-        project_statuses = request.query_params.get("project_statuses")
-        with_comments = request.query_params.get("with_comments")
-        active_projects = request.query_params.get("active_projects")
-
-        if name is not None and name != "":
-            name = str(name).strip()
-            queryset = queryset.filter(name__nospaces__unaccent__icontains=name.replace(" ", ""))
-
-        if year is not None and year != "":
-            queryset = queryset.filter(creation_date__year=year)
-
-        if manual_identifier is not None and manual_identifier != "":
-            manual_identifier = str(manual_identifier).strip()
-            queryset = queryset.filter(
-                manual_identifier__nospaces__unaccent__icontains=manual_identifier.replace(" ", "")
-            )
+        request = self.request
+        queryset = super().get_queryset()
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -174,87 +85,49 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 queryset = queryset.filter(
                     models.Q(id__in=user_projects_ids)
                     | models.Q(
-                        id__in=(
-                            ProjectCommissionFund.objects.filter(
-                                commission_fund_id__in=CommissionFund.objects.filter(
-                                    fund_id__in=user_funds_ids
-                                ).values_list("id")
-                            ).values_list("project_id")
-                        ),
+                        projectcommissionfund__commission_fund__fund_id__in=user_funds_ids,
                         project_status__in=Project.ProjectStatus.get_commissionnable_project_statuses(),
                     )
-                    | models.Q(
-                        association_id__in=Association.objects.filter(
-                            institution_id__in=user_institutions_ids
-                        ).values_list("id")
-                    )
+                    | models.Q(association__institution_id__in=user_institutions_ids)
                 )
             else:
                 queryset = queryset.filter(
                     models.Q(id__in=user_projects_ids)
-                    | models.Q(
-                        id__in=(
-                            ProjectCommissionFund.objects.filter(
-                                commission_fund_id__in=CommissionFund.objects.filter(
-                                    fund_id__in=user_funds_ids
-                                ).values_list("id")
-                            ).values_list("project_id")
-                        ),
-                    )
-                    | models.Q(
-                        association_id__in=Association.objects.filter(
-                            institution_id__in=user_institutions_ids
-                        ).values_list("id")
-                    )
+                    | models.Q(projectcommissionfund__commission_fund__fund_id__in=user_funds_ids)
+                    | models.Q(association__institution_id__in=user_institutions_ids)
                 )
 
-        if user is not None and user != "":
-            queryset = queryset.filter(user_id=user)
-
-        if association is not None and association != "":
-            queryset = queryset.filter(association_id=association)
-
-        if project_statuses is not None and project_statuses != "":
-            all_project_statuses = [c[0] for c in Project.project_status.field.choices]
-            project_statuses_codes = project_statuses.split(",")
-            project_statuses_codes = [
-                project_status_code
-                for project_status_code in project_statuses_codes
-                if project_status_code != "" and project_status_code in all_project_statuses
-            ]
-            queryset = queryset.filter(project_status__in=project_statuses_codes)
-
-        if commission is not None and commission != "":
-            queryset = queryset.filter(
-                id__in=ProjectCommissionFund.objects.filter(
-                    commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission).values_list("id")
-                ).values_list("project_id")
+        queryset = queryset.prefetch_related(
+            models.Prefetch(
+                'projectcommissionfund_set',
+                queryset=ProjectCommissionFund.objects.select_related(
+                    'commission_fund__commission'
+                )
             )
+        ).distinct()
 
-        if with_comments is not None and with_comments != "":
-            projects_ids_with_comments = ProjectComment.objects.all().values_list("project_id")
-            if to_bool(with_comments) is False:
-                queryset = queryset.exclude(id__in=projects_ids_with_comments)
-            else:
-                queryset = queryset.filter(id__in=projects_ids_with_comments)
+        return queryset
 
-        if active_projects is not None and active_projects != "":
-            inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
-            if to_bool(active_projects) is False:
-                queryset = queryset.filter(project_status__in=inactive_statuses)
-            else:
-                queryset = queryset.exclude(project_status__in=inactive_statuses)
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = ProjectUpdateSerializer
+        else:
+            self.serializer_class = ProjectPartialDataSerializer
+        return super().get_serializer_class()
+
+    @capture_queries()
+    def get(self, request, *args, **kwargs):
+        """List all projects linked to a user, or all projects with all their details (manager)."""
+        queryset = self.filter_queryset(self.get_queryset())
 
         for project in queryset:
-            pcf = project.projectcommissionfund_set.first()
-            if pcf is not None:
-                project.commission = Commission.objects.get(
-                    id=CommissionFund.objects.get(id=pcf.commission_fund_id).commission_id
-                )
+            pcf = project.projectcommissionfund_set.all()
+            if pcf:
+                project.commission = pcf[0].commission_fund.commission
             else:
                 project.commission = None
 
-        serializer = self.get_serializer_class()(queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True)
         return response.Response(serializer.data)
 
     @extend_schema(
@@ -273,13 +146,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
             and request.data["association"] is not None
             and request.data["association"] != ""
         ):
-            try:
-                association = Association.objects.get(id=request.data["association"])
-            except ObjectDoesNotExist:
-                return response.Response(
-                    {"error": _("Association does not exist.")},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            association = get_object_or_404(Association, id=request.data["association"])
 
             if association.can_submit_projects and association.is_enabled:
                 try:
@@ -295,7 +162,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
                             {"error": _("User not allowed to create a new project for this association.")},
                             status=status.HTTP_403_FORBIDDEN,
                         )
-                except ObjectDoesNotExist:
+                except AssociationUser.DoesNotExist:
                     return response.Response(
                         {"error": _("User not allowed in this association.")},
                         status=status.HTTP_403_FORBIDDEN,
@@ -322,14 +189,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        write_serializer = self.get_serializer(data=request.data)
+        write_serializer.is_valid(raise_exception=True)
 
         if (
             "association" in request.data
@@ -342,10 +203,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if (
-            not "association" in request.data
+            "association" not in request.data
             or request.data["association"] is None
             or request.data["association"] == ""
-        ) and (not "user" in request.data or request.data["user"] is None or request.data["user"] == ""):
+        ) and ("user" not in request.data or request.data["user"] is None or request.data["user"] == ""):
             return response.Response(
                 {"error": _("Missing affectation of the new project.")},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -353,8 +214,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if (
             ("user" in request.data and "association_user" in request.data)
-            or (not "association" in request.data and "association_user" in request.data)
-            or (not "association_user" in request.data and "association" in request.data)
+            or ("association" not in request.data and "association_user" in request.data)
+            or ("association_user" not in request.data and "association" in request.data)
         ):
             return response.Response(
                 {"error": _("Cannot add a user from an association.")},
@@ -362,11 +223,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         if "association" in request.data and "association_user" in request.data:
-            association_user_count = AssociationUser.objects.filter(
+            association_user = AssociationUser.objects.filter(
                 id=request.data["association_user"],
                 association_id=request.data["association"],
-            ).count()
-            if association_user_count == 0:
+            )
+            if not association_user.exists():
                 return response.Response(
                     {"error": _("Link between association and user does not exist.")},
                     status=status.HTTP_404_NOT_FOUND,
@@ -385,8 +246,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
         if (
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
-            and datetime.datetime.strptime(request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["planned_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["planned_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},
@@ -394,24 +255,20 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
 
         today = datetime.date.today()
-        request.data["creation_date"] = today
-        request.data["edition_date"] = today
-
-        return super().create(request, *args, **kwargs)
+        # Returns Project with details about linked objects
+        project_instance = write_serializer.save(
+            creation_date=today,
+            edition_date=today
+        )
+        read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
+        return response.Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    http_method_names = ["get", "patch", "delete"]
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -436,13 +293,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a project with all its details."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -470,15 +321,6 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return self.retrieve(request, *args, **kwargs)
 
     @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    @extend_schema(
         responses={
             status.HTTP_200_OK: ProjectSerializer,
             status.HTTP_400_BAD_REQUEST: None,
@@ -489,22 +331,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        write_serializer = self.get_serializer(instance=project, data=request.data, partial=True)
+        write_serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -538,16 +368,13 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-        expired_project_commission_dates_count = ProjectCommissionFund.objects.filter(
+        expired_project_commission_dates = ProjectCommissionFund.objects.filter(
             project_id=project.id,
-            commission_fund_id__in=CommissionFund.objects.filter(
-                commission_id__in=Commission.objects.filter(submission_date__lt=datetime.datetime.today()).values_list(
-                    "id"
-                )
-            ).values_list("id"),
-        ).count()
+            commission_fund__commission__submission_date__lt=datetime.datetime.today()
+        ).exists()
+
         if (
-            expired_project_commission_dates_count > 0
+            expired_project_commission_dates
             and "planned_start_date" not in request.data
             and "planned_end_date" not in request.data
         ):
@@ -569,16 +396,20 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if (
             "planned_start_date" in request.data
             and "planned_end_date" in request.data
-            and datetime.datetime.strptime(request.data["planned_start_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            > datetime.datetime.strptime(request.data["planned_end_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            and datetime.datetime.strptime(request.data["planned_start_date"], DATETIME_FORMAT)
+            > datetime.datetime.strptime(request.data["planned_end_date"], DATETIME_FORMAT)
         ):
             return response.Response(
                 {"error": _("Can't set planned start date after planned end date.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data["edition_date"] = datetime.date.today()
-        return self.partial_update(request, *args, **kwargs)
+        # Returns Project with details about linked objects
+        project_instance = write_serializer.save(
+            edition_date=datetime.date.today()
+        )
+        read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
+        return response.Response(read_serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         responses={
@@ -590,13 +421,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys a project."""
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -615,27 +440,10 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route."""
-
     serializer_class = ProjectStatusSerializer
-
-    def get_permissions(self):
-        if self.request.method == "PUT":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        return Project.visible_objects.all()
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Project.visible_objects.all()
+    http_method_names = ["patch"]
 
     @extend_schema(
         responses={
@@ -648,22 +456,10 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update project status."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        project = self.get_object()
 
-        try:
-            project = self.get_queryset().get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if not request.user.can_edit_project(project):
             return response.Response(
@@ -711,7 +507,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
         template = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
         }
 
@@ -720,7 +516,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
             association_email_template_code = ""
             user_email_template_code = ""
             if new_project_status in Project.ProjectStatus.get_email_project_processing_project_statuses():
-                document_process_types = ["DOCUMENT_PROJECT", "CHARTER_PROJECT_FUND"]
+                document_process_types = ["DOCUMENT_PROJECT"]
                 association_email_template_code = "MANAGER_PROJECT_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_USER_CREATION"
                 request.data["processing_date"] = datetime.datetime.today()
@@ -728,13 +524,8 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
                 association_email_template_code = "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"
                 user_email_template_code = "MANAGER_PROJECT_REVIEW_USER_CREATION"
-                commission = Commission.objects.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                            "commission_fund_id"
-                        )
-                    ).values_list("commission_id")
-                ).first()
+
+                commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
                 context["commission_name"] = commission.name
                 context["project_name"] = project.name
             missing_documents_names = Document.objects.filter(
@@ -743,31 +534,11 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                     models.Q(is_required_in_process=True, fund_id=None)
                     | models.Q(
                         is_required_in_process=True,
-                        fund_id__in=CommissionFund.objects.filter(
-                            id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                                "commission_fund_id"
-                            )
-                        ).values_list("fund_id"),
+                        fund__commissionfund__projectcommissionfund__project_id=project.id,
                     )
                 )
-            ).exclude(
-                id__in=DocumentUpload.objects.filter(
-                    project_id=project.id,
-                ).values_list("document_id")
-            )
-            if project.association_id is not None:
-                missing_documents_names = missing_documents_names.exclude(
-                    id__in=DocumentUpload.objects.filter(
-                        association_id=project.association_id,
-                    ).values_list("document_id")
-                ).values_list("name")
-            elif project.user_id is not None:
-                missing_documents_names = missing_documents_names.exclude(
-                    id__in=DocumentUpload.objects.filter(
-                        user_id=project.user_id,
-                    ).values_list("document_id")
-                ).values_list("name")
-            if missing_documents_names.count() > 0:
+            ).exclude(documentupload__project=project)
+            if missing_documents_names.exists():
                 missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
                 return response.Response(
                     {"error": _(f"Missing documents : {missing_documents_names_string}.")},
@@ -787,7 +558,7 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 projects_year = Project.visible_objects.filter(
                     manual_identifier__isnull=False, manual_identifier__startswith=year
                 )
-                if projects_year.count() > 0:
+                if projects_year.exists():
                     last_identifier = (
                         int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
                     )
@@ -795,23 +566,19 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 project.save()
 
             managers_emails = project.get_project_default_manager_emails()
-            if project.association_id is not None:
+            if project.association_id:
                 association = Association.objects.get(id=project.association_id)
                 funds_misc_used = Fund.objects.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                            "commission_fund_id"
-                        )
-                    ).values_list("fund_id"),
+                    commissionfund__projectcommissionfund__project=project,
                     is_site=False,
                 )
                 context["association_name"] = association.name
                 template = MailTemplate.objects.get(code=association_email_template_code)
-                if funds_misc_used.count() > 0:
+                if funds_misc_used.exists():
                     for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                         if user_to_check.has_perm("users.change_user_misc"):
                             managers_emails.append(user_to_check.email)
-            elif project.user_id is not None:
+            elif project.user_id:
                 context["first_name"] = request.user.first_name
                 context["last_name"] = request.user.last_name
                 template = MailTemplate.objects.get(code=user_email_template_code)
@@ -835,41 +602,59 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
                 History.objects.create(
                     action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
                 )
-                commission = Commission.objects.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                            "commission_fund_id"
-                        )
-                    ).values_list("commission_id")
-                ).first()
-                fund = Fund.objects.filter(
-                    id__in=CommissionFund.objects.filter(
-                        id__in=ProjectCommissionFund.objects.filter(project_id=project.id).values_list(
-                            "commission_fund_id"
-                        )
-                    ).values_list("fund_id")
-                ).first()
+                commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
+                fund = Fund.objects.filter(commissionfund__projectcommissionfund__project=project).first()
                 context["project_name"] = project.name
                 context["fund_name"] = fund.acronym
                 context["commission_name"] = commission.name
             template = MailTemplate.objects.get(code=mail_templates_codes_by_status[new_project_status])
-            email = ""
-            if project.association_id is not None:
-                if project.association_user_id is not None:
-                    email = User.objects.get(
-                        id=AssociationUser.objects.get(id=project.association_user_id).user_id
-                    ).email
-                else:
-                    email = Association.objects.get(id=project.association_id).email
-            elif project.user_id is not None:
-                email = User.objects.get(id=project.user_id).email
             context["manager_email_address"] = ','.join(project.get_project_default_manager_emails())
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
-                to_=email,
+                to_=project.get_project_owner_data().get("email"),
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
 
         request.data["edition_date"] = datetime.date.today()
         return self.update(request, *args, **kwargs)
+
+
+class ProjectCommissionPostponeView(generics.GenericAPIView):
+    """Custom view to postpone a Project to another Commission while keeping its funds data"""
+    queryset = Project.visible_objects.all()
+    serializer_class = ProjectPostponeSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ProjectUpdatePermission]
+    http_method_names = ["patch"]
+    lookup_url_kwarg = "project_id"
+
+    def patch(self, request, *args, **kwargs):
+        project = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        new_commission = serializer.validated_data["new_commission_id"]
+
+        # Updating ProjectCommissionFund links
+        with transaction.atomic():
+            # Mapping funds with CommissionFund ids of the new commission
+            new_commission_funds_map = {
+                cf.fund_id: cf.id
+                for cf in CommissionFund.objects.filter(commission=new_commission)
+            }
+
+            # For each existing PCF object, update CommissionFund id based on previous mapped funds and project funds
+            project_commission_funds = ProjectCommissionFund.objects.filter(project=project)
+            for pcf in project_commission_funds:
+                fund = pcf.commission_fund.fund
+                new_cf_id = new_commission_funds_map.get(fund.id)
+                if new_cf_id != pcf.commission_fund_id:
+                    pcf.commission_fund_id = new_cf_id
+                    pcf.save()
+                    pcf.refresh_from_db()
+                    send_pcf_notification_mail_with_attachments(request=request, pcf=pcf, notification_type="POSTPONE")
+
+        return Response(
+            {"success": _("Project successfully postponed to the new commission.")},
+            status=status.HTTP_200_OK
+        )

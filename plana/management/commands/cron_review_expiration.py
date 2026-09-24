@@ -37,24 +37,18 @@ class Command(BaseCommand):
 
             for project_needing_review in projects_needing_reviews:
                 context["project_name"] = project_needing_review.name
-                if project_needing_review.association_id is not None:
-                    association = Association.objects.get(id=project_needing_review.association_id)
-                    if project_needing_review.association_user_id is not None:
-                        email = User.objects.get(
-                            id=AssociationUser.objects.get(id=project_needing_review.association_user_id).user_id
-                        ).email
-                    else:
-                        email = association.email
+                owner_data = project_needing_review.get_project_owner_data()
+                if project_needing_review.association:
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=email,
+                        to_=owner_data.get("email"),
                         subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )
 
                     managers_emails = list(
-                        Institution.objects.get(id=association.institution_id)
+                        Institution.objects.get(id=project_needing_review.association.institution_id)
                         .default_institution_managers()
                         .values_list("email", flat=True)
                     )
@@ -66,12 +60,11 @@ class Command(BaseCommand):
                         message=template.parse_vars(None, None, context),
                     )
 
-                elif project_needing_review.user_id is not None:
-                    user = User.objects.get(id=project_needing_review.user_id)
+                elif project_needing_review.user:
                     template = MailTemplate.objects.get(code="USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW_SCHEDULED")
                     send_mail(
                         from_=settings.DEFAULT_FROM_EMAIL,
-                        to_=user.email,
+                        to_=owner_data.get("email"),
                         subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                         message=template.parse_vars(None, None, context),
                     )

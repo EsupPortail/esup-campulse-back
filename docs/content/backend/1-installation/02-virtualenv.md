@@ -26,7 +26,8 @@ export DEFAULT_DB_PASSWORD="plana"
 # Upload d'images et de documents sur le stockage S3.
 export AWS_ACCESS_KEY_ID=AccESSkeyId
 export AWS_SECRET_ACCESS_KEY=secREtaCCEsskeY
-export AWS_STORAGE_BUCKET_NAME=bucket_name
+export AWS_STORAGE_PUBLIC_BUCKET_NAME=public_bucket_name
+export AWS_STORAGE_PRIVATE_BUCKET_NAME=private_bucket_name
 export AWS_S3_ENDPOINT_URL=https://s3.domain.example
 
 # Recherche d'un compte sur un annuaire LDAP (optionnel, mais à désactiver plus loin dans l'installation via les variables Django).

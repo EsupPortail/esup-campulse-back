@@ -13,10 +13,10 @@ def load_key(keyfile):
     """Load JWT and AGE keys."""
     try:
         keyfile = SITE_ROOT / "keys" / keyfile
-        with open(keyfile, "rb") as file:
-            return file.read()
+        with open(keyfile, "r") as file:
+            return file.read().strip()
     except FileNotFoundError:
-        return b""
+        return ""
 
 
 APP_VERSION = "1.2.4"
@@ -76,13 +76,17 @@ DATABASES = {
 }
 
 
-######################
-# Site configuration #
-######################
+############################
+# Allowed hosts & Security #
+############################
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
+
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "ssl")
+
+# CSRF_TRUSTED_ORIGINS = "".split()
 
 
 #########################
@@ -163,23 +167,6 @@ STATICFILES_FINDERS = [
 ]
 
 
-############
-# Dipstrap #
-############
-
-DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
-
-
-##############
-# Secret key #
-##############
-
-# Make this unique, and don't share it with anybody.
-# Only for dev and test environnement. Should be redefined for production
-# environnement
-SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
-
-
 ##########################
 # Template configuration #
 ##########################
@@ -242,7 +229,7 @@ MIDDLEWARE = [
 
 
 #####################
-# Url configuration #
+# URL configuration #
 #####################
 
 ROOT_URLCONF = f"{SITE_NAME}.urls"
@@ -283,6 +270,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth_cas",
     "rest_framework_simplejwt",
+    'django_filters',
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "drf_spectacular",
@@ -395,8 +383,54 @@ LOGGING = {
 }
 
 
+###############
+# Secret keys #
+###############
+
+# Make this unique, and don't share it with anybody.
+# Only for dev and test environnement. Should be redefined for production
+# environnement
+SECRET_KEY = "ma8r116)33!-#pty4!sht8tsa(1bfe%(+!&9xfack+2e9alah!"
+
+
+############
+# Dipstrap #
+############
+
+DIPSTRAP_VERSION = ""
+DIPSTRAP_STATIC_URL = "//django-static.u-strasbg.fr/dipstrap/"
+
+
+##########
+# Sentry #
+##########
+
+STAGE = None
+SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
+
+
+def sentry_init(environment):
+    """Init Sentry service."""
+    try:
+        with open(join(SITE_ROOT, "build.txt"), encoding="utf-8") as f:
+            release = f.read().strip()
+    except FileNotFoundError:
+        release = None
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+        ],
+        environment=environment,
+        release=release,
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+    )
+
+
 #########################
-# DJANGO REST FRAMEWORK #
+# Django REST Framework #
 #########################
 
 REST_FRAMEWORK = {
@@ -406,6 +440,9 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
     ],
+    "DEFAULT_FILTER_BACKENDS": (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
@@ -438,19 +475,20 @@ AWS_DEFAULT_ACL = None
 AWS_USE_OBJECT_ACL = True
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
-AWS_STORAGE_BUCKET_NAME = environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_STORAGE_PUBLIC_BUCKET_NAME = environ.get("AWS_STORAGE_PUBLIC_BUCKET_NAME", "")
+AWS_STORAGE_PRIVATE_BUCKET_NAME = environ.get("AWS_STORAGE_PRIVATE_BUCKET_NAME", "")
 AWS_S3_ENDPOINT_URL = environ.get("AWS_S3_ENDPOINT_URL", "")
 S3_LOGOS_FILEPATH = "logos"
 S3_ASSOCIATIONS_LOGOS_FILEPATH = "associations_logos"
 S3_TEMPLATES_FILEPATH = "associations_documents_templates"
 S3_DOCUMENTS_FILEPATH = "associations_documents"
 S3_NOTIFICATIONS_FILEPATH = "projects_notifications"
-AGE_PUBLIC_KEY = load_key("age-public-key.key")
-AGE_PRIVATE_KEY = load_key("age-private-key.key")
+AGE_PUBLIC_KEY = environ.get("AGE_PUBLIC_KEY", load_key("age-public-key.key"))
+AGE_PRIVATE_KEY = environ.get("AGE_PRIVATE_KEY", load_key("age-private-key.key"))
 
 
 #####################
-# DJANGO THUMBNAILS #
+# Django Thumbnails #
 #####################
 
 THUMBNAILS = {
@@ -496,7 +534,7 @@ THUMBNAILS = {
 }
 
 ##################
-# AUTHENTICATION #
+# Authentication #
 ##################
 
 CAS_ID = "cas"
@@ -507,6 +545,7 @@ CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
 # Keys are User model fields, values are CAS fields.
 CAS_ATTRIBUTES_NAMES = {
+    "uid": "",  # Should be automatically detected by CAS
     "email": "mail",
     "first_name": "first_name",
     "last_name": "last_name",
@@ -554,8 +593,8 @@ SOCIALACCOUNT_PROVIDERS = {
 SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=1),
     "ALGORITHM": "RS256",
-    "SIGNING_KEY": load_key("jwt-private-key.pem"),
-    "VERIFYING_KEY": load_key("jwt-public-key.pem"),
+    "SIGNING_KEY": environ.get("JWT_SIGNING_KEY", load_key("jwt-private-key.pem")),
+    "VERIFYING_KEY": environ.get("JWT_VERIFYING_KEY", load_key("jwt-public-key.pem")),
     "AUDIENCE": "plan_a",
     "ISSUER": "plan_a",
     "USER_ID_FIELD": "id",
@@ -572,28 +611,6 @@ REST_AUTH = {
     "PASSWORD_CHANGE_SERIALIZER": "plana.apps.users.serializers.user_auth.PasswordChangeSerializer",
     "REGISTER_SERIALIZER": "plana.apps.users.serializers.user.CustomRegisterSerializer",
 }
-
-
-##########
-# Sentry #
-##########
-
-STAGE = None
-SENTRY_DSN = "https://72691d0aec61475a80d93ac9b634ca57@sentry.app.unistra.fr/54"
-
-
-def sentry_init(environment):
-    """Init Sentry service."""
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(),
-        ],
-        environment=environment,
-        release=open(join(SITE_ROOT, "build.txt"), encoding="utf-8").read(),
-        send_default_pii=True,
-        traces_sample_rate=1.0,
-    )
 
 
 ###############
@@ -627,13 +644,12 @@ SPECTACULAR_SETTINGS = {
 
 EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION_PATH = "register-verify-email/"
 EMAIL_TEMPLATE_PASSWORD_RESET_PATH = "password-reset-confirm/"
-EMAIL_TEMPLATE_PASSWORD_CHANGE_PATH = "dashboard/password-change-url/"
 EMAIL_TEMPLATE_ACCOUNT_VALIDATE_PATH = "dashboard/validate-users/"
 EMAIL_TEMPLATE_USER_ASSOCIATION_VALIDATE_PATH = "dashboard/validate-association-users/"
 EMAIL_TEMPLATE_DOCUMENT_VALIDATE_PATH = "charter/manage/"
 
 
-################
+#################
 # PDF Templates #
 #################
 
@@ -677,7 +693,7 @@ ASSOCIATION_IS_SITE_DEFAULT = False
 ASSOCIATION_DEFAULT_AMOUNT_MEMBERS_ALLOWED = 4
 
 # External APIs.
-ACCOUNTS_API_CLIENT = "plana.libs.api.accounts.SporeAccountsAPI"
+ACCOUNTS_API_CLIENT = "Spore"
 ACCOUNTS_API_CONF = {}
 
 # Enable adding a LDAP account though Spore.
@@ -772,7 +788,9 @@ PERMISSIONS_GROUPS = {
         "delete_institutioncomponent",
         "view_institutioncomponent",
         # contents
+        "add_content",
         "change_content",
+        "view_content",
         "add_logo",
         "change_logo",
         "delete_logo",
@@ -789,6 +807,7 @@ PERMISSIONS_GROUPS = {
         "delete_document",
         "delete_document_any_fund",
         "delete_document_any_institution",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -838,11 +857,13 @@ PERMISSIONS_GROUPS = {
         "delete_associationuser_any_institution",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "add_groupinstitutionfunduser_any_group",
         "delete_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser_any_group",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
+        "delete_emailaddress",
         # mail templates
         "change_mailtemplate",
         "view_mailtemplate",
@@ -863,6 +884,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -891,11 +913,11 @@ PERMISSIONS_GROUPS = {
         "change_user_all_fields",
         "delete_user",
         "view_user",
-        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
@@ -915,6 +937,7 @@ PERMISSIONS_GROUPS = {
         "add_document",
         "change_document",
         "delete_document",
+        "add_documentupload",
         "add_documentupload_all",
         "change_documentupload",
         "delete_documentupload",
@@ -947,11 +970,11 @@ PERMISSIONS_GROUPS = {
         "delete_user_misc",
         "view_user",
         "view_user_misc",
-        "view_user_anyone",
         "change_associationuser",
         "delete_associationuser",
         "view_associationuser",
         "view_associationuser_anyone",
+        "add_groupinstitutionfunduser",
         "delete_groupinstitutionfunduser",
         "view_groupinstitutionfunduser",
         "view_groupinstitutionfunduser_any_group",
@@ -976,7 +999,6 @@ PERMISSIONS_GROUPS = {
         # users
         "view_user",
         "view_user_misc",
-        "view_user_anyone",
         "view_associationuser",
         "view_groupinstitutionfunduser",
     ],
@@ -984,6 +1006,7 @@ PERMISSIONS_GROUPS = {
         # associations
         "change_association",
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects
@@ -1011,6 +1034,7 @@ PERMISSIONS_GROUPS = {
     ],
     "STUDENT_MISC": [
         # documents
+        "add_documentupload",
         "delete_documentupload",
         "view_documentupload",
         # projects

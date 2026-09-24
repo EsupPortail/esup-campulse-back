@@ -11,7 +11,7 @@ from drf_spectacular.views import (
 )
 from rest_framework.exceptions import bad_request, server_error
 
-from .views import forbidden, not_found, ok, StatsView
+from .views import StatsView, forbidden, not_found, ok
 
 admin.autodiscover()
 

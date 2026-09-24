@@ -39,4 +39,4 @@ weight: 116
 - `black plana` : linter les fichiers.
 - `pylint plana --output-format=json:pylint.json` : liste des erreurs non lintables exportées dans un fichier `pylint.json`.
 - `cd docs && hugo server && cd ..` : lancer le serveur de développement de la documentation.
-- `aws s3api put-object-acl --bucket AWS_STORAGE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME --key FILE_PATH --acl public-read` : rendre un fichier lisible publiquement sur le serveur S3 (ajout de nouveau logo).
+- `aws s3api put-object-acl --bucket AWS_STORAGE_PUBLIC_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME --key FILE_PATH --acl public-read` : rendre un fichier lisible publiquement sur le serveur S3 (ajout de nouveau logo).

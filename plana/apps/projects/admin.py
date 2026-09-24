@@ -1,35 +1,49 @@
 """Admin view for Project models."""
 import datetime
+
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from plana.apps.users.models.user import AssociationUser, User
-
-from .models import (
-    Category,
-    Project,
-    ProjectCategory,
-    ProjectComment,
-    ProjectCommissionFund,
-)
-from ..contents.models import Content
-from ...admin import SecuredModelAdmin
-from ...libs.mail_template.models import MailTemplate
-from ...utils import send_mail
+from .utils import send_pcf_notification_mail_with_attachments
+from ...admin import SecuredModelAdmin, JSONImportAdminMixin
+from plana.apps.projects import models
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(models.Category)
+class CategoryAdmin(JSONImportAdminMixin):
     """List view for categories."""
 
-    list_display = ["name"]
+    list_display = ["name", "is_enabled"]
     search_fields = ["name"]
+    actions = ["enable_selection", "disable_selection"]
+
+    def _purge_draft_project_categories(self, category_queryset):
+        """Deletes ProjectCategory objects from draft and processing projects."""
+        models.ProjectCategory.objects.filter(
+            category__in=category_queryset,
+            project__project_status__in=["PROJECT_DRAFT", "PROJECT_DRAFT_PROCESSED", "PROJECT_PROCESSING"]
+        ).delete()
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            old_obj = models.Category.objects.get(pk=obj.pk)
+            if old_obj.is_enabled and not obj.is_enabled:
+                self._purge_draft_project_categories(models.Category.objects.filter(pk=obj.pk))
+
+        super().save_model(request, obj, form, change)
+
+    @admin.action(description=_("Enable all selected Categories"))
+    def enable_selection(self, request, queryset):
+        queryset.update(is_enabled=True)
+
+    @admin.action(description=_("Disable all selected Categories"))
+    def disable_selection(self, request, queryset):
+        self._purge_draft_project_categories(queryset)
+        queryset.update(is_enabled=False)
 
 
-@admin.register(Project)
+@admin.register(models.Project)
 class ProjectAdmin(SecuredModelAdmin):
     """List view for projects."""
 
@@ -54,12 +68,22 @@ class ProjectAdmin(SecuredModelAdmin):
         "project_status",
     ]
 
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .select_related('user', 'association_user__user', 'association')
+            .prefetch_related(
+                'projectcommissionfund_set__commission_fund__commission',
+                'projectcommissionfund_set__commission_fund__fund'
+            )
+        )
+
     @admin.display(description=_("Association User"))
     @admin.display(ordering="association_user")
     def get_association_user(self, obj):
         """Get user that manages a project in an association."""
-        if obj.association_user is not None:
-            user = User.objects.get(id=AssociationUser.objects.get(id=obj.association_user.id).user_id)
+        if (association_user := obj.association_user):
+            user = association_user.user
             return f"{user.first_name} {user.last_name}"
         return "-"
 
@@ -67,15 +91,18 @@ class ProjectAdmin(SecuredModelAdmin):
     @admin.display(ordering="projectcommissionfund")
     def get_commission_funds(self, obj):
         """Get commissions and funds linked to a project."""
-        project_commission_funds = ProjectCommissionFund.objects.filter(project_id=obj.id)
-        if project_commission_funds.count() > 0:
-            commission_name = project_commission_funds.first().commission_fund.commission.name
-            fund_names = list(project_commission_funds.values_list("commission_fund__fund__acronym", flat=True))
+        commission_name = ''
+        fund_names = []
+        for pcf in obj.projectcommissionfund_set.all():
+            commision_fund = pcf.commission_fund
+            commission_name = commision_fund.commission.name
+            fund_names.append(commision_fund.fund.acronym)
+        if commission_name:
             return f"{commission_name} - {', '.join(fund_names)}"
-        return "-"
+        return '-'
 
 
-@admin.register(ProjectCategory)
+@admin.register(models.ProjectCategory)
 class ProjectCategoryAdmin(SecuredModelAdmin):
     """List view for project categories."""
 
@@ -83,7 +110,7 @@ class ProjectCategoryAdmin(SecuredModelAdmin):
     search_fields = ["category__name", "project__name"]
 
 
-@admin.register(ProjectComment)
+@admin.register(models.ProjectComment)
 class ProjectCommentAdmin(SecuredModelAdmin):
     """List view for project comments."""
 
@@ -91,82 +118,31 @@ class ProjectCommentAdmin(SecuredModelAdmin):
     list_filter = ["is_visible"]
     search_fields = ["text", "project__name", "user__first_name", "user__last_name"]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project', 'user')
+
 
 class GeneratePDFAction:
-    def __init__(self, template_name, description):
-        self.template_name = template_name
+    def __init__(self, notification_type, description):
+        self.notification_type = notification_type
         self.short_description = description
 
     @property
     def __name__(self):
-        return f"generate_pdf_{self.template_name}"
+        return f"generate_pdf_{self.notification_type}"
 
-    # TODO : Add info and error messages
     def __call__(self, modeladmin, request, queryset):
-        attachments = []
         for obj in queryset:
-            # Retrieving data from ProjectCommissionFund object
-            fund = obj.commission_fund.fund
-            project = obj.project
-            commission = obj.commission_fund.commission
-            content = Content.objects.get(code=f"NOTIFICATION_{fund.acronym.upper()}_{self.template_name}")
-            owner = {
-                "name": "PRENOM NOM",
-                "address": "1 Rue du Test STRASBOURG - 67000, FRANCE",
-            }
-            # Initializing data for PDF attachment
-            attachments.append(
-                {
-                    "template_name": f"{settings.S3_PDF_FILEPATH}/{settings.TEMPLATES_PDF_NOTIFICATIONS_FOLDER}/{getattr(fund, f'{self.template_name.lower()}_template_path')}",
-                    "filename": f"{slugify(content.title)}.pdf",
-                    "context_attach": {
-                        "amount_earned": obj.amount_earned,
-                        "project_name": project.name,
-                        "project_manual_identifier": project.manual_identifier,
-                        "date": datetime.date.today().strftime('%d %B %Y'),
-                        "year": datetime.date.today().strftime('%Y'),
-                        "date_commission": commission.commission_date.strftime('%d %B %Y'),
-                        "owner": owner,
-                        "content": content,
-                    },
-                    "mimetype": "application/pdf",
-                    "request": request,
-                }
-
-            )
-
-        # Setting up data to send email
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": f"https://{current_site.domain}",
-            "site_name": current_site.name,
-        }
-
-        code_templates = {
-            "ATTRIBUTION": "FUND_CONFIRMATION",
-            "REJECTION": "FUND_REJECTION",
-            "POSTPONE": "POSTPONED",
-            "DECISION_ATTRIBUTION": "FUND_CONFIRMATION",
-        }
-        template = MailTemplate.objects.get(code=f"USER_OR_ASSOCIATION_PROJECT_{code_templates[self.template_name]}")
-        # Send email with all generated PDF attachments
-        send_mail(
-            from_=settings.DEFAULT_FROM_EMAIL,
-            to_=request.user.email,
-            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-            message=template.parse_vars(request.user, request, context),
-            temp_attachments=attachments,
-        )
+            send_pcf_notification_mail_with_attachments(request=request, pcf=obj, notification_type=self.notification_type, from_admin=True)
 
 
 # Defining PDF actions for ProjectCommissionFund admin
-generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution")
+generate_pdf_attribution = GeneratePDFAction("ATTRIBUTION", "Générer une notification d'attribution et de décison d'attribution")
 generate_pdf_rejection = GeneratePDFAction("REJECTION", "Générer une notification de rejet")
 generate_pdf_postpone = GeneratePDFAction("POSTPONE", "Générer une notification de report")
-generate_pdf_decision_attribution = GeneratePDFAction("DECISION_ATTRIBUTION", "Générer une notification de décision d'attribution")
 
 
-@admin.register(ProjectCommissionFund)
+@admin.register(models.ProjectCommissionFund)
 class ProjectCommissionFundAdmin(admin.ModelAdmin):
     """List view for project commission funds."""
 
@@ -194,9 +170,6 @@ class ProjectCommissionFundAdmin(admin.ModelAdmin):
                     generate_pdf_rejection, 'generate_pdf_rejection', generate_pdf_rejection.short_description),
                 'generate_pdf_postpone': (
                     generate_pdf_postpone, 'generate_pdf_postpone', generate_pdf_postpone.short_description),
-                'generate_pdf_decision_attribution': (
-                    generate_pdf_decision_attribution, 'generate_pdf_decision_attribution',
-                    generate_pdf_decision_attribution.short_description),
             }
             actions.update(custom_actions)
         return actions

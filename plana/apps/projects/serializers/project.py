@@ -2,15 +2,20 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
+from plana.apps.commissions.models import Commission
 from plana.apps.commissions.serializers.commission import CommissionSerializer
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
+from plana.apps.users.serializers.association_user import AssociationUserSerializer
+from plana.apps.users.serializers.user import UserNameSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -18,6 +23,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     categories = CategorySerializer(many=True, read_only=True)
     commissions = CommissionSerializer(many=True, read_only=True)
+    association = AssociationMandatoryDataSerializer(read_only=True)
+    user = UserNameSerializer(read_only=True)
+    association_user = AssociationUserSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -57,7 +65,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
-    name = serializers.CharField(required=False, allow_blank=True, max_length=250)
     categories = CategorySerializer(many=True, read_only=True)
     commissions = CommissionSerializer(many=True, read_only=True)
 
@@ -107,6 +114,9 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
 
     commission = CommissionSerializer(many=False, read_only=True)
     budget_file = serializers.SerializerMethodField("get_budget_file")
+    association = AssociationMandatoryDataSerializer(read_only=True)
+    user = UserNameSerializer(read_only=True)
+    association_user = AssociationUserSerializer(read_only=True)
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_budget_file(self, project):
@@ -143,3 +153,17 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["project_status", "processing_date"]
+
+
+class ProjectPostponeSerializer(serializers.Serializer):
+    """Serializer for project commission postpone"""
+    new_commission_id = serializers.PrimaryKeyRelatedField(queryset=Commission.objects.all(), allow_null=False, required=True)
+
+    def validate(self, data):
+        project_id = self.context["view"].kwargs.get("project_id")
+        eligible_commissions_ids = Commission.objects.allowing_project_postpone(project_id=project_id).values_list("id", flat=True)
+        if data["new_commission_id"].pk not in eligible_commissions_ids:
+            raise serializers.ValidationError({
+                "commission_not_eligible": _("The selected commission is not eligible for this project postpone.")}
+            )
+        return data

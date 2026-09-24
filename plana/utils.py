@@ -3,6 +3,9 @@
 import ast
 import datetime
 import logging
+import re
+import unicodedata
+import urllib.parse
 
 import boto3
 import weasyprint
@@ -12,9 +15,16 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.template import Context, Template
 from django.template.loader import get_template, render_to_string
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from zxcvbn import zxcvbn
+
+PHONE_REGEX_PATTERN = r"^\+?\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4,6}$"
+
+
+def clean_filename(filename: str) -> str:
+    """Used to clean filenames of generated PDFs, replacing every character other than letter or number with dashes"""
+    cleaned_filename = re.sub(r'[^a-zA-Z0-9À-ÿ]+', '-', filename)
+    return cleaned_filename.strip('-')
 
 
 def check_valid_password(password):
@@ -74,8 +84,9 @@ def send_mail(
                         temp_attachment["request"],
                         temp_attachment["template_name"],
                 )
+                # Override last notification file for the given pcf (if None is specifically provided do nothing)
                 if "pcf_obj" in temp_attachment:
-                    filename = f"notification_{temp_attachment['context_attach']['project_name']}.pdf"
+                    filename = f"notification_{clean_filename(temp_attachment['context_attach']['project_name'])}.pdf"
                     temp_attachment["pcf_obj"].last_notification_file.save(
                         filename,
                         SimpleUploadedFile(filename, binary, content_type="application/pdf"),
@@ -130,15 +141,18 @@ def generate_pdf_response(filename, dict_data, type_doc, base_url):
     """Generate a PDF file as a HTTP response (used for all PDF exports returned in API routes)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc])
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_PUBLIC_BUCKET_NAME, Key=settings.TEMPLATES_PDF_FILEPATHS[type_doc])
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(dict_data)
         html = template.render(context)
     else:
         # May not work anymore since S3 PDF refactoring.
         html = render_to_string(settings.TEMPLATES_PDF_FILEPATHS[type_doc], dict_data)
+    filename = clean_filename(filename)
+    encoded_filename = urllib.parse.quote(f"{filename}.pdf")
     pdf_response = HttpResponse(content_type="application/pdf")
-    pdf_response["Content-Disposition"] = f'Content-Disposition: attachment; filename="{slugify(filename)}.pdf"'
+    pdf_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
+    pdf_response["Access-Control-Expose-Headers"] = "Content-Disposition"
     weasyprint.HTML(string=html, base_url=base_url).write_pdf(pdf_response)
     return pdf_response
 
@@ -147,7 +161,7 @@ def generate_pdf_binary(context, request, template_name):
     """Generate a PDF file as a binary (used for all PDF notifications attached in emails)."""
     if settings.USE_S3 == True:
         s3 = get_s3_client()
-        data = s3.get_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=template_name)
+        data = s3.get_object(Bucket=settings.AWS_STORAGE_PUBLIC_BUCKET_NAME, Key=template_name)
         template = Template(data['Body'].read().decode('utf-8'))
         context = Context(context)
     else:
@@ -156,3 +170,11 @@ def generate_pdf_binary(context, request, template_name):
     html = template.render(context)
     pdf_binary = weasyprint.HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf()
     return pdf_binary
+
+
+def normalize_object_name(object_name: str) -> str:
+    return (
+        unicodedata.normalize("NFD", object_name.strip().replace(" ", "").lower())
+        .encode("ascii", "ignore")
+        .decode("utf-8")
+    )

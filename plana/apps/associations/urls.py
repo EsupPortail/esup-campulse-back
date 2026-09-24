@@ -7,7 +7,7 @@ from .views.association import (
     AssociationListCreate,
     AssociationNameList,
     AssociationRetrieveUpdateDestroy,
-    AssociationStatusUpdate,
+    AssociationStatusUpdate, AssociationMembersView,
 )
 from .views.association_export import AssociationListExport, AssociationRetrieveExport
 
@@ -39,4 +39,5 @@ urlpatterns = [
         name="associations_list_export",
     ),
     path("names", AssociationNameList.as_view(), name="association_name_list"),
+    path("<int:association_id>/users", AssociationMembersView.as_view(), name="association_user_links"),
 ]

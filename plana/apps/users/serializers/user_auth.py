@@ -15,7 +15,6 @@ from dj_rest_auth.serializers import (
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions
 
@@ -80,7 +79,7 @@ class PasswordResetSerializer(DJRestAuthPasswordResetSerializer):
             if user.is_cas_user:
                 raise exceptions.ValidationError({"detail": [_("Unable to reset the password of a CAS account.")]})
             self.reset_form.save(**opts)
-        except ObjectDoesNotExist:
+        except User.DoesNotExist:
             pass
 
 
@@ -97,7 +96,7 @@ class PasswordResetConfirmSerializer(DJRestAuthPasswordResetConfirmSerializer):
         request = None
         current_site = get_current_site(request)
         context = {
-            "site_domain": f"https://{current_site.domain}",
+            "site_domain": current_site.domain,
             "site_name": current_site.name,
             "first_name": self.user.first_name,
             "last_name": self.user.last_name,

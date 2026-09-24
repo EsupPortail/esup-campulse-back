@@ -15,20 +15,44 @@ add_header Content-Security-Policy "upgrade-insecure-requests; default-src 'none
 
 ## Mise en place du serveur S3
 
-Un bucket S3 est utilisé pour stocker quatre types de documents :
+Deux buckets S3 sont utilisés pour stocker les différents types de documents, un bucket est public et l'autre est privé.
+
+Dans le bucket public sont stockés : 
 - Les logos des associations.
 - Les logos présents dans le pied de page du site.
 - Les documents de la bibliothèque (modèles à remplir).
-- Les documents déposés dans le cadre d'une inscription, d'un dépôt de charte ou d'un dépôt de projet (tous sont chiffrés).
+
+Tandis que dans le bucket privé sont stockés les documents déposés dans le cadre d'une inscription, d'un dépôt de charte ou d'un dépôt de projet (tous sont chiffrés).
 
 Il est recommandé d'utiliser le [client AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) en créant un profil de connexion pour gérer le compte utilisé.
 ```sh
 aws configure --profile PROFILE_NAME # utilitaire pour créer un nouveau profil (spécifier Access et Secret Keys)
 ```
 
-Un bucket distinct doit ensuite être crée par environnement de déploiement.
+Un bucket distinct doit ensuite être créé par environnement de déploiement et par paramétrage (un public et un privé).
 ```sh
-aws s3api create-bucket --bucket AWS_STORAGE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME
+aws s3api create-bucket --bucket AWS_STORAGE_PRIVATE_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME
+```
+
+Pour le bucket public, il faut penser à ajouter une policy dédiée pour que les fichiers uploadés héritent des caractéristiques publiques du bucket :
+```sh
+aws s3api create-bucket --bucket AWS_STORAGE_PUBLIC_BUCKET_NAME --endpoint-url AWS_S3_ENDPOINT_URL --profile PROFILE_NAME --policy file://policy.json
+```
+
+Où le fichier `policy.json` contiendrait ceci :
+```json
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid":"PublicRead",
+      "Effect":"Allow",
+      "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::AWS_STORAGE_PUBLIC_BUCKET_NAME/*"]
+    }
+  ]
+}
 ```
 
 ### Ressources statiques (fichiers PDF)

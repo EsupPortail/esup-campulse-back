@@ -1,6 +1,5 @@
 """Views for project PDF generation."""
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -39,14 +38,8 @@ class ProjectDataExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
-        try:
-            project = self.queryset.get(id=kwargs["pk"])
-            data = project.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
+        data = project.__dict__
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -105,8 +98,9 @@ class ProjectDataExport(generics.RetrieveAPIView):
                 document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT"),
             ).values("name", "document__name")
         )
+        filename = f"Récapitulatif-Demande-Subvention-{data['name']}"
 
-        return generate_pdf_response(data["name"], data, "project_summary", request.build_absolute_uri("/"))
+        return generate_pdf_response(filename, data, "project_summary", request.build_absolute_uri("/"))
 
 
 class ProjectReviewDataExport(generics.RetrieveAPIView):
@@ -126,14 +120,8 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve a PDF file."""
-        try:
-            project = self.queryset.get(id=kwargs["pk"])
-            data = project.__dict__
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = self.get_object()
+        data = project.__dict__
 
         if (
             not request.user.has_perm("projects.view_project_any_fund")
@@ -186,9 +174,10 @@ class ProjectReviewDataExport(generics.RetrieveAPIView):
                 document_id__in=Document.objects.filter(process_type="DOCUMENT_PROJECT_REVIEW"),
             ).values("name", "document__name")
         )
+        filename = f"Récapitulatif-Demande-Subvention-{data['name']}"
 
         return generate_pdf_response(
-            data["name"],
+            filename,
             data,
             "project_review_summary",
             request.build_absolute_uri('/'),

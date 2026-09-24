@@ -10,14 +10,13 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.provider import CASProvider
 
 from .models import AssociationUser, GroupInstitutionFundUser, User
-from ...admin import SecuredModelAdmin, SecuredInlineAdmin
 
 
 class ManagerUserCreationForm(UserCreationForm):
@@ -75,7 +74,7 @@ class ManagerUserCreationForm(UserCreationForm):
                 self.save_m2m()
 
         EmailAddress.objects.create(email=user.email, verified=True, primary=True, user_id=user.id)
-        if is_cas is True:
+        if is_cas:
             SocialAccount.objects.create(
                 user=user,
                 provider=CASProvider.id,
@@ -84,7 +83,7 @@ class ManagerUserCreationForm(UserCreationForm):
             )
 
         group = Group.objects.get(name="MANAGER_GENERAL")
-        if "is_manager_general" in self.changed_data and self.cleaned_data["is_manager_general"] is True:
+        if "is_manager_general" in self.changed_data and self.cleaned_data["is_manager_general"]:
             for institution_id in Institution.objects.values_list("id", flat=True):
                 GroupInstitutionFundUser.objects.create(
                     user_id=user.id,
@@ -111,7 +110,7 @@ class GroupInstitutionFundUserForm(forms.ModelForm):
         self.fields["institution"].required = False
 
 
-class GroupInstitutionFundUserInline(SecuredInlineAdmin):
+class GroupInstitutionFundUserInline(admin.StackedInline):
     """Add GroupInstitutionFundUser sub-form."""
 
     model = GroupInstitutionFundUser
@@ -119,11 +118,11 @@ class GroupInstitutionFundUserInline(SecuredInlineAdmin):
     form = GroupInstitutionFundUserForm
 
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
-        exclude = ('password',)
+        fields = "__all__"
+        exclude = ("password",)
 
 
 @admin.register(User)
@@ -148,30 +147,49 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ["is_validated_by_admin", "can_submit_projects"]
     search_fields = ["email", "first_name", "last_name"]
 
-    def get_form(self, request, obj=None, **kwargs):
-        """Route correct form if user is created or changed."""
-        if not obj:
-            self.form = self.add_form
-        else:
-            self.form = self.change_form
+    def get_queryset(self, request):
+        return (
+            super().get_queryset(request)
+            .prefetch_related(
+                'groupinstitutionfunduser_set__group',
+                'associations',
+                'emailaddress_set'
+            )
+            .distinct()
+        )
 
-        return super().get_form(request, obj, **kwargs)
+    def delete_queryset(self, request, queryset):
+        """Uses ids list to group delete objects even with distinct on main queryset"""
+        user_ids = list(queryset.values_list('pk', flat=True))
+        self.model.objects.filter(pk__in=user_ids).delete()
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Use correct form if user is created or changed with restricted fields if not superuser."""
+        superuser_only_fields = ["is_superuser", "groups", "user_permissions", "is_staff"]
+
+        if not obj:
+            kwargs["form"] = self.add_form
+        else:
+            kwargs["form"] = self.change_form
+        form_class = super().get_form(request, obj, **kwargs)
+
+        if not request.user.is_superuser:
+            for field in superuser_only_fields:
+                if field in form_class.base_fields:
+                    del form_class.base_fields[field]
+        return form_class
 
     @admin.display(description=_("Groups"))
     @admin.display(ordering="groups_institutions_funds")
     def get_groups(self, obj):
         """Get groups linked to user."""
-        return list(
-            GroupInstitutionFundUser.objects.filter(user_id=obj.id)
-            .distinct('group__name')
-            .values_list("group__name", flat=True)
-        )
+        return list({gifu.group.name for gifu in obj.groupinstitutionfunduser_set.all()})
 
     @admin.display(description=_("Associations"))
     @admin.display(ordering="associationuser")
     def get_associations(self, obj):
         """Get associations linked to user."""
-        return list(AssociationUser.objects.filter(user_id=obj.id).values_list("association__acronym", flat=True))
+        return [asso.acronym for asso in obj.associations.all()]
 
     @admin.display(boolean=True)
     @admin.display(description=_("Has validated email address"))
@@ -210,7 +228,7 @@ class AssociationUserAdmin(admin.ModelAdmin):
 
 
 @admin.register(GroupInstitutionFundUser)
-class GroupInstitutionFundUserAdmin(SecuredModelAdmin):
+class GroupInstitutionFundUserAdmin(admin.ModelAdmin):
     """List view for group users."""
 
     list_display = ["user", "group", "institution", "fund"]
@@ -223,3 +241,6 @@ class GroupInstitutionFundUserAdmin(SecuredModelAdmin):
         "fund__acronym",
         "fund__name",
     ]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user', 'group', 'institution', 'fund')

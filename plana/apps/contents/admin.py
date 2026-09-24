@@ -18,7 +18,7 @@ class ContentAdmin(SummernoteModelAdmin):
         fields = list(super().get_readonly_fields(request))
         if not request.user.is_superuser:
             fields.extend(["is_editable"])
-            if not obj.code.startswith("NOTIFICATION_"):
+            if obj and not obj.code.startswith("NOTIFICATION_"):
                 fields.extend(["code", "label"])
         return fields
 

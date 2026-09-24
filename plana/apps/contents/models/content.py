@@ -9,11 +9,11 @@ class Content(models.Model):
 
     code = models.CharField(_("Code"), max_length=128, blank=False, null=False, unique=True)
     label = models.CharField(_("Label"), max_length=128, blank=False, null=False, unique=True)
-    title = models.CharField(_("Title"), max_length=512, default="", blank=True, null=True)
-    header = models.TextField(_("Header"), default="", blank=True, null=True)
+    title = models.CharField(_("Title"), max_length=512, blank=True)
+    header = models.TextField(_("Header"), blank=True)
     body = models.TextField(_("Body"), blank=False, null=False)
-    footer = models.TextField(_("Footer"), default="", blank=True, null=True)
-    aside = models.TextField(_("Sidebar"), default="", blank=True, null=True)
+    footer = models.TextField(_("Footer"), blank=True)
+    aside = models.TextField(_("Sidebar"), blank=True)
     is_editable = models.BooleanField(_("Is editable"), default=False)
 
     def __str__(self):
