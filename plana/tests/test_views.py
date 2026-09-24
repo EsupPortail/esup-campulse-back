@@ -9,8 +9,8 @@ class RootViewsTests(TestCase):
 
     fixtures = [
         "associations_activityfield.json",
-        "associations_association.json",
-        "commissions_commission.json",
+        "tests/associations_association.json",
+        "tests/commissions_commission.json",
         "commissions_fund.json",
         "documents_document.json",
         "institutions_institution.json",
