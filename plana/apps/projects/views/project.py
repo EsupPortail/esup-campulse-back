@@ -108,6 +108,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
             )
         ).distinct()
 
+        # FIXME : temporary solution to exclude draft projects for managers
+        if request.user.is_staff:
+            queryset = queryset.exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT)
+
         return queryset
 
     def get_serializer_class(self):

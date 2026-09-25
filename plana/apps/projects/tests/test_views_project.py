@@ -181,23 +181,23 @@ class ProjectsViewsTests(TestCase):
         """
         GET /projects/ .
 
-        - A general manager user gets all projects.
+        - A general manager user gets all projects except DRAFT ones.
         - Search filters are available.
         """
         response = self.general_client.get("/projects/")
-        projects_cnt = Project.visible_objects.all().count()
+        projects_cnt = Project.visible_objects.all().exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content["results"]), projects_cnt)
 
         similar_names = [
-            "Projet associatif de porteur de projet individuel",
-            "projet associatif de porteur de projet individuel",
-            "Projetassociatifdeporteurdeprojetindividuel",
-            "projetassociatifdeporteurdeprojetindividuel",
-            " Projet associatif de porteur de projet individuel ",
-            "Prôjêt àssöcïâtîf dë porteur de projet individuel",
-            "associatif de porteur de projet individuel",
+            "Projet en cours porté par une association",
+            "projet en cours porté par une association",
+            "Projetencoursporteparuneassociation",
+            "projetencoursporteparuneassociation",
+            " Projet en cours porté par une association ",
+            "Prôjêt èn coûrs porté pàr üne ässocîation",
+            "cours porte par une association",
         ]
         for similar_name in similar_names:
             response = self.general_client.get(f"/projects/?name={similar_name}")
@@ -214,24 +214,24 @@ class ProjectsViewsTests(TestCase):
 
         year = 2099
         response = self.general_client.get(f"/projects/?year={year}")
-        projects_cnt = Project.visible_objects.filter(creation_date__year=year).count()
+        projects_cnt = Project.visible_objects.filter(creation_date__year=year).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), projects_cnt)
 
         response = self.general_client.get(f"/projects/?user_id={self.student_misc_user_id}")
-        projects_cnt = Project.visible_objects.filter(user_id=self.student_misc_user_id).count()
+        projects_cnt = Project.visible_objects.filter(user_id=self.student_misc_user_id).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), projects_cnt)
 
         association_id = 2
         response = self.general_client.get(f"/projects/?association_id={association_id}")
-        projects_cnt = Project.visible_objects.filter(association_id=association_id).count()
+        projects_cnt = Project.visible_objects.filter(association_id=association_id).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), projects_cnt)
 
         project_statuses = ["PROJECT_DRAFT", "PROJECT_VALIDATED"]
         response = self.general_client.get(f"/projects/?project_statuses={','.join(str(x) for x in project_statuses)}")
-        projects_cnt = Project.visible_objects.filter(project_status__in=project_statuses).count()
+        projects_cnt = Project.visible_objects.filter(project_status__in=project_statuses).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), projects_cnt)
 
@@ -241,11 +241,11 @@ class ProjectsViewsTests(TestCase):
             id__in=ProjectCommissionFund.objects.filter(
                 commission_fund_id__in=CommissionFund.objects.filter(commission_id=commission).values_list("id")
             ).values_list("project_id")
-        ).count()
+        ).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).count()
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), projects_cnt)
 
-        projects_ids_with_comments = ProjectComment.objects.all().values_list("project_id")
+        projects_ids_with_comments = ProjectComment.objects.all().exclude(project__project_status=Project.ProjectStatus.PROJECT_DRAFT).values_list("project_id")
         response = self.general_client.get("/projects/?with_comments=true")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), len(projects_ids_with_comments))
@@ -254,10 +254,11 @@ class ProjectsViewsTests(TestCase):
         self.assertNotEqual(len(content["results"]), len(projects_ids_with_comments))
 
         inactive_statuses = Project.ProjectStatus.get_archived_project_statuses()
-        inactive_projects = Project.visible_objects.filter(project_status__in=inactive_statuses)
+        inactive_projects = Project.visible_objects.filter(project_status__in=inactive_statuses).exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT)
         response = self.general_client.get("/projects/?active_projects=false")
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), inactive_projects.count())
+        inactive_statuses.append(Project.ProjectStatus.PROJECT_DRAFT)
         active_projects = Project.visible_objects.exclude(project_status__in=inactive_statuses)
         response = self.general_client.get("/projects/?active_projects=true")
         content = json.loads(response.content.decode("utf-8"))
