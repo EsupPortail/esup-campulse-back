@@ -5,12 +5,19 @@ import datetime
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from plana.apps.commissions.models import Fund
 from plana.apps.commissions.models.commission import Commission
+from plana.apps.commissions.serializers.fund import FundMinimalDataSerializer
 from plana.utils import normalize_object_name
 
 
 class CommissionSerializer(serializers.ModelSerializer):
     """Main serializer."""
+    funds = serializers.SerializerMethodField()
+
+    def get_funds(self, obj):
+        funds = Fund.objects.filter(commissionfund__commission=obj)
+        return FundMinimalDataSerializer(funds, many=True, context=self.context).data
 
     class Meta:
         model = Commission
@@ -31,6 +38,14 @@ class CommissionSerializer(serializers.ModelSerializer):
         if submission_date and commission_date and submission_date > commission_date:
             raise serializers.ValidationError({"inconsistent_dates": _("Can't set submission date after commission date.")})
         return data
+
+
+class CommissionMinimalDataSerializer(serializers.ModelSerializer):
+    """Commission serializer with fewer data."""
+
+    class Meta:
+        model = Commission
+        fields = "__all__"
 
 
 class CommissionUpdateSerializer(serializers.ModelSerializer):

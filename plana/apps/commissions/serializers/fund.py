@@ -11,3 +11,11 @@ class FundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fund
         fields = "__all__"
+
+
+class FundMinimalDataSerializer(serializers.ModelSerializer):
+    """Fund serializer with fewer data."""
+
+    class Meta:
+        model = Fund
+        fields = ["pk", "name", "acronym", "is_site", "institution_id"]

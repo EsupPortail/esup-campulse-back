@@ -9,7 +9,7 @@ from rest_framework import serializers
 
 from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
 from plana.apps.commissions.models import Commission
-from plana.apps.commissions.serializers.commission import CommissionSerializer
+from plana.apps.commissions.serializers.commission import CommissionMinimalDataSerializer
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
@@ -22,7 +22,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commission = CommissionSerializer(read_only=True)
+    commission = CommissionMinimalDataSerializer(read_only=True)
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
@@ -66,7 +66,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commission = CommissionSerializer(read_only=True)
+    commission = CommissionMinimalDataSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -112,7 +112,7 @@ class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     """Serializer for project list."""
 
-    commission = CommissionSerializer(many=False, read_only=True)
+    commission = CommissionMinimalDataSerializer(many=False, read_only=True)
     budget_file = serializers.SerializerMethodField("get_budget_file")
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)

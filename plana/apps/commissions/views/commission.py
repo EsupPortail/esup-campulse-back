@@ -21,7 +21,7 @@ from plana.pagination import BasePageNumberPagination
 class CommissionListCreate(generics.ListCreateAPIView):
     """/commissions/ route."""
 
-    queryset = Commission.objects.all().distinct().order_by("submission_date")
+    queryset = Commission.objects.all().distinct().order_by("submission_date").prefetch_related("commissionfund_set__fund")
     serializer_class = CommissionSerializer
     filterset_class = CommissionFilter
     pagination_class = BasePageNumberPagination
@@ -37,7 +37,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
 class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/commissions/{id} route."""
 
-    queryset = Commission.objects.all().order_by("submission_date")
+    queryset = Commission.objects.all().order_by("submission_date").prefetch_related("commissionfund_set__fund")
     serializer_class = CommissionSerializer
     http_method_names = ["get", "patch", "delete"]
 
