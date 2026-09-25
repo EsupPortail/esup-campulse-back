@@ -87,7 +87,7 @@ class CommissionDatesViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     def test_get_commissions_list_filter_is_site(self):
         """
@@ -102,7 +102,7 @@ class CommissionDatesViewsTests(TestCase):
             ).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     def test_get_commissions_list_filter_funds(self):
         """
@@ -116,7 +116,7 @@ class CommissionDatesViewsTests(TestCase):
             id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     def test_get_commissions_list_filter_open_to_projects(self):
         """
@@ -127,12 +127,12 @@ class CommissionDatesViewsTests(TestCase):
         response_true = self.client.get("/commissions/?is_open_to_projects=true")
         commissions_cnt = Commission.objects.filter(is_open_to_projects=True).count()
         content = json.loads(response_true.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
         response_false = self.client.get("/commissions/?is_open_to_projects=false")
         commissions_cnt = Commission.objects.filter(is_open_to_projects=False).count()
         content = json.loads(response_false.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     # FIXME : more precise unittest
     def test_get_commissions_list_filter_active_projects(self):
@@ -168,28 +168,28 @@ class CommissionDatesViewsTests(TestCase):
         )
         response_wapf = self.client.get("/commissions/?with_active_projects=false")
         content_wapf = json.loads(response_wapf.content.decode("utf-8"))
-        self.assertEqual(len(content_wapf), commissions_with_inactive_projects.count())
+        self.assertEqual(len(content_wapf["results"]), commissions_with_inactive_projects.count())
 
         commissions_with_active_projects = Commission.objects.filter(
             models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
         )
         response_wapt = self.client.get("/commissions/?with_active_projects=true")
         content_wapt = json.loads(response_wapt.content.decode("utf-8"))
-        self.assertEqual(len(content_wapt), commissions_with_active_projects.count())
+        self.assertEqual(len(content_wapt["results"]), commissions_with_active_projects.count())
 
         commissions_only_with_inactive_projects = Commission.objects.filter(
             id__in=commissions_ids_with_inactive_projects
         ).exclude(id__in=commissions_ids_with_active_projects)
         response_owapf = self.client.get("/commissions/?only_with_active_projects=false")
         content_owapf = json.loads(response_owapf.content.decode("utf-8"))
-        self.assertEqual(len(content_owapf), commissions_only_with_inactive_projects.count())
+        self.assertEqual(len(content_owapf["results"]), commissions_only_with_inactive_projects.count())
 
         commissions_only_with_active_projects = Commission.objects.exclude(
             id__in=commissions_ids_with_inactive_projects
         ).filter(id__in=commissions_ids_with_active_projects)
         response_owapt = self.client.get("/commissions/?only_with_active_projects=true")
         content_owapt = json.loads(response_owapt.content.decode("utf-8"))
-        self.assertEqual(len(content_owapt), commissions_only_with_active_projects.count())
+        self.assertEqual(len(content_owapt["results"]), commissions_only_with_active_projects.count())
 
     def test_get_commissions_list_filter_managed_projects(self):
         """
@@ -207,14 +207,14 @@ class CommissionDatesViewsTests(TestCase):
         )
         response = self.institution_client.get("/commissions/?managed_projects=true")
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_managed_projects.count())
+        self.assertEqual(len(content["results"]), commissions_with_managed_projects.count())
 
         commissions_not_with_managed_projects = Commission.objects.exclude(
             id__in=commissions_with_managed_projects.values_list("id", flat=True)
         )
         response = self.institution_client.get("/commissions/?managed_projects=false")
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_not_with_managed_projects.count())
+        self.assertEqual(len(content["results"]), commissions_not_with_managed_projects.count())
 
     def test_post_commissions_anonymous(self):
         """

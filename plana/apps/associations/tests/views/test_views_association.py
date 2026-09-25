@@ -110,10 +110,10 @@ class AssociationsViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         associations = Association.objects.filter(is_site=True, is_public=True)
-        self.assertEqual(len(response.data), len(associations))
+        self.assertEqual(len(response.data["results"]), len(associations))
 
         content = json.loads(response.content.decode("utf-8"))
-        association_1 = content[0]
+        association_1 = content["results"][0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("current_projects"))
 
@@ -135,7 +135,7 @@ class AssociationsViewsTests(TestCase):
         ]
         for similar_name in similar_names:
             response = self.client.get(f"/associations/?name={similar_name}")
-            self.assertEqual(response.data[0]["name"], similar_names[0])
+            self.assertEqual(response.data["results"][0]["name"], similar_names[0])
 
     def test_get_associations_list_filter_acronym(self):
         """
@@ -152,7 +152,7 @@ class AssociationsViewsTests(TestCase):
         ]
         for similar_acronym in similar_acronyms:
             response = self.client.get(f"/associations/?acronym={similar_acronym}")
-            self.assertEqual(response.data[0]["acronym"], similar_acronyms[0])
+            self.assertEqual(response.data["results"][0]["acronym"], similar_acronyms[0])
 
     def test_get_associations_list_filter_enabled(self):
         """
@@ -162,7 +162,7 @@ class AssociationsViewsTests(TestCase):
         - Enabled associations can be filtered.
         """
         response = self.client.get("/associations/?is_enabled=true")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_enabled"], True)
 
     def test_get_associations_list_filter_public(self):
@@ -173,7 +173,7 @@ class AssociationsViewsTests(TestCase):
         - Public associations can be filtered.
         """
         response = self.client.get("/associations/?is_public=true")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_public"], True)
 
     def test_get_associations_list_filter_site(self):
@@ -184,7 +184,7 @@ class AssociationsViewsTests(TestCase):
         - Site associations can be filtered.
         """
         response = self.client.get("/associations/?is_site=true")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_site"], True)
 
     def test_get_associations_list_filter_institution(self):
@@ -195,7 +195,7 @@ class AssociationsViewsTests(TestCase):
         - Associations with a specific institution ID can be filtered.
         """
         response = self.client.get("/associations/?institutions=1")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["institution"]["id"], 1)
 
     def test_get_associations_list_filter_institution_component(self):
@@ -207,11 +207,11 @@ class AssociationsViewsTests(TestCase):
         - Associations without a specific institution component ID can be filtered.
         """
         response = self.client.get("/associations/?institution_component=1")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["institution_component"]["id"], 1)
 
         response = self.client.get("/associations/?institution_component=")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["institution_component"], None)
 
     def test_get_associations_list_filter_activity_field(self):
@@ -222,7 +222,7 @@ class AssociationsViewsTests(TestCase):
         - Associations with a specific activity field can be filtered.
         """
         response = self.client.get("/associations/?activity_field=3")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["activity_field"]["id"], 3)
 
     def test_get_associations_list_filter_user_anonymous(self):
@@ -235,7 +235,7 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get(f"/associations/?user_id={self.student_user_id}")
         content = json.loads(response.content.decode("utf-8"))
         links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-        self.assertNotEqual(len(content), links_cnt)
+        self.assertNotEqual(len(content["results"]), links_cnt)
 
     def test_get_associations_list_filter_user_manager(self):
         """
@@ -247,7 +247,7 @@ class AssociationsViewsTests(TestCase):
         response = self.general_client.get(f"/associations/?user_id={self.student_user_id}")
         content = json.loads(response.content.decode("utf-8"))
         links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-        self.assertEqual(len(content), links_cnt)
+        self.assertEqual(len(content["results"]), links_cnt)
 
     def test_get_associations_list_filter_non_enabled_student(self):
         """
@@ -257,7 +257,7 @@ class AssociationsViewsTests(TestCase):
         - Non-enabled associations cannot be filtered by student.
         """
         response = self.member_client.get("/associations/?is_enabled=false")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_enabled"], True)
 
     def test_get_associations_list_filter_non_enabled_manager(self):
@@ -268,7 +268,7 @@ class AssociationsViewsTests(TestCase):
         - Non-enabled associations can be filtered by a manager.
         """
         response = self.general_client.get("/associations/?is_enabled=false")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_enabled"], False)
 
     def test_get_associations_list_filter_non_public_student(self):
@@ -279,7 +279,7 @@ class AssociationsViewsTests(TestCase):
         - Non-public associations cannot be filtered by student.
         """
         response = self.member_client.get("/associations/?is_public=false")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_public"], True)
 
     def test_get_associations_list_filter_non_public_manager(self):
@@ -290,11 +290,11 @@ class AssociationsViewsTests(TestCase):
         - Non-public associations can be filtered by a manager.
         """
         response = self.general_client.get("/associations/?is_enabled=false")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_enabled"], False)
 
         response = self.general_client.get("/associations/?is_public=false")
-        for association in response.data:
+        for association in response.data["results"]:
             self.assertEqual(association["is_public"], False)
 
     def test_post_association_bad_request_format(self):

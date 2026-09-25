@@ -15,6 +15,7 @@ from plana.apps.commissions.serializers.commission import (
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.pagination import BasePageNumberPagination
 
 
 class CommissionListCreate(generics.ListCreateAPIView):
@@ -23,6 +24,7 @@ class CommissionListCreate(generics.ListCreateAPIView):
     queryset = Commission.objects.all().distinct().order_by("submission_date")
     serializer_class = CommissionSerializer
     filterset_class = CommissionFilter
+    pagination_class = BasePageNumberPagination
 
     def get_permissions(self):
         if self.request.method == "GET":

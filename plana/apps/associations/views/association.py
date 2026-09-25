@@ -27,6 +27,7 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
+from plana.pagination import BasePageNumberPagination
 from plana.utils import send_mail
 
 from .. import permissions
@@ -39,6 +40,7 @@ class AssociationListCreate(generics.ListCreateAPIView):
     """/associations/ route."""
 
     filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    pagination_class = BasePageNumberPagination
     filterset_class = AssociationFilter
     queryset = (
         Association.objects.all()
