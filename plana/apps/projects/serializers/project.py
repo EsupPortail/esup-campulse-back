@@ -22,7 +22,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commission = CommissionSerializer(read_only=True)
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
@@ -41,7 +41,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "association_user",
             "partner_association",
             "categories",
-            "commissions",
+            "commission",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
@@ -66,7 +66,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commission = CommissionSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -81,7 +81,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "association_user",
             "partner_association",
             "categories",
-            "commissions",
+            "commission",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
