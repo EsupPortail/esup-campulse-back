@@ -3,6 +3,7 @@ import datetime
 
 from django.db import models
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models import Count, Q
 
 
 class CommissionQuerySet(models.QuerySet):
@@ -35,4 +36,35 @@ class CommissionQuerySet(models.QuerySet):
             # Only one commission per project for now, should not appear as a choice to postpone into (already linked)
             .exclude(commissionfund__projectcommissionfund__project_id=project_id)
             .distinct()
+        )
+
+    def annotate_projects_counts(self):
+        """
+        Annotate some projects counts for each commission :
+        - submitted_projects_count for all non-draft submitted projects (all statuses included even review ones)
+        - processing_projects_count for all submitted projects waiting for manager approval
+        - standby_projects_count for all submitted projects waiting for bearer updates
+        """
+        from plana.apps.projects.models import Project
+        return (
+            self.annotate(
+                submitted_projects_count=Count(
+                    "commissionfund__projectcommissionfund__project",
+                    filter=~Q(
+                        commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_DRAFT),
+                    distinct=True,
+                ),
+                processing_projects_count=Count(
+                    "commissionfund__projectcommissionfund__project",
+                    filter=Q(
+                        commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_PROCESSING),
+                    distinct=True,
+                ),
+                standby_projects_count=Count(
+                    "commissionfund__projectcommissionfund__project",
+                    filter=Q(
+                        commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED),
+                    distinct=True,
+                ),
+            )
         )

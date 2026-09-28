@@ -33,6 +33,13 @@ class CommissionListCreate(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
         return super().get_permissions()
 
+    def get_queryset(self):
+        """Custom queryset with annotations to retrieve some projects counts"""
+        # FIXME : better permission here
+        if self.request.user.is_authenticated and self.request.user.is_staff:
+            return self.queryset.annotate_projects_counts()
+        return super().get_queryset()
+
 
 class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/commissions/{id} route."""
@@ -54,6 +61,13 @@ class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         else:
             self.serializer_class = CommissionSerializer
         return super().get_serializer_class()
+
+    def get_queryset(self):
+        """Custom queryset with annotations to retrieve some projects counts"""
+        # FIXME : better permission here
+        if self.request.user.is_authenticated and self.request.user.is_staff:
+            return self.queryset.annotate_projects_counts()
+        return super().get_queryset()
 
     @extend_schema(
         responses={
