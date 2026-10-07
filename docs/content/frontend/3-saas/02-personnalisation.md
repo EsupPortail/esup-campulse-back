@@ -153,6 +153,8 @@ accessibility-declaration
 Assurez-vous également de contrôler les références à ces textes.
 Les références sont appelées ainsi : `@:voici-une-référence`.
 
+Si la référence **n'est pas** précédée d'un espace, il est nécessaire de le préciser comme suit : `"Associations étudiantes de l'@:('university.name')"`.
+
 Pour écraser un texte, ajoutez-le dans `locales/custom.txt`.
 
 Veillez à bien respecter cette syntaxe (clé=texte, sans guillemets et saut de ligne) : 
@@ -171,3 +173,4 @@ En effet, conformément au plugin Vue I18n, que nous utilisons, il est nécessai
 Vous pouvez le faire de la manière suivante, dans des accolades avec des guillemets simples :
 
 "Si vous n'avez pas eu de rendez-vous avec le vie étudiante, merci d'écrire à cette adresse avant de déposer votre projet : fsdie-projet{'@'}univ.fr."
+
