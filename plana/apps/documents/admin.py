@@ -110,6 +110,9 @@ class DocumentAdmin(admin.ModelAdmin):
                         associations_to_update.append(asso)
                 if associations_to_update:
                     Association.objects.bulk_update(associations_to_update, ["charter_date", "charter_status"])
+        # On Document creation do nothing more
+        else:
+            super().save_model(request, obj, form, change)
 
 
 @admin.register(DocumentUpload)
