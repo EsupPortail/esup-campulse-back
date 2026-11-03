@@ -1,5 +1,6 @@
 import pathlib
 
+from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
@@ -22,15 +23,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            if options["test"] is True:
-                apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
-                # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
-                for app_fixture in apps_fixtures:
-                    if app_fixture.name.endswith("documents_documentupload.json"):
-                        apps_fixtures.remove(app_fixture)
-                call_command("loaddata", *apps_fixtures)
-                libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
-                call_command("loaddata", *libs_fixtures)
+            if Group.objects.all().exists():
+                self.stdout.write(self.style.WARNING(_("Initial data already present.")))
             else:
                 call_command(
                     "loaddata",
@@ -40,11 +34,8 @@ class Command(BaseCommand):
                         "contents_content",
                         "contents_logo",
                         "contents_setting",
-                        "django_site",
                         "documents_document",
                         "auth_group",
-                        "auth_group_permissions",
-                        "auth_permission",
                         "institutions_institution",
                         "institutions_institutioncomponent",
                         "projects_category",
@@ -52,8 +43,22 @@ class Command(BaseCommand):
                         "mailtemplatevars",
                     ],
                 )
+                call_command("createsuperuser", "--no-input")
 
-            if options["storages"] is True:
+            # Loading dev data from tests fixtures if needed
+            if options["test"]:
+                apps_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/*.json"))
+                # TODO Find a way to import documentupload fixtures with real files correctly for test environments.
+                for app_fixture in apps_fixtures:
+                    if app_fixture.name.endswith("tests/documents_documentupload.json"):
+                        apps_fixtures.remove(app_fixture)
+                call_command("loaddata", *apps_fixtures)
+                test_fixtures = list(pathlib.Path().glob("plana/apps/*/fixtures/tests/*.json"))
+                call_command("loaddata", *test_fixtures)
+                libs_fixtures = list(pathlib.Path().glob("plana/libs/*/fixtures/*.json"))
+                call_command("loaddata", *libs_fixtures)
+
+            if options["storages"]:
                 call_command("loaddata_storages")
 
             self.stdout.write(self.style.SUCCESS(_("Initial datas import - done")))

@@ -21,7 +21,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         allowed_groups_names = []
         for group_structure_name, group_structure in settings.GROUPS_STRUCTURE.items():
-            if group_structure["REGISTRATION_ALLOWED"] is False:
+            if not group_structure["REGISTRATION_ALLOWED"]:
                 allowed_groups_names.append(group_structure_name)
         group_choices = Group.objects.filter(name__in=allowed_groups_names).values_list("name", flat=True)
         institution_choices = Institution.objects.all().values_list("acronym", flat=True)
@@ -55,7 +55,7 @@ class Command(BaseCommand):
             user.is_active = True
             user.is_staff = True
             user.is_validated_by_admin = True
-            if options["superuser"] is True:
+            if options["superuser"]:
                 user.is_superuser = True
 
             password = ""

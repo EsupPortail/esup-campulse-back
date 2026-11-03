@@ -1,0 +1,74 @@
+[
+  {
+    "model": "contents.logo",
+    "pk": 1,
+    "fields": {
+      "acronym": "crous",
+      "title": "Le Centre régional des œuvres universitaires et scolaires",
+      "url": "https://www.crous-strasbourg.fr/",
+      "row": 1,
+      "column": 2,
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 2,
+    "fields": {
+      "acronym": "unistra",
+      "title": "L'Université de Strasbourg",
+      "url": "https://www.unistra.fr/",
+      "row": 1,
+      "column": 1,
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 3,
+    "fields": {
+      "acronym": "cvec",
+      "title": "La Contribution Vie Étudiante et de Campus",
+      "url": "https://cvec.etudiant.gouv.fr/",
+      "row": 2,
+      "column": 2,
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 4,
+    "fields": {
+      "acronym": "france-relance",
+      "title": "France Relance",
+      "url": "https://www.economie.gouv.fr/plan-de-relance",
+      "row": 2,
+      "column": 1,
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 5,
+    "fields": {
+      "acronym": "esr",
+      "title": "Le Ministère de l'Enseignement Supérieur et de la Recherche",
+      "url": "https://www.enseignementsup-recherche.gouv.fr/",
+      "row": 2,
+      "column": 3,
+      "visible": true
+    }
+  },
+  {
+    "model": "contents.logo",
+    "pk": 6,
+    "fields": {
+      "acronym": "nextgenerationeu",
+      "title": "Financé par l'Union européenne NextGenerationEU",
+      "url": "https://next-generation-eu.europa.eu/index_fr",
+      "row": 2,
+      "column": 4,
+      "visible": true
+    }
+  }
+]

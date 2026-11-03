@@ -1,9 +1,9 @@
 """Views directly linked to commission exports."""
 
 import csv
+import urllib.parse
 from tempfile import NamedTemporaryFile
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -11,6 +11,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from openpyxl import Workbook
 from rest_framework import generics, response, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from plana.apps.associations.models import Association
@@ -24,13 +25,14 @@ from plana.apps.projects.models import (
 )
 from plana.apps.projects.serializers.project import ProjectSerializer
 from plana.apps.users.models import User
-from plana.utils import generate_pdf_response
+from plana.utils import generate_pdf_response, clean_filename
 
 
 class CommissionExport(generics.RetrieveAPIView):
     """/commissions/{id}/export route."""
 
     permission_classes = [IsAuthenticated]
+    # FIXME : Should be a Commission queryset, temporarily keeping it to not break anything else
     queryset = Project.visible_objects.all()
     serializer_class = ProjectSerializer
 
@@ -61,19 +63,13 @@ class CommissionExport(generics.RetrieveAPIView):
         project_ids = request.query_params.get("project_ids")
 
         queryset = self.get_queryset()
+        # commission = self.get_object() # Use it again when Commission queryset for the View
+        commission = get_object_or_404(Commission.objects.all(), pk=kwargs["pk"])
         commission_id = kwargs["pk"]
-
-        try:
-            commission = Commission.objects.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Commission does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -122,7 +118,7 @@ class CommissionExport(generics.RetrieveAPIView):
             str(_("Categories")),
         ]
 
-        funds = Fund.objects.all().order_by("acronym")
+        funds = Fund.objects.filter(commissionfund__commission_id=commission_id).order_by("acronym")
         for fund in funds:
             acronym = fund.acronym
             fields.append(str(_("Amount asked ") + acronym))
@@ -142,12 +138,14 @@ class CommissionExport(generics.RetrieveAPIView):
         writer = None
         workbook = None
         worksheet = None
-        filename = f"commission_{commission_id}_export"
+        filename = clean_filename(f"Export-Projets-{commission.name}")
         if mode is None or mode == "csv":
-            http_response = HttpResponse(content_type="application/csv")
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.csv"
+            encoded_filename = urllib.parse.quote(f"{filename}.csv")
+            http_response = HttpResponse(content_type="text/csv")
+            http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
+            http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
             writer = csv.writer(http_response, delimiter=";")
-            writer.writerow([field for field in fields])
+            writer.writerow(fields)
         elif mode == "xlsx":
             workbook = Workbook()
             worksheet = workbook.active
@@ -201,13 +199,13 @@ class CommissionExport(generics.RetrieveAPIView):
                     )
                     fields.append(pcf.amount_asked)
                     fields.append(pcf.amount_earned)
-                except ObjectDoesNotExist:
+                except ProjectCommissionFund.DoesNotExist:
                     fields.append(0)
                     fields.append(0)
 
             if mode is None or mode == "csv":
                 # Write CSV file content
-                writer.writerow([field for field in fields])
+                writer.writerow(fields)
             elif mode == "xlsx":
                 for index_field, field in enumerate(fields):
                     worksheet.cell(row=index_project + 2, column=index_field + 1).value = field
@@ -221,11 +219,13 @@ class CommissionExport(generics.RetrieveAPIView):
                 workbook.save(tmp.name)
                 tmp.seek(0)
                 stream = tmp.read()
+            encoded_filename = urllib.parse.quote(f"{filename}.xlsx")
             http_response = HttpResponse(
                 content=stream,
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
-            http_response["Content-Disposition"] = f"Content-Disposition: attachment; filename={filename}.xlsx"
+            http_response["Content-Disposition"] = f'attachment; filename*=UTF-8\'\'{encoded_filename}'
+            http_response["Access-Control-Expose-Headers"] = "Content-Disposition"
             return http_response
         if mode == "pdf":
             return generate_pdf_response(

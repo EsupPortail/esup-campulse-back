@@ -11,9 +11,9 @@ class ContentsModelsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "contents_content.json",
+        "tests/contents_content.json",
         "contents_logo.json",
-        "contents_setting.json",
+        "tests/contents_setting.json",
     ]
 
     def setUp(self):

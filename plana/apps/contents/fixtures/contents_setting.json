@@ -31,7 +31,7 @@
       "parameters": {
         "description": "URL d’accès à la documentation de l’appli, affichée dans les mails.",
         "type": "text",
-        "value": "https://ernest.unistra.fr/"
+        "value": "https://documentation.domain.fr/"
       }
     }
   },
@@ -43,7 +43,7 @@
       "parameters": {
         "description": "Acronyme de l’établissement dont les gestionnaires sont chargés de valider les comptes CAS.",
         "type": "text",
-        "value": "Unistra"
+        "value": "Ins2"
       }
     }
   },
@@ -65,7 +65,7 @@
     "fields": {
       "setting": "CRON_DAYS_BEFORE_ACCOUNT_EXPIRATION_WARNING",
       "parameters": {
-        "description": "Nombre de jours depuis le dernier changement de mot de passe d’un compte après lequel un mail est envoyé pour prévenir de l’expiration future de ce mot de passe.",
+        "description": "Nombre de jours depuis la dernière connexion d’un compte après lequel un mail est envoyé pour prévenir de la suppression future de ce compte.",
         "type": "integer",
         "value": 335
       }
@@ -75,29 +75,17 @@
     "model": "contents.setting",
     "pk": 7,
     "fields": {
-      "setting": "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION",
+      "setting": "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING",
       "parameters": {
-        "description": "Nombre de jours depuis la dernière mise à jour de la charte d’une association après lequel un mail est envoyé pour prévenir de l’expiration de cette charte.",
+        "description": "Nombre de jours précédant la date d'expiration stockée de la charte d'une association, un mail est envoyé pour prévenir de l’expiration future de cette charte.",
         "type": "integer",
-        "value": 365
+        "value": 10
       }
     }
   },
   {
     "model": "contents.setting",
     "pk": 8,
-    "fields": {
-      "setting": "CRON_DAYS_BEFORE_ASSOCIATION_EXPIRATION_WARNING",
-      "parameters": {
-        "description": "Nombre de jours depuis la dernière mise à jour de la charte d’une association après lequel un mail est envoyé pour prévenir de l’expiration future de cette charte.",
-        "type": "integer",
-        "value": 355
-      }
-    }
-  },
-  {
-    "model": "contents.setting",
-    "pk": 9,
     "fields": {
       "setting": "CRON_DAYS_BEFORE_DOCUMENT_EXPIRATION_WARNING",
       "parameters": {
@@ -109,7 +97,7 @@
   },
   {
     "model": "contents.setting",
-    "pk": 10,
+    "pk": 9,
     "fields": {
       "setting": "CRON_DAYS_BEFORE_HISTORY_EXPIRATION",
       "parameters": {
@@ -121,7 +109,7 @@
   },
   {
     "model": "contents.setting",
-    "pk": 11,
+    "pk": 10,
     "fields": {
       "setting": "CRON_DAYS_BEFORE_PASSWORD_EXPIRATION",
       "parameters": {
@@ -133,7 +121,7 @@
   },
   {
     "model": "contents.setting",
-    "pk": 12,
+    "pk": 11,
     "fields": {
       "setting": "CRON_DAYS_BEFORE_PASSWORD_EXPIRATION_WARNING",
       "parameters": {
@@ -145,7 +133,7 @@
   },
   {
     "model": "contents.setting",
-    "pk": 13,
+    "pk": 12,
     "fields": {
       "setting": "CRON_DAYS_BEFORE_REVIEW_EXPIRATION",
       "parameters": {
@@ -157,7 +145,7 @@
   },
   {
     "model": "contents.setting",
-    "pk": 14,
+    "pk": 13,
     "fields": {
       "setting": "NEW_YEAR_MONTH_INDEX",
       "parameters": {
@@ -169,15 +157,15 @@
   },
   {
     "model": "contents.setting",
-    "pk": 15,
+    "pk": 14,
     "fields": {
       "setting": "RESTRICTED_DOMAINS",
       "parameters": {
         "description": "Noms de domaine séparés des adresses email ne pouvant pas créer de compte local (devant utiliser CAS).",
         "type": "array",
         "value": [
-          "unistra.fr",
-          "etu.unistra.fr"
+          "domain.fr",
+          "domain.other.fr"
         ]
       }
     }

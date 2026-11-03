@@ -1,10 +1,13 @@
 """Models describing projects."""
-
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Sum, Count, Q
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
+from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
@@ -12,7 +15,9 @@ from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
+from plana.apps.users.models.user import AssociationUser, User
+from plana.libs.mail_template.models import MailTemplate
+from plana.utils import send_mail
 
 
 class Project(models.Model):
@@ -40,10 +45,10 @@ class Project(models.Model):
                 "PROJECT_PROCESSING": 2,
                 "PROJECT_REJECTED": 3,
                 "PROJECT_VALIDATED": 3,
+                "PROJECT_CANCELED": 4,
                 "PROJECT_REVIEW_DRAFT": 4,
                 "PROJECT_REVIEW_PROCESSING": 5,
                 "PROJECT_REVIEW_VALIDATED": 6,
-                "PROJECT_CANCELED": 6,
             }
 
         @staticmethod
@@ -129,7 +134,7 @@ class Project(models.Model):
                 "PROJECT_CANCELED",
             ]
 
-    name = models.CharField(_("Name"), max_length=250, blank=False)
+    name = models.CharField(_("Name"), max_length=100, blank=False)
     manual_identifier = models.CharField(_("Manual identifier"), max_length=8, unique=True, null=True)
     planned_start_date = models.DateTimeField(_("Planned start date"), null=True)
     planned_end_date = models.DateTimeField(_("Planned end date"), null=True)
@@ -179,6 +184,7 @@ class Project(models.Model):
     description = models.TextField(_("Description (activities done, changes from planning, ...)"), default="")
     difficulties = models.TextField(_("Difficulties"), default="")
     improvements = models.TextField(_("Improvements"), default="")
+    categories = models.ManyToManyField("Category", through="ProjectCategory")
 
     objects = models.Manager()
     visible_objects = VisibleProjectManager()
@@ -186,14 +192,14 @@ class Project(models.Model):
     def get_project_default_manager_emails(self, fund_id=None):
         """Return a list of manager email addresses affected to a project."""
         managers_emails = []
-        if fund_id is not None:
+        if fund_id:
             project_commission_funds = ProjectCommissionFund.objects.filter(
                 project_id=self.id,
                 commission_fund_id__in=CommissionFund.objects.filter(
                     fund_id=Fund.objects.get(id=fund_id).id
                 ).values_list("id"),
             )
-            if project_commission_funds.count() > 0:
+            if project_commission_funds.exists():
                 managers_emails = list(
                     Institution.objects.get(id=Fund.objects.get(id=fund_id).institution_id)
                     .default_institution_managers()
@@ -206,17 +212,127 @@ class Project(models.Model):
                     fund_id__in=Fund.objects.filter(is_site=False).values_list("id")
                 ).values_list("id"),
             )
-            if self.association_id is not None:
+            if self.association_id :
                 managers_emails = list(
                     Institution.objects.get(id=Association.objects.get(id=self.association_id).institution_id)
                     .default_institution_managers()
                     .values_list("email", flat=True)
                 )
-            if self.user_id is not None or misc_project_commission_funds.count() > 0:
-                for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                    if user_to_check.has_perm("users.change_user_misc"):
-                        managers_emails.append(user_to_check.email)
+            if self.user_id or misc_project_commission_funds.exists():
+                managers_emails.extend(
+                    User.objects
+                    .filter(
+                        is_superuser=False,
+                        is_staff=True,
+                        # Check the permission "users.change_user_misc"
+                        groupinstitutionfunduser__group__permissions__content_type__app_label='users',
+                        groupinstitutionfunduser__group__permissions__codename='change_user_misc')
+                    .values_list('email', flat=True)
+                )
         return managers_emails
+
+    def get_project_owner_data(self) -> dict:
+        if self.association:
+            owner = self.association
+            return {
+                "name": owner.name,
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+                "email": self.association_user.user.email if self.association_user else owner.email
+            }
+        elif self.user:
+            owner = self.user
+            return {
+                "name": f"{owner.first_name} {owner.last_name}",
+                "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
+                "email": self.user.email
+            }
+        return {}
+
+    @property
+    def commissions(self):
+        return Commission.objects.filter(
+            commissionfund__projectcommissionfund__project=self
+        ).distinct()
+
+    def can_transition_to_status(self, new_status: str) -> bool:
+        """
+        Checks if the new status is near the actual one in priority order
+        Cannot change status if the current one is already a finished status
+        Can roll back status with a delta of 1 if current status is authorized to rollback
+        Else accept delta of one to move forward in priority order
+        """
+        if self.project_status in self.ProjectStatus.get_archived_project_statuses():
+            return False
+
+        statuses_order = self.ProjectStatus.get_project_statuses_order()
+        current_order = statuses_order.get(self.project_status, 0)
+        new_order = statuses_order.get(new_status, 0)
+
+        delta = new_order - current_order
+        if delta == 1:
+            return True
+        if delta == -1 and self.project_status in self.ProjectStatus.get_rollbackable_project_statuses():
+            return True
+
+        return False
+
+    def process_project_pcf_amount_earned_status_update(self) -> None:
+        """
+        Checks if every pcf amount_earned has been defined, and update project status accordingly if so
+        A project is considered finished one way (waiting review) or another (canceled) when all pcf amount_earned have been set up
+        """
+        stats = self.projectcommissionfund_set.aggregate(
+            has_pending_amount_count=Count("id", Q(amount_earned__isnull=True, is_validated_by_admin=True)),
+            total_earned=Sum("amount_earned", default=0),
+        )
+        if stats["has_pending_amount_count"] == 0:
+            new_status = self.ProjectStatus.PROJECT_REVIEW_DRAFT if stats["total_earned"] > 0 else self.ProjectStatus.PROJECT_CANCELED
+            if self.project_status != new_status and self.can_transition_to_status(new_status):
+                self.project_status = new_status
+                self.save(update_fields=["project_status"])
+
+    def process_project_pcf_admin_validation_status_update(self, request) -> None:
+        """
+        Checks if every pcf is_validated_by_admin has been defined, and update project status accordingly if so
+        A project is considered ready for commission (validated) or not (rejected) when all pcf is_validated_by_admin have been set up
+        """
+        stats = self.projectcommissionfund_set.aggregate(
+            unchecked_admin_count=Count("id", filter=Q(is_validated_by_admin__isnull=True)),
+            validated_admin_count=Count("id", filter=Q(is_validated_by_admin=True)),
+        )
+
+        # There's still pcf waiting for first validation, do nothing here
+        if stats["unchecked_admin_count"] > 0:
+            return
+
+        current_site = get_current_site(request)
+        context = {
+            "site_domain": current_site.domain,
+            "site_name": current_site.name,
+            "project_name": self.name,
+            "fund_name": list(self.projectcommissionfund_set.filter(is_validated_by_admin=True).values_list("commission_fund__fund__name", flat=True)),
+        }
+        owner_data = self.get_project_owner_data()
+
+        if stats["validated_admin_count"] > 0:
+            new_status = self.ProjectStatus.PROJECT_VALIDATED
+            mail_code = "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION"
+        else:
+            new_status = self.ProjectStatus.PROJECT_REJECTED
+            mail_code = "USER_OR_ASSOCIATION_PROJECT_REJECTION"
+            context["manager_email_address"] = ",".join(self.get_project_default_manager_emails())
+
+        if self.project_status != new_status and self.can_transition_to_status(new_status):
+            self.project_status = new_status
+            self.save(update_fields=["project_status"])
+
+            template = MailTemplate.objects.get(code=mail_code)
+            send_mail(
+                from_=settings.DEFAULT_FROM_EMAIL,
+                to_=owner_data.get("email"),
+                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+                message=template.parse_vars(request.user, request, context),
+            )
 
     def __str__(self):
         return self.name

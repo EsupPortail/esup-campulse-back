@@ -5,7 +5,6 @@ import datetime
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -15,6 +14,7 @@ from plana.apps.commissions.models.fund import Fund
 from plana.apps.contents.models.setting import Setting
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.apps.users.managers import CustomUserManager
 from plana.apps.users.provider import CASProvider
 
 
@@ -48,6 +48,12 @@ class AssociationUser(models.Model):
             ),
             ("view_associationuser_anyone", "Can view all associations for a user."),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'association'],
+                name='unique_association_user',
+            ),
+        ]
 
 
 class GroupInstitutionFundUser(models.Model):
@@ -60,8 +66,8 @@ class GroupInstitutionFundUser(models.Model):
 
     user = models.ForeignKey("User", verbose_name=_("User"), on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.RESTRICT)
-    institution = models.ForeignKey(Institution, on_delete=models.RESTRICT, null=True)
-    fund = models.ForeignKey(Fund, on_delete=models.RESTRICT, null=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.user} - {self.group} - {self.institution} - {self.fund}"
@@ -81,6 +87,12 @@ class GroupInstitutionFundUser(models.Model):
             (
                 "view_groupinstitutionfunduser_any_group",
                 "Can view all groups for a user.",
+            ),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'group', 'institution', 'fund'],
+                name='unique_group_institution_fund_user',
             ),
         ]
 
@@ -130,7 +142,9 @@ class User(AbstractUser):
         related_name="group_institution_fund_set",
     )
 
-    def has_perm(self, perm, obj=None):
+    objects = CustomUserManager()
+
+    def has_perm(self, perm, obj=None) -> bool:
         """Overriden has_perm to check for institutions."""
         if self.is_superuser:
             return True
@@ -140,22 +154,24 @@ class User(AbstractUser):
                     id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("group_id")
                 ).values_list("id"),
                 codename=perm.split(".")[1],
-            ).count()
-            > 0
+            ).exists()
         )
 
     def can_access_project(self, project_obj):
         """Check if a user can access a project as association president, misc user, fund member, or manager."""
         if project_obj.association is not None:
             try:
-                AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
+                AssociationUser.objects.get(
+                    user_id=self.pk,
+                    association_id=project_obj.association,
+                    is_validated_by_admin=True
+                )
                 return True
-            except ObjectDoesNotExist:
+            except AssociationUser.DoesNotExist:
                 pass
 
-        if project_obj.user is not None:
-            if project_obj.user == self:
-                return True
+        if project_obj.user is not None and project_obj.user == self:
+            return True
 
         if self.get_user_funds().count() != 0 or self.get_user_managed_funds().count() != 0:
             user_funds_ids = self.get_user_funds().values_list("id")
@@ -192,50 +208,43 @@ class User(AbstractUser):
             return False
 
         if project_obj.association_user is not None and self.get_user_funds().count() == 0 and not self.is_staff:
-            member = AssociationUser.objects.get(user_id=self.pk, association_id=project_obj.association)
-            if (
-                not member.is_president
-                and not self.is_president_in_association(project_obj.association)
-                and member.id != project_obj.association_user.id
-            ):
+            try:
+                member = AssociationUser.objects.get(
+                    user_id=self.pk,
+                    association_id=project_obj.association,
+                    is_validated_by_admin=True
+                )
+                if (
+                    not member.is_president
+                    and not self.is_president_in_association(project_obj.association)
+                    and member.id != project_obj.association_user.id
+                ):
+                    return False
+                return True
+            except AssociationUser.DoesNotExist:
                 return False
-            return True
 
         return True
 
     def get_user_associations(self):
         """Return a list of Association IDs linked to a student user."""
-        return Association.objects.filter(
-            id__in=AssociationUser.objects.filter(user_id=self.pk).values_list("association_id")
-        )
+        return Association.objects.filter(associationuser__user=self, associationuser__is_validated_by_admin=True)
 
     def get_user_managed_associations(self):
         """Return a list of Association IDs linked to a manager user."""
-        return Association.objects.filter(
-            institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
-            ).values_list("id")
-        )
+        return Association.objects.filter(institution__groupinstitutionfunduser__user=self)
 
     def get_user_funds(self):
         """Return a list of Fund IDs linked to a student user."""
-        return Fund.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("fund_id")
-        )
+        return Fund.objects.filter(groupinstitutionfunduser__user=self)
 
     def get_user_managed_funds(self):
         """Return a list of Fund IDs linked to a manager user."""
-        return Fund.objects.filter(
-            institution_id__in=Institution.objects.filter(
-                id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
-            ).values_list("id")
-        )
+        return Fund.objects.filter(institution__groupinstitutionfunduser__user=self)
 
     def get_user_groups(self):
         """Return a list of Group IDs linked to a user."""
-        return Group.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("group_id")
-        )
+        return Group.objects.filter(groupinstitutionfunduser__user=self)
 
     def get_user_institutions(self):
         """Return a list of Institution IDs linked to a student user."""
@@ -254,9 +263,7 @@ class User(AbstractUser):
 
     def get_user_managed_institutions(self):
         """Return a list of Institution IDs linked to a manager user."""
-        return Institution.objects.filter(
-            id__in=GroupInstitutionFundUser.objects.filter(user_id=self.pk).values_list("institution_id")
-        )
+        return Institution.objects.filter(groupinstitutionfunduser__user=self)
 
     def get_user_default_manager_emails(self):
         """Return a list of manager email addresses affected to a user."""
@@ -264,15 +271,15 @@ class User(AbstractUser):
         funds_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, fund_id__isnull=False)
         institutions_user = GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id__isnull=False)
         managers_emails = []
-        if institutions_user.count() > 0:
+        if institutions_user.exists():
             for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
                 if user_to_check.has_perm("users.add_groupinstitutionfunduser_any_group"):
                     managers_emails.append(user_to_check.email)
-        elif assos_user.count() > 0 or funds_user.count() > 0:
+        elif assos_user.exists() or funds_user.exists():
             for institution in self.get_user_institutions():
                 managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
-        elif self.is_cas_user is True:
+        elif self.is_cas_user:
             institution = Institution.objects.get(acronym=Setting.get_setting("CAS_INSTITUTION_ACRONYM"))
             managers_emails += institution.default_institution_managers().values_list("email", flat=True)
             managers_emails = list(set(managers_emails))
@@ -283,38 +290,33 @@ class User(AbstractUser):
         return managers_emails
 
     @property
-    def has_validated_email_user(self):
+    def has_validated_email_user(self) -> bool:
         """Return True if the user account has a validated email."""
         return self.emailaddress_set.filter(verified=True).exists()
 
     @property
-    def is_cas_user(self):
+    def is_cas_user(self) -> bool:
         """Return True if the user account was generated through CAS on signup."""
         return self.socialaccount_set.filter(provider=CASProvider.id).exists()
 
-    def is_in_association(self, association_id):
+    def is_in_association(self, association_id: int) -> bool:
         """Check if a user can read an association."""
-        try:
-            AssociationUser.objects.get(
-                user_id=self.pk,
-                association_id=association_id,
-                is_validated_by_admin=True,
-            )
-            return True
-        except ObjectDoesNotExist:
-            return False
+        return AssociationUser.objects.filter(
+            user_id=self.pk,
+            association_id=association_id,
+            is_validated_by_admin=True,
+        ).exists()
 
-    def is_member_in_fund(self, fund_id):
+    def is_member_in_fund(self, fund_id) -> bool:
         """Check if a user is linked as member to a fund."""
         return (
             GroupInstitutionFundUser.objects.filter(
                 models.Q(user_id=self.pk, fund_id=fund_id)
                 | models.Q(user_id=self.pk, institution_id=Fund.objects.get(id=fund_id).institution_id)
-            ).count()
-            > 0
+            ).exists()
         )
 
-    def is_president_in_association(self, association_id):
+    def is_president_in_association(self, association_id: int) -> bool:
         """Check if a user can write in an association."""
         try:
             now = datetime.date.today()
@@ -338,22 +340,22 @@ class User(AbstractUser):
                 is_validated_by_admin=True,
             )
             return True
-        except ObjectDoesNotExist:
+        except AssociationUser.DoesNotExist:
             return False
 
-    def is_staff_for_association(self, association_id):
+    def is_staff_for_association(self, association_id) -> bool:
         """Check if a user is linked as manager for an association."""
         if self.is_staff:
             return GroupInstitutionFundUser.objects.filter(
                 user_id=self.pk,
                 institution_id=Association.objects.get(id=association_id).institution_id,
-            )
+            ).exists()
         return False
 
-    def is_staff_in_institution(self, institution_id):
+    def is_staff_in_institution(self, institution_id) -> bool:
         """Check if a user is linked as manager to an institution."""
         if self.is_staff:
-            return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id)
+            return GroupInstitutionFundUser.objects.filter(user_id=self.pk, institution_id=institution_id).exists()
         return False
 
     def __str__(self):

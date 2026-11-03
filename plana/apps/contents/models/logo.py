@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from plana.storages import DynamicStorageFileField
 
-if settings.USE_S3 is False:
+if not settings.USE_S3:
     DynamicStorageFileField = models.FileField
 
 

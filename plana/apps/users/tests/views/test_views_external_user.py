@@ -14,14 +14,13 @@ class ExternalUserViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "institutions_institution.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/commissions_fund.json",
+        "tests/institutions_institution.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -35,7 +34,7 @@ class ExternalUserViewsTests(TestCase):
             },
         )
 
-    @patch('plana.apps.users.views.external.Client')
+    @patch('plana.apps.users.views.external.get_client')
     def test_external_user_detail_success(self, mock_client):
         """Get an external user."""
         mock_instance = mock_client.return_value
@@ -69,7 +68,7 @@ class ExternalUserViewsTests(TestCase):
         response = self.manager_client.get(reverse('external_user_list'), {'wrong': 'wrong'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @patch('plana.apps.users.views.external.Client')
+    @patch('plana.apps.users.views.external.get_client')
     def test_external_user_detail_empty(self, mock_client):
         """Don't get an external user if nothing is sent."""
         mock_instance = mock_client.return_value
@@ -79,7 +78,7 @@ class ExternalUserViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data)
 
-    @patch('plana.apps.users.views.external.Client', autospec=True)
+    @patch('plana.apps.users.views.external.get_client', autospec=True)
     def test_external_user_detail_internal_error(self, mock_client):
         """Don't get an external user if exception is thrown."""
         mock_instance = mock_client.return_value

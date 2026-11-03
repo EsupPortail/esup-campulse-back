@@ -1,48 +1,32 @@
 """Views directly linked to projects categories."""
 
-import datetime
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
-from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import CommissionFund
-from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
-from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
+from plana.apps.projects.permissions import ProjectCategoryUpdatePermission
 from plana.apps.projects.serializers.project_category import ProjectCategorySerializer
 
 
+@extend_schema(tags=["projects/categories"])
 class ProjectCategoryListCreate(generics.ListCreateAPIView):
     """/projects/categories route."""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "project_id",
-                OpenApiTypes.NUMBER,
-                OpenApiParameter.QUERY,
-                description="Project id.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: ProjectCategorySerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-        },
-        tags=["projects/categories"],
-    )
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsAuthenticated(), DjangoModelPermissions(), ProjectCategoryUpdatePermission()]
+        return [IsAuthenticated(), DjangoModelPermissions()]
+
+    # FIXME : If permission to get some projects data, also have permission to retrieve their linked categories (custom manager)
     def get(self, request, *args, **kwargs):
         """List all links between categories and projects."""
         project_id = request.query_params.get("project_id")
@@ -51,7 +35,7 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
         user_institutions_ids = []
         if not request.user.has_perm("projects.view_projectcategory_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
-            if managed_funds.count() > 0:
+            if managed_funds.exists():
                 user_funds_ids = managed_funds
             else:
                 user_funds_ids = request.user.get_user_funds()
@@ -68,24 +52,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
             self.queryset = self.queryset.filter(
                 models.Q(project_id__in=user_projects_ids)
-                | models.Q(
-                    project_id__in=(
-                        ProjectCommissionFund.objects.filter(
-                            commission_fund_id__in=CommissionFund.objects.filter(
-                                fund_id__in=user_funds_ids
-                            ).values_list("id")
-                        ).values_list("project_id")
-                    )
-                )
-                | models.Q(
-                    project_id__in=(
-                        Project.visible_objects.filter(
-                            association_id__in=Association.objects.filter(
-                                institution_id__in=user_institutions_ids
-                            ).values_list("id")
-                        ).values_list("id")
-                    )
-                )
+                | models.Q(project__projectcommissionfund__commission_fund__fund_id__in=user_funds_ids.values_list("id"))
+                | models.Q(project__in=(Project.visible_objects.filter(association__institution__in=user_institutions_ids.values_list("id"))))
             )
 
         if project_id:
@@ -93,58 +61,8 @@ class ProjectCategoryListCreate(generics.ListCreateAPIView):
 
         return self.list(request, *args, **kwargs)
 
-    @extend_schema(
-        responses={
-            status.HTTP_201_CREATED: ProjectCategorySerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/categories"],
-    )
-    def post(self, request, *args, **kwargs):
-        """Create a link between a category and a project."""
-        try:
-            project = Project.visible_objects.get(id=request.data["project"])
-            Category.objects.get(id=request.data["category"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project or category does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
 
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not request.user.can_edit_project(project):
-            return response.Response(
-                {"error": _("Not allowed to update categories for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        project_categories_count = ProjectCategory.objects.filter(
-            project_id=request.data["project"],
-            category_id=request.data["category"],
-        ).count()
-        if project_categories_count > 0:
-            return response.Response(
-                {"error": _("This project is already linked to this category.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        project.edition_date = datetime.date.today()
-        project.save()
-
-        return super().create(request, *args, **kwargs)
-
-
+# TODO : Still useful ?
 class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     """/projects/{project_id}/categories route."""
 
@@ -163,13 +81,7 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
     )
     def get(self, request, *args, **kwargs):
         """Retrieve all categories linked to a project."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        project = get_object_or_404(Project.visible_objects, id=kwargs["project_id"])
 
         if (
             not request.user.has_perm("projects.view_projectcategory_any_fund")
@@ -185,42 +97,25 @@ class ProjectCategoryRetrieve(generics.RetrieveAPIView):
         return response.Response(serializer.data)
 
 
+@extend_schema(tags=["projects/categories"])
 class ProjectCategoryDestroy(generics.DestroyAPIView):
     """/projects/{project_id}/categories/{category_id} route."""
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, ProjectCategoryUpdatePermission]
     queryset = ProjectCategory.objects.all()
     serializer_class = ProjectCategorySerializer
 
-    @extend_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: ProjectCategorySerializer,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-        tags=["projects/categories"],
-    )
-    def delete(self, request, *args, **kwargs):
-        """Destroys a link between project and category."""
-        try:
-            project = Project.visible_objects.get(id=kwargs["project_id"])
-            project_category = ProjectCategory.objects.get(
-                project_id=kwargs["project_id"], category_id=kwargs["category_id"]
-            )
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Project does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+    def get_object(self):
+        obj = get_object_or_404(
+            self.get_queryset(),
+            project_id=self.kwargs["project_id"],
+            category_id=self.kwargs["category_id"]
+        )
+        self.check_object_permissions(self.request, obj)
+        return obj
 
-        if not request.user.can_edit_project(project):
-            return response.Response(
-                {"error": _("Not allowed to update categories for this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        project.edition_date = datetime.date.today()
-        project.save()
-        project_category.delete()
-        return response.Response({}, status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        """ProjectCategory object deletion should update the Project's edition date"""
+        instance.project.edition_date = timezone.now()
+        instance.project.save()
+        instance.delete()

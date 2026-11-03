@@ -3,13 +3,13 @@
     "model": "commissions.fund",
     "pk": 1,
     "fields": {
-      "name": "Fonds de Solidarité et de Développement des Initiatives Étudiantes",
-      "acronym": "FSDIE",
+      "name": "Fonds Principal d'Exemple",
+      "acronym": "FPEX",
       "is_site": true,
-      "decision_attribution_template_path": "FSDIE/decision_attribution.html",
-      "attribution_template_path": "FSDIE/attribution.html",
-      "rejection_template_path": "FSDIE/rejection.html",
-      "postpone_template_path": "FSDIE/postpone.html",
+      "decision_attribution_template_path": "FPEX/decision_attribution.html",
+      "attribution_template_path": "FPEX/attribution.html",
+      "rejection_template_path": "FPEX/rejection.html",
+      "postpone_template_path": "FPEX/postpone.html",
       "institution_id": 2
     }
   },
@@ -17,26 +17,12 @@
     "model": "commissions.fund",
     "pk": 2,
     "fields": {
-      "name": "Initiative d'Excellence « Creative Thinkers »",
-      "acronym": "IdEx",
-      "is_site": true,
-      "decision_attribution_template_path": "IdEx/decision_attribution.html",
-      "attribution_template_path": "IdEx/attribution.html",
-      "rejection_template_path": "IdEx/rejection.html",
-      "postpone_template_path": "IdEx/postpone.html",
-      "institution_id": 2
-    }
-  },
-  {
-    "model": "commissions.fund",
-    "pk": 3,
-    "fields": {
-      "name": "Culture-ActionS",
-      "acronym": "Culture-ActionS",
+      "name": "Fonds Externe d'Exemple",
+      "acronym": "FEEX",
       "is_site": false,
       "decision_attribution_template_path": "",
-      "attribution_template_path": "Culture-ActionS/attribution.html",
-      "rejection_template_path": "Culture-ActionS/rejection.html",
+      "attribution_template_path": "FEEX/attribution.html",
+      "rejection_template_path": "FEEX/rejection.html",
       "postpone_template_path": "",
       "institution_id": 1
     }

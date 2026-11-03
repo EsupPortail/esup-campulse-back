@@ -28,14 +28,15 @@ class LdapClient:
         FILTER
         ATTRIBUTES
     """
+    api_name = "accounts"
+    FIELDS = ["first_name", "last_name", "mail", "username"]
 
     @staticmethod
     def decode_value(value: Union[bytes, str]) -> str:
         return value.decode("utf8") if isinstance(value, bytes) else value
 
-    @staticmethod
-    def get_mapping(attrs: list[str]) -> dict[str, str]:
-        return getattr(settings, 'ACCOUNTS_API_MAPPING', dict(zip(attrs, attrs)))
+    def get_mapping(self, attrs: list[str]) -> dict[str, str]:
+        return dict(zip(self.FIELDS, attrs))
 
     def search(self, **kwargs):
         conf = getattr(settings, f'{self.api_name.upper()}_API_CONF')

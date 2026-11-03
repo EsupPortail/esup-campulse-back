@@ -13,7 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             if settings.USE_S3 == True:
-                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                bucket_name = settings.AWS_STORAGE_PUBLIC_BUCKET_NAME
                 resource = boto3.resource(
                     "s3",
                     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -28,7 +28,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(_(f"S3 bucket {bucket_name} content cleaned.")))
             else:
                 shutil.rmtree(os.path.join(settings.MEDIA_ROOT))
-                pass
 
         except Exception as error:
             self.stdout.write(self.style.ERROR(f"Error : {error}"))

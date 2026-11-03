@@ -7,7 +7,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from plana.libs.api.accounts import Client
+from plana.libs.api.accounts import get_client
 
 from ..serializers.external import ExternalUserSerializer
 
@@ -45,7 +45,8 @@ class ExternalUserList(generics.ListAPIView):
 
         try:
             if last_name := self.request.query_params.get("last_name"):
-                data = Client().list_users(last_name=last_name)
+                client = get_client()
+                data = client.list_users(last_name=last_name)
                 serializer = self.get_serializer(data, many=True)
                 return Response(serializer.data)
 

@@ -1,7 +1,5 @@
-from functools import wraps
 import time
-
-from rest_framework import generics
+from functools import wraps
 
 from django.db import connection
 from django.test.utils import CaptureQueriesContext

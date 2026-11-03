@@ -1,11 +1,9 @@
 """Views directly linked to documents."""
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics, response, status
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.documents.models.document import Document
@@ -14,12 +12,16 @@ from plana.apps.documents.serializers.document import (
     DocumentSerializer,
     DocumentUpdateSerializer,
 )
+from plana.decorators import capture_queries
+
+from ..filters import DocumentFilter
 
 
 class DocumentList(generics.ListCreateAPIView):
     """/documents/ route."""
 
     queryset = Document.objects.all().order_by("name")
+    filterset_class = DocumentFilter
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -36,72 +38,14 @@ class DocumentList(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "acronym",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document acronym.",
-            ),
-            OpenApiParameter(
-                "fund_ids",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Document fund IDs.",
-            ),
-            OpenApiParameter(
-                "process_types",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
-                description="Document process type.",
-            ),
-        ],
-        responses={
-            status.HTTP_200_OK: DocumentSerializer,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """List all documents types."""
-        acronym = request.query_params.get("acronym")
-        fund_ids = request.query_params.get("fund_ids")
-        process_types = request.query_params.get("process_types")
-
-        if acronym is not None and acronym != "":
-            self.queryset = self.queryset.filter(acronym=acronym)
-
-        if fund_ids is not None and fund_ids != "":
-            self.queryset = self.queryset.filter(fund_id__in=fund_ids.split(","))
-
-        if process_types is not None and process_types != "":
-            all_process_types = [c[0] for c in Document.process_type.field.choices]
-            process_types_codes = process_types.split(",")
-            process_types_codes = [
-                project_type_code
-                for project_type_code in process_types_codes
-                if project_type_code != "" and project_type_code in all_process_types
-            ]
-            self.queryset = self.queryset.filter(process_type__in=process_types_codes)
-
-        return self.list(request, *args, **kwargs)
-
-    @extend_schema(
         responses={
             status.HTTP_201_CREATED: DocumentSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
         }
     )
     def post(self, request, *args, **kwargs):
         """Create a new document type (manager only)."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
             "institution" in request.data
@@ -130,9 +74,10 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/documents/{id} route."""
 
     queryset = Document.objects.all()
+    http_method_names = ["get", "post", "patch", "delete", "head", "options", "trace"]
 
     def get_permissions(self):
-        if self.request.method in ("GET", "PUT"):
+        if self.request.method == "GET":
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -148,32 +93,6 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     @extend_schema(
         responses={
             status.HTTP_200_OK: DocumentSerializer,
-            status.HTTP_404_NOT_FOUND: None,
-        },
-    )
-    def get(self, request, *args, **kwargs):
-        """Retrieve a document type with all its details."""
-        try:
-            self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        return self.retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        exclude=True,
-        responses={
-            status.HTTP_405_METHOD_NOT_ALLOWED: None,
-        },
-    )
-    def put(self, request, *args, **kwargs):
-        return response.Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: DocumentSerializer,
             status.HTTP_400_BAD_REQUEST: None,
             status.HTTP_401_UNAUTHORIZED: None,
             status.HTTP_403_FORBIDDEN: None,
@@ -183,22 +102,11 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def patch(self, request, *args, **kwargs):
         """Update document details."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            return response.Response(
-                {"error": error.detail},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
-        try:
-            document = self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document = self.get_object()
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         if (
             document.institution_id is not None
@@ -248,13 +156,7 @@ class DocumentRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         """Destroys an entire document type (manager only)."""
-        try:
-            document = self.queryset.get(id=kwargs["pk"])
-        except ObjectDoesNotExist:
-            return response.Response(
-                {"error": _("Document does not exist.")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        document = self.get_object()
 
         if (
             document.institution_id is not None

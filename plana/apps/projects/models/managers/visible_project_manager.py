@@ -2,10 +2,9 @@
 
 import datetime
 
+from django.apps import apps
 from django.db import models
 from django.db.utils import ProgrammingError
-
-from plana.apps.contents.models.setting import Setting
 
 
 class VisibleProjectManager(models.Manager):
@@ -14,23 +13,21 @@ class VisibleProjectManager(models.Manager):
     def get_queryset(self):
         """Override queryset to get project younger than defined amount of years."""
         queryset = super().get_queryset()
+
+        Setting = apps.get_model('contents', 'Setting')
         invisible_projects_ids = []
-        amount_years_before_project_invisibility = None
+
         try:
-            for project in queryset:
-                # TODO Tests break if this variable is set before this loop instruction. (???)
-                amount_years_before_project_invisibility = Setting.get_setting(
-                    "AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY"
-                )
-                break
+            days_before_project_invisibility = 365 * Setting.get_setting(
+                "AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY"
+            )
             for project in queryset:
                 if datetime.datetime.now(
                     datetime.timezone(datetime.timedelta(hours=0))
-                ) > project.edition_date + datetime.timedelta(days=(365 * amount_years_before_project_invisibility)):
+                ) > project.edition_date + datetime.timedelta(days=(365 * days_before_project_invisibility)):
                     invisible_projects_ids.append(project.id)
-            queryset = queryset.exclude(id__in=invisible_projects_ids)
-        except ProgrammingError:
-            # TODO Error triggered when initial migration is applied.
-            # Find a better way to manage this case.
-            pass
-        return queryset
+            return queryset.exclude(id__in=invisible_projects_ids)
+        except Exception:
+            # TODO Error triggered when initial migration is applied
+            # and AMOUNT_YEARS_BEFORE_PROJECT_INVISIBILITY is empty
+            return queryset

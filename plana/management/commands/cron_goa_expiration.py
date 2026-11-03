@@ -36,7 +36,7 @@ class Command(BaseCommand):
                     context["associations_goa_list"] = "\n".join(associations_goa_list[institution.id])
                     email_addresses_to_use = [
                         x
-                        for x in list(institution.default_institution_managers().values_list("email", flat=True))
+                        for x in institution.default_institution_managers().values_list("email", flat=True)
                         if x not in email_addresses_used
                     ]
                     send_mail(

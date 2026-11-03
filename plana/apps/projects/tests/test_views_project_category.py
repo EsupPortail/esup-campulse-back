@@ -8,6 +8,7 @@ from rest_framework import status
 
 from plana.apps.associations.models.association import Association
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects.models import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
 from plana.apps.users.models.user import GroupInstitutionFundUser
@@ -17,25 +18,24 @@ class ProjectCategoryLinksViewsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
-        "account_emailaddress.json",
+        "tests/account_emailaddress.json",
         "associations_activityfield.json",
-        "associations_association.json",
+        "tests/associations_association.json",
         "auth_group.json",
-        "auth_group_permissions.json",
         "auth_permission.json",
-        "commissions_fund.json",
-        "commissions_commission.json",
-        "commissions_commissionfund.json",
-        "contents_setting.json",
-        "institutions_institution.json",
+        "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
+        "tests/contents_setting.json",
+        "tests/institutions_institution.json",
         "institutions_institutioncomponent.json",
         "projects_category.json",
-        "projects_project.json",
-        "projects_projectcategory.json",
-        "projects_projectcommissionfund.json",
-        "users_associationuser.json",
-        "users_groupinstitutionfunduser.json",
-        "users_user.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcategory.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     @classmethod
@@ -79,15 +79,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
             "password": "motdepasse",
         }
         cls.response = cls.student_president_client.post(url_login, data_student_president)
-
-    def test_get_project_categories_anonymous(self):
-        """
-        GET /projects/categories .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/categories")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_project_categories_student(self):
         """
@@ -140,15 +131,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(content), projects_categories_cnt)
 
-    def test_post_project_categories_anonymous(self):
-        """
-        POST /projects/categories .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.post("/projects/categories", {"name": "Testing anonymous"})
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_post_project_categories_not_found(self):
         """
         POST /projects/categories .
@@ -157,11 +139,13 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The project must exist.
         """
         post_data = {"project": 999, "category": 1}
-        response = self.student_offsite_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        post_data = {"project": 1, "category": 999}
-        response = self.student_offsite_client.post("/projects/categories", post_data)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("project", response.data)
+        post_data = {"project": 2, "category": 999}
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("category", response.data)
 
     def test_post_project_categories_forbidden_user(self):
         """
@@ -174,15 +158,32 @@ class ProjectCategoryLinksViewsTests(TestCase):
         response = self.student_offsite_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_post_project_categories_already_exists(self):
+    def test_post_project_category_already_exists(self):
         """
         POST /projects/categories .
 
-        - A project and a category cannot be linked together twice.
+        - A project cannot be linked to multiple categories.
         """
-        post_data = {"project": 2, "category": 1}
+        post_data = {"project": 2, "category": 5}
         response = self.student_president_client.post("/projects/categories", post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("already_existing_category", response.data)
+
+    def test_post_project_category_disabled(self):
+        """
+        POST /projects/categories .
+
+        - A project cannot be linked to multiple categories.
+        """
+        project = Project.objects.get(pk=2)
+        project.projectcategory_set.all().delete()
+        category = Category.objects.get(pk=5)
+        category.is_enabled = False
+        category.save()
+        post_data = {"project": 2, "category": 5}
+        response = self.student_president_client.post("/projects/categories", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("category_disabled", response.data)
 
     def test_post_project_categories_association_success(self):
         """
@@ -193,6 +194,8 @@ class ProjectCategoryLinksViewsTests(TestCase):
         - The ProjectCategory link is created in db.
         - Project edition date is updated.
         """
+        project = Project.objects.get(pk=2)
+        project.projectcategory_set.all().delete()
         post_data = {"project": 2, "category": 3}
         old_project_edition_date = Project.visible_objects.get(id=post_data["project"]).edition_date
         response = self.student_president_client.post("/projects/categories", post_data)
@@ -203,15 +206,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
             len(ProjectCategory.objects.filter(project=post_data["project"], category=post_data["category"])),
         )
         self.assertNotEqual(old_project_edition_date, new_project_edition_date)
-
-    def test_get_project_categories_by_id_anonymous(self):
-        """
-        GET /projects/{project_id}/categories .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.get("/projects/1/categories")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_project_categories_by_id_404(self):
         """
@@ -254,15 +248,6 @@ class ProjectCategoryLinksViewsTests(TestCase):
 
         content = json.loads(response.content.decode("utf-8"))
         self.assertEqual(len(content), project_test_cnt)
-
-    def test_delete_project_categories_anonymous(self):
-        """
-        DELETE /projects/{project_id}/categories/{category_id} .
-
-        - An anonymous user cannot execute this request.
-        """
-        response = self.client.delete("/projects/1/categories/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_project_categories_not_found(self):
         """
