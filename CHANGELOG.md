@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.4.0 (03/11/2026)
+
+/!\ Cette version diffère des précédentes car elle présente un risque de casse dû à la mise à jour de paramètres essentiels au fonctionnement de l'application /!\
+Cette nouvelle version de Campulse fait suite à la version k8s-0.5.3, elle regroupe tous les tags existants avec le nommage commençant par "k8s-" (c'est à dire toutes les modifications entre les versions 1.3.2 et k8s-0.5.3, résumées dans ce changelog).
+Elle inclut ainsi toutes les évolutions ayant été effectuées en vue des déploiements de l'application sur le PaaS, ainsi que de multiples corrections de bugs, des améliorations des performances, et des correctifs de sécurité.
+Il est donc désormais possible de conteneuriser l'application de manière "clé en main" (avec notamment le Dockerfile disponible dans le code source du dépôt).
+
+### /!\ Points de vigilance dans les fichiers de settings du projet
+- Nouvelle variable `CAS_ATTRIBUTES_NAMES["uid"]` disponible, par défaut la valeur détectée automatiquement par CAS est "uid".
+- Passage d'un système à deux buckets S3 pour des raisons d'usage et de sécurité, la variable `AWS_STORAGE_BUCKET_NAME` a été scindée en deux de la manière suivante : `AWS_STORAGE_PUBLIC_BUCKET_NAME` et `AWS_STORAGE_PRIVATE_BUCKET_NAME`.
+Le bucket privé doit être le bucket S3 dans lequel sont téléversés les fichiers chiffrés par l'application (documents de projets, d'utilisateurs ou de chartes associatives), tandis que le bucket public sert aux fichiers non sensibles de l'application (logos, templates pdfs, templates de documents...).
+
+### Correction de bugs (sur la base de la version k8s-0.5.3)
+- Correction d'un bug empêchant les gestionnaires généraux de modifier ou d'ajouter un objet Document dans l'admin django
+
+## k8s-0.5.3 (23/09/2026)
+
+### Features et évolutions
+- Ajout de restrictions supplémentaires sur les objets Document dans l'admin django pour les non-superutilisateurs
+- Modifier une date fixe d'expiration du Document "CHARTE_SITE" dans l'admin django applique la nouvelle date à tous les agréments d'associations validés et en cours
+
+## k8s-0.5.2 (18/09/2026)
+
+### Features et évolutions
+- Mise à jour de l'image Docker de base à `python:3.9-slim-bookworm` dans le Dockerfile
+- Remise à niveau de la lib permettant la recherche de comptes via LDAP dans l'application
+- La CRON `cron_goa_expiration` a été retirée des CRONs journalières
+- Les utilisateurs CAS "fantômes" n'apparaissent plus dans la liste des utilisateurs via l'API
+- Ajustements sur les variables de mails disponibles pour les notifications de projets
+
+## k8s-0.5.1 (04/09/2026)
+
+### Correction de bugs
+- Correction d'une typo dans l'import de données initial au lancement du conteneur pouvant causer des erreurs
+
 ## k8s-0.5.0 (03/09/2026)
 
 ### Features et évolutions
