@@ -1,19 +1,50 @@
 """Admin view for Document models."""
 import datetime
 
-from django.contrib import admin, messages
+from django import forms
+from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.db.models import Prefetch
-from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
 from .models import Document, DocumentUpload
 from ..associations.models import Association
 
 
+class DocumentAdminForm(forms.ModelForm):
+    """Custom admin form for Document model to manage updates rules on objects."""
+    def __init__(self, *args, **kwargs):
+        # Retrieve request from ModelAdmin
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        """
+        Custom clean to block a Document process to be changed by a non-superuser if some documents were already uploaded.
+        """
+        cleaned_data = super().clean()
+
+        # Only when change on object
+        if self.instance and self.instance.pk:
+            old_obj = Document.objects.get(pk=self.instance.pk)
+            uploaded_docs = DocumentUpload.objects.filter(document=old_obj).exists()
+
+            new_process_type = cleaned_data.get('process_type')
+
+            if uploaded_docs and old_obj.process_type != new_process_type:
+                if self.request and not self.request.user.is_superuser:
+                    raise ValidationError(
+                        _("Cannot update this document's process : some documents using it were already uploaded.")
+                    )
+
+        return cleaned_data
+
+
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     """List view for documents."""
 
+    form = DocumentAdminForm
     list_display = [
         "acronym",
         "description",
@@ -38,6 +69,17 @@ class DocumentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('fund', 'institution')
 
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        """Custom get_form method to pass request data"""
+        FormClass = super().get_form(request, obj, **kwargs)
+
+        class ModelFormWithRequest(FormClass):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return FormClass(*args, **kwargs)
+
+        return ModelFormWithRequest
+
     def has_delete_permission(self, request, obj=None):
         """
         Custom admin permission to avoid non-superusers from deleting documents
@@ -54,34 +96,15 @@ class DocumentAdmin(admin.ModelAdmin):
 
         return super().has_delete_permission(request, obj)
 
-    def response_change(self, request, obj):
-        """Force error message to stay on change form instead of list redirect"""
-        storage = messages.get_messages(request)
-        has_error = any(message.level == messages.ERROR for message in storage)
-
-        if has_error:
-            storage.used = False
-            return HttpResponseRedirect(request.path)
-
     def save_model(self, request, obj, form, change):
         """
         Custom save method to update future charter expiration date of all associations in advanced workflow
         with the new expiration day.
-        Also blocks a Document process to be changed by a non-superuser if some documents were already uploaded.
         """
-        if change:
-            old_obj = Document.objects.get(pk=obj.pk)
-            uploaded_docs = DocumentUpload.objects.filter(document=old_obj).exists()
-            if uploaded_docs and old_obj.process_type != obj.process_type and not request.user.is_superuser:
-                self.message_user(
-                    request,
-                    str(_("Cannot update this document's process : some documents using it were already uploaded.")),
-                    level=messages.ERROR
-                )
-                return
+        old_obj = Document.objects.filter(pk=obj.pk).first()
+        super().save_model(request, obj, form, change)
 
-            super().save_model(request, obj, form, change)
-
+        if change and old_obj:
             if old_obj.expiration_day != obj.expiration_day and obj.acronym == "CHARTE_SITE":
                 latest_uploads = DocumentUpload.objects.filter(
                     document__process_type="CHARTER_ASSOCIATION",
@@ -110,9 +133,6 @@ class DocumentAdmin(admin.ModelAdmin):
                         associations_to_update.append(asso)
                 if associations_to_update:
                     Association.objects.bulk_update(associations_to_update, ["charter_date", "charter_status"])
-        # On Document creation do nothing more
-        else:
-            super().save_model(request, obj, form, change)
 
 
 @admin.register(DocumentUpload)
