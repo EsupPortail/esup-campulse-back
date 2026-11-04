@@ -2,6 +2,7 @@
 
 import datetime
 
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, response, status
@@ -11,63 +12,71 @@ from plana.apps.commissions.filters import CommissionFilter
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.serializers.commission import (
     CommissionSerializer,
-    CommissionUpdateSerializer
+    CommissionUpdateSerializer, CommissionManageSerializer
 )
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.pagination import BasePageNumberPagination
 
 
-class CommissionListCreate(generics.ListCreateAPIView):
+class CommissionList(generics.ListAPIView):
     """/commissions/ route."""
 
     queryset = Commission.objects.all().distinct().order_by("submission_date").prefetch_related("commissionfund_set__fund")
     serializer_class = CommissionSerializer
     filterset_class = CommissionFilter
+    permission_classes = [AllowAny]
     pagination_class = BasePageNumberPagination
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+
+class CommissionManageListCreate(generics.ListCreateAPIView):
+    """/commissions/manage/ route."""
+
+    queryset = Commission.objects.all().distinct().order_by("submission_date").prefetch_related("commissionfund_set__fund")
+    serializer_class = CommissionManageSerializer
+    filterset_class = CommissionFilter
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    pagination_class = BasePageNumberPagination
 
     def get_queryset(self):
-        """Custom queryset with annotations to retrieve some projects counts"""
-        # FIXME : better permission here
-        if self.request.user.is_authenticated and self.request.user.is_staff:
-            return self.queryset.annotate_projects_counts()
-        return super().get_queryset()
+        """Custom queryset with annotations to retrieve some projects counts, only for commissions managed by user."""
+        manager_funds = self.request.user.get_user_managed_funds().values_list("pk")
+        member_funds = self.request.user.get_user_funds().values_list("pk")
+        return self.queryset.filter(
+            Q(commissionfund__fund_id__in=manager_funds) | Q(commissionfund__fund_id__in=member_funds)
+        ).annotate_projects_counts()
 
 
-class CommissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class CommissionRetrieve(generics.RetrieveAPIView):
     """/commissions/{id} route."""
 
     queryset = Commission.objects.all().order_by("submission_date").prefetch_related("commissionfund_set__fund")
     serializer_class = CommissionSerializer
-    http_method_names = ["get", "patch", "delete"]
+    permission_classes = [AllowAny]
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
+
+class CommissionManageRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """/commissions/{id}/manage route."""
+
+    queryset = Commission.objects.all().order_by("submission_date").prefetch_related("commissionfund_set__fund")
+    serializer_class = CommissionManageSerializer
+    http_method_names = ["get", "patch", "delete"]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
             self.serializer_class = CommissionUpdateSerializer
         else:
-            self.serializer_class = CommissionSerializer
+            self.serializer_class = CommissionManageSerializer
         return super().get_serializer_class()
 
     def get_queryset(self):
         """Custom queryset with annotations to retrieve some projects counts"""
-        # FIXME : better permission here
-        if self.request.user.is_authenticated and self.request.user.is_staff:
-            return self.queryset.annotate_projects_counts()
-        return super().get_queryset()
+        manager_funds = self.request.user.get_user_managed_funds().values_list("pk")
+        member_funds = self.request.user.get_user_funds().values_list("pk")
+        return self.queryset.filter(
+            Q(commissionfund__fund_id__in=manager_funds) | Q(commissionfund__fund_id__in=member_funds)
+        ).annotate_projects_counts().distinct()
 
     @extend_schema(
         responses={

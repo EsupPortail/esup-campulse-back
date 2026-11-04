@@ -14,6 +14,19 @@ from plana.utils import normalize_object_name
 class CommissionSerializer(serializers.ModelSerializer):
     """Main serializer."""
     funds = serializers.SerializerMethodField()
+
+    def get_funds(self, obj) -> list[dict]:
+        funds = Fund.objects.filter(commissionfund__commission=obj)
+        return FundMinimalDataSerializer(funds, many=True, context=self.context).data
+
+    class Meta:
+        model = Commission
+        fields = "__all__"
+
+
+class CommissionManageSerializer(serializers.ModelSerializer):
+    """Main serializer."""
+    funds = serializers.SerializerMethodField()
     submitted_projects_count = serializers.IntegerField(read_only=True, default=None)
     processing_projects_count = serializers.IntegerField(read_only=True, default=None)
     standby_projects_count = serializers.IntegerField(read_only=True, default=None)
