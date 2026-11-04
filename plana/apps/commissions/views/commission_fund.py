@@ -1,5 +1,5 @@
 """Views linked to commissions funds."""
-
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework.generics import get_object_or_404
@@ -49,3 +49,9 @@ class CommissionFundDestroy(generics.DestroyAPIView):
             self.get_queryset(),
             commission_id=self.kwargs["commission_id"],
             fund_id=self.kwargs["fund_id"])
+
+    def perform_destroy(self, instance):
+        """CommissionFund object deletion should update the Commission's edition date"""
+        instance.commission.edition_date = timezone.now()
+        instance.commission.save()
+        instance.delete()
