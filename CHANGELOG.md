@@ -12,6 +12,10 @@ Il est donc désormais possible de conteneuriser l'application de manière "clé
 - Passage d'un système à deux buckets S3 pour des raisons d'usage et de sécurité, la variable `AWS_STORAGE_BUCKET_NAME` a été scindée en deux de la manière suivante : `AWS_STORAGE_PUBLIC_BUCKET_NAME` et `AWS_STORAGE_PRIVATE_BUCKET_NAME`.
 Le bucket privé doit être le bucket S3 dans lequel sont téléversés les fichiers chiffrés par l'application (documents de projets, d'utilisateurs ou de chartes associatives), tandis que le bucket public sert aux fichiers non sensibles de l'application (logos, templates pdfs, templates de documents...).
 
+Des scripts de migration automatique des données entre buckets S3 sont disponibles dans le répertoire `scripts`, à la racine du dépôt du projet :
+- Pour le passage d'un système à un bucket S3 unique vers deux buckets S3, en conservant le même compte S3 que l'actuel, sous le nom de `migrate_s3_buckets_content.sh`.
+- Pour la migration des buckets S3 vers un autre compte S3, sous le nom de `migrate_s3_buckets_account.sh` (Peut aussi être utilisé pour migrer d'un seul bucket S3 vers deux, dans ce cas-ci il faut renseigner les variables `--old-public` et `old-private` avec le même nom de bucket).
+
 ### Correction de bugs (sur la base de la version k8s-0.5.3)
 - Correction d'un bug empêchant les gestionnaires généraux de modifier ou d'ajouter un objet Document dans l'admin django
 
