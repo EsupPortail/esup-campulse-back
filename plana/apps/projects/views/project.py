@@ -103,7 +103,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
             models.Prefetch(
                 'projectcommissionfund_set',
                 queryset=ProjectCommissionFund.objects.select_related(
-                    'commission_fund__commission'
+                    'commission_fund__commission',
+                    'commission_fund__fund'
                 )
             )
         ).distinct()
@@ -259,7 +260,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-    queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").prefetch_related("projectcommissionfund_set")
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

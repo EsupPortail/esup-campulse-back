@@ -14,6 +14,7 @@ from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
+from plana.apps.projects.serializers.project_commission_fund import ProjectCommissionFundMinimalDataSerializer
 from plana.apps.users.serializers.association_user import AssociationUserSerializer
 from plana.apps.users.serializers.user import UserNameSerializer
 
@@ -26,6 +27,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
+    project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
 
     class Meta:
         model = Project
@@ -59,6 +61,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "creation_date",
             "edition_date",
             "processing_date",
+            "project_commission_funds",
         ]
 
 
@@ -117,6 +120,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
+    project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_budget_file(self, project):
@@ -144,6 +148,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "edition_date",
             "project_status",
             "budget_file",
+            "project_commission_funds",
         ]
 
 

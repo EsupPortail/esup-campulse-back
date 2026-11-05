@@ -5,10 +5,14 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from plana.apps.commissions.models import CommissionFund
+from plana.apps.commissions.serializers.commission import CommissionMinimalDataSerializer
+from plana.apps.commissions.serializers.fund import FundMinimalDataSerializer
 
 
 class CommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
+    commission = CommissionMinimalDataSerializer(read_only=True)
+    fund = FundMinimalDataSerializer(read_only=True)
 
     class Meta:
         model = CommissionFund
