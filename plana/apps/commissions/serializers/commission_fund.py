@@ -11,8 +11,6 @@ from plana.apps.commissions.serializers.fund import FundMinimalDataSerializer
 
 class CommissionFundSerializer(serializers.ModelSerializer):
     """Main serializer."""
-    commission = CommissionMinimalDataSerializer(read_only=True)
-    fund = FundMinimalDataSerializer(read_only=True)
 
     class Meta:
         model = CommissionFund
@@ -30,3 +28,13 @@ class CommissionFundSerializer(serializers.ModelSerializer):
         commission.edition_date = timezone.now()
         commission.save()
         return super().create(validated_data)
+
+
+class CommissionFundReadOnlySerializer(serializers.ModelSerializer):
+    """Main CommissionFund serializer with full data details."""
+    commission = CommissionMinimalDataSerializer(read_only=True)
+    fund = FundMinimalDataSerializer(read_only=True)
+
+    class Meta:
+        model = CommissionFund
+        fields = "__all__"

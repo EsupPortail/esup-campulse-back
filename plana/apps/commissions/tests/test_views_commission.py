@@ -59,6 +59,17 @@ class CommissionDatesViewsTests(TestCase):
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
 
+        cls.member_fund_user_id = 6
+        cls.member_fund_fund_id = 3
+        cls.member_fund_user_name = "membre-culture-actions@mail.tld"
+        cls.member_fund_client = Client()
+        data_member_fund = {
+            "username": cls.member_fund_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.member_fund_client.post(url_login, data_member_fund)
+
+
         cls.student_user_id = 9
         cls.student_user_name = "etudiant-porteur@mail.tld"
         cls.student_client = Client()
@@ -68,6 +79,40 @@ class CommissionDatesViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
+    def test_get_manager_commissions_list(self):
+        """
+        GET /commissions/manage/ .
+
+        - There's at least one commission in the commissions list.
+        - The route can only be accessed by authenticated users.
+        - The route's data is pre-filtered based on user rights on institution of funds in the commissions.
+        - Some additional fields are present through this endpoint
+        """
+        # A manager from an institution with no managed fund retrieves nothing
+        response_no_commission = self.institution_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_no_commission.status_code, status.HTTP_200_OK)
+        content = response_no_commission.data
+        self.assertEqual(len(content["results"]), 0)
+
+        # A manager general retrieves every commission
+        commissions_all_cnt = Commission.objects.count()
+        response_manager = self.general_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        content_manager = response_manager.data
+        self.assertEqual(len(content_manager["results"]), commissions_all_cnt)
+
+        # A fund member retrieves only commissions containing its managed funds
+        commissions_fund_cnt = Commission.objects.filter(commissionfund__fund=self.member_fund_fund_id).count()
+        response_fund = self.member_fund_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_fund.status_code, status.HTTP_200_OK)
+        content_fund = response_fund.data
+        self.assertEqual(len(content_fund["results"]), commissions_fund_cnt)
+        # Additional fields
+        commission_dict = content_fund["results"][0]
+        self.assertIn("submitted_projects_count", commission_dict)
+        self.assertIn("processing_projects_count", commission_dict)
+        self.assertIn("standby_projects_count", commission_dict)
+
     def test_get_commissions_list(self):
         """
         GET /commissions/ .
@@ -75,14 +120,20 @@ class CommissionDatesViewsTests(TestCase):
         - There's at least one commission in the commissions list.
         - The route can be accessed by anyone.
         - We get the same amount of commissions through the model and through the view.
+        - Sensitive fields are not present.
         """
         commissions_cnt = Commission.objects.count()
 
         response = self.client.get(reverse("commission_list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
+        content = response.data
         self.assertEqual(len(content["results"]), commissions_cnt)
+
+        commission_dict = content["results"][0]
+        self.assertNotIn("submitted_projects_count", commission_dict)
+        self.assertNotIn("processing_projects_count", commission_dict)
+        self.assertNotIn("standby_projects_count", commission_dict)
 
     def test_get_commissions_list_filter_is_site(self):
         """
@@ -298,9 +349,42 @@ class CommissionDatesViewsTests(TestCase):
         GET /commissions/{id} .
 
         - An anonymous user can execute this request.
+        - Sensitive fields are not returned.
         """
         response = self.client.get(reverse("commission_retrieve", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Additional fields
+        self.assertNotIn("submitted_projects_count", response.data)
+        self.assertNotIn("processing_projects_count", response.data)
+        self.assertNotIn("standby_projects_count", response.data)
+
+    def test_get_manager_commission_by_id(self):
+        """
+        GET /commissions/{id}/manage/ .
+
+        - The route can only be accessed by authenticated users.
+        - The route's data is pre-filtered based on user rights on institution of funds in the commissions.
+        - Some additional fields are present through this endpoint
+        """
+        # A manager from an institution with no managed fund retrieves nothing
+        response_no_commission = self.institution_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_no_commission.status_code, status.HTTP_404_NOT_FOUND)
+
+        # A manager general retrieves any commission
+        response_manager = self.general_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # A fund member retrieves only commissions containing its managed funds
+        response_fund_not_found = self.member_fund_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 2}))
+        self.assertEqual(response_fund_not_found.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_fund = self.member_fund_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_fund.status_code, status.HTTP_200_OK)
+        content = response_fund.data
+        # Additional fields
+        self.assertIn("submitted_projects_count", content)
+        self.assertIn("processing_projects_count", content)
+        self.assertIn("standby_projects_count", content)
 
     def test_patch_commission_404(self):
         """
