@@ -4,19 +4,20 @@ from django.urls import path
 
 from .views.activity_field import AssociationActivityFieldList
 from .views.association import (
-    AssociationListCreate,
     AssociationNameList,
-    AssociationRetrieveUpdateDestroy,
-    AssociationStatusUpdate, AssociationMembersView,
+    AssociationStatusUpdate, AssociationMembersView, AssociationManageListCreate, AssociationRetrieve,
+    AssociationManageRetrieveUpdateDestroy, AssociationList,
 )
 from .views.association_export import AssociationListExport, AssociationRetrieveExport
 
 urlpatterns = [
-    path("", AssociationListCreate.as_view(), name="association_list_create"),
+    path("", AssociationList.as_view(), name="association_list"),
+    path("<int:pk>", AssociationRetrieve.as_view(), name="association_retrieve"),
+    path("manage", AssociationManageListCreate.as_view(), name="association_manage_list_create"),
     path(
-        "<int:pk>",
-        AssociationRetrieveUpdateDestroy.as_view(),
-        name="association_retrieve_update_destroy",
+        "<int:pk>/manage",
+        AssociationManageRetrieveUpdateDestroy.as_view(),
+        name="association_manage_retrieve_update_destroy",
     ),
     path(
         "<int:pk>/export",
