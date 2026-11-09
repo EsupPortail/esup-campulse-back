@@ -13,6 +13,7 @@ class ProjectFilter(filters.FilterSet):
     year = filters.NumberFilter(field_name="creation_date", lookup_expr="year")
     manual_identifier = filters.CharFilter(method="filter_manual_identifier")
     commission_id = filters.NumberFilter(field_name="projectcommissionfund__commission_fund__commission_id")
+    commission_date = filters.DateFromToRangeFilter(field_name="projectcommissionfund__commission_fund__commission__commission_date")
     project_statuses = ChoiceInFilter(
         field_name='project_status',
         choices=Project.ProjectStatus.choices,
@@ -38,6 +39,7 @@ class ProjectFilter(filters.FilterSet):
         help_text="Filter projects by user first_name, last_name or username (contains)."
     )
     edition_date = filters.DateFromToRangeFilter()
+    category = filters.NumberFilter(field_name="categories")
 
     def filter_name(self, queryset, name, value):
         return queryset.filter(name__nospaces__unaccent__icontains=value.replace(" ", ""))
