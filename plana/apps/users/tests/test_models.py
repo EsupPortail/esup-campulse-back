@@ -1,6 +1,7 @@
 """List of tests done on users models."""
 
 from django.test import Client, TestCase
+from django.utils import timezone
 
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
@@ -44,3 +45,36 @@ class UsersModelsTests(TestCase):
             str(group_user),
             f"{group_user.user} - {group_user.group} - {group_user.institution} - {group_user.fund}",
         )
+
+    def test_association_user_can_be_president(self):
+        """"""
+        asso_user = AssociationUser.objects.filter(
+            is_validated_by_admin=True,
+            is_president=False,
+            can_be_president_to__isnull=True,
+            can_be_president_from__isnull=True
+        ).first()
+        self.assertFalse(asso_user.can_be_president)
+
+        asso_user.is_president = True
+        asso_user.save()
+        self.assertTrue(asso_user.can_be_president)
+
+        asso_user.is_validated_by_admin = False
+        asso_user.save()
+        self.assertFalse(asso_user.can_be_president)
+
+        asso_user.is_validated_by_admin = True
+        asso_user.is_president = False
+        asso_user.can_be_president_from = timezone.make_aware(timezone.datetime(year=2000, month=1, day=1))
+        asso_user.save()
+        self.assertTrue(asso_user.can_be_president)
+
+        asso_user.can_be_president_to = timezone.make_aware(timezone.datetime(year=2001, month=1, day=1))
+        asso_user.save()
+        self.assertFalse(asso_user.can_be_president)
+
+        asso_user.can_be_president_from = None
+        asso_user.can_be_president_to = timezone.make_aware(timezone.datetime(year=2099, month=1, day=1))
+        asso_user.save()
+        self.assertTrue(asso_user.can_be_president)

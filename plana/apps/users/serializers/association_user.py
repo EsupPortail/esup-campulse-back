@@ -20,6 +20,7 @@ class AssociationUserSerializer(serializers.ModelSerializer):
 
     user = UserNameSerializer(read_only=True)
     association = AssociationMandatoryDataSerializer(read_only=True)
+    can_be_president = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = AssociationUser
