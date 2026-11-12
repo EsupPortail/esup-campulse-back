@@ -23,7 +23,7 @@ variables:
   POSTGRES_USER: plana
   POSTGRES_PASSWORD: plana
   DJANGO_SETTINGS_MODULE: plana.settings.unittest
-  PYTHON_VERSION: "3.9"
+  PYTHON_VERSION: "3.12"
   CONTAINER_TEST_IMAGE: $CI_REGISTRY/dnum/campulse-backend:$CI_COMMIT_REF_NAME
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/dnum/campulse-backend:latest
   EXTRA_ARGS: ""

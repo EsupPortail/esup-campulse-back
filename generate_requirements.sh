@@ -5,7 +5,7 @@ uv pip compile pyproject.toml -o requirements/common.txt --index-strategy unsafe
 
 for env in saas test preprod prod; do
     echo "📦️ generating $env.txt"
-    uv pip compile pyproject.toml --group $env -o requirements/$env.txt --index-strategy unsafe-best-match --no-annotate
+    uv pip compile pyproject.toml --group $env -o requirements/$env.txt --index-strategy unsafe-best-match --emit-index-url --no-annotate
 done
 
 echo "📦️ generating dev.txt"
