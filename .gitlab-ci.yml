@@ -16,7 +16,7 @@ services:
   image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
   before_script:
     - apt-get update && apt-get install -y age
-    - curl -sSL https://install.python-poetry.org | python3 - --version 1.8.4
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
 
 variables:
   POSTGRES_DB: plana_test
@@ -65,14 +65,14 @@ unittest:
   image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
   script:
     - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
-    - pip3 install -r requirements/dev.txt
+    - uv sync --frozen
     - python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
     - touch keys/jwt-private-key.pem
     - python manage.py generate_age_keys
     - touch keys/age-public-key.key
     - touch keys/age-private-key.key
-    - tox
+    - uv run tox
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     paths:
