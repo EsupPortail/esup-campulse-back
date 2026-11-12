@@ -1,13 +1,13 @@
 #!/bin/bash
 
 echo "📦️ generating common.txt"
-poetry export -o requirements/common.txt --without-hashes
+uv pip compile pyproject.toml -o requirements/common.txt --index-strategy unsafe-best-match --no-annotate
 
-for env in saas test preprod prod;
-do
-echo "📦️ generating $env.txt"
-poetry export -o requirements/$env.txt --with $env
+for env in saas test preprod prod; do
+    echo "📦️ generating $env.txt"
+    uv pip compile pyproject.toml --group $env -o requirements/$env.txt --index-strategy unsafe-best-match --no-annotate
 done
 
 echo "📦️ generating dev.txt"
-poetry export -o requirements/dev.txt --with dev --without-hashes
+uv pip compile pyproject.toml -o requirements/dev.txt --index-strategy unsafe-best-match --no-annotate
+

@@ -30,6 +30,7 @@ pip-log.txt
 .tox
 nosetests.xml
 htmlcov/
+coverage.xml
 
 # Translations
 *.mo
@@ -61,5 +62,7 @@ keys/*
 # Docker
 docker/**/.env.dev
 
+# Env
 .env
+.venv
 logs
