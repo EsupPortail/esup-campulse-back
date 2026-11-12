@@ -64,10 +64,10 @@ unittest:
   extends: .python-image
   script:
     - uv sync --frozen
-    - python manage.py generate_jwt_keys
+    - uv run python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
     - touch keys/jwt-private-key.pem
-    - python manage.py generate_age_keys
+    - uv run python manage.py generate_age_keys
     - touch keys/age-public-key.key
     - touch keys/age-private-key.key
     - uv run tox
