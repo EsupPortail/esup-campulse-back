@@ -1,8 +1,7 @@
 version: "3"
 services:
-  db:
-    image: "postgres_12_fr"
-    build: ./docker
+  plana_db:
+    image: "postgres:17"
     container_name: plana_db
     restart: unless-stopped
     environment:
