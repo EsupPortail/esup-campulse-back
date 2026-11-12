@@ -15,7 +15,7 @@ services:
     - cluster
   image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
   before_script:
-    - apt-get update && apt-get install -y age
+    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 age
     - curl -LsSf https://astral.sh/uv/install.sh | sh
     - export PATH="$HOME/.local/bin:$PATH"
 
@@ -61,11 +61,8 @@ sonarqube-check:
 
 unittest:
   stage: test
-  tags:
-    - cluster
-  image: registry.app.unistra.fr/docker/python$PYTHON_VERSION-ci:latest
+  extends: .python-image
   script:
-    - apt-get update && apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
     - uv sync --frozen
     - python manage.py generate_jwt_keys
     - touch keys/jwt-public-key.pem
