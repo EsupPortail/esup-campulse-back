@@ -30,6 +30,7 @@ class CommissionManageSerializer(serializers.ModelSerializer):
     submitted_projects_count = serializers.IntegerField(read_only=True, default=None)
     processing_projects_count = serializers.IntegerField(read_only=True, default=None)
     standby_projects_count = serializers.IntegerField(read_only=True, default=None)
+    overdue_review_count = serializers.IntegerField(read_only=True, default=None)
 
     def get_funds(self, obj) -> list[dict]:
         funds = Fund.objects.filter(commissionfund__commission=obj)

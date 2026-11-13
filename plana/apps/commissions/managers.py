@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Count, Q
 
+from plana.apps.contents.models import Setting
+
 
 class CommissionQuerySet(models.QuerySet):
 
@@ -38,6 +40,7 @@ class CommissionQuerySet(models.QuerySet):
             .distinct()
         )
 
+    # TODO : unittests
     def annotate_projects_counts(self):
         """
         Annotate some projects counts for each commission :
@@ -46,6 +49,9 @@ class CommissionQuerySet(models.QuerySet):
         - standby_projects_count for all submitted projects waiting for bearer updates
         """
         from plana.apps.projects.models import Project
+        today = datetime.date.today()
+        review_due_date = today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION"))
+
         return (
             self.annotate(
                 submitted_projects_count=Count(
@@ -60,11 +66,20 @@ class CommissionQuerySet(models.QuerySet):
                         commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_PROCESSING),
                     distinct=True,
                 ),
+                # TODO : Count with future review_draft_processed status too
                 standby_projects_count=Count(
                     "commissionfund__projectcommissionfund__project",
                     filter=Q(
                         commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED),
                     distinct=True,
                 ),
+                overdue_review_count=Count(
+                    "commissionfund__projectcommissionfund__project",
+                    filter=Q(
+                        commissionfund__projectcommissionfund__project__project_status=Project.ProjectStatus.PROJECT_REVIEW_DRAFT,
+                        commissionfund__projectcommissionfund__project__planned_end_date__lte=review_due_date,
+                    ),
+                    distinct=True,
+                )
             )
         )
