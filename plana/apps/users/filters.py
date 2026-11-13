@@ -10,19 +10,28 @@ User = get_user_model()
 
 class UserFilter(filters.FilterSet):
     name = filters.CharFilter(method="filter_name")
+    first_name = filters.CharFilter(method="filter_name")
+    last_name = filters.CharFilter(method="filter_name")
     email = filters.CharFilter(method="filter_email")
     is_cas = filters.BooleanFilter(method="filter_is_cas")
     association_id = filters.NumberFilter(field_name="associations__id", lookup_expr="exact")
 
     class Meta:
         model = User
-        fields = ["is_validated_by_admin", "name", "email", "is_cas", "association_id"]
+        fields = ["is_validated_by_admin", "name", "first_name", "last_name", "email", "is_cas", "association_id"]
 
     def filter_name(self, queryset, name, value):
-        return queryset.filter(
-            Q(first_name__nospaces__unaccent__icontains=value.strip().replace(" ", ""))
-            | Q(last_name__nospaces__unaccent__icontains=value.strip().replace(" ", ""))
-        )
+        """Filter users by global name, first name or last name, always with case-insensitive"""
+        cleaned_value = value.strip().replace(" ", "")
+
+        if name == "name":
+            return queryset.filter(
+                Q(first_name__nospaces__unaccent__icontains=value.strip().replace(" ", ""))
+                | Q(last_name__nospaces__unaccent__icontains=value.strip().replace(" ", ""))
+            )
+
+        lookup_kwargs = {f"{name}__nospaces__unaccent__icontains": cleaned_value}
+        return queryset.filter(**lookup_kwargs)
 
     def filter_email(self, queryset, name, value):
         return queryset.filter(email__nospaces__unaccent__icontains=value.strip().replace(" ", ""))

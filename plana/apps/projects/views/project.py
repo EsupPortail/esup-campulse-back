@@ -30,6 +30,7 @@ from plana.apps.projects.serializers.project import (
 )
 from plana.apps.users.models.user import AssociationUser, User
 from plana.libs.mail_template.models import MailTemplate
+from plana.pagination import BasePageNumberPagination
 from plana.utils import send_mail
 from ..filters import ProjectFilter
 
@@ -47,6 +48,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
     filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
     filterset_class = ProjectFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    pagination_class = BasePageNumberPagination
     search_fields = [
         "name__nospaces__unaccent",
         "creation_date__year",
@@ -101,10 +103,15 @@ class ProjectListCreate(generics.ListCreateAPIView):
             models.Prefetch(
                 'projectcommissionfund_set',
                 queryset=ProjectCommissionFund.objects.select_related(
-                    'commission_fund__commission'
+                    'commission_fund__commission',
+                    'commission_fund__fund'
                 )
             )
         ).distinct()
+
+        # FIXME : temporary solution to exclude draft projects for managers
+        if request.user.is_staff:
+            queryset = queryset.exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT)
 
         return queryset
 
@@ -114,21 +121,6 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             self.serializer_class = ProjectPartialDataSerializer
         return super().get_serializer_class()
-
-    @capture_queries()
-    def get(self, request, *args, **kwargs):
-        """List all projects linked to a user, or all projects with all their details (manager)."""
-        queryset = self.filter_queryset(self.get_queryset())
-
-        for project in queryset:
-            pcf = project.projectcommissionfund_set.all()
-            if pcf:
-                project.commission = pcf[0].commission_fund.commission
-            else:
-                project.commission = None
-
-        serializer = self.get_serializer(queryset, many=True)
-        return response.Response(serializer.data)
 
     @extend_schema(
         responses={
@@ -268,7 +260,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-    queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
+    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").prefetch_related("projectcommissionfund_set")
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

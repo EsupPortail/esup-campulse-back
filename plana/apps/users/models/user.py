@@ -2,10 +2,9 @@
 
 import datetime
 
-from allauth.account.models import EmailAddress
-from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
@@ -33,6 +32,21 @@ class AssociationUser(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.association}"
+
+    @property
+    def can_be_president(self) -> bool:
+        """Defines if an asso-user link is a president one or not based on several parameters."""
+        if not self.is_validated_by_admin:
+            return False
+        if self.is_president:
+            return True
+        if self.can_be_president_from is None and self.can_be_president_to is None:
+            return False
+
+        now = timezone.now()
+        after_start = self.can_be_president_from is None or self.can_be_president_from <= now
+        before_end = self.can_be_president_to is None or self.can_be_president_to >= now
+        return after_start and before_end
 
     class Meta:
         verbose_name = _("User Association")

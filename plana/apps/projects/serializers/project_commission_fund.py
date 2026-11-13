@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from plana.apps.commissions.models import CommissionFund
+from plana.apps.commissions.serializers.commission_fund import CommissionFundReadOnlySerializer
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
 from plana.apps.projects.utils import send_pcf_notification_mail_with_attachments
@@ -19,6 +20,15 @@ class ProjectCommissionFundSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectCommissionFund
         fields = "__all__"
+
+
+class ProjectCommissionFundMinimalDataSerializer(serializers.ModelSerializer):
+    """Main serializer."""
+    commission_fund = CommissionFundReadOnlySerializer(read_only=True)
+
+    class Meta:
+        model = ProjectCommissionFund
+        fields = ["pk", "project_id", "is_validated_by_admin", "amount_earned", "amount_asked", "commission_fund"]
 
 
 class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):

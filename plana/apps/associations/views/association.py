@@ -4,11 +4,12 @@ import datetime
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import filters, generics, response, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
 
 from plana.apps.associations.models.association import Association
@@ -27,18 +28,43 @@ from plana.apps.institutions.models.institution import Institution
 from plana.apps.users.models.user import AssociationUser
 from plana.decorators import capture_queries
 from plana.libs.mail_template.models import MailTemplate
+from plana.pagination import BasePageNumberPagination
 from plana.utils import send_mail
 
-from .. import permissions
-from ..filters import AssociationFilter, AssociationNameFilter
-from ..permissions import ViewAssociationMembersPermission
-from ...users.serializers.association_user import AssociationUserSerializer
+from plana.apps.associations import permissions
+from plana.apps.associations.filters import AssociationFilter, AssociationNameFilter, BaseAssociationFilter
+from plana.apps.users.serializers.association_user import AssociationUserSerializer
 
 
-class AssociationListCreate(generics.ListCreateAPIView):
+class AssociationList(generics.ListAPIView):
     """/associations/ route."""
 
+    serializer_class = AssociationPartialDataSerializer
     filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    pagination_class = BasePageNumberPagination
+    permission_classes = [AllowAny]
+    filterset_class = BaseAssociationFilter
+    queryset = (
+        Association.objects.filter(is_enabled=True, is_public=True)
+        .select_related('institution', 'institution_component', 'activity_field')
+        .order_by("name")
+    )
+    search_fields = [
+        "name__nospaces__unaccent",
+        "acronym__nospaces__unaccent",
+        "activity_field__name__nospaces__unaccent",
+        "institution__name__nospaces__unaccent",
+        "institution_component__name__nospaces__unaccent",
+    ]
+
+
+class AssociationManageListCreate(generics.ListCreateAPIView):
+    """/associations/manage/ route."""
+
+    serializer_class = AssociationPartialDataSerializer
+    filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
+    pagination_class = BasePageNumberPagination
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     filterset_class = AssociationFilter
     queryset = (
         Association.objects.all()
@@ -53,13 +79,6 @@ class AssociationListCreate(generics.ListCreateAPIView):
         "institution_component__name__nospaces__unaccent",
     ]
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions]
-        return super().get_permissions()
-
     def get_serializer_class(self):
         if self.request.method == "GET":
             self.serializer_class = AssociationPartialDataSerializer
@@ -68,35 +87,34 @@ class AssociationListCreate(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def get_queryset(self):
-        if self.request.user.is_anonymous:
-            return self.queryset.filter(is_enabled=True, is_public=True)
-
-        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_enabled"):
-            return self.queryset.filter(is_enabled=True)
-
-        if not self.request.user.is_anonymous and not self.request.user.has_perm("associations.view_association_not_public"):
-            return self.queryset.filter(is_public=True)
-
-        return self.queryset
+        manager_institutions = self.request.user.get_user_managed_institutions().values_list("pk")
+        member_associations = self.request.user.get_user_associations().values_list("pk")
+        return self.queryset.filter(
+            Q(institution__in=manager_institutions) | Q(id__in=member_associations)
+        ).distinct()
 
 
-class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class AssociationRetrieve(generics.RetrieveAPIView):
     """/associations/{id} route."""
+
+    queryset = (
+        Association.objects.filter(is_enabled=True, is_public=True)
+        .select_related('institution', 'institution_component', 'activity_field')
+    )
+    permission_classes = [AllowAny]
+    serializer_class = AssociationAllDataReadSerializer
+
+
+class AssociationManageRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    """/associations/{id}/manage/ route."""
 
     queryset = (
         Association.objects.all()
         .select_related('institution', 'institution_component', 'activity_field')
     )
+    serializer_class = AssociationAllDataReadSerializer
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationManagePermission]
     http_method_names = ["get", "patch", "delete"]
-
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = [AllowAny, permissions.AssociationRetrievePermission]
-        elif self.request.method == "PATCH":
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationUpdatePermission]
-        else:
-            self.permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.AssociationDestroyPermission]
-        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -105,8 +123,22 @@ class AssociationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             self.serializer_class = AssociationAllDataUpdateSerializer
         return super().get_serializer_class()
 
+    def get_queryset(self):
+        manager_institutions = self.request.user.get_user_managed_institutions().values_list("pk")
+        member_associations = self.request.user.get_user_associations().values_list("pk")
+        return self.queryset.filter(
+            Q(institution__in=manager_institutions) | Q(id__in=member_associations)
+        ).distinct()
+
+    def destroy(self, request, *args, **kwargs):
+        """Custom destroy to check if the association is still enabled before deletion."""
+        instance = self.get_object()
+        if instance.is_enabled:
+            raise ValidationError({"association_enabled": _("Can't delete an enabled association.")})
+        return super().destroy(request, *args, **kwargs)
+
     def perform_destroy(self, instance):
-        """Custom destroy to send a mail to the deleted association"""
+        """Custom perform_destroy to send a mail to the deleted association"""
         if instance.email:
             current_site = get_current_site(self.request)
             managers_emails = instance.institution.default_institution_managers().values_list("email", flat=True)
@@ -277,7 +309,7 @@ class AssociationMembersView(generics.ListAPIView):
     Only if president of given association or association managed by auth user, or member of the association
     """
 
-    permission_classes = [IsAuthenticated, DjangoModelPermissions, ViewAssociationMembersPermission]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, permissions.ViewAssociationMembersPermission]
     queryset = AssociationUser.objects.filter(is_validated_by_admin=True).select_related('association', 'user')
     serializer_class = AssociationUserSerializer
 

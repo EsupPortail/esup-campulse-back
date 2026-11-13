@@ -9,11 +9,12 @@ from rest_framework import serializers
 
 from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
 from plana.apps.commissions.models import Commission
-from plana.apps.commissions.serializers.commission import CommissionSerializer
+from plana.apps.commissions.serializers.commission import CommissionMinimalDataSerializer
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
+from plana.apps.projects.serializers.project_commission_fund import ProjectCommissionFundMinimalDataSerializer
 from plana.apps.users.serializers.association_user import AssociationUserSerializer
 from plana.apps.users.serializers.user import UserNameSerializer
 
@@ -22,10 +23,11 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Main serializer."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commission = CommissionMinimalDataSerializer(read_only=True)
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
+    project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
 
     class Meta:
         model = Project
@@ -41,7 +43,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "association_user",
             "partner_association",
             "categories",
-            "commissions",
+            "commission",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
@@ -59,6 +61,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "creation_date",
             "edition_date",
             "processing_date",
+            "project_commission_funds",
         ]
 
 
@@ -66,7 +69,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
     """Main serializer without project_status."""
 
     categories = CategorySerializer(many=True, read_only=True)
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commission = CommissionMinimalDataSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -81,7 +84,7 @@ class ProjectUpdateSerializer(serializers.ModelSerializer):
             "association_user",
             "partner_association",
             "categories",
-            "commissions",
+            "commission",
             "budget_previous_edition",
             "target_audience",
             "amount_students_audience",
@@ -112,11 +115,12 @@ class ProjectUpdateManagerSerializer(serializers.ModelSerializer):
 class ProjectPartialDataSerializer(serializers.ModelSerializer):
     """Serializer for project list."""
 
-    commission = CommissionSerializer(many=False, read_only=True)
+    commission = CommissionMinimalDataSerializer(many=False, read_only=True)
     budget_file = serializers.SerializerMethodField("get_budget_file")
     association = AssociationMandatoryDataSerializer(read_only=True)
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
+    project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_budget_file(self, project):
@@ -144,6 +148,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "edition_date",
             "project_status",
             "budget_file",
+            "project_commission_funds",
         ]
 
 

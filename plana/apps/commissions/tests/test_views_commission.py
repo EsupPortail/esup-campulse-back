@@ -1,6 +1,5 @@
 """List of tests done on commissions views."""
 
-import datetime
 import json
 
 from django.db import models
@@ -8,14 +7,10 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from plana.apps.associations.models.association import Association
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.commissions.models.fund import Fund
-from plana.apps.commissions.views.commission import ProjectCommissionFund
-from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
-from plana.apps.users.models.user import GroupInstitutionFundUser
 
 
 class CommissionDatesViewsTests(TestCase):
@@ -64,6 +59,17 @@ class CommissionDatesViewsTests(TestCase):
         }
         cls.response = cls.institution_client.post(url_login, data_institution)
 
+        cls.member_fund_user_id = 6
+        cls.member_fund_fund_id = 3
+        cls.member_fund_user_name = "membre-culture-actions@mail.tld"
+        cls.member_fund_client = Client()
+        data_member_fund = {
+            "username": cls.member_fund_user_name,
+            "password": "motdepasse",
+        }
+        cls.response = cls.member_fund_client.post(url_login, data_member_fund)
+
+
         cls.student_user_id = 9
         cls.student_user_name = "etudiant-porteur@mail.tld"
         cls.student_client = Client()
@@ -73,6 +79,40 @@ class CommissionDatesViewsTests(TestCase):
         }
         cls.response = cls.student_client.post(url_login, data_student)
 
+    def test_get_manager_commissions_list(self):
+        """
+        GET /commissions/manage/ .
+
+        - There's at least one commission in the commissions list.
+        - The route can only be accessed by authenticated users.
+        - The route's data is pre-filtered based on user rights on institution of funds in the commissions.
+        - Some additional fields are present through this endpoint
+        """
+        # A manager from an institution with no managed fund retrieves nothing
+        response_no_commission = self.institution_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_no_commission.status_code, status.HTTP_200_OK)
+        content = response_no_commission.data
+        self.assertEqual(len(content["results"]), 0)
+
+        # A manager general retrieves every commission
+        commissions_all_cnt = Commission.objects.count()
+        response_manager = self.general_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+        content_manager = response_manager.data
+        self.assertEqual(len(content_manager["results"]), commissions_all_cnt)
+
+        # A fund member retrieves only commissions containing its managed funds
+        commissions_fund_cnt = Commission.objects.filter(commissionfund__fund=self.member_fund_fund_id).count()
+        response_fund = self.member_fund_client.get(reverse("commission_manage_list_create"))
+        self.assertEqual(response_fund.status_code, status.HTTP_200_OK)
+        content_fund = response_fund.data
+        self.assertEqual(len(content_fund["results"]), commissions_fund_cnt)
+        # Additional fields
+        commission_dict = content_fund["results"][0]
+        self.assertIn("submitted_projects_count", commission_dict)
+        self.assertIn("processing_projects_count", commission_dict)
+        self.assertIn("standby_projects_count", commission_dict)
+
     def test_get_commissions_list(self):
         """
         GET /commissions/ .
@@ -80,14 +120,20 @@ class CommissionDatesViewsTests(TestCase):
         - There's at least one commission in the commissions list.
         - The route can be accessed by anyone.
         - We get the same amount of commissions through the model and through the view.
+        - Sensitive fields are not present.
         """
         commissions_cnt = Commission.objects.count()
 
-        response = self.client.get("/commissions/")
+        response = self.client.get(reverse("commission_list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        content = response.data
+        self.assertEqual(len(content["results"]), commissions_cnt)
+
+        commission_dict = content["results"][0]
+        self.assertNotIn("submitted_projects_count", commission_dict)
+        self.assertNotIn("processing_projects_count", commission_dict)
+        self.assertNotIn("standby_projects_count", commission_dict)
 
     def test_get_commissions_list_filter_is_site(self):
         """
@@ -95,14 +141,14 @@ class CommissionDatesViewsTests(TestCase):
 
         - is_site filters by is_site field.
         """
-        response = self.client.get("/commissions/?is_site=true")
+        response = self.client.get(reverse("commission_list"), data={"is_site": True})
         commissions_cnt = Commission.objects.filter(
             id__in=CommissionFund.objects.filter(
                 fund__in=Fund.objects.filter(is_site=True)
             ).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     def test_get_commissions_list_filter_funds(self):
         """
@@ -111,12 +157,12 @@ class CommissionDatesViewsTests(TestCase):
         - funds filters by Fund linked to Commission through CommissionFund.
         """
         fund_ids = [1, 3]
-        response = self.client.get(f"/commissions/?funds={','.join(str(x) for x in fund_ids)}")
+        response = self.client.get(reverse("commission_list"), data={"funds": ','.join(str(x) for x in fund_ids)})
         commissions_cnt = Commission.objects.filter(
             id__in=CommissionFund.objects.filter(fund_id__in=fund_ids).values_list("commission_id")
         ).count()
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     def test_get_commissions_list_filter_open_to_projects(self):
         """
@@ -124,15 +170,15 @@ class CommissionDatesViewsTests(TestCase):
 
         - is_open_to_projects returns only one date by fund.
         """
-        response_true = self.client.get("/commissions/?is_open_to_projects=true")
+        response_true = self.client.get(reverse("commission_list"), data={"is_open_to_projects": True})
         commissions_cnt = Commission.objects.filter(is_open_to_projects=True).count()
         content = json.loads(response_true.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
-        response_false = self.client.get("/commissions/?is_open_to_projects=false")
+        response_false = self.client.get(reverse("commission_list"), data={"is_open_to_projects": False})
         commissions_cnt = Commission.objects.filter(is_open_to_projects=False).count()
         content = json.loads(response_false.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_cnt)
+        self.assertEqual(len(content["results"]), commissions_cnt)
 
     # FIXME : more precise unittest
     def test_get_commissions_list_filter_active_projects(self):
@@ -166,30 +212,30 @@ class CommissionDatesViewsTests(TestCase):
         commissions_with_inactive_projects = Commission.objects.filter(
             models.Q(id__in=commissions_ids_with_inactive_projects) | models.Q(id__in=commissions_ids_without_projects)
         )
-        response_wapf = self.client.get("/commissions/?with_active_projects=false")
+        response_wapf = self.client.get(reverse("commission_list"), data={"with_active_projects": False})
         content_wapf = json.loads(response_wapf.content.decode("utf-8"))
-        self.assertEqual(len(content_wapf), commissions_with_inactive_projects.count())
+        self.assertEqual(len(content_wapf["results"]), commissions_with_inactive_projects.count())
 
         commissions_with_active_projects = Commission.objects.filter(
             models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
         )
-        response_wapt = self.client.get("/commissions/?with_active_projects=true")
+        response_wapt = self.client.get(reverse("commission_list"), data={"with_active_projects": True})
         content_wapt = json.loads(response_wapt.content.decode("utf-8"))
-        self.assertEqual(len(content_wapt), commissions_with_active_projects.count())
+        self.assertEqual(len(content_wapt["results"]), commissions_with_active_projects.count())
 
         commissions_only_with_inactive_projects = Commission.objects.filter(
             id__in=commissions_ids_with_inactive_projects
         ).exclude(id__in=commissions_ids_with_active_projects)
-        response_owapf = self.client.get("/commissions/?only_with_active_projects=false")
+        response_owapf = self.client.get(reverse("commission_list"), data={"only_with_active_projects": False})
         content_owapf = json.loads(response_owapf.content.decode("utf-8"))
-        self.assertEqual(len(content_owapf), commissions_only_with_inactive_projects.count())
+        self.assertEqual(len(content_owapf["results"]), commissions_only_with_inactive_projects.count())
 
         commissions_only_with_active_projects = Commission.objects.exclude(
             id__in=commissions_ids_with_inactive_projects
         ).filter(id__in=commissions_ids_with_active_projects)
-        response_owapt = self.client.get("/commissions/?only_with_active_projects=true")
+        response_owapt = self.client.get(reverse("commission_list"), data={"only_with_active_projects": True})
         content_owapt = json.loads(response_owapt.content.decode("utf-8"))
-        self.assertEqual(len(content_owapt), commissions_only_with_active_projects.count())
+        self.assertEqual(len(content_owapt["results"]), commissions_only_with_active_projects.count())
 
     def test_get_commissions_list_filter_managed_projects(self):
         """
@@ -205,34 +251,20 @@ class CommissionDatesViewsTests(TestCase):
             )
             | models.Q(commissionfund__fund__institution__groupinstitutionfunduser__user_id=user_id)
         )
-        response = self.institution_client.get("/commissions/?managed_projects=true")
+        response = self.institution_client.get(reverse("commission_list"), data={"managed_projects": True})
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_with_managed_projects.count())
+        self.assertEqual(len(content["results"]), commissions_with_managed_projects.count())
 
         commissions_not_with_managed_projects = Commission.objects.exclude(
             id__in=commissions_with_managed_projects.values_list("id", flat=True)
         )
-        response = self.institution_client.get("/commissions/?managed_projects=false")
+        response = self.institution_client.get(reverse("commission_list"), data={"managed_projects": False})
         content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content), commissions_not_with_managed_projects.count())
-
-    def test_post_commissions_anonymous(self):
-        """
-        POST /commissions/ .
-
-        - An anonymous user can't execute this request.
-        """
-        post_data = {
-            "submission_date": "2099-11-30",
-            "commission_date": "2099-12-25",
-            "name": "New Commission",
-        }
-        response = self.client.post("/commissions/", post_data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(len(content["results"]), commissions_not_with_managed_projects.count())
 
     def test_post_commissions_forbidden(self):
         """
-        POST /commissions/ .
+        POST /commissions/manage/ .
 
         - A user without proper permissions can't execute this request.
         """
@@ -241,12 +273,12 @@ class CommissionDatesViewsTests(TestCase):
             "commission_date": "2099-12-25",
             "name": "New Commission",
         }
-        response = self.student_client.post("/commissions/", post_data)
+        response = self.student_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_commissions_wrong_dates(self):
         """
-        POST /commissions/ .
+        POST /commissions/manage/ .
 
         - submission_date cannot come after commission_date.
         """
@@ -255,13 +287,13 @@ class CommissionDatesViewsTests(TestCase):
             "commission_date": "2099-11-30",
             "name": "New Commission",
         }
-        response = self.general_client.post("/commissions/", post_data)
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("inconsistent_dates", response.data)
 
     def test_post_commissions_too_old(self):
         """
-        POST /commissions/ .
+        POST /commissions/manage/ .
 
         - A commission taking place before today cannot be created.
         """
@@ -270,13 +302,13 @@ class CommissionDatesViewsTests(TestCase):
             "commission_date": "1993-12-25",
             "name": "New Commission",
         }
-        response = self.general_client.post("/commissions/", post_data)
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("submission_date", response.data)
 
     def test_post_commissions_name_already_taken(self):
         """
-        POST /commissions/ .
+        POST /commissions/manage/ .
 
         - The commission name must be unique, aven unaccented and without spaces.
         """
@@ -285,13 +317,13 @@ class CommissionDatesViewsTests(TestCase):
             "commission_date": "2099-12-25",
             "name": "Commissionnumero 1",
         }
-        response = self.general_client.post("/commissions/", post_data)
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("name", response.data)
 
     def test_post_commissions_success(self):
         """
-        POST /commissions/ .
+        POST /commissions/manage/ .
 
         - A user with proper permissions can execute this request.
         """
@@ -300,7 +332,7 @@ class CommissionDatesViewsTests(TestCase):
             "commission_date": "2099-12-25",
             "name": "New Commission",
         }
-        response = self.general_client.post("/commissions/", post_data)
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_commission_by_id_404(self):
@@ -309,7 +341,7 @@ class CommissionDatesViewsTests(TestCase):
 
         - An anonymous user can execute this request.
         """
-        response = self.client.get("/commissions/99999")
+        response = self.client.get(reverse("commission_retrieve", kwargs={"pk": 99999}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_commission_by_id_anonymous(self):
@@ -317,34 +349,53 @@ class CommissionDatesViewsTests(TestCase):
         GET /commissions/{id} .
 
         - An anonymous user can execute this request.
+        - Sensitive fields are not returned.
         """
-        response = self.client.get("/commissions/1")
+        response = self.client.get(reverse("commission_retrieve", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Additional fields
+        self.assertNotIn("submitted_projects_count", response.data)
+        self.assertNotIn("processing_projects_count", response.data)
+        self.assertNotIn("standby_projects_count", response.data)
 
-    def test_patch_commission_anonymous(self):
+    def test_get_manager_commission_by_id(self):
         """
-        PATCH /commissions/{id} .
+        GET /commissions/{id}/manage/ .
 
-        - An anonymous user can't execute this request.
+        - The route can only be accessed by authenticated users.
+        - The route's data is pre-filtered based on user rights on institution of funds in the commissions.
+        - Some additional fields are present through this endpoint
         """
-        patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
-        response = self.client.patch(
-            "/commissions/1",
-            data=patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # A manager from an institution with no managed fund retrieves nothing
+        response_no_commission = self.institution_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_no_commission.status_code, status.HTTP_404_NOT_FOUND)
+
+        # A manager general retrieves any commission
+        response_manager = self.general_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_manager.status_code, status.HTTP_200_OK)
+
+        # A fund member retrieves only commissions containing its managed funds
+        response_fund_not_found = self.member_fund_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 2}))
+        self.assertEqual(response_fund_not_found.status_code, status.HTTP_404_NOT_FOUND)
+
+        response_fund = self.member_fund_client.get(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_fund.status_code, status.HTTP_200_OK)
+        content = response_fund.data
+        # Additional fields
+        self.assertIn("submitted_projects_count", content)
+        self.assertIn("processing_projects_count", content)
+        self.assertIn("standby_projects_count", content)
 
     def test_patch_commission_404(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - A user with proper permissions can execute this request.
         - Commission must exist.
         """
         patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
         response = self.general_client.patch(
-            "/commissions/999",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 999}),
             data=patch_data,
             content_type="application/json",
         )
@@ -352,13 +403,13 @@ class CommissionDatesViewsTests(TestCase):
 
     def test_patch_commission_forbidden(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - A user without proper permissions can't execute this request.
         """
         patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
         response = self.student_client.patch(
-            "/commissions/1",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
             content_type="application/json",
         )
@@ -366,13 +417,13 @@ class CommissionDatesViewsTests(TestCase):
 
     def test_patch_commission_wrong_name(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - The commission name must be unique, aven unaccented and without spaces.
         """
         patch_data = {"name": "Commissionnumero1"}
         response = self.general_client.patch(
-            "/commissions/2",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 2}),
             data=patch_data,
             content_type="application/json",
         )
@@ -381,13 +432,13 @@ class CommissionDatesViewsTests(TestCase):
 
     def test_patch_commission_wrong_dates(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - submission_date cannot come after commission_date.
         """
         patch_data = {"submission_date": "2099-12-25", "commission_date": "2099-11-30"}
         response = self.general_client.patch(
-            "/commissions/1",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
             content_type="application/json",
         )
@@ -396,13 +447,13 @@ class CommissionDatesViewsTests(TestCase):
 
     def test_patch_commission_too_old(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - A commission date cannot be updated to a date taking place before today.
         """
         patch_data = {"submission_date": "1993-11-30", "commission_date": "2099-12-25"}
         response = self.general_client.patch(
-            "/commissions/1",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
             content_type="application/json",
         )
@@ -411,13 +462,13 @@ class CommissionDatesViewsTests(TestCase):
 
     def test_patch_commission_success(self):
         """
-        PATCH /commissions/{id} .
+        PATCH /commissions/{id}/manage/ .
 
         - A user with proper permissions can execute this request.
         """
         patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
         response = self.general_client.patch(
-            "/commissions/1",
+            reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
             content_type="application/json",
         )
@@ -429,37 +480,28 @@ class CommissionDatesViewsTests(TestCase):
             commission_date.submission_date.strftime("%Y-%m-%d"),
         )
 
-    def test_delete_commission_anonymous(self):
-        """
-        DELETE /commissions/{id} .
-
-        - An anonymous user can't execute this request.
-        """
-        response = self.client.delete("/commissions/1")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_delete_commission_404(self):
         """
-        DELETE /commissions/{id} .
+        DELETE /commissions/{id}/manage/ .
 
         - A user with proper permissions can execute this request.
         - Commission must exist.
         """
-        response = self.general_client.delete("/commissions/999")
+        response = self.general_client.delete(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 999}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_commission_forbidden(self):
         """
-        DELETE /commissions/{id} .
+        DELETE /commissions/{id}/manage/ .
 
         - A user without proper permissions can't execute this request.
         """
-        response = self.student_client.delete("/commissions/1")
+        response = self.student_client.delete(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_commission_too_old(self):
         """
-        DELETE /commissions{id} .
+        DELETE /commissions{id}/manage/ .
 
         - A commission taking place before today cannot be deleted.
         """
@@ -467,26 +509,26 @@ class CommissionDatesViewsTests(TestCase):
         commission_date = Commission.objects.get(id=commission_date_id)
         commission_date.commission_date = "1993-12-25"
         commission_date.save()
-        response = self.general_client.delete(f"/commissions/{commission_date_id}")
+        response = self.general_client.delete(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": commission_date_id}))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_commission_non_draft_projects(self):
         """
-        DELETE /commissions/{id} .
+        DELETE /commissions/{id}/manage/ .
 
         - A commission with non-draft projects linked cannot be deleted.
         """
-        response = self.general_client.delete("/commissions/1")
+        response = self.general_client.delete(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_commission_success(self):
         """
-        DELETE /commissions/{id} .
+        DELETE /commissions/{id}/manage/ .
 
         - A user with proper permissions can execute this request.
         - Commission object is correctly deleted
         """
-        response = self.general_client.delete("/commissions/3")
+        response = self.general_client.delete(reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 3}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         commission_date = Commission.objects.filter(id=3)

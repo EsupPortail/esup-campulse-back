@@ -2,14 +2,20 @@
 
 from rest_framework import serializers
 
-from plana.apps.commissions.serializers.commission import CommissionSerializer
+from plana.apps.associations.serializers.association import AssociationMandatoryDataSerializer
+from plana.apps.commissions.serializers.commission import CommissionMinimalDataSerializer
 from plana.apps.projects.models.project import Project
+from plana.apps.users.serializers.association_user import AssociationUserSerializer
+from plana.apps.users.serializers.user import UserNameSerializer
 
 
 class ProjectReviewSerializer(serializers.ModelSerializer):
     """Main review serializer."""
 
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionMinimalDataSerializer(many=True, read_only=True)
+    association = AssociationMandatoryDataSerializer(read_only=True)
+    user = UserNameSerializer(read_only=True)
+    association_user = AssociationUserSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -41,7 +47,7 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
 class ProjectReviewUpdateSerializer(serializers.ModelSerializer):
     """Main review serializer for update."""
 
-    commissions = CommissionSerializer(many=True, read_only=True)
+    commissions = CommissionMinimalDataSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project

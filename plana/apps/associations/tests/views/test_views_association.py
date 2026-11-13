@@ -102,18 +102,18 @@ class AssociationsViewsTests(TestCase):
 
         - The route can be accessed by anyone.
         - We get the same amount of associations through the model and through the view.
-        - Only associations site and public are returned by default.
+        - Only associations site and public are returned.
         - Main associations details are returned (test the "name" attribute).
         - All associations details aren't returned (test the "current_projects" attribute).
         """
-        response = self.client.get("/associations/")
+        response = self.client.get(reverse("association_list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         associations = Association.objects.filter(is_site=True, is_public=True)
-        self.assertEqual(len(response.data), len(associations))
+        self.assertEqual(len(response.data["results"]), len(associations))
 
-        content = json.loads(response.content.decode("utf-8"))
-        association_1 = content[0]
+        content = response.data
+        association_1 = content["results"][0]
         self.assertTrue(association_1.get("name"))
         self.assertFalse(association_1.get("current_projects"))
 
@@ -134,8 +134,8 @@ class AssociationsViewsTests(TestCase):
             "plateforme",
         ]
         for similar_name in similar_names:
-            response = self.client.get(f"/associations/?name={similar_name}")
-            self.assertEqual(response.data[0]["name"], similar_names[0])
+            response = self.client.get(reverse("association_list"), data={"name": similar_name})
+            self.assertEqual(response.data["results"][0]["name"], similar_names[0])
 
     def test_get_associations_list_filter_acronym(self):
         """
@@ -151,30 +151,8 @@ class AssociationsViewsTests(TestCase):
             "plan",
         ]
         for similar_acronym in similar_acronyms:
-            response = self.client.get(f"/associations/?acronym={similar_acronym}")
-            self.assertEqual(response.data[0]["acronym"], similar_acronyms[0])
-
-    def test_get_associations_list_filter_enabled(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Enabled associations can be filtered.
-        """
-        response = self.client.get("/associations/?is_enabled=true")
-        for association in response.data:
-            self.assertEqual(association["is_enabled"], True)
-
-    def test_get_associations_list_filter_public(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Public associations can be filtered.
-        """
-        response = self.client.get("/associations/?is_public=true")
-        for association in response.data:
-            self.assertEqual(association["is_public"], True)
+            response = self.client.get(reverse("association_list"), data={"acronym": similar_acronym})
+            self.assertEqual(response.data["results"][0]["acronym"], similar_acronyms[0])
 
     def test_get_associations_list_filter_site(self):
         """
@@ -183,8 +161,8 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Site associations can be filtered.
         """
-        response = self.client.get("/associations/?is_site=true")
-        for association in response.data:
+        response = self.client.get(reverse("association_list"), data={"is_site": True})
+        for association in response.data["results"]:
             self.assertEqual(association["is_site"], True)
 
     def test_get_associations_list_filter_institution(self):
@@ -194,8 +172,8 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Associations with a specific institution ID can be filtered.
         """
-        response = self.client.get("/associations/?institutions=1")
-        for association in response.data:
+        response = self.client.get(reverse("association_list"), data={"institutions": [1]})
+        for association in response.data["results"]:
             self.assertEqual(association["institution"]["id"], 1)
 
     def test_get_associations_list_filter_institution_component(self):
@@ -206,12 +184,12 @@ class AssociationsViewsTests(TestCase):
         - Associations with a specific institution component ID can be filtered.
         - Associations without a specific institution component ID can be filtered.
         """
-        response = self.client.get("/associations/?institution_component=1")
-        for association in response.data:
+        response = self.client.get(reverse("association_list"), data={"institution_component": 1})
+        for association in response.data["results"]:
             self.assertEqual(association["institution_component"]["id"], 1)
 
-        response = self.client.get("/associations/?institution_component=")
-        for association in response.data:
+        response_none = self.client.get(reverse("association_list"), data={"institution_component": ""})
+        for association in response_none.data["results"]:
             self.assertEqual(association["institution_component"], None)
 
     def test_get_associations_list_filter_activity_field(self):
@@ -221,81 +199,54 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Associations with a specific activity field can be filtered.
         """
-        response = self.client.get("/associations/?activity_field=3")
-        for association in response.data:
+        response = self.client.get(reverse("association_list"), data={"activity_field": 3})
+        for association in response.data["results"]:
             self.assertEqual(association["activity_field"]["id"], 3)
 
-    def test_get_associations_list_filter_user_anonymous(self):
+    def test_get_associations_list_disabled_filters(self):
         """
         GET /associations/ .
 
         - The route can be accessed by anyone.
-        - Associations with a specific user_id cannot be filtered by an anonymous.
+        - Associations with a specific user_id cannot be filtered by anyone.
+        - Non-enabled associations cannot be filtered by anyone.
+        - Non-public associations cannot be filtered by anyone.
         """
-        response = self.client.get(f"/associations/?user_id={self.student_user_id}")
-        content = json.loads(response.content.decode("utf-8"))
+        response = self.client.get(reverse("association_list"), data={"user_id": self.student_user_id})
+        content = response.data
         links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-        self.assertNotEqual(len(content), links_cnt)
+        self.assertNotEqual(len(content["results"]), links_cnt)
 
-    def test_get_associations_list_filter_user_manager(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Associations with a specific user_id can be filtered by a manager.
-        """
-        response = self.general_client.get(f"/associations/?user_id={self.student_user_id}")
-        content = json.loads(response.content.decode("utf-8"))
-        links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
-        self.assertEqual(len(content), links_cnt)
-
-    def test_get_associations_list_filter_non_enabled_student(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Non-enabled associations cannot be filtered by student.
-        """
-        response = self.member_client.get("/associations/?is_enabled=false")
-        for association in response.data:
+        response = self.member_client.get(reverse("association_list"), data={"is_enabled": False})
+        for association in response.data["results"]:
             self.assertEqual(association["is_enabled"], True)
 
-    def test_get_associations_list_filter_non_enabled_manager(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Non-enabled associations can be filtered by a manager.
-        """
-        response = self.general_client.get("/associations/?is_enabled=false")
-        for association in response.data:
-            self.assertEqual(association["is_enabled"], False)
-
-    def test_get_associations_list_filter_non_public_student(self):
-        """
-        GET /associations/ .
-
-        - The route can be accessed by anyone.
-        - Non-public associations cannot be filtered by student.
-        """
-        response = self.member_client.get("/associations/?is_public=false")
-        for association in response.data:
+        response = self.member_client.get(reverse("association_list"), data={"is_public": False})
+        for association in response.data["results"]:
             self.assertEqual(association["is_public"], True)
 
-    def test_get_associations_list_filter_non_public_manager(self):
+# TODO : Sensé péter (only manage)
+    def test_get_associations_manage_list_specific_filters(self):
         """
-        GET /associations/ .
+        GET /associations/manage/ .
 
-        - The route can be accessed by anyone.
+        - The route can be accessed by authorized users.
+        - Non-enabled associations can be filtered by a manager.
         - Non-public associations can be filtered by a manager.
+        - Associations with a specific user_id can be filtered by a manager.
         """
-        response = self.general_client.get("/associations/?is_enabled=false")
-        for association in response.data:
+        response_enabled = self.general_client.get(reverse("association_manage_list_create"), data={"is_enabled": False})
+        for association in response_enabled.data["results"]:
             self.assertEqual(association["is_enabled"], False)
 
-        response = self.general_client.get("/associations/?is_public=false")
-        for association in response.data:
+        response_public = self.general_client.get(reverse("association_manage_list_create"), data={"is_public": False})
+        for association in response_public.data["results"]:
             self.assertEqual(association["is_public"], False)
+
+        response = self.general_client.get(reverse("association_manage_list_create"), data={"user_id": self.student_user_id})
+        content = response.data
+        links_cnt = AssociationUser.objects.filter(user_id=self.student_user_id).count()
+        self.assertEqual(len(content["results"]), links_cnt)
 
     def test_post_association_bad_request_format(self):
         """
@@ -306,8 +257,8 @@ class AssociationsViewsTests(TestCase):
         - Email param is mandatory.
         """
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Les Fans de Campulse",
                 "email": "test@mail.tld"
             },
@@ -316,14 +267,14 @@ class AssociationsViewsTests(TestCase):
         self.assertIn("no_institution", response_general.data)
 
         response_general = self.general_client.post(
-            "/associations/",
-            {"email": "test@mail.tld", "institution": 2},
+            reverse("association_manage_list_create"),
+            data={"email": "test@mail.tld", "institution": 2},
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
 
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Les Fans de Campulse",
                 "institution": 2,
             },
@@ -337,8 +288,8 @@ class AssociationsViewsTests(TestCase):
         - Institution must exist.
         """
         response_general = self.general_client.post(
-            "/associations/",
-            {"institution": 1000},
+            reverse("association_manage_list_create"),
+            data={"institution": 1000},
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("institution", response_general.data)
@@ -351,8 +302,8 @@ class AssociationsViewsTests(TestCase):
         - A Misc manager cannot set is_site on a new association.
         """
         response_institution = self.institution_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Forbidden association",
                 "email": "false@mail.tld",
                 "institution": 2,
@@ -362,8 +313,8 @@ class AssociationsViewsTests(TestCase):
         self.assertIn("wrong_institution", response_institution.data)
 
         response_misc = self.misc_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Another forbidden association",
                 "email": "false@mail.tld",
                 "is_public": True
@@ -381,8 +332,8 @@ class AssociationsViewsTests(TestCase):
         - An association cannot have a similar name compared to another one.
         """
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Les Fans de Campulse",
                 "institution": 2,
                 "email": "mail@mail.tld",
@@ -397,8 +348,8 @@ class AssociationsViewsTests(TestCase):
         ]
         for similar_name in similar_names:
             response_general = self.general_client.post(
-                "/associations/",
-                {"name": similar_name, "email": "test@mail.tld", "institution": 2},
+                reverse("association_manage_list_create"),
+                data={"name": similar_name, "email": "test@mail.tld", "institution": 2},
             )
             self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertIn("similar_name", response_general.data)
@@ -410,17 +361,16 @@ class AssociationsViewsTests(TestCase):
         - An Institution Manager can add an association from the same institution.
         """
         response_institution = self.institution_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Successful association.",
                 "email": "success@association.fr",
                 "institution": 3
             },
         )
         self.assertEqual(response_institution.status_code, status.HTTP_201_CREATED)
-        no_site_association = json.loads(response_institution.content.decode("utf-8"))
-        self.assertFalse(no_site_association["isPublic"])
-        new_association = json.loads(response_institution.content.decode("utf-8"))
+        new_association = response_institution.data
+        self.assertFalse(new_association["is_public"])
         self.assertEqual(new_association["institution"], 3)
 
     def test_post_association_success_manager_general(self):
@@ -432,20 +382,20 @@ class AssociationsViewsTests(TestCase):
         - A General Manager can add a site association.
         """
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Les Fans de Campulse",
                 "email": "fan-2-campulse@mail.tld",
                 "institution": 2,
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
-        non_site_association = json.loads(response_general.content.decode("utf-8"))
-        self.assertFalse(non_site_association["isSite"])
+        non_site_association = response_general.data
+        self.assertFalse(non_site_association["is_site"])
 
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Team Campulse n°1",
                 "email": "team-campulse1@mail.tld",
                 "institution": 2,
@@ -453,12 +403,12 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
-        public_association = json.loads(response_general.content.decode("utf-8"))
-        self.assertTrue(public_association["isPublic"])
+        public_association = response_general.data
+        self.assertTrue(public_association["is_public"])
 
         response_general = self.general_client.post(
-            "/associations/",
-            {
+            reverse("association_manage_list_create"),
+            data={
                 "name": "Team Campulse n°2",
                 "email": "team-campulse2@mail.tld",
                 "institution": 2,
@@ -466,8 +416,8 @@ class AssociationsViewsTests(TestCase):
             },
         )
         self.assertEqual(response_general.status_code, status.HTTP_201_CREATED)
-        site_association = json.loads(response_general.content.decode("utf-8"))
-        self.assertTrue(site_association["isSite"])
+        site_association = response_general.data
+        self.assertTrue(site_association["is_site"])
 
     def test_get_association_details_404(self):
         """
@@ -475,28 +425,32 @@ class AssociationsViewsTests(TestCase):
 
         - A non-existing association can't be returned.
         """
-        not_found_response = self.client.get("/associations/9999")
+        not_found_response = self.client.get(reverse("association_retrieve", kwargs={"pk": 9999}))
         self.assertEqual(not_found_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_association_details_forbidden(self):
         """
         GET /associations/{id} .
 
-        - A non-public association can't be seen by an anonymous user.
-        - A non-enabled association can't be seen by a student user who's not in it.
-        - A non-public association can't be seen by a student user who's not in it.
+        - The route can be accessed by anyone.
+        - A non-public association cannot be seen by anyone, even its members, through this endpoint.
+        - A non-enabled association cannot be seen by anyone, even its members, through this endpoint.
         """
-        non_public_response = self.client.get("/associations/3")
-        self.assertEqual(non_public_response.status_code, status.HTTP_401_UNAUTHORIZED)
+        non_public_response = self.client.get(reverse("association_retrieve", kwargs={"pk": 3}))
+        self.assertEqual(non_public_response.status_code, status.HTTP_404_NOT_FOUND)
 
         association = Association.objects.get(id=5)
         association.is_enabled = False
         association.save()
-        non_enabled_not_member_response = self.member_client.get("/associations/5")
-        self.assertEqual(non_enabled_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
+        non_enabled_not_member_response = self.member_client.get(reverse("association_retrieve", kwargs={"pk": 5}))
+        self.assertEqual(non_enabled_not_member_response.status_code, status.HTTP_404_NOT_FOUND)
 
-        non_public_not_member_response = self.member_client.get("/associations/3")
-        self.assertEqual(non_public_not_member_response.status_code, status.HTTP_403_FORBIDDEN)
+        non_public_not_member_response = self.member_client.get(reverse("association_retrieve", kwargs={"pk": 3}))
+        self.assertEqual(non_public_not_member_response.status_code, status.HTTP_404_NOT_FOUND)
+
+        Association.objects.filter(pk=2).update(is_enabled=False, is_public=False)
+        non_enabled_member_response = self.member_client.get(reverse("association_retrieve", kwargs={"pk": 2}))
+        self.assertEqual(non_enabled_member_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_association_details_success(self):
         """
@@ -505,111 +459,106 @@ class AssociationsViewsTests(TestCase):
         - The route can be accessed by anyone.
         - Main association details are returned (test the "name" attribute).
         - All associations details are returned (test the "current_projects" attribute).
-        - A non-enabled association can be seen by a student user who's in it.
-        - A non-public association can be seen by a student user who's in it.
+        - A non-enabled association cannot be seen by anyone.
+        - A non-public association cannot be seen by anyone.
         """
         association = Association.objects.get(id=1)
 
-        response = self.client.get("/associations/1")
+        response = self.client.get(reverse("association_retrieve", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        public_association = json.loads(response.content.decode("utf-8"))
+        public_association = response.data
         self.assertEqual(public_association["name"], association.name)
-        self.assertEqual(public_association["currentProjects"], association.current_projects)
+        self.assertEqual(public_association["current_projects"], association.current_projects)
 
     def test_get_association_details_success_not_enabled(self):
         """
-        GET /associations/{id} .
+        GET /associations/{id}/manage/ .
 
         - A non-enabled association can be seen by a student user who's in it.
         """
-        non_enabled_member_response = self.member_client.get("/associations/2")
+        non_enabled_member_response = self.member_client.get(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": 2}))
         self.assertEqual(non_enabled_member_response.status_code, status.HTTP_200_OK)
 
     def test_get_association_details_success_not_public(self):
         """
-        GET /associations/{id} .
+        GET /associations/{id}/manage/ .
 
         - A non-public association can be seen by a student user who's in it.
         """
-        non_public_member_response = self.member_client.get("/associations/2")
+        non_public_member_response = self.member_client.get(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": 2}))
         self.assertEqual(non_public_member_response.status_code, status.HTTP_200_OK)
+
+    def test_get_association_manage_wrong_institution(self):
+        """
+        PATCH /associations/{id}/manage/ .
+
+        - A Manager cannot access an association that is not from its perimeter.
+        """
+        response_misc = self.misc_client.get(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": 1}))
+        self.assertEqual(response_misc.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_association_wrong_phone_number(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A member of the association's office can edit information from the association.
         - Phone number must respect a given format.
         """
         association_id = 2
         response_president = self.president_client.patch(
-            f"/associations/{association_id}",
-            {"phone": "thisisaphonenumber"},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"phone": "thisisaphonenumber"},
             content_type="application/json",
         )
         self.assertEqual(response_president.status_code, status.HTTP_400_BAD_REQUEST)
         association = Association.objects.get(id=association_id)
         self.assertNotEqual(association.phone, "thisisaphonenumber")
 
-    def test_patch_association_manager_misc(self):
+    def test_patch_association_manager_wrong_institution(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
-        - A Misc Manager cannot edit an association.
+        - A Manager cannot edit an association that is not from its perimeter.
         """
         response_misc = self.misc_client.patch(
-            "/associations/1",
-            {"name": "L'association"},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": 1}),
+            data={"name": "L'association"},
             content_type="application/json",
         )
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_patch_association_404(self):
-        """
-        PATCH /associations/{id} .
-
-        - A non-existing association cannot be edited.
-        """
-        association_id = 99
-        response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"name": "The Big Bang Theory fanclub."},
-            content_type="application/json",
-        )
-        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response_misc.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_association_not_members(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A member of an association without status cannot edit infos from another association.
         - A member of an association's office cannot edit information from another association.
         """
         association_id = 3
         response_incorrect_member = self.member_client.patch(
-            f"/associations/{association_id}",
-            {"name": "Je suis pas de cette asso mais je veux l'éditer."},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"name": "Je suis pas de cette asso mais je veux l'éditer."},
             content_type="application/json",
         )
-        self.assertEqual(response_incorrect_member.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_incorrect_member.status_code, status.HTTP_404_NOT_FOUND)
         response_incorrect_president = self.president_client.patch(
-            f"/associations/{association_id}",
-            {"name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer."},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"name": "Je suis membre du bureau d'une autre asso, mais je veux l'éditer."},
             content_type="application/json",
         )
-        self.assertEqual(response_incorrect_president.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_incorrect_president.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_patch_association_by_its_members_forbidden(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A member of the association without status cannot edit infos from the association.
         """
         association_id = 2
         response_correct_member = self.member_client.patch(
-            f"/associations/{association_id}",
-            {"name": "Je suis de l'asso mais je ne peux pas l'éditer."},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"name": "Je suis de l'asso mais je ne peux pas l'éditer."},
             content_type="application/json",
         )
         self.assertEqual(response_correct_member.status_code, status.HTTP_403_FORBIDDEN)
@@ -617,14 +566,14 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_duplicate_email(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - Same email address can't be used for two associations.
         """
         association_id = 2
         response_wrong_email = self.president_client.patch(
-            f"/associations/{association_id}",
-            {"email": "asso-hors-site@unistra.fr"},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"email": "asso-hors-site@unistra.fr"},
             content_type="application/json",
         )
         self.assertEqual(response_wrong_email.status_code, status.HTTP_400_BAD_REQUEST)
@@ -632,7 +581,7 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_by_its_members_success(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A member of the association's office can edit information from the association.
         - Event is stored in History.
@@ -640,8 +589,8 @@ class AssociationsViewsTests(TestCase):
         """
         association_id = 2
         response_correct_president = self.president_client.patch(
-            f"/associations/{association_id}",
-            {
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={
                 "name": "Je peux éditer l'asso.",
                 "phone": "0836656565",
             },
@@ -658,7 +607,7 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_manager_success(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A General Manager can edit an association.
         - Event is stored in History.
@@ -669,8 +618,8 @@ class AssociationsViewsTests(TestCase):
 
         self.assertFalse(len(mail.outbox))
         response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={
                 "name": "Association name",
                 "institution": 2,
                 "can_submit_projects": False,
@@ -693,8 +642,8 @@ class AssociationsViewsTests(TestCase):
         self.assertTrue(len(mail.outbox))
 
         response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"can_submit_projects": True},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"can_submit_projects": True},
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_200_OK)
@@ -703,14 +652,14 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_lower_amount_members(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - Cannot lower max number of student allowed in an association if all of them are registered.
         """
         association_id = 2
         response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"amount_members_allowed": 1},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"amount_members_allowed": 1},
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
@@ -718,29 +667,37 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_institution_component(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - Association's institution component must be linked to the same institution as the designated association.
         """
         asso_id = 4
-        response = self.general_client.patch(f"/associations/{asso_id}", {"institution_component": 1}, content_type="application/json")
+        response = self.general_client.patch(
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": asso_id}),
+            data={"institution_component": 1},
+            content_type="application/json"
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("inconsistent_institution", response.data)
 
-        other_response = self.general_client.patch(f"/associations/{asso_id}", {"institution": 4}, content_type="application/json")
+        other_response = self.general_client.patch(
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": asso_id}),
+            data={"institution": 4},
+            content_type="application/json"
+        )
         self.assertEqual(other_response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("inconsistent_institution", other_response.data)
 
         consistent_response = self.general_client.patch(
-            f"/associations/{asso_id}",
-            {"institution": 2, "institution_component": 1},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": asso_id}),
+            data={"institution": 2, "institution_component": 1},
             content_type="application/json"
         )
         self.assertEqual(consistent_response.status_code, status.HTTP_200_OK)
 
     def test_patch_association_social_networks_bad_request(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - Association's social networks are not updated if the global format is not a list (400).
         - Association's social networks are not updated if the keys are not valid (400).
@@ -748,24 +705,24 @@ class AssociationsViewsTests(TestCase):
         """
         association_id = 2
         response_general_list = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"social_networks": {"type": "SocialNetwork", "location": "https://socialnetwork.random"}},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"social_networks": {"type": "SocialNetwork", "location": "https://socialnetwork.random"}},
             content_type="application/json",
         )
         self.assertEqual(response_general_list.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("list_expected", response_general_list.data.get("social_networks"))
 
         response_general_keys = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"social_networks": [{"typeeee": "SocialNetwork", "location": "https://socialnetwork.random"}]},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"social_networks": [{"typeeee": "SocialNetwork", "location": "https://socialnetwork.random"}]},
             content_type="application/json",
         )
         self.assertEqual(response_general_keys.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("wrong_params", response_general_keys.data.get("social_networks"))
 
         response_general_string = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"social_networks": json.dumps([{"type": "SocialNetwork", "location": 1234}])},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"social_networks": json.dumps([{"type": "SocialNetwork", "location": 1234}])},
             content_type="application/json",
         )
         self.assertEqual(response_general_string.status_code, status.HTTP_400_BAD_REQUEST)
@@ -773,7 +730,7 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_social_networks_success(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - A General Manager can edit an association's social networks.
         - Event is stored in History.
@@ -782,8 +739,8 @@ class AssociationsViewsTests(TestCase):
         association_id = 2
         social_networks_json = [{"type": "SocialNetwork", "location": "https://socialnetwork.random"}]
         response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"social_networks": social_networks_json},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"social_networks": social_networks_json},
             content_type="application/json",
         )
         self.assertEqual(response_general.status_code, status.HTTP_200_OK)
@@ -793,7 +750,7 @@ class AssociationsViewsTests(TestCase):
 
     def test_patch_association_public_and_projects_or_not(self):
         """
-        PATCH /associations/{id} .
+        PATCH /associations/{id}/manage/ .
 
         - An association can't be public nor submit projects if not enabled.
         - An association must lose its public status and can_submit_project perm if enabled is removed.
@@ -801,8 +758,8 @@ class AssociationsViewsTests(TestCase):
         # This association is enabled by default
         association_id = 3
         self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": False},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_enabled": False},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -810,8 +767,8 @@ class AssociationsViewsTests(TestCase):
 
         # Association public status can be true only if is_enabled is true
         self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_public": True, "can_submit_project": True},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_public": True, "can_submit_project": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -819,13 +776,13 @@ class AssociationsViewsTests(TestCase):
         self.assertFalse(association.can_submit_projects)
 
         self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": True},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_enabled": True},
             content_type="application/json",
         )
         self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_public": True, "can_submit_projects": True},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_public": True, "can_submit_projects": True},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -834,8 +791,8 @@ class AssociationsViewsTests(TestCase):
 
         # Association loosing its public status by changing is_enabled to false
         self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": False},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_enabled": False},
             content_type="application/json",
         )
         association = Association.objects.get(id=association_id)
@@ -865,42 +822,30 @@ class AssociationsViewsTests(TestCase):
 
     def test_delete_association_forbidden(self):
         """
-        DELETE /associations/{id} .
+        DELETE /associations/{id}/manage/ .
 
         - An enabled association cannot be deleted.
-        - A Misc Manager cannot delete an association.
         - An Institution Manager cannot delete an association from another institution.
         """
         association_id = 1
 
-        response_general = self.general_client.delete(f"/associations/{association_id}")
-        self.assertEqual(response_general.status_code, status.HTTP_403_FORBIDDEN)
+        response_general = self.general_client.delete(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}))
+        self.assertEqual(response_general.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("association_enabled", response_general.data)
         self.assertFalse(len(mail.outbox))
 
         response_general = self.general_client.patch(
-            f"/associations/{association_id}",
-            {"is_enabled": False},
+            reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}),
+            data={"is_enabled": False},
             content_type="application/json",
         )
 
-        response_misc = self.misc_client.delete(f"/associations/{association_id}")
-        self.assertEqual(response_misc.status_code, status.HTTP_403_FORBIDDEN)
-
-        response_institution = self.institution_client.delete(f"/associations/{association_id}")
-        self.assertEqual(response_institution.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_delete_association_404(self):
-        """
-        DELETE /associations/{id} .
-
-        - A non-existing association cannot be deleted.
-        """
-        response_general = self.general_client.delete("/associations/9999")
-        self.assertEqual(response_general.status_code, status.HTTP_404_NOT_FOUND)
+        response_institution = self.institution_client.delete(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}))
+        self.assertEqual(response_institution.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_association_success(self):
         """
-        DELETE /associations/{id} .
+        DELETE /associations/{id}/manage/ .
 
         - A General Manager can delete an association.
         - An email is received if deletion is successful.
@@ -911,7 +856,7 @@ class AssociationsViewsTests(TestCase):
         association.is_enabled = False
         association.save()
 
-        response_general = self.general_client.delete(f"/associations/{association_id}")
+        response_general = self.general_client.delete(reverse("association_manage_retrieve_update_destroy", kwargs={"pk": association_id}))
         self.assertEqual(response_general.status_code, status.HTTP_204_NO_CONTENT)
         self.assertTrue(len(mail.outbox))
         with self.assertRaises(ObjectDoesNotExist):
@@ -1071,7 +1016,7 @@ class AssociationsViewsTests(TestCase):
         response = self.client.get("/associations/activity_fields")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        content = json.loads(response.content.decode("utf-8"))
+        content = response.data
         self.assertEqual(len(content), activity_fields_cnt)
 
     def test_get_association_names_list(self):
@@ -1088,7 +1033,7 @@ class AssociationsViewsTests(TestCase):
         associations = Association.objects.all()
         self.assertEqual(len(response.data), len(associations))
 
-        content_all_assos = json.loads(response.content.decode("utf-8"))
+        content_all_assos = response.data
         asso_name_1 = content_all_assos[0]
         self.assertTrue(asso_name_1.get("name"))
         self.assertTrue(asso_name_1.get("id"))
@@ -1103,7 +1048,7 @@ class AssociationsViewsTests(TestCase):
         """
         asso_names_cnt_institution = Association.objects.filter(institution_id__in=[2, 3]).count()
         response = self.client.get("/associations/names?institutions=2,3")
-        content = json.loads(response.content.decode("utf-8"))
+        content = response.data
         self.assertEqual(len(content), asso_names_cnt_institution)
 
     def test_get_association_names_list_filter_public(self):
@@ -1115,7 +1060,7 @@ class AssociationsViewsTests(TestCase):
         """
         asso_names_cnt_public = Association.objects.filter(is_public=True).count()
         response = self.client.get("/associations/names?is_public=true")
-        content = json.loads(response.content.decode("utf-8"))
+        content = response.data
         self.assertEqual(len(content), asso_names_cnt_public)
 
     def test_get_association_names_list_allow_new_user(self):
@@ -1126,14 +1071,14 @@ class AssociationsViewsTests(TestCase):
         - Get a different amount of associations with allow_new_users filter.
         """
         response = self.client.get("/associations/names")
-        content_all_assos = json.loads(response.content.decode("utf-8"))
+        content_all_assos = response.data
 
         AssociationUser.objects.create(user_id=12, association_id=2)
 
         response_assos_users_allowed = self.client.get("/associations/names?allow_new_users=true")
-        content_assos_users_allowed = json.loads(response_assos_users_allowed.content.decode("utf-8"))
+        content_assos_users_allowed = response_assos_users_allowed.data
         response_assos_users_not_allowed = self.client.get("/associations/names?allow_new_users=false")
-        content_assos_users_not_allowed = json.loads(response_assos_users_not_allowed.content.decode("utf-8"))
+        content_assos_users_not_allowed = response_assos_users_not_allowed.data
         self.assertEqual(
             len(content_assos_users_allowed) + len(content_assos_users_not_allowed),
             len(content_all_assos),
@@ -1172,7 +1117,7 @@ class AssociationsViewsTests(TestCase):
             association=self.president_asso_id,
             is_validated_by_admin=True
         ).count()
-        content_asso_members = json.loads(response_president.content.decode("utf-8"))
+        content_asso_members = response_president.data
         self.assertEqual(len(content_asso_members), associations_user_asso_cnt)
 
     def test_get_association_members_manager(self):
@@ -1187,5 +1132,5 @@ class AssociationsViewsTests(TestCase):
             association=self.manager_institution_asso_id,
             is_validated_by_admin=True
         ).count()
-        content_asso_members = json.loads(response_manager.content.decode("utf-8"))
+        content_asso_members = response_manager.data
         self.assertEqual(len(content_asso_members), associations_user_asso_cnt)

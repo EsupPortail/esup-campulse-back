@@ -334,6 +334,11 @@ class Project(models.Model):
                 message=template.parse_vars(request.user, request, context),
             )
 
+    @property
+    def commission(self):
+        pcf = self.projectcommissionfund_set.all()
+        return pcf[0].commission_fund.commission if pcf else None
+
     def __str__(self):
         return self.name
 

@@ -16,6 +16,7 @@ class CommissionFilter(filters.FilterSet):
     only_with_active_projects = filters.BooleanFilter(method="filter_only_with_active_projects")
     managed_projects = filters.BooleanFilter(method="filter_managed_projects")
     to_postpone_project = filters.NumberFilter(method="filter_to_postpone_project")
+    commission_date = filters.DateFromToRangeFilter()
 
     class Meta:
         model = Commission
