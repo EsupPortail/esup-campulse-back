@@ -28,7 +28,7 @@ class ProjectCommissionFundMinimalDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectCommissionFund
-        fields = ["pk", "project_id", "is_validated_by_admin", "amount_earned", "amount_asked", "commission_fund"]
+        fields = ["pk", "project_id", "is_validated_by_admin", "amount_earned", "amount_asked", "commission_fund", "is_first_edition"]
 
 
 class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
