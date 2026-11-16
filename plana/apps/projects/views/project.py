@@ -252,7 +252,8 @@ class ProjectListCreate(generics.ListCreateAPIView):
             creation_date=today,
             edition_date=today
         )
-        read_serializer = ProjectSerializer(project_instance, context=self.get_serializer_context())
+        annotated_project = Project.objects.annotate_bearer_counts().get(pk=project_instance.pk)
+        read_serializer = ProjectSerializer(annotated_project, context=self.get_serializer_context())
         return response.Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -260,7 +261,12 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").prefetch_related("projectcommissionfund_set")
+    queryset = (
+        Project.visible_objects.all()
+        .annotate_bearer_counts()
+        .select_related("association", "user", "association_user")
+        .prefetch_related("projectcommissionfund_set")
+    )
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":

@@ -1,13 +1,14 @@
-"""Outside of django-admin, the app only uses projects where edition_date is lower than 5 years old."""
+"""Outside django-admin, the app only uses projects where edition_date is lower than 5 years old."""
 
 import datetime
 
 from django.apps import apps
 from django.db import models
-from django.db.utils import ProgrammingError
+
+from plana.apps.projects.managers import ProjectQuerySet
 
 
-class VisibleProjectManager(models.Manager):
+class VisibleProjectManager(models.Manager.from_queryset(ProjectQuerySet)):
     """visible_objects from Project."""
 
     def get_queryset(self):

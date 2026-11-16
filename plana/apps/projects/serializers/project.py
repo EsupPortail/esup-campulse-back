@@ -28,6 +28,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
     project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
+    bearer_overdue_review_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Project
@@ -62,6 +63,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "edition_date",
             "processing_date",
             "project_commission_funds",
+            "bearer_overdue_review_count",
         ]
 
 

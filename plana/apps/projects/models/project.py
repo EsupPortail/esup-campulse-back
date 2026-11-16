@@ -11,6 +11,7 @@ from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.commissions.models.fund import Fund
 from plana.apps.institutions.models.institution import Institution
+from plana.apps.projects import managers
 from plana.apps.projects.models.managers.visible_project_manager import (
     VisibleProjectManager,
 )
@@ -186,7 +187,7 @@ class Project(models.Model):
     improvements = models.TextField(_("Improvements"), default="")
     categories = models.ManyToManyField("Category", through="ProjectCategory")
 
-    objects = models.Manager()
+    objects = managers.ProjectQuerySet.as_manager()
     visible_objects = VisibleProjectManager()
 
     def get_project_default_manager_emails(self, fund_id=None):
