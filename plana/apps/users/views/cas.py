@@ -1,38 +1,41 @@
 """Special views dedicated to CAS login and operations."""
 
-import requests
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
-from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions, generics, permissions
 
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from allauth.socialaccount.providers.openid_connect.provider import OpenIDConnectProvider
+
 from plana.apps.history.models import History
-from plana.apps.users.adapter import CASAdapter
 from plana.apps.users.models import User
-from plana.apps.users.serializers.cas import CASSerializer
 from plana.apps.users.serializers.user import CustomCASDataRegisterSerializer
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
 
 
-class CASLogin(SocialLoginView):
+class CASOpenIDConnectAdapter(OpenIDConnectProvider.oauth2_adapter_class):
+    def __init__(self, request):
+        super().__init__(request, provider_id="cas")
+
+
+class OIDCLogin(SocialLoginView):
     """
     /users/auth/cas/login/ route.
 
     POST : Authenticates a user through CAS with django-allauth-cas and dj-rest-auth.
     """
 
-    adapter_class = CASAdapter
-    serializer_class = CASSerializer
+    adapter_class = CASOpenIDConnectAdapter
+    callback_url = "http://localhost:8000/"
+    client_class = OAuth2Client
 
 
-class CASLogout(LogoutView):
+class OIDCLogout(LogoutView):
     """
     /users/auth/cas/logout/ route.
 
@@ -40,44 +43,7 @@ class CASLogout(LogoutView):
 
     POST : Logs out a user authenticated with CAS out.
     """
-
-    adapter_class = CASAdapter
-    serializer_class = CASSerializer
-
-    # The user should be redirected to CASClient.get_logout_url(redirect_url=redirect_url)
-
-
-# login = CASLoginView.adapter_view(CASAdapter)
-# callback = CASCallbackView.adapter_view(CASAdapter)
-
-
-def cas_test(request):  # pragma: no cover
-    """Debug function to test the CAS server."""
-    service_url = reverse("cas_verify")
-    service_url = urlencode({"service": request.build_absolute_uri(service_url)})
-    redirect_url = f"{settings.CAS_SERVER}login?{service_url}"
-    return HttpResponseRedirect(redirect_to=redirect_url)
-
-
-def cas_verify(request):  # pragma: no cover
-    """Debug function to test the ticket."""
-    service_url = request.build_absolute_uri(reverse("cas_verify"))
-    ticket = request.GET.get("ticket")
-
-    response = requests.post(
-        request.build_absolute_uri(reverse("rest_cas_login")),
-        json={
-            "service": service_url,
-            "ticket": ticket,
-        },
-        headers={
-            "Accept": "application/json",
-        },
-    )
-    if response.ok:
-        return JsonResponse(response.json())
-    print(response)
-    return JsonResponse({})
+    pass
 
 
 class CASDataRegisterView(generics.UpdateAPIView):

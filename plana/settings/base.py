@@ -268,7 +268,7 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth_cas",
+    "allauth.socialaccount.providers.openid_connect",
     "rest_framework_simplejwt",
     'django_filters',
     "dj_rest_auth",
@@ -538,15 +538,15 @@ THUMBNAILS = {
 ##################
 
 CAS_ID = "cas"
-CAS_NAME = "CAS Unistra"
-CAS_SERVER = "https://cas.unistra.fr/cas/"
-CAS_VERSION = 3
-CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
+#CAS_NAME = "CAS Unistra"
+#CAS_SERVER = "https://cas.unistra.fr/cas/"
+#CAS_VERSION = 3
+#CAS_AUTHORIZED_SERVICES = ["http://localhost:8000/users/auth/cas_verify/"]
 
 # Keys are User model fields, values are CAS fields.
 CAS_ATTRIBUTES_NAMES = {
-    "uid": "",  # Should be automatically detected by CAS
-    "email": "mail",
+    "uid": "sub",
+    "email": "email",
     "first_name": "first_name",
     "last_name": "last_name",
     "is_student": "affiliation",
@@ -582,12 +582,36 @@ ACCOUNT_USERNAME_BLACKLIST = [
 SOCIALACCOUNT_ADAPTER = "plana.apps.users.adapter.SocialAccountAdapter"
 SOCIALACCOUNT_EMAIL_VERIFICATION = False
 SOCIALACCOUNT_EMAIL_REQUIRED = True
-
+SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_PROVIDERS = {
-    "cas": {
-        "VERIFIED_EMAIL": True,
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "cas",
+                "name": "Unistra main CAS",
+                # Fake localhost OIDC server for dev purposes
+                # Using https://github.com/geigerzaehler/oidc-provider-mock
+                "client_id": "0f456fba-945a-49b1-9c74-e5de6788414f",
+                "secret": "9Mth7l3Uvfd9abKDFDPVcQ",
+                "settings": {
+                    "server_url": "http://localhost:9400/"
+                },
+            },
+# For future additional provider if needed
+#            {
+#                "provider_id": "other-cas",
+#                "name": "Other CAS",
+#                "client_id": "CLIENT_ID_2",
+#                "secret": "CLIENT_SECRET_2",
+#                "settings": {
+#                    "server_url": "https://idp-oidc.fr/.well-known/openid-configuration",
+#                },
+#            }
+        ]
     }
 }
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
 
 # Using SimpleJWT with dj-rest-auth
 SIMPLE_JWT = {

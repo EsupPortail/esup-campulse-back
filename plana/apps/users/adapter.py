@@ -1,18 +1,14 @@
 """Links the CAS provider to the CAS views."""
-
 import re
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth_cas.views import CASAdapter as AllAuthCASAdapter
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
 from plana.apps.users.models.user import User
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
-
-from .provider import CASProvider
 
 
 class PlanAAdapter(DefaultAccountAdapter):
@@ -62,16 +58,22 @@ class PlanAAdapter(DefaultAccountAdapter):
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
-    """Default adapter for CAS accounts."""
+    """Minimal Adapter to plug dj-rest-auth on 'cas' OIDC provider"""
 
+    def populate_user(self, request, sociallogin, data):
+        """Fills the user attributes from the provider's JWT claims"""
+        print(data)
+        user = super().populate_user(request, sociallogin, data)
 
-class CASAdapter(AllAuthCASAdapter):
-    """Subclass CASAdapter to give the configuration as a CAS client."""
+        # Get claims stored in extra_data by the provider
+        extra_data = sociallogin.account.extra_data.get("userinfo", {})
+        print(extra_data)
+        user.username = extra_data.get(settings.CAS_ATTRIBUTES_NAMES["uid"], user.username)
+        user.email = extra_data.get(settings.CAS_ATTRIBUTES_NAMES["email"], user.email)
+        user.first_name = extra_data.get(settings.CAS_ATTRIBUTES_NAMES["first_name"], user.first_name)
+        user.last_name = extra_data.get(settings.CAS_ATTRIBUTES_NAMES["last_name"], user.last_name)
 
-    provider_id = CASProvider.id
-    url = settings.CAS_SERVER
-    version = int(settings.CAS_VERSION)
+        affiliation = extra_data.get(settings.CAS_ATTRIBUTES_NAMES["is_student"], "")
+        user.is_student = settings.CAS_ATTRIBUTES_VALUES["is_student"] == affiliation
 
-    def get_provider(self, request):
-        """Get the provider."""
-        return self.provider
+        return user

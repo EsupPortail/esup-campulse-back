@@ -8,7 +8,7 @@ from .views.association_user import (
     AssociationUserRetrieve,
     AssociationUserUpdateDestroy,
 )
-from .views.cas import CASDataRegisterView, CASLogin, CASLogout, cas_test, cas_verify
+from .views.cas import CASDataRegisterView, OIDCLogin, OIDCLogout
 from .views.external import ExternalUserList
 from .views.group_institution_fund_user import (
     GroupInstitutionFundUserDestroy,
@@ -28,8 +28,9 @@ from .views.user_auth import (
 urlpatterns = [
     path("", UserListCreate.as_view(), name="user_list_create"),
     path("<int:pk>", UserRetrieveUpdateDestroy.as_view(), name="user_detail"),
-    path("auth/cas/login/", CASLogin.as_view(), name="rest_cas_login"),
-    path("auth/cas/logout/", CASLogout.as_view(), name="rest_cas_logout"),
+    path('accounts/', include('allauth.urls')),
+    path("auth/oidc/login/", OIDCLogin.as_view(), name="rest_cas_login"),
+    path("auth/oidc/logout/", OIDCLogout.as_view(), name="rest_cas_logout"),
     path("auth/user/", UserAuthView.as_view(), name="rest_user_details"),
     path("auth/registration/", RegisterView.as_view(), name="rest_user_registration"),
     path("auth/registration/cas/", CASDataRegisterView.as_view(), name="rest_user_registration_cas_data"),
