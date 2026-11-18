@@ -44,7 +44,7 @@ DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 class ProjectListCreate(generics.ListCreateAPIView):
     """/projects/ route."""
 
-    queryset = Project.visible_objects.all().select_related("association", "user", "association_user").order_by("edition_date")
+    queryset = Project.objects.all()
     filter_backends = [filters.SearchFilter, drf_filters.DjangoFilterBackend]
     filterset_class = ProjectFilter
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
@@ -60,7 +60,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         request = self.request
-        queryset = super().get_queryset()
+        queryset = Project.visible_objects.all().select_related("association", "user", "association_user").order_by("edition_date")
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
@@ -261,12 +261,15 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """/projects/{id} route."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     http_method_names = ["get", "patch", "delete"]
-    queryset = (
-        Project.visible_objects.all()
-        .annotate_bearer_counts()
-        .select_related("association", "user", "association_user")
-        .prefetch_related("projectcommissionfund_set")
-    )
+    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        return (
+            Project.visible_objects.all()
+            .annotate_bearer_counts()
+            .select_related("association", "user", "association_user")
+            .prefetch_related("projectcommissionfund_set")
+        )
 
     def get_serializer_class(self):
         if self.request.method == "PATCH":
@@ -440,8 +443,11 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route."""
     serializer_class = ProjectStatusSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
-    queryset = Project.visible_objects.all()
+    queryset = Project.objects.all()
     http_method_names = ["patch"]
+
+    def get_queryset(self):
+        return Project.visible_objects.all()
 
     @extend_schema(
         responses={
@@ -620,11 +626,14 @@ class ProjectStatusUpdate(generics.UpdateAPIView):
 
 class ProjectCommissionPostponeView(generics.GenericAPIView):
     """Custom view to postpone a Project to another Commission while keeping its funds data"""
-    queryset = Project.visible_objects.all()
+    queryset = Project.objects.all()
     serializer_class = ProjectPostponeSerializer
     permission_classes = [IsAuthenticated, DjangoModelPermissions, ProjectUpdatePermission]
     http_method_names = ["patch"]
     lookup_url_kwarg = "project_id"
+
+    def get_queryset(self):
+        return Project.visible_objects.all()
 
     def patch(self, request, *args, **kwargs):
         project = self.get_object()
