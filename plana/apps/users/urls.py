@@ -92,9 +92,3 @@ if settings.LDAP_ENABLED:
     urlpatterns += [
         path("external/", ExternalUserList.as_view(), name="external_user_list"),
     ]
-
-if settings.DEBUG:  # pragma: no cover
-    urlpatterns += [
-        path("auth/cas_test/", cas_test, name="cas_test"),
-        path("auth/cas_verify/", cas_verify, name="cas_verify"),
-    ]
