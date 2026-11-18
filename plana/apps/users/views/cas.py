@@ -1,5 +1,7 @@
 """Special views dedicated to CAS login and operations."""
 
+import json
+
 from dj_rest_auth.registration.views import SocialLoginView
 from dj_rest_auth.views import LogoutView
 from django.conf import settings
@@ -23,6 +25,34 @@ class CASOpenIDConnectAdapter(OpenIDConnectProvider.oauth2_adapter_class):
         super().__init__(request, provider_id="cas")
 
 
+class PKCEOAuth2Client(OAuth2Client):
+    """OAuth2 client that forwards the PKCE ``code_verifier`` to the token endpoint.
+
+    dj-rest-auth's ``SocialLoginSerializer`` only passes the authorization
+    ``code`` to ``get_access_token()`` and silently drops the ``code_verifier``
+    sent by the frontend. When CAS is configured with PKCE, the token exchange
+    fails (``invalid_grant``) because the verifier is missing. This client
+    recovers the verifier from the request body and forwards it to CAS.
+    """
+
+    def get_access_token(self, code, pkce_code_verifier=None, extra_data=None):
+        if pkce_code_verifier is None:
+            pkce_code_verifier = self._extract_code_verifier()
+        return super().get_access_token(
+            code, pkce_code_verifier=pkce_code_verifier, extra_data=extra_data
+        )
+
+    def _extract_code_verifier(self):
+        """Read ``code_verifier`` from the JSON request body (sent by the frontend)."""
+        try:
+            payload = json.loads(self.request.body) if self.request.body else {}
+        except (ValueError, TypeError):
+            return None
+        if isinstance(payload, dict):
+            return payload.get("code_verifier")
+        return None
+
+
 class OIDCLogin(SocialLoginView):
     """
     /users/auth/cas/login/ route.
@@ -32,7 +62,8 @@ class OIDCLogin(SocialLoginView):
 
     adapter_class = CASOpenIDConnectAdapter
     callback_url = "http://localhost:8000/"
-    client_class = OAuth2Client
+    client_class = PKCEOAuth2Client
+    # client_class = OAuth2Client
 
 
 class OIDCLogout(LogoutView):
