@@ -17,10 +17,12 @@ class CommissionFilter(filters.FilterSet):
     managed_projects = filters.BooleanFilter(method="filter_managed_projects")
     to_postpone_project = filters.NumberFilter(method="filter_to_postpone_project")
     commission_date = filters.DateFromToRangeFilter()
+    edition_date = filters.DateFromToRangeFilter()
+    submission_date = filters.DateFromToRangeFilter()
 
     class Meta:
         model = Commission
-        fields = ["is_open_to_projects"]
+        fields = ["is_open_to_projects", "name"]
         distinct = True
 
     def filter_with_active_projects(self, queryset, name, value):
