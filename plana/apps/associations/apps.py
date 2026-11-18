@@ -6,8 +6,8 @@ class AssociationsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "plana.apps.associations"
 
-    def ready(self):
-        """Add health check on Association."""
-        from plana.apps.associations.backends import AssociationCheckBackend
-
-        plugin_dir.register(AssociationCheckBackend)
+#    def ready(self):
+#        """Add health check on Association."""
+#        from plana.apps.associations.backends import AssociationCheckBackend
+#
+#        plugin_dir.register(AssociationCheckBackend)
