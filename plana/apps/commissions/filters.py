@@ -22,7 +22,7 @@ class CommissionFilter(filters.FilterSet):
 
     class Meta:
         model = Commission
-        fields = ["is_open_to_projects", "name"]
+        fields = ["is_open_to_projects", "name", "is_archived"]
         distinct = True
 
     def filter_with_active_projects(self, queryset, name, value):
