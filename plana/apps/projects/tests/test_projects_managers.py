@@ -1,4 +1,7 @@
 """Main TestCase for projects managers."""
+import datetime
+from unittest.mock import patch
+
 from django.test import TestCase
 from django.utils import timezone
 
@@ -34,6 +37,24 @@ class ProjectQuerySetTestCase(TestCase):
 
         project_without_bearer_overdue_review_count = Project.objects.filter(pk=4).annotate_bearer_counts().first()
         self.assertEqual(project_without_bearer_overdue_review_count.bearer_overdue_review_count, 0)
+
+    @patch("django.utils.timezone.localdate", return_value=datetime.date(2026, 11, 20))
+    def test_annotate_projects_data(self, mock_localdate):
+        # Project with an overdue review
+        Project.objects.filter(pk=5).update(planned_end_date=timezone.datetime(year=2026, month=6, day=1))
+        project_with_review_overdue_days = Project.objects.filter(pk=5).annotate_projects_data().first()
+        self.assertEqual(project_with_review_overdue_days.review_overdue_days, 142)
+
+        project_ids = [
+            5,  # Project in the past but still not considered overdue to submit its review
+            6,  # Review draft project not in the past yet
+            10  # Project not in review statuses
+        ]
+        Project.objects.filter(pk=5).update(planned_end_date=timezone.datetime(year=2026, month=11, day=15))
+
+        for project_id in project_ids:
+            project = Project.objects.filter(pk=project_id).annotate_projects_data().first()
+            self.assertEqual(project.review_overdue_days, 0)
 
     def test_order_by_project_statuses_manage(self):
         """

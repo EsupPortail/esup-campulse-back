@@ -60,7 +60,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         request = self.request
-        queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
+        queryset = Project.visible_objects.all().select_related("association", "user", "association_user").annotate_projects_data()
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
