@@ -19,10 +19,11 @@ class CommissionFilter(filters.FilterSet):
     commission_date = filters.DateFromToRangeFilter()
     edition_date = filters.DateFromToRangeFilter()
     submission_date = filters.DateFromToRangeFilter()
+    name = filters.CharFilter(lookup_expr="icontains")
 
     class Meta:
         model = Commission
-        fields = ["is_open_to_projects", "name", "is_archived"]
+        fields = ["is_open_to_projects", "is_archived"]
         distinct = True
 
     def filter_with_active_projects(self, queryset, name, value):
