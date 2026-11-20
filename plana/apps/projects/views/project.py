@@ -60,7 +60,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         request = self.request
-        queryset = Project.visible_objects.all().select_related("association", "user", "association_user").order_by("edition_date")
+        queryset = Project.visible_objects.all().select_related("association", "user", "association_user")
 
         if not request.user.has_perm("projects.view_project_any_fund"):
             managed_funds = request.user.get_user_managed_funds()
@@ -111,9 +111,9 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         # FIXME : temporary solution to exclude draft projects for managers
         if request.user.is_staff:
-            queryset = queryset.exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT)
+            return queryset.exclude(project_status=Project.ProjectStatus.PROJECT_DRAFT).order_by_project_statuses_manage()
 
-        return queryset
+        return queryset.order_by("edition_date")
 
     def get_serializer_class(self):
         if self.request.method == "POST":

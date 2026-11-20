@@ -210,7 +210,10 @@ class ProjectsViewsTests(TestCase):
         ]
         for similar_identifier in similar_identifiers:
             response = self.general_client.get(f"/projects/?manual_identifier={similar_identifier}")
-            self.assertEqual(response.data["results"][0]["manual_identifier"], similar_identifiers[0])
+            returned_identifiers = [
+                item["manual_identifier"] for item in response.data["results"]
+            ]
+            self.assertIn(similar_identifiers[0], returned_identifiers)
 
         year = 2099
         response = self.general_client.get(f"/projects/?year={year}")
