@@ -29,6 +29,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     association_user = AssociationUserSerializer(read_only=True)
     project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
     bearer_overdue_review_count = serializers.IntegerField(read_only=True)
+    review_overdue_days = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Project
@@ -64,6 +65,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "processing_date",
             "project_commission_funds",
             "bearer_overdue_review_count",
+            "review_overdue_days",
         ]
 
 
@@ -123,6 +125,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
     user = UserNameSerializer(read_only=True)
     association_user = AssociationUserSerializer(read_only=True)
     project_commission_funds = ProjectCommissionFundMinimalDataSerializer(many=True, read_only=True, source="projectcommissionfund_set")
+    review_overdue_days = serializers.IntegerField(read_only=True)
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_budget_file(self, project):
@@ -151,6 +154,7 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
             "project_status",
             "budget_file",
             "project_commission_funds",
+            "review_overdue_days",
         ]
 
 
