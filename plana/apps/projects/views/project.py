@@ -2,8 +2,6 @@
 
 import datetime
 
-from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as drf_filters
@@ -14,10 +12,7 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
 
 from plana.apps.associations.models.association import Association
-from plana.apps.commissions.models import Commission, Fund, CommissionFund
-from plana.apps.contents.models.setting import Setting
-from plana.apps.documents.models.document import Document
-from plana.apps.history.models.history import History
+from plana.apps.commissions.models import Fund, CommissionFund
 from plana.apps.institutions.models.institution import Institution
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
@@ -28,15 +23,12 @@ from plana.apps.projects.serializers.project import (
     ProjectUpdateManagerSerializer,
     ProjectUpdateSerializer, ProjectPostponeSerializer,
 )
-from plana.apps.users.models.user import AssociationUser, User
-from plana.libs.mail_template.models import MailTemplate
+from plana.apps.users.models.user import AssociationUser
 from plana.pagination import BasePageNumberPagination
-from plana.utils import send_mail
 from ..filters import ProjectFilter
 
-from plana.decorators import capture_queries
-from ..permissions import ProjectUpdatePermission
-from ..utils import send_pcf_notification_mail_with_attachments
+from ..permissions import ProjectUpdatePermission, CanAccessOrEditProjectPermission
+from ..notifications import send_pcf_notification_mail_with_attachments
 
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
@@ -442,186 +434,12 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class ProjectStatusUpdate(generics.UpdateAPIView):
     """/projects/{id}/status route."""
     serializer_class = ProjectStatusSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticated, DjangoModelPermissions, CanAccessOrEditProjectPermission]
     queryset = Project.objects.all()
     http_method_names = ["patch"]
 
     def get_queryset(self):
         return Project.visible_objects.all()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: ProjectStatusSerializer,
-            status.HTTP_400_BAD_REQUEST: None,
-            status.HTTP_401_UNAUTHORIZED: None,
-            status.HTTP_403_FORBIDDEN: None,
-            status.HTTP_404_NOT_FOUND: None,
-        }
-    )
-    def patch(self, request, *args, **kwargs):
-        """Update project status."""
-        project = self.get_object()
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if not request.user.can_edit_project(project):
-            return response.Response(
-                {"error": _("Not allowed to update this project.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        old_project_status = project.project_status
-        new_project_status = request.data["project_status"]
-
-        authorized_statuses = []
-        if request.user.has_perm("projects.change_project_as_bearer"):
-            authorized_statuses += Project.ProjectStatus.get_bearer_project_statuses()
-        if request.user.has_perm("projects.change_project_as_validator"):
-            authorized_statuses += Project.ProjectStatus.get_validator_project_statuses()
-        if new_project_status not in authorized_statuses:
-            return response.Response(
-                {"error": _("Choosing this status is not allowed.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        statuses_order = Project.ProjectStatus.get_project_statuses_order()
-        if old_project_status in Project.ProjectStatus.get_archived_project_statuses():
-            return response.Response(
-                {"error": _("Cannot change this project status anymore.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if (
-            statuses_order[new_project_status] == statuses_order[old_project_status] - 1
-            and old_project_status not in Project.ProjectStatus.get_rollbackable_project_statuses()
-        ):
-            return response.Response(
-                {"error": _("Cannot rollback to a previous status.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if (
-            statuses_order[new_project_status] != statuses_order[old_project_status] + 1
-            and statuses_order[new_project_status] != statuses_order[old_project_status] - 1
-        ):
-            return response.Response(
-                {"error": _("Wrong status process.")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        template = None
-        current_site = get_current_site(request)
-        context = {
-            "site_domain": current_site.domain,
-            "site_name": current_site.name,
-        }
-
-        if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
-            document_process_types = []
-            association_email_template_code = ""
-            user_email_template_code = ""
-            if new_project_status in Project.ProjectStatus.get_email_project_processing_project_statuses():
-                document_process_types = ["DOCUMENT_PROJECT"]
-                association_email_template_code = "MANAGER_PROJECT_ASSOCIATION_CREATION"
-                user_email_template_code = "MANAGER_PROJECT_USER_CREATION"
-                request.data["processing_date"] = datetime.datetime.today()
-            elif new_project_status in Project.ProjectStatus.get_email_review_processing_project_statuses():
-                document_process_types = ["DOCUMENT_PROJECT_REVIEW"]
-                association_email_template_code = "MANAGER_PROJECT_REVIEW_ASSOCIATION_CREATION"
-                user_email_template_code = "MANAGER_PROJECT_REVIEW_USER_CREATION"
-
-                commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
-                context["commission_name"] = commission.name
-                context["project_name"] = project.name
-            missing_documents_names = Document.objects.filter(
-                models.Q(process_type__in=document_process_types)
-                & (
-                    models.Q(is_required_in_process=True, fund_id=None)
-                    | models.Q(
-                        is_required_in_process=True,
-                        fund__commissionfund__projectcommissionfund__project_id=project.id,
-                    )
-                )
-            ).exclude(documentupload__project=project)
-            if missing_documents_names.exists():
-                missing_documents_names_string = ', '.join(str(item) for item in missing_documents_names)
-                return response.Response(
-                    {"error": _(f"Missing documents : {missing_documents_names_string}.")},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            if (
-                project.manual_identifier is None
-                and new_project_status in Project.ProjectStatus.get_identifier_project_statuses()
-            ):
-                now = datetime.datetime.now()
-                if now.month >= Setting.get_setting("NEW_YEAR_MONTH_INDEX"):
-                    year = now.year
-                else:
-                    year = now.year - 1
-                last_identifier = 0
-                projects_year = Project.visible_objects.filter(
-                    manual_identifier__isnull=False, manual_identifier__startswith=year
-                )
-                if projects_year.exists():
-                    last_identifier = (
-                        int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
-                    )
-                project.manual_identifier = f"{year}{last_identifier+1:04}"
-                project.save()
-
-            managers_emails = project.get_project_default_manager_emails()
-            if project.association_id:
-                association = Association.objects.get(id=project.association_id)
-                funds_misc_used = Fund.objects.filter(
-                    commissionfund__projectcommissionfund__project=project,
-                    is_site=False,
-                )
-                context["association_name"] = association.name
-                template = MailTemplate.objects.get(code=association_email_template_code)
-                if funds_misc_used.exists():
-                    for user_to_check in User.objects.filter(is_superuser=False, is_staff=True):
-                        if user_to_check.has_perm("users.change_user_misc"):
-                            managers_emails.append(user_to_check.email)
-            elif project.user_id:
-                context["first_name"] = request.user.first_name
-                context["last_name"] = request.user.last_name
-                template = MailTemplate.objects.get(code=user_email_template_code)
-
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=managers_emails,
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
-        elif new_project_status in Project.ProjectStatus.get_validator_project_statuses():
-            mail_templates_codes_by_status = {
-                "PROJECT_DRAFT_PROCESSED": "USER_OR_ASSOCIATION_PROJECT_NEEDS_CHANGES",
-                "PROJECT_REJECTED": "USER_OR_ASSOCIATION_PROJECT_REJECTION",
-                "PROJECT_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION",
-                "PROJECT_REVIEW_DRAFT": "USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW",
-                "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
-                "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
-            }
-            if new_project_status == "PROJECT_VALIDATED":
-                History.objects.create(
-                    action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
-                )
-                commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
-                fund = Fund.objects.filter(commissionfund__projectcommissionfund__project=project).first()
-                context["project_name"] = project.name
-                context["fund_name"] = fund.acronym
-                context["commission_name"] = commission.name
-            template = MailTemplate.objects.get(code=mail_templates_codes_by_status[new_project_status])
-            context["manager_email_address"] = ','.join(project.get_project_default_manager_emails())
-            send_mail(
-                from_=settings.DEFAULT_FROM_EMAIL,
-                to_=project.get_project_owner_data().get("email"),
-                subject=template.subject.replace("{{ site_name }}", context["site_name"]),
-                message=template.parse_vars(request.user, request, context),
-            )
-
-        request.data["edition_date"] = datetime.date.today()
-        return self.update(request, *args, **kwargs)
 
 
 class ProjectCommissionPostponeView(generics.GenericAPIView):

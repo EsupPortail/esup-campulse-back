@@ -1,15 +1,20 @@
-"""Utils file for projects app"""
+"""Utils file for projects app, mainly used for notifications handling"""
 import datetime
+import logging
 from typing import Optional
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.formats import date_format
 
+from plana.apps.commissions.models import Commission, Fund
 from plana.apps.contents.models import Content
-from plana.apps.projects.models import ProjectCommissionFund, ProjectComment
+from plana.apps.history.models import History
+from plana.apps.projects.models import ProjectCommissionFund, ProjectComment, Project
 from plana.libs.mail_template.models import MailTemplate
 from plana.utils import send_mail
+
+logger = logging.getLogger(__name__)
 
 
 def build_pcf_notification_attachment_data(request, pcf: ProjectCommissionFund, template_path: str, content_code: str, from_admin: bool) -> Optional[dict]:
@@ -118,3 +123,91 @@ def send_pcf_notification_mail_with_attachments(request, pcf: ProjectCommissionF
         message=mail_template.parse_vars(request.user, request, context),
         temp_attachments=attachments,
     )
+
+
+def send_project_status_update_notification(request, project_obj: Project) -> None:
+    """Used to send notifications on main project status update (commission related), from bearer or manager"""
+
+    def _get_bearer_context(project):
+        if project.project_status in Project.ProjectStatus.get_email_project_processing_project_statuses():
+            prefix = "MANAGER_PROJECT"
+        elif project.project_status in Project.ProjectStatus.get_email_review_processing_project_statuses():
+            prefix = "MANAGER_PROJECT_REVIEW"
+        else:
+            return {}
+
+        role = "ASSOCIATION" if project.association_id else "USER" if project.user_id else None
+        if not role:
+            return {}
+
+        # Commission should be mandatory at this state
+        commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
+        bearer_context = {
+            "template_code": f"{prefix}_{role}_CREATION",
+            "commission_name": commission.name,
+            "project_name": project.name,
+            "to": project.get_project_default_manager_emails()
+        }
+        owner_data = project.get_project_owner_data()
+        if project.association_id:
+            bearer_context["association_name"] = owner_data.get("name")
+        elif project.user_id:
+            bearer_context["first_name"] = owner_data.get("first_name")
+            bearer_context["last_name"] = owner_data.get("last_name")
+
+        return bearer_context
+
+    def _get_validator_context(project):
+        mail_templates_codes_by_status = {
+            "PROJECT_DRAFT_PROCESSED": "USER_OR_ASSOCIATION_PROJECT_NEEDS_CHANGES",
+            "PROJECT_REJECTED": "USER_OR_ASSOCIATION_PROJECT_REJECTION",
+            "PROJECT_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION",
+            "PROJECT_REVIEW_DRAFT": "USER_OR_ASSOCIATION_PROJECT_NEEDS_REVIEW",
+            "PROJECT_REVIEW_VALIDATED": "USER_OR_ASSOCIATION_PROJECT_REVIEW_CONFIRMATION",
+            "PROJECT_CANCELED": "USER_OR_ASSOCIATION_PROJECT_CANCELLATION",
+        }
+        if not (template_code := mail_templates_codes_by_status.get(project.project_status)):
+            return {}
+        validator_context = {
+            "template_code": template_code,
+            "to": project.get_project_owner_data().get("email"),
+            "manager_email_address": ','.join(project.get_project_default_manager_emails())
+        }
+        if project.project_status == "PROJECT_VALIDATED":
+            # TODO : Better history model
+            History.objects.create(
+                action_title="PROJECT_VALIDATED", action_user_id=request.user.pk, project_id=project.id
+            )
+            commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=project).first()
+            fund = Fund.objects.filter(commissionfund__projectcommissionfund__project=project).first()
+            validator_context.update({
+                "project_name": project.name,
+                "fund_name": fund.acronym,
+                "commission_name": commission.name
+            })
+        return validator_context
+
+    if project_obj.project_status in Project.ProjectStatus.get_bearer_project_statuses():
+        context = _get_bearer_context(project_obj)
+    elif project_obj.project_status in Project.ProjectStatus.get_validator_project_statuses():
+        context = _get_validator_context(project_obj)
+    else:
+        return
+
+    # Mail sending is not mandatory for this workflow step, should not be blocking the process
+    try:
+        current_site = get_current_site(request)
+        context.update({"site_domain": current_site.domain, "site_name": current_site.name})
+        template = MailTemplate.objects.get(code=context["template_code"])
+        send_mail(
+            from_=settings.DEFAULT_FROM_EMAIL,
+            to_=context["to"],
+            subject=template.subject.replace("{{ site_name }}", context["site_name"]),
+            message=template.parse_vars(request.user, request, context),
+        )
+    except Exception:
+        logger.exception(
+            "Failed to send status update notification for project %s (status=%s)",
+            project_obj.pk,
+            project_obj.project_status
+        )

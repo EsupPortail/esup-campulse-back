@@ -8,7 +8,7 @@ from plana.apps.commissions.models import CommissionFund
 from plana.apps.commissions.serializers.commission_fund import CommissionFundReadOnlySerializer
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_commission_fund import ProjectCommissionFund
-from plana.apps.projects.utils import send_pcf_notification_mail_with_attachments
+from plana.apps.projects.notifications import send_pcf_notification_mail_with_attachments
 
 
 class ProjectCommissionFundSerializer(serializers.ModelSerializer):

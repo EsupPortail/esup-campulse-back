@@ -4,6 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Sum, Count, Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
@@ -244,8 +245,10 @@ class Project(models.Model):
             owner = self.user
             return {
                 "name": f"{owner.first_name} {owner.last_name}",
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-                "email": self.user.email
+                "email": owner.email
             }
         return {}
 
@@ -339,6 +342,20 @@ class Project(models.Model):
     def commission(self):
         pcf = self.projectcommissionfund_set.all()
         return pcf[0].commission_fund.commission if pcf else None
+
+    # TODO : unittests
+    def apply_manual_identifier(self):
+        """Generate and apply a manual identifier to the project if it doesn't already have one."""
+        from plana.apps.contents.models.setting import Setting
+        if not self.manual_identifier:
+            now = timezone.now()
+            year = now.year if now.month >= Setting.get_setting("NEW_YEAR_MONTH_INDEX") else now.year - 1
+            last_identifier = 0
+            projects_year = Project.visible_objects.filter(manual_identifier__isnull=False, manual_identifier__startswith=year)
+            if projects_year.exists():
+                last_identifier = int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
+            self.manual_identifier = f"{year}{last_identifier + 1:04}"
+            self.save()
 
     def __str__(self):
         return self.name
