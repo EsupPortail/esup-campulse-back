@@ -552,3 +552,34 @@ class ReviewExpirationCommandTest(TestCase):
             project_needing_review.save()
         call_command("cron_review_expiration")
         self.assertTrue(len(mail.outbox))
+
+
+class ArchiveCommissionsCommandTest(TestCase):
+    """Test archive_commissions command."""
+
+    fixtures = [
+        "associations_activityfield.json",
+        "tests/associations_association.json",
+        "auth_group.json",
+        "auth_permission.json",
+        "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
+        "tests/institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
+    ]
+
+    def test_archive_commissions(self):
+        """is_archived should be True for past commissions with only finished projects or no projects at all."""
+        commission = Commission.objects.get(pk=5)
+        commission.is_archived = False
+        commission.save()
+        call_command("cron_archive_commissions")
+
+        self.assertTrue(Commission.objects.get(pk=5).is_archived)
+        self.assertEqual(Commission.objects.filter(is_archived=True).count(), 1)

@@ -11,6 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command("cron_account_expiration")
         call_command("cron_association_expiration")
+        call_command("cron_archive_commissions")
         call_command("cron_commission_expiration")
         call_command("cron_document_expiration")
         call_command("cron_history_expiration")

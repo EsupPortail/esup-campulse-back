@@ -7,7 +7,8 @@
       "edition_date": "2099-10-15",
       "commission_date": "2099-10-20",
       "is_open_to_projects": true,
-      "name": "Commission numéro 1"
+      "name": "Commission numéro 1",
+      "is_archived": false
     }
   },
   {
@@ -18,7 +19,8 @@
       "edition_date": "2099-10-15",
       "commission_date": "2099-10-22",
       "is_open_to_projects": true,
-      "name": "Une autre commission de rentrée d'octobre 2099"
+      "name": "Une autre commission de rentrée d'octobre 2099",
+      "is_archived": false
     }
   },
   {
@@ -29,7 +31,8 @@
       "edition_date": "2099-10-15",
       "commission_date": "2099-10-21",
       "is_open_to_projects": true,
-      "name": "Commission de rentrée d'octobre 2099"
+      "name": "Commission de rentrée d'octobre 2099",
+      "is_archived": false
     }
   },
   {
@@ -40,7 +43,8 @@
       "edition_date": "2000-01-12",
       "commission_date": "2000-01-30",
       "is_open_to_projects": false,
-      "name": "Commission du passé"
+      "name": "Commission du passé",
+      "is_archived": false
     }
   },
   {
@@ -51,7 +55,8 @@
       "edition_date": "1990-01-25",
       "commission_date": "1990-01-30",
       "is_open_to_projects": false,
-      "name": "Commission archivée"
+      "name": "Commission archivée",
+      "is_archived": true
     }
   }
 ]
