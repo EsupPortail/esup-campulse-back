@@ -61,7 +61,7 @@ class CommissionManageSerializer(serializers.ModelSerializer):
         if edition_date and submission_date and edition_date <= submission_date:
             raise serializers.ValidationError({"too_early_edition_date": _("The edition date must be later than the submission date.")})
         if edition_date and commission_date and edition_date > commission_date:
-            raise serializers.ValidationError({"to_late_edition_date": _("The edition date must be earlier than or equal to the commission date.")})
+            raise serializers.ValidationError({"too_late_edition_date": _("The edition date must be earlier than or equal to the commission date.")})
 
         return data
 

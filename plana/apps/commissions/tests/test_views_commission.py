@@ -281,15 +281,38 @@ class CommissionDatesViewsTests(TestCase):
         POST /commissions/manage/ .
 
         - submission_date cannot come after commission_date.
+        - edition_date cannot come after commission_date.
+        - edition_date cannot come before submission_date.
         """
         post_data = {
             "submission_date": "2099-12-25",
+            "edition_date": "2099-12-30",
             "commission_date": "2099-11-30",
             "name": "New Commission",
         }
         response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("inconsistent_dates", response.data)
+
+        post_data = {
+            "submission_date": "2099-11-25",
+            "edition_date": "2099-12-30",
+            "commission_date": "2099-11-30",
+            "name": "New Commission",
+        }
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_late_edition_date", response.data)
+
+        post_data = {
+            "submission_date": "2099-11-25",
+            "edition_date": "2099-11-10",
+            "commission_date": "2099-11-30",
+            "name": "New Commission",
+        }
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_early_edition_date", response.data)
 
     def test_post_commissions_too_old(self):
         """
@@ -299,6 +322,7 @@ class CommissionDatesViewsTests(TestCase):
         """
         post_data = {
             "submission_date": "1993-11-30",
+            "edition_date": "1993-12-15",
             "commission_date": "1993-12-25",
             "name": "New Commission",
         }
@@ -329,8 +353,13 @@ class CommissionDatesViewsTests(TestCase):
         """
         post_data = {
             "submission_date": "2099-11-30",
+            "edition_date": "2099-12-15",
             "commission_date": "2099-12-25",
             "name": "New Commission",
+            "room": "Example Room",
+            "building": "Example building",
+            "address": "Example Address",
+            "scheduled_time": "10:00:00"
         }
         response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -466,7 +495,7 @@ class CommissionDatesViewsTests(TestCase):
 
         - A user with proper permissions can execute this request.
         """
-        patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
+        patch_data = {"submission_date": "2099-10-07", "commission_date": "2099-12-25"}
         response = self.general_client.patch(
             reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
