@@ -43,7 +43,7 @@ class AssociationUser(models.Model):
         if self.can_be_president_from is None and self.can_be_president_to is None:
             return False
 
-        now = timezone.now()
+        now = timezone.localdate()
         after_start = self.can_be_president_from is None or self.can_be_president_from <= now
         before_end = self.can_be_president_to is None or self.can_be_president_to >= now
         return after_start and before_end
