@@ -55,8 +55,9 @@ sonarqube-check:
     # - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     # - if: $CI_COMMIT_BRANCH == 'master'
     # - if: $CI_COMMIT_BRANCH == 'main'
-    # - if: $CI_COMMIT_BRANCH == 'develop'
-    - if: $CI_COMMIT_BRANCH == 'cleanup'
+    - if: $CI_COMMIT_BRANCH == 'develop'
+    - if: $CI_COMMIT_BRANCH == 'develop-v2'
+    # - if: $CI_COMMIT_BRANCH == 'cleanup'
 
 unittest:
   stage: test
@@ -126,7 +127,8 @@ b:docker:
   variables:
     DESTINATION: $CONTAINER_TEST_IMAGE
   rules:
-    - when: always
+    - if: '$CI_COMMIT_TAG'
+      when: always
 
 r:docker:
   extends: .build-image
