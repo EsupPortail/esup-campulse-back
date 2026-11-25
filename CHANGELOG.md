@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0 (25/11/2026)
+
+### Evolutions et configuration
+- Remplacement de Poetry par UV
+- Mise à jour de la version de python requise 3.9 -> 3.12
+- Mise à jour de la version de django : 4.2 -> 5.2
+- Mise à jour globale de tous les paquets nécessaires selon ces nouvelles limitations
+/!\ Une base de données en PostgreSQL 14 ou supérieur est désormais nécessaire au bon fonctionnement de l'application. /!\
+
 ## 1.4.0 (03/11/2026)
 
 /!\ Cette version diffère des précédentes car elle présente un risque de casse dû à la mise à jour de paramètres essentiels au fonctionnement de l'application /!\
