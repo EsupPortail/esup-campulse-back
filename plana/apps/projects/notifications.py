@@ -5,6 +5,7 @@ from typing import Optional
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils import timezone
 from django.utils.formats import date_format
 
 from plana.apps.commissions.models import Commission, Fund
@@ -188,6 +189,9 @@ def send_project_status_update_notification(request, project_obj: Project) -> No
                 "commission_scheduled_time": commission.scheduled_time,
                 "commission_location": f"{commission.building} - {commission.room} - {commission.address}"
             })
+            # If commission is tomorrow, send a mail to member funds (global reminder already sent at this point)
+            if commission.commission_date == timezone.localdate() + datetime.timedelta(days=1):
+                validator_context["bcc"] = commission.get_fund_members_emails()
         return validator_context
 
     if project_obj.project_status in Project.ProjectStatus.get_bearer_project_statuses():
@@ -205,6 +209,7 @@ def send_project_status_update_notification(request, project_obj: Project) -> No
         send_mail(
             from_=settings.DEFAULT_FROM_EMAIL,
             to_=context["to"],
+            bcc_=context.get("bcc", []),
             subject=template.subject.replace("{{ site_name }}", context["site_name"]),
             message=template.parse_vars(request.user, request, context),
         )

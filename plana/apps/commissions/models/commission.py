@@ -1,5 +1,6 @@
 """Models describing commissions."""
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -28,3 +29,11 @@ class Commission(models.Model):
     class Meta:
         verbose_name = _("Commission")
         verbose_name_plural = _("Commissions")
+
+    def get_fund_members_emails(self):
+        User = get_user_model()
+        funds = self.commissionfund_set.values_list("fund_id")
+        return User.objects.filter(
+            groupinstitutionfunduser__fund_id__in=funds,
+            groupinstitutionfunduser__group__name="MEMBER_FUND"
+        ).distinct().values_list("email", flat=True)

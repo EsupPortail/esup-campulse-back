@@ -1,8 +1,10 @@
 """List of tests done on projects models."""
+import datetime
 from unittest.mock import patch
 
 from django.core import mail
 from django.test import Client, TestCase, RequestFactory
+from django.utils import timezone
 
 from plana.apps.commissions.models import Commission
 from plana.apps.projects.models.category import Category
@@ -244,7 +246,7 @@ class ProjectsModelsTests(TestCase):
         refreshed_other_project = Project.objects.get(id=project_id)
         self.assertEqual(refreshed_other_project.project_status, project.project_status)
 
-    def test_process_pcf_admin_validation_ok(self):
+    def test_process_pcf_admin_validation_ok_without_bcc(self):
         # If last pcf validated by admin, mail sent and project status updated accordingly
         project = Project.objects.get(id=3)
         pcf = ProjectCommissionFund.objects.get(pk=4)
@@ -255,10 +257,30 @@ class ProjectsModelsTests(TestCase):
         project.refresh_from_db()
         self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_VALIDATED)
         self.assertEqual(len(mail.outbox), 1)
+        sent_email = mail.outbox[0]
+        self.assertCountEqual(sent_email.bcc, [])
 
         # No double-mail sent if validated twice
         project.process_project_pcf_admin_validation_status_update(request=self.request)
         self.assertEqual(len(mail.outbox), 1)
+
+    @patch("plana.apps.commissions.models.Commission.get_fund_members_emails")
+    def test_process_pcf_admin_validation_ok_with_bcc(self, mock_emails):
+        fake_emails = ["test@test.fr", "test2@test.fr"]
+        mock_emails.return_value = fake_emails
+        # If last pcf validated by admin, mail sent and project status updated accordingly
+        Commission.objects.filter(pk=1).update(commission_date=timezone.localdate() + datetime.timedelta(days=1))
+        project = Project.objects.get(id=3)
+        pcf = ProjectCommissionFund.objects.get(pk=4)
+        pcf.is_validated_by_admin = True
+        pcf.save()
+
+        project.process_project_pcf_admin_validation_status_update(request=self.request)
+        project.refresh_from_db()
+        self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_VALIDATED)
+        self.assertEqual(len(mail.outbox), 1)
+        sent_email = mail.outbox[0]
+        self.assertCountEqual(sent_email.bcc, fake_emails)
 
     def test_process_pcf_admin_validation_fully_rejected(self):
         # If last pcf rejected by admin, mail sent and project status updated accordingly

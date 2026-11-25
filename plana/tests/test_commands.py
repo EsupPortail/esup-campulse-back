@@ -1,6 +1,7 @@
 """Test commands in management folder."""
 
 import datetime
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -583,3 +584,40 @@ class ArchiveCommissionsCommandTest(TestCase):
 
         self.assertTrue(Commission.objects.get(pk=5).is_archived)
         self.assertEqual(Commission.objects.filter(is_archived=True).count(), 1)
+
+
+class CommissionReminderCommandTest(TestCase):
+    """Test archive_commissions command."""
+
+    fixtures = [
+        "associations_activityfield.json",
+        "tests/associations_association.json",
+        "auth_group.json",
+        "auth_permission.json",
+        "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
+        "tests/institutions_institution.json",
+        "institutions_institutioncomponent.json",
+        "mailtemplates",
+        "mailtemplatevars",
+        "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
+        "tests/users_associationuser.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
+    ]
+
+    @patch("plana.apps.commissions.models.Commission.get_fund_members_emails")
+    def test_reminder_commissions(self, mock_emails):
+        """is_archived should be True for past commissions with only finished projects or no projects at all."""
+        fake_emails = ["test@test.fr", "test2@test.fr"]
+        mock_emails.return_value = fake_emails
+        tomorrow = timezone.localdate() + datetime.timedelta(days=1)
+        Commission.objects.filter(pk=1).update(commission_date=tomorrow)
+        call_command("cron_commission_reminder")
+
+        self.assertEqual(len(mail.outbox), 1)
+        sent_email = mail.outbox[0]
+        self.assertCountEqual(fake_emails, sent_email.bcc)
+        self.assertTrue(sent_email.subject.startswith("Rappel : "))

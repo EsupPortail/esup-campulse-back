@@ -1,4 +1,6 @@
 """Models describing projects."""
+import datetime
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.validators import MinValueValidator
@@ -339,6 +341,7 @@ class Project(models.Model):
             "fund_name": list(self.projectcommissionfund_set.filter(is_validated_by_admin=True).values_list("commission_fund__fund__name", flat=True)),
         }
         owner_data = self.get_project_owner_data()
+        bcc = []
 
         if stats["validated_admin_count"] > 0:
             new_status = self.ProjectStatus.PROJECT_VALIDATED
@@ -350,6 +353,9 @@ class Project(models.Model):
                 "commission_scheduled_time": commission.scheduled_time,
                 "commission_location": f"{commission.building} - {commission.room} - {commission.address}"
             })
+            # If commission is tomorrow, send a mail to member funds (global reminder already sent at this point)
+            if commission.commission_date == timezone.localdate() + datetime.timedelta(days=1):
+                bcc = commission.get_fund_members_emails()
         else:
             new_status = self.ProjectStatus.PROJECT_REJECTED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_REJECTION"
@@ -363,6 +369,7 @@ class Project(models.Model):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=owner_data.get("email"),
+                bcc_=bcc,
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )

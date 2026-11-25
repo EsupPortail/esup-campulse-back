@@ -10,9 +10,14 @@ class CommissionsModelsTests(TestCase):
     """Main tests class."""
 
     fixtures = [
+        "auth_group.json",
+        "auth_permission.json",
         "tests/commissions_fund.json",
         "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/institutions_institution.json",
+        "tests/users_groupinstitutionfunduser.json",
+        "tests/users_user.json",
     ]
 
     def setUp(self):
@@ -28,3 +33,28 @@ class CommissionsModelsTests(TestCase):
         """There's at least one commission in the database."""
         commission = Commission.objects.first()
         self.assertEqual(str(commission), commission.name)
+
+    def test_get_fund_members_emails(self):
+        commission_all = Commission.objects.get(pk=1)
+        emails_all = list(commission_all.get_fund_members_emails())
+        self.assertCountEqual(
+            emails_all,
+            [
+                "membre-commissions@mail.tld",
+                "membre-culture-actions@mail.tld",
+                "membre-fsdie-idex@mail.tld",
+                "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld"
+            ]
+        )
+
+        commission = Commission.objects.get(pk=2)
+        emails = list(commission.get_fund_members_emails())
+        print(emails)
+        self.assertCountEqual(
+            emails,
+            [
+                "membre-commissions@mail.tld",
+                "membre-fsdie-idex@mail.tld",
+                "president-asso-site-etudiant-asso-hors-site-porteur-commissions@mail.tld"
+            ]
+        )

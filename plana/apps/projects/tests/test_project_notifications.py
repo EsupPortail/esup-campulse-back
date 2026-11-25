@@ -5,6 +5,7 @@ from unittest.mock import patch, ANY
 from django.utils import timezone
 from django.test import Client, TestCase, RequestFactory
 
+from plana.apps.commissions.models import Commission
 from plana.apps.contents.models import Content
 from plana.apps.history.models import History
 from plana.apps.projects import notifications
@@ -231,7 +232,7 @@ class ProjectStatusNotificationsTestCase(TestCase):
         self.assertIn(expected_template.subject.split("{{")[0].strip(), kwargs["subject"])
 
     @patch("plana.apps.projects.notifications.send_mail", wraps=send_mail)
-    def test_validator_project_validated_status(self, mock_send_mail):
+    def test_validator_project_validated_status_without_bcc(self, mock_send_mail):
         """Assert that a project validated by a validator sends correct email and creates history entry"""
         project = Project.objects.get(pk=10)
         initial_history_count = History.objects.filter(project_id=project.id,action_title="PROJECT_VALIDATED",).count()
@@ -244,6 +245,33 @@ class ProjectStatusNotificationsTestCase(TestCase):
         )
         mock_send_mail.assert_called_once()
         self.assertEqual(mock_send_mail.call_args.kwargs["to_"], project.get_project_owner_data().get("email"))
+        # Only when the commission is tomorrow
+        self.assertEqual(mock_send_mail.call_args.kwargs["bcc_"], [])
+
+    @patch("plana.apps.projects.notifications.send_mail", wraps=send_mail)
+    @patch("plana.apps.commissions.models.Commission.get_fund_members_emails")
+    def test_validator_project_validated_status_with_bcc(self, mock_emails, mock_send_mail):
+        """
+        Assert that a project validated by a validator sends correct email and creates history entry
+        with bcc if the commission is tomorrow
+        """
+        fake_emails = ["test@test.fr", "test2@test.fr"]
+        mock_emails.return_value = fake_emails
+        Commission.objects.filter(pk=1).update(commission_date=timezone.localdate() + datetime.timedelta(days=1))
+        # If last pcf validated by admin, mail sent and project status updated accordingly
+        project = Project.objects.get(pk=10)
+        initial_history_count = History.objects.filter(project_id=project.id,action_title="PROJECT_VALIDATED",).count()
+
+        notifications.send_project_status_update_notification(self.request, project)
+
+        self.assertEqual(
+            History.objects.filter(project_id=project.id, action_title="PROJECT_VALIDATED").count(),
+            initial_history_count + 1,
+        )
+        mock_send_mail.assert_called_once()
+        self.assertEqual(mock_send_mail.call_args.kwargs["to_"], project.get_project_owner_data().get("email"))
+        self.assertEqual(mock_send_mail.call_args.kwargs["bcc_"], fake_emails)
+
 
     @patch("plana.apps.projects.notifications.send_mail", wraps=send_mail)
     def test_project_status_without_notification(self, mock_send_mail):
