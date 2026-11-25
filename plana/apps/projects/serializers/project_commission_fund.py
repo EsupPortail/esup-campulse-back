@@ -1,5 +1,4 @@
 """Serializers describing fields used on project commission fund table."""
-import datetime
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -32,7 +31,7 @@ class ProjectCommissionFundMinimalDataSerializer(serializers.ModelSerializer):
 
 
 class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
-    """Fields that can be updated by project's bearer."""
+    """Fields that can be updated by project's bearer or validator."""
 
     class Meta:
         model = ProjectCommissionFund
@@ -65,10 +64,9 @@ class ProjectCommissionFundDataSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError({"forbidden_validator_fields": _("Not allowed to update validator fields for this project's commission.")})
 
-        # Checking submission date
-        commission = self.instance.commission_fund.commission
-        if commission.submission_date < datetime.date.today() and not request.user.has_perm("projects.change_projectcommissionfund_as_validator"):
-            raise serializers.ValidationError({"submission_date": _("Submission date for this commission is gone.")})
+        # Checking edition date if bearer edit
+        if request.user.has_perm("projects.change_projectcommissionfund_as_bearer") and not self.instance.project.can_still_be_edited_by_bearer():
+            raise serializers.ValidationError({"past_edition_date": _("Edition date for this commission is gone.")})
 
         return data
 

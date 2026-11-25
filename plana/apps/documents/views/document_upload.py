@@ -111,6 +111,14 @@ class DocumentUploadListCreate(generics.ListCreateAPIView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
+            # Uploaded documents edition of an already submitted project is only possible
+            # if its commission edition_date is not in the past
+            if request.user.has_perm("projects.change_project_as_bearer") and not project.can_still_be_edited_by_bearer():
+                return response.Response(
+                    {"past_edition_date": _("Edition date for this commission is gone.")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         association = None
         if (
             "association" in request.data
@@ -350,23 +358,31 @@ class DocumentUploadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
         document_upload = self.get_object()
         get_object_or_404(Document, id=document_upload.document_id)
 
-        if not request.user.has_perm("documents.delete_documentupload_all") and (
-            (
-                document_upload.project_id is not None
-                and not request.user.can_edit_project(Project.visible_objects.get(id=document_upload.project_id))
-            )
-            or (document_upload.user_id is not None and request.user.pk != document_upload.user_id)
-            or (
-                document_upload.association_id is not None
-                and not request.user.is_in_association(document_upload.association_id)
-            )
-        ):
-            return response.Response(
-                {"error": _("Not allowed to delete this uploaded document.")},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+        # FIXME : Previously visible objects only here for project (?)
+        if not request.user.has_perm("documents.delete_documentupload_all"):
+            if document_upload.project:
+                if not request.user.can_edit_project(document_upload.project):
+                    return response.Response(
+                        {"error": _("Not allowed to delete this uploaded document.")},
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
+                # Uploaded documents edition of an already submitted project is only possible
+                # if its commission edition_date is not in the past (for its bearer)
+                if request.user.has_perm("projects.change_project_as_bearer") and not document_upload.project.can_still_be_edited_by_bearer():
+                    return response.Response(
+                        {"past_edition_date": _("Edition date for this commission is gone.")},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            if (
+                (document_upload.user_id and request.user.pk != document_upload.user_id)
+                or (document_upload.association_id and not request.user.is_in_association(document_upload.association_id))
+            ):
+                return response.Response(
+                    {"error": _("Not allowed to delete this uploaded document.")},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
-        if request.user.has_perm("documents.delete_documentupload_all"):
+        else:
             current_site = get_current_site(request)
             context = {
                 "site_domain": current_site.domain,

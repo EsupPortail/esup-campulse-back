@@ -180,6 +180,9 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
         # Must be updating to an authorized project status depending on user role
         authorized_statuses = []
         if request.user.has_perm("projects.change_project_as_bearer"):
+            # Only if commission edition_date is not in the past for bearer
+            if not project.can_still_be_edited_by_bearer():
+                raise serializers.ValidationError({"past_edition_date": _("Edition date for this commission is gone.")})
             authorized_statuses += Project.ProjectStatus.get_bearer_project_statuses()
         if request.user.has_perm("projects.change_project_as_validator"):
             authorized_statuses += Project.ProjectStatus.get_validator_project_statuses()

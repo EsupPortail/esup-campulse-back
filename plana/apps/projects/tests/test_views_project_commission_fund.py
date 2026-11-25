@@ -409,23 +409,24 @@ class ProjectCommissionFundViewsTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("workflow_inconsistency", response.data)
 
-    def test_patch_project_cf_wrong_submission_date(self):
+    def test_patch_project_cf_wrong_edition_date(self):
         """
         PATCH /projects/{project_id}/commission_funds/{commission_fund_id} .
 
         - The route can be accessed by any authenticated user.
         - The commission submission date must not be over.
         """
+        project_id = 1
+        Project.objects.filter(id=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED)
         commission_fund_id = 3
-        commission = Commission.objects.get(id=1)
-        commission.submission_date = "1968-05-03"
-        commission.save()
+        Commission.objects.filter(id=1).update(edition_date="1968-05-03")
         response = self.student_misc_client.patch(
-            f"/projects/1/commission_funds/{commission_fund_id}",
+            f"/projects/{project_id}/commission_funds/{commission_fund_id}",
             {"amount_asked": 1333},
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_edition_date", response.data)
 
     def test_patch_project_cf_amount_earned(self):
         """

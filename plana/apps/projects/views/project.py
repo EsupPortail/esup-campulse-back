@@ -376,6 +376,13 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        # Bearer edit of an already submitted project is only possible if its commission edition_date is not in the past
+        if request.user.has_perm("projects.change_project_as_bearer") and not project.can_still_be_edited_by_bearer():
+            return response.Response(
+                {"past_edition_date": _("Edition date for this commission is gone.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if (
             "amount_students_audience" in request.data
             and "amount_all_audience" in request.data
