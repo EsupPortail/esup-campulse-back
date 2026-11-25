@@ -98,6 +98,77 @@ Il ne faut pas oublier de modifier l'alt des images en conséquence.
 
 Du moment que le lien vers le fichier image existe dans le répertoire `img` de l'arborescence, il n'y a aucun nommage de fichier particulier à respecter, si ce n'est qu'il ne doit pas contenir d'espaces ou de caractères spéciaux.
 
+### Polices d'écriture
+
+Il est possible d'importer ses propres polices d'écriture personnalisées dans le style des PDFs afin de correspondre au langage visuel de son établissement, comme c'est le cas à l'Université de Strasbourg actuellement.
+
+Pour ce faire, il est nécessaire d'avoir un répertoire "fonts" à la racine du dépôt de personnalisation :
+```txt
+├── css
+├── fonts
+├── img
+└── templates
+```
+Dans ce répertoire fonts, il est possible d'ajouter autant de polices d'écriture que nécessaire, chacune dans un sous-répertoire portant le nom de la police d'écriture qu'il contient. Par exemple :
+```txt
+├── css
+├── fonts
+    ├── Unistra1.0
+    └── Unistra2.0
+├── img
+└── templates
+```
+Au sein de ces répertoires devront être placés les fichiers source des polices choisies, c'est à dire les fichiers `.woff` et `.woff2` nécessaires à l'utilisation des différentes polices d'écriture.
+Il faut également y ajouter un fichier `votre_font.css` dans chacun de ces répertoires afin d'y déclarer les classes CSS qui permettront l'usage de votre police d'écriture dans le CSS customisé des templates de PDFs.
+Il faudra alors importer ces fichiers de CSS dans les différents templates qui utilisent la police choisie.
+
+En reprenant notre exemple, on aurait ceci au niveau de l'arborescence : 
+```txt
+├── css
+├── fonts
+    ├── Unistra1.0
+    │  ├── Unistra1.0.css
+    │  ├── Unistra1.0-Bold.woff
+    │  ├── Unistra1.0-Bold.woff2
+    │  ├── Unistra1.0-Regular.woff
+    │  └── Unistra1.0-Regular.woff2
+    │  └── etc
+    └── Unistra2.0
+├── img
+└── templates
+```
+Et ceci en exemple de contenu de fichier CSS : 
+```css
+@font-face {
+    font-family: 'Unistra1.0';
+    src: url('Unistra1.0-Regular.woff2') format('woff2'),
+         url('Unistra1.0-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Unistra1.0';
+    src: url('Unistra1.0-Bold.woff2') format('woff2'),
+    url('Unistra1.0-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+```
+Ce modèle peut être réutilisé pour tous les styles détaillés de la police voulue (regular, bold, italic, bold-italic, ...).
+
+Le fichier de CSS de la police d'écriture s'importe ensuite comme ceci dans les templates HTML de PDFs : 
+```html
+<link rel="stylesheet" href="{% s3static 'fonts/Unistra1.0/Unistra1.0.css' %}" type="text/css"/>
+``` 
+/!\ Attention à bien importer le fichier de CSS de la police d'écriture AVANT celui du style global qui l'utilise, ce doit être le premier fichier de CSS importé du template HTML /!\
+
+Il sera alors possible d'utiliser cette police d'écriture dans les classes CSS des templates HTML de cette manière par exemple : 
+```css
+.unistra {
+    font-family: "Unistra1.0";
+}
+```
+
 ### Spécificités des notifications
 
 Ces fichiers se servent majoritairement de contenus html déjà stockés en base de données : objets `Contenu` dont le code commence par `NOTIFICATION_`.

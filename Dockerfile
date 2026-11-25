@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bookworm
+FROM python:3.12-slim-bookworm
 
 LABEL maintainer="DNum DIP - Université de Strasbourg <dnum-dip@unistra.fr>" \
       app="plana"
