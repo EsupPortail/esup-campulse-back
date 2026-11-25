@@ -1,7 +1,7 @@
 """List of tests done on users models."""
+import datetime
 
 from django.test import Client, TestCase
-from django.utils import timezone
 
 from plana.apps.users.models.user import AssociationUser, GroupInstitutionFundUser, User
 
@@ -66,15 +66,15 @@ class UsersModelsTests(TestCase):
 
         asso_user.is_validated_by_admin = True
         asso_user.is_president = False
-        asso_user.can_be_president_from = timezone.make_aware(timezone.datetime(year=2000, month=1, day=1))
+        asso_user.can_be_president_from = datetime.date(year=2000, month=1, day=1)
         asso_user.save()
         self.assertTrue(asso_user.can_be_president)
 
-        asso_user.can_be_president_to = timezone.make_aware(timezone.datetime(year=2001, month=1, day=1))
+        asso_user.can_be_president_to = datetime.date(year=2001, month=1, day=1)
         asso_user.save()
         self.assertFalse(asso_user.can_be_president)
 
         asso_user.can_be_president_from = None
-        asso_user.can_be_president_to = timezone.make_aware(timezone.datetime(year=2099, month=1, day=1))
+        asso_user.can_be_president_to = datetime.date(year=2099, month=1, day=1)
         asso_user.save()
         self.assertTrue(asso_user.can_be_president)
