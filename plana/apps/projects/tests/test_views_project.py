@@ -776,6 +776,7 @@ class ProjectsViewsTests(TestCase):
         - A student user cannot execute this request if status is not allowed.
         - A student user can execute this request if status is allowed.
         - A student user cannot execute this request if commission edition_date is in the past for some statuses.
+        - A student user cannot execute this request if the project has not applied to a commission yet.
         """
         project_id = 1
         self.assertFalse(len(mail.outbox))
@@ -804,6 +805,12 @@ class ProjectsViewsTests(TestCase):
         response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("past_edition_date", response.data)
+
+        Project.objects.filter(pk=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT)
+        ProjectCommissionFund.objects.filter(project_id=project_id).delete()
+        response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("no_commission", response.data)
 
     def test_patch_project_status_manager_bad_request(self):
         """

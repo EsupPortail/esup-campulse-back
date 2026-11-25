@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.core import mail
 from django.test import Client, TestCase, RequestFactory
 
+from plana.apps.commissions.models import Commission
 from plana.apps.projects.models.category import Category
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.models.project_category import ProjectCategory
@@ -286,3 +287,35 @@ class ProjectsModelsTests(TestCase):
         project.refresh_from_db()
         self.assertEqual(project.project_status, Project.ProjectStatus.PROJECT_PROCESSING)
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_can_still_be_edited_by_bearer(self):
+        """
+        - Commission edition date must be in the future for designated statuses. (only if there is a commission)
+        """
+        project_id = 1
+        project = Project.objects.get(id=project_id)
+        self.assertTrue(project.can_still_be_edited_by_bearer())
+
+        project = Project.objects.filter(id=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED)
+        Commission.objects.filter(pk=1).update(edition_date="2000-01-01")
+        project = Project.objects.get(id=1)
+        self.assertFalse(project.can_still_be_edited_by_bearer())
+
+        ProjectCommissionFund.objects.filter(project_id=project_id).delete()
+        self.assertTrue(project.can_still_be_edited_by_bearer())
+
+    def test_can_still_be_submitted_by_bearer(self):
+        """
+        - Commission submission date must be in the future for designated statuses. (only if there is a commission)
+        """
+        project_id = 1
+        project = Project.objects.get(id=project_id)
+        self.assertTrue(project.can_still_be_submitted_by_bearer())
+
+        project = Project.objects.filter(id=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT)
+        Commission.objects.filter(pk=1).update(submission_date="2000-01-01")
+        project = Project.objects.get(id=1)
+        self.assertFalse(project.can_still_be_submitted_by_bearer())
+
+        ProjectCommissionFund.objects.filter(project_id=project_id).delete()
+        self.assertTrue(project.can_still_be_submitted_by_bearer())

@@ -291,6 +291,17 @@ class Project(models.Model):
                 return False
         return True
 
+    def can_still_be_submitted_by_bearer(self):
+        """
+        Checks if project can still be submitted for a bearer user, based on its commission submission_date
+        (must be in the future)
+        """
+        commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=self).first()
+        if commission:
+            if self.project_status == Project.ProjectStatus.PROJECT_DRAFT and commission.submission_date < timezone.localdate():
+                return False
+        return True
+
     def process_project_pcf_amount_earned_status_update(self) -> None:
         """
         Checks if every pcf amount_earned has been defined, and update project status accordingly if so

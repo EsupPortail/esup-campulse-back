@@ -177,12 +177,19 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
         old_project_status = project.project_status
         new_project_status = data["project_status"]
 
+        # Cannot update project status if no commission to apply to
+        if not project.commission:
+            raise serializers.ValidationError({"no_commission": _("A project must be linked to a commission to update its status.")})
+
         # Must be updating to an authorized project status depending on user role
         authorized_statuses = []
         if request.user.has_perm("projects.change_project_as_bearer"):
-            # Only if commission edition_date is not in the past for bearer
+            # Only if commission edition_date is not in the past for bearer for some statuses
             if not project.can_still_be_edited_by_bearer():
                 raise serializers.ValidationError({"past_edition_date": _("Edition date for this commission is gone.")})
+            # Only if commission submission_date is not in the past for bearer for some statuses
+            if not project.can_still_be_submitted_by_bearer():
+                raise serializers.ValidationError({"past_submission_date": _("Submission date for this commission is gone.")})
             authorized_statuses += Project.ProjectStatus.get_bearer_project_statuses()
         if request.user.has_perm("projects.change_project_as_validator"):
             authorized_statuses += Project.ProjectStatus.get_validator_project_statuses()
