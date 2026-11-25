@@ -697,15 +697,18 @@
     "fields": {
       "code": "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION",
       "label": "User Or Association Project Validated",
-      "description": "Notification d'une demande de subventionnements validée envoyée à une association ou un porteur individuel",
-      "subject": "{{ site_name }} – Notification d’attribution",
-      "body": "Bonjour,<br/><br/>Votre projet {{ project_name }} vient d'être validé pour le fonds {{ fund_name }}.<br/>Vous êtes donc invité au Forum des Associations en vue de la présentation de votre projet aux membres du jury de la Commission d'Aide aux Projets Étudiants : {{ commission_name }}.<br/>Votre présence est obligatoire et votre présentation ne doit pas dépasser 3 minutes.<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
+      "description": "Convocation de passage en commission pour un projet déposé par une association ou un porteur individuel",
+      "subject": "{{ site_name }} – Convocation de passage en commission",
+      "body": "Bonjour,<br/><br/>Votre projet {{ project_name }} a été validé pour le fonds {{ fund_name }}.<br/>Vous êtes donc invité en vue de la présentation de votre projet aux membres du jury de la Commission d'Aide aux Projets Étudiants : {{ commission_name }}.<br/>Votre présence est obligatoire et votre présentation ne doit pas dépasser 3 minutes.<br/>Date et heure de la commission : {{ commission_date }} {{ commission_scheduled_time }}</br>Lieu de la commission : {{ commission_location }}<br/><br/>Cordialement,<br/>L’équipe {{ site_name }}",
       "active": true,
       "available_vars": [
         2,
         15,
         17,
-        19
+        19,
+        20,
+        21,
+        22
       ]
     }
   },

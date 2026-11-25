@@ -343,6 +343,13 @@ class Project(models.Model):
         if stats["validated_admin_count"] > 0:
             new_status = self.ProjectStatus.PROJECT_VALIDATED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION"
+            commission = self.commission
+            context.update({
+                "commission_name": commission.name,
+                "commission_date": commission.commission_date,
+                "commission_scheduled_time": commission.scheduled_time,
+                "commission_location": f"{commission.building} - {commission.room} - {commission.address}"
+            })
         else:
             new_status = self.ProjectStatus.PROJECT_REJECTED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_REJECTION"

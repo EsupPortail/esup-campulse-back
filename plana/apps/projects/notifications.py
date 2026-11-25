@@ -183,7 +183,10 @@ def send_project_status_update_notification(request, project_obj: Project) -> No
             validator_context.update({
                 "project_name": project.name,
                 "fund_name": fund.acronym,
-                "commission_name": commission.name
+                "commission_name": commission.name,
+                "commission_date": commission.commission_date,
+                "commission_scheduled_time": commission.scheduled_time,
+                "commission_location": f"{commission.building} - {commission.room} - {commission.address}"
             })
         return validator_context
 
