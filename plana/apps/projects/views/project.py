@@ -259,6 +259,7 @@ class ProjectRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         return (
             Project.visible_objects.all()
             .annotate_bearer_counts()
+            .annotate_projects_data()
             .select_related("association", "user", "association_user")
             .prefetch_related("projectcommissionfund_set")
         )
