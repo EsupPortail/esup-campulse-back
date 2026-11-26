@@ -10,7 +10,7 @@ from .models import Commission, CommissionFund, Fund
 class CommissionAdmin(admin.ModelAdmin):
     """List view for commissions."""
 
-    list_display = ["name", "submission_date", "commission_date", "is_open_to_projects", "get_funds"]
+    list_display = ["name", "submission_date", "commission_date", "is_open_to_projects", "get_funds", "is_archived"]
     list_filter = ["is_open_to_projects"]
     search_fields = ["name", "submission_date", "commission_date"]
 

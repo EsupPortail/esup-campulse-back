@@ -577,9 +577,9 @@ class ArchiveCommissionsCommandTest(TestCase):
 
     def test_archive_commissions(self):
         """is_archived should be True for past commissions with only finished projects or no projects at all."""
-        commission = Commission.objects.get(pk=5)
-        commission.is_archived = False
-        commission.save()
+        Commission.objects.filter(pk=5).update(is_archived=False)
+        # Test with a past commission with finished and ongoing statuses at the same time
+        Project.objects.filter(pk=7).update(project_status=Project.ProjectStatus.PROJECT_REVIEW_VALIDATED)
         call_command("cron_archive_commissions")
 
         self.assertTrue(Commission.objects.get(pk=5).is_archived)
