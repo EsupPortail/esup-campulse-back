@@ -8,10 +8,13 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
+from plana.apps.commissions.models import Commission
 from plana.apps.documents.models.document import Document
 from plana.apps.documents.models.document_upload import DocumentUpload
+from plana.apps.projects.models import Project
 from plana.apps.users.models.user import AssociationUser
 from plana.storages import DynamicStorageFieldFile
 
@@ -26,6 +29,8 @@ class DocumentsViewsTests(TestCase):
         "auth_group.json",
         "auth_permission.json",
         "tests/commissions_fund.json",
+        "tests/commissions_commission.json",
+        "tests/commissions_commissionfund.json",
         "tests/contents_setting.json",
         "tests/documents_document.json",
         "tests/documents_documentupload.json",
@@ -34,6 +39,7 @@ class DocumentsViewsTests(TestCase):
         "mailtemplates",
         "mailtemplatevars",
         "tests/projects_project.json",
+        "tests/projects_projectcommissionfund.json",
         "tests/users_associationuser.json",
         "tests/users_groupinstitutionfunduser.json",
         "tests/users_user.json",
@@ -119,7 +125,7 @@ class DocumentsViewsTests(TestCase):
             "document": documents[1].id,
             "user": cls.student_misc_user_id,
         }
-        cls.student_misc_client.post("/documents/uploads", post_data_1)
+        cls.new_document_first = cls.student_misc_client.post("/documents/uploads", post_data_1)
         cls.new_document = cls.student_misc_client.post("/documents/uploads", post_data_2)
 
     def test_get_document_upload_list_student(self):
@@ -284,6 +290,29 @@ class DocumentsViewsTests(TestCase):
         }
         response = self.student_site_client.post("/documents/uploads", post_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_post_document_upload_project_not_editable_anymore(self):
+        """
+        POST /documents/uploads .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be authorized to update the project.
+        - The project commission edition_date must be in the future.
+        """
+        document = Document.objects.get(acronym="BUDGET_PREVISIONNEL")
+        project = Project.objects.get(pk=1)
+        project.project_status = Project.ProjectStatus.PROJECT_DRAFT_PROCESSED
+        project.save()
+        Commission.objects.filter(pk=1).update(edition_date=timezone.datetime(year=2000, month=1, day=1))
+        post_data = {
+            "path_file": "",
+            "project": project.id,
+            "user": self.student_misc_user_id,
+            "document": document.id,
+        }
+        response = self.student_misc_client.post("/documents/uploads", post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_edition_date", response.data)
 
     def test_post_document_upload_bad_request(self):
         """
@@ -648,6 +677,23 @@ class DocumentsViewsTests(TestCase):
         document_upload_id = 6
         response = self.student_misc_client.delete(f"/documents/uploads/{document_upload_id}")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_document_upload_project_not_editable_anymore(self):
+        """
+        DELETE /documents/uploads/{id} .
+
+        - The route can be accessed by any authenticated user.
+        - The authenticated user must be authorized to update the project.
+        - The project commission edition_date must be in the future.
+        """
+        document_upload_id = self.new_document_first.data['id']
+        project = Project.objects.get(pk=1)
+        project.project_status = Project.ProjectStatus.PROJECT_DRAFT_PROCESSED
+        project.save()
+        Commission.objects.filter(pk=1).update(edition_date=timezone.datetime(year=2000, month=1, day=1))
+        response = self.student_misc_client.delete(f"/documents/uploads/{document_upload_id}")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_edition_date", response.data)
 
     def test_delete_document_upload_association_success(self):
         """

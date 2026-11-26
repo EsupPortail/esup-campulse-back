@@ -173,5 +173,32 @@
       "description": "Nom d'une commission.",
       "fake_vars": []
     }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 20,
+    "fields": {
+      "code": "{{ commission_location }}",
+      "description": "Lieu complet d'une commission.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 21,
+    "fields": {
+      "code": "{{ commission_scheduled_time }}",
+      "description": "Horaire d'une commission.",
+      "fake_vars": []
+    }
+  },
+  {
+    "model": "mail_template.MailTemplateVar",
+    "pk": 22,
+    "fields": {
+      "code": "{{ commission_date }}",
+      "description": "Date d'une commission.",
+      "fake_vars": []
+    }
   }
 ]

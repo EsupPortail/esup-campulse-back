@@ -1,9 +1,12 @@
 """Models describing projects."""
+import datetime
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Sum, Count, Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from plana.apps.associations.models.association import Association
@@ -244,8 +247,10 @@ class Project(models.Model):
             owner = self.user
             return {
                 "name": f"{owner.first_name} {owner.last_name}",
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
                 "address": f"{owner.address} {owner.city} - {owner.zipcode}, {owner.country}",
-                "email": self.user.email
+                "email": owner.email
             }
         return {}
 
@@ -276,6 +281,28 @@ class Project(models.Model):
             return True
 
         return False
+
+    def can_still_be_edited_by_bearer(self):
+        """
+        Checks if project can still be edited for a bearer user, based on its commission edition_date
+        (must be in the future)
+        """
+        commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=self).first()
+        if commission:
+            if self.project_status == Project.ProjectStatus.PROJECT_DRAFT_PROCESSED and commission.edition_date < timezone.localdate():
+                return False
+        return True
+
+    def can_still_be_submitted_by_bearer(self):
+        """
+        Checks if project can still be submitted for a bearer user, based on its commission submission_date
+        (must be in the future)
+        """
+        commission = Commission.objects.filter(commissionfund__projectcommissionfund__project=self).first()
+        if commission:
+            if self.project_status == Project.ProjectStatus.PROJECT_DRAFT and commission.submission_date < timezone.localdate():
+                return False
+        return True
 
     def process_project_pcf_amount_earned_status_update(self) -> None:
         """
@@ -314,10 +341,21 @@ class Project(models.Model):
             "fund_name": list(self.projectcommissionfund_set.filter(is_validated_by_admin=True).values_list("commission_fund__fund__name", flat=True)),
         }
         owner_data = self.get_project_owner_data()
+        bcc = []
 
         if stats["validated_admin_count"] > 0:
             new_status = self.ProjectStatus.PROJECT_VALIDATED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_CONFIRMATION"
+            commission = self.commission
+            context.update({
+                "commission_name": commission.name,
+                "commission_date": commission.commission_date,
+                "commission_scheduled_time": commission.scheduled_time,
+                "commission_location": f"{commission.building} - {commission.room} - {commission.address}"
+            })
+            # If commission is tomorrow, send a mail to member funds (global reminder already sent at this point)
+            if commission.commission_date == timezone.localdate() + datetime.timedelta(days=1):
+                bcc = commission.get_fund_members_emails()
         else:
             new_status = self.ProjectStatus.PROJECT_REJECTED
             mail_code = "USER_OR_ASSOCIATION_PROJECT_REJECTION"
@@ -331,6 +369,7 @@ class Project(models.Model):
             send_mail(
                 from_=settings.DEFAULT_FROM_EMAIL,
                 to_=owner_data.get("email"),
+                bcc_=bcc,
                 subject=template.subject.replace("{{ site_name }}", context["site_name"]),
                 message=template.parse_vars(request.user, request, context),
             )
@@ -339,6 +378,20 @@ class Project(models.Model):
     def commission(self):
         pcf = self.projectcommissionfund_set.all()
         return pcf[0].commission_fund.commission if pcf else None
+
+    # TODO : unittests
+    def apply_manual_identifier(self):
+        """Generate and apply a manual identifier to the project if it doesn't already have one."""
+        from plana.apps.contents.models.setting import Setting
+        if not self.manual_identifier:
+            now = timezone.now()
+            year = now.year if now.month >= Setting.get_setting("NEW_YEAR_MONTH_INDEX") else now.year - 1
+            last_identifier = 0
+            projects_year = Project.visible_objects.filter(manual_identifier__isnull=False, manual_identifier__startswith=year)
+            if projects_year.exists():
+                last_identifier = int(projects_year.order_by("-manual_identifier").first().manual_identifier) % 10000
+            self.manual_identifier = f"{year}{last_identifier + 1:04}"
+            self.save()
 
     def __str__(self):
         return self.name

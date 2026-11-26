@@ -4,10 +4,11 @@
     "pk": 1,
     "fields": {
       "submission_date": "2099-10-06",
+      "edition_date": "2099-10-15",
       "commission_date": "2099-10-20",
       "is_open_to_projects": true,
       "name": "Commission numéro 1",
-      "edition_date": "2089-01-26T00:00:00.000Z"
+      "is_archived": false
     }
   },
   {
@@ -15,10 +16,11 @@
     "pk": 2,
     "fields": {
       "submission_date": "2099-10-08",
+      "edition_date": "2099-10-15",
       "commission_date": "2099-10-22",
       "is_open_to_projects": true,
       "name": "Une autre commission de rentrée d'octobre 2099",
-      "edition_date": "2089-01-26T00:00:00.000Z"
+      "is_archived": false
     }
   },
   {
@@ -26,10 +28,11 @@
     "pk": 3,
     "fields": {
       "submission_date": "2099-10-07",
+      "edition_date": "2099-10-15",
       "commission_date": "2099-10-21",
       "is_open_to_projects": true,
       "name": "Commission de rentrée d'octobre 2099",
-      "edition_date": "2089-01-26T00:00:00.000Z"
+      "is_archived": false
     }
   },
   {
@@ -37,10 +40,11 @@
     "pk": 4,
     "fields": {
       "submission_date": "2000-01-01",
+      "edition_date": "2000-01-12",
       "commission_date": "2000-01-30",
       "is_open_to_projects": false,
       "name": "Commission du passé",
-      "edition_date": "1999-01-12T00:00:00.000Z"
+      "is_archived": false
     }
   },
   {
@@ -48,10 +52,11 @@
     "pk": 5,
     "fields": {
       "submission_date": "1990-01-01",
+      "edition_date": "1990-01-25",
       "commission_date": "1990-01-30",
       "is_open_to_projects": false,
       "name": "Commission archivée",
-      "edition_date": "1989-06-30T00:00:00.000Z"
+      "is_archived": true
     }
   }
 ]

@@ -647,19 +647,22 @@ class ProjectsViewsTests(TestCase):
         response = self.student_president_client.patch("/projects/2", project_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_project_serializer_error(self):
+    def test_patch_project_commission_dates_past(self):
         """
         PATCH /projects/{id} .
 
         - The route can be accessed by a student user.
-        - Serializer fields must be valid.
+        - The commission edition_date must be in the future
         """
         project_id = 1
-        patch_data = {"summary": False}
+        Project.objects.filter(pk=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED)
+        Commission.objects.filter(pk=1).update(edition_date="2000-01-01")
+        patch_data = {"summary": "test"}
         response = self.student_misc_client.patch(
             f"/projects/{project_id}", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_edition_date", response.data)
 
     def test_patch_project_manager_success(self):
         """
@@ -766,36 +769,27 @@ class ProjectsViewsTests(TestCase):
         response = self.general_client.patch("/projects/999/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_patch_project_status_serializer_error(self):
-        """
-        PATCH /projects/{id}/status .
-
-        - A student user can execute this request if status is allowed.
-        - Serializer fields must be valid.
-        """
-        patch_data = {"project_status": False}
-        response = self.student_misc_client.patch(
-            "/projects/1/status", data=patch_data, content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_patch_project_status_student(self):
         """
         PATCH /projects/{id}/status .
 
-        - An student user cannot execute this request if status is not allowed.
-        - An student user can execute this request if status is allowed.
+        - A student user cannot execute this request if status is not allowed.
+        - A student user can execute this request if status is allowed.
+        - A student user cannot execute this request if commission edition_date is in the past for some statuses.
+        - A student user cannot execute this request if the project has not applied to a commission yet.
         """
+        project_id = 1
         self.assertFalse(len(mail.outbox))
         patch_data = {"project_status": "PROJECT_REJECTED"}
-        response = self.student_misc_client.patch("/projects/1/status", patch_data, content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("forbidden_status", response.data)
         self.assertFalse(len(mail.outbox))
 
         patch_data = {"project_status": "PROJECT_PROCESSING"}
-        response = self.student_misc_client.patch("/projects/1/status", patch_data, content_type="application/json")
+        response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        project = Project.visible_objects.get(id=1)
+        project = Project.visible_objects.get(id=project_id)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
         self.assertTrue(len(mail.outbox))
 
@@ -806,17 +800,27 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_PROCESSING")
 
-    def test_patch_project_status_manager(self):
+        Project.objects.filter(pk=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT_PROCESSED)
+        Commission.objects.filter(pk=1).update(edition_date="2000-01-01")
+        response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("past_edition_date", response.data)
+
+        Project.objects.filter(pk=project_id).update(project_status=Project.ProjectStatus.PROJECT_DRAFT)
+        ProjectCommissionFund.objects.filter(project_id=project_id).delete()
+        response = self.student_misc_client.patch(f"/projects/{project_id}/status", patch_data, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("no_commission", response.data)
+
+    def test_patch_project_status_manager_bad_request(self):
         """
         PATCH /projects/{id}/status .
 
         - A manager user cannot execute this request if status is not allowed.
         - Statuses must follow order defined in ProjectStatus sub-model.
-        - A manager user can execute this request if status is allowed.
-        - PROJECT_VALIDATED Event is stored in History.
         - Archived statuses cannot be updated anymore.
-        - Cannot rollback to a previous status, except if allowed in order.
         """
+        # Status not allowed
         project_id = 3
         patch_data = {"project_status": "PROJECT_REVIEW_PROCESSING"}
         response = self.general_client.patch(
@@ -824,8 +828,10 @@ class ProjectsViewsTests(TestCase):
             patch_data,
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("forbidden_status", response.data)
 
+        # Status inconsistency
         patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
         response = self.general_client.patch(
             f"/projects/{project_id}/status",
@@ -833,7 +839,26 @@ class ProjectsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("status_inconsistency", response.data)
 
+        # Archived project
+        patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
+        response = self.general_client.patch(
+            f"/projects/9/status",
+            patch_data,
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("archived_project", response.data)
+
+    def test_patch_project_status_manager_ok(self):
+        """
+        PATCH /projects/{id}/status .
+
+        - A manager user can execute this request if status is allowed.
+        - PROJECT_VALIDATED Event is stored in History.
+        """
+        project_id = 3
         patch_data = {"project_status": "PROJECT_REJECTED"}
         response = self.general_client.patch(
             f"/projects/{project_id}/status",
@@ -855,14 +880,13 @@ class ProjectsViewsTests(TestCase):
         project = Project.visible_objects.get(id=4)
         self.assertEqual(project.project_status, "PROJECT_VALIDATED")
 
-        patch_data = {"project_status": "PROJECT_REVIEW_DRAFT"}
-        response = self.general_client.patch(
-            f"/projects/{project_id}/status",
-            patch_data,
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_patch_project_status_manager_rollback(self):
+        """
+        PATCH /projects/{id}/status .
 
+        - Cannot roll back to a previous status, except if allowed in order.
+        """
+        project_id = 3
         project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_REVIEW_DRAFT"
         project.save()
@@ -873,6 +897,7 @@ class ProjectsViewsTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("status_inconsistency", response.data)
 
         project = Project.visible_objects.get(id=project_id)
         project.project_status = "PROJECT_REVIEW_PROCESSING"
@@ -900,6 +925,7 @@ class ProjectsViewsTests(TestCase):
             "/projects/2/status", patch_data, content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("missing_documents", response.data)
         project = Project.visible_objects.get(id=2)
         self.assertEqual(project.project_status, "PROJECT_DRAFT")
 

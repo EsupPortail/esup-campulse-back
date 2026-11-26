@@ -1,7 +1,9 @@
 """Serializers describing fields used on projects."""
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
@@ -15,6 +17,7 @@ from plana.apps.documents.models.document_upload import DocumentUpload
 from plana.apps.projects.models.project import Project
 from plana.apps.projects.serializers.category import CategorySerializer
 from plana.apps.projects.serializers.project_commission_fund import ProjectCommissionFundMinimalDataSerializer
+from plana.apps.projects.notifications import send_project_status_update_notification
 from plana.apps.users.serializers.association_user import AssociationUserSerializer
 from plana.apps.users.serializers.user import UserNameSerializer
 
@@ -160,10 +163,93 @@ class ProjectPartialDataSerializer(serializers.ModelSerializer):
 
 class ProjectStatusSerializer(serializers.ModelSerializer):
     """Serializer for status field."""
+    project_status = serializers.ChoiceField(choices=Project.ProjectStatus.choices, required=True)
 
     class Meta:
         model = Project
         fields = ["project_status", "processing_date"]
+        read_only_fields = ["processing_date"]
+
+    def validate(self, data):
+        request = self.context.get("request")
+        project = self.instance
+
+        old_project_status = project.project_status
+        new_project_status = data["project_status"]
+
+        # Cannot update project status if no commission to apply to
+        if not project.commission:
+            raise serializers.ValidationError({"no_commission": _("A project must be linked to a commission to update its status.")})
+
+        # Must be updating to an authorized project status depending on user role
+        authorized_statuses = []
+        if request.user.has_perm("projects.change_project_as_bearer"):
+            # Only if commission edition_date is not in the past for bearer for some statuses
+            if not project.can_still_be_edited_by_bearer():
+                raise serializers.ValidationError({"past_edition_date": _("Edition date for this commission is gone.")})
+            # Only if commission submission_date is not in the past for bearer for some statuses
+            if not project.can_still_be_submitted_by_bearer():
+                raise serializers.ValidationError({"past_submission_date": _("Submission date for this commission is gone.")})
+            authorized_statuses += Project.ProjectStatus.get_bearer_project_statuses()
+        if request.user.has_perm("projects.change_project_as_validator"):
+            authorized_statuses += Project.ProjectStatus.get_validator_project_statuses()
+        if new_project_status not in authorized_statuses:
+            raise serializers.ValidationError({"forbidden_status": _("Choosing this status is not allowed.")})
+
+        # Cannot change status for an archived project
+        if old_project_status in Project.ProjectStatus.get_archived_project_statuses():
+            raise serializers.ValidationError({"archived_project": _("Cannot change this project status anymore.")})
+
+        # Check project status transition consistency
+        if not project.can_transition_to_status(new_project_status):
+            raise serializers.ValidationError({"status_inconsistency": _("Transition this project status to the one selected is not allowed.")})
+
+        # Check if all requested documents were submitted to allow project status update
+        if new_project_status in Project.ProjectStatus.get_bearer_project_statuses():
+            if missing_documents_names := self._get_missing_documents_names(project, new_project_status):
+                raise serializers.ValidationError({"missing_documents": _(f"Missing documents : {missing_documents_names}.")})
+
+            # Setting up processing_date when new status need to
+            if new_project_status in Project.ProjectStatus.get_email_project_processing_project_statuses():
+                data["processing_date"] = timezone.now()
+
+        return data
+
+    def update(self, instance, validated_data):
+        new_project_status = validated_data.get("project_status")
+        # Giving project a manual identifier if needed
+        if new_project_status in Project.ProjectStatus.get_identifier_project_statuses():
+            instance.apply_manual_identifier()
+        instance = super().update(instance, validated_data)
+        # Mail sending to designated managers
+        if new_project_status:
+            send_project_status_update_notification(self.context.get("request"), instance)
+
+        return instance
+
+    @staticmethod
+    def _get_missing_documents_names(project, new_project_status):
+        document_process_types = (
+            ["DOCUMENT_PROJECT"]
+            if new_project_status in Project.ProjectStatus.get_email_project_processing_project_statuses()
+            else ["DOCUMENT_PROJECT_REVIEW"]
+            if new_project_status in Project.ProjectStatus.get_email_review_processing_project_statuses()
+            else []
+        )
+
+        missing_documents = list(
+            Document.objects.filter(
+                models.Q(process_type__in=document_process_types)
+                & (
+                    models.Q(is_required_in_process=True, fund_id=None)
+                    | models.Q(
+                        is_required_in_process=True,
+                        fund__commissionfund__projectcommissionfund__project_id=project.id,
+                    )
+                )
+            ).exclude(documentupload__project=project)
+        )
+        return ", ".join(str(item) for item in missing_documents)
 
 
 class ProjectPostponeSerializer(serializers.Serializer):

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .utils import send_pcf_notification_mail_with_attachments
+from .notifications import send_pcf_notification_mail_with_attachments
 from ...admin import SecuredModelAdmin, JSONImportAdminMixin
 from plana.apps.projects import models
 

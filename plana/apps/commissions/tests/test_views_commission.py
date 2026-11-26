@@ -2,15 +2,14 @@
 
 import json
 
-from django.db import models
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from plana.apps.commissions.models.commission import Commission
 from plana.apps.commissions.models.commission_fund import CommissionFund
 from plana.apps.commissions.models.fund import Fund
-from plana.apps.projects.models.project import Project
 
 
 class CommissionDatesViewsTests(TestCase):
@@ -180,87 +179,25 @@ class CommissionDatesViewsTests(TestCase):
         content = json.loads(response_false.content.decode("utf-8"))
         self.assertEqual(len(content["results"]), commissions_cnt)
 
-    # FIXME : more precise unittest
-    def test_get_commissions_list_filter_active_projects(self):
+    def test_get_commissions_list_filter_with_closed_future_commissions(self):
         """
         GET /commissions/ .
 
-        - with_active_projects returns commissions depending on their projects statuses.
-        - only_with_active_projects returns commissions depending on their projects statuses.
+        - When passed to True, return all commissions.
+        - When passed to False, return only past and open_to_projects commissions.
         """
-        # Empty commissions
-        commissions_ids_without_projects = Commission.objects.filter(
-            commissionfund__projectcommissionfund__project__isnull=True
-        ).values_list("id", flat=True).distinct()
+        response_true = self.client.get(reverse("commission_list"), data={"with_closed_future_commissions": True})
+        self.assertEqual(len(response_true.data["results"]), Commission.objects.all().count())
 
-        # Inactive projects related commissions
-        archived_visible_projects = Project.visible_objects.filter(
-            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
+        future_closed_commission = Commission.objects.create(
+            name="New closed future commission",
+            is_open_to_projects=False,
+            submission_date=timezone.datetime(year=2999, month=1, day=1),
+            edition_date=timezone.datetime(year=2999, month=2, day=1),
+            commission_date=timezone.datetime(year=2999, month=3, day=1)
         )
-        commissions_ids_with_inactive_projects = Commission.objects.filter(
-            commissionfund__projectcommissionfund__project__in=archived_visible_projects
-        ).values_list("id", flat=True).distinct()
-
-        # Active projects related commissions
-        active_visible_projects = Project.visible_objects.exclude(
-            project_status__in=Project.ProjectStatus.get_archived_project_statuses()
-        )
-        commissions_ids_with_active_projects = Commission.objects.filter(
-            commissionfund__projectcommissionfund__project__in=active_visible_projects
-        ).values_list("id", flat=True).distinct()
-
-        commissions_with_inactive_projects = Commission.objects.filter(
-            models.Q(id__in=commissions_ids_with_inactive_projects) | models.Q(id__in=commissions_ids_without_projects)
-        )
-        response_wapf = self.client.get(reverse("commission_list"), data={"with_active_projects": False})
-        content_wapf = json.loads(response_wapf.content.decode("utf-8"))
-        self.assertEqual(len(content_wapf["results"]), commissions_with_inactive_projects.count())
-
-        commissions_with_active_projects = Commission.objects.filter(
-            models.Q(id__in=commissions_ids_with_active_projects) | models.Q(id__in=commissions_ids_without_projects)
-        )
-        response_wapt = self.client.get(reverse("commission_list"), data={"with_active_projects": True})
-        content_wapt = json.loads(response_wapt.content.decode("utf-8"))
-        self.assertEqual(len(content_wapt["results"]), commissions_with_active_projects.count())
-
-        commissions_only_with_inactive_projects = Commission.objects.filter(
-            id__in=commissions_ids_with_inactive_projects
-        ).exclude(id__in=commissions_ids_with_active_projects)
-        response_owapf = self.client.get(reverse("commission_list"), data={"only_with_active_projects": False})
-        content_owapf = json.loads(response_owapf.content.decode("utf-8"))
-        self.assertEqual(len(content_owapf["results"]), commissions_only_with_inactive_projects.count())
-
-        commissions_only_with_active_projects = Commission.objects.exclude(
-            id__in=commissions_ids_with_inactive_projects
-        ).filter(id__in=commissions_ids_with_active_projects)
-        response_owapt = self.client.get(reverse("commission_list"), data={"only_with_active_projects": True})
-        content_owapt = json.loads(response_owapt.content.decode("utf-8"))
-        self.assertEqual(len(content_owapt["results"]), commissions_only_with_active_projects.count())
-
-    def test_get_commissions_list_filter_managed_projects(self):
-        """
-        GET /commissions/ .
-
-        - managed_projects returns funds where current user manages projects.
-        """
-        user_id = self.manager_institution_user_id
-        commissions_with_managed_projects = Commission.objects.filter(
-            models.Q(
-                commissionfund__projectcommissionfund__project__in=Project.visible_objects.all(),
-                commissionfund__projectcommissionfund__project__association__institution__groupinstitutionfunduser__user_id=user_id
-            )
-            | models.Q(commissionfund__fund__institution__groupinstitutionfunduser__user_id=user_id)
-        )
-        response = self.institution_client.get(reverse("commission_list"), data={"managed_projects": True})
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content["results"]), commissions_with_managed_projects.count())
-
-        commissions_not_with_managed_projects = Commission.objects.exclude(
-            id__in=commissions_with_managed_projects.values_list("id", flat=True)
-        )
-        response = self.institution_client.get(reverse("commission_list"), data={"managed_projects": False})
-        content = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(len(content["results"]), commissions_not_with_managed_projects.count())
+        response_false = self.client.get(reverse("commission_list"), data={"with_closed_future_commissions": False})
+        self.assertEqual(response_false.data["count"], Commission.objects.exclude(pk=future_closed_commission.pk).count())
 
     def test_post_commissions_forbidden(self):
         """
@@ -281,15 +218,38 @@ class CommissionDatesViewsTests(TestCase):
         POST /commissions/manage/ .
 
         - submission_date cannot come after commission_date.
+        - edition_date cannot come after commission_date.
+        - edition_date cannot come before submission_date.
         """
         post_data = {
             "submission_date": "2099-12-25",
+            "edition_date": "2099-12-30",
             "commission_date": "2099-11-30",
             "name": "New Commission",
         }
         response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("inconsistent_dates", response.data)
+
+        post_data = {
+            "submission_date": "2099-11-25",
+            "edition_date": "2099-12-30",
+            "commission_date": "2099-11-30",
+            "name": "New Commission",
+        }
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_late_edition_date", response.data)
+
+        post_data = {
+            "submission_date": "2099-11-25",
+            "edition_date": "2099-11-10",
+            "commission_date": "2099-11-30",
+            "name": "New Commission",
+        }
+        response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("too_early_edition_date", response.data)
 
     def test_post_commissions_too_old(self):
         """
@@ -299,6 +259,7 @@ class CommissionDatesViewsTests(TestCase):
         """
         post_data = {
             "submission_date": "1993-11-30",
+            "edition_date": "1993-12-15",
             "commission_date": "1993-12-25",
             "name": "New Commission",
         }
@@ -329,8 +290,13 @@ class CommissionDatesViewsTests(TestCase):
         """
         post_data = {
             "submission_date": "2099-11-30",
+            "edition_date": "2099-12-15",
             "commission_date": "2099-12-25",
             "name": "New Commission",
+            "room": "Example Room",
+            "building": "Example building",
+            "address": "Example Address",
+            "scheduled_time": "10:00:00"
         }
         response = self.general_client.post(reverse("commission_manage_list_create"), data=post_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -466,7 +432,7 @@ class CommissionDatesViewsTests(TestCase):
 
         - A user with proper permissions can execute this request.
         """
-        patch_data = {"submission_date": "2099-11-30", "commission_date": "2099-12-25"}
+        patch_data = {"submission_date": "2099-10-07", "commission_date": "2099-12-25"}
         response = self.general_client.patch(
             reverse("commission_manage_retrieve_update_destroy", kwargs={"pk": 1}),
             data=patch_data,
