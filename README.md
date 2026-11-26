@@ -23,14 +23,14 @@ Dépôt du front accessible à l'adresse [https://github.com/EsupPortail/esup-ca
 
 ## Technologies requises
 
-- [Python](https://www.python.org/) (version >= 3.9)
-- [PostgreSQL](https://www.postgresql.org/) (version >= 12)
+- [Python](https://www.python.org/) (version >= 3.12)
+- [PostgreSQL](https://www.postgresql.org/) (version >= 14)
 - [S3](https://aws.amazon.com/fr/s3/) (serveur de stockage des images et documents)
 
 ## Technologies conseillées
 
 - [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) (gestion de l'environnement virtuel)
-- [Poetry](https://python-poetry.org/) (gestionnaire de dépendances)
+- [uv](https://docs.astral.sh/uv/) (gestionnaire de dépendances)
 - [age](https://github.com/FiloSottile/age) (chiffrement des documents privés)
 
 ## Technologies de développement
