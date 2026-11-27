@@ -31,7 +31,7 @@ class ProjectQuerySet(models.QuerySet):
         Setting = apps.get_model('contents', 'Setting')
 
         today = datetime.date.today()
-        review_due_date = today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION"))
+        review_due_date = today - datetime.timedelta(days=Setting.get_setting("DAYS_BEFORE_REVIEW_OVERDUE"))
         bearer_overdue_subquery = (
             Project.objects.filter(
                 Q(user=OuterRef("user")) | Q(association=OuterRef("association")),
@@ -61,7 +61,7 @@ class ProjectQuerySet(models.QuerySet):
         Setting = apps.get_model('contents', 'Setting')
 
         today = timezone.localdate()
-        review_due_date = today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION"))
+        review_due_date = today - datetime.timedelta(days=Setting.get_setting("DAYS_BEFORE_REVIEW_OVERDUE"))
 
         return self.annotate(
             # Only calculating if planned_end_date is in the past and for the designated project statuses

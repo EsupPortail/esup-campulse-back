@@ -43,7 +43,7 @@ class ProjectQuerySetTestCase(TestCase):
         # Project with an overdue review
         Project.objects.filter(pk=5).update(planned_end_date=timezone.datetime(year=2026, month=6, day=1))
         project_with_review_overdue_days = Project.objects.filter(pk=5).annotate_projects_data().first()
-        self.assertEqual(project_with_review_overdue_days.review_overdue_days, 142)
+        self.assertEqual(project_with_review_overdue_days.review_overdue_days, 112)
 
         project_ids = [
             5,  # Project in the past but still not considered overdue to submit its review

@@ -50,7 +50,7 @@ class CommissionQuerySet(models.QuerySet):
         """
         from plana.apps.projects.models import Project
         today = datetime.date.today()
-        review_due_date = today - datetime.timedelta(days=Setting.get_setting("CRON_DAYS_BEFORE_REVIEW_EXPIRATION"))
+        review_due_date = today - datetime.timedelta(days=Setting.get_setting("DAYS_BEFORE_REVIEW_OVERDUE"))
 
         return (
             self.annotate(

@@ -169,5 +169,17 @@
         ]
       }
     }
+  },
+  {
+    "model": "contents.setting",
+    "pk": 15,
+    "fields": {
+      "setting": "DAYS_BEFORE_REVIEW_OVERDUE",
+      "parameters": {
+        "description": "Nombre de jours après la date de fin prévue d'un projet au-delà duquel un bilan non validé est considéré comme en retard.",
+        "type": "integer",
+        "value": 60
+      }
+    }
   }
 ]
