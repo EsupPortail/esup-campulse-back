@@ -1,6 +1,5 @@
 """Serializers describing fields used on commission funds."""
 
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -21,13 +20,6 @@ class CommissionFundSerializer(serializers.ModelSerializer):
         if commission_funds:
             raise serializers.ValidationError({"already_exists": _("This commission is already linked to this fund.")})
         return data
-
-    def create(self, validated_data):
-        """CommissionFund object creation should update the Commission's edition date"""
-        commission = validated_data["commission"]
-        commission.edition_date = timezone.now()
-        commission.save()
-        return super().create(validated_data)
 
 
 class CommissionFundReadOnlySerializer(serializers.ModelSerializer):
